@@ -1,0 +1,94 @@
+######################################################################
+#
+#  EPrints 404 Error Hander
+#
+######################################################################
+#
+#  __COPYRIGHT__
+#
+# Copyright 2000-2008 University of Southampton. All Rights Reserved.
+# 
+#  __LICENSE__
+#
+######################################################################
+
+use EPrints;
+
+use strict;
+
+my $session = new EPrints::Session();
+exit( 0 ) unless( defined $session );
+
+my $url = $ENV{REDIRECT_URL};
+
+my $r = $session->{ request };
+my $c = $r->connection;
+# Has 404 message been suppressed? (don't forget to reset it for this connection)
+my $show = $c->notes->get( "show_404" );
+$c->notes->set( show_404 => 1 );
+
+if( defined($show) and !$show )
+{
+	$session->terminate();
+	exit( 0 );
+}
+
+if( $url =~ m#^/(\d+)/#  || $url =~ m#^/id/eprint/(\d+)/# )
+{
+	my $eprint = $session->dataset( "eprint" )->dataobj( $1 );
+	my $eprint_message;
+	if( defined $eprint )
+	{
+		my $status = $eprint->get_value( "eprint_status" );
+		if( defined $status && $status eq "archive" ){
+			$eprint_message = $session->html_phrase(
+				"cgi/handle_http_error:404_blurb:archive_eprint",
+				citation => $eprint->render_citation_link,
+			);
+		} elsif( defined $status && $status eq "deletion" ){
+			# re-use logic used to deal with tombstone pages - linking to more recent versions
+			# if available. 
+			# render returns: $dom, $title, $links, $template
+			( $eprint_message, undef, undef, undef ) = $eprint->render;
+		}
+	}
+
+	&plain_404( $session, $eprint_message );
+} else {
+        &plain_404( $session );
+}
+
+$session->terminate();
+
+######################################################################
+#
+# plain_404( $session, [$message] )
+#
+#  Render a standard Document Not Found error message.
+#
+######################################################################
+
+sub plain_404
+{
+	my( $session, $message ) = @_;
+
+	if( defined $message ){
+		$session->build_page(
+			$session->html_phrase( "cgi/handle_http_error:404_title" ),
+			$session->html_phrase( "cgi/handle_http_error:404_blurb:message",
+				url => $session->make_text( $ENV{REDIRECT_URL} ),
+				message => $message,
+			),
+			"plain_404"
+		);
+	} else {
+		$session->build_page(
+			$session->html_phrase( "cgi/handle_http_error:404_title" ),
+			$session->html_phrase( "cgi/handle_http_error:404_blurb",
+				url => $session->make_text( $ENV{REDIRECT_URL} )
+			),
+			"plain_404"
+		);
+	}
+	$session->send_page();
+}

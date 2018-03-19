@@ -1,0 +1,145 @@
+
+/* QUERY COMPLETION - Uses jquery-ui */
+
+ul.ui-autocomplete {
+    font-family: 'Arial';
+    background: white;
+    text-align: left;
+    border: solid 1px #bbbbdd;
+    list-style-type: none;
+    padding: 0px;
+    margin: 0;
+    width: 385px;
+    position: absolute;
+}
+
+ul.ui-autocomplete h2 {
+    font-size: small;
+    background-color: #efefef;
+    padding: 5px;
+}
+
+ul.ui-autocomplete li.ui-menu-item {
+    padding: 0;
+    margin: 0;
+}
+
+ul.ui-autocomplete li.ui-menu-item a {
+    display: block;
+    padding: 3px;
+    cursor: pointer;
+}
+
+ul.ui-autocomplete li.ui-menu-item a.description,
+ul.ui-autocomplete li.ui-menu-item a.url {
+    padding-top: 0px;
+}
+
+ul.ui-autocomplete li.ui-menu-item span {
+    display: block;
+    font-size: 1.1em;
+    padding-left: 10px;
+}
+
+ul.ui-autocomplete li.ui-menu-item a.ui-state-hover {
+    background-color: #efefff;
+}
+
+ul.ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all{
+    font-size: 1.2em;
+    width: auto;
+}
+
+
+/*course search*/
+form#fb-coursefinderform {
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+input#coursequery {
+    display: inline!important;
+    margin-right:1em;
+	margin-bottom:0;
+}
+
+form#fb-coursefinderform input[type="submit"] {
+    display: inline;
+	padding: .6em 1em;
+}
+
+#mainpage .refine span {
+	font-size: 1.6em!important;
+	padding: 6px 0 12px;
+	font-family: 'PT Sans',sans-serif;
+	font-weight: bold;
+	width: 21%;
+	float: left;
+	margin-right: 2%;
+	margin-top: 0.5em;
+}
+
+.refine{
+	margin-bottom:0!important;
+}
+
+div#autocompletewrapper {
+    position: absolute;  background: #fff;  
+    border: 1px solid #A9A9A9;  border-top: 0;  padding: 1em;margin-top: -1px; max-width:300px;
+}
+
+ul#autocomplete {
+    margin: 0;
+    padding: 0;
+}
+
+ul#autocomplete li {
+    padding: 0;
+    list-style: none;
+    margin: 0 0 0.4em 0;
+}
+
+#fb-search-button{
+	padding: .4em 1em;
+width: auto;
+background: #00365B;
+border-top: #00365B 1px solid;
+border-right: #00365B 1px solid;
+border-left: #00365B 1px solid;
+border-bottom: #04141F 1px solid;
+border-radius: 5px;
+-webkit-border-radius: 5px;
+color: #fff;
+margin: .8em 0 0;
+cursor: pointer;
+font-size: 1.3em;
+clear: both;
+}
+
+.ember-text-field{
+display: inline!important;
+margin-right: 1em!important;
+}
+
+button#sectionSearchSubmit {
+padding: .4em 1em;
+width: auto;
+background: #00365B;
+border-top: #00365B 1px solid;
+border-right: #00365B 1px solid;
+border-left: #00365B 1px solid;
+border-bottom: #04141F 1px solid;
+border-radius: 5px;
+-webkit-border-radius: 5px;
+color: #fff;
+margin: .8em 0 0;
+cursor: pointer;
+font-size: 1.3em;
+clear: both;
+}
+
+#sectionSearch{
+display: inline!important;
+margin-right: 0.8em!important;
+}

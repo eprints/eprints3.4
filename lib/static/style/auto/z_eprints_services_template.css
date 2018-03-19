@@ -1,0 +1,75 @@
+/* override the default style with on a little cleaner */
+
+  body
+  {
+    background-color: #eaeaea;
+  }
+  #wrapper
+  {
+    background-color: #fff;
+    box-shadow: 0 2px 6px rgba(100, 100, 100, 0.3);
+    padding: 5px;
+    max-width: 1280px;
+    margin: 10px auto;
+  }
+  #main_content
+  {
+    min-height: 640px;
+  }
+  h1
+  {
+    padding-bottom: 5px;
+  }
+  h1, h2, h3, h4
+  {
+    color: #000000;
+  }
+  .ep_tm_menu,
+  .ep_tm_menu li:hover
+  {
+    background-image: none;
+    color: black;
+  }
+  .ep_tm_footer
+  {
+    height: 34px;
+  }
+  .ep_sr_content, .ep_summary_box_body, .ep_tab_panel, .ep_toolbox_content, .ep_upload_doc
+  {
+    background-image: none;
+    background-color: #fff;
+    box-shadow: 0 2px 6px rgba(100, 100, 100, 0.3);
+  }
+  .ep_tm_searchbar, .ep_columns_title, td.ep_columns_alter
+  {
+    background-image: none;
+    background-color: #fff;
+    box-shadow: 0 2px 6px rgba(100, 100, 100, 0.3);
+  }
+  .ep_search_buttons, .ep_search_controls, .ep_search_controls_bottom, .ep_view_group_by
+  {
+    background-image: none;
+    background-color: #fff;
+    box-shadow: 0 2px 6px rgba(100, 100, 100, 0.3);
+  }
+  .ep_summary_box_title, .ep_sr_title_bar, .ep_sr_collapse_bar 
+  {
+    background-image: none;
+    background-color: #fff;
+    box-shadow: 0 2px 6px rgba(100, 100, 100, 0.3);
+  }
+  .ep_blister_node
+  {
+    background-image: none;
+    background-color: #fff;
+    box-shadow: 0 2px 6px rgba(100, 100, 100, 0.3);
+  }
+  .ep_form_action_button, .ep_form_internal_button, .ep_tm_searchbarbutton
+  {
+    background-image: none;
+    margin-right: 8px;
+  } 
+  .ep_blister_node_selected
+  {
+    background-image: none;
+  }

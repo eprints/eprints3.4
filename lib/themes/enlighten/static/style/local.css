@@ -1,0 +1,246 @@
+
+/* 
+ * This CSS file will be applied after all the built in styles.
+ * 
+ * CSS files are loaded in alphabetic order, hence the  "zzz" in 
+ * the filename to force it to load after the other css files!
+ * 
+ * Add any local over-rides here. 
+ * 
+ * To totally replace a system css file, create a file of the same 
+ * name in this directory. eg. messages.css
+ * 
+*/
+
+h1{
+	color: #02456d;
+	font-weight: normal;
+}
+
+#pageContent #mainpage img{
+	display:inline;
+	border:none;
+}
+
+#pageContent .aside{
+	position: static;
+	float:left;
+	margin-right: 10px;
+	background:1em top no-repeat #ededed;	
+}
+/*
+#mainpage{
+	float:none;
+}*/
+
+#mainpage form{
+	border:none;
+}
+
+.sectionHeader h1{
+	text-align: left;
+}
+
+.maincontent .ep_columns_cell.ep_columns_cell_last{
+	padding:0;
+} 
+
+#mainpage form{
+	padding:0;
+}
+
+#mainpage #eprints_content input[type="submit"]{
+	margin: 0.4em;
+	padding: 5px;
+}
+
+ul.ep_action_list li{
+	vertical-align: middle;
+}
+
+.maincontent td{
+	padding:0;
+}
+
+.ep_columns td table, .ep_columns td table > *{
+	margin:0;
+	padding:0;
+}
+
+#mainpage #eprints_content .ep_columns_cell_last .caption{
+	display:none;
+}
+
+#mainpage #eprints_content p, #mainpage #eprints_content a, #mainpage #eprints_content li, #mainpage #eprints_content td, 
+#mainpage #eprints_content form input, #mainpage #eprints_content form p, #mainpage #eprints_content form label{
+	font-size: 1em !important;	
+	white-space: normal;
+}
+
+#mainpage #eprints_content form input, #mainpage #eprints_content form select, #mainpage #eprints_content form label
+{
+	display: inline;
+	float:none;	
+	margin:0.5em;	
+	font-family: "PT Sans",sans-serif;
+}
+
+
+/*#eprints_content #ep_admin_tabs_tabs li*/
+#mainpage #eprints_content .ep_tab_bar li{
+	display:inline;
+	margin:0;
+	list-style: none;
+}
+
+#mainpage input, #mainpage select, #mainpage textarea {
+	margin:0.5em;
+}
+
+
+.ep_tm_key_tools li{
+	display:block;
+	border:none;
+}
+
+
+/*#sNav .ep_tm_key_tools li a{
+	margin-left:0;
+	padding-left: 0;
+}
+*/
+/*
+Resizing so that we can fit Search Repository onto the title button
+*/
+/*#siteSearch input{
+	width:62%;
+}
+
+#siteSearch button{
+	width: 32%;
+}*/
+
+#mainpage #eprints_content form td, #mainpage #eprints_content form table{
+	border:none;
+
+}
+
+
+#mainpage input[type="password"]{
+	width:60% !important;
+}
+
+.ep_block p{
+	text-align: left;
+}
+
+
+.open{
+  background-color:#ededed;
+}
+
+
+.contentPanelContainer0{
+	display:none;
+}
+
+.ep_msg_message_content, .ep_msg_error_content, .ep_msg_warning_content, .ep_msg_other_content
+{
+    border-width: 0;
+}
+
+.ep_msg_message_content table 
+{
+    border: 1px solid #ccc;
+}
+.ep_msg_message_content td
+{
+    border: none;
+}
+
+.caption {
+	display: none;
+}
+
+/*For the table with the PDF and author details*/
+.maincontent table{
+	border:none;
+}
+
+.maincontent td{
+	border: none;
+}
+/*end PDF table*/
+
+.maincontent .ep_blister_bar{
+	width:65%;
+	margin:auto;
+}
+
+#sNav a{
+	font-size: 1em !important;
+}
+
+#sNav li{
+	font-size: 14px;
+}
+
+/*
+Input is set to 60% which is just huge.  Unless specified otherwise, 160px looks slightly better
+*/
+#mainpage #eprints_content input[type='text'], #mainpage #eprints_content input[type='password']{
+	width: 160px !important;
+}
+
+
+/*
+Line up the EPrints form buttons
+*/
+
+.ep_form_input_grid_arrows{
+	text-align: right;
+}
+/*
+.ep_only_js{
+	text-align: right;
+}
+
+.ep_sr_title > *{
+	text-align: left;
+}*/
+
+/*Seems there's a specific rule for id="q", so overriding*/
+#mainpage input#q{
+	padding:0.5em !important;
+}
+
+
+/*The width="100%" breaks the display in Chrome on display items*/
+td.ep_columns_alter td{
+	width:14px;
+}
+
+/*The last cell disappears off the edge if the display get too small without this*/
+table ul.ep_action_list{
+	white-space: normal;
+}
+
+#sNav .ep_drop_down:hover ul{
+  display:block;
+  float:none;
+  
+}
+
+#sNav ul li ul{
+  display:none;
+  
+  background-color:#ededed;
+}
+
+td.ep_row, th.ep_row{
+	vertical-align: middle;
+}
+
+.ep_preview{
+	border: solid 1px black;
+}

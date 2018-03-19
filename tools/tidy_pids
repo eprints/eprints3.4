@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# Deletes PID files for Indexer and OpenOffice, if the processes did not clear them properly on reboot.
+
+cd `dirname $0`
+if [[ -f ../var/indexer.pid && ! -d /proc/`cat ../var/indexer.pid` ]]; then
+	rm ../var/indexer.pid
+	if [[ -f ../var/indexer.tick ]]; then
+		 rm ../var/indexer.tick
+	fi
+fi
+if [[ -f ../var/openoffice.pid && ! -d /proc/`cat ../var/openoffice.pid` ]]; then
+        rm ../var/openoffice.pid
+fi

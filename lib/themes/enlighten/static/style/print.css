@@ -1,0 +1,135 @@
+/* 
+=============================================================================
+
+	print.css
+	v1.0
+	2010/04/19
+
+	Headscape
+	Written by Chris Sanderson (chris.sanderson@headscape.co.uk)
+
+	This stylesheet combined with basic.css to provide styling for printed pages. 
+
+=============================================================================
+*/
+
+body {font-size: 85%;}
+
+.hide,
+.pp_pic_holder, .pp_overlay, .ppt,
+#sitename,
+#siteTools,
+#siteSearch,
+#pNav,
+#pageContent .aside,
+#breadcrumbs,
+#home .courseFinder,
+.has_js .rotatingFeature ul,
+#flvcontainer,
+ul.slide li.more a,
+#jquerylist-nav,
+#pageContent #mainpage .maincontent .pagination,
+#rform input[type$='submit'],
+#pageFooter .backToTop,
+#pageFooter .contact .email,
+#pageFooter ul {display: none;}
+
+abbr {border-bottom: none;}
+a {text-decoration: none; color: #000;}
+
+.rotatingFeature {margin-bottom: 2em;}
+.rotatingFeature .features .feature {display: block !important;}
+
+.links h1,
+.links h2 {margin-top: 0; font-size: 14pt;}
+
+h1.unresponsivestyle {display:none;}
+
+#pageContent #mainpage img {display: block; border: 1px solid #ccc; padding: 2px;}
+#pageContent #mainpage .maincontent img.left,
+#pageContent #mainpage .maincontent .imgleft {float: left; margin: 0.3em 1.5em 1.2em 0;}
+#pageContent #mainpage .maincontent img.right,
+#pageContent #mainpage .maincontent .imgright {float: right; margin: 0.3em 0 1.2em 1.5em;}
+.has_js #pageContent #mainpage .maincontent img.left,
+.has_js #pageContent #mainpage .maincontent img.right {margin: 0;}
+#pageContent #mainpage .maincontent .img .caption,
+#pageContent #mainpage .maincontent .imgleft .caption,
+#pageContent #mainpage .maincontent .imgright .caption {margin-bottom: 0; font: 13px Georgia, "Times New Roman", Times, serif; font-style: italic; line-height: 1.7em;}
+#pageContent #mainpage .maincontent .imgright .caption {text-align: right;}
+
+#pageContent #mainpage .maincontent table {width: 90%; margin-bottom: 2.5em; border-collapse: collapse;}
+#pageContent #mainpage .maincontent table tr th {padding: 0.4em 0.6em; font-size: 1.2em; border: 1px solid grey;}
+#pageContent #mainpage .maincontent table tr td {padding: 0.4em 0.6em; border: 1px solid grey;}
+
+#pageContent #mainpage .maincontent .newsstory {border-bottom: 1px solid grey;}
+#pageContent #mainpage .maincontent .newsstoryphoto {float: right; font-size: 1.3em; margin: 0.3em 0 1.2em 1.5em;}
+
+#pageContent .links p.profile_link {overflow: hidden; margin-bottom: 1em;}
+#pageContent .links p.profile_link img {float: left; margin-right: 0.5em;}
+
+#pageContent #mainpage .maincontent .profileleftcol {float: left; width: 172px;}
+#pageContent #mainpage .maincontent .profilerightcol {margin-left: 195px;}
+
+ul.slide li {display: block !important;}
+
+#pageContent .links p,
+#pageContent .links ul,
+#pageContent .links ol,
+#pageContent .links form {margin-bottom: 2em;}
+
+#rform fieldset {margin-bottom: 1.5em; padding: 1em 0;}
+#rform fieldset legend {padding: 0.2em 0.5em 0.2em 0; font-size: 1.92em;}
+#rform p {margin-left: 1em; font-size: 1em !important;}
+#rform label {display: block; float: left; width: 180px; margin: 2px 0 0 1em; text-align: right;}
+#rform input, #rform textarea, #rform select {margin: 2px 0 5px 10px;}
+
+#pageContent #mainpage #gallery {float: left; width: 100%;}
+#pageContent #mainpage #gallery .row {float: left; width: 60%; margin-bottom: 2.5em;}
+#pageContent #mainpage #gallery .row .column {float: left; margin-right: 20px;}
+#pageContent #mainpage #gallery .row .column3 {margin-right: 0;}
+#pageContent #mainpage #gallery .row .column span {display: block; border: 1px solid #ccc; margin-bottom: 0.3em; padding: 2px;}
+#pageContent #mainpage #gallery .row .column span a {width: 146px; height: 146px; overflow: hidden; display: block; text-align: center;}
+#pageContent #mainpage #gallery .row .column span a img {display: inline; vertical-align: bottom; padding: 0; border: none;}
+#pageContent #mainpage #gallery .row .column .gCaption {font-style: italic; font-family: Georgia, "Times New Roman", Times, serif;}
+
+#pageContent,
+#pageContent div,
+#pageContent .courseFinder .header,
+#pageContent .courseFinder .header div,
+#pageContent .courseFinder.basic ul,
+#pageContent .courseFinder.basic ul div,
+#pageContent .jumpLink h2,
+#pageContent .jumpLink h2 div,
+#pageContent .jumpLink .text,
+#pageContent .jumpLink .text div,
+#pageContent .rotatingFeature .feature .text,
+#pageContent .rotatingFeature .feature .text div,
+#pageContent #mainpage .maincontent .textsplash,
+#pageContent #mainpage .maincontent .textsplash div,
+#pageContent #mainpage .maincontent .pullquote,
+#pageContent #mainpage .maincontent .pullquote div {position: static !important; border: none !important; width: auto !important; height: auto !important; padding: 0 !important;}
+
+.maincontent,
+.links {padding-top: 2em;}
+.maincontent h1 {margin-top: 0;}
+.maincontent,
+.links,
+.news,
+.events {border-top: 1px solid grey;}
+#home .maincontent {border-top: none;}
+.news ul li,
+.events ul li {margin-bottom: 1.5em;}
+.news ul li h4,
+.events ul li h4 {margin-top: 0;}
+.news ul li p,
+.events ul li p {margin-bottom: 0;}
+
+#pageFooter .contact .phoneEmail .tel,
+#pageFooter .contact .phoneEmail .tel dd {display: inline;}
+.accordianhidden{	display:block!important;}
+.pageHeader{display:none;}
+
+/*added for 1t4 style*/
+body{background:none;}
+#pageBackgroundImage{display:none;}
+.nav{display:none;}

@@ -1,0 +1,105 @@
+use EPrints;
+use strict;
+
+my $session = EPrints::Session->new();
+my $content = "text/html";
+$session->send_http_header( content_type=>$content );
+
+my $dataset = $session->param( "dataset" );
+   $dataset = "eprint" unless $dataset;
+
+my $nohead = $session->param( "nohead" );
+   $nohead = 0 unless $nohead;
+
+if( !( $session->current_user && $session->current_user->value("usertype") =~ /^(admin|local_admin)$/ ) )
+{
+  print "<html><body>You must be logged in as an admin to view this page</body></html>\n";
+  $session->terminate;
+  exit( 0 );
+}
+
+print <<EOT;
+<html>
+<head>
+<title>$dataset</title>
+<style>
+#dataset_dictionary
+{
+  font-family: sans-serif;
+}
+#dataset_dictionary td
+{
+  border: 1px solid lightgrey;
+}
+#dataset_dictionary tr:hover
+{
+  background-color: #efefef;
+}
+#dataset_dictionary .unset
+{
+  color: lightgrey;
+}
+#dataset_dictionary li
+{
+  font-size: 80%;
+}
+#dataset_dictionary a, a:visited
+{
+  color: black;
+  text-decoration: none;
+}
+#dataset_dictionary a:hover
+{
+  text-decoration: underline;
+}
+p.dataset_dictionary
+{
+  font-weight: bold;
+}
+</style>
+</head>
+<body>
+<ul>
+EOT
+
+unless( $nohead )
+{
+  foreach my $ds ( $session->get_sql_dataset_ids )
+  {
+    print "  <li><a href='dataset_dictionary?dataset=$ds'>$ds</a></li>\n";
+  }
+}
+
+print <<EOT;
+</ul>
+<p class="dataset_dictionary">Field information for the '$dataset' dataset</p>
+<table id="dataset_dictionary">
+<tr><th>Name</th><th>Type</th><th>Label</th><th>Help</th></tr>
+EOT
+
+my $unset = "<span class='unset'>Unset</span>";
+
+my $ds = $session->dataset( $dataset );
+
+if( $ds )
+{
+  my @fields = $ds->fields;
+  foreach my $field (@fields)
+  {
+    my $n =  $field->name;
+    my $name =  $field->render_name;
+    my $help = $field->render_help;
+    my $t = $field->type;
+
+    $name = $unset if $name eq '["' . $dataset . '_fieldname_' . $n . '" not defined]';
+    $help = $unset if $help eq '["' . $dataset . '_fieldhelp_' . $n . '" not defined]';
+
+    print "<tr><td>$n</td><td>$t</td><td>$name</td><td>$help</td></tr>\n";
+  }
+}
+
+print <<EOT;
+</table>
+</body>
+</html>
+EOT

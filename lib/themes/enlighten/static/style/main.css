@@ -1,0 +1,890 @@
+a,abbr,acronym,address,applet,big,blockquote,body,caption,cite,code,dd,del,dfn,div,dl,dt,em,fieldset,font,form,h1,h2,h3,h4,h5,h6,html,iframe,img,ins,kbd,label,legend,li,object,ol,p,pre,q,s,samp,small,strike,strong,sub,sup,table,tbody,td,tfoot,th,thead,tr,tt,ul,var{margin:0;padding:0;border:0;outline:0;font-weight:inherit;font-style:inherit;font-family:inherit}
+html{-webkit-font-smoothing:antialiased}
+h1 h1,h2,h3,h4,h5,h6{font-weight:400}
+h1,h2,h3,h4,h5,h6{font-family:'PT Sans',sans-serif;font-weight:400;color:#02456d}
+p{font-size:1.4em;line-height:1.4}
+em{font-style:italic}
+a{color:#005288;text-decoration:none;cursor:pointer}
+a img{border:none}
+a:active,a:focus,a:hover{cursor:pointer;text-decoration:underline}
+:active,:focus{outline:0}
+.clearfix:after{content:".";display:block;height:0;clear:both;visibility:hidden}
+* html .clearfix{height:1%}
+.clearfix{display:block}
+table{border-collapse:separate;border-spacing:0}
+ul{list-style:none}
+ol{padding-left:2.8em!important}
+caption{text-align:left;font-weight:400}
+td{text-align:left;font-weight:400}
+th{text-align:left;font-weight:400}
+blockquote:after,blockquote:before,q:after,q:before{content:""}
+blockquote,q{quotes:"" ""}
+button,input,select,textarea{font-family:'PT Sans',sans-serif}
+button{cursor:pointer}
+.skip{height:1px;left:-5000em;overflow:hidden;position:absolute;top:auto;width:1px}
+.hide{display:none}
+body{color:#333;font-family:'PT Serif',Georgia,"Times New Roman",Times,serif;font-size:62.5%;margin:0;background:#cdced2}
+#pageContent,#pageFooter,#pageHeader,.breadcrumbTop{margin:0 auto!important;width:80%}
+#pageContent{overflow:hidden}
+@media only screen and (max-width:680px){#pageContent{overflow:visible!important}
+}
+#pageBackgroundImage{max-width:30%;position:fixed;top:0;left:700px;z-index:-2;display:none}
+/*#pageContainer #pageHeader{background:url(/style/images/headerbg_new2.png) repeat-x top;position:relative}*/
+#pageHeader h3,#pageHeader p.sitenavigation{display:none}
+#pageHeader a{color:#fff}
+#branding{float:left;padding:2.5618556701031% 2.0618556701031% 1.5463917525773%;width:17.7319587628866%}
+#branding #logo{display:none}
+#branding img{max-width:172px;height:auto}
+#branding a{display:block;float:left}
+#branding #sitename{display:none}
+#pageHeader .topLinks{float:right;width:55.6701030927835%}
+#siteTools{float:right;padding:3.5777777777778% 5.5777777777778% 2.5777777777778% 2.5777777777778%;font-family:'PT Sans',sans-serif;font-weight:400;font-size:1em}
+#siteTools ul{float:right}
+#siteTools li{float:left}
+#siteTools li a{border-right:#fff 1px solid;font-size:1.4em;margin-left:.7em;padding-right:.7em}
+#siteTools li.last a{border-right:none;padding-right:0}
+#pageHeader .nav .dropdownButton,#siteTools .dropdownButton{display:none}
+.dropdownButton.open{background:#32668b!important}
+#siteSearch{padding:2%;width:50%;float:right;}
+#siteSearch fieldset,#siteSearch form{border:none!important}
+#siteSearch label{display:none}
+#siteSearch input{border:1px solid #00365b;box-shadow:inset 1px 1px 2px 0 gray;-webkit-box-shadow:inset 1px 1px 2px 0 gray;font-size:1.4em;float:left;margin-right:2.8985507246377;padding:.7em;width:66.6666666666667%}
+#siteSearch button{background:#2e5c81;border-top:#00365b 1px solid;border-right:#00365b 1px solid;border-left:#00365b 1px solid;border-bottom:#04141f 1px solid;border-radius:5px;-webkit-border-radius:5px;color:#fff;float:right;font-size:1.6em;padding:.55em 0;width:25.7142857142857%}
+#pageHeader .nav ul{font-family:'PT Sans',sans-serif;font-weight:400}
+#pageHeader .nav{background:url(/style/images/navbg-new.png);clear:both;padding:0 1.5463917525773%}
+#pageHeader .nav li{float:left;width:14.255714285714286%;border-bottom:#cdced2 1px solid}
+#pageHeader .nav li a{color:#cdced2;border-right:1px solid #cdced2;display:block;font-size:1.5em;text-align:center;margin:5% 0;padding:2% 0}
+#pageHeader .nav li.last a{border-right:none}
+#pageHeader .nav li:hover{background:url(/style/images/navbg-new.png)}
+#pageHeader .nav li a:hover{text-decoration:none}
+#pageHeader .nav li.active{background:#125684;border-left:#fff 1px solid;border-right:#fff 1px solid;margin-left:-1px;border-bottom:#fff 1px solid}
+#pageHeader .nav li.active a{border-right:none}
+#pageHeader #altNav{display:none}
+#pageHeader .lowerWrap{width:100%;margin-top:-1px;border-top:#cdced2 1px solid}
+#pageHeader .nav .dropdownButton,#siteTools .dropdownButton{padding:0;margin:0;border:none}
+#pageContent{background:#fff;outline:0;position:relative;z-index:1;height:auto!important}
+.breadcrumbTop{margin:.5em 0 .5em 35px}
+.breadcrumbTop ul{padding:.5em 0}
+.breadcrumbTop li{background:url(/style/images/breadcrumbarrow.png) center right no-repeat;float:left;font-size:1.3em;padding:.2em 1em .2em .8em;font-family:'PT Sans',sans-serif}
+.breadcrumbTop li.last{background:0 0}
+.backToTop a{background:#fff;border-bottom:none;border-left:none;border-right:none;color:#666;display:block;float:left;font-size:1.3em;height:1.3em;margin-left:1.5463917525773%;padding:.5em 1em;position:absolute;top:-3.6em;font-family:'PT Sans',sans-serif;font-weight:400}
+.backToTop a:hover{padding:.7em 1em .5em;text-decoration:none}
+#pageFooter{font-family:'PT Sans',sans-serif;background:#f4f3f2;border:none;margin-top:4.5em!important;margin-bottom:2em!important;padding-bottom:2.0618556701031%;position:relative}
+#pageFooter h2{display:block;font-family:'PT Sans',sans-serif;font-size:2.2em;line-height:1.4;margin-bottom:.4em;padding:2.0618556701031% 2.5773195876289% 0}
+#pageFooter h3,#pageFooter li,#pageFooter p{font-size:1.3em;line-height:1.5;margin-bottom:.4em}
+#pageFooter h3{text-transform:uppercase}
+#pageFooter li a{background:url(/style/images/bulletcontent.png) 0 .38em no-repeat;padding-left:1em;display:block}
+#pageFooter ul{margin-bottom:2em}
+#pageFooter .contactLinks{float:left;width:45.360824742268%;padding:0 2.0618556701031% 0 2.5773195876289%}
+#pageFooter .footerLinks{border-left:1px solid #d7d3ce;float:left;min-height:21em;padding:0 2.0618556701031%;width:20.6185567010309%}
+#pageFooter .addthis_toolbox{margin-top:1.5em}
+#pageFooter .addthis_toolbox a{background:0 0;padding-left:0}
+@media only screen and (max-width:850px){#pageFooter .contactLinks,#pageFooter .footerLinks{float:none;min-height:0;width:95.87628%}
+#pageFooter .footerLinks{border-left:none}
+#pageHeader .topLinks{width:100%;background:url(/style/images/navbg-new.png);border-bottom:1px solid #042e4a}
+#branding{padding:4.4444444444444% 0 4.4444444444444% 4.4444444444444%;width:40%}
+#branding img{width:100%;height:auto}
+#siteSearch{padding:2%;width:50%;float:right}
+#siteSearch input{width:60%}
+#siteTools{width:24.4444444444444%;margin:2.2222222222222% 2.2222222222222% 2.2222222222222% 0;padding:0;position:relative}
+#siteTools .dropdownButton{display:block;float:right;background:url(/style/images/navbg-new.png);font-size:1.3em;width:100%}
+#siteTools .dropdownButton a{background:url(/style/images/azlistsdropdownarrow.png) center right no-repeat;display:block;padding:10.3636363636364% 36.3636363636364% 10.3636363636364% 9.0909090909091%}
+#siteTools .dropdownButton a:hover{text-decoration:none}
+#siteTools ul{background:#32668B;display:none;padding:1em 0;position:absolute;right:0;top:2.9em;width:120%;z-index:2}
+#siteTools li{display:block;float:none}
+#siteTools li a{border-right:none;display:block;padding:.8em}
+#pageHeader .nav{background:0 0;border-top:none;clear:none;float:right;margin:5.1111111111111% 4% 5.1111111111111% 0;padding:0;position:relative;width:46.6666666666667%}
+#pageHeader .nav .dropdownButton{display:block;float:right;background:url(/style/images/navbg-new.png)}
+#pageHeader .nav .dropdownButton a{background:url(/style/images/navmenudropdown.png) center right no-repeat;color:#fff;display:block;font-size:1.6em;padding:12.5% 60px 12.5% 12.5%;font-family:'PT Sans',sans-serif}
+#pageHeader .nav .dropdownButton a:hover{text-decoration:none}
+#pageHeader .nav ul{background:#32668b;display:none;padding:.5em 0;position:absolute;top:4.8em;width:120%;z-index:2;right:0}
+#pageHeader .nav li{display:block;width:100%;border-bottom:none}
+#pageHeader .nav li a{padding:.8em 1.6em;text-align:left;margin:3% 0}
+#pageHeader #altNav{display:block}
+#pageHeader #pNav{margin:0!important}
+}
+@media only screen and (max-width:680px){#pageContent,#pageContent .maincontent,#pageFooter,#pageHeader,.breadcrumbTop{width:100%;margin:0}
+#pageContent #mainpage .maincontent #accordion img,#pageContent #mainpage .maincontent img{max-width:100%!important;height:auto!important}
+#pageContent #mainpage .maincontent #accordion .imgleft,#pageContent #mainpage .maincontent #accordion .imgright,#pageContent #mainpage .maincontent #accordion img.left,#pageContent #mainpage .maincontent #accordion img.right,#pageContent #mainpage .maincontent .imgleft,#pageContent #mainpage .maincontent .imgright,#pageContent #mainpage .maincontent img.left,#pageContent #mainpage .maincontent img.right{height:auto!important}
+}
+@media only screen and (max-width:1000px) and (min-width:680px){#pageContent,#pageFooter,#pageHeader,.breadcrumbTop{width:90%}
+#pageContent #mainpage .maincontent #accordion img,#pageContent #mainpage .maincontent img{max-width:100%!important;height:auto!important}
+#pageContent #mainpage .maincontent #accordion .imgleft,#pageContent #mainpage .maincontent #accordion .imgright,#pageContent #mainpage .maincontent #accordion img.left,#pageContent #mainpage .maincontent #accordion img.right,#pageContent #mainpage .maincontent .imgleft,#pageContent #mainpage .maincontent .imgright,#pageContent #mainpage .maincontent img.left,#pageContent #mainpage .maincontent img.right{height:auto!important}
+}
+@media only screen and (min-width:1000px){#pageContent,#pageFooter,#pageHeader,.breadcrumbTop{width:931px}
+}
+#mainpage form{width:96%;padding:2%;border:1px solid #c3bdb4;margin:1.5em 0}
+#mainpage form p{font-size:1.2em!important;font-family:'PT Sans',sans-serif;font-weight:400}
+#mainpage form label{font-size:1.4em!important;float:left;max-width:80%;display:block;padding:.5em}
+#mainpage form legend{font-size:1.8em;color:#02456d}
+#mainpage form input[type=checkbox],#mainpage form input[type=radio]{margin:1em 0 1.4em 10px!important;max-width:10%;clear:both}
+#mainpage fieldset{padding:2%!important;border:1px solid #c3bdb4!important}
+#mainpage .rightCol form{padding:2%;border:none!important;margin:0}
+#mainpage legend{font-size:1.4em;line-height:1.4;font-family:'PT Sans',sans-serif;font-weight:700}
+#mainpage input,#mainpage select,#mainpage textarea{padding:.5em;margin:.5em 0 1.25em}
+#mainpage input[type=submit]{padding:.4em 1em;width:auto;background:#00365B;border-top:#00365B 1px solid;border-right:#00365B 1px solid;border-left:#00365B 1px solid;border-bottom:#04141F 1px solid;border-radius:5px;-webkit-border-radius:5px;color:#fff;margin:.8em 0 0;cursor:pointer;font-size:1.3em;clear:both}
+#mainpage input[type=submit],#mainpage input[type=text],#mainpage select,#mainpage textarea{display:block}
+#mainpage input[type=text]{font-size:1.3em}
+#mainpage select{max-width:72%}
+#mainpage input[type=text],#mainpage textarea{width:60%!important}
+#mainpage .rightCol select{width:100%!important;max-width:inherit}
+select option{max-width:100%}
+#mainpage .formHelp{margin-left:.2em;padding-left:1.5em;background:url(http://www.gla.ac.uk/1t4/generic/images/tooltip.png) top left no-repeat}
+#mainpage .formHelp span.helpText{font-style:italic;color:#5B5B5B;font-size:.9em}
+.errorMessages{color:#333;border:1px solid #C7928F;background:#F0E8E8;padding:2%!important;margin:1.5em 0;width:96%}
+.errorMessages ul{margin-left:2em}
+.errorMessages p strong{color:#8b0000}
+.errorMessages ul li{font-size:1.4em;line-height:1.4;list-style:square;margin-top:.5em;color:#8b0000}
+@media only screen and (max-width:680px){#mainpage .rightCol form{padding:0;width:100%!important}
+#mainpage .formHelp{display:none}
+#mainpage input,#mainpage select,#mainpage textarea{padding:.5em}
+.breadcrumbTop{display:none}
+#pageHeader .nav{border-bottom:none}
+#mainpage input[type=text],#mainpage textarea{width:94.5%!important}
+#mainpage select{width:100%!important;max-width:inherit}
+#siteTools li.last a{padding-right:.7em}
+}
+@media only screen and (max-width:460px){#branding{padding-top:7%}
+#siteSearch input{background-image:url(http://www.gla.ac.uk/1t4/generic/images/searchbg.jpg);background-position:center right;background-repeat:no-repeat;padding-right:2em}
+#siteSearch button{display:none}
+#siteSearch,#siteTools{width:20%; padding: 3% 15% 3% 3%}
+#siteSearch input{width:100%}
+}
+.promo.undergraduate .text,.singleContentElement.promo.undergraduate,p.textsplash.undergraduate{background-color:#008a98}
+#pageContent .sectionHeader{color:#fff;border-bottom:none;background-color:#2e5c81;z-index:666}
+#pageContent .sectionHeader h1{min-height:36px;margin:0;padding:17px 15px;font-size:3em;color:#fff;font-family:'PT Sans',sans-serif;font-weight:400}
+#pageContent .sectionHeader h1 a{color:#fff!important}
+#pageContent .sectionHeader.mvls{background:#305c80;color:#fff;border-bottom:none}
+.aside.mvls{background:url(http://www.gla.ac.uk/1t4/generic/images/navarrow-new.png) 1em top no-repeat #ededed}
+#staffphoto.mvls,.CollegeColour.singleContentElement.promo.mvls,p.textsplash.mvls{background-color:#305c80}
+#pageContent .sectionHeader.arts{background:#305c80;color:#fff;border-bottom:none}
+.aside.arts{background:url(http://www.gla.ac.uk/1t4/generic/images/navarrow-new.png) 1em top no-repeat #ededed}
+#staffphoto.arts,.CollegeColour.singleContentElement.promo.arts,p.textsplash.arts{background-color:#305c80}
+#pageContent .sectionHeader.scieng{background:#305c80;color:#fff;border-bottom:none}
+.aside.scieng{background:url(http://www.gla.ac.uk/1t4/generic/images/navarrow-new.png) 1em top no-repeat #ededed}
+#staffphoto.scieng,.CollegeColour.singleContentElement.promo.scieng,p.textsplash.scieng{background-color:#305c80}
+#pageContent .sectionHeader.socsci{background:#305c80;color:#fff;border-bottom:none}
+.aside.socsci{background:url(http://www.gla.ac.uk/1t4/generic/images/navarrow-new.png) 1em top no-repeat #ededed}
+#staffphoto.socsci,.CollegeColour.singleContentElement.promo.socsci,p.textsplash.socsci{background-color:#305c80}
+#pageContent .sectionHeader.internal{background:#52473b;color:#fff;border-bottom:none}
+.aside.internal{background:url(http://www.gla.ac.uk/1t4/generic/images/navarrow-sandstone.png) 1em top no-repeat #ededed}
+p.textsplash.internal{background-color:#52473b!important}
+.promo.internal .text,.singleContentElement.promo.postgraduate{background-color:#52473b}
+#pageContent .sectionHeader.undergraduate{background:#951272;color:#fff;border-bottom:none}
+.aside.undergraduate{background:url(http://www.gla.ac.uk/1t4/generic/images/navarrow-thistle.png) 1em top no-repeat #ededed}
+.promo.undergraduate .text,.singleContentElement.promo.undergraduate{background-color:#951272}
+p.textsplash.undergraduate{background-color:#4f5961!important}
+#pageContent .sectionHeader.postgraduate{background:#5b4d94;color:#fff;border-bottom:none}
+.aside.postgraduate{background:url(http://www.gla.ac.uk/1t4/generic/images/navarrow-lavender.png) 1em top no-repeat #ededed}
+.promo.postgraduate .text,.singleContentElement.promo.postgraduate{background-color:#5b4d94}
+p.textsplash.postgraduate{background-color:#4f5961!important}
+#pretabs p.textsplash.postgraduate{background-color:#e4e4e4!important}
+#pageContent .sectionHeader.research{background:#5b537d;color:#fff;border-bottom:none}
+.aside.research{background:url(http://www.gla.ac.uk/1t4/generic/images/navarrow-heather.png) 1em top no-repeat #ededed}
+.promo.research .text,.singleContentElement.promo.research{background-color:#5b537d}
+p.textsplash.research{background-color:#4f5961!important}
+.maincontent h3 .smaller{font-size:.8em}
+.aside{border-right:none;height:100%;padding:2.0618556701031% 0;position:absolute;width:22.680412371134%;background:url(/style/images/navarrow-blue.png) 1em top no-repeat #ededed}
+.aside img{height:auto;margin:5%;width:90%}
+#sNav .sectionTitle a{font-size:2em;line-height:1.2;font-family:'PT Serif',Georgia,"Times New Roman",Times,serif;padding:0 0 5% 2.272727272727273%}
+#sNav .sectionTitle a:hover{background:0 0}
+#sNav ul{margin:0;padding:0;font-family:'PT Sans',sans-serif;font-weight:400}
+.open{background-color:#fff;border-top:none;border-left:none;border-bottom:none;font-family:'PT Sans',sans-serif;font-weight:400;padding:1% 0;margin:-1px -1px 2% 0}
+.open .open,.open .open .open,.open .open .open .open{border:none;margin:0;padding:0}
+.current a,.currentsection{background:url(http://www.gla.ac.uk/1t4/generic/images/navcurrentarrow.png) right .8em no-repeat}
+.currentsection{background:url(/style/images/breadcrumbarrow.png) right .8em no-repeat}
+#sNav .sectionTitle.current a,.current ul a{background:0 0}
+#sNav .open.current .currentsection,#sNav .open.current a{background-color:#fff}
+#sNav li{margin-left:6.818181818181818%}
+#sNav .currentsection,#sNav a{color:#333;display:block;font-size:1.4em;line-height:1.4;padding:3.636363636363636% 1.4em 3.636363636363636% 6.818181818181818%;border-bottom:1px solid #fff}
+#sNav ul li .currentsection ul li a,#sNav ul li ul li .currentsection,#sNav ul li ul li a{margin-left:4.545454545454545%}
+#sNav ul li .currentsection ul li ul li a,#sNav ul li ul li .currentsection ul li a,#sNav ul li ul li ul li .currentsection,#sNav ul li ul li ul li a{margin-left:9.090909090909091%}
+#sNav ul li ul li .currentbranch0 ul li ul li a,#sNav ul li ul li .currentsection ul li ul li a #sNav ul li ul li ul li ul li .currentbranch0 a,#sNav ul li ul li ul li .currentbranch0 ul li a,#sNav ul li ul li ul li .currentsection ul li a,#sNav ul li ul li ul li ul li .currentsection a,#sNav ul li ul li ul li ul li a{margin-left:13.636363636363636%}
+#sNav li li li li li a{margin-left:18.181818181818182%}
+#sNav ul li .currentbranch0 ul li a{padding-left:33px;color:#666}
+#sNav ul li ul li .currentbranch0{padding-left:33px}
+#sNav ul li .heading,#sNav ul li .heading a{display:block;color:#333;line-height:1.6em}
+#sNav ul li.heading{display:block;padding:.4em 15px;color:#333;line-height:1.6em}
+#pageContent .extraNav{margin-top:20px;margin-left:15px;margin-right:15px;font-size:1.2em;color:#333}
+#pageContent .extraNav a{color:#333}
+.dropdownNav{display:none}
+@media only screen and (max-width:680px){.dropdownNav{background:#e8e6e4;margin:0;padding:1.5em 4.347826086956522% 4.347826086956522%;width:91.33333333%}
+.dropdownNav p{color:#52473b;font-family:'PT Serif',Georgia,"Times New Roman",Times,serif;font-size:1.6em}
+.dropdownNav .textBox{background:url(http://www.gla.ac.uk/1t4/generic/images/navdropdownarrow.jpg) right center no-repeat #fff;border:1px solid #ABA398;margin-top:.5em;padding:.6em 3em .6em 2.941176470588235%;height:2.4em;overflow:hidden}
+.dropdownNav .textBox p{color:#333;line-height:1.7;margin-top:-.1em}
+ul.menu{background:#fff;border:1px solid #aba398;margin:0 4.5%;position:absolute;width:91%;left:-1px;z-index:20}
+.dropdownNav,ul.menu{display:none}
+.currentsection,ul.menu a:hover{background:#e8e6e4}
+ul.menu .open{border:none;margin:0;padding:0}
+ul.menu .current .currentsection,ul.menu .current a{background:0 0}
+ul.menu .sectionTitle a{font-weight:700;padding:2% 4%}
+ul.menu li.sectionHeaderLi{margin:0}
+ul.menu li .currentsection,ul.menu li a{color:#333;display:block;font-size:1.4em;line-height:1.4;padding:3% 4% 3% 9%}
+ul.menu li .currentsection li a,ul.menu li li .currentsection,ul.menu li ul li a{padding:3% 4% 3% 14%}
+ul.menu li .currentsection ul li ul li a,ul.menu li ul li .currentsection ul li a,ul.menu li ul li ul li .currentsection,ul.menu li ul li ul li a{padding:3% 4% 3% 19%}
+ul.menu li ul li .currentsection ul li ul li a,ul.menu li ul li ul li .currentsection ul li a,ul.menu li ul li ul li ul li .currentsection,ul.menu li ul li ul li ul li a{padding:3% 4% 3% 24%}
+ul.menu li ul li .currentsection ul li ul li ul li a,ul.menu li ul li ul li ul li .currentsection ul li a,ul.menu li ul li ul li ul li ul li .currentsection,ul.menu li ul li ul li ul li ul li a{padding:3% 4% 3% 29%}
+ul.menu li .currentbranch0 ul li a,ul.menu li ul li .currentbranch0{padding-left:33px}
+ul.menu li ul li .currentbranch0 ul li ul li a,ul.menu li ul li ul li .currentbranch0 ul li a,ul.menu li ul li ul li ul li .currentbranch0,ul.menu li ul li ul li ul li .currentbranch0 a{padding:3% 4% 3% 29%}
+ul.menu li .heading,ul.menu li .heading a{display:block;color:#333;line-height:1.6em}
+ul.menu ul li.heading{display:block;padding:.4em 15px;color:#333;line-height:1.6em;background:url(http://www.gla.ac.uk/0t4/generic/images/snav_li_active.gif) right bottom no-repeat #e1e1e1;border-top-color:#d4d2d0}
+}
+.maincontent{width:67.3758865248227%}
+.maincontent.fullwidth{clear:both;width:100%}
+#breadcrumbs,#mainpage,#pageContent .header{float:right;margin-top:1.5em;margin-bottom:-.5em;padding-right:2.0618556701031%;width:72.680412371134%}
+#mainpage{padding-bottom:2.0618556701031%;padding-right:0;margin-top:2em;overflow:hidden}
+#breadcrumbs{margin-bottom:0}
+#breadcrumbs h3{display:none}
+#breadcrumbs li{float:left;font-family:'PT Sans',sans-serif;font-weight:400;font-size:1.4em;line-height:1.4}
+#breadcrumbs li.last{color:#767676}
+#breadcrumbs li a{color:#003f6a!important;background:url(http://www.gla.ac.uk/1t4/generic/images/breadcrumbarrow.gif) center right no-repeat;display:block;margin-right:.3em;padding-right:1em}
+h1 a{color:#333}
+.maincontent h1,h1.responsivestyle{font-size:3em;margin-bottom:.5em}
+.maincontent h1.unresponsivestyle{display:none}
+.maincontent h2{font-family:'PT Sans',sans-serif;font-weight:700;font-size:2.2em;margin:.5em 0;color:#02456d}
+.maincontent h3{font-family:'PT Sans',sans-serif;font-weight:700;font-size:2em;margin:.5em 0;color:#574f45}
+.maincontent h4{font-family:'PT Sans',sans-serif;font-weight:700;font-size:1.8em;margin:.5em 0;color:#574f45}
+.maincontent h5{font-family:'PT Sans',sans-serif;font-weight:700;font-size:1.6em;margin:.5em 0;color:#574f45}
+.maincontent h6{font-family:'PT Sans',sans-serif;font-weight:700;font-size:1.42em;margin:.5em 0;color:#574f45}
+.maincontent p{margin-bottom:1em;line-height:1.7em}
+.maincontent ol,.maincontent ul{margin:1em 0}
+.maincontent li{font-size:1.4em;line-height:1.4}
+.maincontent ul ul{margin:0 0 1em}
+.maincontent li li{font-size:1em;margin:0 0 .25em 1em}
+.maincontent ul li{list-style:square;margin:0 0 .5em 2em}
+.maincontent ol li{list-style:decimal}
+.maincontent ol li ol li{list-style:lower-alpha}
+h1.textsplash,h2.textsplash,ol.textsplash,p.textsplash{background:#52473b;color:#fff;padding:2.127659574468085% 2.836879432624113%;width:94.25%;font-family:'PT Sans',sans-serif;font-weight:400}
+.textsplash a{color:#fff;text-decoration:underline}
+.textsplashdark{background:#ccc;color:#000;padding:2.127659574468085% 2.836879432624113%;width:94.25%;font-family:'PT Sans',sans-serif;font-weight:400}
+.textsplashdark a{color:#000;text-decoration:underline}
+.textsplashheather{background:#5b537d;color:#fff;padding:2.127659574468085% 2.836879432624113%;width:94.25%;font-family:'PT Sans',sans-serif;font-weight:400}
+.textsplashheather a{color:#fff;text-decoration:underline}
+.maincontent table{font-size:1.4em;line-height:1.4;border-top:1px solid #d2cec7;border-left:1px solid #d2cec7;margin:.4em 0;width:100%}
+.maincontent td,.maincontent th{border-right:1px solid #d2cec7;border-bottom:1px solid #d2cec7;vertical-align:middle}
+.maincontent td{padding:2%}
+.maincontent th{background:#d2cec7;padding:.4em .6em}
+.maincontent table li,.maincontent table p{font-size:1em}
+tr.alt{background-color:#F4F4F4}
+strong{font-weight:700}
+#flvcontainer,#flvcontainer embed{width:100%}
+hr{border-bottom:none;border-top:1px solid #c3bdb4;height:1px}
+#pageContent #mainpage .maincontent p.intro{font-size:1.5em}
+#pageContent #mainpage .maincontent p.intro:first-letter{float:left;font-size:350%;line-height:.7em;margin-right:.03em;margin-top:.1em}
+.maincontent li.unapprovedpgr a:link{color:#9a3a06}
+#pageContent #mainpage .maincontent p.pullquote{float:right;position:relative;width:48.5%;margin:2% 1px 2% 3%;padding:0;background:#52473b;color:#fff}
+#pageContent #mainpage .maincontent p.pullquote a{color:#fff}
+#pageContent #mainpage .maincontent p.pullquote .container{line-height:1.7em}
+#pageContent #mainpage .maincontent p.pullquote .quoteopen{position:absolute;top:6%;left:4%;height:.8em;font-size:3em}
+#pageContent #mainpage .maincontent p.pullquote .quoteclosed{position:absolute;bottom:0;right:4%;height:.8em;font-size:3em}
+#pageContent #mainpage .maincontent p.pullquote strong{display:block}
+#pageContent #mainpage .maincontent p.update{float:right;position:relative;width:35%;margin:0 0 1.5em 1.5em;padding:1.5em 3em;border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;background:#b2c3d0;color:#000;font-family:'PT Sans',sans-serif;font-weight:700}
+#pageContent #mainpage .maincontent p.update .container{line-height:1.7em}
+#pageContent .links button,#pageContent .links form,#pageContent .links input,#pageContent .links p,#pageContent .links select,#pageContent .links textarea,.rightCol form button,.rightCol form input,.rightCol form p,.rightCol form select,.rightCol form textarea{margin-bottom:3%;margin-top:3%}
+.fakeCol{top:100%;left:100%;position:fixed;visibility:hidden;height:auto;padding:4px}
+#pageContent .links ul li .meta .filesize,.rightCol ul li .meta .filesize{display:inline}
+#pageContent .links ul li.doc,#pageContent .links ul li.docx,.rightCol ul li.doc,.rightCol ul li.docx{background-position:0 1px;background-image:url(http://www.gla.ac.uk/1t4/generic/images/icon_word.gif);padding-left:1.7em}
+#pageContent .links ul li.xls,#pageContent .links ul li.xlsx,.rightCol ul li.xls,.rightCol ul li.xlsx{background-position:0 1px;background-image:url(http://www.gla.ac.uk/1t4/generic/images/icon_excel.gif);padding-left:1.7em}
+#pageContent .links ul li.ppt,#pageContent .links ul li.pptx,.rightCol ul li.ppt,.rightCol ul li.pptx{background-position:0 1px;background-image:url(http://www.gla.ac.uk/1t4/generic/images/icon_powerpoint.gif);padding-left:1.7em}
+#pageContent .links ul li.pdf,.rightCol ul li.pdf{background-position:0 1px;background-image:url(http://www.gla.ac.uk/1t4/generic/images/icon_pdf.gif);padding-left:1.7em}
+#pageContent .links ul li.zip,.rightCol ul li.zip{background-position:0 1px;background-image:url(http://www.gla.ac.uk/1t4/generic/images/icon_zip.gif);padding-left:1.7em}
+#pageContent .links ul li.gif,#pageContent .links ul li.jpeg,#pageContent .links ul li.jpg,#pageContent .links ul li.png,.rightCol ul li.gif,.rightCol ul li.jpeg,.rightCol ul li.jpg,.rightCol ul li.png{background-position:0 1px;background-image:url(http://www.gla.ac.uk/1t4/generic/images/icon_image.gif);padding-left:1.7em}
+.responsivePageContent .links{float:none;width:100%;padding:0}
+.responsivePageContent .links .container{border:4px solid #E6E5E1;padding:2%}
+.responsivePageContent .links .container h4{margin:0 0 .4em;font-family:'PT Serif',Georgia,"Times New Roman",Times,serif;font-size:2em}
+#pageContent #mainpage img{display:block;border:1px solid #ccc;padding:2px;max-width:100%;height:auto!important}
+#pageContent #mainpage .maincontent .staff img{display:block;border:1px solid #ccc;padding:2px}
+#pageContent #mainpage .feature img{border:none;padding:0}
+#pageContent #mainpage img.inlineimg{display:inline;margin-bottom:0;padding-bottom:0}
+#pageContent #mainpage .maincontent #accordion .imgleft,#pageContent #mainpage .maincontent #accordion img.left,#pageContent #mainpage .maincontent .imgleft,#pageContent #mainpage .maincontent img.left{float:left;margin:.3em 1.5em 1.2em 0}
+#pageContent #mainpage .maincontent #accordion .imgright,#pageContent #mainpage .maincontent #accordion img.right,#pageContent #mainpage .maincontent .imgright,#pageContent #mainpage .maincontent img.right{float:right;margin:.3em 0 1.2em 1.5em}
+.has_js #pageContent #mainpage .maincontent img.left,.has_js #pageContent #mainpage .maincontent img.right{margin:0}
+#pageContent #mainpage .maincontent .img .caption,#pageContent #mainpage .maincontent .imgleft .caption,#pageContent #mainpage .maincontent .imgright .caption{margin-bottom:0;font:13px 'PT Serif',Georgia,"Times New Roman",Times,serif;font-style:italic;line-height:1.7em}
+#pageContent #mainpage .maincontent .imgright .caption{text-align:right;float:right;clear:both}
+#pageContent #mainpage_forbottom .links .img .captionLinks,#pageContent #mainpage_forbottom .links .imgleft .captionLinks,#pageContent #mainpage_forbottom .links .imgright .captionLinks{margin-bottom:0;margin-top:4px;font:12px 'PT Serif',Georgia,"Times New Roman",Times,serif;line-height:1.7em}
+#pageContent #mainpage_forbottom .links .imgright .captionLinks{text-align:right}
+#pageContent #mainpage .splashimage img{width:100%!important;height:auto!important;margin-bottom:1.4em;border:0!important;padding:0!important}
+.newsstoryphoto{width:22.269503546099291%;float:right;overflow:hidden}
+.newsstoryphoto img{border:none!important;padding:0!important}
+.newsstory{width:75.177304964539007%;float:left;padding-bottom:5%}
+.newsstory h2{margin-top:0}
+@media only screen and (max-width:680px){.newsstory{width:77%;padding:0}
+.newsstoryphoto{width:22%;float:right;margin-bottom:2em}
+.newsstoryphoto img{width:100%!important;height:auto!important}
+}
+.newsonecolclear{clear:both}
+.jumpLink{background:#fff;border:4px solid #e6e5e1;float:left;margin-bottom:2em;min-height:15em;width:47.5%;padding-bottom:1%;position:relative}
+.jumpLink.solid{background:#eeedeb;border-width:0;width:48.5%;margin-bottom:2em!important}
+.jumpLink.solid ul{margin-bottom:2em}
+.jumpLink .container{margin:0!important;padding:5%}
+.jumpLink .text{background-image:none!important}
+.jumpLink h2{color:#000}
+.jumpLink h3{font-size:2em;margin:0 0 .5em;font-family:'PT Sans',sans-serif;font-weight:400}
+.jumpLink h2{font-size:2.2em;margin:0 0 .5em;font-family:'PT Sans',sans-serif;font-weight:400}
+.jumpLink.right{float:right}
+.jumpLink .image{width:100%;height:auto;overflow:hidden}
+.jumpLink .image img{width:100%!important;height:auto!important;border:none!important;padding:0!important}
+.jumpLink .container ul{clear:both;width:100%}
+.jumpLink .container li{list-style:none;margin:0}
+.jumpLink .container li a{list-style:none;margin:0 0 .5em;background:url(/style/images/bulletcontent.png) 0 .3em no-repeat;border:none;width:94%;padding-left:5%;padding-right:3%;float:left;font-size:1.4em;line-height:1.4;font-family:'PT Sans',sans-serif}
+.jumpLink.inline .image{width:45%;height:100%;position:absolute;bottom:0;right:-1px}
+.jumpLink.inline .image img{width:auto!important}
+.jumpLink.inline .container{width:45%!important}
+.jumpLink.inline .container li a{padding-left:10%}
+.jumpLink.solid.TileBackgroundAlt1{background:#2e5c81}
+.jumpLink.solid.TileBackgroundAlt1 a,.jumpLink.solid.TileBackgroundAlt1 h2,.jumpLink.solid.TileBackgroundAlt1 p{color:#fff!important}
+.jumpLink.solid.TileBackgroundAlt2{background:#4f5961}
+.jumpLink.solid.TileBackgroundAlt2 a,.jumpLink.solid.TileBackgroundAlt2 h2{color:#fff}
+.jumpLink.solid.TileBackgroundAlt2 p{color:#fff!important}
+.jumpLink.solid.TileBackgroundAlt3{background:#eee}
+.jumpLink.solid.TileBackgroundAlt3 a,.jumpLink.solid.TileBackgroundAlt3 h2,.jumpLink.solid.TileBackgroundAlt3 p{color:#333!important}
+#mainpage form.course_search_tile_form{width:100%;padding:0;margin:0;border:none}
+#mainpage input#q{width:100%!important;padding:3% 0 3% 3%}
+#mainpage form.course_search_tile_form input[type=submit]{width:48%;border-radius:0;-webkit-border-radius:0;float:right;margin:0 -3.5% 0 0}
+.contentPanel.promo.clear.courseSearch.postgraduate{background:#eee}
+.courseSearch .container{padding:5%}
+#pageContent .links{font-family:'PT Sans',sans-serif}
+.links,.rightCol{width:29.7872340425532%;float:right;padding:0}
+.links .img,.rightCol img{width:100%}
+.links .img img,.rightCol .img img{width:100%;height:auto}
+.links ul,.rightCol ul{margin:.8em 0 2em}
+.maincontent .links ul{margin:1em 0}
+.links li,.rightCol li{background:url(/style/images/bulletcontent.png) 0 .4em no-repeat;font-size:1.4em;line-height:1.4;margin:.5em 0 0!important;padding-left:1.2em;list-style:none!important}
+.links h1,.links h2,.rightCol h1{font-size:2em;margin-bottom:2%}
+.rotatingFeature{overflow:hidden}
+.rotatingFeature ul{display:none}
+.rotatingFeature .features{position:relative}
+.rotatingFeature .feature{overflow:hidden;cursor:pointer;border:1px solid #aba398}
+.rotatingFeature .img{width:100%!important;height:auto!important;margin-bottom:-.2em;z-index:2}
+.rotatingFeature .img img{width:100%!important;height:auto!important}
+,.rotatingFeature .text,.rotatingFeature h3{background:url(http://www.gla.ac.uk/1t4/generic/images/blue90.png);color:#fff;display:block}
+.rotatingFeature h3{font-size:2em;font-family:'PT Sans',sans-serif;font-weight:400;top:0;margin:0;padding:.6em .7em .3em}
+,.rotatingFeature .text{padding:0 1.4em .6em}
+#jquerylist-nav,.jquerylist-nav{position:relative;margin:0 0 2em}
+.jquerylist-nav{margin-top:1em}
+.ln-letters{overflow:hidden}
+.ln-letters a{font-size:1.2em;display:block;float:left;padding:4px 3px 2px!important;border:1px solid #ccc;border-right:none;text-decoration:none!important;background:none!important}
+.ln-letters a.ln-last{border-right:1px solid #ccc}
+.ln-letters a.ln-selected,.ln-letters a:hover{background-color:#eaeaea}
+.ln-letters a.ln-disabled{color:#ccc!important;display:none!important}
+.ln-letter-count{margin-top:-1.2em;text-align:center;font-size:1.2em;line-height:1}
+#jquerylist li a{text-decoration:none!important}
+#jquerylist li a:hover{text-decoration:underline!important;color:#004d9c!important}
+.ui-tabs{position:relative;zoom:1}
+.ui-tabs .ui-tabs-nav{margin:0!important}
+.ui-tabs .ui-tabs-nav li{z-index:300;list-style:none;float:left;position:relative;margin:0 1% 0 0;white-space:nowrap;border:1px solid #d2cec7}
+.ui-tabs .ui-tabs-nav li a{float:left;padding:5px 7px;color:#333;text-decoration:none!important;outline:0;background:#d2cec7}
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected{border-bottom:none}
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected a{padding-bottom:6px;border-bottom:none;color:#333!important;background:#fff!important}
+.ui-tabs .ui-tabs-nav li.ui-state-disabled a,.ui-tabs .ui-tabs-nav li.ui-state-processing a,.ui-tabs .ui-tabs-nav li.ui-tabs-selected a{cursor:text}
+.ui-tabs .ui-tabs-nav li a,.ui-tabs.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-selected a{cursor:pointer}
+.ui-tabs .ui-tabs-panel{overflow:hidden;clear:left;position:relative;top:-1px;margin-bottom:3%;padding:3%;background:#fff;border:1px solid #d2cec7;display:block;width:94%}
+.ui-tabs .ui-tabs-hide{display:none}
+@media only screen and (max-width:850px){.ui-tabs .ui-tabs-nav li a{padding:5px 3px}
+.ui-tabs .ui-tabs-hide{display:block}
+}
+@media only screen and (max-width:680px){#jquerylist li a{word-wrap:break-word}
+#tabs ul.ui-tabs-nav{display:none}
+#tabs .ui-tabs .ui-tabs-panel{border-left:none;border-right:none;border-top:none;border-bottom:1px solid #D2CEC7;margin-bottom:0;top:0;overflow:visible}
+}
+#mainpage .ui-tabs-panel fieldset{border:none!important}
+.ui-accordion{width:100%}
+.ui-accordion .ui-accordion-header{cursor:pointer;position:relative;margin-top:1px;zoom:1}
+.ui-accordion .ui-accordion-li-fix{display:inline}
+.ui-accordion .ui-accordion-header-active{border-bottom:0!important}
+.ui-accordion .ui-accordion-header a:link{text-decoration:none}
+.ui-accordion .ui-accordion-header a{text-decoration:none;display:block;font-size:1.8em;padding:.5em .5em .5em .7em}
+.ui-accordion-icons .ui-accordion-header a{padding-left:2.2em}
+.ui-accordion .ui-accordion-header .ui-icon{position:absolute;left:.5em;top:50%;margin-top:-8px}
+.ui-accordion .ui-accordion-content{padding:1em 2.2em;border-top:0;margin-top:-2px;position:relative;top:1px;margin-bottom:2px;overflow:auto;display:none;zoom:1}
+.ui-accordion .ui-accordion-content-active{display:block}
+#pageContent #mainpage #issuedate{display:none}
+.rform{font-size:1.2em}
+.rform fieldset{margin-bottom:1.5em;padding:1em 0;background:#efefef;border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px}
+.rform fieldset legend{padding:.2em .5em;font-size:1.92em;background:#fff;border-bottom-right-radius:5px;-moz-border-radius-bottomright:5px;-webkit-border-bottom-right-radius:5px}
+.rform p{margin-left:1em;margin-right:1em;margin-bottom:0;padding-bottom:0;font-size:1em!important}
+.rform label{display:block;float:left;width:25%;margin:4px 0 0 1em;text-align:right}
+#pageContent #mainpage .rform input,#pageContent #mainpage .rform select,#pageContent #mainpage .rform textarea{margin:1em 0 5px 10px}
+#pageContent #mainpage .rform textarea{height:150px}
+@media only screen and (max-width:800px){.rform label{text-align:left;float:none!important;padding:.5em 0!important;width:90%}
+#mainpage input[type=text],#mainpage textarea{width:90%!important;margin-top:0!important}
+#mainpage form input[type=checkbox],#mainpage form input[type=radio]{margin:0 0 1.4em 1em!important}
+#mainpage select{width:90%!important;max-width:inherit}
+}
+#pageContent #mainpage #gallery{font-size:1.3em}
+#pageContent #mainpage #gallery .row{float:left;margin-bottom:2.5em}
+#pageContent #mainpage #gallery .row .column{float:left;margin-right:20px}
+#pageContent #mainpage #gallery .row .column3{margin-right:0}
+#pageContent #mainpage #gallery .row .column span{display:block;border:1px solid #ccc;margin-bottom:.3em;padding:2px}
+#pageContent #mainpage #gallery .row .column span a{width:146px;height:146px;overflow:hidden;display:block;text-align:center}
+#pageContent #mainpage #gallery .row .column span a img{display:inline;vertical-align:bottom;padding:0;border:none}
+#pageContent #mainpage #gallery .row .column .gCaption{font-style:italic;font-family:'PT Serif',Georgia,"Times New Roman",Times,serif}
+.pp_description,.pp_nav{font-size:1.3em;font-family:'PT Sans',sans-serif}
+.promo{width:100%;margin-bottom:2em;position:relative}
+.promo .image img{width:100%;height:auto;padding:0!important;border:none!important}
+.promo .text{background:#52473b;padding:5% 5% 0;position:relative;width:90%}
+.promo .text a,.promo .text p{color:#fff!important;font-family:'PT Sans',sans-serif;font-weight:400}
+.links .promo .text{padding-bottom:1em}
+.promo .text h2,.promo .text h3{font-family:'PT Sans',sans-serif;font-weight:400;font-size:2.2em;margin:0 0 .3em;color:#fff}
+@media only screen and (max-width:680px){.promo{float:none;width:100%;margin-left:0!important;margin-bottom:4.5%;height:auto}
+.promo .image{display:none}
+.promo .text{position:initial}
+}
+#apply,.apply{background-color:#378016!important;color:#fff!important}
+#apply,.apply,.applying{border-color:#378016!important}
+#apply a,.apply a{color:#fff!important}
+.button{display:block;clear:left;background:#6bc300;color:#fff;padding:2.5% 5%;font-size:1.4em;-moz-border-radius:5px;-webkit-border-radius:5px;-khtml-border-radius:5px;border-radius:5px;width:5em;border:1px solid #c3bdb4;margin:0 0 4%}
+.apply.button:hover{background:#539900!important;border-color:#539900!important;text-decoration:none}
+.study .ui-tabs .ui-tabs-nav li{white-space:normal;max-width:23%;overflow:hidden}
+.study .ui-tabs .ui-tabs-nav li a{min-height:3em;overflow:hidden}
+.postGraduate .ui-tabs .ui-tabs-nav li{max-width:20%}
+.postGraduate .ui-tabs .ui-tabs-nav li.applying{max-width:33%}
+@media only screen and (max-width:850px){.study .ui-tabs .ui-tabs-nav li a{min-height:4em}
+}
+@media only screen and (max-width:680px){.ui-tabs{border-left:1px #c3bdb4 solid;border-right:1px #c3bdb4 solid;border-top:1px #c3bdb4 solid;overflow:visible;width:99.9%}
+}
+.featured-alumni{margin-bottom:1em}
+.featured-alumni h3{margin:0;padding:0 1.4em}
+.alumni-quote{background:url(http://www.gla.ac.uk/1t4/generic/images/pullquote.png) no-repeat;padding-left:52px}
+.alumni-popup-block{background-color:#fff!important}
+.alumni-popup-block .mfp-close{color:#fff!important;line-height:59px}
+.alumni-popup-header{background-color:#003965;padding:1em 2em;color:#fff}
+.alumni-popup-text{padding:2em}
+.alumni-popup-text p{line-height:1.4em;margin-bottom:.4em}
+.alumni-popup-text img{margin-left:1em}
+.alumni-popup-text p img{margin-left:1em;display:none}
+.alumni-popup-text h3{font-size:2em;margin:.4em 0}
+.alumni-popup-block h2{font-size:3em;color:#fff}
+.featured-alumni{border:1px solid silver;padding:1em}
+.ep_view_blurb,.ep_view_jump_to{font-size:1.4em;line-height:1.4}
+.staffDetails{margin-bottom:3%}
+.staffDetails li{margin:0!important;list-style:none!important;font-size:2em}
+.staff .ui-tabs .ui-tabs-nav li{max-width:18.5%}
+.staff .ui-tabs .ui-tabs-nav li.info{max-width:26%}
+@media only screen and (max-width:850px){.staff .ui-tabs .ui-tabs-nav li.info{max-width:18.5%}
+.ui-tabs .ui-tabs-nav li{overflow:hidden;white-space:normal;font-size:1.1em}
+.staff .ui-tabs .ui-tabs-nav li a{min-height:2.7em}
+}
+@media only screen and (max-width:680px){.staffDetails img{width:35%;height:auto;margin-bottom:0!important}
+.staffDetails p{clear:both}
+.staffDetails p a{display:block;padding:3%;margin-top:2%;background:#e8e6e4}
+}
+.share{margin:3% 0 3% 1%}
+.share a{font-size:1.3em}
+.backLink a{background:url(http://www.gla.ac.uk/1t4/generic/images/backarrow.gif) 0 .2em no-repeat;padding-left:1em}
+.story{width:98%}
+.story .share{padding:0}
+@media only screen and (max-width:680px){.share a{display:none}
+.share .addthis_separator{display:none!important}
+.share .addthis_button_compact,.share .addthis_button_compact span{display:block}
+.share .addthis_button_compact{padding:2% 5% 2% 2%!important;border:1px solid #c3bdb4;-moz-border-radius:5px;-webkit-border-radius:5px;-khtml-border-radius:5px;border-radius:5px;margin-bottom:4%;min-width:5em}
+}
+#pageContent .magazinehome .row{float:left;width:100%;clear:both;margin-bottom:2%}
+#pageContent .magazinehome .column{float:left;width:100%}
+#pageContent .magazinehome .col33{width:29%;margin-right:4%}
+#pageContent .magazinehome .col50{width:46%;margin-right:4%}
+#pageContent .magazinehome .col60{width:56.741259%;margin-right:2%}
+#pageContent .magazinehome .col40{width:41.258741258741259%}
+@media only screen and (min-width:680px){#pageContent .magazinehome .links .container{border-right:none;border-top:none;border-bottom:none;border-left:1px #E6E5E1 solid;padding-left:8%}
+}
+@media only screen and (max-width:680px){.jumpLink,.magazinehome .rightCol{width:auto!important}
+.magazinehome .column{width:100%!important}
+}
+#mainpage form#refinebysubjectform{border:none!important}
+@media only screen and (max-width:840px){.ln-letters a{margin:0 0 .75em .75em!important;padding:10px 0!important;border-right:1px solid #ccc!important;width:40px;text-align:center}
+.ln-letter-count{display:none!important}
+}
+@media only screen and (max-width:680px){#mainpage{overflow:hidden}
+.aside{display:none}
+.dropdownNav{display:block;margin-bottom:2%}
+#mainpage,#pageContent .header{width:91.304347826086956%;padding:0 4.347826086956522%;margin-top:0;margin-bottom:1em;float:none}
+#breadcrumbs{width:95.652173913043478%;padding:4.347826086956522% 0;margin-top:0;display:none}
+.jumpLink,.links,.maincontent,.rightCol{clear:both;width:100%;min-height:0;float:left}
+.links{margin-bottom:2em}
+.links,.rightCol{padding:0}
+.jumpLink.right{float:left!important}
+.jumpLink.inline .image img{height:auto!important;width:70%!important;right:0;position:absolute}
+#pageBackgroundImage{display:none}
+}
+.tabHideNextDiv{padding:.5em 2em .5em .5em;margin:0!important;background:url(http://www.gla.ac.uk/1t4/generic/images/accordianclosed.png) 96% center no-repeat #e8e6e4;border-bottom:1px #c3bdb4 solid;display:none}
+.tabHideNextDiv.closeTab{background:url(http://www.gla.ac.uk/1t4/generic/images/accordianopen.png) 97% center no-repeat #fff}
+.apply.tabHideNextDiv{background:url(http://www.gla.ac.uk/1t4/generic/images/accordianclosedwhite.png) 97% center no-repeat #378016}
+.apply.tabHideNextDiv.closeTab{background:url(http://www.gla.ac.uk/1t4/generic/images/accordianopenwhite.png) 97% center no-repeat #378016}
+.tabHideNextDiv a{color:#000}
+@media only screen and (max-width:680px){.tabHideNextDiv{display:block}
+.ui-tabs-panel .responsiveContent{float:left}
+}
+span.hiddenLink{display:none}
+.blockCarousel{background:#2e5c81;margin-bottom:-2em}
+.carouselHeading{font-size:2.4em;line-height:1.4;margin-bottom:.5em}
+.responsiveContent{margin-bottom:2em}
+.rotatingPanel a,.rotatingPanel p{color:#fff!important;font-family:'PT Sans',sans-serif;font-weight:400}
+.rotatingPanel li{margin:0!important;padding:0!important;font-size:inherit!important;line-height:inherit!important}
+.rotatingPanel a img{margin-right:0;cursor:pointer}
+.rotatingPanel.slides li{background:#2e5c81}
+.rotatingPanel .panel img{border:none!important;padding:0!important}
+.rightCol .panel .text{padding:5.681818181818181%}
+.flex-next{background:url(http://www.gla.ac.uk/1t4/generic/images/gallerynextarrow.png) no-repeat center}
+.flex-prev{background:url(http://www.gla.ac.uk/1t4/generic/images/galleryprevarrow.png) no-repeat center}
+.generic .controls a{border-bottom:1px #5A8FAF solid;margin:0}
+.controls .flex-direction-nav{margin:0;display:block}
+.controls .flex-direction-nav li{background-color:#5a8faf;cursor:pointer;list-style:none;float:left;margin:0 .5em 0 0;padding:0;background-image:none;line-height:1.4}
+.controls.right{position:absolute;bottom:5.5%;right:1.5%}
+.controls.left{position:absolute;bottom:5.5%;left:2.5%}
+.maincontent .controls .flex-direction-nav li,.rightCol .controls .flex-direction-nav li{line-height:1.2}
+.maincontent .controls .flex-direction-nav li a,.rightCol .controls .flex-direction-nav li a{padding:0 .6em}
+.rightCol .controls.right{bottom:.8em;right:.8em}
+.rightCol .controls.left{position:absolute;bottom:1.5em;left:1.5em}
+.controls .flex-direction-nav li:hover{background-color:#70a1c0}
+.controls a{font-size:1.2em!important;padding:.2em .8em;text-indent:-9999px;display:block}
+@media only screen and (max-width:680px){#home .controls .flex-direction-nav li,.rightCol .controls .flex-direction-nav li{font-size:inherit}
+.controls .flex-direction-nav{margin:0;display:block}
+.generic .controls a{border-bottom:none}
+.rightCol .inlineTextAndImage .panel .text{padding:3%}
+.controls{position:relative!important;bottom:0!important;right:0!important;left:0!important;margin-top:1em}
+.controls a{text-indent:0;border:none}
+.controls .flex-direction-nav li{float:none;background:0 0}
+.flex-next{float:right;padding:.5em 1.3em .5em 0!important;background:url(http://www.gla.ac.uk/1t4/generic/images/gallerynextarrowmobile.png) no-repeat right!important}
+.flex-prev{float:left;padding:.5em 0 .5em 1.3em!important;background:url(http://www.gla.ac.uk/1t4/generic/images/galleryprevarrowmobile.png) no-repeat left!important}
+.blockTextAndImage .panel .text,.inlineTextAndImage .panel .text{width:80%!important;padding:5%!important}
+}
+.rightCol .inlineTextAndImage .panel .text{padding:3% 3% 3% 8%}
+.inlineTextAndImage h3{margin:0 0 .4em;font-family:'PT Sans',sans-serif;font-weight:400;font-size:2.2em}
+.inlineTextAndImage .panel .text{height:100%;background:0 0;padding:3%;margin-bottom:2em}
+.contentPanel .inlineTextAndImage .panel .text{width:50%}
+.inlineTextAndImage .panel .image{float:right;width:41.258741258741259%;margin-left:1.8em;overflow:hidden}
+.inlineTextAndImage .panel .image img{float:right}
+@media only screen and (max-width:680px){.inlineTextAndImage .panel .text{margin-bottom:0}
+}
+@media only screen and (max-width:850px){.contentPanel .inlineTextAndImage .panel .text{width:45%}
+}
+.blockTextAndImage h3{font-family:'PT Sans',sans-serif;font-weight:400;margin:0 0 .3em!important}
+.blockTextAndImage a,.blockTextAndImage p{font-size:1.4em;margin-bottom:0}
+.blockTextAndImage a:hover{text-decoration:none;cursor:pointer}
+.blockTextAndImage .panel .rotatingText,.blockTextAndImage .panel .text{width:86%;padding:2% 15% 2% 3%;margin-top:-1px}
+a.fakeLink:hover{text-decoration:underline!important;cursor:pointer}
+.imagePanel{position:relative;overflow:hidden;margin:2% 0;border:1px solid #06304D}
+.imagePanel .text{width:96.405819%;padding:2.29709035222%;margin-top:-1px;background:#2e5c81!important}
+.imagePanel .text a,.imagePanel .text p{color:#fff!important;font-size:1.4em;margin-bottom:0}
+.imagePanel .image img{border:none!important;padding:0!important;width:101%;margin-left:-1px}
+.panelBlank{background:none!important}
+.panelBlank.right .container{padding-left:5%!important}
+.panelBlank .container{padding-left:0}
+.panelBlank h2{font-family:'PT Sans',sans-serif!important;font-weight:700!important;color:#02456d!important;font-size:2.2em!important}
+.panelBlank ul{margin:1em 0!important}
+.panelBlank li{list-style:square!important;margin-left:2em!important;font-size:1.3em!important;line-height:1.8em!important}
+.panelBlank li a{list-style:square!important;font-size:1em!important;font-family:'PT Sans',sans-serif!important;background:none!important;float:none!important;padding:0!important}
+.rightCol .flexContainer{border:none}
+.flexslider{zoom:1;overflow:hidden;left:-1px;width:99.9%;-webkit-transform:translateZ(0px)}
+.pageCarouselBlock .flexslider{position:relative;left:0}
+@media only screen and (max-width:680px){.flexslider{left:0}
+}
+.flexslider .slides{margin:0;overflow:hidden;display:block!important}
+.flexslider .slides>li{margin:0!important;display:none;-webkit-transform:translate3d(0,0,0);-webkit-perspective:1000;-webkit-backface-visibility:hidden;-webkit-transform-style:preserve-3d}
+.newsCarousel{position:relative;margin-bottom:1em;width:100%;padding-bottom:1em}
+.viewport{border:1px solid #c3bdb4;margin-left:3.5em;margin-right:3.5em;overflow:hidden}
+.newsCarousel .flexslider .slides li div{padding-right:1.5em}
+.newsCarousel #newsContainer{height:auto!important;padding:1em;postion:relative;width:50%}
+.newsCarousel .next,.newsCarousel .prev{background-color:#8c8276;height:80px;width:35px;float:left;margin-top:-13em}
+.newsCarousel .next{float:right}
+.newsAndEventsNav{position:relative;height:4em;clear:both}
+.newsAndEventsNav ul{width:100%;margin:0}
+.newsAndEventsNav li{position:absolute;top:0;left:0;list-style:none!important;width:38.888888888888889%;margin:0!important;padding:2% 5.20833333333333%;border:1px solid #eeedea;border-bottom:1px solid #c3bdb4;background:#eeedea}
+.newsAndEventsNav li.last{left:50%}
+.newsAndEventsNav li.active{background:#fff;border:1px solid #c3bdb4;border-bottom:none;z-index:20}
+.newsAndEventsNav h3{font-size:1.5em;margin:0;text-align:center;padding:.3em}
+.newsAndEvents{font-size:1.2em;border:1px solid #c3bdb4;border-top:0;padding:5.20833333333333%;padding:0 5.20833333333333%;margin-top:-1px;margin-bottom:2em}
+.newsAndEvents .nav li{float:left}
+.newsAndEvents h3{margin-top:0;font-size:1.92em!important;font-family:'PT Sans',sans-serif!important;background:url(http://www.gla.ac.uk/1t4/generic/images/rightcol_hr.gif) left bottom no-repeat}
+.newsAndEvents .rsList{border-bottom:1px solid #c3bdb4}
+.newsAndEvents ul{margin:0;list-style:none}
+.newsAndEvents ul li{overflow:hidden;font-size:1em!important;margin:0!important;padding:1em 0;border-top:1px dotted #c3bdb4;background:0 0}
+.newsAndEvents .moreLink a{float:right}
+.newsAndEvents ul li:first-child{border-top:1px solid #fff!important}
+.newsAndEvents ul li h4{font:1.1em 'PT Serif',Georgia,"Times New Roman",Times,serif!important;margin:.3em 0;font-family:'PT Sans',sans-serif;font-weight:400!important}
+.newsAndEvents ul li p{font-size:1em}
+.newsAndEvents ul li h4 a{line-height:1.4em;text-decoration:none!important;font-size:1.4em}
+.newsAndEvents ul li h4 a:hover{text-decoration:underline!important}
+.newsAndEvents ul li .datetime,.newsAndEvents ul li .location{line-height:1.4em;font-size:1.1em}
+.newsAndEvents ul li .datetime abbr{border:none;line-height:1.4em;font-weight:700}
+.newsAndEvents ul li .description{color:#333;line-height:1.4em;font-size:1.1em}
+#home .newsAndEvents ul li .summary a,.newsAndEvents ul li .entry-title a{font-size:1.4em}
+.newsAndEvents table tr{font-size:.7em}
+.newsAndEvents ul li .entry-content{color:#333;line-height:1.4em;font-size:1.1em}
+.newsAndEvents .linkList{border-bottom:none}
+.newsAndEvents .linkList h4{margin:0}
+.newsAndEvents .linkList .last{padding:1em 0 1.25em}
+.newsAndEvents .linkList a{float:right;font-size:1em!important}
+.newsAndEvents .vevent div{margin:.3em 0}
+.newsAndEvents .hentry .datetime{margin:0 0 .3em}
+#events_oldrightcolumn,.newsAndEvents .vevent .description{display:none}
+@media only screen and (max-width:680px){.newsAndEventsNav li{width:39%!important}
+}
+.singleContentElement{width:48.5%;float:left;margin-bottom:2em;zoom:1;padding-bottom:0;min-height:17.5em}
+.singleContentElement .flexslider{width:100%;left:-1px}
+.singleContentElement.jumpLink.block .container{position:relative;bottom:0;left:0;width:90%}
+.singleContentElement.right{float:left;margin-left:2.9%}
+.singleContentElement .flex-viewport,.singleContentElement .flexslider,.singleContentElement .flexslider .slides,.singleContentElement .flexslider .slides li{height:100%}
+.contentPanel.clear{clear:both}
+.singleContentElement .flexslider .slides>li{position:relative}
+.singleContentElement .inlineTextAndImage .panel .text{padding:5%}
+.singleContentElement .blockTextAndImage .panel .text{width:80%;padding:5% 15% 5% 5%;bottom:0;left:0}
+.contentPanel .controls.right{bottom:2.5%}
+.singleContentElement.promo{background:#52473b}
+.singleContentElement.promo .text{background:0 0}
+.singleContentElement p{font-family:'PT Sans',sans-serif!important;margin-bottom:1.2em!important}
+.row{display:block;clear:both;width:100%;margin-bottom:2em}
+.row .contentPanel{height:100%;padding-bottom:2em}
+.singleContentElement.promo.TileBackgroundAlt1{background:#2e5c81}
+.singleContentElement.promo.TileBackgroundAlt2{background:#4f5961}
+.singleContentElement.promo.TileBackgroundAlt3{background:#eee}
+.singleContentElement.promo.TileBackgroundAlt3 .text a{color:#005288!important}
+.singleContentElement.promo.TileBackgroundAlt3 .text h2,.singleContentElement.promo.TileBackgroundAlt3 .text p{color:#333!important}
+@media only screen and (max-width:680px){.singleContentElement{width:100%!important;min-height:2em}
+.singleContentElement.right{float:left;margin-left:0}
+.row{margin-bottom:0}
+}
+.vid_resp{float:none!important;width:100%!important;margin:0!important;overflow:hidden}
+.video_tile_text a.open-popup-link{color:#fff}
+#slideshow-area,#slideshow-scroller{position:relative;overflow:hidden;margin:0 auto}
+#slideshow-area{background-color:#fff;color:#666;margin-top:25px}
+#slideshow-next,#slideshow-previous{width:28px;height:50px;position:absolute;background:url(http://www.gla.ac.uk/0t4/generic/images/slideshow/back.png) 50% 50% no-repeat;top:-10px;display:none;cursor:pointer;cursor:hand}
+#slideshow-next{display:block;background:url(http://www.gla.ac.uk/0t4/generic/images/slideshow/fwd.png) 50% 50% no-repeat;top:-10px;right:0}
+.slideshow-content{float:left}
+#pageContent #mainpage .maincontent #slideshow-area .slideshow-content img{margin:0 0 10px 10px;padding:0;border:0;float:right;width:100%!important;height:auto!important}
+#pageContent #mainpage .maincontent #slideshow-area .slideshow-content img.left{margin:0 10px 10px 0;padding:0;border:0;float:left}
+#pageContent #mainpage .maincontent #slideshow-area .slideshow-text h1,#pageContent #mainpage .maincontent #slideshow-area .slideshow-text h2,#pageContent #mainpage .maincontent #slideshow-area .slideshow-text h3,#pageContent #mainpage .maincontent #slideshow-area .slideshow-text h4,#pageContent #mainpage .maincontent #slideshow-area .slideshow-text h5,#pageContent #mainpage .maincontent #slideshow-area .slideshow-text p{margin-top:0;padding-top:0;margin-right:26px}
+#pageContent #mainpage .maincontent #slideshow-area .slideshow-text{margin-bottom:.8em!important;line-height:1.8em;color:#666;padding-top:10px}
+#pageContent #mainpage .maincontent ul.slideThumbs{margin:10px 0 0 30px;padding:0;list-style:none}
+#pageContent #mainpage .maincontent .slideThumbs li{float:left;margin-right:7px;margin-bottom:5px;padding:3px;list-style:none}
+#pageContent #mainpage .maincontent .slideThumbs li img{float:left;height:40px;line-height:80px;overflow:hidden;position:relative;z-index:1}
+#pageContent #mainpage .slideshow{background:0 0}
+.repos{background-color:#fff;padding:0 2%;width:96%;border:1px solid #e8e6e4}
+.staff h3{font-size:1.8em!important;font-weight:400;margin:0;padding:0}
+.staff{border-bottom:1px solid #ccc}
+#pageContent #mainpage .maincontent .video_caption{font-size:1.3em}
+#expandallwrapper{height:29px;border-bottom:2px #e4e4e4 solid}
+#expandalldiv{width:27px;height:27px;background:url(http://www.gla.ac.uk/1t4/programmes/images/plus.png) center;float:right;cursor:pointer;border:2px solid #e4e4e4;border-bottom:none}
+#expandalldiv.expandedall{background:url(http://www.gla.ac.uk/1t4/programmes/images/minus.png) center}
+.accordianhidden li p{font-size:1em;line-height:1em}
+.heading_opener{border-top:none;border-bottom:none;padding:.8em .3em .8em 1.3em;background:url(http://www.gla.ac.uk/1t4/programmes/images/plus.png) center left no-repeat #e4e4e4;border-left:4px #e4e4e4 solid;margin-top:1em}
+.heading_opener.alt{background:url(http://www.gla.ac.uk/1t4/programmes/images/minuswhite.png) center left no-repeat #005885;border-left:4px #005885 solid;color:#fff}
+.heading_opener.alt h2{color:#fff}
+.content_opener{background:url(http://www.gla.ac.uk/1t4/generic/images/accordianarrow.png) 1em top no-repeat;padding-top:2em}
+.content_opener .textsplash{padding:10px;margin:0 0 10px;border:1px solid #c5c5c5;font-family:'PT Sans',sans-serif;font-weight:400}
+.racc{margin-bottom:1em!important;background:none!important}
+.racc h2{font-family:'PT Sans',sans-serif;font-weight:400;font-size:2em;margin:0 0 0 1em;cursor:pointer}
+.racc .content_opener h2{margin-left:0}
+.racc .imgright,.racc img.right{float:right;margin:.3em 0 1.2em 1.5em!important}
+.racc .imgleft,.racc img.left{float:left;margin:.3em 1.5em 1.2em 0!important}
+#pageContent #mainpage #fb-wrapper #fb-results li{list-style-type:none}
+#pageContent #mainpage #fb-wrapper #fb-results li .imagetext .imgwrap{float:left;width:140px;min-height:180px;margin-right:.8em;background:#3c3c3c}
+#pageContent #mainpage #fb-wrapper #fb-results li a img{width:140px;margin-right:.8em;border:0;padding:0;height:auto}
+#pageContent #mainpage #fb-wrapper #fb-results li .imagetext p{font-size:1em}
+#pageContent #mainpage #fb-wrapper #fb-results li .imagetext{border:1px solid #c3bdb4;background-color:#F8F8F8;margin:1em 0;position:relative}
+#pageContent #mainpage .searchnav li{display:inline-block;margin:0;text-wrap:normal;font-size:1.2em;padding:4px 3px 2px 4px;border:1px solid #ccc;border-right:none;text-decoration:none!important;background:none!important}
+#pageContent #mainpage .searchnav li a.navactive{font-weight:700}
+#pageContent #mainpage .searchnav li.last-item{border-right:1px solid #ccc}
+#supervisorsearch{float:left;margin-bottom:0}
+#findasupervisor{float:left;background:#00365b;border:1px solid #00365b;border-bottom:#04141f 1px solid;color:#fff;font-size:1.6em;position:relative;margin-top:10px;margin-left:10px;padding:.2em .6em;font-family:'PT Sans',sans-serif}
+.video_title{font-size:1.4em;float:left}
+.nowplaying,.playlist{display:none}
+.title{position:absolute;background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAA8AQMAAABcuAgVAAAAA1BMVEUBFB5yGb3bAAAAAXRSTlPZv+myFgAAAAxJREFUCB1jYBhZAAAA8AABlLHiVgAAAABJRU5ErkJggg==);color:#fff;width:100%;bottom:0}
+.title p{font-family:'PT Sans',sans-serif;margin:8px}
+.video_thumb{position:relative}
+@media only screen and (max-width:680px){.video_thumb{width:100%!important;background-color:#4f5961}
+.video_thumb img{width:46%!important;height:auto!important;float:left}
+.title p{margin-left:48%}
+.title{position:relative;background:0 0;color:#fff;width:100%}
+}
+.accordianhidden .popupplayer_wrapper{max-width:40%}
+.mfp-bg{top:0;left:0;width:100%;height:100%;z-index:1042;overflow:hidden;position:fixed;background:#0b0b0b;opacity:.8;filter:alpha(opacity=80)}
+.mfp-wrap{top:0;left:0;width:100%;height:100%;z-index:1043;position:fixed;outline:0!important;-webkit-backface-visibility:hidden}
+.mfp-container{text-align:center;position:absolute;width:100%;height:100%;left:0;top:0;padding:0 8px;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}
+.mfp-container:before{content:'';display:inline-block;height:100%;vertical-align:middle}
+.mfp-align-top .mfp-container:before{display:none}
+.mfp-content{position:relative;display:inline-block;vertical-align:middle;margin:0 auto;text-align:left;z-index:1045}
+.mfp-ajax-holder .mfp-content,.mfp-inline-holder .mfp-content{width:100%;cursor:auto}
+.mfp-ajax-cur{cursor:progress}
+.mfp-zoom-out-cur,.mfp-zoom-out-cur .mfp-image-holder .mfp-close{cursor:-moz-zoom-out;cursor:-webkit-zoom-out;cursor:zoom-out}
+.mfp-zoom{cursor:pointer;cursor:-webkit-zoom-in;cursor:-moz-zoom-in;cursor:zoom-in}
+.mfp-auto-cursor .mfp-content{cursor:auto}
+.mfp-arrow,.mfp-close,.mfp-counter,.mfp-preloader{-webkit-user-select:none;-moz-user-select:none;user-select:none}
+.mfp-loading.mfp-figure{display:none}
+.mfp-hide{display:none!important}
+.mfp-preloader{color:#ccc;position:absolute;top:50%;width:auto;text-align:center;margin-top:-.8em;left:8px;right:8px;z-index:1044}
+.mfp-preloader a{color:#ccc}
+.mfp-preloader a:hover{color:#fff}
+.mfp-s-error .mfp-content,.mfp-s-ready .mfp-preloader{display:none}
+button.mfp-arrow,button.mfp-close{overflow:visible;cursor:pointer;background:0 0;border:0;-webkit-appearance:none;display:block;outline:0;padding:0;z-index:1046;-webkit-box-shadow:none;box-shadow:none}
+button::-moz-focus-inner{padding:0;border:0}
+.mfp-close{width:44px;height:44px;line-height:44px;position:absolute;right:0;top:0;text-decoration:none;text-align:center;opacity:.65;padding:0 0 18px 10px;color:#fff;font-style:normal;font-size:28px;font-family:'PT Sans',sans-serif}
+.mfp-close:focus,.mfp-close:hover{opacity:1}
+.mfp-close:active{top:1px}
+.mfp-close-btn-in .mfp-close{color:#333}
+.mfp-iframe-holder .mfp-close,.mfp-image-holder .mfp-close{color:#fff;right:-6px;text-align:right;padding-right:6px;width:100%}
+.mfp-counter{position:absolute;top:0;right:0;color:#ccc;font-size:12px;line-height:18px}
+.mfp-arrow{position:absolute;opacity:.65;margin:-55px 0 0;top:50%;padding:0;width:90px;height:110px;-webkit-tap-highlight-color:transparent}
+.mfp-arrow:active{margin-top:-54px}
+.mfp-arrow:focus,.mfp-arrow:hover{opacity:1}
+.mfp-arrow .mfp-a,.mfp-arrow .mfp-b,.mfp-arrow:after,.mfp-arrow:before{content:'';display:block;width:0;height:0;position:absolute;left:0;top:0;margin-top:35px;margin-left:35px;border:inset transparent}
+.mfp-arrow .mfp-a,.mfp-arrow:after{border-top-width:13px;border-bottom-width:13px;top:8px}
+.mfp-arrow .mfp-b,.mfp-arrow:before{border-top-width:21px;border-bottom-width:21px}
+.mfp-arrow-left{left:0}
+.mfp-arrow-left .mfp-a,.mfp-arrow-left:after{border-right:17px solid #fff;margin-left:31px}
+.mfp-arrow-left .mfp-b,.mfp-arrow-left:before{margin-left:25px;border-right:27px solid #3f3f3f}
+.mfp-arrow-right{right:0}
+.mfp-arrow-right .mfp-a,.mfp-arrow-right:after{border-left:17px solid #fff;margin-left:39px}
+.mfp-arrow-right .mfp-b,.mfp-arrow-right:before{border-left:27px solid #3f3f3f}
+.mfp-iframe-holder{padding-top:40px;padding-bottom:40px}
+.mfp-iframe-holder .mfp-content{line-height:0;width:100%;max-width:900px}
+.mfp-iframe-holder .mfp-close{top:-40px}
+.mfp-iframe-scaler{width:100%;height:0;overflow:hidden;padding-top:56.25%}
+.mfp-iframe-scaler iframe{position:absolute;display:block;top:0;left:0;width:100%;height:100%;box-shadow:0 0 8px rgba(0,0,0,.6);background:#000}
+img.mfp-img{width:auto;max-width:100%;height:auto;display:block;line-height:0;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;padding:40px 0;margin:0 auto}
+.mfp-figure{line-height:0}
+.mfp-figure:after{content:'';position:absolute;left:0;top:40px;bottom:40px;display:block;right:0;width:auto;height:auto;z-index:-1;box-shadow:0 0 8px rgba(0,0,0,.6);background:#444}
+.mfp-figure small{color:#bdbdbd;display:block;font-size:12px;line-height:14px}
+.mfp-bottom-bar{margin-top:-36px;position:absolute;top:100%;left:0;width:100%;cursor:auto}
+.mfp-title{text-align:left;line-height:18px;color:#f3f3f3;word-wrap:break-word;padding-right:36px}
+.mfp-image-holder .mfp-content{max-width:100%}
+.mfp-gallery .mfp-image-holder .mfp-figure{cursor:pointer}
+@media screen and (max-width:800px) and (orientation:landscape),screen and (max-height:300px){.mfp-img-mobile .mfp-image-holder{padding-left:0;padding-right:0}
+.mfp-img-mobile img.mfp-img{padding:0}
+.mfp-img-mobile .mfp-figure:after{top:0;bottom:0}
+.mfp-img-mobile .mfp-figure small{display:inline;margin-left:5px}
+.mfp-img-mobile .mfp-bottom-bar{background:rgba(0,0,0,.6);bottom:0;margin:0;top:auto;padding:3px 5px;position:fixed;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}
+.mfp-img-mobile .mfp-bottom-bar:empty{padding:0}
+.mfp-img-mobile .mfp-counter{right:5px;top:3px}
+.mfp-img-mobile .mfp-close{top:0;right:0;width:35px;height:35px;line-height:35px;background:rgba(0,0,0,.6);position:fixed;text-align:center;padding:0}
+}
+@media all and (max-width:900px){.mfp-arrow{-webkit-transform:scale(0.75);transform:scale(0.75)}
+.mfp-arrow-left{-webkit-transform-origin:0;transform-origin:0}
+.mfp-arrow-right{-webkit-transform-origin:100%;transform-origin:100%}
+.mfp-container{padding-left:6px;padding-right:6px}
+}
+.mfp-ie7 .mfp-img{padding:0}
+.mfp-ie7 .mfp-bottom-bar{width:600px;left:50%;margin-left:-300px;margin-top:5px;padding-bottom:5px}
+.mfp-ie7 .mfp-container{padding:0}
+.mfp-ie7 .mfp-content{padding-top:44px}
+.mfp-ie7 .mfp-close{top:0;right:0;padding-top:0}
+.white-popup-block{background:#005885;padding:0;text-align:left;max-width:650px;margin:40px auto;position:relative}
+.white-popup-block .video_caption{margin-right:10px!important;padding:6px!important;font-size:1.4em!important;background-color:#005288;color:#fff}
+.white-popup-block td{padding:1em}
+.links .applynow,.maincontent .applynow{background:url(http://www.gla.ac.uk/1t4/postgraduate/images/arrowrightwhite.png) right no-repeat #005885;font-family:'PT Sans',sans-serif!important;font-weight:400;padding:7px 7px 7px 10px;margin-bottom:10px;display:block}
+.links .applynow h2{font-family:'PT Sans',sans-serif!important;font-size:2.2em;margin:0 0 .3em}
+.maincontent .applynow{width:150px;display:block}
+.links .applynow a,.maincontent .applynow a{color:#fff}
+.links .applynow img,.maincontent .applynow img{display:none!important}
+@media only screen and (max-width:680px){.links .applynow{margin-top:2%}
+.accordianhidden .applynow,.maincontent .applynow{display:none!important}
+}
+.twitter_profile_pic{float:right;margin-left:5px}
+.feed_items{color:#fff;font-size:1.4em;font-family:'PT Sans',sans-serif}
+.feed_items li{margin-bottom:.6em;padding-bottom:.6em;border-bottom:1px solid #767676}
+.feed_items last-child{border-bottom:none}
+.twitter_link{float:right}
+.twitter_link img{display:inline!important;border:0!important;margin-bottom:-2px}
+.feed_items.rcol li{font-size:1em;background:0 0;margin:0!important;padding-left:0}
+.splash img{width:100%}
+.splashimage{position:relative}
+.splashtext{font-family:'PT Sans',sans-serif;position:absolute;width:45%;top:2em;left:2em;padding:1em;background-color:rgba(0,56,101,.8);color:rgba(255,255,255,.9)}
+.splashtext h1,.splashtext h2,.splashtext h3{color:rgba(255,255,255,.9);margin:0 0 .1em;padding:0}
+.splashtext p{margin-bottom:.1em!important;line-height:1.4em;font-family:'PT Sans',sans-serif}
+.splashtext li{list-style:none!important;background:url(/style/images/bulletcontent.png) .2em .4em no-repeat;margin-left:0!important;padding-left:1em}
+.hidenextdiv{border-top:none;border-bottom:none;padding:.3em .3em .3em 1.3em;background:url(http://www.gla.ac.uk/1t4/programmes/images/plus.png) center left no-repeat #e4e4e4;border-left:4px #e4e4e4 solid;margin-top:0}
+.accordianhidden{overflow:hidden}
+.accordianhidden .hidenextdiv{margin:0;background:url(http://www.gla.ac.uk/1t4/programmes/images/plusgrey.png) center left no-repeat #fff}
+.hidenextdiv.expanded{background:url(http://www.gla.ac.uk/1t4/programmes/images/minuswhite.png) center left no-repeat #005885;border-left:4px #005885 solid}
+.accordianhidden .hidenextdiv.expanded{background:url(http://www.gla.ac.uk/1t4/programmes/images/minusgrey.png) center left no-repeat #fff;border:1px solid #e4e4e4;border-left:4px solid #e4e4e4;border-bottom:0}
+.accordianhidden .accordianhidden{background-image:none;padding:10px;border:1px solid #e4e4e4;border-left:4px solid #e4e4e4;border-top:0}
+.accordianhidden .accordianhidden .accordianhidden{background-image:none;padding:10px;border:1px solid #e4e4e4;border-top:0}
+.accordianhidden .accordianhidden .hidenextdiv{padding-left:1.6em;border:0;background-color:#e4e4e4}
+.hidenextdiv.expanded a{color:#fff;font-family:'PT Sans',sans-serif;font-weight:400}
+.accordianhidden .hidenextdiv.expanded a{color:#666;font-family:'PT Sans',sans-serif;font-weight:400}
+.hidenextdiv a{text-decoration:none;font-family:'PT Sans',sans-serif;font-weight:400}
+.accordianhidden{background:url(http://www.gla.ac.uk/1t4/generic/images/accordianarrow.png) 1em top no-repeat;padding-top:2em}
+.accordianhidden ul{margin-top:0!important}
+.hidenextdiv{margin-bottom:0!important}
+.xtensibleCarousel.contentPanel{background-color:#2e5c81}
+.xtensibleCarousel .flex-control-nav{text-align:center;position:absolute;top:1em;width:100%}
+.xtensibleCarousel .flex-control-paging{margin:0!important;padding-left:0!important}
+.xtensibleCarousel .flex-control-nav li{display:inline;margin:0 7px}
+.xtensibleCarousel .flex-control-nav li a{background:rgba(255,255,255,.6);display:inline-block;overflow:hidden;width:10px;height:0;padding-top:10px;text-align:center;-moz-background-clip:padding;-webkit-background-clip:padding-box;background-clip:padding-box}
+.xtensibleCarousel .flex-control-nav li a.flex-active{background:rgba(255,255,255,.9)}
+.xtensibleCarousel .flex-direction-nav{position:absolute;top:5%;width:100%}
+.xtensibleNarrow .flex-direction-nav{position:absolute;top:25%;width:100%}
+.xtensibleCarousel .flex-direction-nav li a{width:26px;height:26px;margin:-13px 0 0;display:block;font-size:0;position:absolute;top:45%;cursor:pointer;color:#326693;padding:1em}
+@media only screen and (max-width:680px){.xtensibleCarousel .flex-direction-nav li .flex-prev{left:0;background:url(http://www.gla.ac.uk/1t4/generic/images/galleryprevarrow.png) no-repeat center rgba(20,93,142,.8)!important}
+.xtensibleCarousel .flex-direction-nav li .flex-next{right:0;background:url(http://www.gla.ac.uk/1t4/generic/images/gallerynextarrow.png) no-repeat center rgba(20,93,142,.8)!important}
+}
+.xtensibleCarousel .flex-direction-nav li .flex-prev{left:0;background:url(http://www.gla.ac.uk/1t4/generic/images/galleryprevarrow.png) no-repeat center rgba(20,93,142,.8)}
+.xtensibleCarousel .flex-direction-nav li .flex-next{right:0;background:url(http://www.gla.ac.uk/1t4/generic/images/gallerynextarrow.png) no-repeat center rgba(20,93,142,.8)}
+.xtensibleCarousel .flexslider{width:100%}
+.xtensibleCarousel .rotatingPanel a img{width:100%;color:#000}
+.xtensibleCarousel .blockTextAndImage{background-color:#2e5c81}
+.xtensibleCarousel .blockTextAndImage a{margin-bottom:0}
+.xtensibleCarousel .blockTextAndImage h2{margin:0 0 .3em;font-size:1.6em}
+.xtensibleCarousel .blockTextAndImage p{margin-bottom:0;font-size:1em!important}
+.xtensibleSlideshow h1,.xtensibleSlideshow h2,.xtensibleSlideshow h3{margin-bottom:.3em}
+.xtensibleSlideshow .blockTextAndImage,.xtensibleSlideshow .rotatingPanel.slides li,.xtensibleSlideshow.contentPanel{background-color:#fff}
+.xtensibleSlideshow .blockTextAndImage .slideshow_content{background-color:#fff;color:#000!important;padding:0 3em 1em}
+.xtensibleSlideshow .blockTextAndImage .slideshow_content img{max-width:100%;height:auto!important}
+.xtensibleSlideshow .blockTextAndImage .slideshow_content img.right{float:right;margin-left:.5em}
+.xtensibleSlideshow .blockTextAndImage .slideshow_content img.left{float:left;margin-right:.5em}
+.xtensibleSlideshow .slideshow_content ul{margin:1em 0!important}
+.xtensibleSlideshow .slideshow_content li{margin-left:2em!important;list-style-type:circle!important;line-height:1.4!important}
+.xtensibleSlideshow .flex-control-nav li a{background:rgba(0,0,0,.4);display:inline-block;overflow:hidden;width:10px;height:0;padding-top:10px;text-align:center;-webkit-border-radius:300px;border-radius:300px;-moz-background-clip:padding;-webkit-background-clip:padding-box;background-clip:padding-box}
+.xtensibleSlideshow .flex-control-nav{bottom:0;top:auto}
+.xtensibleSlideshow .flex-viewport{padding-bottom:1em}
+.xtensibleSlideshow .flex-control-nav li a.flex-active{background:rgba(0,0,0,.9)}
+.xtensibleSlideshow .slideshow_content{font-size:1.4em}
+.xtensibleSlideshow .blockTextAndImage a{color:#005288!important;font-size:1em}
+.xtensibleSlideshow .blockTextAndImage p{color:#000!important;margin-bottom:1em;line-height:1.7em;font-family:'PT Serif',Georgia,"Times New Roman",Times,serif}
+.contentPanel.newsevents .datetime,.contentPanel.newsevents .entry-content{display:none}
+.contentPanel.newsevents .container li a{border-bottom:1px solid;padding-bottom:.5em;padding-left:0;background:0 0}
+.contentPanel.newsevents .container h2{font-size:2.2em}
+.contentPanel.newsevents .container a{font-size:1.4em}
+.share{background:url(http://www.gla.ac.uk/1t4/generic/images/social.gif) no-repeat!important;overflow:hidden;display:inline!important;height:16px!important;width:16px!important;line-height:16px!important;padding:0}
+#fb{background-position:0 -272px!important}
+#gp{background-position:0 -352px!important}
+#tw{background-position:0 -832px!important}
+.socialimage{height:150px;overflow:hidden;position:relative}
+.socialimagesrc{position:absolute;top:-30%}
+.socialslider{font-size:1.4em}
+.tile_social_icon{position:absolute;top:0;right:0}
+.tile_social_icon img{border:none!important;padding:1em!important}
+#socialloader{padding:5em}
+#socialloader img{border:none!important;display:block;margin-left:auto;margin-right:auto}
+.mfp-with-zoom .mfp-content{width:40%!important;max-height:50%!important;margin:5% auto auto;vertical-align:baseline}
+.mfp-with-zoom .mfp-content img{width:100%}
+.mfp-with-zoom .mfp-content .xtensibleCarousel .flex-direction-nav{top:20em}
+.mfp-with-zoom .mfp-content .tile_social_icon{float:right;position:relative;height:100%}
+.mfp-content .tile_social_icon a img,.mfp-with-zoom .mfp-content .tile_social_icon img{width:25px;height:25px;padding:0 1em 0 0}
+.socialtext{padding:1em}
+.mfp-with-zoom .mfp-container,.mfp-with-zoom.mfp-bg{opacity:0;-webkit-backface-visibility:hidden;-webkit-transition:all .3s ease-out;-moz-transition:all .3s ease-out;-o-transition:all .3s ease-out;transition:all .3s ease-out}
+.mfp-with-zoom.mfp-ready .mfp-container{opacity:1}
+.mfp-with-zoom.mfp-ready.mfp-bg{opacity:.8}
+.mfp-with-zoom.mfp-removing .mfp-container,.mfp-with-zoom.mfp-removing.mfp-bg{opacity:0}
+@media only screen and (max-width:680px){.socialimage{display:block!important}
+#mainpage{padding-top:2em}
+.mfp-with-zoom .mfp-content{width:90%!important}
+.mfp-with-zoom .mfp-content .xtensibleCarousel .flex-direction-nav{top:10em}
+}
+#pageContent .links p.hiddenapply{display:none}
+#staffphotosm{float:right}
+#staffphoto.portrait img{margin:auto;padding:0!important}
+#postaladdresssm{margin:0 0 10px 25px;padding:5px;color:##333}
+#sp_postaladdress{background-color:#f5f5f5;padding:1em}
+#sp_contactInfo p{margin:0 0 10px 25px;padding:5px;color:#333}
+@media only screen and (max-width:680px){#staffphotosm{float:right;width:30%;margin-left:1em}
+.sp_content ul li{list-style:none;margin:0}
+.sp_content .accordianhidden ul li{list-style:square;margin:1.2em}
+#postaladdresssm,#sp_contactInfo p{margin:1em 0;padding:0}
+}
+#survey{font-family:'PT Sans',sans-serif;font-weight:400;color:#fff;background-color:#343434;width:90%;max-width:931px;margin:auto;position:relative}
+#survey a,#survey p{color:#fff}
+@media only screen and (max-width:680px){#survey{width:100%;margin-left:0}
+}
+#survey p{padding:.8em;color:#fff;margin-left:.4em;margin-right:20px}
+#surveyoptout{position:absolute;right:1em;top:.3em;font-size:2em;font-family:'PT Sans',sans-serif;font-weight:400}

@@ -1,0 +1,288 @@
+<?xml version="1.0"?>
+<!DOCTYPE html SYSTEM "entities.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB" lang="en-GB"  xmlns:epc="http://eprints.org/ep3/control">
+  <head>
+    <title><epc:pin ref="title" textonly="yes"/> - <epc:phrase ref="archive_name"/></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+    <meta http-equiv="Content-Language" content="en" />
+<!--standard meta tags-->
+<!-- navigation object : 1kGenericCSSJScallsPHP -->
+    <link rel="stylesheet" type="text/css" href="/style/basicprint.css" media="print" />
+    <link rel="stylesheet" type="text/css" href="/style/print.css" media="print" />
+    <!--<link rel="stylesheet" type="text/css" href="/style/main.css" /> -->
+    <style type="text/css" media="screen">
+
+               @import "/style/main.css"/**/;
+        
+    </style>
+    <link href="//fonts.googleapis.com/css?family=Lato:400,300,100,700,900" rel="stylesheet" type="text/css" />
+    <link href="//fonts.googleapis.com/css?family=PT+Sans:400,700" rel="stylesheet" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+
+
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script>
+
+
+
+
+    <script type="text/javascript" src="/javascript/jwplayer.js"></script>
+    <script type="text/javascript" src="/javascript/jquery.ba-bbq.min.js"></script>
+    
+    <script type="text/javascript" src="/javascript/jquery.flexslider.js"></script>
+    <script type="text/javascript" src="/javascript/main-dev.js"></script>
+    <script type="text/javascript" src="/javascript/raccoon.js"></script>
+
+
+
+
+
+<!--[if IE 9]>
+        <link href="/style/ie9.css" rel="stylesheet" type="text/css" media="screen" />
+        <![endif]-->
+<!--[if IE 8]>
+        <link href="/style/ie8.css" rel="stylesheet" type="text/css" media="screen" />
+        <![endif]-->
+<!--[if IE 7]>
+        <link href="/style/ie7.css" rel="stylesheet" type="text/css" media="screen" />
+        <![endif]-->
+<!-- Funnelback autocomplete -->
+<!--[if lte IE 6]>
+        <link rel="stylesheet" type="text/css" href="/style/ie6.css" />
+   <![endif]-->
+
+
+
+
+    <link rel="stylesheet" type="text/css" href="/style/searchautocomplete.css" />
+
+    <script type="text/javascript" src="/javascript/jquery.tmpl.min.js"></script>
+    <script type="text/javascript" src="/javascript/jquery.funnelback-completion.js"></script>
+
+    
+    <link rel="stylesheet" type="text/css" href="/style/menu_across.css" />
+    
+    
+    <script type="text/javascript">
+  //jQuery.noConflict();
+</script>
+<epc:pin ref="head"/>
+
+<link rel="stylesheet" type="text/css" href="/style/local.css"/>
+
+<style type="text/css">
+  /*
+  Adding settings overridden by the auto-generated CSS.  But keep them for EPrints stuff
+  */
+body{
+  font-family: "PT Serif",Georgia,"Times New Roman",Times,serif;
+  font-size:62.5%;
+}
+
+body #eprints_content{
+  font-size:14px;  
+}
+
+#eprints_content table, #eprints_content td, #eprints_content p, #eprints_content form input, #eprints_content a, #eprints_content div, #eprints_content a, h1{
+  font-size:1em;
+}
+
+/*
+To change the blue heading box colour, set the RGB here
+*/
+
+#sectionHeader{
+  background-color:#2E5C81;
+}
+
+
+</style>
+
+
+
+  </head>
+  <body style="">
+	
+    <epc:pin ref="pagetop"/>	
+<div id="wrapper">
+    <div id="accessibility" class="skip">
+      <ul>
+        <li>
+          <a href="#mainpage">Skip to main content</a>
+        </li>
+        <li>
+          <a href="http://www.gla.ac.uk/about/accessibility/">Accessibility information</a>
+        </li>
+      </ul>
+    </div>
+        <div id="pageBackgroundImage">
+            <img src="/images/backgroundaa.jpg" alt="" class="" 
+                title="" style="width : 832px; height : 1000px; border : ; padding : ; margin : ; float : ;  " />
+        </div>    
+    <div id="pageContainer">
+      <div class="header clearfix" id="pageHeader">
+        <div class="lowerWrap">
+<!-- generic external header start -->
+<!-- navigation object : 1kGenericExternalHeaderPHP -->
+<!--noindex-->
+        <div class="ep_tm_site_logo">
+        <a href="{$config{frontpage}}" title="{phrase('archive_name')}">
+          <img alt="{phrase('archive_name')}" src="{$config{rel_path}}{$config{site_logo}}"/>
+        </a>
+        </div>
+
+
+      
+        </div>
+      </div>
+      <div class="breadcrumbTop">
+        <ul class="clearfix">
+<!-- breadcrumbs -->
+          <li>
+              <a href="{$config{http_url}}">
+                <epc:phrase ref="template/navigation:home"/>
+              </a>
+          </li>
+        </ul>
+      </div>
+      <div style="clear:both"></div>
+
+      <div class="section curvyRedraw arrow" id="pageContent">
+  <!-- Site search start -->
+            <div id="siteSearch">
+           
+                <form method="get" accept-charset="utf-8" action="{$config{http_cgiurl}}/search" style="display:inline">
+                  <label>Search</label>
+                  <input class="ep_tm_searchbarbox" size="20" type="text" name="q" text="Search Repository"/>
+                  <button class="" value="{phrase('lib/searchexpression:action_search')}" type="submit" name="_action_search" id="ssSubmit">Search</button>
+                  <input type="hidden" name="_action_search" value="Search"/>
+                  <input type="hidden" name="_order" value="bytitle"/>
+                  <input type="hidden" name="basic_srchtype" value="ALL"/>
+                  <input type="hidden" name="_satisfyall" value="ALL"/>
+                </form>
+            </div>
+<!-- Site search end -->
+ 
+
+
+          <div class="sectionHeader" id="sectionHeader">
+         
+
+
+            <h1><a href="{$config{http_url}}"><epc:phrase ref="archive_name"/></a></h1>
+        </div>
+        <div class="aside">
+          <div class="nav" id="sNav">
+            <ul>
+            <li>              
+              <a href="{$config{http_url}}/information.html">
+                <epc:phrase ref="template/navigation:about"/>
+              </a>
+            </li>
+            <li>
+<a href="{$config{perl_url}}/latest">Latest Additions</a>
+            </li>
+            <li>
+<a href="{$config{perl_url}}/search/advanced">Search</a>
+            </li>
+            <li class="ep_drop_down">
+              <a href="{$config{http_url}}/view/" menu="ep_tm_menu_browse">
+              <epc:phrase ref="template/navigation:browse"/>  
+              </a>
+              
+
+            <ul>
+                <li>
+                  <a href="{$config{http_url}}/view/year/">
+                    <epc:phrase ref="bin/generate_views:indextitleprefix"/>
+                    <epc:phrase ref="viewname_eprint_year"/>
+                  </a>
+                </li>
+                <li>
+                  <a href="{$config{http_url}}/view/subjects/">
+                    <epc:phrase ref="bin/generate_views:indextitleprefix"/>
+                    <epc:phrase ref="viewname_eprint_subjects"/>
+                  </a>
+                </li>
+                <li>
+                  <a href="{$config{http_url}}/view/divisions/">
+                    <epc:phrase ref="bin/generate_views:indextitleprefix"/>
+                    <epc:phrase ref="viewname_eprint_divisions"/>
+                  </a>
+                </li>
+                <li>
+                  <a href="{$config{http_url}}/view/creators/">
+                    <epc:phrase ref="bin/generate_views:indextitleprefix"/>
+                    <epc:phrase ref="viewname_eprint_creators"/>
+                  </a>
+                </li>
+            </ul>
+
+
+            </li><!--end of ep_dropdown-->
+                
+                <epc:pin ref="login_status"/>
+            </ul>
+
+          </div>
+          
+          </div>
+        
+          <div class="dropdownNav">
+            <div class="textBox" style=""><p>In this section</p></div>  
+          </div>
+          <ul class="menu"></ul>
+        <div id="mainpage">
+             
+          <div id="mainpage_forbottom">
+
+            <div class="maincontent fullwidth">
+              
+              <div id="eprints_content">
+                <h1><epc:pin ref="title"/></h1>
+                <epc:pin ref="page"/>
+                <br style="clear:both;" />
+              </div>
+            </div>
+          </div>
+          <div class="onecolclear"></div>
+
+          <div class="slide-data-narrow">
+            <div class="panel clearfix">
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer clearfix" id="pageFooter">
+<!--noindex-->
+      <div class="backToTop">
+        <a href="#">Back to top</a>
+      </div>
+<!--endnoindex-->
+<!-- navigation object : 1kGenericFooter -->
+<!--noindex-->
+
+    </div>
+
+    <div class="ep_tm_footer ep_noprint">
+      <div class="ep_tm_eprints_logo">
+        <a href="http://eprints.org/software/">
+          <img alt="EPrints Logo" src="{$config{rel_path}}/images/eprintslogo.gif"/>
+        </a>
+      </div>
+      <epc:phrase ref="template:about_eprints"/>
+    </div>
+
+<!-- navigation object : Generic Footer resources -->
+    <script type="text/javascript" src="/javascript/retina-1.1.0.js"></script>
+</div>
+</body>
+
+
+
+</html>

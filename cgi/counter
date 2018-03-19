@@ -1,0 +1,83 @@
+######################################################################
+#
+#  Show the number of eprints currently in the repository
+#
+#  Used for remote monitoring of repository growth. eg. by 
+#  software.eprints.org
+#
+######################################################################
+
+use EPrints;
+
+
+use strict;
+
+my $eprints = EPrints->new;
+my $repo = $eprints->current_repository;
+exit( 0 ) unless( defined $repo );
+
+$repo->send_http_header( content_type=>"text/plain; charset=UTF-8" );
+
+my %counts;
+foreach my $ds_id ($repo->get_sql_dataset_ids)
+{
+	my $ds = $repo->dataset( $ds_id );
+	my $table = $ds->get_sql_table_name;
+	$counts{$ds_id} = $repo->get_database->count_table( $table );
+}
+{
+	my $ds = $repo->dataset( "eprint" );
+	my $search = $ds->prepare_search;
+	my @counts = $search->perform_groupby( $ds->field( "eprint_status" ) );
+	foreach my $i (0..$#{$counts[0]})
+	{
+		$counts{$counts[0]->[$i]} = $counts[1]->[$i];
+	}
+	for(qw( inbox buffer archive deletion ))
+	{
+		$counts{$_} ||= 0;
+	}
+}
+foreach my $ds_id ( sort keys %counts )
+{
+	print sprintf("%s: %i\n",
+		$ds_id,
+		$counts{$ds_id}
+	);
+}
+
+# version
+print "version: " . EPrints->human_version . " " . $repo->config( "vendor_short" ) . "\n";
+foreach my $key ( qw / version_description version_long version_alias vendor_long vendor_short flavour_id flavour_version flavour_name / )
+{
+	print $key . ": " . $repo->config( $key ) . "\n";
+}
+
+# Indexer Status
+my $daemon = EPrints::Index::Daemon->new
+(
+	session => $repo,
+	logfile => EPrints::Index::logfile(),
+	noise => ($repo->{noise}||1),
+);
+
+my $status = "not-running";
+$status = "running" if $daemon->is_running();
+$status = "stalled" if $daemon->has_stalled();
+print "indexer: $status\n";
+
+if( $repo->dataset( 'epm' ) )
+{
+	print "epm: ";
+	my $first = 1;
+	$repo->dataset( 'epm' )->dataobj_class->map($repo, sub
+	{
+		my( undef, undef, $epm ) = @_;
+		print "; " if !$first;
+		$first = 0;
+		print $epm->value( "epmid" ) . "=" . $epm->value( "version" );
+	});
+}
+print "\n";
+
+exit;

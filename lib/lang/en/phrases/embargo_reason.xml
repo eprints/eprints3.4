@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<!DOCTYPE phrases SYSTEM "entities.dtd">
+<epp:phrases xmlns="http://www.w3.org/1999/xhtml" xmlns:epp="http://eprints.org/ep3/phrase" xmlns:epc="http://eprints.org/ep3/control">
+
+<epp:phrase id="document_fieldname_embargo_reason">Reason for Embargo</epp:phrase>
+<epp:phrase id="document_fieldhelp_embargo_reason">Please select a reason for requesting an embargo on Open Access of this data</epp:phrase>
+
+<epp:phrase id="embargo_reason_typename_publication">Information intended for future publication</epp:phrase>
+<epp:phrase id="embargo_reason_typename_security">Information relating/prejudicial to national security</epp:phrase>
+<epp:phrase id="embargo_reason_typename_rights">Information that is covered by third party information property rights</epp:phrase>
+<epp:phrase id="embargo_reason_typename_dpa">Information that is covered by confidentiality agreements or the Data Protection Act</epp:phrase>
+<epp:phrase id="embargo_reason_typename_patents">Information that will compromise commercial interests including impending patents</epp:phrase>
+
+</epp:phrases>

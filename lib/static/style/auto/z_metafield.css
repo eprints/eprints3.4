@@ -1,0 +1,16 @@
+table.ep_metafield_compound,
+table.ep_metafield_compound th,
+table.ep_metafield_compound td
+{
+  border: 0.5px solid lightgray;
+  border-spacing: 0px;
+}
+
+table.ep_metafield_compound th,
+table.ep_metafield_compound td
+{
+  padding-top: 3px;
+  padding-bottom: 3px;
+  padding-left: 5px;
+  padding-right: 5px;
+}

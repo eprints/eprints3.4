@@ -1,0 +1,144 @@
+#!/usr/bin/perl
+
+=head1 NAME
+
+title_duplicates - warn of duplicate entries based on title
+
+=head1 SYNOPSIS
+
+	title_duplicates?q=Field+studies+&field=title&dataset=eprint&id=23
+
+=head1 DESCRIPTION
+
+Provides a warning box for any other eprints where q prefixes the title.
+
+=cut
+
+use EPrints;
+
+use strict;
+use warnings;
+
+my $repo = EPrints->new->current_repository;
+
+my $db = $repo->get_database;
+my $xml = $repo->xml;
+
+# security??
+
+# How many chars needed before we try and suggest duplicates?
+my $need = 5;
+
+my $q = $repo->param( "q" ) || "";
+
+exit unless length( $q ) >= $need; 
+
+my $id = $repo->param( "eprintid" );
+$id = $repo->param( "id" ) if !EPrints::Utils::is_set( $id );
+
+my $fieldname = $repo->param( "field" );
+$fieldname = 'title' if !EPrints::Utils::is_set( $fieldname );
+
+my $dataset_name = $repo->param( "dataset" );
+$dataset_name = 'eprint' if !EPrints::Utils::is_set( $dataset_name );
+
+if( !defined($id) )
+{
+	$repo->log( "duplicates lookup script called without id argument: ".join(',',$repo->param));
+	exit(0);
+}
+elsif( $id =~ /^([0-9]+)$/ )
+{
+	$id = $1;
+}
+else
+{
+	EPrints::abort "Requires numeric id argument";
+}
+
+my $dataset = $repo->dataset( $dataset_name );
+EPrints->abort( "No such dataset '$dataset_name'" ) if !defined $dataset;
+
+EPrints->abort( "No such field '$fieldname'" ) if !$dataset->has_field( $fieldname );
+my $field = $dataset->field( $fieldname );
+
+my $Q_table = $db->quote_identifier($dataset->get_sql_table_name);
+my $Q_id = $db->quote_identifier( $dataset_name . "id" );
+my $Q_eprint_status = $db->quote_identifier( "eprint_status" );
+my $Q_field_name = $db->quote_identifier( $field->get_sql_name );
+
+my $sql = "SELECT $Q_id" .
+	" FROM $Q_table" .
+	" WHERE ";
+if ($dataset_name eq "eprint") {
+	$sql .= " $Q_eprint_status=" .  $db->quote_value( "archive" );
+} 
+$sql .=	" AND $Q_id!=$id" .
+	" AND $Q_field_name IS NOT NULL" .
+	" AND $Q_field_name " .
+	$db->sql_LIKE() .
+	$db->quote_value( EPrints::Database::prep_like_value( $q ) . '%' );
+
+my $html = $xml->create_element( "div" );
+
+my $sth = $db->prepare_select( $sql, 'limit' => 10 );
+$db->execute( $sth , $sql );
+
+my $base_url = $repo->config( "base_url" );
+
+my $row = $sth->fetch;
+
+unless( defined $row )
+{
+        print '<?xml version="1.0" encoding="UTF-8" ?><span/>';
+        $repo->terminate;
+        exit;
+}
+
+$html->appendChild( $repo->render_message( "warning",
+		$repo->html_phrase( "cgi/users/lookup/title_duplicates:warning",
+			field => $field->render_name,
+		)
+	) );
+
+# messages have a 10px top & bottom margin :-(
+$html->appendChild( my $ul = $xml->create_element( 'ul',
+		style => "margin-top: -10px",
+	));
+
+my $count = 0;
+my $first = 1;
+
+do
+{
+	my( $id, $value ) = @$row;
+	$ul->appendChild( my $li = $repo->make_element( 'li' ) );
+	if( $first )
+	{
+		$li->setAttribute( 'class', 'ep_first' );
+		$first = 0;
+	}
+	
+	my $dataobj = $dataset->dataobj($id);
+	if( ++$count > 5 )
+	{
+		$li->appendChild( $dataobj->render_citation_link( "brief", target => "_blank" ) );
+	}
+	else
+	{
+		$li->appendChild( $dataobj->render_citation_link( "default", target=>"_blank" ) );
+	}
+} while( $count < 20 && defined($row = $sth->fetch) );
+
+$sth->finish;
+
+binmode(STDOUT, ":utf8");
+$repo->send_http_header( content_type => "text/xml; charset=UTF-8" );
+
+print <<END,
+<?xml version="1.0" encoding="UTF-8" ?>
+
+END
+	$repo->xhtml->to_xhtml( $html );
+
+$xml->dispose( $html );

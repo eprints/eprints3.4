@@ -1,0 +1,171 @@
+use EPrints;
+use strict;
+
+# renders a calendar for embedded in other pages via ajax
+#
+# note the use of &amp; when using from an xpage, else use &
+#  jQuery.ajax({url: "/cgi/cal?year=2017&amp;w=25&amp;m=8",
+#    success:function(data)
+#    {
+#      jQuery('#mycal').append(data);
+#    }
+#  });
+
+my $session = EPrints::Session->new();
+my $content = "text/html";
+$session->send_http_header( content_type=>$content );
+
+my($nday, $nmonth, $nyear)=(localtime)[3,4,5];
+my $today = sprintf("%04d_%02d_%02d", ($nyear+1900), ($nmonth+1), $nday);
+
+# the year to render
+my $year = $session->param( "year" );
+   $year = $nyear+1900 unless $year;
+
+# the month to start at 1..12
+my $month = $session->param( "month" );
+   $month = 1 unless $month;
+
+# the base size in pixels of each day
+my $w = $session->param( "w" );
+   $w = 40 unless $w;
+
+# the number of months per row
+my $r = $session->param( "r" );
+   $r = 4 unless $r;
+
+# the number of months to show
+my $m = $session->param( "m" );
+   $m = 12 unless $m;
+   $m = 24 if $m > 24; # hard limit of 24 months
+
+my $w2 = $w+2;
+my $mh = 50 + 7 * $w;
+
+print <<EOT;
+<html>
+<head>
+<title>$year</title>
+<style>
+.day
+{
+  width: ${w}px; height: ${w}px;
+  border: 1px solid black;
+  display: inline-block;
+  margin: 1px;
+  text-align: right;
+  box-sizing: content-box; 
+}
+.date:hover
+{
+  background-color: #ccccff;
+}
+.empty
+{
+  border: none;
+  width: ${w2}px; height: ${w2}px;  
+}
+.heading
+{
+  border: none;
+  width: ${w2}px; height: 22px;
+  text-align: center;
+}
+.day a
+{
+  text-decoration: none;
+  color: black;
+  padding-right: 2px;
+}
+#d$today
+{
+  background-color: #ffffcc;
+}
+.day a:hover
+{
+  text-decoration: underline;
+}
+.month
+{
+  display: inline-block;
+  margin: 10px;
+  height: ${mh}px;
+  font-family: sans-serif;
+}
+.month_label
+{
+  text-align: center;
+  font-weight: 600;
+}
+.today
+{
+  font-weight: 600;
+}
+</style>
+</head>
+<body>
+
+<div class='month_row'>
+EOT
+
+sub fn($$$)
+{
+  my($y, $m, $d) = @_;
+  return "<div class='day empty'>&nbsp;</div>" if $d =~ /^[ ]+$/;
+  return "<div class='day heading'>$d</div>" if $d =~ /^[A-Za-z ]+$/;
+  my $target = sprintf("%d/%02d/%02d", $y, $m, $d);
+  my $id = sprintf("%04d_%02d_%02d", $y, $m, $d);
+
+  # link to an external page
+  # return "<div class='day date' id='d$id'><a href='/somewhere-else?date=$target'>$d</a></div>";
+
+  my $class = "day date";
+  if( $today eq $id )
+  {
+	$class .= " today";
+  }
+
+  # simple date info
+  return "<div class='$class' id='$id'>$d</div>";
+}
+
+my $col=0;
+my $month_count = 0;
+
+# build a list of years which our month count covers
+my @years = ($year);
+my $mc = $m - (12-$month);
+my $yc = 1;
+while( $mc > 0 ) { push @years, $year+$yc; $mc=$mc-12; $yc++ }
+
+# process and output one month at a time
+my $start_month = $month;
+for my $_y ( @years )
+{
+  for my $_mon ( $start_month .. 12 )
+  {
+    $month_count++;
+    next if $month_count > $m;
+    print "</div><div class='month_row'>" if($col && $col%${r}==0);
+    open(CAL, "cal $_mon $_y |");
+    print "<div class='month'>\n";
+    my $line_num = 1;
+    while(<CAL>)
+    {
+      s/([0-9A-Za-z ]+)/<div class='month_label'>$1<\/div>/ if $line_num == 1;
+      s/([0-9A-Za-z ]{2,3})/&fn($_y, $_mon, $1)/ge if(!/$_y/);
+      s/\n/<br>\n/g;
+      print;
+      $line_num++;
+    }
+    print "</div>\n";
+    ++$col;
+  }
+  $start_month = 1;
+}
+
+print <<EOT;
+</div>
+</body>
+</html>
+EOT

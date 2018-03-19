@@ -1,0 +1,470 @@
+#!/usr/bin/perl
+
+use FindBin;
+use lib "$FindBin::Bin/../perl_lib";
+
+=pod
+
+=for Pod2Wiki
+
+=head1 NAME
+
+epm - EPrints Package Manager
+
+=head1 SYNOPSIS
+
+epm I<command> [B<options>]
+
+Where I<command> is one of:
+
+	build
+	disable
+	enable
+	install
+	link_lib
+	list
+	rebuild
+	uninstall
+	unpack
+
+=head1 OPTIONS
+
+=over 4
+
+=item --verbose
+
+=item --force
+
+=item --help
+
+=item --man
+
+=item --epm L<package_path>
+
+Read metadata from the epm at L<package_path> when building.
+
+=item --version
+
+Set the version when building.
+
+=back
+
+=head1 COMMANDS
+
+=over 4
+
+=cut
+
+use EPrints;
+use Getopt::Long;
+use Pod::Usage;
+use Digest::MD5;
+use MIME::Base64;
+use Cwd;
+
+use strict;
+use warnings;
+
+my $opt_version;
+my $opt_verbose = 0;
+my $opt_force = 0;
+my $opt_help;
+my $opt_man;
+my $opt_epm;
+
+GetOptions(
+	'epm=s' => \$opt_epm,
+	'version=s' => \$opt_version,
+	'verbose+' => \$opt_verbose,
+	'force' => \$opt_force,
+	'help' => \$opt_help,
+	'man' => \$opt_man,
+) or pod2usage( 2 );
+
+pod2usage(-verbose => 1) if $opt_help;
+pod2usage(-verbose => 2) if $opt_man;
+
+pod2usage( 2 ) if !@ARGV;
+my $cmd = shift @ARGV;
+
+my $noise = $opt_verbose + 1;
+my $force = $opt_force;
+
+my $f = "action_$cmd";
+if( !defined &$f )
+{
+	pod2usage( "Unknown or unsupported command '$cmd'" );
+}
+
+my $repo = EPrints::Repository->new;
+my $handler = EPrints::CLIProcessor->new(
+	repository => $repo,
+);
+my $dataset = $repo->dataset( "epm" );
+
+{
+no strict "refs";
+&$f( $repo );
+}
+
+sub repository
+{
+	my( $repoid ) = @_;
+	return $repoid if UNIVERSAL::isa( $repoid, "EPrints::Repository" );
+	my $repo = EPrints->repository( $repoid );
+	if( !defined $repo )
+	{
+		die "'$repoid' is not a valid repository identifier";
+	}
+	return $repo;
+}
+
+sub epm
+{
+	my( $repo, $name ) = @_;
+
+	my $epm = $repo->dataset( 'epm' )->dataobj( $name );
+	if( !defined $epm )
+	{
+		$handler->add_message( "error", $repo->xml->create_text_node(
+			"'$name' is not installed or is an invalid epm identifier"
+		) );
+		exit(1);
+	}
+	return $epm;
+}
+
+=item build I<package> I<file1> I<file2> ...
+
+Build a new package called C<package> from a list of files.
+
+	./epm build endnote \
+		lib/plugins/EPrints/Plugin/Export/EndNote.pm \
+		lib/epm/endnote.pl
+
+Where C<lib/epm/endnote.pl> contains:
+
+	$c->{plugins}{"Export::EndNote"}{params}{disable} = 0;
+
+=cut
+
+sub action_build
+{
+	my( $repo ) = @_;
+
+	pod2usage( 2 ) if @ARGV < 2;
+	my( $name, @manifest ) = @ARGV;
+
+	my $epdata = {};
+	if( $opt_epm )
+	{
+		if(open(my $fh, "<", $opt_epm))
+		{
+			sysread($fh, my $xml, -s $fh);
+			close($fh);
+			my $epm = $dataset->dataobj_class->new_from_xml( $repo, $xml );
+			$epdata = $epm->get_data;
+		}
+		else
+		{
+			die "Error reading from $opt_epm: $!";
+		}
+	}
+	# sanity check they aren't bundling "installed" epms
+	if( my @bad = grep { $_ =~ m# ^lib/epm/[^/]+\.epmi?$ #x } @manifest )
+	{
+		die "Can not bundle installed package files: @bad";
+	}
+
+	delete $epdata->{documents};
+	$epdata->{epmid} = $name;
+	$epdata->{datestamp} = EPrints::Time::iso_datetime();
+	$epdata->{version} = $opt_version if $opt_version;
+	$epdata->{version} = '1.0.0'
+		if !EPrints::Utils::is_set( $epdata->{version} );
+
+	my $pkg_cache = $repo->config( "base_path" ) . "/var/cache/epm";
+	EPrints->system->mkdir( $pkg_cache )
+		or die "Error creating directory $pkg_cache: $!";
+
+	my $epm = $dataset->dataobj_class->new_from_manifest(
+		$repo, $epdata, @manifest
+	);
+
+	my $output = sprintf("%s/%s-%s.epm",
+		$pkg_cache,
+		$epm->value( "epmid" ),
+		$epm->value( "version" )
+	);
+
+	open(my $fhout, ">", $output) or die "Error writing to $output: $!";
+
+	binmode($fhout, ":utf8");
+	syswrite($fhout, $epm->serialise( 1 ));
+
+	print "$output\n";
+}
+
+=item disable I<repository> I<package>
+
+Disable the I<package> for I<repository>. This will trigger a configuration
+reload.
+
+=cut
+
+sub action_disable
+{
+	pod2usage() if @ARGV != 2;
+	my( $repoid, $name ) = @ARGV;
+
+	my $repo = &repository( $repoid );
+	my $epm = &epm( $repo, $name );
+
+	$epm->control_screen(
+		processor => $handler,
+	)->action_disable;
+}
+
+=item enable I<repository> I<package>
+
+Enable the I<package> for I<repository>. This will trigger a configuration
+reload.
+
+=cut
+
+sub action_enable
+{
+	pod2usage() if @ARGV != 2;
+	my( $repoid, $name ) = @ARGV;
+
+	my $repo = &repository( $repoid );
+	my $epm = &epm( $repo, $name );
+
+	local $handler->{dataobj} = $epm;
+
+	$epm->control_screen(
+		processor => $handler,
+	)->action_enable;
+}
+
+=item install I<package_path>
+
+Install a package located at I<package_path>.
+
+=cut
+
+sub action_install
+{
+	my( $repo ) = @_;
+
+	pod2usage( 2 ) if @ARGV != 1;
+
+	my( $source ) = @ARGV;
+
+	open(my $fh, "<", $source) or die "Error reading $source: $!";
+	sysread($fh, my $xml, -s $fh);
+	close($fh);
+
+	my $epm = $repo->dataset( "epm" )->dataobj_class->new_from_xml( $repo, $xml );
+
+	if( $epm->install( $handler, $force ) )
+	{
+		print "Installed ".$epm->value( "epmid" )." [$source]\n";
+	}
+}
+
+=item link_lib I<package>
+
+Soft-link all files in the package under lib/ to a directory tree lib/ below
+the package's home directory. This is a utility method for developers.
+
+Use --force to overwrite existing files.
+
+=cut
+
+sub action_link_lib
+{
+	my( $repo ) = @_;
+
+	pod2usage( 2 ) if @ARGV != 1;
+
+	my( $name ) = @ARGV;
+
+	my $epm = &epm( $repo, $name );
+
+	my $sourcedir = $epm->epm_dir . '/lib';
+	my $targetdir = $repo->config( "base_path" ) . '/lib';
+
+	File::Find::find(sub {
+		return if $File::Find::name =~ /\/\./;
+		return if -d $File::Find::name;
+
+		my $path = $targetdir;
+		$path .= "/" . substr($File::Find::dir,length($sourcedir)+1);
+
+		EPrints->system->mkdir( $path );
+
+		if( $opt_force && -e "$path/$_" ) {
+			unlink "$path/$_";
+		}
+		symlink($File::Find::name, "$path/$_");
+
+		print "$path/$_\n";
+	}, $sourcedir);
+}
+
+=item list
+
+List all installed packages.
+
+=cut
+
+sub action_list
+{
+	my( $repo ) = @_;
+
+	$dataset->dataobj_class->map($repo, sub {
+		my( undef, undef, $epm ) = @_;
+
+		print sprintf("%s\t%s\n", $epm->id, $epm->value( "version" ));
+	});
+}
+
+=item rebuild
+
+Rewrite the .epm and .epmi files. This is a utility method for developers.
+
+=cut
+
+sub action_rebuild
+{
+	my( $repo ) = @_;
+
+	pod2usage( 2 ) if @ARGV != 1;
+
+	my( $name ) = @ARGV;
+
+	my $epm = &epm( $repo, $name );
+
+	$epm->rebuild;
+
+	$epm->commit;
+
+	print $epm->epm_dir . "/" . $epm->id . ".epm\n";
+}
+
+=item uninstall I<package>
+
+Uninstall the installed package I<package>.
+
+=cut
+
+sub action_uninstall
+{
+	my( $repo ) = @_;
+
+	pod2usage( 2 ) if @ARGV != 1;
+
+	my( $name ) = @ARGV;
+
+	my $epm = &epm( $repo, $name );
+
+	my @enabled_in;
+	foreach my $repoid (EPrints->repository_ids)
+	{
+		last if $force;
+		my $repo = EPrints->repository( $repoid );
+		my $repo_epm = $repo->dataset( "epm" )->make_dataobj( $epm->get_data );
+
+		if( $repo_epm->is_enabled )
+		{
+			push @enabled_in, $repoid;
+		}
+	}
+	die "Can't uninstall while package is enabled in: ".join(', ', @enabled_in) if @enabled_in;
+
+	if( $epm->uninstall( $handler, $force ) )
+	{
+		print "Uninstalled $name\n";
+	}
+}
+
+=item unpack I<package_path>
+
+Unpack the files contained in package_path to the current directory. This is
+equivalent to tar -xf package_path.
+
+=cut
+
+sub action_unpack
+{
+	my( $repo ) = @_;
+
+	pod2usage( 2 ) if @ARGV != 1;
+
+	my( $source ) = @ARGV;
+
+	open(my $fh, "<", $source) or die "Error reading $source: $!";
+	sysread($fh, my $xml, -s $fh);
+	close($fh);
+
+	my $epm = $repo->dataset( "epm" )->dataobj_class->new_from_xml( $repo, $xml );
+
+	foreach my $file ($epm->installed_files)
+	{
+		my $filepath = $file->value( "filename" );
+		if( $filepath =~ m#^/# || $filepath =~ m#/\.# )
+		{
+			warn "Won't unpack root-pathed or hidden file: $filepath";
+			next;
+		}
+		$filepath = 'lib/' . $filepath;
+		my( @path, $filename ) = split '/', getcwd() . '/' . $filepath;
+		for(0..($#path-1))
+		{
+			my $path = join '/', @path[0..$_];
+			EPrints->system->mkdir($path)
+				or die "mkdir $path: $!";
+		}
+		if( !$opt_force && -e $filepath )
+		{
+			die "Use --force to overwrite $filepath\n";
+		}
+		open(my $fh, ">", $filepath) or die "Error writing to $filepath: $!";
+		syswrite($fh, $file->value( "data" ));
+		close($fh);
+		print "$filepath\n" if $noise;
+	}
+}
+
+=back
+
+=cut
+
+=head1 COPYRIGHT
+
+=for COPYRIGHT BEGIN
+
+Copyright 2000-2011 University of Southampton.
+
+=for COPYRIGHT END
+
+=for LICENSE BEGIN
+
+This file is part of EPrints L<http://www.eprints.org/>.
+
+EPrints is free software: you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published
+by the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+EPrints is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+License for more details.
+
+You should have received a copy of the GNU General Public License
+along with EPrints.  If not, see L<http://www.gnu.org/licenses/>.
+
+=for LICENSE END
+

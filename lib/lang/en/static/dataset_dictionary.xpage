@@ -1,0 +1,22 @@
+<?xml version="1.0" standalone="no" ?>
+<!DOCTYPE page SYSTEM "entities.dtd" >
+<xpage:page xmlns="http://www.w3.org/1999/xhtml" xmlns:xpage="http://eprints.org/ep3/xpage" xmlns:epc="http://eprints.org/ep3/control">
+<xpage:title>Dataset Dictionary</xpage:title>
+<xpage:body>
+
+<a href='dataset_dictionary.html?1#eprint'>eprint</a> |
+<a href='dataset_dictionary.html?2#user'>user</a> |
+<a href='dataset_dictionary.html?3#file'>file</a> |
+<a href='dataset_dictionary.html?4#document'>document</a> |
+<a href='dataset_dictionary.html?5#subject'>subject</a> |
+<a href='dataset_dictionary.html?6#history'>history</a> |
+<a href='dataset_dictionary.html?7#access'>access</a>
+
+<div id="dataset_dictionary"></div>
+<script type="text/javascript">
+var dataset = location.hash.substr(1);
+new Ajax.Updater('dataset_dictionary',"/cgi/dataset_dictionary?nohead=1&amp;dataset="+dataset ,{method:'get'});
+</script>
+
+</xpage:body>
+</xpage:page>

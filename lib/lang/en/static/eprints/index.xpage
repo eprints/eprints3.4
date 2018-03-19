@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="iso-8859-1"  standalone="no"  ?>
+<!DOCTYPE page SYSTEM "entities.dtd" >
+<xpage:page xmlns="http://www.w3.org/1999/xhtml" xmlns:xpage="http://eprints.org/ep3/xpage" xmlns:epc="http://eprints.org/ep3/control">
+<xpage:head>
+<style type="text/css">
+.technology dt {
+	font-weight: bold;
+}
+.technology dd {
+	display: inline;
+	margin: 0;
+}
+.technology dd:after { content: ","; }
+.technology dd.last:after { content: "."; }
+</style>
+</xpage:head>
+<xpage:title>About EPrints</xpage:title>
+<xpage:body>
+
+<h2>About this software</h2>
+
+
+<p>This site is running <epc:print expr="$config{version_description}" />.</p>
+
+<p>EPrints has been developed at the <a href="http://www.ecs.soton.ac.uk/">School of Electronics and Computer Science</a> at the <a href="http://www.soton.ac.uk/">University of Southampton</a>, UK.</p>
+
+<p>For more information please see <a href="http://www.eprints.org/">www.eprints.org</a>.</p>
+
+<p><a href="http://www.eprints.org/">EPrints Services</a> based in Southampton can also provide hosting, training and consultancy services for your EPrints repository.</p>
+
+<h2>Credits</h2>
+
+<h3>Software Architects</h3>
+<ul>
+ <li>Christopher Gutteridge</li>
+ <li>Dr Tim Brody</li>
+ <li>Seb Francois</li>
+ <li>Justin Bradley</li>
+</ul>
+
+<h3>Developers</h3>
+<ul>
+ <li>Dr Jiadi Yao</li>
+ <li>Dr Will Fyson</li>
+ <li>Kelly Terrell</li>
+ <li>Dr David Newman</li>
+ <li>Dr Timothy Miles-Board</li>
+ <li>Dr Dave Tarrant</li>
+ <li>Adam Field</li>
+ <li>Patrick McSweeney</li>
+</ul>
+
+<h3>Contributors</h3>
+<ul>
+ <li>Alexander Bergolth</li>
+ <li>Dr Michael O. Jewell</li>
+ <li>Dr Jessie Hey</li>
+ <li>Dr Harry Mason</li>
+ <li>Al Riddoch</li>
+ <li>Dr Gui Power</li>
+ <li>Pauline Simpson</li>
+ <li>Robert Tansley</li>
+ <li>Adam White</li>
+ <li>Wendy White</li>
+ <li>Dr Steve Hitchcock</li>
+ <li>Denis Pitzalis</li>
+ <li>Matthew Kerwin</li>
+ <li>Mark Gregson</li>
+ <li>John Salter</li>
+</ul>
+
+<h3>Project Management</h3>
+<ul>
+ <li>Professor Leslie Carr</li>
+ <li>John Darlington</li>
+</ul>
+
+<h3>user experience consultant</h3>
+<ul>
+ <li>prof mc schraefel</li>
+</ul>
+
+<h3>Visionary and Software Specifications</h3>
+<ul>
+ <li>Professor Stevan Harnad</li>
+</ul>
+
+<p>Thanks to the EPrints users and community for contributing ideas, bug reports and fixes.</p>
+
+<epc:phrase ref="ruler" />
+
+<h2>Technologies employed and supported:</h2>
+
+<dl class="technology">
+
+<dt>Powered by:</dt>
+<dd><a href="http://www.mysql.com/">MySQL</a></dd>
+<dd><a href="http://www.apache.org/">Apache Webserver</a></dd>
+<dd><a href="http://www.perl.org/">Perl</a></dd>
+<dd><a href="http://perl.apache.org/">mod_perl</a></dd>
+<dd><a href="https://xapian.org/">Xapian</a></dd>
+<dd><a href="http://www.w3c.org/XML/">XML</a></dd>
+<dd><a href="http://www.w3c.org/DOM/">DOM</a></dd>
+<dd><a href="http://www.w3c.org/RDF/">RDF</a></dd>
+<dd><a href="http://codemirror.net/">CodeMirror</a></dd>
+<dd><a href="http://flowplayer.org/">Flowplayer</a></dd>
+<dd class="last"><a href="http://www.cpan.org/">CPAN</a></dd>
+
+<dt>Supports:</dt>
+<dd><a href="http://www.openarchives.org/">Open Archives Initiative Protocol for Metadata Harvesting</a></dd>
+<dd><a href="http://www.w3.org/MarkUp/">Valid XHTML</a></dd>
+<dd><a href="http://jigsaw.w3.org/css-validator/">Valid CSS</a></dd>
+<dd class="last"><a href="http://linkeddata.org/">Linked Data</a></dd>
+
+<dt>Part of:</dt>
+<dd class="last"><a href="http://www.gnu.org/">The GNU Project</a></dd>
+
+</dl>
+
+<epc:phrase ref="ruler" />
+
+<div align="center" style='margin-top:2em'>
+<a href="http://www.ecs.soton.ac.uk/"><img src="{$config{rel_path}}/images/ecslogo.jpg" border="0" alt="School of Electronics and Computer Science, University of Southampton" align="top"/></a>
+<p>EPrints is Copyright &#169; University of Southampton, 2000-2017.</p>
+</div>
+
+</xpage:body>
+</xpage:page>

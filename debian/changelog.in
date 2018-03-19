@@ -1,0 +1,5 @@
+eprints (@VERSION@) @DEBIAN_TYPE@; urgency=low
+
+  * Upstream release.
+
+ -- EPrints Software <software@eprints.org>  @DEBIAN_DATE@

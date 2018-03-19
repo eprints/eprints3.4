@@ -1,0 +1,7 @@
+#lib inc for the publication flavour. starts from base path (e.g. /opt/eprints3) 
+#pathes are separated by ; (semi-colon) and should not contain spaces
+#back ones overwrite front ones. 
+
+flavours/pub_lib;site_lib;ingredients/bazaar;
+
+

@@ -1,0 +1,53 @@
+/*Doing stuff to get the menu to display across*/
+
+#pageContent .aside{
+  width:100%;
+  padding:8px 0px;
+}
+
+#sNav ul li{
+  float:left
+}
+
+#sNav ul li ul{
+  display:none;
+  position:absolute;
+  background-color:#ededed;
+}
+
+#sNav ul li ul li{
+  float:none;
+  margin-left:0px;
+  padding-left:0px;
+
+}
+
+#sNav ul li ul a{
+  margin-left:0px;
+  padding-left:0px;
+}
+
+
+
+
+li.ep_drop_down{
+  padding-bottom: 0px; margin: 0px;
+}
+
+
+
+#sNav li{
+  margin-left:0;
+}
+
+#sNav .currentsection, #sNav a{
+  padding: 0 1.4em 0 13px
+}
+
+.open{
+  padding-top:0;
+}
+
+#mainpage{
+  width:100%;
+}

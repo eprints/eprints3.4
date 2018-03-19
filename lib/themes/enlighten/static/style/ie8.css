@@ -1,0 +1,19 @@
+#pageHeader,
+#pageContent,
+.breadcrumbTop,
+#pageFooter { width: 97em }
+#home .topPanels .jumpLink .container td { padding-left: 0.5em }
+.share { margin-bottom: 2.5em }
+#pageContent .magazinehome .links .container { border-right: none; border-top: none; border-bottom: none; border-left: 1px #E6E5E1 solid; padding-left: 8%; }
+#mainpage form label { padding-top: 1em }
+.flexslider { left: 0px !important }
+/* Lets fix the heights when stacking content*/
+.singleContentElement .flexslider,
+.singleContentElement .flex-viewport,
+.singleContentElement .flexslider .slides,
+.singleContentElement .flexslider .slides li,
+.singleContentElement .flexslider .slides .panel { height: auto }
+.singleContentElement.blockCarousel,
+.singleContentElement.inlineCarousel,
+.singleContentElement.homeCarousel { background: #196293 }
+.singleContentElement .rotatingPanel .panel { background: none }

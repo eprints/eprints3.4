@@ -1,0 +1,71 @@
+       #home .jumpLink .container li a { font-size: 1em }
+.responsiveContent { position: relative }
+#pageHeader,
+#pageContent,
+.breadcrumbTop,
+#pageFooter { width: 97em }
+.flexslider { left: 0px !important }
+#pageHeader .nav { display: block }
+#pNav ul { margin-top: -1px }
+#mainpage form { width: 95.5% }
+#mainpage select { width: 72.25% }
+#mainpage select[name=title] { width: auto }
+#siteSearch button { padding: 0.2em 0; border: none; }
+#pageHeader .nav li { width: 14% }
+#siteTools { min-width: 20em }
+.aside { float: left }
+.open { border-right: #ffffff 2px solid }
+.ui-tabs .ui-tabs-nav li a { padding-right: 10px }
+#pageFooter li a { background-position-x: 1em }
+#home .alertsCarousel .controls { position: absolute; background-color: transparent!important; }
+#home .alertsCarousel .controls .flex-direction-nav { margin-top: -0.5em; zoom: 1; position: relative !important; }
+#home .alertsCarousel .controls span { float: none; position: absolute; top: -5px; right: 7em; }
+#home .alertsCarousel .controls { top: 0.5em }
+#home .alertsCarousel .controls a { height: 19px !important }
+#home .topPanels .jumpLink .container td { padding-bottom: 0.5em }
+#home .newsAndEvents ul li { list-style: none }
+#home .newsAndEvents .linkList .last { padding-top: 0.25em }
+#home .newsAndEvents .linkList { margin-top: 1em }
+#home .newsAndEventsNav li { width: 39.2% }
+#home .homeCarousel .blockTextAndImage p,
+.homeCarousel .blockTextAndImage a { font-size: 1.1em }
+#home .homeCarousel .blockTextAndImage .readMoreLink { font-size: 1.1em !important }
+#home .homeCarousel .blockTextAndImage p { margin-bottom: 0.3em }
+#home .homeCarousel .right.controls .flex-direction-nav { right: 0em; bottom: 0em; }
+#home .promo .text { width: 89% }
+.blockTextAndImage .panel .text { min-height: 2.2em }
+.responsivePageContent .blockTextAndImage p { font-size: 1.1em }
+.homeCarousel .blockTextAndImage a { font-size: initial !important }
+.responsivePageContent .inlineTextAndImage a,
+.responsivePageContent .inlineTextAndImage p { font-size: 1.1em }
+.inlineTextAndImage h3 { font-size: 1.6em }
+.controls { zoom: 1 }
+.right.controls { /*float: right;_NO__DOTCOMMA__AFTER__*/ }
+.left.controls { float: left; /*position: relative !important;*/ }
+/*.inlineCarousel .controls*/
+.blockTextAndImage .controls,
+.inlineTextAndImage .controls,
+.blockCarousel .controls { /*top: 0;; bottom: 0; left: 0; right: 0; */ }
+.controls .flex-direction-nav { min-width: 7em; position: absolute; }
+.right.controls .flex-direction-nav { right: 0em; bottom: 1em; }
+.left.controls .flex-direction-nav { left: 1em; bottom: 1.5em; }
+.controls .flex-direction-nav li a { height: 20px; min-width: 5px; zoom: 1; }
+#home .controls .flex-direction-nav li a { height: 24px }
+.controls.right .flex-direction-nav { right: -0.5em }
+#home .homeCarousel .controls.right .flex-direction-nav { right: -0.5em }
+.blockTextAndImage h3 { font-size: 1.6 !important }
+.contentPanel .inlineTextAndImage .panel .text { width: 43% }
+/* Lets fix the heights when stacking content*/
+.singleContentElement .flexslider,
+.singleContentElement .flex-viewport,
+.singleContentElement .flexslider .slides,
+.singleContentElement .flexslider .slides li,
+.singleContentElement .flexslider .slides .panel { height: auto }
+.singleContentElement.blockCarousel,
+.singleContentElement.inlineCarousel,
+.singleContentElement.homeCarousel { background: #196293 }
+.singleContentElement .rotatingPanel .panel { background: none }
+#mainpage form label { padding-top: 0.7em }
+/* Pages */
+.postgraduate .ui-tabs .ui-tabs-nav li { max-width: 21em }
+.magazinehome .links .container { border-right: none; border-top: none; border-bottom: none; border-left: 1px #E6E5E1 solid; padding-left: 8%; }

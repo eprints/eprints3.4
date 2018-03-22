@@ -14,17 +14,11 @@ GNU EPrints README
 
 =head1 SYNOPSIS
 
-	./configure --help
-	./configure (with some sensible options)
-	sudo make install
-
 Installation guide: B<http://wiki.eprints.org/w/Installation>.
 
 For more information see B<http://www.eprints.org/software/>.
 
 NOTE:
-*The 3.3 branch should be considered as the new "master" branch now. *
-*The master branch is no longer maintained. (A merge could not be performed automatically due to different code paths.)*
 
 =head1 DESCRIPTION
 
@@ -53,7 +47,7 @@ EPrints can be contacted in the real world at
 
 =head1 COPYRIGHT
 
-Copyright 2000-2015 University of Southampton.
+Copyright 2000-2018 University of Southampton.
 
 EPrints is free software: you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published

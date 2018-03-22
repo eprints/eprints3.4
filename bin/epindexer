@@ -1,5 +1,15 @@
 #!/usr/bin/perl -T -w
 
+### BEGIN INIT INFO
+# Provides:          epindexer
+# Required-Start:    $local_fs $remote_fs $network $syslog $named
+# Required-Stop:     $local_fs $remote_fs $network $syslog $named
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: EPrints indexer
+# Description:       Start the EPrints indexer daemon as the correct user.
+### END INIT INFO
+
 my $user = "eprints";
 my $group = "eprints";
 my $prefix = "/opt/eprints3";
@@ -14,6 +24,7 @@ my $prefix = "/opt/eprints3";
 #
 ######################################################################
 
+use Config::General qw( ParseConfig );
 use English;
 use POSIX;
 
@@ -43,7 +54,66 @@ while(my( undef, undef, $gid, $members ) = getgrent())
 $REAL_GROUP_ID = $EFFECTIVE_GROUP_ID = "@sgroups";
 $REAL_USER_ID = $EFFECTIVE_USER_ID = $uid;
 
-my $indexer_cmd = "$prefix/bin/indexer";
+# Read the configuration file
+my $confname = "$prefix/cfg/epindexer.conf";
+my %conf;
+if ( -f $confname )
+{
+	%conf = ParseConfig( $confname );
+}
+
+# Configure verbosity
+my $noise = 0;
+if( defined $conf{'verbose'} and $conf{'verbose'} =~ m/^(\d+)$/ )
+{
+	$noise = $1;
+}
+
+# Set up the environment
+if ( exists $conf{'Environment'} )
+{
+	foreach my $k ( keys %{$conf{'Environment'}} )
+	{
+		# regex capture groups don't inherit the source's taint
+		$conf{'Environment'}{$k} =~ m/(.*)/;
+		$ENV{$k} = $1;
+		if ( $noise > 0 )
+		{
+			print $k . '=' . $ENV{$k} . "\n";
+		}
+	}
+}
+
+# Build the command line for the indexer
+my @indexer_cmd = ( "$prefix/bin/indexer" );
+# logfile must be non-empty string
+if ( defined $conf{'logfile'} and $conf{'logfile'} =~ m/(.+)/ )
+{
+	push @indexer_cmd, '--logfile', $1;
+}
+# loglevel is a number from 0 to 6
+if ( defined $conf{'loglevel'} and $conf{'loglevel'} =~ m/^([0-6])$/ )
+{
+	push @indexer_cmd, '--loglevel', $1;
+}
+# rollcount is a number
+if ( defined $conf{'rollcount'} and $conf{'rollcount'} =~ m/^(\d+)$/ )
+{
+	push @indexer_cmd, '--rollcount', $1;
+}
+# respawn is a number (of seconds)
+if ( defined $conf{'respawn'} and $conf{'respawn'} =~ m/(\d+)/ )
+{
+	push @indexer_cmd, '--respawn', $1;
+}
+
+push @indexer_cmd, $opt;
+if ( $noise > 0 )
+{
+	print 'Executing ' . join( ' ', @indexer_cmd ) . "\n";
+}
+
+# Go!
 $| = 0;
 if( $opt eq 'start' )
 {
@@ -54,9 +124,9 @@ if( $opt eq 'stop' )
 	print 'Stopping EPrints Indexer: ';
 }
 delete $ENV{'PATH'};
-my $rv = system( $indexer_cmd, $opt );
+my $rv = system( @indexer_cmd );
 $rv = $rv >> 8;
-if( $opt eq 'start' || $opt eq 'stop' ) 
+if( $opt eq 'start' || $opt eq 'stop' )
 {
 	if( $rv == 0 )
 	{
@@ -74,10 +144,9 @@ exit $rv;
 
 =for COPYRIGHT BEGIN
 
-Copyright 2017 University of Southampton.
+Copyright 2018 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
-This software may be used with permission and must not be redistributed.
 http://www.eprints.org/eprints-3.4/
 
 =for COPYRIGHT END
@@ -100,4 +169,3 @@ License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
 =for LICENSE END
-

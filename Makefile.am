@@ -28,6 +28,15 @@ README:
 VERSION:
 	echo $(VERSION) > VERSION
 
+dist-core: distdir
+	-rm -f $(distdir).tar.gz
+	tar czf $(distdir).tar.gz $(distdir) --exclude "$(distdir)/flavours"
+	$(am__post_remove_distdir)
+dist-flavours: distdir
+	-rm -f $(distdir)-flavours.tar.gz
+	tar czf $(distdir)-flavours.tar.gz $(distdir)/flavours
+	$(am__post_remove_distdir)
+
 clean-local:
 	-rm -f ChangeLog INSTALL README VERSION
 

@@ -121,7 +121,7 @@ fi
 
 APACHE="2"
 
-SMTP_SERVER="smtp"
+SMTP_SERVER="127.0.0.1"
 AC_ARG_WITH(smtp-server,
     [  --with-smtp-server=[HOSTNAME]  
                           SMTP server to use for outgoing email],

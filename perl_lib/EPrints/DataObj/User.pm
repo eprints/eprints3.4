@@ -579,8 +579,12 @@ sub owned_eprints_list
 	}
 	
 	my $list = &$fn( $self->{session}, $self, $opts{dataset} );
-	if (!$searchexp->is_blank()) { $list = $list->intersect( $searchexp->perform_search ); }
 
+
+	#MBA-85 (rwf1v07/08/03/2018): if statement doesn't return true when search filter comprises of eprint state and so intersect doesn't happen
+	#as 'get_users_owned_eprints' is used so rarely, and because this if statement only seems to check if there is nothing to do, seems harmless to remove it
+	#if (!$searchexp->is_blank()) { $list = $list->intersect( $searchexp->perform_search ); }
+	$list = $list->intersect( $searchexp->perform_search ); 
 	return $list;
 }
 
@@ -1528,10 +1532,9 @@ sub has_role
 
 =for COPYRIGHT BEGIN
 
-Copyright 2017 University of Southampton.
+Copyright 2018 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
-This software may be used with permission and must not be redistributed.
 http://www.eprints.org/eprints-3.4/
 
 =for COPYRIGHT END

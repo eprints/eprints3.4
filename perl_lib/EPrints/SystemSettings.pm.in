@@ -16,11 +16,8 @@ EPrints::SystemSettings
 package EPrints::SystemSettings;
 
 $EPrints::SystemSettings::conf = {
-                                   'version' => 'EPrints 3.4',
-                                   'version_id' => 'eprints-3.4',
-                                   'base_path' => '/opt/eprints3',
+                                   'base_path' => '@PREFIX@',
                                    'show_ids_in_log' => 0,
-                                   'group' => 'eprints',
                                    'version_history' => [
                                                           'eprints-3.2.3',
                                                           'eprints-3.3.6',
@@ -31,14 +28,15 @@ $EPrints::SystemSettings::conf = {
                                                           'eprints-3.3.14',
                                                           'eprints-3.3.15'
                                                         ],
-                                   'smtp_server' => '127.0.0.1', # sensible default, but may not be valid
-                                   'user' => 'eprints',
+                                   'user' => '@INSTALL_USER@',
+                                   'group' => '@INSTALL_GROUP@',
+                                   'smtp_server' => '@SMTP_SERVER@',
                                    'file_perms' => '0664',
+                                   'dir_perms' => '02775',
                                    'invocation' => {},
                                    'executables' => {
-                                                      'perl' => '/usr/bin/perl'
+                                                      'perl' => '@PERL_PATH@'
                                                     },
-                                   'dir_perms' => '02775',
                                    'flavours' => {
                                                    'zero' => [##site_lib has been removed from the flavour path and now a special lib that can overwrite core modules.
                                                        'ingredients/bazaar_stub', ## this is loaded here to prevent warning for EPMC.pm module when other repos install bazaar in the /lib dir
@@ -122,7 +120,6 @@ sub read_inc
 1;
 
 
-
 =head1 COPYRIGHT
 
 =for COPYRIGHT BEGIN
@@ -152,4 +149,3 @@ License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
 =for LICENSE END
-

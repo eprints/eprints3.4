@@ -1266,33 +1266,28 @@ sub GET
 	elsif( $self->scope == CRUD_SCOPE_DATAOBJ )
 	{
 		return HTTP_NOT_FOUND if !defined $dataobj;
+		if ( $repo->config("use_long_url_format") &&  ($dataset->base_id eq "file") ) 
+		{
+			##	redirect /id/file/234  to  /id/eprint/23/1.pdf (part of the 84_sword.pl test) when use_long_url_format is turned on, instead of the summary page of the file dataobj.
+			my $url = $dataobj->get_url;
+			if( defined( $url ) && $url ne $dataobj->uri )
+			{
+				return EPrints::Apache::Rewrite::redir_see_other( $r, $url );
+			}
+		}
 
+		# user wants HTML and there is a static page available
+		my $url = ($dataset->base_id eq "eprint" && $dataset->id ne "archive") ?
+				$dataobj->get_control_url :
+				$dataobj->get_url;
+		if( $plugin->get_subtype eq "SummaryPage" )
+		{
+			if( defined( $url ) && $url ne $dataobj->uri )
+			{
+				return EPrints::Apache::Rewrite::redir_see_other( $r, $url );
+			}
+		}
 
-        if (not $repo->config("use_long_url_format"))
-        {
-            # user wants HTML and there is a static page available
-            my $url = ($dataset->base_id eq "eprint" && $dataset->id ne "archive") ?
-                    $dataobj->get_control_url :
-                    $dataobj->get_url;
-            if( $plugin->get_subtype eq "SummaryPage" )
-            {
-                if( defined( $url ) && $url ne $dataobj->uri )
-                {
-                    return EPrints::Apache::Rewrite::redir_see_other( $r, $url );
-                }
-            }
-        }
-        else
-        {
-            if ($dataset->base_id eq "file")  ##  redirect /id/file/234  to  /id/eprint/23/1.pdf (part of the 84_sword.pl test)
-            {
-                my $url = $dataobj->get_url;
-                if( defined( $url ) && $url ne $dataobj->uri )
-                {
-                    return EPrints::Apache::Rewrite::redir_see_other( $r, $url );
-                }
-            }
-        }
 		# set Last-Modified header for individual objects
 		if( my $field = $dataset->get_datestamp_field() )
 		{
@@ -1386,15 +1381,15 @@ sub POST
 	}
 	my $list = $self->parse_input( $plugin, sub {
 			my( $epdata ) = @_;
-            if (!$self->is_file_ok($epdata))
-            {
-                $self->sword_error(
-                    status => HTTP_PRECONDITION_FAILED,
-                    href => "http://purl.org/net/sword/error/ErrorChecksumMismatch",
-                    summary => "Attachment file integrity check failed. (Filesize not specified, filesize does not match or MD5 checksum mismatch)",
-                );
-                return undef;
-            }
+			if (!$self->is_file_ok($epdata))
+			{
+				$self->sword_error(
+					status => HTTP_PRECONDITION_FAILED,
+					href => "http://purl.org/net/sword/error/ErrorChecksumMismatch",
+					summary => "Attachment file integrity check failed. (Filesize not specified, filesize does not match or MD5 checksum mismatch)",
+				);
+				return undef;
+			}
 			if( $self->scope == CRUD_SCOPE_USER_CONTENTS )
 			{
 				$epdata->{userid} = $owner->id;
@@ -1543,15 +1538,15 @@ sub PUT
 		} );
 	return if !defined $list;
 
-    if (!$self->is_file_ok($epdata))
-    {
-        $self->sword_error(
-            status => HTTP_PRECONDITION_FAILED,
-            href => "http://purl.org/net/sword/error/ErrorChecksumMismatch",
-            summary => "Filesize not specified or filesize does not match",
-        );
-        return undef;
-    }
+	if (!$self->is_file_ok($epdata))
+	{
+		$self->sword_error(
+			status => HTTP_PRECONDITION_FAILED,
+			href => "http://purl.org/net/sword/error/ErrorChecksumMismatch",
+			summary => "Filesize not specified or filesize does not match",
+		);
+		return undef;
+	}
 
 
 	# implicit create on unknown URI
@@ -1593,8 +1588,8 @@ sub PUT
 	}
 
 	$dataobj->empty();
-    #$dataobj->set_value('eprint_status','inbox') if $dataobj->get_dataset_id() eq "eprint"; 
-    $dataobj->update( $epdata, include_subdataobjs => 1 );
+	#$dataobj->set_value('eprint_status','inbox') if $dataobj->get_dataset_id() eq "eprint"; 
+	$dataobj->update( $epdata, include_subdataobjs => 1 );
 	$dataobj->commit;
 
 	# transfer the eprint, if needed
@@ -1851,7 +1846,7 @@ sub servicedocument
 
 	return $self->send_response(
 		OK,
-		'application/xtomsvc+xml; charset=utf-8',
+		'application/atomsvc+xml; charset=utf-8',
 		$content
 	);
 }
@@ -1898,46 +1893,43 @@ sub is_false
 ##The check only happens when file is using "_content" 
 sub is_file_ok
 {
-    my( $self, $epdata ) = @_;
-    my $file_checking_succ=1;
-    foreach my $doc (@{$epdata->{documents}})
-    {
-        foreach (@{$doc->{files}})
-        {
-            my $content = $_->{_content};
-            if (defined $content) ##when content is defined, we expect the filesize exist and same as the the one in xml.
-            {
-                if (!defined $_->{filesize})
-                {
-                    $file_checking_succ=0;
-                }
+	my( $self, $epdata ) = @_;
+	my $file_checking_succ=1;
+	foreach my $doc (@{$epdata->{documents}})
+	{
+		foreach (@{$doc->{files}})
+		{
+			my $content = $_->{_content};
+			if (defined $content) ##when content is defined, we expect the filesize exist and same as the the one in xml.
+			{
+				if (!defined $_->{filesize})
+				{
+					$file_checking_succ=0;
+				}
 
-                my $filesize = -s $content;
-                if ($filesize ne $_->{filesize})  ##if file size do not match, file check fail
-                {
-                    $file_checking_succ=0;
-                }
-                ##checking md5 checksum
-                if (defined($_->{hash_type}) && defined($_->{hash}))
-                {
-                    if (lc($_->{hash_type}) eq 'md5')
-                    {
-                        my $ctx = Digest::MD5->new->addfile($content);
-                        seek($content,0,0);
-                        if ($ctx->hexdigest ne $_->{hash})
-                        {
-                           $file_checking_succ=0; 
-                        }
-                        
-                    }
-                }
-            }
-            
+				my $filesize = -s $content;
+				if ($filesize ne $_->{filesize})  ##if file size do not match, file check fail
+				{
+					$file_checking_succ=0;
+				}
+				##checking md5 checksum
+				if (defined($_->{hash_type}) && defined($_->{hash}))
+				{
+					if (lc($_->{hash_type}) eq 'md5')
+					{
+						my $ctx = Digest::MD5->new->addfile($content);
+						seek($content,0,0);
+						if ($ctx->hexdigest ne $_->{hash})
+						{
+						   $file_checking_succ=0; 
+						}
 
-
-        }
-    }
-    return $file_checking_succ;
+					}
+				}
+			}
+		}
+	}
+	return $file_checking_succ;
 }
 
 
@@ -2154,10 +2146,9 @@ http://en.wikipedia.org/wiki/Content_negotiation
 
 =for COPYRIGHT BEGIN
 
-Copyright 2017 University of Southampton.
+Copyright 2018 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
-This software may be used with permission and must not be redistributed.
 http://www.eprints.org/eprints-3.4/
 
 =for COPYRIGHT END

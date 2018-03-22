@@ -89,53 +89,113 @@ sub extra_subfields
 	return ();
 }
 
-sub render_value
+#Edited by ADB under direction from TDB
+#sub render_value
+sub render_value_actual
 {
 	my( $self, $session, $value, $alllangs, $nolink, $object ) = @_;
 
-	if( defined $self->{render_value} )
-	{
-		return $self->call_property( "render_value",
-			$session, 
-			$self, 
-			$value, 
-			$alllangs, 
-			$nolink,
-			$object );
-	}
+	#if( defined $self->{render_value} )
+	#{
+	#	return $self->call_property( "render_value",
+	#		$session, 
+	#		$self, 
+	#		$value, 
+	#		$alllangs, 
+	#		$nolink,
+	#		$object );
+	#}
 
-	my $table = $session->make_element( "table", "class" => "ep_metafield_compound" );
-	my $tr = $session->make_element( "tr" );
-	$table->appendChild( $tr );
-	my $f = $self->get_property( "fields_cache" );
-	foreach my $field_conf ( @{$f} )
-	{
-		my $fieldname = $field_conf->{name};
-		my $field = $self->{dataset}->get_field( $fieldname );
-		my $th = $session->make_element( "th" );
-		$tr->appendChild( $th );
-		$th->appendChild( $field->render_name( $session ) );
-	}
+	my $class = "ep_" . $self->{name};
 
-	if( $self->get_property( "multiple" ) )
-	{
-		foreach my $row ( @{$value} )
+	my $result;
+
+	if( !EPrints::Utils::is_set( $self->get_property( "as_list"  ) ) || $self->get_property( "as_list" ) == 0 ) {
+
+		# View as table
+
+		my $table = $session->make_element( "table", border=>1, cellspacing=>0, cellpadding=>2, class=>"ep_compound $class" );
+
+		my $tr = $session->make_element( "tr", "class"=>"ep_compound_header_row" );
+		$table->appendChild( $tr );
+		my $f = $self->get_property( "fields_cache" );
+		foreach my $field_conf ( @{$f} )
 		{
-			$table->appendChild( $self->render_single_value_row( $session, $row, $alllangs, $nolink, $object ) );
+			my $fieldname = $field_conf->{name};
+			my $field = $self->{dataset}->get_field( $fieldname );
+			my $th = $session->make_element( "th" );
+			$tr->appendChild( $th );
+			$th->appendChild( $field->render_name( $session ) );
 		}
+	
+		if( $self->get_property( "multiple" ) )
+		{
+			foreach my $row ( @{$value} )
+			{
+				$table->appendChild( $self->render_single_value_row( $session, $row, $alllangs, $nolink, $object ) );
+			}
+		}
+		else
+		{
+			$table->appendChild( $self->render_single_value_row( $session, $value, $alllangs, $nolink, $object ) );
+		}
+
+		$result = $table;
 	}
 	else
 	{
-		$table->appendChild( $self->render_single_value_row( $session, $value, $alllangs, $nolink, $object ) );
+		# View as list
+
+		my $list = $session->make_element( "div", class=>"ep_compound_list $class" );
+
+		my @records = $self->get_property( "multiple" ) ? @{$value} : @{[$value]};
+
+		foreach my $record ( @records )
+		{
+			my $table = $session->make_element( "table", border=>1, cellspacing=>0, cellpadding=>2 );
+
+			my $f = $self->get_property( "fields_cache" );
+
+			foreach my $field_conf ( @{$f} )
+			{
+				my $tr = $session->make_element( "tr" );
+
+				my $fieldname = $field_conf->{name};
+				my $field = $self->{dataset}->get_field( $fieldname );
+				my $th = $session->make_element( "th" );
+
+				$tr->appendChild( $th );
+				$th->appendChild( $field->render_name( $session ) );
+
+				my $alias = $field->property( "sub_name" );
+				my $td = $session->make_element( "td" );
+
+				$tr->appendChild( $td );
+				$td->appendChild( 
+					$field->render_value_no_multiple( 
+						$session, 
+						$record->{$alias}, 
+						$alllangs,
+						$nolink,
+						$object ) );
+
+				$table->appendChild( $tr );
+			}
+
+			$list->appendChild( $table );
+		}
+
+		$result = $list;
 	}
-	return $table;
+
+	return $result;
 }
 
 sub render_single_value_row
 {
 	my( $self, $session, $value, $alllangs, $nolink, $object ) = @_;
 
-	my $tr = $session->make_element( "tr" );
+	my $tr = $session->make_element( "tr", "class"=>"ep_compound_data_row" );
 
 	foreach my $field (@{$self->{fields_cache}})
 	{
@@ -628,10 +688,9 @@ sub get_id_from_value
 
 =for COPYRIGHT BEGIN
 
-Copyright 2017 University of Southampton.
+Copyright 2018 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
-This software may be used with permission and must not be redistributed.
 http://www.eprints.org/eprints-3.4/
 
 =for COPYRIGHT END

@@ -457,6 +457,7 @@ END
     
     ##create the 00_flavour.pl
     my $flavourfile = "$repodir/cfg/cfg.d/00_flavour.pl";
+    mkdir "$repodir/cfg/cfg.d" unless -d "$repodir/cfg/cfg.d";
     open( FLAV, ">$flavourfile" ) || die "Could not write to $flavourfile: $!";
     print FLAV Data::Dumper->Dump(
         [

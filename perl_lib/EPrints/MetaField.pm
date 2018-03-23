@@ -2341,7 +2341,7 @@ sub get_property_defaults
 		input_advice_right => EP_PROPERTY_UNDEF,
 		input_advice_below => EP_PROPERTY_UNDEF,
 		input_assist	=> EP_PROPERTY_FALSE,
-
+		as_list 	=> EP_PROPERTY_UNDEF,
 		readonly	=> EP_PROPERTY_FALSE,
 );
 }

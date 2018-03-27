@@ -269,7 +269,7 @@ sub update_auto
 	foreach my $fn (sort keys %map)
 	{
 		my $path = $map{$fn};
-		if ($repo->{quiet} == 1)
+		if (defined $repo->get_conf('quiet') && $repo->get_conf('quiet') == 1)
 		{
 			print $fh "\n\n\n/* From: $fn */\n\n";
 		}

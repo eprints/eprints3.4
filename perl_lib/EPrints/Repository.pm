@@ -1597,7 +1597,7 @@ sub _load_core_modules
 
 	##load flavour from a local config, which is used to determine the flavour lib order. 
 	my $_fpath = $conf->{base_path}."/archives/".$self->{id}."/cfg/cfg.d/00_flavour.pl";
-	open (my $fh, $_fpath) or die "could not open file flavour config file: $!";
+	open (my $fh, $_fpath) or die "could not open file flavour config file at [$_fpath]: $! \n";
 	my $flavour;
 	while (my $row=<$fh>)
 	{

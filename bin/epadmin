@@ -385,7 +385,7 @@ sub create
     if (not $repo_type ~~ @flavours)
     {
         print STDERR "Available repository types are: \n   ",join("\n   ",@flavours),"\n";
-        print STDERR "Usage: \$epadmin create [repository type]\n";
+        print STDERR "Usage: epadmin create [repository type]\n";
         exit(1);
     }
     

@@ -79,6 +79,11 @@
     min-width: 145px;
     max-width: 145px;
   }
+  .ep_tm_searchbarbutton 
+  { 
+    min-width: inherit; 
+  }
+
   .ep_blister_node_selected
   {
     background-image: none;

@@ -68,8 +68,22 @@
   {
     background-image: none;
     margin-right: 8px;
+    min-width: 145px;
+    max-width: 200px;
+    padding-left: 5px;
+    padding-right: 5px;
+    white-space: normal;
   } 
+  #ep_eprint_view_panels .ep_form_action_button 
+  {
+    min-width: 145px;
+    max-width: 145px;
+  }
   .ep_blister_node_selected
   {
     background-image: none;
+  }
+  dl.ep_action_list dd
+  {
+    margin-bottom: 15px;
   }

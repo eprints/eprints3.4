@@ -1570,8 +1570,8 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
     <epp:phrase id="lib/searchfield:help_int">Enter a single number (e.g. 93), or a range of numbers, e.g. `17-23', `17-' or -23'.</epp:phrase>
     <epp:phrase id="lib/searchfield:help_float">Enter a single number (e.g. 3.14159), or a range of numbers, e.g. `4.8-15', `16-' or -23.42'.</epp:phrase>
     <epp:phrase id="lib/searchfield:help_itemref">Select a single record ID number (e.g. 93), or a range of numbers, e.g. `17-23', `17-' or -23'.</epp:phrase>
-    <epp:phrase id="lib/searchfield:help_storable" />
     <epp:phrase id="lib/searchfield:help_counter">Enter a single ID (e.g. 93), or a range of IDs, e.g. `17-23' or `17-'. </epp:phrase>
+    <epp:phrase id="lib/searchfield:help_storable" />
     <epp:phrase id="lib/searchfield:bool_nopref">No Preference</epp:phrase>
     <epp:phrase id="lib/searchfield:bool_yes">Yes</epp:phrase>
     <epp:phrase id="lib/searchfield:bool_no">No</epp:phrase>
@@ -2804,13 +2804,13 @@ PY = 2006 and OG = (Cambridge)<br />
 	<epp:phrase id="Plugin/Screen/EPrint/Error:title">Error</epp:phrase>
     <epp:phrase id="Plugin/Screen/EPrint/Error:description">Error</epp:phrase>
     
-    <epp:phrase id="Plugin/Screen/EPrint/RemoveWithEmail:title">Remove item (notify)</epp:phrase>
+    <epp:phrase id="Plugin/Screen/EPrint/RemoveWithEmail:title">Remove item (with notification)</epp:phrase>
     <epp:phrase id="Plugin/Screen/EPrint/RemoveWithEmail:description">Remove this item from the system forever, but send an email to the user who deposited it to inform them why.</epp:phrase>
     <epp:phrase id="Plugin/Screen/EPrint/RemoveWithEmail:item_removed">Item has been removed.</epp:phrase>
 	<epp:phrase id="Plugin/Screen/EPrint/Document/Remove:item_removed" ref="Plugin/Screen/EPrint/RemoveWithEmail:item_removed"/>
     <epp:phrase id="Plugin/Screen/EPrint/RemoveWithEmail:item_not_removed">Item could not be removed.</epp:phrase>
 
-    <epp:phrase id="Plugin/Screen/EPrint/RejectWithEmail:title">Return item (notify)</epp:phrase>
+    <epp:phrase id="Plugin/Screen/EPrint/RejectWithEmail:title">Return item (with notification)</epp:phrase>
     <epp:phrase id="Plugin/Screen/EPrint/RejectWithEmail:description">Return this item from to the user work area and send an email to the user who deposited it to explain why it cannot yet be accepted.</epp:phrase>
     <epp:phrase id="Plugin/Screen/EPrint/RejectWithEmail:item_removed">Item has been removed.</epp:phrase>
     <epp:phrase id="Plugin/Screen/EPrint/RejectWithEmail:item_not_removed">Item could not be removed.</epp:phrase>
@@ -2887,7 +2887,7 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="Plugin/Screen/EPrint/View:no_subclass">render_status should have been subclassed.</epp:phrase>
 
     <epp:phrase id="Plugin/Screen/EPrint/NewVersion:action:new_version:title">New version</epp:phrase>
-    <epp:phrase id="Plugin/Screen/EPrint/NewVersion:action:new_version:description">Use this to submit a new version of this item. It will create an exact copy which you can then make changes to. This item and the new version will be linked.</epp:phrase>
+    <epp:phrase id="Plugin/Screen/EPrint/NewVersion:action:new_version:description">Use this to submit a new version of this item. It will create an exact copy which you can then make changes to. This item and the new version will be linked. This item will be hidden from search result pages, once the new version is made public.</epp:phrase>
     <epp:phrase id="Plugin/Screen/EPrint/NewVersion:success">New versions successfully created in your work area. You are now viewing the new version.</epp:phrase>
 
     <epp:phrase id="Plugin/Screen/EPrint/UseAsTemplate:action:use_as_template:title">Use as template</epp:phrase>

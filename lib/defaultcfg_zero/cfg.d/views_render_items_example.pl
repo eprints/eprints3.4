@@ -53,10 +53,9 @@ $c->{render_view_items_3col_boxes} = sub
 
 =for COPYRIGHT BEGIN
 
-Copyright 2017 University of Southampton.
+Copyright 2018 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
-This software may be used with permission and must not be redistributed.
 http://www.eprints.org/eprints-3.4/
 
 =for COPYRIGHT END

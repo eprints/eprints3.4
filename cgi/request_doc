@@ -20,7 +20,7 @@ exit( 1 ) unless( defined $session );
 
 EPrints::ScreenProcessor->process( 
 	session => $session, 
-	url => $session->config( "perl_url" )."/request_doc",
+	url => "/cgi/request_doc",
 	screenid => "Public::RequestCopy",
 );
 $session->terminate;

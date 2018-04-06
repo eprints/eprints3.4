@@ -23,7 +23,20 @@ foreach my $ds_id ($repo->get_sql_dataset_ids)
 {
 	my $ds = $repo->dataset( $ds_id );
 	my $table = $ds->get_sql_table_name;
-	$counts{$ds_id} = $repo->get_database->count_table( $table );
+	unless ( $table eq "access" )
+	{
+		$counts{$ds_id} = $repo->get_database->count_table( $table );
+	}
+	else
+	{
+		# Get Max ID rather than total for access as this can be slow with InnoDB and 10 million+ records
+		my $db = $repo->get_database;
+		my $max_sql = "SELECT MAX(".$table."id) FROM $table;";
+	        my $max_sth = $db->prepare( $max_sql );
+        	$db->execute( $max_sth, $max_sql );
+ 	        my @max = $max_sth->fetchrow_array;
+		$counts{$ds_id} = @max[0];
+	}
 }
 {
 	my $ds = $repo->dataset( "eprint" );

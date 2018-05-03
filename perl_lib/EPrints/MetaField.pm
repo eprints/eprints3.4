@@ -1641,7 +1641,7 @@ sub form_value_actual
 		{
 			@values[$1-1, $1] = @values[$1, $1-1];
 		}
-		elsif( $ibutton =~ m/^${basename}_up_(\d+)$/ && $1 > 1 )
+		elsif( $ibutton =~ m/^${basename}_up_(\d+)$/ && $1 > 1 && $1 < @values+1)
 		{
 			@values[$1-1, $1-2] = @values[$1-2, $1-1];
 		}

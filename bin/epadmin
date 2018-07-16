@@ -2,6 +2,7 @@
 
 use FindBin;
 use lib "$FindBin::Bin/../perl_lib";
+no if $] >= 5.017011, warnings => 'experimental::smartmatch';
 
 ######################################################################
 #
@@ -380,7 +381,7 @@ sub create
     pod2usage( 2 ) if( scalar @ARGV > 1 ); 
 
     my $conf = $EPrints::SystemSettings::conf;
-    my @flavours =  keys $conf->{flavours};
+    my @flavours = keys %{$conf->{flavours}};
     my $repo_type = $ARGV[0]? $ARGV[0]:"";
     if (not $repo_type ~~ @flavours)
     {

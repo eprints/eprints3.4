@@ -2,22 +2,22 @@
 
 {
 	my $uri = URI->new( "http://" );
-	if( EPrints::Utils::is_set( $c->{host} ) )
-	{
-		$uri->scheme( "http" );
-		$uri->host( $c->{host} );
-		$uri->port( $c->{port} );
-		$uri = $uri->canonical;
-		$uri->path( $c->{http_root} );
-	}
-	else
-	{
-		$uri->scheme( "https" );
-		$uri->host( $c->{securehost} );
-		$uri->port( $c->{secureport} );
-		$uri = $uri->canonical;
-		$uri->path( $c->{https_root} );
-	}
+        if( EPrints::Utils::is_set( $c->{securehost} ) )
+        {
+                $uri->scheme( "https" );
+                $uri->host( $c->{securehost} );
+                $uri->port( $c->{secureport} );
+                $uri = $uri->canonical;
+                $uri->path( $c->{https_root} );
+        }
+        else
+        {
+                $uri->scheme( "http" );
+                $uri->host( $c->{host} );
+                $uri->port( $c->{port} );
+                $uri = $uri->canonical;
+                $uri->path( $c->{http_root} );
+        }
 
 # EPrints base URL without trailing slash
 	$c->{base_url} = "$uri";
@@ -40,9 +40,10 @@ $c->{use_long_url_format} = 1;
 
 =for COPYRIGHT BEGIN
 
-Copyright 2018 University of Southampton.
-EPrints 3.4 is supplied by EPrints Services.
-
+Copyright 2016 University of Southampton.
+EPrints 3.4 preview 2 is supplied by EPrints Services.
+This software is supplied as is and is for demonstration purposes.
+This software may be used with permission and must not be redistributed.
 http://www.eprints.org/eprints-3.4/
 
 =for COPYRIGHT END

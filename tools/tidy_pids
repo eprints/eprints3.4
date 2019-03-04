@@ -1,14 +1,27 @@
 #!/bin/bash
 
 # Deletes PID files for Indexer and OpenOffice, if the processes did not clear them properly on reboot.
+indexer_pid="../var/indexer.pid"
+indexer_tick="../var/indexer.tick"
+indexer_cmd="indexer"
+indexer_rm=0
+openoffice_pid="../var/openoffice.pid"
+openoffice_cmd="/opt/openoffice.org3/program/soffice.bin-accept=socket,host=localhost,port=8100;urp;StarOffice.ServiceManager-norestore-nofirststartwizard-nologo-headless"
 
 cd `dirname $0`
-if [[ -f ../var/indexer.pid && ! -d /proc/`cat ../var/indexer.pid` ]]; then
-	rm ../var/indexer.pid
-	if [[ -f ../var/indexer.tick ]]; then
-		 rm ../var/indexer.tick
-	fi
+if [[ -f $indexer_pid && ! -d /proc/`cat $indexer_pid` ]]; then
+        indexer_rm=1
+elif [[ -f $indexer_pid && -d /proc/`cat $indexer_pid` && "`cat /proc/\`cat $indexer_pid\`/cmdline`" !=  "$indexer_cmd" ]]; then
+        indexer_rm=1
 fi
-if [[ -f ../var/openoffice.pid && ! -d /proc/`cat ../var/openoffice.pid` ]]; then
-        rm ../var/openoffice.pid
+if [[ $indexer_rm -eq 1 ]]; then
+        rm $indexer_pid
+        if [[ -f $indexer_tick ]]; then
+                 rm $indexer_tick
+        fi
+fi
+if [[ -f $openoffice_pid && ! -d /proc/`cat $openoffice_pid` ]]; then
+        rm $openoffice_pid
+elif [[ -f $openoffice_pid && -d /proc/`cat $openoffice_pid` && "`cat /proc/\`cat $openoffice_pid\`/cmdline`" !=  "$openoffice_cmd" ]]; then
+        rm $openoffice_pid
 fi

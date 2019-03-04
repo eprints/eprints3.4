@@ -22,6 +22,7 @@ sub apache_conf
 	my $id = $repo->get_id;
 	my $adminemail = $repo->config( "adminemail" );
 	my $host = $repo->config( "host" );
+	$host = $repo->config( "securehost" ) if !EPrints::Utils::is_set( $host ) && EPrints::Utils::is_set( $repo->config( "securehost" ) );
 	my $port = $repo->config( "port" );
 	$port = 80 if !defined $port;
 	my $hostport = $host;
@@ -69,41 +70,39 @@ EOC
   ServerName $host
 $aliases
   ServerAdmin $adminemail
-  Include $base_path/cfg/perl_module_isolation_vhost.conf
-
-  <Location "$http_root">
-    PerlSetVar EPrints_ArchiveID $id
-
-    Options +ExecCGI
-    <IfModule mod_authz_core.c>
-       Require all granted
-    </IfModule>
-    <IfModule !mod_authz_core.c>
-       Order allow,deny
-       Allow from all
-    </IfModule>
-  </Location>
 
 EOC
 
-	# backwards compatibility
-	my $apachevhost = $repo->config( "config_path" )."/apachevhost.conf";
-	if( -e $apachevhost )
-	{
-		$conf .= "  # Include any legacy directives\n";
-		$conf .= "  Include $apachevhost\n\n";
-	}
+	# check if we enabled site-wide https
+        $http_url = $repo->config("http_url") || "";
+        if ( substr( $http_url, 0, 5 ) ne "https")
+        {
+		# backwards compatibility
+		$conf .= "    Include $base_path/cfg/perl_module_isolation_vhost.conf\n\n";
+		$conf .= _location( $http_root, $id );
+		my $apachevhost = $repo->config( "config_path" )."/apachevhost.conf";
+		if( -e $apachevhost )
+		{
+			$conf .= "  # Include any legacy directives\n";
+			$conf .= "  Include $apachevhost\n\n";
+		}
 
-	$conf .= <<EOC;
+		$conf .= <<EOC;
 
   # Note that PerlTransHandler can't go inside
   # a "Location" block as it occurs before the
   # Location is known.
   PerlTransHandler +EPrints::Apache::Rewrite
   
-</VirtualHost>
-
 EOC
+	}
+	else
+	{
+		$http_url = $http_url . '/' if substr( $http_url, -1 ) ne '/';
+		$conf .= "  RedirectPermanent / $http_url\n";
+	}
+  
+	$conf .= "</VirtualHost>\n\n";
 
 	return $conf;
 }
@@ -139,6 +138,28 @@ sub apache_secure_conf
 EOC
 }
 
+sub _location
+{
+	my( $http_root, $id, $secure ) = @_;
+
+	$secure = $secure ? 'PerlSetVar EPrints_Secure yes' : '';
+
+	return <<EOC;
+  <Location "$http_root">
+    PerlSetVar EPrints_ArchiveID $id
+    $secure
+    Options +ExecCGI
+    <IfModule mod_authz_core.c>
+       Require all granted
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+       Order allow,deny
+       Allow from all
+    </IfModule>
+  </Location>
+EOC
+}
+
 1;
 
 =head1 COPYRIGHT
@@ -148,6 +169,7 @@ EOC
 Copyright 2018 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
+This software may be used with permission and must not be redistributed.
 http://www.eprints.org/eprints-3.4/
 
 =for COPYRIGHT END

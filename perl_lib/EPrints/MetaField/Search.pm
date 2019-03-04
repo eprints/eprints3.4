@@ -63,7 +63,7 @@ sub render_single_value
 
 sub make_searchexp
 {
-	my( $self, $session, $value, $basename ) = @_;
+	my( $self, $session, $value, $basename, $obj ) = @_;
 
 	my $dataset = $session->dataset( $self->{datasetid} );
 
@@ -94,6 +94,17 @@ sub make_searchexp
 	if( defined($conf_key) )
 	{
 		$fields = $session->config( $conf_key );
+		#if we've been passed a function, get the array from that
+		if( ref( $fields ) eq "CODE" )
+		{			
+			$fields = $self->call_property( "fieldnames_config", 
+				$self,
+				$session,	
+				$value,
+				$dataset,
+				$obj );
+		}
+
 	}
 	else
 	{
@@ -141,7 +152,7 @@ sub get_basic_input_elements
 
 	# cjg - make help an option?
 
-	my $searchexp = $self->make_searchexp( $session, $value, $basename."_" );
+	my $searchexp = $self->make_searchexp( $session, $value, $basename."_", $obj );
 
 	foreach my $sf ( $searchexp->get_non_filter_searchfields )
 	{

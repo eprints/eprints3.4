@@ -15,16 +15,17 @@ $c->{epm_sources} = [] if !defined $c->{epm_sources};
 # Define the EPM sources
 push @{$c->{epm_sources}}, {
                 name => "EPrints Bazaar",
-                base_url => "http://bazaar.eprints.org",
+                base_url => "https://bazaar.eprints.org",
 };
 
 =head1 COPYRIGHT
 
 =for COPYRIGHT BEGIN
 
-Copyright 2018 University of Southampton.
-EPrints 3.4 is supplied by EPrints Services.
-
+Copyright 2016 University of Southampton.
+EPrints 3.4 preview 2 is supplied by EPrints Services.
+This software is supplied as is and is for demonstration purposes.
+This software may be used with permission and must not be redistributed.
 http://www.eprints.org/eprints-3.4/
 
 =for COPYRIGHT END

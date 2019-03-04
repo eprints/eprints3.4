@@ -113,6 +113,13 @@ sub action_request
 
 	my $email = $request->value( "requester_email" );
 
+	my $blacklist = $session->config( 'email_blacklist' );
+	if( $email && $blacklist && grep { $email eq $_ } @$blacklist )
+	{
+		$self->{processor}->add_message( "error", $session->html_phrase( "general:email_denied" ) );
+		return;
+	}
+
 	my $eprint = $self->{processor}->{eprint};
 	my $doc = $self->{processor}->{document};
 	my $contact_email = $self->{processor}->{contact_email};

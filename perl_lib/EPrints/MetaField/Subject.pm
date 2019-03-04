@@ -37,20 +37,6 @@ BEGIN
 
 use EPrints::MetaField::Set;
 
-sub render_single_value
-{
-	my( $self, $session, $value ) = @_;
-
-	my $subject = new EPrints::DataObj::Subject( $session, $value );
-	if( !defined $subject )
-	{
-		return $session->make_text( "?? $value ??" );
-	}
-
-	return $subject->render_with_path(
-		$session,
-		$self->get_property( "top" ) );
-}
 
 sub render_option
 {
@@ -174,6 +160,136 @@ sub get_value_label
 	}
 	return $subj->render_description();
 }
+
+
+## Input single subject node, e.g. HJ
+## Output the subject html text. e.g. HJ Public Finance
+sub render_single_value
+{
+	my( $self, $session, $value ) = @_;
+	my $subject = new EPrints::DataObj::Subject( $session, $value );
+	if( !defined $subject )
+	{
+		return $session->make_text( "?? $value ??" );
+	}
+	return $subject->render_description();
+}
+
+sub render_value
+{
+	my( $self, $session, $value, $alllangs, $nolink, $object ) = @_;
+    unless( EPrints::Utils::is_set( $value ) )
+    {
+        if( $self->{render_quiet} )
+        {
+            return $session->make_doc_fragment;
+        }
+        else
+        {
+            # maybe should just return nothing
+            return $session->html_phrase(
+                "lib/metafield:unspecified",
+                fieldname => $self->render_name( $session ) );
+        }
+    }
+    my @value;
+    if ( $self->get_property( "multiple") )
+    {
+        @value = @{$value};
+    }
+    else
+    {
+        @value = ($value);
+    }
+
+    my @rendered_values = ();
+
+    my $first = 1;
+    my $html = $session->make_doc_fragment();
+
+    if( $self->{render_quiet} )
+    {
+        @value = grep { EPrints::Utils::is_set( $_ ) } @value;
+    }
+
+    foreach my $i (0..$#value) ##subjects assigned to the eprint
+    {
+        if( $i > 0 )
+        {
+            my $phraseid = "lib/metafield:join_".$self->get_type;
+            if( $i == $#value && $session->get_lang->has_phrase(
+                        "$phraseid.last", $session ) )
+            {
+                $phraseid .= ".last";
+            }
+            elsif( $i == 1 && $session->get_lang->has_phrase(
+                        "$phraseid.first", $session ) )
+            {
+                $phraseid .= ".first";
+            }
+            $html->appendChild( $session->html_phrase( $phraseid ) );
+        }
+        $html->appendChild(
+            $self->render_value_sepa_link(
+                $session,
+                $value[$i],
+                $alllangs,
+                $nolink,
+                $object ) );
+    }
+    return $html;
+}
+
+
+## Internal function by the render_value above.
+## Renders subject path with individual links.
+sub render_value_sepa_link
+{
+    my( $self, $session, $value, $alllangs, $nolink, $object ) = @_;
+
+    my $rendered = $self->render_value_withopts( $session, $value, $nolink, $object );
+
+
+    my $subject = new EPrints::DataObj::Subject( $session, $value );
+	my $v = $session->make_doc_fragment();
+	return $v unless $subject;
+	my @paths = $subject->get_paths( $session,  $self->get_property( "top" ) );
+
+	my $first = 1;
+	foreach( @paths )
+    {
+        if( $first )
+        {
+            $first = 0;
+        }
+        else
+        {
+            $v->appendChild( $session->html_phrase(
+                "lib/metafield:join_subject" ) );
+            # nb. using one from metafield!
+        }
+        my $first = 1;
+        foreach( @{$_} )
+        {
+            if( !$first )
+            {
+                    $v->appendChild( $session->html_phrase(
+                    "lib/metafield:join_subject_parts" ) );
+            }
+            $first = 0;
+            $v->appendChild( $self->render_value_no_multiple(
+                $session,
+                $_->get_id(),
+                $alllangs,
+                $nolink,
+                $object ) );
+        }
+    }
+	return $v;
+}
+
+
+
 
 sub render_search_set_input
 {

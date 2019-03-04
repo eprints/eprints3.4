@@ -14,12 +14,18 @@ var eprints_http_root = %s;
 var eprints_http_cgiroot = %s;
 var eprints_oai_archive_id = %s;
 var eprints_logged_in = %s;
+var eprints_logged_in_userid = %s; 
+var eprints_logged_in_username = %s; 
+var eprints_logged_in_usertype = %s; 
 EOJ
 			(map { EPrints::Utils::js_string( $_ ) }
 				$repo->current_url( host => 1, path => 'static' ),
 				$repo->current_url( host => 1, path => 'cgi' ),
 				EPrints::OpenArchives::archive_id( $repo ) ),
 			defined $repo->current_user ? 'true' : 'false',
+			defined $repo->current_user ? $repo->current_user->get_id : 0,
+			defined $repo->current_user ? '"' . $repo->current_user->get_value("username") . '"' : '""',
+			defined $repo->current_user ? '"' . $repo->current_user->get_value("usertype") . '"' : '""', # is this safe to share?
 		)) );
 	$head->appendChild( $repo->xml->create_text_node( "\n    " ) );
 	my $style = $head->appendChild( $repo->xml->create_element( "style",

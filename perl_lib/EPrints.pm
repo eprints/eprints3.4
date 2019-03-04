@@ -301,6 +301,7 @@ use EPrints::DataObj::Triple;
 use EPrints::DataObj::UploadProgress;
 use EPrints::DataObj::User;
 use EPrints::DataSet;
+use EPrints::DOI;
 use EPrints::Email;
 use EPrints::Extras;
 use EPrints::Index;
@@ -524,7 +525,7 @@ sub abort
 </head>
 <body>
 <h1>EPrints System Error</h1>
-<p><tt>$htmlerrmsg</tt></p>
+<p><code>$htmlerrmsg</code></p>
 </body>
 </html>
 END
@@ -632,7 +633,7 @@ sub abort
 </head>
 <body>
 <h1>EPrints System Error</h1>
-<p><tt>$htmlerrmsg</tt></p>
+<p><code>$htmlerrmsg</code></p>
 </body>
 </html>
 END

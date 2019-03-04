@@ -24,6 +24,8 @@ An array reference of stop words to use (defaults to English).
 
 package EPrints::Plugin::Search::Xapian;
 
+use EPrints::Plugin::Search;
+
 @ISA = qw( EPrints::Plugin::Search );
 
 use strict;

@@ -313,18 +313,18 @@ sub remove_all
 
 	
 ######################################################################
-# =pod
-# 
-# =item $subject = EPrints::DataObj::Subject::create( $session, $id, $name, $parents, $depositable )
-# 
-# Creates a new subject in the database. $id is the ID of the subject,
-# $name is a multilang data structure with the name of the subject in
-# one or more languages. eg. { en=>"Trousers", en-us=>"Pants}. $parents
-# is a reference to an array containing the ID's of one or more other
-# subjects (don't make loops!). If $depositable is true then eprints may
-# belong to this subject.
-# 
-# =cut
+=pod
+ 
+=item $subject = EPrints::DataObj::Subject::create( $session, $id, $name, $parents, $depositable )
+ 
+Creates a new subject in the database. $id is the ID of the subject,
+$name is a multilang data structure with the name of the subject in
+one or more languages. eg. { en=>"Trousers", en-us=>"Pants}. $parents
+is a reference to an array containing the ID's of one or more other
+subjects (don't make loops!). If $depositable is true then eprints may
+belong to this subject.
+ 
+=cut
 ######################################################################
 
 sub create
@@ -348,15 +348,15 @@ sub create
 }
 
 ######################################################################
-# =pod
-# 
-# =item $dataobj = EPrints::DataObj::Subject->create_from_data( $session, $data, $dataset )
-# 
-# Returns undef if a bad (or no) subjectid is specified.
-# 
-# Otherwise calls the parent method in EPrints::DataObj.
-# 
-# =cut
+=pod
+ 
+=item $dataobj = EPrints::DataObj::Subject->create_from_data( $session, $data, $dataset )
+ 
+Returns undef if a bad (or no) subjectid is specified.
+ 
+Otherwise calls the parent method in EPrints::DataObj.
+
+=cut
 ######################################################################
 
 sub create_from_data
@@ -384,11 +384,13 @@ END
 }
 
 ######################################################################
-# 
-# @subject_ids = $subject->_get_ancestors
-#
-# Get the ancestors of a given subject.
-#
+=pod
+ 
+=item @subject_ids = $subject->_get_ancestors
+
+Get the ancestors of a given subject.
+
+=cut
 ######################################################################
 
 sub _get_ancestors
@@ -408,6 +410,9 @@ sub _get_ancestors
 	return @ancestors;
 }
 
+######################################################################
+=pod
+
 =item $subject = $subject->top()
 
 Returns the subject that is at the top of this subject's tree (which may be this subject).
@@ -415,6 +420,7 @@ Returns the subject that is at the top of this subject's tree (which may be this
 Returns undef if the subject is not part of a tree.
 
 =cut
+######################################################################
 
 sub top
 {
@@ -643,19 +649,6 @@ sub get_paths
 	return @paths;
 }
 
-
-######################################################################
-#
-# ( $tags, $labels ) = get_postable( $session, $user )
-#
-#  Returns a list of the subjects that can be posted to by $user. They
-#  are returned in a tuple, the first element being a reference to an
-#  array of tags (for the ordering) and the second being a reference
-#  to the hash mapping tags to full names. [STATIC]
-#
-######################################################################
-
-
 ######################################################################
 =pod
 
@@ -714,11 +707,13 @@ sub get_subjects
 }
 
 ######################################################################
-# 
-# $subjects = $subject->_get_subjects2( $postableonly, $hidenode, $nestids, $subjectmap, $rmap, $prefix )
-#
-# Recursive function used by get_subjects.
-#
+=pod 
+
+=item $subjects = $subject->_get_subjects2( $postableonly, $hidenode, $nestids, $subjectmap, $rmap, $prefix )
+
+Recursive function used by get_subjects.
+
+=cut
 ######################################################################
 
 sub _get_subjects2
@@ -822,17 +817,19 @@ sub get_all
 }
 
 ######################################################################
-#
-# @eprints  = $subject->posted_eprints( $dataset )
-#
-# Deprecated. This method is no longer used by eprints, and may be 
-# removed in a later release.
-# 
-# Return all the eprints which are in this subject (or below it in
-# the tree, its children etc.) It searches all fields of type subject.
-# 
-# $dataset is the dataset to return eprints from.
-# 
+=pod
+
+=item  @eprints  = $subject->posted_eprints( $dataset )
+
+Deprecated. This method is no longer used by eprints, and may be 
+removed in a later release.
+ 
+Return all the eprints which are in this subject (or below it in
+the tree, its children etc.) It searches all fields of type subject.
+ 
+$dataset is the dataset to return eprints from.
+
+=cut 
 ######################################################################
 
 sub posted_eprints
@@ -947,6 +944,17 @@ sub valid_id
 # sub get_type
 # {
 # }
+
+######################################################################
+=pod
+
+=item $subj->render_description()
+
+undocumented
+
+=cut
+######################################################################
+#
 
 sub render_description
 {

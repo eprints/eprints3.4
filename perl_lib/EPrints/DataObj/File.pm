@@ -944,8 +944,9 @@ sub characters
 		{
 			use bytes;
 			$_ .= $data->{Data};
-			print $tmpfile MIME::Base64::decode_base64( substr($_,0,length($_) - length($_)%77) );
-			$_ = substr($_,length($_) - length($_)%77);
+			$_ =~ s/\s+//g;
+			print $tmpfile MIME::Base64::decode_base64( substr($_,0,length($_) - length($_)%4) );
+			$_ = substr($_,length($_) - length($_)%4);
 		}
 	}
 }

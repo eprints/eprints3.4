@@ -120,9 +120,7 @@ sub action_newsearch
 sub run_search
 {
 	my( $self ) = @_;
-
 	my $list = $self->{processor}->{search}->perform_search();
-
 	my $error = $self->{processor}->{search}->{error};
 	if( defined $error )
 	{	
@@ -132,17 +130,21 @@ sub run_search
 
 	# we want to filter the search results by an arbitrary criteria
 	my $dataset_id = $list->{dataset}->base_id();
-	my $v = $self->{session}->get_conf( "login_required_for_${dataset_id}s", "enable" );
+	my $v = $self->{session}->get_conf( "login_required_for_${dataset_id}s", "enable" ); #if defined, callback function can be called, if set to 1 will hide abstracts to non-logged in users
+
 	my $fn = $self->{session}->get_conf( "${dataset_id}s_access_restrictions_callback" );
 	if( $v && defined $fn )
 	{
-		# if we are here then access to abstracts etc are restricted by way of a callback fn, and we are logged in as a user, this should be extended to viewing search results too
+		# if we are here then access to abstracts/search results etc are restricted by way of a callback fn
+		my $sconf = $self->{processor}->{sconf};
+		my $mode = $sconf->{mode} || "search";
+
 		my $user = $self->{session}->current_user;
 		my @ids;
 		$list->map( sub
 		{
 			my( $session, $dataset, $item ) = @_;
-			my $rv = &{$fn}( $item, $user, "search" );
+			my $rv = &{$fn}( $item, $user, $mode );
 			push @ids, $item->get_id() if $rv != 0;
 			# print STDERR "[" . $item->get_id() . "]=[$rv]\n";
 		} );
@@ -340,6 +342,13 @@ sub render_title
 		return $self->{processor}->{search}->render_conditions_description;
 	}
 
+	#allow a title to be defined rather than a title_phrase
+	my $title = $self->{processor}->{sconf}->{title};
+	if( defined $title )
+	{
+		return $title;
+	}
+
 	my $phraseid = $self->{processor}->{sconf}->{"title_phrase"};
 	if( defined $phraseid )
 	{
@@ -500,6 +509,9 @@ sub render_export_bar
 			
 			my $url = $self->export_url( $id );
 			my $span = $plugin->render_export_icon( $type, $url );
+
+			#add class to span so we can use CSS on it
+			$span->setAttribute('class', $span->getAttribute('class') . ' ep_search_' . $id );
 
 			if( $type eq "tool" )
 			{

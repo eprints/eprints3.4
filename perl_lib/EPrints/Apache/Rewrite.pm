@@ -141,7 +141,7 @@ sub handler
 	return $rc if defined $rc;
 
 	# /archive/ redirect
-	if( $uri =~ m! ^$urlpath/archive/(.*) !x )
+	if( $uri =~ m! ^$urlpath/archive/+(.*) !x )
 	{
 		return redir( $r, "$urlpath/$1$args" );
 	}
@@ -318,7 +318,7 @@ sub handler
 	}
 
 	# sitemap.xml (nb. only works if site is in root / of domain.)
-	if( $uri =~ m! ^$urlpath/sitemap(?:-sc)\.xml$ !x )
+	if( $uri =~ m! ^$urlpath/sitemap(?:-sc)?\.xml$ !x )
 	{
 		$r->handler( 'perl-script' );
 
@@ -419,7 +419,7 @@ if ($repository->config("use_long_url_format"))
 #this will serve a document, static files(.include files) or abstract page. 
     my $accept = EPrints::Apache::AnApache::header_in( $r, "Accept" );
     my $method = eval {$r->method} || "";
-    if (  $method eq "GET"  ## request method must be GET
+    if ( ( $method eq "GET" || $method eq "HEAD" ) ## request method must be GET or HEAD
         &&  (index(lc($accept), "text/html") != -1 || index(lc($accept),"*/*") != -1 || $accept eq ""  )   ## header must be text/html, or */*, or undef
         &&  ($uri !~ m!^${urlpath}/id/eprint/0*[1-9][0-9]*/contents$! )   ## uri must not be id/eprint/XX/contents
         &&  ($uri =~ s! ^${urlpath}/id/eprint/(0*)([1-9][0-9]*)\b !!x )     ## uri must be id/eprint/XX
@@ -592,7 +592,7 @@ if(not $repository->config("use_long_url_format"))
 			# print STDERR "** EPRINT ** no current user, uri is '$uri' args are '$args' eprintid is '$eprintid' ($v)\n" unless $user;
 			# print STDERR "** EPRINT ** current user is " . $user->get_value("username") . "\n" if $user;
 
-			if( !$user && $v && $v eq "1" )
+			if( !$user && defined $v && $v == 1 )
 			{
 				my $redir_url = "${login_url}?target=${uri}${eprintid}"; 
 				return redir( $r, $redir_url );
@@ -608,7 +608,7 @@ if(not $repository->config("use_long_url_format"))
 		# Only allow specific users to access abstract pages.
 		{
 			my $v = $repository->get_conf( "login_required_for_eprints", "enable" );
-			if( $v )
+			if( defined $v && $v == 1 )
 			{
 				# if we are here then access to abstracts etc are restricted, and we are logged in as a user
 				my $fn = $repository->get_conf( "eprints_access_restrictions_callback" );
@@ -833,6 +833,16 @@ if(not $repository->config("use_long_url_format"))
 	}
 
 	return OK;
+}
+
+sub redir_permanent
+{
+	my( $r, $url ) = @_;
+
+	EPrints::Apache::AnApache::send_status_line( $r, 301, "Moved Permanently" );
+	EPrints::Apache::AnApache::header_out( $r, "Location", $url );
+	EPrints::Apache::AnApache::send_http_header( $r );
+	return DONE;
 }
 
 sub redir

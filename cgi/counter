@@ -93,4 +93,8 @@ if( $repo->dataset( 'epm' ) )
 }
 print "\n";
 
+
+print "registry: " . join(", ",@{$repo->config("flavours")->{$repo->config("flavour")}}) . "\n";
+# To check if a flavour has certain ingredient: $repo->flavour_has( "ingredients/eprints_lists" )
+
 exit;

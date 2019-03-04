@@ -1855,16 +1855,19 @@ this returns the name of the option in the current language.
 
 sub render_value_label
 {
-	my( $self, $value ) = @_;
-	return $self->get_value_label( $self->repository, $value );
+	my( $self, $value, %opts ) = @_;
+	return $self->get_value_label( $self->repository, $value, %opts );
 }
 sub get_value_label
 {
-	my( $self, $session, $value ) = @_;
+	my( $self, $session, $value, %opts ) = @_;
 
+	if( !EPrints::Utils::is_set( $value ) && $opts{fallback_phrase} )
+	{
+		return $session->html_phrase( $opts{fallback_phrase} );
+	}
 	return $session->make_text( $value );
 }
-
 
 
 #	if( $self->is_type( "id" ) )
@@ -2263,7 +2266,9 @@ sub render_search_description
 
 	my $valuedesc = $self->render_search_value(
 		$session,
-		$value );
+		$value,
+		$merge,
+		$match );
 	
 	return $session->html_phrase(
 		$phraseid,
@@ -2273,7 +2278,7 @@ sub render_search_description
 
 sub render_search_value
 {
-	my( $self, $session, $value ) = @_;
+	my( $self, $session, $value, $merge, $match ) = @_;
 
 	return $session->make_text( '"'.$value.'"' );
 }	

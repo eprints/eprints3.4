@@ -207,6 +207,10 @@ sub get_system_field_info
 			text_index => 0,
 			volatile => 1,
 		},
+		{
+			name => "captcha",
+			type => "recaptcha",
+		}
 	)
 };
 
@@ -579,12 +583,8 @@ sub owned_eprints_list
 	}
 	
 	my $list = &$fn( $self->{session}, $self, $opts{dataset} );
+	if (!$searchexp->is_blank()) { $list = $list->intersect( $searchexp->perform_search ); }
 
-
-	#MBA-85 (rwf1v07/08/03/2018): if statement doesn't return true when search filter comprises of eprint state and so intersect doesn't happen
-	#as 'get_users_owned_eprints' is used so rarely, and because this if statement only seems to check if there is nothing to do, seems harmless to remove it
-	#if (!$searchexp->is_blank()) { $list = $list->intersect( $searchexp->perform_search ); }
-	$list = $list->intersect( $searchexp->perform_search ); 
 	return $list;
 }
 
@@ -814,6 +814,28 @@ Return the URL which will display information about this user.
 
 If $staff is true then return the URL for an administrator to view
 and modify this record.
+
+=cut
+######################################################################
+
+sub get_url
+{
+        my( $self ) = @_;
+
+        return $self->get_control_url;
+}
+
+
+######################################################################
+=pod
+
+=begin InternalDoc
+
+=item $url = $dataobj->get_control_url
+
+Returns the URL for the control page for this user. 
+
+=end InternalDoc
 
 =cut
 ######################################################################

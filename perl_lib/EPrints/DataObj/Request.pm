@@ -52,7 +52,7 @@ sub get_system_field_info
 		{ name=>"userid", type=>"itemref", 
 			datasetid=>"user", required=>0 },
 
-		{ name=>"email", type=>"text", required=>1 },
+		{ name=>"email", type=>"email", required=>1 },
 
 		{ name=>"requester_email", type=>"email", required=>1 },
 
@@ -62,6 +62,7 @@ sub get_system_field_info
 
 		{ name=>"code", type=>"text", required=>0 },
 
+		{ name => "captcha",type => "recaptcha" },
 	);
 }
 

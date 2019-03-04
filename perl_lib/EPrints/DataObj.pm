@@ -1167,8 +1167,8 @@ sub render_citation_link
 {
 	my( $self , $style , %params ) = @_;
 
-	$params{url} = $self->get_url;
-	
+	$params{url} = $self->get_url unless $params{url};
+
 	return $self->render_citation( $style, %params );
 }
 

@@ -146,7 +146,7 @@ for my $_y ( @years )
   {
     $month_count++;
     next if $month_count > $m;
-    print "</div><div class='month_row'>" if($col && $col%${r}==0);
+    print "</div><div class='month_row'>" if($r ne "flow" && $col && $col%${r}==0);
     open(CAL, "cal $_mon $_y |");
     print "<div class='month'>\n";
     my $line_num = 1;

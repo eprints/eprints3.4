@@ -9,7 +9,8 @@
 ######################################################################
 
 $c->{latest_tool_modes} = {
-	default => { citation => "result" }
+	default => { citation => "result" },
+	fplatest => { citation => "result", max => 3 }
 };
 
 # Example of a latest_tool mode. This makes a mode=articles option
@@ -23,7 +24,12 @@ $c->{latest_tool_modes} = {
 #		max => 20
 #	}
 
-
+# Make sure the appropriate Export plugins are also enabled.
+$c->{latest_tool_feeds} = {
+#       Atom => { enabled => 1, "label" => "Atom" },
+#       RSS => { enabled => 1, "label" => "RSS 1.0" },
+        RSS2 => { enabled => 1, "label" => "RSS 2.0" },
+};
 
 =head1 COPYRIGHT
 

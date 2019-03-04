@@ -47,9 +47,9 @@ sub input_text_fh
     my @ids;
 
     my $pid = $plugin->param( "pid" );
-        my $session = $plugin->{repository};
-        my $use_prefix = $plugin->param( "use_prefix" ) || 1;
-        my $doi_field = $plugin->param( "doi_field" ) || 'id_number';
+    my $session = $plugin->{repository};
+    my $use_prefix = $plugin->param( "use_prefix" ) || 1;
+    my $doi_field = $plugin->param( "doi_field" ) || 'id_number';
 
     unless( $pid )
     {
@@ -64,6 +64,11 @@ sub input_text_fh
         $doi =~ s/\s+$//;
 
         next unless length($doi);
+	my $obj = EPrints::DOI->parse( $doi );
+	if( $obj )
+	{
+		$doi = $obj->to_string( noprefix => !$use_prefix );
+	}
 
         #some doi's in the repository may have the "doi:" prefix and others may not, so we need to check both cases - rwf1v07:27/01/2016
         my $doi2 = $doi;
@@ -200,10 +205,8 @@ sub convert_input
     my( $plugin, $data ) = @_;
 
     my $epdata = {};
-    my $use_prefix = $plugin->param( "use_prefix" );
-        my $doi_field = $plugin->param( "doi_field" );
-        $use_prefix = 1 unless defined ( $use_prefix );
-        $doi_field = "id_number" unless defined ( $doi_field );
+    my $use_prefix = $plugin->param( "use_prefix" ) || 1;
+    my $doi_field = $plugin->param( "doi_field" ) || "id_number";
 
     if( defined $data->{creators} )
     {
@@ -234,10 +237,16 @@ sub convert_input
     if( defined $data->{"doi"} )
     {
         #Use doi field identified from config parameter, in case it has been customised. Alan Stiles, Open University 20140408
-        $epdata->{$doi_field} = $data->{"doi"};
-        my $doi = $data->{"doi"};
-        $doi =~ s/^\s*doi:\s*//gi;
-        $epdata->{official_url} = "http://dx.doi.org/$doi";
+        my $doi = EPrints::DOI->parse( $data->{"doi"} );
+	if( $doi )
+	{
+	    $epdata->{$doi_field} = $doi->to_string( noprefix=>!$use_prefix );
+	    $epdata->{official_url} = $doi->to_uri->as_string;
+	}
+	else
+	{
+	    $epdata->{$doi_field} = $data->{"doi"};
+	}
     }
     if( defined $data->{"volume_title"} )
     {
@@ -310,9 +319,10 @@ sub url_encode
 
 =for COPYRIGHT BEGIN
 
-Copyright 2018 University of Southampton.
-EPrints 3.4 is supplied by EPrints Services.
-
+Copyright 2016 University of Southampton.
+EPrints 3.4 preview 2 is supplied by EPrints Services.
+This software is supplied as is and is for demonstration purposes.
+This software may be used with permission and must not be redistributed.
 http://www.eprints.org/eprints-3.4/
 
 =for COPYRIGHT END

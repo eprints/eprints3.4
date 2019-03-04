@@ -1,0 +1,302 @@
+##################
+##History Search##
+##################
+
+use EPrints;
+use Data::Dumper;
+use Time::Piece;
+use Time::Seconds;
+
+use strict;
+
+my $session = new EPrints::Session;
+my $content = "text/html";
+$session->send_http_header( content_type=>$content );
+
+if( !( $session->current_user && $session->current_user->value("usertype") =~ /^(admin|local_admin)$/ ) )
+{
+  print "<html><body>You must be logged in as an admin to view this page</body></html>\n";
+  $session->terminate;
+  exit( 0 );
+}
+
+#get field you want to watch
+my $fname = $session->param( "fname" );
+
+#get start date
+my $start_date = $session->param( "start_date" );
+
+#get end date
+my $end_date = $session->param( "end_date" );
+
+#title
+my $title = $session->make_element( "h2" );
+$title->appendChild( $session->make_text( "History Search" ) );
+
+#page
+my $page = $session->make_doc_fragment();
+
+#render warning area
+my $message_div = $session->make_element( "div", id=>"ep_messages", class=>"history_warning");
+$page->appendChild( $message_div );
+
+my $warning_div = $session->make_element( "div", class=>"ep_msg_warning" );
+$message_div->appendChild( $warning_div );
+
+my $content_div = $session->make_element( "div", id=>"warning_content", class=>"ep_msg_warning_content" );
+$warning_div->appendChild( $content_div );
+
+#render controls
+my $controls = $session->make_element( "div", class=>"history_search controls");
+my $form = $session->make_element( "form" );
+$form->setAttribute( "onsubmit", "return validateHistorySearch()" );
+$controls->appendChild( $form );
+
+#print list of fields
+my $fields = $session->make_element( "div", class=>"fields" );
+my $dataset = "eprint";
+my $eprint_ds = $session->dataset( $dataset );
+
+my $field_label = $session->make_element( "label", for=>"fname" );
+$field_label->appendChild( $session->make_text( "Field" ) );
+$fields->appendChild( $field_label );
+
+my $field_select = $session->make_element( "select", name=>"fname" );
+my @fields = $eprint_ds->fields;
+foreach my $field (@fields)
+{
+	my $n =  $field->name;
+	my $name =  $field->render_name;
+	my $option = $session->make_element( "option", value=>$n );
+	if( $fname eq $n )
+	{
+		$option->setAttribute( "selected", "selected" );
+	}
+	$option->appendChild( $name );
+	$field_select->appendChild( $option );
+}
+$fields->appendChild( $field_select );
+$form->appendChild( $fields );
+
+#print start date
+my $start_div = $session->make_element( "div", class=>"startdate" );
+my $start_label = $session->make_element( "label", for=>"start_date" );
+$start_label->appendChild( $session->make_text( "Start Date" ) );
+$start_div->appendChild( $start_label );
+
+my $start_input = $session->make_element( "input", type=>"text", id=>"start_date", name=>"start_date", value=>$start_date, placeholder=>"yyyy-mm-dd" );
+$start_div->appendChild( $start_input );
+
+$form->appendChild( $start_div );
+
+#print end date
+my $end_div = $session->make_element( "div", class=>"enddate" );
+my $end_label = $session->make_element( "label", for=>"end_date" );
+$end_label->appendChild( $session->make_text( "End Date" ) );
+$end_div->appendChild( $end_label );
+
+my $end_input = $session->make_element( "input", type=>"text", id=>"end_date", name=>"end_date", value=>$end_date, placeholder=>"yyyy-mm-dd" );
+$end_div->appendChild( $end_input );
+
+$form->appendChild( $end_div );
+
+#print submit
+my $submit_div = $session->make_element( "div", class=>"submit" );
+my $submit = $session->make_element( "input", type=>"submit", value=>"Search" );
+$submit_div->appendChild( $submit );
+$form->appendChild( $submit_div );
+
+#end controls
+$page->appendChild( $controls );
+
+#do the history search
+my $hist_ds = $session->dataset( "history" );
+my $search_string;
+if(defined $fname)
+{
+
+my $field = $eprint_ds->field( $fname );
+my $field_name = $field->render_name;
+
+my $sql = "SELECT historyid, objectid, revision, timestamp_year, timestamp_month, timestamp_day FROM history WHERE datasetid = 'eprint' AND action = 'modify' AND (details LIKE '%|$fname|%' OR details LIKE '$fname|%' OR details LIKE '%|$fname' OR details LIKE '$fname')";
+
+$search_string = $search_string . 'Changes to "'.$field_name.'" ';
+
+my $using_dates = 0;
+if( defined $start_date && $start_date =~ /(\d{4})-?(\d{1,2})?-?(\d{1,2})?/ )
+{
+	$using_dates = 1;
+
+	my $y = $1;
+	my $m = sprintf( "%02d", $2 );
+	my $d = sprintf( "%02d", $3 );
+	
+	my $s_date = "$y$m$d";
+	$sql = $sql . " AND CONCAT(timestamp_year,LPAD(timestamp_month,2,0),LPAD(timestamp_day,2,0)) > $s_date";
+	
+	my $date_string = make_date_string( $d, $m, $y );
+	if( defined $end_date && $end_date =~ /(\d{4})-?(\d{1,2})?-?(\d{1,2})?/ )
+	{
+		$search_string = $search_string . "between $date_string and ";
+	}
+	else
+	{
+		$search_string = $search_string . "since $date_string";
+	}
+}
+
+if( defined $end_date && $end_date =~ /(\d{4})-?(\d{1,2})?-?(\d{1,2})?/ )
+{
+	$using_dates = 1;
+
+	my $y = $1;
+        my $m = sprintf( "%02d", $2 );
+        my $d = sprintf( "%02d", $3 );
+
+	my $e_date = "$y$m$d";
+	$sql = $sql . " AND CONCAT(timestamp_year,LPAD(timestamp_month,2,0),LPAD(timestamp_day,2,0)) < $e_date";
+
+	my $date_string = make_date_string( $d, $m, $y );
+	if( defined $start_date && $start_date =~ /(\d{4})-?(\d{1,2})?-?(\d{1,2})?/ )
+        {
+                $search_string = $search_string . $date_string;
+        }
+	else
+	{
+		$search_string = $search_string . "before $date_string";
+	}
+
+}
+
+if( !$using_dates )
+{
+	$sql = $sql . " ORDER BY historyid DESC";
+	$sql = $sql . " LIMIT 100";
+	$search_string = 'The last 100 changes to "'.$field_name.'"';
+}
+else
+{
+	$sql = $sql . " ORDER BY historyid ASC";
+}
+
+
+my $sth = $session->get_database->prepare( $sql );
+$session->get_database->execute( $sth , $sql );
+
+my $search_title = $session->make_element( "h2" );
+$search_title->appendChild( $session->make_text( $search_string ) );
+$page->appendChild( $search_title );
+
+my $table = $session->make_element( "table" );
+my $tr = $session->make_element( "tr" );
+my @headings = ("EPrint ID", "Timestamp", "Old Value", "New Value" );
+foreach my $h (@headings)
+{
+	my $th = $session->make_element( "th" );
+	$th->appendChild( $session->make_text( $h ) );
+	$tr->appendChild( $th );
+}
+$table->appendChild( $tr );
+$page->appendChild( $table );
+
+while( my( $historyid, $eprintid, $revision, $y, $m, $d ) = $sth->fetchrow_array )
+{
+	#does the eprint exist???
+	my $eprint = $eprint_ds->dataobj( $eprintid );
+	if( defined $eprint )
+	{
+
+	#get the history object
+	my $hist = $hist_ds->dataobj( $historyid );
+	
+	my $old_value = "Unknown";
+
+	#get previous state
+	my $previous = $hist->get_previous();
+        if( defined( $previous ) )
+        {
+        	my $r_file = $previous->get_stored_file( "dataobj.xml" );
+ 		my $r_file_new = defined($r_file) ? $r_file->get_local_copy() : undef;
+		open(my $fh, "xmllint --recover $r_file_new |");
+		my $parser = XML::LibXML->new();
+		my $doc = XML::LibXML->load_xml( IO => $fh );
+		$old_value = get_content_value( $doc, $fname ) || "Unknown";
+	}
+
+	#get current state
+       	my $r_file = $hist->get_stored_file( "dataobj.xml" );
+ 	my $r_file_new = defined($r_file) ? $r_file->get_local_copy() : undef;
+	open(my $fh, "xmllint --recover $r_file_new |");
+	my $parser = XML::LibXML->new();
+	my $doc = XML::LibXML->load_xml( IO => $fh );
+	my $new_value = get_content_value( $doc, $fname );
+
+	if( $d =~ /^\d{1}$/ )
+	{
+		$d = "0$d";
+	}
+	if( $m =~ /^\d{1}$/ )
+	{
+		$m = "0$m";
+	}
+
+	#render in a more human-readable way if appropriate
+	if( $field->isa( "EPrints::MetaField::Set" ) )
+	{
+		$old_value = $field->render_value( $session, $old_value ) . "\n" unless $old_value eq "Unknown";
+		$new_value = $field->render_value( $session, $new_value ) . "\n" unless $new_value eq "Unknown";
+	}
+
+	my $result_row = $session->make_element( "tr" );
+	$result_row->appendChild( make_td( $session, $eprintid ) ); 
+	$result_row->appendChild( make_td( $session, "$d/$m/$y" ) );
+	$result_row->appendChild( make_td( $session, $old_value ) );
+	$result_row->appendChild( make_td( $session, $new_value ) );
+	$table->appendChild( $result_row );
+	}
+}
+
+}
+
+my $template = 'default';
+$session->build_page( $title, $page, "history_search", undef, $template );
+$session->send_page();
+
+$session->terminate;
+exit;
+
+sub make_date_string{
+	my ( $d, $m, $y ) = @_;
+	
+	my $string = $y;
+	if( $m != "00" )
+	{
+		$string = "$m/$y";
+	}
+	if( $d != "00" )
+	{
+		$string = "$d/$m/$y";
+	}
+	return $string;
+}
+
+sub make_td{
+	my( $session, $value ) = @_;
+	my $td = $session->make_element( "td" );
+	$td->appendChild( $session->make_text( $value ) );
+	return $td;
+}
+
+sub get_content_value{
+
+        my( $doc, $fname ) = @_;
+
+        my @possible_contents = ();
+        my @contents = $doc->getElementsByTagName( $fname );
+        foreach my $c (@contents)
+        {
+                push @possible_contents, $c->textContent;
+        }
+	return $possible_contents[0];   
+}
+

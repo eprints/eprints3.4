@@ -96,7 +96,7 @@ $c->add_trigger( EP_TRIGGER_INDEX_FIELDS, sub {
 			{
 				$value = $v;
 			}
-			next if !EPrints::Utils::is_set( $value );
+			next if !EPrints::Utils::is_set( $value ) || ref($value) ne ""; 
 			$tg->index_text( $value );
 			$tg->increase_termpos();
 			next if length($value) > 200; # Xapian term length limit-ish
@@ -118,6 +118,7 @@ $c->add_trigger( EP_TRIGGER_INDEX_FIELDS, sub {
 				$langid, # TODO: non-English ordervalues?
 				$dataset
 			);
+			next if ref($ordervalue) ne ""; 
 			my $key = $dataset->base_id . '.' . $field->name . '.' . $langid;
 			$doc->add_value( $field_pos{$key}, $ordervalue );
 		}

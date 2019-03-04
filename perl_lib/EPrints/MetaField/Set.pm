@@ -241,6 +241,15 @@ sub render_set_input
 	}
 	foreach my $opt ( @{$tags} )
 	{
+		# "group" set options under headings
+                my $phraseid = $self->{confid}."_optheading_".$self->{name}."_".$opt;
+                if( $session->get_lang->has_phrase( $phraseid ) )
+                {
+                        my $div = $session->make_element( "div", class => "ep_optheading" );
+                        $div->appendChild( $session->html_phrase( $phraseid ) );
+                        $list->appendChild( $div );
+                }
+
 		my $row;
 		if( $input_style eq "long" )
 		{
@@ -527,7 +536,7 @@ sub get_property_defaults
 	$defaults{input_tags} = $EPrints::MetaField::UNDEF;
 	$defaults{render_option} = $EPrints::MetaField::UNDEF;
 	$defaults{render_max_search_values} = 5;
-	$defaults{text_index} = 0;
+	$defaults{text_index} = 1;
 	$defaults{sql_index} = 1;
 	$defaults{match} = "EQ";
 	$defaults{merge} = "ANY";

@@ -542,7 +542,6 @@ Option "template" uses a different template to "default.xml".
 sub page
 {
 	my( $self, $map, %options ) = @_;
-
 	my $repo = $self->{repository};
 
 	# if mainonly=yes is in effect return the page content
@@ -608,6 +607,11 @@ sub page
 			1 );
 		$pt->appendChild( $ptnew );
 		$map->{$_} = $pt;
+	}
+
+	if( $repo->get_online && defined $repo->param( "template" ) )
+	{
+		$options{template} = $repo->param( "template" );
 	}
 
 	if( !defined $options{template} )

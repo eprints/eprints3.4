@@ -188,7 +188,7 @@ use EPrints::Const qw/ :http /;
 our $DEBUG = 0;
 
 use strict;
-  
+
 my $MAX_ITEMS = 2000;
 
 =item $filename = update_view_file( $repo, $langid, $localpath, $uri )
@@ -253,6 +253,20 @@ undef $age if $DEBUG;
 	{
 		$view = $a_view, last if( $a_view->{id} eq $viewid );
 	}
+
+	#if we don't have a view, see if it's a list view and get the configuration from the list
+	if( !defined $view && $viewid =~ /^([a-zA-z]+)_(\d+)/)
+	{
+		#get the view from the dataobj (this is probably an ingredients/eprints_list list)
+		my $ds = $repo->dataset( $1 );
+		if( defined $ds )
+		{
+			my $dataobj = $ds->dataobj( $2 );
+			$view = $dataobj->get_view( $repo ) if defined $dataobj;
+		}
+	}
+	
+	#still no view... something has gone wrong	
 	if( !defined $view )
 	{
 		$repo->log( "'$viewid' was not found in browse_views configuration" );
@@ -511,8 +525,14 @@ sub update_view_list
 		return;
 	}
 
+	# construct the export and navigation bars, which are common to all "alt_views"
+	my $menu_fields = $menus_fields->[$#$path_values];
+
+	# exact = 0, for subject fields, will show items which are affiliated to that subject's children        
+	my $exact = !($menu_fields->[0]->isa( 'EPrints::MetaField::Subject' ) && $view->{show_children});
+
 	# get all of the items for this level
-	my $filters = $view->get_filters( $path_values, 1 ); # EXact
+	my $filters = $view->get_filters( $path_values, $exact ); # EXact
 
 	my $ds = $view->dataset;
 
@@ -528,9 +548,6 @@ sub update_view_list
 	);
 
 	my $count = $list->count;
-
-	# construct the export and navigation bars, which are common to all "alt_views"
-	my $menu_fields = $menus_fields->[$#$path_values];
 
 	my $nav_sizes = $opts{sizes};
 	if( !defined $nav_sizes && $menu_fields->[0]->isa( "EPrints::MetaField::Subject" ) )
@@ -608,6 +625,9 @@ sub update_view_list
 		my $phrase_id = "viewtitle_".$ds->base_id()."_".$view->{id}."_list";
 		my $null_phrase_id = "viewnull_".$ds->base_id()."_".$view->{id};
 
+		#look for override null_phrase_id in view config
+                $null_phrase_id = $view->{null_phrase_id} if defined $view->{null_phrase_id};
+
 		my %files;
 
 		if( $repo->get_lang()->has_phrase( $phrase_id, $repo ) )
@@ -641,6 +661,8 @@ sub update_view_list
 			$title = $repo->html_phrase( $phrase_id, %o );
 		}
 	
+		#look for override title in view config
+                $title = $view->{title} if defined $view->{title};
 		if( !defined $title )
 		{
 			$title = $repo->html_phrase(
@@ -665,6 +687,17 @@ sub update_view_list
 
 		my $PAGE = $files{"$page_file_name.page"} = $xml->create_document_fragment;
 		my $INCLUDE = $files{"$page_file_name.include"} = $xml->create_document_fragment;
+
+		if( defined $view->{title_link} )
+                {
+                        my $title_link = $repo->call( $view->{title_link},
+                                                $repo,
+                                                $view,
+                                                $path_values,   ##???
+                                                $page_file_name
+                        );
+                        $PAGE->appendChild( $title_link ) if( defined $title_link );
+                }
 
 		$PAGE->appendChild( $xml->clone( $navigation_aids ) );
 		
@@ -1063,23 +1096,26 @@ sub create_single_page_menu
 	my $title;
 	my $title_phrase_id = "viewtitle_".$ds->base_id()."_".$view->{id}."_menu_".( $menu_level + 1 );
 
-	if( $repo->get_lang()->has_phrase( $title_phrase_id, $repo ) )
+	$title = $view->{title} if defined $view->{title};
+	if( !defined $title )
 	{
-		my %o = ();
-		for( my $i = 0; $i < scalar( @{$path_values} ); ++$i )
+		if( $repo->get_lang()->has_phrase( $title_phrase_id, $repo ) )
 		{
-			$o{"value".($i+1)} = $menus_fields->[$i]->[0]->render_single_value( $repo, $path_values->[$i]);
+			my %o = ();
+			for( my $i = 0; $i < scalar( @{$path_values} ); ++$i )
+			{
+				$o{"value".($i+1)} = $menus_fields->[$i]->[0]->render_single_value( $repo, $path_values->[$i]);
+			}
+			$title = $repo->html_phrase( $title_phrase_id, %o );
 		}
-		$title = $repo->html_phrase( $title_phrase_id, %o );
+		else
+		{
+			$title = $repo->html_phrase(
+				"bin/generate_views:indextitle",
+				viewname=>$view->render_name,
+			);
+		}
 	}
-	else
-	{
-		$title = $repo->html_phrase(
-			"bin/generate_views:indextitle",
-			viewname=>$view->render_name,
-		);
-	}
-
 
 	# Write page to disk
 	$repo->write_static_page( 
@@ -1461,7 +1497,7 @@ sub get_cols_for_menu
 
 sub render_menu
 {
-	my( $repo, $menu, $sizes, $values, $fields, $has_submenu, $view ) = @_;
+	my( $repo, $menu, $sizes, $values, $fields, $has_submenu, $view, $path_values ) = @_;
 
 	if( scalar @{$values} == 0 )
 	{
@@ -1518,12 +1554,12 @@ sub render_menu
 
 		my $li = $repo->make_element( "li" );
 
-		my $xhtml_value = $fields->[0]->get_value_label( $repo, $value ); 
 		my $null_phrase_id = "viewnull_".$ds->base_id()."_".$view->{id};
-		if( !EPrints::Utils::is_set( $value ) && $repo->get_lang()->has_phrase($null_phrase_id) )
+		if( !$repo->get_lang()->has_phrase($null_phrase_id) )
 		{
-			$xhtml_value = $repo->html_phrase( $null_phrase_id );
+			$null_phrase_id = 'Update/Views:no_value';
 		}
+		my $xhtml_value = $fields->[0]->get_value_label( $repo, $value, fallback_phrase => $null_phrase_id ); 
 
 		if( defined $sizes && (!defined $sizes->{$fileid} || $sizes->{$fileid} == 0 ))
 		{
@@ -1532,6 +1568,23 @@ sub render_menu
 		else
 		{
 			my $link = EPrints::Utils::escape_filename( $fileid );
+
+			if( defined $view->{list} ) #we might be displaying this in a non browse view context (i.e. a list description) and so relative links are no use
+                        {
+                                my $list_id = $view->{id};
+                                my $full_link = "/view/$list_id/"; #link to list id
+                                my $path = "";
+
+                                #add path values if necessary
+                                if( defined $path_values && scalar @$path_values > 0 )
+                                {
+                                        $path = join( "/", map { defined $_ ? $_ : '' } @$path_values ); #handle any potential undefs in the path gracefully
+                                        $path = 'NULL' if $path eq ''; #undef path values represented by NULL
+                                        $full_link .= "$path/";
+                                }
+                                $link = $full_link . $link;
+                        }
+
 			if( $has_submenu ) { $link .= '/'; } else { $link .= '.html'; }
 			my $a = $repo->render_link( $link );
 			$a->appendChild( $xhtml_value );
@@ -1654,7 +1707,8 @@ sub render_navigation_aids
 		$menu_fields = $menus_fields->[$menu_level-1];
 	}
 
-	if( defined $menu_fields && $menu_fields->[0]->isa( "EPrints::MetaField::Subject" ) )
+	# set nonav = 1 to hide subject browser
+	if( defined $menu_fields && $menu_fields->[0]->isa( "EPrints::MetaField::Subject" ) && !$view->{nonav} )
 	{
 		my $subject = EPrints::Subject->new( $repo, $path_values->[-1] );
 		if( !defined $subject )
@@ -1716,6 +1770,7 @@ sub render_export_bar
 	my $feeds = $repo->make_doc_fragment;
 	my $tools = $repo->make_doc_fragment;
 	my $select = $repo->make_element( "select", name=>"format" );
+	my $default_export_plugin = $repo->config( 'default_export_plugin' ) || '_NULL_';
 	foreach my $plugin ( @plugins )
 	{
 		my $id = $plugin->get_id;
@@ -1744,6 +1799,7 @@ sub render_export_bar
 		else
 		{
 			my $option = $repo->make_element( "option", value=>$id );
+			$option->setAttribute( 'selected', 'selected' ) if( $id eq $default_export_plugin );
 			$option->appendChild( $plugin->render_name );
 			$select->appendChild( $option );
 		}
@@ -1996,7 +2052,7 @@ sub get_view_opts
 	if( $opts->{"cloud"} )
 	{
 		$opts->{"jump"} = "plain";
-		$opts->{"no_seperator"} = 1;
+		$opts->{"no_seperator"} = 1 unless defined $opts->{"seperator"};
 		$opts->{"cloudmin"} = 80 unless defined $opts->{"cloudmin"};
 		$opts->{"cloudmax"} = 200 unless defined $opts->{"cloudmax"};
 	}
@@ -2103,6 +2159,18 @@ sub get_filters
 	{
 		push @$filters, { meta_fields=>[qw( metadata_visibility )], value=>"show" };
 	}
+		
+	if( defined $self->{list} ) # we only want items in this list so add a new filter based on list ids
+        {
+                my $ids = $self->{list}->ids;
+                $ids = join(" ", @$ids);
+                push @$filters, { meta_fields => [qw( eprintid ) ], value => $ids, match => "EQ", merge => "ANY" };
+        }
+	elsif( exists $self->{list} ) #the list has been defined, but it's empty so add a filter that will remove any and all eprints
+	{
+	        push @$filters, { meta_fields => [qw( eprintid ) ], value => 0, match => "EQ", merge => "ANY" };	
+	}
+	#else... carry on like normal, no list activity going on here
 
 	for( my $i = 0; $i < @$path_values && $i < @$menus_fields; ++$i )
 	{
@@ -2401,8 +2469,19 @@ sub render_citation_link
 
 	my $key = join ":", ($self->{citation}||''), $self->dataset->id, $item->id;
 
+	#if we have a template, add it on the end of the item's url
+	my %params;
+	if( defined $self->{item_template} && $self->{item_template} ne 'default' )
+	{
+		$params{url} = $item->url . "?template=" . $self->{item_template}
+	}
+        elsif ( defined $self->{template} && !defined $self->{item_template} )
+	{
+                $params{url} = $item->url . "?template=" . $self->{template};
+        }	
+
 	return $self->{_citescache}->{$key} ||=
-		$item->render_citation_link( $self->{citation} );
+		$item->render_citation_link( $self->{citation}, %params );
 }
 
 =begin InternalDoc

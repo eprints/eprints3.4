@@ -179,9 +179,14 @@ sub convert_dataobj
 	
 	# Probably a DOI
 	push @dcdata, $plugin->simple_value( $eprint, id_number => "relation" );
-	# .. not a default field but added by several IRs
-	push @dcdata, $plugin->simple_value( $eprint, doi => "relation" );
-
+	# export id_number field as DC.identifier # SHEFFHALLAM-168
+	push @dcdata, $plugin->simple_value( $eprint, id_number => "identifier" );
+	# export id_number field as doi, if it matches the regx # SHEFFHALLAM-176:
+	if (EPrints::Utils::is_set( $eprint->get_value("id_number") ) && 
+		$eprint->get_value("id_number") =~ m|^10\.\d{4,9}/[-._;()/:A-Z0-9]+$|i)
+	{
+		push @dcdata, $plugin->simple_value( $eprint, id_number => "doi" );
+	}
 	# If no documents, may still have an eprint-level language
 	push @dcdata, $plugin->simple_value( $eprint, language => "language" );
 

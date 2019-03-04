@@ -35,7 +35,7 @@ sub map
 
 	my $sources = $repo->config( "epm", "sources" );
 	$sources = [
-		{ name => "EPrints Bazaar", base_url => "http://bazaar.eprints.org/" }
+		{ name => "EPrints Bazaar", base_url => "https://bazaar.eprints.org/" }
 	] if !defined $sources;
 
 	foreach my $source (@$sources)
@@ -144,7 +144,7 @@ sub accolades
 	my( $_ua, $_base_url ) = @_;
 
 	my $ua = ( $_ua ) ? $_ua : LWP::UserAgent->new;
-	my $base_url = ( $_base_url ) ? $_base_url : "http://bazaar.eprints.org/";
+	my $base_url = ( $_base_url ) ? $_base_url : "https://bazaar.eprints.org/";
 
 #	my $ua = $self->{ua};
 # my $ua = LWP::UserAgent->new;
@@ -226,9 +226,10 @@ sub epm_by_eprintid
 
 =for COPYRIGHT BEGIN
 
-Copyright 2018 University of Southampton.
-EPrints 3.4 is supplied by EPrints Services.
-
+Copyright 2016 University of Southampton.
+EPrints 3.4 preview 2 is supplied by EPrints Services.
+This software is supplied as is and is for demonstration purposes.
+This software may be used with permission and must not be redistributed.
 http://www.eprints.org/eprints-3.4/
 
 =for COPYRIGHT END

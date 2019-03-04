@@ -317,7 +317,7 @@ sub export
 		return if $doc->value( "eprintid" ) != $self->{workflow}->{item}->id;
 
 		my $hide = $self->{session}->param( "docid" );
-		$hide = !defined($hide) || $hide ne $docid;
+		#$hide = !defined($hide) || $hide ne $docid;
 		$frag = $self->_render_doc_div( $doc, $hide );
 	}
 

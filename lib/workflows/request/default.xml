@@ -26,11 +26,6 @@ To add a Captcha to document requests add a cfg.d containing:
 $c->{recaptcha}->{private_key} = "your private key";
 $c->{recaptcha}->{public_key} = "your public key";
 
-$c->add_dataset_field( "request", {
-	name => "captcha",
-	type => "recaptcha",
-});
-
 Then uncomment the following line to add the captcha to the form:
 
   	<component surround="None"><field ref="captcha" /></component>

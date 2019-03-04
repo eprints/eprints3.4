@@ -32,6 +32,7 @@ package EPrints::DataObj::EPM;
 
 @ISA = ( 'EPrints::DataObj' );
 
+use EPrints::Plugin::Screen::EPMC; 
 use strict;
 
 our $MAX_SIZE = 2097152;
@@ -1173,9 +1174,10 @@ sub is_set
 
 =for COPYRIGHT BEGIN
 
-Copyright 2018 University of Southampton.
-EPrints 3.4 is supplied by EPrints Services.
-
+Copyright 2016 University of Southampton.
+EPrints 3.4 preview 2 is supplied by EPrints Services.
+This software is supplied as is and is for demonstration purposes.
+This software may be used with permission and must not be redistributed.
 http://www.eprints.org/eprints-3.4/
 
 =for COPYRIGHT END

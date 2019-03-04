@@ -394,11 +394,14 @@ sub param
 
         if( defined $name )
         {
-            if( $self->{query}->can('multi_param') ){
-                   @result = $self->{query}->multi_param( $name );
-            } else {
-                   @result = $self->{query}->param( $name );
-            }
+		if( $self->{query}->can('multi_param') )
+		{
+			@result = $self->{query}->multi_param( $name );
+		}
+		else 
+		{
+			@result = $self->{query}->param( $name );
+            	}
         }
         else
         {
@@ -553,6 +556,18 @@ sub load_config
 	$self->_load_plugins() || return;
 
 	$self->{field_defaults} = {};
+
+	# check dependencies between ingredients and flavours
+	my %deps = ( $self->config("deps") ) ? %{ $self->config("deps") } : ();
+	foreach my $d ( keys %deps )
+	{
+		# print STDERR "checking deps for '$d'\n";
+		foreach my $i ( @{ $deps{$d} } )
+		{
+			my $has = $self->flavour_has($i);
+			print STDERR "'$d' has an unmet dependency upon '$i'\n" unless $has;
+		}
+	}
 
 	return $self;
 }
@@ -808,31 +823,24 @@ sub _load_workflows
 		$self->config( "lib_path" )."/workflows",
 		$self->{workflows} );
 
-
-#	if( -e $self->config( "base_path" )."/site_lib/workflows" )
-#	{	
-#		# load /site_lib/ workflows
-#		EPrints::Workflow::load_all( 
-#			$self->config( "base_path" )."/site_lib/workflows",
-#			$self->{workflows} );
-#	}
-#
+	# if( -e $self->config( "base_path" )."/site_lib/workflows" )
+	# {
+	# 	# load /site_lib/ workflows
+		# EPrints::Workflow::load_all( $self->config( "base_path" )."/site_lib/workflows", $self->{workflows} );
+	# }
     
-    my $flavour = $self->config( "flavour" );
-    my $lib_order = $self->config('flavours')->{$flavour};
-    foreach ( @$lib_order )
-    {
-        my $dir = $self->config( "base_path" )."/$_/workflows";
-        if( ! -e $dir )
-        {
-            #$self->log("Could not load workflow from $dir.");
-            next;
-        }
-        EPrints::Workflow::load_all( 
-           $dir,
-           $self->{workflows} );
-    }
-
+	my $flavour = $self->config( "flavour" );
+	my $lib_order = $self->config('flavours')->{$flavour};
+	foreach ( @$lib_order )
+	{
+		my $dir = $self->config( "base_path" )."/$_/workflows";
+		if( ! -e $dir )
+		{
+			# $self->log("Could not load workflow from $dir.");
+			next;
+		}
+		EPrints::Workflow::load_all( $dir, $self->{workflows} );
+	}
 
 	if( -e $self->config( "config_path" )."/workflows" )
 	{	
@@ -5719,6 +5727,34 @@ sub cleanup
 =cut
 
 ######################################################################
+
+
+
+######################################################################
+=pod
+
+=begin InternalDoc
+
+=item $Boolean = $repository->flavour_has("ingredients/bazaar")
+
+return 1 or 0 if the given path is in the current inc file.
+
+=end InternalDoc
+
+=cut
+######################################################################
+
+
+sub flavour_has
+{
+	my ($self, $module) = @_;
+
+	my $inc_file = $self->config("flavours")->{ $self->config("flavour") };
+
+	return scalar ( grep { $_ eq $module } @{$inc_file} );
+}
+
+
 
 
 

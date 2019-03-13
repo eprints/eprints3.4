@@ -31,7 +31,7 @@ $c->{render_paras} = sub {
 	}
 
 	return $frag;
-}
+};
 
 =head1 COPYRIGHT
 

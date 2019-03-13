@@ -26,7 +26,8 @@ $EPrints::SystemSettings::conf = {
                                                           'eprints-3.3.12',
                                                           'eprints-3.3.13',
                                                           'eprints-3.3.14',
-                                                          'eprints-3.3.15'
+                                                          'eprints-3.3.15',
+							  'eprints-3.4.0',
                                                         ],
                                    'user' => '@INSTALL_USER@',
                                    'group' => '@INSTALL_GROUP@',
@@ -124,7 +125,7 @@ sub read_inc
 
 =for COPYRIGHT BEGIN
 
-Copyright 2018 University of Southampton.
+Copyright 2019 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/

@@ -29,7 +29,7 @@ $c->{send_email} = \&EPrints::Email::send_mail_via_smtp;
 
 =for COPYRIGHT BEGIN
 
-Copyright 2018 University of Southampton.
+Copyright 2019 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/

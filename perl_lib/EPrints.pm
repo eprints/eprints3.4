@@ -115,7 +115,7 @@ use Carp;
 
 use strict;
 
-our $VERSION = v3.4.0;
+our $VERSION = 'v3.4.1-rc2';
 $conf->{version} = "EPrints ".EPrints->human_version;
 $conf->{versionid} = "eprints-".EPrints->human_version;
 
@@ -860,7 +860,7 @@ EPrints::Config::init();
 
 =for COPYRIGHT BEGIN
 
-Copyright 2018 University of Southampton.
+Copyright 2019 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/

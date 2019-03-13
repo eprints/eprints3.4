@@ -18,3 +18,34 @@ qq{[d678]}, qq{[d1678]}, qq{[d2678]}, qq{[d12678]}, qq{[d3678]}, qq{[d13678]}, q
 qq{[d5678]}, qq{[d15678]}, qq{[d25678]}, qq{[d125678]}, qq{[d35678]}, qq{[d135678]}, qq{[d235678]}, qq{[d1235678]}, qq{[d45678]}, qq{[d145678]}, qq{[d245678]}, qq{[d1245678]}, qq{[d345678]}, qq{[d1345678]}, qq{[d2345678]}, qq{[d12345678]},
 ];
 1;
+
+=head1 COPYRIGHT
+
+=for COPYRIGHT BEGIN
+
+Copyright 2019 University of Southampton.
+EPrints 3.4 is supplied by EPrints Services.
+
+http://www.eprints.org/eprints-3.4/
+
+=for COPYRIGHT END
+
+=for LICENSE BEGIN
+
+This file is part of EPrints 3.4 L<http://www.eprints.org/>.
+
+EPrints 3.4 and this file are released under the terms of the
+GNU Lesser General Public License version 3 as published by
+the Free Software Foundation unless otherwise stated.
+
+EPrints 3.4 is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public
+License along with EPrints 3.4.
+If not, see L<http://www.gnu.org/licenses/>.
+
+=for LICENSE END
+

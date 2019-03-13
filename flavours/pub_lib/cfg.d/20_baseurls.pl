@@ -40,10 +40,9 @@ $c->{use_long_url_format} = 1;
 
 =for COPYRIGHT BEGIN
 
-Copyright 2016 University of Southampton.
-EPrints 3.4 preview 2 is supplied by EPrints Services.
-This software is supplied as is and is for demonstration purposes.
-This software may be used with permission and must not be redistributed.
+Copyright 2019 University of Southampton.
+EPrints 3.4 is supplied by EPrints Services.
+
 http://www.eprints.org/eprints-3.4/
 
 =for COPYRIGHT END

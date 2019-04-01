@@ -291,7 +291,7 @@ sub process
 
 	my $current_user = $self->{session}->current_user;
 
-	# Check to make sure CARF token is set and  has not been changed.
+	# Check to make sure CSRF token is set and  has not been changed.
 	if ( defined $self->{session}->config( "csrf_token_salt" ) && defined $self->{session}->current_user && $ENV{REQUEST_METHOD} eq "POST" )
 	{
 		my $csrf_detected = 1;

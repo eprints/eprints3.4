@@ -1410,7 +1410,12 @@ sub uri
 	{
 		return $self->get_session->get_repository->call( [ "dataobj_uri", $ds_id ], $self );
 	}
-			
+		
+	if ( EPrints::Utils::is_set( $self->get_session->get_repository->get_conf( "uri_url" ) ) )
+        {
+                return $self->get_session->get_repository->get_conf( "uri_url" ).$self->internal_uri;
+        }
+	
 	return $self->get_session->get_repository->get_conf( "base_url" ).$self->internal_uri;
 }
 

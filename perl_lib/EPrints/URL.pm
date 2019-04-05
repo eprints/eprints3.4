@@ -136,7 +136,8 @@ sub get
 		else
 		{
 			$uri->scheme( "http" );
-			$uri->host( $session->config( "host" ) );
+			my $host = EPrints::Utils::is_set( $session->config( "host" ) ) ? $session->config( "host" ) :  $session->config( "securehost" );
+			$uri->host( $host );
 			my $port = $session->config( "port" ) || 80;
 			$uri->port( $port ) if $port != 80;
 		}

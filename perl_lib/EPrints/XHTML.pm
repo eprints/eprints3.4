@@ -875,7 +875,7 @@ sub tree
 	) );
 	$frag->appendChild( $repo->make_javascript(<<"EOJ") );
 Event.observe( window, 'load', function() {
-	ep_js_init_dl_tree('$opts{prefix}', '$opts{prefix}_open');
+	ep_js_init_dl_tree('$opts{prefix}', '$opts{class}_open');
 });
 EOJ
 

@@ -61,6 +61,23 @@ $c->{email_for_doc_request} = sub
 	return undef; 
 };
 
+# Define the descriptor you want for the EPrint to appear in the subject line of the request a copy and confirmation emails.
+#$c->{get_request_eprint_descriptor} = sub 
+#{
+#        my ( $eprint ) = @_;
+#
+#        if( $eprint->is_set("title") )
+#        {
+#                return $eprint->value("title");
+#        }
+#        if( $eprint->is_set("publication") )
+#        {
+#                return $eprint->value("publication");
+#        }
+#        return "EPrint ID ".$eprint->id;
+#}
+
+
 # The expiry for a document request (in days)
 # $c->{expiry_for_doc_request} = 7;
 

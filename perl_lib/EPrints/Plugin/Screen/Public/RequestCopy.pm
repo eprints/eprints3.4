@@ -151,8 +151,15 @@ sub action_request
 	my $history_ds = $session->dataset( "history" );
 	$history_ds->create_object( $session, $history_data );
 
+	my $eprint_descriptor = $eprint->get_value( 'title' );
+ 	if( $self->{session}->get_repository->can_call( "get_request_eprint_descriptor" ) ) 
+ 	{
+ 		$eprint_descriptor = $self->{session}->get_repository->call( "get_request_eprint_descriptor", $eprint );
+ 	}
+ 	$eprint_descriptor =~ s/^\s+|\s+$//g;
+
 	# Send request email
-	my $subject = $session->phrase( "request/request_email:subject", eprint => $eprint->get_value( "title" ) );
+	my $subject = $session->phrase( "request/request_email:subject", eprint => $eprint_descriptor );
 	my $mail = $session->make_element( "mail" );
 	$mail->appendChild( $session->html_phrase(
 		"request/request_email:body", 
@@ -223,7 +230,7 @@ sub action_request
 		session => $session,
 		langid => $session->get_langid,
 		to_email => $email,
-		subject => $session->phrase( "request/ack_email:subject", eprint=>$eprint->get_value( "title" ) ), 
+		subject => $session->phrase( "request/ack_email:subject", eprint => $eprint_descriptor ), 
 		message => $mail,
 		sig => $session->html_phrase( "mail_sig" )
 	);

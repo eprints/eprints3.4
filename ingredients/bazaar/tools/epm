@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use FindBin;
-use lib "$FindBin::Bin/../perl_lib";
+use lib "$FindBin::Bin/../../../perl_lib";
 
 =pod
 
@@ -85,6 +85,7 @@ pod2usage(-verbose => 1) if $opt_help;
 pod2usage(-verbose => 2) if $opt_man;
 
 pod2usage( 2 ) if !@ARGV;
+
 my $cmd = shift @ARGV;
 
 my $noise = $opt_verbose + 1;
@@ -96,7 +97,10 @@ if( !defined &$f )
 	pod2usage( "Unknown or unsupported command '$cmd'" );
 }
 
-my $repo = EPrints::Repository->new;
+my @_repoids = EPrints::Config::get_repository_ids();
+my $_repoid = scalar(@_repoids) ? $_repoids[0] : undef;
+my $repo = EPrints::Repository->new( $_repoid ); # need any valid repo
+#my $repo = EPrints::Repository->new;
 my $handler = EPrints::CLIProcessor->new(
 	repository => $repo,
 );

@@ -139,7 +139,7 @@ my $feeds_conf = $session->config( "latest_tool_feeds" );
 if ( defined $feeds_conf )
 {
         my $feeds = $session->make_element( "div", class=>"ep_latest_tool_feeds" );
-        foreach my $feed_type (keys $feeds_conf)
+        foreach my $feed_type (keys %{$feeds_conf})
         {
                 if ( defined $feeds_conf->{$feed_type}->{enabled} && $feeds_conf->{$feed_type}->{enabled} )
                 {

@@ -61,6 +61,8 @@ Where I<command> is one of:
 
 =item refresh_abstracts
 
+=item refresh_citations
+
 =item refresh_views
 
 =item rehash
@@ -168,6 +170,10 @@ Tell the webserver that all views pages must be regenerated. The webserver will 
 =item B<epadmin> refresh_abstracts I<repository_id>
 
 Tell the webserver that all abstract summary pages must be regenerated. The webserver will update them next , but won't update them again unless something on the EPrint changes or you re-run refresh abstracts. Also causes config to be reloaded.
+
+=item B<epadmin> refresh_citations I<repository_id>
+
+Tell the webserver that all citations must be regenerated. The webserver will update them next , but won't update them again unless something on the citationable object changes or you re-run refresh citation.
 
 =item B<epadmin> redo_mime_type I<repository_id> dataset [ objectid, ... ]
 
@@ -322,6 +328,7 @@ else
 	elsif( $action eq "erase_fulltext_index" ) { erase_fulltext_index( $repoid ); }
 	elsif( $action eq "reload" ) { reload( $repoid ); }
 	elsif( $action eq "refresh_abstracts" ) { refresh_abstracts( $repoid ); }
+	elsif( $action eq "refresh_citations" ) { refresh_citations( $repoid ); }
 	elsif( $action eq "refresh_views" ) { refresh_views( $repoid ); }
 	elsif( $action eq "redo_mime_type" ) { redo_mime_type( $repoid, @ARGV ); }
 	elsif( $action eq "redo_thumbnails" ) { redo_thumbnails( $repoid, @ARGV ); }
@@ -1425,7 +1432,32 @@ END
 	}
 
 	reload( $repoid );
-}	
+}
+
+
+sub refresh_citations
+{
+        my( $repoid ) = @_;
+
+        my $repo = &repository( $repoid );
+
+        my $file = $repo->config( "variables_path" )."/citations.timestamp";
+        unless( open( CHANGEDFILE, ">$file" ) )
+        {
+                EPrints::abort( "Cannot write to file $file" );
+        }
+        print CHANGEDFILE "This file last poked at: ".EPrints::Time::human_time()."\n";
+        close CHANGEDFILE;
+        if( $noise > 0 )
+        {
+                print <<END;
+Citations will be updated when they are next requested.  You may wish to run
+refresh_abstracts and/or refresh_views as citations will only be updated on 
+non-cached pages.
+END
+        }
+}
+	
 
 sub reload
 {

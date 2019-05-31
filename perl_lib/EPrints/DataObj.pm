@@ -619,6 +619,34 @@ sub clear_changed
 ######################################################################
 =pod
 
+=begin InternalDoc
+
+=item $dataobj->clear_citations( )
+
+Clear any citations associated with the DataObj.
+
+=end InternalDoc
+
+=cut
+######################################################################
+
+sub clear_citations
+{
+	my( $self ) = @_;
+
+	my $db = $self->{session}->get_database();
+	my $citations_sql = "SELECT `citationid` WHERE `datasetid` = '" . $self->{dataset}->confid . "' AND `objectid` = '" . $self->id . "'";
+	my $statement = $db->prepare( $citations_sql );
+	$db->execute($statement, $citations_sql);
+	while ( my $res = $statement->fetchrow_hashref )
+	{
+		$self->{session}->dataset( "citation" )->dataobj( $res->{citationid} )->delete();
+	}
+}
+
+######################################################################
+=pod
+
 =item $success = $dataobj->commit( [$force] )
 
 Write this object to the database and reset the changed fields.
@@ -674,6 +702,9 @@ sub commit
 
 	# clear changed fields
 	$self->clear_changed();
+
+	# clear citations unless this is a citation
+	$self->clear_citations() if defined $self->{session}->config( "citation_caching", "enabled" ) && $self->{session}->config( "citation_caching", "enabled" ) && $self->{dataset}->confid != "citation";
 
 	return $success;
 }
@@ -1146,9 +1177,56 @@ sub render_citation
 		);
 	}
 
-	return $citation->render( $self,
-		in=>"citation ".$self->{dataset}->confid."/".$style, 
-		%params );
+	my $citation_htmlobj = undef; 
+	my $res = undef;
+	my $citation_caching_enabled = defined $self->{session}->config( "citation_caching", "enabled" ) && $self->{session}->config( "citation_caching", "enabled" );
+
+	if ( $citation_caching_enabled )
+	{
+		my $db = $self->{session}->get_database();
+        	my $citations_sql = "SELECT `citationid`, `citation_text`, `timestamp_year` AS `year`, `timestamp_month` AS `month`, `timestamp_day` AS `day`, `timestamp_hour` AS `hour`, `timestamp_minute` AS `minute`, `timestamp_second` AS `second` FROM `citation` WHERE `datasetid` = '" . $self->{dataset}->confid . "' AND `objectid` = '" . $self->id . "' AND `style` = '" . $style . "' ORDER BY `timestamp_year`, `timestamp_month`, `timestamp_day`, `timestamp_hour`, `timestamp_minute`, `timestamp_second` DESC LIMIT 1";
+		my $statement = $db->prepare($citations_sql);
+        	$db->execute($statement, $citations_sql);
+	        my $res = $statement->fetchrow_hashref;
+	}
+        if (EPrints::Utils::is_set($res))
+        {
+		my $citation_unixtime = EPrints::Time::datetime_utc( $res->{year}, $res->{month}, $res->{day}, $res->{hour}, $res->{minute}, $res->{second} );
+
+                my $timestampfile = $self->{session}->get_conf( "variables_path" )."/citations.timestamp";
+                my $refresh_unixtime = ( -e $timestampfile ) ? (stat( $timestampfile ))[9] : 0;
+
+                if ( $citation_unixtime > $refresh_unixtime ) 
+		{
+                        my $citation_text = "<citation>" . $res->{ 'citation_text' } . "</citation>";
+                        return EPrints::XML->contents_of( EPrints::XML->parse_string( $citation_text )->documentElement() );  # convert to HTML Object
+                }
+                else
+                {
+                        my $citation_dataobj = $self->{session}->dataset( "citation" )->dataobj( $res->{citationid} );
+                        $citation_htmlobj = $citation->render( $self, in=>"citation ".$self->{dataset}->confid."/".$style, %params );
+                        $citation_dataobj->set_value( 'citation_text', $self->{session}->xml->to_string( $citation_htmlobj ) );
+                        $citation_dataobj->set_value( 'timestamp', EPrints::Time::get_iso_timestamp() );
+                        $citation_dataobj->commit;
+
+                }
+        }
+	else
+	{
+		$citation_htmlobj = $citation->render( $self, in=>"citation ".$self->{dataset}->confid."/".$style, %params );
+		if ( $citation_caching_enabled )
+		{
+			my $citation_data = {
+				datasetid => $self->{dataset}->confid,
+				objectid => $self->id,
+				style => $style,
+				citation_text => $self->{session}->xml->to_string( $citation_htmlobj ),
+				timestamp => EPrints::Time::get_iso_timestamp(),
+			};
+			my $citation_dataobj = $self->{session}->dataset('citation')->create_object( $self->{session}, $citation_data );
+		}
+	}
+	return $citation_htmlobj;
 }
 
 
@@ -1404,18 +1482,18 @@ sub uri
 	my( $self ) = @_;
 
 	return undef if !EPrints::Utils::is_set( $self->get_id );
-
+	
 	my $ds_id = $self->get_dataset->confid;
 	if( $self->get_session->get_repository->can_call( "dataobj_uri", $ds_id ) )
 	{
 		return $self->get_session->get_repository->call( [ "dataobj_uri", $ds_id ], $self );
 	}
-		
+
 	if ( EPrints::Utils::is_set( $self->get_session->get_repository->get_conf( "uri_url" ) ) )
         {
                 return $self->get_session->get_repository->get_conf( "uri_url" ).$self->internal_uri;
         }
-	
+
 	return $self->get_session->get_repository->get_conf( "base_url" ).$self->internal_uri;
 }
 

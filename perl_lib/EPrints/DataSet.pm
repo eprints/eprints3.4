@@ -334,6 +334,11 @@ my $INFO = {
 		import => 1,
 		datestamp => "timestamp",
 	},
+	citation => {
+		sqlname => "citation",
+		class => "EPrints::DataObj::Citation",
+		datestamp => "timestamp",
+	},
 	saved_search => {
 		sqlname => "saved_search",
 		class => "EPrints::DataObj::SavedSearch",

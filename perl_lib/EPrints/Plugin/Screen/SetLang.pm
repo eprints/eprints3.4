@@ -31,6 +31,15 @@ sub from
 
 	my $referrer = $session->param( "referrer" );
         $referrer = EPrints::Apache::AnApache::header_in( $session->get_request, 'Referer' ) unless( EPrints::Utils::is_set( $referrer ) );
+	if (defined $referrer)
+        {
+                my $referrer_uri = URI->new($referrer);
+                my $repository_uri = URI->new($session->config('base_url'));
+                if ($referrer_uri->host ne $repository_uri->host)
+                {
+                        $referrer = undef;
+                }
+        }
 	$referrer = $session->config( "home_page" ) unless( EPrints::Utils::is_set( $referrer ) );
 
 	$self->{processor}->{redirect} = $referrer;

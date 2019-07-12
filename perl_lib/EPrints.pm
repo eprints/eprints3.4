@@ -284,7 +284,7 @@ use EPrints::DataObj;
 use EPrints::DataObj::SubObject;
 use EPrints::DataObj::Access;
 use EPrints::DataObj::Cachemap;
-use EPrints::DataObj::Citation;
+use EPrints::DataObj::CitationCache;
 use EPrints::DataObj::Document;
 use EPrints::DataObj::EPrint;
 use EPrints::DataObj::File;

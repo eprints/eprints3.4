@@ -144,6 +144,7 @@ exit;
 sub make_static
 {
 	my( $session, $dataset, $eprint, $info ) = @_;
+	$eprint->clear_citationcaches() if defined $session->config( "citation_caching", "enabled" ) && $session->config( "citation_caching", "enabled" );
 	$eprint->generate_static();
 	if( $noise > 1 )
 	{

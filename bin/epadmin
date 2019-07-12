@@ -1402,6 +1402,15 @@ webserver will now be told to reload the apache configuration, although
 restarting the server at this point is slightly more efficient.
 
 END
+		if ( defined $repo->config( "citation_caching", "enabled" ) && $repo->config( "citation_caching", "enabled" ) )
+                {
+                        print <<END;
+You will also need to running "refresh_citations" if you have made changes 
+to any of the citation files that are used by view (browse) pages.
+
+END
+                }
+
 	}
 
 	reload( $repoid );
@@ -1429,6 +1438,14 @@ webserver will now be told to reload the apache configuration, although
 restarting the server at this point is slightly more efficient.
 
 END
+		if ( defined $repo->config( "citation_caching", "enabled" ) && $repo->config( "citation_caching", "enabled" ) )
+		{
+			print <<END;
+You will also need to run "refresh_citations" if you have made changes 
+to any of the citation files that are used by abstract (summary) pages.
+
+END
+		}
 	}
 
 	reload( $repoid );
@@ -1451,7 +1468,7 @@ sub refresh_citations
         if( $noise > 0 )
         {
                 print <<END;
-Citations will be updated when they are next requested.  You may wish to run
+Citation caches will be updated when they are next requested.  You may wish to run
 refresh_abstracts and/or refresh_views as citations will only be updated on 
 non-cached pages.
 END

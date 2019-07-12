@@ -1742,7 +1742,20 @@ sub in_thread
 {
 	my( $self, $field ) = @_;
 
-	return $self->is_set( $field->name ) || $self->later_in_thread( $field )->count > 0;
+        if( $self->later_in_thread( $field )->count > 0 )
+        {
+                return 1;
+        }
+        if( $self->is_set( $field->name ) )
+        {
+                my $parentid = $self->get_value( $field->name );
+                my $dataset = $self->{session}->dataset( "eprint" );
+                my $parent = $dataset->dataobj( $parentid );
+                if( $parent->get_value( "eprint_status" ) eq "archive" )
+                {
+                        return 1;
+                }
+        }
 }
 
 =item $eprint = $eprint->first_in_thread( $field )
@@ -1866,7 +1879,15 @@ sub map_thread
 
 	my %seen = ( $first->id => 1 );
 	&$f( $self->{session}, $self->{dataset}, $first, 0 );
-	$first->_map_thread( $field, $f, \%seen, 1 );
+
+	if( $first->value( "eprint_status" ) eq "archive" ) #only items in the live archive should feature in the tree
+        {
+                $first->_map_thread( $field, $f, \%seen, 1 );
+        }
+        else
+        {
+                $first->_map_thread( $field, $f, \%seen, 0 );
+        }
 }
 
 # WARNING! render_version_thread uses this and relies on $level to build the
@@ -1909,33 +1930,35 @@ sub render_version_thread
 	my $clevel = 0;
 	$self->map_thread( $field, sub {
 		my( $session, undef, $item, $level ) = @_;
+		if( $item->value( "eprint_status" ) eq "archive" ) #only items in the live archive should feature in the tree
+                {
+			# move down a level
+			while( $clevel < $level )
+			{
+				++$clevel;
+				$ul = $ul->lastChild->appendChild( $session->make_element( "ul" ) );
+			}
+			# move up a level
+			while( $clevel > $level )
+			{
+				--$clevel;
+				$ul = $ul->parentNode->parentNode; # ul -> li -> ul
+			}
 
-		# move down a level
-		while( $clevel < $level )
-		{
-			++$clevel;
-			$ul = $ul->lastChild->appendChild( $session->make_element( "ul" ) );
-		}
-		# move up a level
-		while( $clevel > $level )
-		{
-			--$clevel;
-			$ul = $ul->parentNode->parentNode; # ul -> li -> ul
-		}
-
-		my $li = $session->make_element( "li" );
-		$ul->appendChild( $li );
-
-		my $citation;
-		if( $item->id ne $self->id )
-		{
-			$li->appendChild( $item->render_citation_link( $cstyle ) );
-		}
-		else
-		{
-			$li->appendChild( $item->render_citation( $cstyle ) );
-			$li->appendChild( $item->{session}->make_text( " " ) );
-			$li->appendChild( $item->{session}->html_phrase( "lib/eprint:curr_disp" ) );
+			my $li = $session->make_element( "li" );
+			$ul->appendChild( $li );
+	
+			my $citation;
+			if( $item->id ne $self->id )
+			{
+				$li->appendChild( $item->render_citation_link( $cstyle ) );
+			}
+			else
+			{
+				$li->appendChild( $item->render_citation( $cstyle ) );
+				$li->appendChild( $item->{session}->make_text( " " ) );
+				$li->appendChild( $item->{session}->html_phrase( "lib/eprint:curr_disp" ) );
+			}
 		}
 	});
 

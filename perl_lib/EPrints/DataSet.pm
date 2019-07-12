@@ -334,9 +334,9 @@ my $INFO = {
 		import => 1,
 		datestamp => "timestamp",
 	},
-	citation => {
-		sqlname => "citation",
-		class => "EPrints::DataObj::Citation",
+	citationcache => {
+		sqlname => "citationcache",
+		class => "EPrints::DataObj::CitationCache",
 		datestamp => "timestamp",
 	},
 	saved_search => {

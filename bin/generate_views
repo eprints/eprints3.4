@@ -69,6 +69,10 @@ May be repeated B<--view> I<viewid_1> B<--view> I<viewid_2>
 
 Generate only pages for the language with this ID. 
 
+=item B<--refreshcitations>
+
+Set citations to recached before generating view(s).
+
 =item B<--help>
 
 Print a brief help message and exit.
@@ -108,6 +112,7 @@ my $verbose = 0;
 my $quiet = 0;
 my $help = 0;
 my $man = 0;
+my $refreshcitations = 0;
 my $generate_opt;
 my @view_opts;
 my $lang_opt;
@@ -121,6 +126,7 @@ GetOptions(
 	'verbose+' => \$verbose,
 	'silent' => \$quiet,
 	'quiet' => \$quiet,
+	'refreshcitations' => \$refreshcitations,
 	'generate=s' => \$generate_opt,
 	'view=s' => \@view_opts,
 	'lang=s' => \$lang_opt,
@@ -164,6 +170,17 @@ if( !defined $session )
 }
 
 $session->cache_subjects;
+
+if ( $refreshcitations )
+{
+	my $citations_file = $session->config( "variables_path" )."/citations.timestamp";
+        unless( open( CHANGEDFILE, ">$citations_file" ) )
+        {
+                EPrints::abort( "Cannot write to file $citations_file" );
+        }
+        print CHANGEDFILE "This file last poked at: ".EPrints::Time::human_time()."\n";
+        close CHANGEDFILE;
+}
 
 my $repository = $session->get_repository;
 

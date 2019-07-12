@@ -1,6 +1,6 @@
 ######################################################################
 #
-# EPrints::DataObj::Citation
+# EPrints::DataObj::CitationCache
 #
 ######################################################################
 #
@@ -12,11 +12,11 @@
 
 =head1 NAME
 
-B<EPrints::DataObj::Citation> - An citation for a DataObj.
+B<EPrints::DataObj::CitationCache> - A cached citation for a DataObj.
 
 =head1 DESCRIPTION
 
-This class describes a single item in the citation dataset. A citation
+This class describes a single item in the citationcache dataset. A citationcache
 object describes a formatted citation for a single item in another
 dataset.
 
@@ -24,13 +24,13 @@ dataset.
 
 =over 4
 
-=item citationid (int)
+=item citationcacheid (int)
 
-The unique numerical ID of this citation event. 
+The unique numerical ID of this citation cache event. 
 
 =item datasetid (text)
 
-The name of the dataset to which the item that has a citation belongs. "eprint"
+The name of the dataset to which the item that has a citation cache belongs. "eprint"
 is used for eprints, rather than the inbox, buffer etc.
 
 =item objectid (int)
@@ -44,11 +44,11 @@ citation styles and defined in citations/<DataObject>
 
 =item citation_text (text)
 
-The actually text generated for the citation by render_citation.
+The actually text generated for the citation cache by render_citation.
 
 =item timestamp (time)
 
-The moment at which this citation was generated.
+The moment at which this citation cache was generated.
 
 =back
 
@@ -58,7 +58,7 @@ The moment at which this citation was generated.
 
 =cut
 
-package EPrints::DataObj::Citation;
+package EPrints::DataObj::CitationCache;
 
 @ISA = ( 'EPrints::DataObj::SubObject' );
 
@@ -69,7 +69,7 @@ use strict;
 ######################################################################
 =pod
 
-=item $field_info = EPrints::DataObj::Citation->get_system_field_info
+=item $field_info = EPrints::DataObj::CitationCache->get_system_field_info
 
 Return the metadata field configuration for this object.
 
@@ -82,8 +82,8 @@ sub get_system_field_info
 
 	return 
 	( 
-		{ name=>"citationid", type=>"counter", required=>1, can_clone=>0,
-			sql_counter=>"citationid" }, 
+		{ name=>"citationcacheid", type=>"counter", required=>1, can_clone=>0,
+			sql_counter=>"citationcacheid" }, 
 
 		{ name=>"datasetid", type=>"id", text_index=>0, }, 
 
@@ -103,7 +103,7 @@ sub get_system_field_info
 ######################################################################
 =pod
 
-=item $dataset = EPrints::DataObj::Citation->get_dataset_id
+=item $dataset = EPrints::DataObj::CitationCache->get_dataset_id
 
 Returns the id of the L<EPrints::DataSet> object to which this record belongs.
 
@@ -112,7 +112,7 @@ Returns the id of the L<EPrints::DataSet> object to which this record belongs.
 
 sub get_dataset_id
 {
-	return "citation";
+	return "citationcache";
 }
 
 
@@ -120,9 +120,9 @@ sub get_dataset_id
 ######################################################################
 =pod
 
-=item $citation->commit 
+=item $citationcache->commit 
 
-Commit the formatted text generated for a citation
+Commit the formatted text generated for a citationcache
 
 =cut
 ######################################################################
@@ -140,9 +140,9 @@ sub commit
 ######################################################################
 # =pod
 # 
-# =item EPrints::DataObj::Citation::create( $session, $data );
+# =item EPrints::DataObj::CitationCache::create( $session, $data );
 # 
-# Create a new citation  object from this data. Unlike other create
+# Create a new citationcache object from this data. Unlike other create
 # methods this one does not return the new object as it's never 
 # needed, and would increase the load of modifying items.
 # 
@@ -155,16 +155,16 @@ sub create
 {
 	my( $session, $data ) = @_;
 
-	return EPrints::DataObj::Citation->create_from_data( 
+	return EPrints::DataObj::CitationCache->create_from_data( 
 		$session, 
 		$data,
-		$session->dataset( "citation" ) );
+		$session->dataset( "citationcache" ) );
 }
 
 ######################################################################
 =pod
 
-=item $defaults = EPrints::DataObj::Citation->get_defaults( $session, $data )
+=item $defaults = EPrints::DataObj::CitationCache->get_defaults( $session, $data )
 
 Return default values for this object based on the starting data.
 
@@ -182,9 +182,9 @@ sub get_defaults
 
 ######################################################################
 #
-# $xhtml = $citation->render_citation( $style, $url )
+# $xhtml = $citationcache->render_citation( $style, $url )
 #
-# This overrides the normal citation as a citation cannot have its
+# This overrides the normal citation as a citationcache cannot have its
 # own citation.
 #
 ######################################################################
@@ -197,9 +197,9 @@ sub render_citation
 ######################################################################
 =pod
 
-=item $xhtml = $citation->render
+=item $xhtml = $citationcache->render
 
-A citation cannot have a rendering of itself.
+A citationcache cannot have a rendering of itself.
 
 =cut
 ######################################################################
@@ -214,9 +214,9 @@ sub render
 ######################################################################
 =pod
 
-=item $object = $citation->get_dataobj
+=item $object = $citationcache->get_dataobj
 
-Returns the object to which this citation relates.
+Returns the object to which this citationcache relates.
 
 =cut
 ######################################################################

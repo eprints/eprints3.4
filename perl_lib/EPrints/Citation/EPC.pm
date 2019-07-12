@@ -44,11 +44,13 @@ sub load_source
 	$type = "default" unless EPrints::Utils::is_set( $type );
 
 	my $whitespace = $citation->getAttributeNodeNS( EP_NS_CITATION, "trim-whitespace" );
+	my $disable_caching = $citation->getAttributeNodeNS( EP_NS_CITATION, "disable-caching" );
 
 	$self->{type} = $type;
 	$self->{style} = $repo->xml->contents_of( $citation );
 	$self->{mtime} = EPrints::Utils::mtime( $file );
 	$self->{trim_whitespace} = defined $whitespace && lc($whitespace->nodeValue) eq "yes";
+        $self->{disable_caching} = defined $disable_caching && lc($disable_caching->nodeValue) eq "yes";
 
 	$repo->xml->dispose( $doc );
 

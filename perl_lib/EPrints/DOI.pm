@@ -44,6 +44,7 @@ use warnings;
 use strict;
 
 use overload
+	fallback => 1,
 	'""' => \&_stringify,
 	'.'  => \&_cat,
 	'.=' => \&_cat0;

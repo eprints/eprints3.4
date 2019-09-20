@@ -33,7 +33,7 @@ sub _get_or_set_field {
 
 
 sub first {
-	shift->_get_or_set_field(0, @_)
+	shift->_get_or_set_field(0, @_);
 }
 
 

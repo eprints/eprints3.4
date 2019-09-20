@@ -33,7 +33,7 @@ sub _get_or_set_field {
 
 
 sub first {
-	shift->_get_or_set_field(0, @_);
+	shift->_get_or_set_field(0, @_)
 }
 
 
@@ -105,7 +105,7 @@ sub _split_name_parts {
                     die "Unmatched brace in name '$name'";
                 }
             } else {
-                if ( $cur_token =~ /^{(.*)}$/ ) {
+                if ( $cur_token =~ /^{([^\}]*)}$/ ) { # handle included curly braces correctly
                     $cur_token = $1;
                 }
                 push @parts, $cur_token;

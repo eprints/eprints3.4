@@ -32,8 +32,8 @@ unless( $@ )
 {
 	%COLORS = (
 		reset => "reset",
-		error => "bold red",
-		warning => "bold yellow",
+		error => "bold red on_black",
+		warning => "bold yellow on_black",
 	);
 }
 

@@ -272,6 +272,7 @@ sub output_list
 		my $part = $plugin->output_dataobj( $item, %opts );
 		if( defined $opts{fh} )
 		{
+			binmode(STDOUT, ":utf8");
 			print {$opts{fh}} $part;
 		}
 		else

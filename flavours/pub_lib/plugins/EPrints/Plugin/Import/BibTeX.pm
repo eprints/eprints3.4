@@ -404,11 +404,20 @@ sub convert_input
 		$epdata->{institution} = $entry->field( "institution" );
 	}
 
+	# isbn
+	$epdata->{isbn} = $entry->field( "isbn" );
+
+	# issn
+	$epdata->{issn} = $entry->field( "issn" );
+
 	# journal
 	$epdata->{publication} = $entry->field( "journal" );
 
 	# note	
 	$epdata->{note} = $entry->field( "note" );
+
+	# doi
+	$epdata->{id_number} = $entry->field( "doi" );
 
 	# number
 	if( $type eq "TECHREPORT" || $type eq "MANUAL" )
@@ -459,16 +468,16 @@ sub convert_input
 	$epdata->{volume} = $entry->field( "volume" );
 
 	# year
+	my $datepattern = qr/^[0-9]{2,4}-?[0-9]{0,2}-?[0-9]{0,2}$/;
 	if( defined $entry->field( "year" ) )
 	{
-		my $year = $entry->field( "year" );
-		if( $year =~ /^[0-9]{4}$/ )
+		if( $entry->field( "year" ) =~ $datepattern )
 		{
-			$epdata->{date} = $year;
+			$epdata->{date} = $entry->field( "year" );
 		}
 		else
 		{
-			$plugin->warning( $plugin->phrase( "skip_year", year => $year ) );
+			$plugin->warning( $plugin->phrase( "skip_year", year => $entry->field( "year" ) ) );
 		}
 	}
 	
@@ -490,9 +499,9 @@ sub convert_input
 			dec => "12",
 		);
 		my $month = substr( lc( $entry->field( "month" ) ), 0, 3 );
-		if( defined $months{$month} )
+		if( defined $months{$month} && defined $epdata->{date})
 		{
-			$epdata->{date} .= "-" . $months{$month}; 
+			$epdata->{date} .= "-" . $months{$month};
 		}
 		else
 		{
@@ -500,8 +509,22 @@ sub convert_input
 		}
 	}
 
+	# exploit date if necessary
+	unless ( defined $epdata->{date} )
+	{
+	  if( $entry->field( "date" ) =~ $datepattern )
+	  {
+		$epdata->{date} = $entry->field( "date" );
+	  }
+	  else
+	  {
+		$plugin->warning( $plugin->phrase( "skip_year", year => $entry->field( "date" ) ) );
+	  }
+	}
+
 	# abstract
 	$epdata->{abstract} = $entry->field( "abstract" );
+
 	# keywords
 	$epdata->{keywords} = $entry->field( "keywords" );
 
@@ -576,4 +599,3 @@ License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
 =for LICENSE END
-

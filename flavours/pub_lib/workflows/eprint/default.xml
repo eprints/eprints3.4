@@ -80,7 +80,7 @@ Action buttons (Previous/Save/Next) can be shown "top", "bottom" or "both":
     <component><field ref="divisions" /></component>
 
     <component type="Field::Multi">
-      <title>Publication Details</title>
+      <title><epc:phrase ref="archive:workflow:stage:core:publicationDetails" /></title>
       <epc:if test="type != 'patent' ">
         <epc:if test="type.one_of('book_section', 'book', 'article', 'conference_item')">
           <field ref="refereed" required="yes" />
@@ -248,7 +248,7 @@ Action buttons (Previous/Save/Next) can be shown "top", "bottom" or "both":
 
     <epc:if test="type = 'teaching_resource'">
       <component type="Field::Multi">
-        <title>Pedagogic Details</title>
+        <title><epc:phrase ref="archive:workflow:stage:core:pedagogicDetails" /></title>
         <field ref="pedagogic_type"/>
         <field ref="completion_time"/>
         <field ref="task_purpose"/>
@@ -259,7 +259,7 @@ Action buttons (Previous/Save/Next) can be shown "top", "bottom" or "both":
 
     <epc:if test="type.one_of( 'exhibition', 'performance' )">
       <component type="Field::Multi">
-        <title>Venue Details</title>
+        <title><epc:phrase ref="archive:workflow:stage:core:venueDetails" /></title>
         <field ref="event_title" />
         <field ref="event_location"/>
         <field ref="event_dates"/>
@@ -268,7 +268,7 @@ Action buttons (Previous/Save/Next) can be shown "top", "bottom" or "both":
 
     <epc:if test="type = 'conference_item'">
       <component type="Field::Multi">
-        <title>Event Details</title>
+        <title><epc:phrase ref="archive:workflow:stage:core:eventDetails" /></title>
         <field ref="event_title" input_lookup_url="{$config{rel_cgipath}}/users/lookup/event_by_name" required="yes" />
         <field ref="event_type" required="yes" />
         <field ref="event_location"/>

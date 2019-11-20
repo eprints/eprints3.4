@@ -2,11 +2,17 @@
 <!DOCTYPE phrases SYSTEM "entities.dtd">
 <epp:phrases xmlns="http://www.w3.org/1999/xhtml" xmlns:epp="http://eprints.org/ep3/phrase" xmlns:epc="http://eprints.org/ep3/control">
 
-      	<!-- To override system phrases add them here -->
+    <!-- To override system phrases add them here -->
 	
-	<epp:phrase id="eprint_fieldname_article_number">Article Number</epp:phrase> 
-	<epp:phrase id="eprint_fieldhelp_article_number">The number of the article within a journal or other publication.  If this is an electronic/online publication this may be prefixed with an 'e'.</epp:phrase> 
- 	<epp:phrase id="eprint_fieldname_edition">Edition</epp:phrase> 
- 	<epp:phrase id="eprint_fieldhelp_edition">The edition of the book or book section.</epp:phrase> 
+    <epp:phrase id="eprint_fieldname_article_number">Article Number</epp:phrase> 
+    <epp:phrase id="eprint_fieldhelp_article_number">The number of the article within a journal or other publication.  If this is an electronic/online publication this may be prefixed with an 'e'.</epp:phrase> 
+    <epp:phrase id="eprint_fieldname_edition">Edition</epp:phrase> 
+    <epp:phrase id="eprint_fieldhelp_edition">The edition of the book or book section.</epp:phrase> 
+
+    <!-- workflow phrases -->
+    <epp:phrase id="archive:workflow:stage:core:publication_details:title">Publication Details</epp:phrase>
+    <epp:phrase id="archive:workflow:stage:core:pedagogic_details:title">Pedagogic Details</epp:phrase>
+    <epp:phrase id="archive:workflow:stage:core:event_details:title">Event Details</epp:phrase>
+    <epp:phrase id="archive:workflow:stage:core:venue_details:title">Venue Details</epp:phrase>
 
 </epp:phrases>

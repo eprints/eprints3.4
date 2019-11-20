@@ -42,7 +42,7 @@ $c->{make_title_orderkey} = sub
         return make_orderkey_ignore_extras($value);
 };
 
-$c->{make_value_orderkey} = sub
+$c->{make_sanitised_value_orderkey} = sub
 {
 	my ($field, $value, $session, $langid, $dataset) = @_;
 

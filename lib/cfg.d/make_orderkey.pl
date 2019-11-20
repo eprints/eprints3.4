@@ -26,7 +26,7 @@ $c->{make_name_orderkey} = sub
 		my $name = $value->{$_};
 
 		# convert name appropriately
-		my $orderkey = ignoreExtras( $name );
+		my $orderkey = make_orderkey_ignore_extras( $name );
                 push  @orderkey, $orderkey;
          }
          return join( "_" ,  @orderkey );
@@ -39,7 +39,7 @@ $c->{make_title_orderkey} = sub
         $value =~ s/^[^a-z0-9]+//gi;
         if( $value =~ s/^(a|an|the) [^a-z0-9]*//i ) { $value .= ", $1"; }
 
-        return ignoreExtras($value);
+        return make_orderkey_ignore_extras($value);
 };
 
 $c->{make_value_orderkey} = sub
@@ -47,11 +47,11 @@ $c->{make_value_orderkey} = sub
 	my ($field, $value, $session, $langid, $dataset) = @_;
 
 	# convert name appropriately
-	my $orderkey = ignoreExtras( $value );
+	my $orderkey = make_orderkey_ignore_extras( $value );
 	return $orderkey;
 };
 
-sub ignoreExtras
+sub make_orderkey_ignore_extras
 {
 	my ($name) = @_;
 

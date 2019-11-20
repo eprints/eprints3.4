@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<!DOCTYPE phrases SYSTEM "entities.dtd">
+
+<epp:phrases xmlns="http://www.w3.org/1999/xhtml" xmlns:epp="http://eprints.org/ep3/phrase" xmlns:epc="http://eprints.org/ep3/control">
+<epp:phrase id="template/navigation:about:title">Get some detailed repository information!</epp:phrase>
+<epp:phrase id="template/navigation:browse:title">Browse the items using prepared lists!</epp:phrase>
+<epp:phrase id="template/navigation:home:title">Go to start page!</epp:phrase>
+</epp:phrases>

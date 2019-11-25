@@ -1608,8 +1608,17 @@ sub _load_core_modules
 	my $conf = $EPrints::SystemSettings::conf;
 
 	##load flavour from a local config, which is used to determine the flavour lib order. 
-	my $_fpath = $conf->{base_path}."/archives/".$self->{id}."/cfg/cfg.d/00_flavour.pl";
+	my $archives_path = $conf->{base_path}."/archives/";
+	my $_fpath = $archives_path.$self->{id}."/cfg/cfg.d/00_flavour.pl";
 	$_fpath = $conf->{'base_path'}."/cfg/cfg.d/00_flavour.pl" if( ! -e $_fpath );
+	if ( ! -e $_fpath )
+	{
+		opendir(my $dh, $archives_path);
+		my @dirs = grep {-d  $archives_path && ! /^\.{1,2}$/} readdir($dh);
+		use Data::Dumper;
+		closedir($dh);
+		$_fpath =  $archives_path . $dirs[0] . "/cfg/cfg.d/00_flavour.pl" if( defined $dirs[0] && -e $archives_path . $dirs[0] );
+	}
 	open (my $fh, $_fpath) or die "could not open file flavour config file at [$_fpath]: $! \n";
 	my $flavour;
 	while (my $row=<$fh>)

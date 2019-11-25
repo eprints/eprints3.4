@@ -400,8 +400,6 @@ sub fileinfo
 
 	my $base_url = $self->{session}->config( 'http_url' );
 
-	local $self->{session}->{preparing_static_page} = 1; # force full URLs
-
 	my @finfo = ();
 	foreach my $doc ( $self->get_all_documents )
 	{
@@ -418,10 +416,6 @@ sub render_fileinfo
 	my( $session, $field, $value, $alllangs, $nolink, $eprint ) = @_;
 
 	my $baseurl = $session->config( 'rel_path' );
-	if( $session->{preparing_static_page} )
-	{
-		$baseurl = $session->config( 'http_url' );
-	}
 
 	my $f = $session->make_doc_fragment;
 
@@ -1417,8 +1411,6 @@ sub generate_static
 
 	my $status = $self->get_value( "eprint_status" );
 
-	$self->{session}->{preparing_static_page} = 1; 
-
 	$self->remove_static;
 
 	# We is going to temporarily change the language of our session to
@@ -1465,7 +1457,6 @@ sub generate_static
 			 );
 	}
 	$self->{session}->change_lang( $real_langid );
-	delete $self->{session}->{preparing_static_page};
 }
 
 ######################################################################

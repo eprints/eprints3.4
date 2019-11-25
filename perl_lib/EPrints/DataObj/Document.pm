@@ -1651,11 +1651,6 @@ sub thumbnail_url
 		);
 	}
 
-	if( $self->{session}->{preparing_static_page} )
-	{
-		return $self->{session}->config( "http_url" ). "/" . $path;
-	}
-
 	return $self->{session}->current_url(
 		host => 0,
 		path => "static",
@@ -1703,11 +1698,6 @@ sub icon_url
 				last DIR;
 			}
 		}
-	}
-
-	if( $session->{preparing_static_page} )
-	{
-		return $session->config( "http_url" )."/$rel_path/$icon";
 	}
 
 	return $session->config( "rel_path" )."/$rel_path/$icon";
@@ -1759,18 +1749,11 @@ sub render_icon_link
 	my %aopts;
 	$aopts{class} = "ep_document_link";
 	$aopts{target} = "_blank" if( $opts{new_window} );
-	if( $self->{session}->{preparing_static_page} )
-	{
-		$aopts{href} = $self->get_url;
-	}
-	else
-	{
-		$aopts{href} = $self->{session}->current_url(
-			host => 0,
-			path => "static",
-			$self->file_path
-		);
-	}
+	$aopts{href} = $self->{session}->current_url(
+		host => 0,
+		path => "static",
+		$self->file_path
+	);
 	my $preview_id = "doc_preview_".$self->get_id;
 	my $preview_url;
 	if( $opts{preview} )

@@ -5,3 +5,7 @@ $c->{datasets}->{citationcache} = {
         index => 0,
 };
 $c->{citation_caching}->{enabled} = 0;
+$c->{citation_caching}->{excluded_dataobjs} = [
+	'epm',
+	'subject',
+];

@@ -1179,7 +1179,10 @@ sub render_citation
 
 	my $citation_htmlobj = undef; 
 	my $res = undef;
-	my $citation_caching_enabled = defined $self->{session}->config( "citation_caching", "enabled" ) && $self->{session}->config( "citation_caching", "enabled" ) && !$citation->{disable_caching} && $self->{dataset}->confid ne "subject";
+	my @excluded_dataobjs = ( 'epm', 'subject' );
+	@excluded_dataobjs = @{$self->{session}->config( "citation_caching", "excluded_dataobjs" )} if defined $self->{session}->config( "citation_caching", "excluded_dataobjs" );
+	my $citation_caching_enabled = defined $self->{session}->config( "citation_caching", "enabled" ) && $self->{session}->config( "citation_caching", "enabled" ) && !$citation->{disable_caching} && !(grep { $self->{dataset}->confid eq $_ } @excluded_dataobjs);
+
 
 	my $has_cached_version = undef;     # Set if a cached version exists.
 	my $use_cached_version = undef;     # Set if the cached version is to be used.

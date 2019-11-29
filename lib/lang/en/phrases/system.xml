@@ -1069,6 +1069,8 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
 <epp:phrase id="metafield_fieldname_allow_null">Allow Null Values</epp:phrase>
 <epp:phrase id="metafield_fieldname_fields_allow_null">Allow Null</epp:phrase>
 <epp:phrase id="metafield_fieldhelp_allow_null">Whether this field can be undefined (NULL) in the database.</epp:phrase>
+<epp:phrase id="metafield_fieldname_default_value">Default value</epp:phrase>
+<epp:phrase id="metafield_fieldhelp_default_value">The value used if no value input.</epp:phrase>
 <epp:phrase id="metafield_fieldname_export_as_xml">Include in XML Export</epp:phrase>
 <epp:phrase id="metafield_fieldname_fields_export_as_xml">Include in XML Export</epp:phrase>
 <epp:phrase id="metafield_fieldhelp_export_as_xml">Whether this field should be exported in EPrints XML. You may not want to export things like passwords or other sensitive data.</epp:phrase>
@@ -1360,6 +1362,7 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
     <epp:phrase id="history_fieldname_timestamp">Timestamp</epp:phrase>
     <epp:phrase id="history_fieldname_userid">User ID Number</epp:phrase>
     <epp:phrase id="history_fieldname_details">Details</epp:phrase>
+    <epp:phrase id="history_fieldname_revision">Revision</epp:phrase>
     <epp:phrase id="history_search_premble">Search the logs of changes made to records.</epp:phrase>
     <epp:phrase id="history_search_title">History Search</epp:phrase>
 
@@ -1375,7 +1378,7 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
     <epp:phrase id="history_fieldopt_action_move_archive_to_buffer">Moved from Repository to Review</epp:phrase>
     <epp:phrase id="history_fieldopt_action_move_archive_to_deletion">Moved from Repository to Retired</epp:phrase>
     <epp:phrase id="history_fieldopt_action_move_deletion_to_archive">Moved from Retired to Repository</epp:phrase>
-        <epp:phrase id="history_fieldopt_action_move_inbox_to_archive">Moved from Work Area to Repository</epp:phrase>
+    <epp:phrase id="history_fieldopt_action_move_inbox_to_archive">Moved from Work Area to Repository</epp:phrase>
     <epp:phrase id="history_fieldopt_action_mail_owner">Email sent to depositor of record</epp:phrase>
     <epp:phrase id="history_fieldopt_action_create">Created</epp:phrase>
     <epp:phrase id="history_fieldopt_action_destroy">Destroyed</epp:phrase>
@@ -1469,7 +1472,12 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
     <epp:phrase id="file_fieldname_hash_type">Checksum type</epp:phrase>
     <epp:phrase id="file_fieldname_mtime">File modification time</epp:phrase>
     <epp:phrase id="file_fieldname_pronom_uid">Pronom Format Identifier</epp:phrase>
-
+    <epp:phrase id="file_fieldname_url">URL</epp:phrase>
+    <epp:phrase id="file_fieldname_data">Data</epp:phrase>
+    <epp:phrase id="file_fieldname_copies">Copies</epp:phrase>
+    <epp:phrase id="file_fieldname_copies_pluginid">Plugin ID</epp:phrase>
+    <epp:phrase id="file_fieldname_copies_sourceid">Source ID</epp:phrase>
+    
 <!-- Page ranges -->
     <!-- 123-123 -->
     <epp:phrase id="lib/metafield/pagerange:same_page">p. <epc:pin name="from"/></epp:phrase>
@@ -1572,6 +1580,7 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
     <epp:phrase id="lib/searchfield:help_itemref">Select a single record ID number (e.g. 93), or a range of numbers, e.g. `17-23', `17-' or -23'.</epp:phrase>
     <epp:phrase id="lib/searchfield:help_counter">Enter a single ID (e.g. 93), or a range of IDs, e.g. `17-23' or `17-'. </epp:phrase>
     <epp:phrase id="lib/searchfield:help_storable" />
+    <epp:phrase id="lib/searchfield:help_base64" />
     <epp:phrase id="lib/searchfield:bool_nopref">No Preference</epp:phrase>
     <epp:phrase id="lib/searchfield:bool_yes">Yes</epp:phrase>
     <epp:phrase id="lib/searchfield:bool_no">No</epp:phrase>
@@ -2473,6 +2482,10 @@ Titles and Help for the System Fields
     <epp:phrase id="user_fieldhelp_email">The email address for this user</epp:phrase>
     <epp:phrase id="user_fieldname_newemail" ref="user_fieldname_email"></epp:phrase>
     <epp:phrase id="user_fieldhelp_newemail">This must be a valid email address.</epp:phrase>
+    <epp:phrase id="user_fieldname_pin">PIN</epp:phrase>
+    <epp:phrase id="user_fieldhelp_pin">Personal Identification Number for resetting user account.</epp:phrase>
+    <epp:phrase id="user_fieldname_pinsettime">PIN set time</epp:phrase>
+    <epp:phrase id="user_fieldhelp_pinsettime">The time at which the PIN for this user was set.</epp:phrase> 
 
     <epp:phrase id="user_fieldname_lang">Preferred Language</epp:phrase>
     <epp:phrase id="user_fieldhelp_lang">Your preferred language. Where possible information will be mailed in this language.</epp:phrase>
@@ -2505,6 +2518,8 @@ Titles and Help for the System Fields
     <epp:phrase id="document_fieldname_rev_number">Metadata Revision</epp:phrase>
     <epp:phrase id="document_fieldname_language">Language</epp:phrase>
     <epp:phrase id="document_fieldhelp_language">Please indicate the primary language of this format.</epp:phrase>
+    <epp:phrase id="document_fieldname_files">Files</epp:phrase>
+    <epp:phrase id="document_fieldhelp_files">Files associated with this document.</epp:phrase>
     <epp:phrase id="document_fieldname_format">Type</epp:phrase>
     <epp:phrase id="document_fieldhelp_format">Please select the storage format of this document.</epp:phrase>
     <epp:phrase id="document_fieldname_formatdesc">Description</epp:phrase>
@@ -2515,6 +2530,28 @@ Titles and Help for the System Fields
     <epp:phrase id="document_fieldhelp_security">Please indicate the required "security level" of this document. Who is allowed to download it?  If you set this to anything other than "anyone" then consider adding a contact email for this eprint (on the next page), this will allow users to use a web form to request a copy of the document, and you can decide on a case-by-case basis.</epp:phrase>
     <epp:phrase id="document_fieldname_license">License</epp:phrase>
     <epp:phrase id="document_fieldhelp_license">Specify an explicit license for this document (does not affect the access rights you grant at the end of this deposit process). This repository allows <a href="http://creativecommons.org/about/licenses/" target="_blank">Creative Commons</a> licenses.</epp:phrase>
+    <epp:phrase id="document_fieldname_media">Media</epp:phrase>
+    <epp:phrase id="document_fieldhelp_media">Specifies to media used for this document where applicable.</epp:phrase>
+    <epp:phrase id="document_fieldname_media_aspect_ratio">Aspect ratio</epp:phrase>
+    <epp:phrase id="document_fieldhelp_media_aspect_ratio">The aspect ratio (width by height) of the media.</epp:phrase>
+    <epp:phrase id="document_fieldname_media_audio_codec">Audio CODEC</epp:phrase>
+    <epp:phrase id="document_fieldhelp_media_audio_codec">The audio CODEC used by the media.</epp:phrase>
+    <epp:phrase id="document_fieldname_media_duration">Duration</epp:phrase>
+    <epp:phrase id="document_fieldhelp_media_duration">The duration in seconds of the media.</epp:phrase>
+    <epp:phrase id="document_fieldname_media_height">Height</epp:phrase>
+    <epp:phrase id="document_fieldhelp_media_height">The height in pixels of the media.</epp:phrase>
+    <epp:phrase id="document_fieldname_media_sample_start">Sample start</epp:phrase>
+    <epp:phrase id="document_fieldhelp_media_sample_start">The start time of the sample of the media.</epp:phrase>
+    <epp:phrase id="document_fieldname_media_sample_stop">Sample stop</epp:phrase>
+    <epp:phrase id="document_fieldhelp_media_sample_stop">The stop time of the sample of the media.</epp:phrase>
+    <epp:phrase id="document_fieldname_media_video_codec">Video CODEC</epp:phrase>
+    <epp:phrase id="document_fieldhelp_media_video_codec">The video CODEC used by the media.</epp:phrase>
+    <epp:phrase id="document_fieldname_media_width">Width</epp:phrase>
+    <epp:phrase id="document_fieldhelp_media_width">The width in pixels of the media.</epp:phrase>
+    <epp:phrase id="document_fieldname_mime_type">MIME type</epp:phrase>
+    <epp:phrase id="document_fieldhelp_mime_type">The MIME type (application/pdf, text/plain, image/jpeg, audio/mp3, video/mpeg, etc.) of this document.</epp:phrase>
+    <epp:phrase id="document_fieldname_placement">Placement</epp:phrase>
+    <epp:phrase id="document_fieldhelp_placement">The placement of this document</epp:phrase>
     <epp:phrase id="document_fieldname_date_embargo">Embargo expiry date</epp:phrase>
     <epp:phrase id="document_fieldhelp_date_embargo">The date that a publisher- or sponsor-imposed embargo expires. On and after this date, this document will be made publicly accessible.
 <br/>Example: <span class="ep_form_example">2014 - all documents made publicly accessible on 1st January 2014</span>
@@ -2543,6 +2580,12 @@ Titles and Help for the System Fields
     <epp:phrase id="subject_radio_depositable"><label><epc:pin name="true"/>Yes, users can add items to this subject.</label><br/><label><epc:pin name="false"/>No. (In which case it should probably have some children.</label></epp:phrase>
     <epp:phrase id="subject_fieldname_subjectid">Subject ID String</epp:phrase>
     <epp:phrase id="subject_fieldhelp_subjectid">This is the internal key for this subject. It is used in the database and to generate the "views" filenames. It should contain only a-z, 0-9 and dash "/"and underscore "_".</epp:phrase>
+    <epp:phrase id="subject_fieldname_sortvalue">Sort Value</epp:phrase>
+    <epp:phrase id="subject_fieldhelp_sortvalue">Value to use when sorting this subject in preference to its ID String.</epp:phrase>
+    <epp:phrase id="subject_fieldname_sortvalue_sortvalue">Sort value</epp:phrase>
+    <epp:phrase id="subject_fieldhelp_sortvalue_sortvalue">The actual value to use when sorting this subject in preference to its ID String.</epp:phrase>
+    <epp:phrase id="subject_fieldname_sortvalue_lang">Language</epp:phrase>
+    <epp:phrase id="subject_fieldhelp_sortvalue_lang">The language that must be in use to use the Sort Value in preference to the ID String.</epp:phrase>
 
     <epp:phrase id="history_fieldname_objectid">Object ID</epp:phrase>
     <epp:phrase id="history_fieldname_datasetid">Object Type</epp:phrase>
@@ -2560,6 +2603,9 @@ Titles and Help for the System Fields
     <epp:phrase id="datasets_typename_user"><epc:phrase ref="datasetname_user"/></epp:phrase>
     <epp:phrase id="datasets_typename_file"><epc:phrase ref="datasetname_file"/></epp:phrase>
     <epp:phrase id="datasets_typename_import"><epc:phrase ref="datasetname_import"/></epp:phrase>
+    <epp:phrase id="datasets_typename_citationcache"><epc:phrase ref="datasetname_citationcache"/></epp:phrase>
+    <epp:phrase id="datasets_typename_triple"><epc:phrase ref="datasetname_triple"/></epp:phrase>
+    <epp:phrase id="datasets_typename_upload_progress"><epc:phrase ref="datasetname_upload_progress"/></epp:phrase>
 
 
 <!-- Plugin phrases -->
@@ -3417,6 +3463,22 @@ PY = 2006 and OG = (Cambridge)<br />
 <epp:phrase id="request_fieldname_expiry_date">Expiry date</epp:phrase>
 <epp:phrase id="request_fieldhelp_expiry_date"></epp:phrase>
 
+<epp:phrase id="request_fieldname_captcha">CAPTCHA</epp:phrase>
+<epp:phrase id="request_fieldhelp_captcha">Challenge to check user making this request is a human being.</epp:phrase>
+<epp:phrase id="request_fieldname_datestamp">Date</epp:phrase>
+<epp:phrase id="request_fieldhelp_datestamp">Date and time of this request.</epp:phrase>
+<epp:phrase id="request_fieldname_docid">Document ID</epp:phrase>
+<epp:phrase id="request_fieldhelp_docid">The ID of the document for which this request has been made.</epp:phrase>
+<epp:phrase id="request_fieldname_email">Responder email addresses</epp:phrase>
+<epp:phrase id="request_fieldhelp_email">The email addresses (comma separated) of who will be contacted about the request.</epp:phrase>
+<epp:phrase id="request_fieldname_eprintid">Eprint ID</epp:phrase>
+<epp:phrase id="request_fieldhelp_eprintid">The ID of the eprint for the document of this request.</epp:phrase>
+<epp:phrase id="request_fieldname_requestid">Request ID</epp:phrase>
+<epp:phrase id="request_fieldhelp_requestid">The ID of this request.</epp:phrase>
+<epp:phrase id="request_fieldname_userid">Responder User ID</epp:phrase>
+<epp:phrase id="request_fieldhelp_userid">The ID of the user who responded to this request.</epp:phrase>
+
+
 <epp:phrase id="request/request_email:subject">Request for &quot;<epc:pin name="eprint"/>&quot;</epp:phrase>
 <epp:phrase id="request/request_email:body"><p>This item has been requested from <epc:phrase ref="archive_name" /> by <epc:pin name="requester"/>. Please can you respond.</p>
 
@@ -3556,18 +3618,27 @@ PY = 2006 and OG = (Cambridge)<br />
 <epp:phrase id="datasethelp_access">Stores requests generated from the Web interface</epp:phrase>
 <epp:phrase id="datasetname_history">Object Revisions</epp:phrase>
 <epp:phrase id="datasethelp_history">Stores information about revisions made to objects (eprints, users etc.)</epp:phrase>
-<epp:phrase id="datasetname_request">Full-text Requests</epp:phrase>
-<epp:phrase id="datasethelp_request">Stores requests made for full-texts to be delivered by email</epp:phrase>
+<epp:phrase id="datasetname_request">Requests</epp:phrase>
+<epp:phrase id="datasethelp_request">Stores requests made for full-texts, changes, new user accounts, etc.</epp:phrase>
 <epp:phrase id="datasethelp_import">Stores the details of an import.</epp:phrase>
 <epp:phrase id="datasethelp_file">Technical data on files stored.</epp:phrase>
 <epp:phrase id="datasetname_event_queue">Tasks</epp:phrase>
 <epp:phrase id="datasethelp_event_queue">Scheduled tasks for the indexer process.</epp:phrase>
+<epp:phrase id="datasetname_citationcache">Citation Caches</epp:phrase>
+<epp:phrase id="datasethelp_citationcache">Caches of citations for objects (eprints, users, etc.)</epp:phrase>
+<epp:phrase id="datasetname_triple">Triples</epp:phrase>
+<epp:phrase id="datasethelp_triple">Subject-Predicate-Object annotations defining relationships between objects.</epp:phrase>
+<epp:phrase id="datasetname_upload_progress">Upload Progresses</epp:phrase>
+<epp:phrase id="datasethelp_upload_progress">The progress of the upload of a file.</epp:phrase>
 
 <epp:phrase id="message_fieldopt_type_message">Message</epp:phrase>
 <epp:phrase id="message_fieldopt_type_warning">Warning</epp:phrase>
 <epp:phrase id="message_fieldopt_type_error">Error</epp:phrase>
-<epp:phrase id="message_fieldname_messageid">MessageID</epp:phrase>
-<epp:phrase id="message_fieldname_userid">UserID</epp:phrase>
+<epp:phrase id="message_fieldname_messageid">Message ID</epp:phrase>
+<epp:phrase id="message_fieldname_datestamp">Date</epp:phrase>
+<epp:phrase id="message_fieldname_message">Messsage text</epp:phrase>
+<epp:phrase id="message_fieldname_type">Type</epp:phrase>
+<epp:phrase id="message_fieldname_userid">User ID</epp:phrase>
 
 <!-- Scheduler Queue -->
 
@@ -3589,13 +3660,61 @@ PY = 2006 and OG = (Cambridge)<br />
 <epp:phrase id="event_queue_fieldname_userid">Owner</epp:phrase>
 
 <!-- Captcha -->
-
 <epp:phrase id="validate:recaptcha_mismatch">There was an error with the reCAPTCHA. Please try again.</epp:phrase>
 <epp:phrase id="user_fieldname_captcha">Captcha Challenge</epp:phrase>
 <epp:phrase id="user_fieldhelp_captcha">To prevent robots from filling in this form you must verify this captcha.</epp:phrase>
 
 <!-- Cachemap -->
+<epp:phrase id="cachemap_fieldname_cachemapid">Cache Table ID</epp:phrase>
 <epp:phrase id="cachemap_fieldname_created">Creation Time</epp:phrase>
+<epp:phrase id="cachemap_fieldname_lastused">Last used</epp:phrase>
+<epp:phrase id="cachemap_fieldname_oneshot">One shot</epp:phrase>
+<epp:phrase id="cachemap_fieldname_searchexp">Search expression</epp:phrase>
+<epp:phrase id="cachemap_fieldname_userid">User ID</epp:phrase>
+
+<!-- Access -->
+<epp:phrase id="access_fieldname_accessid">Access ID</epp:phrase>
+<epp:phrase id="access_fieldname_datestamp">Date</epp:phrase>
+<epp:phrase id="access_fieldname_referent_docid">Document requested</epp:phrase>
+<epp:phrase id="access_fieldname_referent_id">Item requested</epp:phrase>
+<epp:phrase id="access_fieldname_referring_entity_id">Referer URL</epp:phrase>
+<epp:phrase id="access_fieldname_requester_country">Requester's country</epp:phrase>
+<epp:phrase id="access_fieldname_requester_id">Requester's IP address</epp:phrase>
+<epp:phrase id="access_fieldname_requester_institution">Requester's organisation</epp:phrase>
+<epp:phrase id="access_fieldname_requester_user_agent">Requester's user agent</epp:phrase>
+<epp:phrase id="access_fieldname_service_type_id">View or download</epp:phrase>
+
+<!-- Citationcache -->
+<epp:phrase id="citationcache_fieldname_citation_text">Citation text</epp:phrase>
+<epp:phrase id="citationcache_fieldname_citationcacheid">Citation cache ID</epp:phrase>
+<epp:phrase id="citationcache_fieldname_datasetid">Dataset ID</epp:phrase>
+<epp:phrase id="citationcache_fieldname_objectid">Object ID</epp:phrase>
+<epp:phrase id="citationcache_fieldname_style">Citation style</epp:phrase>
+<epp:phrase id="citationcache_fieldname_timestamp">Time created</epp:phrase>
+
+<!-- Loginticket -->
+<epp:phrase id="loginticket_fieldname_code">Code</epp:phrase>
+<epp:phrase id="loginticket_fieldname_expires">Expires at</epp:phrase>
+<epp:phrase id="loginticket_fieldname_ip">IP address</epp:phrase>
+<epp:phrase id="loginticket_fieldname_securecode">Secure code</epp:phrase>
+<epp:phrase id="loginticket_fieldname_time">Created at</epp:phrase>
+<epp:phrase id="loginticket_fieldname_userid">User ID</epp:phrase>
+
+<!-- Triple -->
+<epp:phrase id="triple_fieldname_lang">Language</epp:phrase>
+<epp:phrase id="triple_fieldname_object">Object</epp:phrase>
+<epp:phrase id="triple_fieldname_predicate">Predicate</epp:phrase>
+<epp:phrase id="triple_fieldname_primary_resource">Primary resource</epp:phrase>
+<epp:phrase id="triple_fieldname_secondary_resource">Secondary resource</epp:phrase>
+<epp:phrase id="triple_fieldname_subject">Subject</epp:phrase>
+<epp:phrase id="triple_fieldname_tripleid">Triple ID</epp:phrase>
+<epp:phrase id="triple_fieldname_type">Type</epp:phrase>
+
+<!-- Upload Progress -->
+<epp:phrase id="upload_progress_fieldname_expires">Expires at</epp:phrase>
+<epp:phrase id="upload_progress_fieldname_progressid">Progress ID</epp:phrase>
+<epp:phrase id="upload_progress_fieldname_received">Received (bytes)</epp:phrase>
+<epp:phrase id="upload_progress_fieldname_size">Size (bytes)</epp:phrase>
 
 
 
@@ -3748,6 +3867,17 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="archive:workflow:stage:notes:title">Extras</epp:phrase>
     <epp:phrase id="archive:workflow:stage:local:title">Custom</epp:phrase>
 
+    <epp:phrase id="eprint:workflow:stage:type:title" ref="archive:workflow:stage:type:title"/>
+    <epp:phrase id="eprint:workflow:stage:files:title" ref="archive:workflow:stage:files:title"/>
+    <epp:phrase id="eprint:workflow:stage:core:title" ref="archive:workflow:stage:core:title"/>
+    <epp:phrase id="eprint:workflow:stage:pubinfo:title" ref="archive:workflow:stage:pubinfo:title"/>
+    <epp:phrase id="eprint:workflow:stage:status:title" ref="archive:workflow:stage:status:title"/>
+    <epp:phrase id="eprint:workflow:stage:event:title" ref="archive:workflow:stage:event:title"/>
+    <epp:phrase id="eprint:workflow:stage:abstract:title" ref="archive:workflow:stage:abstract:title"/>
+    <epp:phrase id="eprint:workflow:stage:subjects:title" ref="archive:workflow:stage:subjects:title"/>
+    <epp:phrase id="eprint:workflow:stage:notes:title" ref="archive:workflow:stage:notes:title"/>
+    <epp:phrase id="eprint:workflow:stage:local:title" ref="archive:workflow:stage:local:title"/>
+
     <epp:phrase id="Plugin/Screen/Listing:title">View</epp:phrase>
     <epp:phrase id="Plugin/Screen/Listing:page_title">Manage <epc:pin name="dataset" /></epp:phrase>
     <epp:phrase id="Plugin/Screen/Listing:remove_column_confirm" ref="Plugin/Screen/Review:remove_column_confirm" />
@@ -3792,6 +3922,8 @@ PY = 2006 and OG = (Cambridge)<br />
 
     <epp:phrase id="Plugin/Screen/Workflow:event_queue:core_stage:title" ref="metapage_title_core" />
     <epp:phrase id="Plugin/Screen/Workflow:event_queue:commit_stage:title" ref="Plugin/Screen/Workflow/Commit:title" />
+    <epp:phrase id="event_queue:workflow:stage:core:title" ref="metapage_title_core" />
+    <epp:phrase id="event_queue:workflow:stage:commit:title" ref="Plugin/Screen/Workflow/Commit:title" />
 
     <epp:phrase id="Plugin/Screen/EPrint/UploadMethod/File:title" ref="Plugin/InputForm/Component/Upload:from_file" />
     <epp:phrase id="Plugin/Screen/EPrint/UploadMethod/File:unsupported_format">No method available to extract data from uploaded file.</epp:phrase>

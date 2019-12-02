@@ -671,6 +671,7 @@ sub config_core
 	$config{adminemail} = undef;
 
 	$config{archive_name} = "Test Repository";
+	$config{organisation_name} = "Organisation of Test";
 
 	if( ref($repo) )
 	{
@@ -679,6 +680,7 @@ sub config_core
 			$config{$_} = $repo->config( $_ );
 		}
 		$config{archive_name} = $repo->phrase( "archive_name" );
+		$config{organisation_name} = $repo->phrase( "organisation_name" );
 	}
 
 print <<END;
@@ -856,6 +858,16 @@ script generates.
 END
 	$config{archive_name} = EPrints::Utils::get_input( '^.+$', 'Archive Name',  $config{archive_name} );
 
+        print <<END;
+
+Enter the name of the organisation in the default language. Again, if you wish to enter 
+other titles for other languages or enter non ascii characters then you may
+enter something as a placeholder and edit the XML config file which this
+script generates.
+
+END
+	$config{organisation_name} = EPrints::Utils::get_input( '^.+$', 'Organisation Name',  $config{organisation_name} );
+
 	# Write files?
 
 	print "\n";
@@ -920,6 +932,7 @@ EOF
             xmlns:epp="http://eprints.org/ep3/phrase">
 
     <epp:phrase id="archive_name">$config{archive_name}</epp:phrase>
+    <epp:phrase id="organisation_name">$config{organisation_name}</epp:phrase>
 
 </epp:phrases>
 END

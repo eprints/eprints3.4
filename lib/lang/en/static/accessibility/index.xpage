@@ -1,0 +1,159 @@
+<?xml version="1.0" standalone="no" ?>
+<!DOCTYPE page SYSTEM "entities.dtd" >
+<xpage:page xmlns="http://www.w3.org/1999/xhtml" xmlns:xpage="http://eprints.org/ep3/xpage" xmlns:epc="http://eprints.org/ep3/control">
+<xpage:title>Accessibility</xpage:title>
+<xpage:body>
+
+<h2 id="accessibility-statement-for-website-name">Accessibility statement for <epc:phrase ref="archive_name" /></h2>
+<p><epc:phrase ref="archive_name" /> is run by <epc:phrase ref="organisation_name" />. We want as many people as possible to be able to use <epc:phrase ref="archive_name" />. For example, that means you should be able to:
+  <ul>
+    <li>change colours, contrast levels and fonts</li>
+    <li>zoom in up to 300% without the text spilling off the screen</li>
+    <li>navigate most of the website using just a keyboard</li>
+    <li>navigate most of the website using speech recognition software</li>
+    <li>listen to most of the website using a screen reader (including the most recent versions of JAWS, NVDA and VoiceOver)</li>
+  </ul>
+</p>
+
+<p>We've also made the website text as simple as possible to understand.</p>
+
+<p><a rel="external" href="https://mcmw.abilitynet.org.uk/">AbilityNet</a> has advice on making your device easier to use if you have a disability.</p>
+
+<h3 id="how-accessible-website-is">How accessible <epc:phrase ref="archive_name" /> is</h3>
+<p>We know some parts of <epc:phrase ref="archive_name" /> are not fully accessible:</p>
+<ul>
+  <li>most older PDF documents are not fully accessible to screen reader software</li>
+<!-- Examples:
+  <li>the text will not reflow in a single column when you change the size of the browser window</li>
+  <li>you cannot modify the line height or spacing of text</li>
+  <li>most audio and video files do not have captions</li>
+  <li>some of our online forms are difficult to navigate using just a keyboard</li>
+  <li>you cannot skip to the main content when using a screen reader</li>
+-->
+</ul>
+
+<h3 id="what-to-do-if-you-cannot-access-parts-of-this-website">What to do if you cannot access parts of <epc:phrase ref="archive_name" /></h3>
+<p>If you need information on <epc:phrase ref="archive_name" /> in a different format like accessible PDF, large print, easy read, audio recording or braille:</p>
+<ul>
+  <li>email <a href="mailto:{$config{adminemail}}"><epc:print expr="$config{adminemail}" /></a></li>
+</ul>
+<!-- <p>We'll consider your request and get back to you in [number] days.</p> -->
+
+<h3 id="reporting-accessibility-problems-with-this-website">Reporting accessibility problems with  <epc:phrase ref="archive_name" /></h3>
+<p>We're always looking to improve the accessibility of <epc:phrase ref="archive_name" />. If you find any problems not listed on this page or think we’re not meeting accessibility requirements, contact by email: <a href="mailto:{$config{adminemail}}"><epc:print expr="$config{adminemail}" /></a>.</p>
+
+<h3 id="enforcement-procedure">Enforcement procedure</h3>
+<p>The Equality and Human Rights Commission (EHRC) is responsible for enforcing the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018 (the 'accessibility regulations'). If you’re not happy with how we respond to your complaint, <a rel="external" href="https://www.equalityadvisoryservice.com/">contact the Equality Advisory and Support Service (EASS)</a>.</p>
+
+<!--
+<h2 id="contacting-us-by-phone-or-visiting-us-in-person">Contacting us by phone or visiting us in person</h2>
+<p>We provide a text relay service for people who are deaf, hearing impaired or have a speech impediment.</p>
+<p>Our offices have audio induction loops, or if you contact us before your visit we can arrange a British Sign Language (BSL) interpreter.</p>
+<p>Find out how to contact us [add link to contact details page].</p>
+-->
+
+<h2 id="technical-information-about-this-websites-accessibility">Technical information about  <epc:phrase ref="archive_name" />'s accessibility</h2>
+<p><epc:phrase ref="organisation_name" /> is committed to making its website accessible, in accordance with the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018.</p>
+<!-- <p>This website is partially compliant with the <a rel="external" href="https://www.w3.org/TR/WCAG21/">Web Content Accessibility Guidelines version 2.1</a> AA standard, due to the non-compliances listed below.</p> -->
+<p><epc:phrase ref="archive_name" /> is not compliant with the <a rel="external" href="https://www.w3.org/TR/WCAG21/">Web Content Accessibility Guidelines version 2.1</a> AA standard. The non-accessible sections are listed below.</p>
+
+<h2 id="non-accessible-content">Non accessible content</h2>
+<p>The content listed below is non-accessible for the following reasons.</p>
+<p>We're always looking to improve the accessibility of <epc:phrase ref="archive_name" />. If you find any problems not listed on this page or think we're not meeting accessibility requirements, contact by email: <a href="mailto:{$config{adminemail}}"><epc:print expr="$config{adminemail}" /></a>.</p>
+
+<h3 id="non-compliance-with-the-accessibility-regulations">Non compliance with the accessibility regulations</h3>
+<p>We are yet to compile a list of where and how  <epc:phrase ref="archive_name" /> is non-compliant with accessibility regulations.</p>
+<!-- 
+[Note: In this subsection, list:
+
+    accessibility problems
+    which of the WCAG 2.1 AA success criteria the problem fails on
+    when you plan to fix the problem
+
+Do not include any problems where you're claiming disproportionate burden, or where the problem is outside the scope of the accessibility regulations (those should go in the subsections below).]
+
+Example:
+
+Some images do not have a text alternative, so people using a screen reader cannot access the information. This fails WCAG 2.1 success criterion 1.1.1 (non-text content).
+
+We plan to add text alternatives for all images by September 2020. When we publish new content we'll make sure our use of images meets accessibility standards.
+-->
+
+<h3 id="disproportionate-burden">Disproportionate burden</h3>
+<p>We are yet to compile a list of problems with fixing them would be a disproportionate burden.</p>
+<!-- 
+[Note: in this subsection list:
+
+    accessibility problems you're claiming would be a disproportionate burden to fix
+    which of the WCAG 2.1 AA success criteria the problem fails on
+
+Bear in mind that something which is a disproportionate burden now will not necessarily be a disproportionate burden forever. If the circumstances change, your ability to claim disproportionate burden may change too.]
+
+Examples:
+
+Navigation and accessing information
+
+There's no way to skip the repeated content in the page header (for example, a 'skip to main content' option). This fails WCAG 2.1 success criterion 2.4.1 (bypass blocks).
+
+It’s not always possible to change the device orientation from horizontal to vertical without making it more difficult to view the content. This fails WCAG 2.1 success criterion 1.3.4 (orientation).
+
+It's not possible for users to change text size without some of the content overlapping. This fails WCAG 2.1 success criterion 1.4.4 (resize text).
+Interactive tools and transactions
+
+Some of our interactive forms are difficult to navigate using a keyboard. For example, because some form controls are missing a 'label' tag.
+
+Our forms are built and hosted through third party software and 'skinned' to look like our website. This fails WCAG 2.1 success criterion 1.3.1 (information and relationships).
+
+We've assessed the cost of fixing the issues with navigation and accessing information, and with interactive tools and transactions. We believe that doing so now would be a disproportionate burden within the meaning of the accessibility regulations. We will make another assessment when the supplier contract is up for renewal, likely to be in [rough timing].
+--> 
+
+<h3 id="content-thats-not-within-the-scope-of-the-accessibility-regulations">Content that's not within the scope of the accessibility regulations</h3>
+<!--
+[Note: in this subsection list:
+
+  accessibility problems that fall outside the scope of the accessibility regulations
+  which of the WCAG 2.1 AA success criteria the problem fails on]
+-->
+
+<h4 id="pdfs-and-other-documents">PDFs and other documents</h4>
+<p>Many of our older PDFs and Word documents do not meet accessibility standards - for example, they may not be structured so they're accessible to a screen reader. This does not meet WCAG 2.1 success criterion 4.1.2 (name, role value).</p>
+<p>The accessibility regulations <a rel="external" href="http://www.legislation.gov.uk/uksi/2018/952/regulation/4/made">do not require us to fix PDFs or other documents placed in <epc:phrase ref="archive_name" />'s archive before 23 September 2019</a> as these items are considered "archives".</p>
+<p>PDFs and other documents added after 23 September 2019 may be user provided and therefore not fully accessible. <epc:phrase ref="archive_name" /> has a review process that should identify these before they are made available for download.  If this is not the case please contact by email: <a href="mailto:{$config{adminemail}}"><epc:print expr="$config{adminemail}" /></a>.</p>
+
+<!--
+Other Example:
+<h4 id="video-captions">Audio and video captions</h4>
+<p>Most audio and video files do not have captions. This fails WCAG 2.1 success criterion 1.2.2 (captions - prerecorded).</p>
+-->
+
+<h2 id="how-we-tested-this-website">How we tested <epc:phrase ref="archive_name" /></h2>
+<p><epc:phrase ref="archive_name" /> has yet to be tested.</p>
+<!-- 
+<p><epc:phrase ref="archive_name" /> was last tested on [date]. The test was carried out by [add name of organisation that carried out test, or indicate that you did your own testing].</p>
+<p>We used this approach to decide on a sample of pages to test [add link to explanation of how you decided which pages to test].</p>
+<p>We tested:
+<ul>
+  <li><epc:phrase ref="archive_name" />'s homepage, available at <a href="$config{http_url}">{$config{http_url}}</a></li>
+  <li>Its 'About the Repository' page, available at <a href="$config{http_url}/information.html">{$config{http_url}}/information.html</a></li>
+  <li>Its 'Browse Items' page, available at <a href="$config{http_url}/view/">{$config{http_url}}/view/</a></li>
+  <li>Its 'Browse by Year' page, available at <a href="$config{http_url}/view/year/">{$config{http_url}}/view/year/</a></li>
+  <li>Its 'Items where Year is 2019' page, available at <a href="$config{http_url}/view/year/2019.html">{$config{http_url}}/view/year/2019.html</a></li>
+  <li>Its '<epc:phrase ref="archive_name" /> User Documentation' page, available at <a href="$config{http_url}/help/">{$config{http_url}}/help/</a></li>
+  <li>Its 'About EPrints' page, available at <a href="$config{http_url}/eprints/">{$config{http_url}}/eprints/</a></li>
+  <li>Its 'Simple Search' page and subsequent results page, available at <a href="$config{cgi_url}/search/simple/">{$config{cgi_url}}/search/simple/</a></li>
+  <li>Its 'Advanced Search' page and subsequent results page, available at <a href="$config{cgi_url}/search/advanced/">{$config{cgi_url}}/search/advanced/</a></li>
+  <li>A selection of publication summary pages, available at URLs of the format $config{http_url}/eprint/id/[NUMBER]</li>
+</ul>
+</p>
+<p>You can read the full accessibility test report <a href="report.html">here</a>.</p>
+-->
+
+<h2 id="what-were-doing-to-improve-accessibility">What we’re doing to improve accessibility</h2>
+<!--
+[Note: publishing an accessibility roadmap is optional. It’s a good idea to publish one if you want to be specific about the order you’re planning to tackle accessibility issues, and there’s no space to do so in the accessibility statement itself.] 
+<p>Our <a href="roadmap.html">accessibility roadmap</a> shows how and when we plan to improve accessibility on <epc:phrase ref="archive_name" />.</a>    
+-->
+<p>This statement was prepared on 2 December 2019. It was last updated on 2 December 2019.</p>
+
+</xpage:body>
+</xpage:page>

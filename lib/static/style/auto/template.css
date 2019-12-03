@@ -145,7 +145,8 @@ hr.ep_tm_last {
 
 .ep_tm_searchbar {
         border-width:0;
-        width:100%;
+	display: flex;
+	justify-content: space-between;
 }
 
 .ep_tm_searchbar td {

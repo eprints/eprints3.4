@@ -11,15 +11,11 @@
 <xpage:body>
 
 <div class="ep_msg_message">
-  <div class="ep_msg_message_content">
-    <table>
-      <tr>
-        <td>
-          <img alt="Message" src="{$config{rel_path}}/style/images/message.png" />
-        </td>
-        <td>Welcome to <epc:phrase ref="archive_name" />. <a href="http://www.eprints.org/d/?keyword=NewRepository&amp;version={$config{version_id}}" target="_blank">Click here to start customising this repository</a>.</td>
-      </tr>
-    </table>
+  <div class="ep_msg_message_content" style="display: table; width: 100%;">
+    <div class="ep_msg_message_icon" style="padding: 1em; display: table-cell; vertical-align: middle;">
+      <img alt="Message" src="{$config{rel_path}}/style/images/message.png" />
+    </div>
+    <div class="ep_msg_message_text" style="padding: 1em; display: table-cell; vertical-align: middle; text-align: left;">Welcome to <epc:phrase ref="archive_name" />. <a rel="external" href="http://www.eprints.org/d/?keyword=NewRepository&amp;version={$config{version_id}}" target="_blank">Start customising this repository</a>.</div>
   </div>
 </div>
 
@@ -27,20 +23,20 @@
   <span id="atom-feed" class="ep_search_feed">
     <a href="{$config{rel_cgipath}}/latest_tool?output=Atom">
       <img alt="[atom feed icon]" src="{$config{rel_path}}/style/images/feed-icon-14x14.png" style="border: 0;" />
-    </a> 
-    <a href="{$config{rel_cgipath}}/latest_tool?output=Atom">Atom</a>
+      Atom
+    </a>
   </span>
   <span id="rss-feed" class="ep_search_feed">
     <a href="{$config{rel_cgipath}}/latest_tool?output=RSS">
       <img alt="[rss feed]" src="{$config{rel_path}}/style/images/feed-icon-14x14.png" style="border: 0;" />
-    </a> 
-    <a href="{$config{rel_cgipath}}/latest_tool?output=RSS">RSS 1.0</a>
+      RSS 1.0
+    </a>
   </span>
   <span id="rss2-feed" class="ep_search_feed">
     <a href="{$config{rel_cgipath}}/latest_tool?output=RSS2">
       <img alt="[rss 2 feed]" src="{$config{rel_path}}/style/images/feed-icon-14x14.png" style="border: 0;" />
+      RSS 2.0
     </a>
-    <a href="{$config{rel_cgipath}}/latest_tool?output=RSS2">RSS 2.0</a>
   </span>
 </div>
 

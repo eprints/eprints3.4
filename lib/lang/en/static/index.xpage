@@ -10,47 +10,56 @@
 <xpage:title>Welcome to <epc:phrase ref="archive_name" /></xpage:title>
 <xpage:body>
 
-<div class="ep_msg_message"><div class="ep_msg_message_content"><table><tbody><tr><td>
-<img alt="Message" src="{$config{rel_path}}/style/images/message.png" /></td><td>
-Welcome to <epc:phrase ref="archive_name" />. <a href="http://www.eprints.org/d/?keyword=NewRepository&amp;version={$config{version_id}}" target="_blank">Click here to start customising this repository</a>.
-</td></tr></tbody></table></div></div>
-
-<div style="text-align: right">
-<span class="ep_search_feed"><a href="{$config{rel_cgipath}}/latest_tool?output=Atom"><img alt="[feed]" src="{$config{rel_path}}/style/images/feed-icon-14x14.png" border="0" /></a> <a href="{$config{rel_cgipath}}/latest_tool?output=Atom">Atom</a></span>
-<span class="ep_search_feed"><a href="{$config{rel_cgipath}}/latest_tool?output=RSS"><img alt="[feed]" src="{$config{rel_path}}/style/images/feed-icon-14x14.png" border="0" /></a> <a href="{$config{rel_cgipath}}/latest_tool?output=RSS">RSS 1.0</a></span>
-<span class="ep_search_feed"><a href="{$config{rel_cgipath}}/latest_tool?output=RSS2"><img alt="[feed]" src="{$config{rel_path}}/style/images/feed-icon-14x14.png" border="0" /></a> <a href="{$config{rel_cgipath}}/latest_tool?output=RSS2">RSS 2.0</a></span>
+<div class="ep_msg_message">
+  <div class="ep_msg_message_content" style="display: table; width: 100%;">
+    <div class="ep_msg_message_icon" style="padding: 1em; display: table-cell; vertical-align: middle;">
+      <img alt="Message" src="{$config{rel_path}}/style/images/message.png" />
+    </div>
+    <div class="ep_msg_message_text" style="padding: 1em; display: table-cell; vertical-align: middle; text-align: left;">Welcome to <epc:phrase ref="archive_name" />. <a rel="external" href="http://www.eprints.org/d/?keyword=NewRepository&amp;version={$config{version_id}}" target="_blank">Start customising this repository</a>.</div>
+  </div>
 </div>
 
+<div style="text-align: right;">
+  <span id="atom-feed" class="ep_search_feed">
+    <a href="{$config{rel_cgipath}}/latest_tool?output=Atom">
+      <img alt="[atom feed icon]" src="{$config{rel_path}}/style/images/feed-icon-14x14.png" style="border: 0;" />
+      Atom
+    </a>
+  </span>
+  <span id="rss-feed" class="ep_search_feed">
+    <a href="{$config{rel_cgipath}}/latest_tool?output=RSS">
+      <img alt="[rss feed]" src="{$config{rel_path}}/style/images/feed-icon-14x14.png" style="border: 0;" />
+      RSS 1.0
+    </a>
+  </span>
+  <span id="rss2-feed" class="ep_search_feed">
+    <a href="{$config{rel_cgipath}}/latest_tool?output=RSS2">
+      <img alt="[rss 2 feed]" src="{$config{rel_path}}/style/images/feed-icon-14x14.png" style="border: 0;" />
+      RSS 2.0
+    </a>
+  </span>
+</div>
 
-<div class="ep_toolbox" ><div class="ep_toolbox_content" >
-  <a href="{$config{perl_url}}/latest">Latest Additions</a><br /><br />
-  View items added to the repository in the past week.  
-</div></div>
+<dl id="ep-homepage-menu" title="Homepage Menu">
+  <dt id="latest-additions"><a href="{$config{perl_url}}/latest">Latest Additions</a></dt>
+  <dd>View items added to the repository in the past week.</dd>
 
-<div class="ep_toolbox"><div class="ep_toolbox_content" >
- <a href="{$config{perl_url}}/search/advanced">Search Repository</a><br /><br />
- Search the repository using a full range of fields. Use the search field at the top of the page for a quick search.
-</div></div>
+  <dt id="search-repository"><a href="{$config{perl_url}}/search/advanced">Search Repository</a></dt>
+  <dd>Search the repository using a full range of fields. Use the search field at the top of the page for a quick search.</dd>
+    
+  <dt id="browse-repository"><a href="{$config{base_url}}/view/subjects/">Browse Repository</a></dt>
+  <dd>Browse the items in the repository by subject.</dd>
+ 
+  <dt id="about-this-repository"><a href="{$config{base_url}}/information.html">About this Repository</a></dt>
+  <dd>More information about this site.</dd>
 
-<div class="ep_toolbox"><div class="ep_toolbox_content" >
- <a href="{$config{base_url}}/view/subjects/">Browse Repository</a><br /><br />
- Browse the items in the repository by subject.
-</div></div>
-
-<div class="ep_toolbox"><div class="ep_toolbox_content" >
- <a href="{$config{base_url}}/information.html">About this Repository</a><br /><br />
- More information about this site.
-</div></div>
-
-<div class="ep_toolbox"><div class="ep_toolbox_content" >
- <a href="{$config{base_url}}/policies.html">Repository Policies</a><br /><br />
- Policy for use of material in this repository.
-</div></div>
+  <dt id="repository-policies"><a href="{$config{base_url}}/policies.html">Repository Policies</a></dt>
+  <dd>Policy for use of material in this repository.</dd>
+</dl>
 
 <p style="margin-top: 2em; font-size: 90%">
 <epc:phrase ref="archive_name" /> supports <a href="http://www.openarchives.org"><abbr title="Open Archives Protocol for Metadata Harvesting v2.0">OAI 2.0</abbr></a> with a base URL of <code><epc:print expr="$config{perl_url}" />/oai2</code>
 </p>
-
 
 </xpage:body>
 </xpage:page>

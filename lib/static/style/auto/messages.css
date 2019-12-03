@@ -7,11 +7,21 @@
 }
 
 .ep_msg_message_icon, .ep_msg_warning_icon, .ep_msg_error_icon {
-	padding: 10px;
+	padding: 1em; 
+	display: table-cell; 
+	vertical-align: middle;
+	max-width: 0;
 }
 
 .ep_msg_message_content, .ep_msg_error_content, .ep_msg_warning_content, .ep_msg_other_content {
 	border-style: solid;
 	border-width: 1px;
+}
+
+.ep_msg_message_text, .ep_msg_error_text, .ep_msg_warning_text, .ep_msg_other_text {
+	padding: 1em; 
+	display: table-cell; 
+	vertical-align: middle; 
+	text-align: left;
 }
 

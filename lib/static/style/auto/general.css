@@ -55,6 +55,24 @@ hr {
 	height: 2px;
 }
 
+dl.ep_normal > dt {
+	font-weight: bold;
+}
+
+dl#ep-homepage-menu dt {
+	border: 1px solid #ccc;
+	padding: 1em 1em 3em 1em;
+	box-shadow: 0 2px 6px rgba(100, 100, 100, 0.3);
+}
+
+dl#ep-homepage-menu dd {
+	position: relative;
+	top: -2em;
+	display: table-cell;
+	padding: 0 1em;
+}
+ 
+
 .ep_required {
 }
 

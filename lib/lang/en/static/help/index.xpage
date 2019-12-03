@@ -6,33 +6,34 @@
 
 
 <ul>
-  <li><a href="#Browsing">Browsing</a></li>
-  <li><a href="#Searching">Searching</a></li>
+  <li><a href="#browsing">Browsing</a></li>
+  <li><a href="#searching">Searching</a>
     <ul>
-    	<li>Text Search Fields</li>
-    	<li>Lists of Values</li>
-    	<li>Yes/No Fields </li>
+    	<li><a href="#text-search-fields">Text Search Fields</a></li>
+    	<li><a href="#list-of-values">Lists of Values</a></li>
+    	<li><a href="#yes-no-fields">Yes/No Fields</a></li>
     </ul>
-  <li><a href="#Registering">Registering</a></li>
-  <li><a href="#Depositing">Depositing Records</a></li>
+  </li>
+  <li><a href="#registering">Registering</a></li>
+  <li><a href="#depositing-records">Depositing Records</a>
     <ul>
-  	<li>Your User Record</li>
-  	<li>Your Workspace</li>
-  </ul>
-  <li><a href="#Process">Depositing Process</a> </li>
+  	<li><a href="#your-user-record">Your User Record</a></li>
+  	<li><a href="#your-workspace">Your Workspace</a></li>
+    </ul>
+  </li>
+  <li><a href="#the-depositing-process">The Depositing Process</a>
     <ul>
-  	<li>Deposit Type</li>
-  	<li>Succession/Commentary </li>
-  	<li>Bibliographic Information </li>
-  	<li>Subject Categories </li>
-  	<li>Document File Upload </li>
-  	
-  </ul>
+  	<li><a href="#deposit-type">Deposit Type</a></li>
+  	<li><a href="#succession-commentary">Succession/Commentary</a></li>
+  	<li><a href="#bibliographic-information">Bibliographic Information</a></li>
+  	<li><a href="#subject-categories">Subject Categories</a></li>
+  	<li><a href="#document-file-upload">Document File Upload</a></li>
+    </ul>
+  </li>
 </ul>
 
 
-<a name="Browsing"></a> 
-<h2>Browsing </h2>
+<h2 id="browsing">Browsing</h2>
 <p>Browsing is a good way to access documents if you don't have a specific
 idea of what you're looking for. There are two ways to browse the repository,
 by subject and by year.</p>
@@ -50,8 +51,7 @@ the repository (if any) which match this value.
 pertinent to the current document. Clicking on one of those subjects will
 take you back to the relevant browse by subject view. </p>
 
-<a name="Searching"></a> 
-<h2>Searching </h2>
+<h2 id="searching">Searching</h2>
 <p>The repository offers two levels of searching, simple and advanced. They
 are similar, but the advanced form lets you perform a finer-grained search
 using more fields. Access the simple search using the Search the Repository
@@ -59,32 +59,32 @@ link on the front page, or using the navigation bar at the top
 of the screen. To perform an advanced search, use the advanced search link
 at the top of the simple search page. </p>
 
-<h3>Text Search Fields </h3>
+<h3 id="text-search-fields">Text Search Fields</h3>
 <p>These are used to search fields like abstract or author. These are the
 fields where there is a text entry area, and a popup menu just to the
 right of it. Type your search terms into the box. You can decide how the
 system will use your search terms by selecting one of the options from the
 popup menu just to the right of the input box.</p>
 
-<dl>
-<dt><h4>Match all, in any order. </h4></dt>
-<dd><p>In the example shown, the system will search for records in which any
+<dl class="ep_normal" title="Text Search Field Matching">
+  <dt id="match-all-in-any-order">Match all, in any order.</dt>
+  <dd>In the example shown, the system will search for records in which any
 of the title, abstract or keywords fields contain both the word
-``patient'' and ``care''. </p></dd>
+``patient'' and ``care''.</dd>
 
-<dt><h4>Match any. </h4></dt>
-<dd><p>In the example shown, the system will search for any record with either
+  <dt id="match-any">Match any.</dt>
+  <dd>In the example shown, the system will search for any record with either
 the term ``patient'' or ``care,'' in any of the title, abstract or
-keywords fields.</p></dd>
+keywords fields.</dd>
 
-<dt><h4>Match as a phrase. </h4></dt>
-<dd><p>In this case, the system will search for your terms appearing exactly
+  <dt id="match-as-a-phrase">Match as a phrase.</dt>
+  <dd>In this case, the system will search for your terms appearing exactly
 as you type them. In the example, the system will return any record with
 the phrase ``patient care'' appearing in the title, abstract or
-keywords. </p></dd>
+keywords.</dd>
 </dl>
 
-<h3>Lists of Values </h3>
+<h3 id="list-of-values">Lists of Values</h3>
 <p>With these you can select one or more values from a list of values for
 the system to search for. If no value in the list is selected, the system
 will ignore this field (i.e. it will
@@ -95,32 +95,35 @@ attached to the list, you can also change search behaviour by selecting
 ``Any of these'' or ``All of these'' from the popup menu on the right of
 the list. </p>
 
-<dl>
-<dt><h4>Any of these. </h4></dt>
-<dd><p>If this is selected, any record which has any of the values you select
-will be retrieved. </p></dd>
+<dl class="ep_normal" title="List of Values Matching">
+  <dt id="any-of-these">Any of these.</dt>
+  <dd>If this is selected, any record which has any of the values you select
+will be retrieved.</dd>
 
-<dt><h4>All of these. </h4></dt>
-<dd><p>If you select this option, a record must have all the values you choose
-associated with it to be retrieved. </p></dd>
+  <dt id="all-of-these">All of these.</dt>
+  <dd>If you select this option, a record must have all the values you choose
+associated with it to be retrieved.</dd>
 </dl>
 
-<h3>Years </h3>
+<h3 id="years">Years</h3>
 <p>When you're searching a year field, you can specify a single year or
 range of years that you're interested in: </p>
 
-<dl>
-<dt>1999</dt>
-<dd>retrieves only records where the year is `1999'; </dd>
-<dt>1987-1990</dt>
-<dd>retrieves records with years between 1987 and 1990 inclusive; </dd>
-<dt>1995- </dt>
-<dd>retrieves records with years of 1995 or later; </dd>
-<dt>-1998</dt>
-<dd>retrieves records with years up to and including 1998. </dd>
+<dl class="ep_normal" title="Year Matching">
+  <dt>1999</dt>
+  <dd>retrieves only records where the year is `1999';</dd>
+
+  <dt>1987-1990</dt>
+  <dd>retrieves records with years between 1987 and 1990 inclusive;</dd>
+
+  <dt>1995- </dt>
+  <dd>retrieves records with years of 1995 or later;</dd>
+
+  <dt>-1998</dt>
+  <dd>retrieves records with years up to and including 1998.</dd>
 </dl>
 
-<h3>Yes/No Fields </h3>
+<h3 id="yes-no-fields">Yes/No Fields</h3>
 <p>Some fields can have the value yes or no, for example the ``Refereed''
 field. In this case, the search field lets you specify whether you want
 retrieved records to have the value yes or no for this field, or whether
@@ -130,8 +133,7 @@ records. </p>
 
 
 
-<a name="Registering"></a> 
-<h2>Registering</h2>
+<h2 id="registering">Registering</h2>
 
 
 <p>Certain services require you to register with the system so that it can
@@ -144,8 +146,7 @@ items, you need to fill out some personal details into a form (<a href="{$config
 the registration e-mail will contain instruction on how to do this. This
 same form is used to change user details once registered. </p>
 
-<a name="Depositing"></a> 
-<h2>Depositing Records</h2>
+<h2 id="depositing-records">Depositing Records</h2>
 
 <p>The first thing you'll need to do, after registering, is fill out your
 user record using the form at <a href="{$config{perl_url}}/users/record"><epc:print expr="$config{perl_url}" />/users/record</a>. When
@@ -161,7 +162,7 @@ vary slightly, depending on whether you are in the process of depositing
 any papers and whether you have any papers pending entry into the main
 repository. </p>
 
-<h3>Your User Record </h3>
+<h3 id="your-user-record">Your User Record</h3>
 
 <p>Your user record is used to hold contact information about you. Some of
 this information will be associated with eprints you upload; some of it is
@@ -192,7 +193,7 @@ a problem with the form, the form will be presented to you again with a
 description of what's wrong. Correct the error and click on ``Update
 Record'' again. </p>
 
-<h3>Your Workspace </h3>
+<h3 id="your-workspace">Your Workspace</h3>
 
 <p>If you start uploading a paper, you can decide that you wish to wait
 until later before completing the upload, and you can start on another
@@ -209,42 +210,43 @@ papers with some option buttons. The title of each paper you are uploading
 will be shown in the list, or its ID if you haven't yet given it a
 title. The option buttons are described below:</p>
 
-<dl>
-<dt><h4>Delete </h4></dt>
-<dd><p>If you select a paper and click on this button, that paper will be
+<dl class="ep_normal" title="Your Workspace Operations">
+  <dt id="your-workspace-delete">Delete</dt>
+  <dd><p>If you select a paper and click on this button, that paper will be
 removed from your workspace and discarded completely. You will be asked
 for confirmation first, so don't worry about accidentally clicking on
-it. Clones of any paper you delete are unaffected. </p></dd>
+it. Clones of any paper you delete are unaffected.</p></dd>
 
-<dt><h4>Edit </h4></dt>
-<dd><p>If you select a paper in your workspace and click this button, you will
-be able to carry on depositing that paper. </p></dd>
+  <dt id="your-workspace-edit">Edit</dt>
+  <dd><p>If you select a paper in your workspace and click this button, you will
+be able to carry on depositing that paper.</p></dd>
 
-<dt><h4>Deposit </h4></dt>
-<dd><p>If you're satisfied that you've completed uploading the paper and
+  <dt id="your-workspace-deposit">Deposit</dt>
+  <dd>
+    <p>If you're satisfied that you've completed uploading the paper and
 associated information as you had intended, then you can select the paper
 and click on this button to deposit the paper in the repository. Note that if
 there are problems with the paper (for instance, if a document file upload
 hasn't worked, or the associated bibliographic information is invalid),
 you will be told what is wrong, and you won't be able to deposit the paper
-until those problems are fixed. </p>
-<p>The depositing process is described in a following section. </p></dd>
+until those problems are fixed.</p>
+    <p>The depositing process is described in a following section.</p>
+  </dd>
 
-<dt><h4>New </h4></dt>
-<dd><p>This button creates a fresh record and starts the depositing
-process. </p></dd>
+  <dt id="your-workspace-new">New</dt>
+  <dd><p>This button creates a fresh record and starts the depositing
+process.</p></dd>
 
-<dt><h4>Clone </h4></dt>
-<dd><p>This button makes a clone of the paper you have selected from the
+  <dt id="your-workspace-clone">Clone</dt>
+  <dd><p>This button makes a clone of the paper you have selected from the
 list. This is useful if you are depositing a number of papers with similar
 information. You can fill out the common information, clone that paper,
 and then edit the clones so you aren't entering the same information
-twice. </p></dd>
+twice.</p></dd>
 </dl>
 
 
-<a name="Process"></a> 
-<h2>The Depositing Process </h2>
+<h2 id="the-depositing-process">The Depositing Process</h2>
 
 
 <p>The depositing process is divided into a number of stages. You can move
@@ -264,7 +266,7 @@ button when you are depositing papers. </p>
 
 
 
-<h3>Deposit Type </h3>
+<h3 id="deposit-type">Deposit Type</h3>
 <p>In this screen, you should select the one option on the list that best
 described your paper, for example ``conference paper'' or ``journal paper
 (paginated).'' The option you choose here will affect what bibliographic
@@ -274,7 +276,7 @@ stages. </p>
 
 <p>Then click on the ``Next'' button. </p>
 
-<h3>Succession/Commentary </h3>
+<h3 id="succession-commentary">Succession/Commentary </h3>
 
 <p>The repository can link together different versions of the same paper, as
 well as commentaries and responses to commentaries. These enable a reader
@@ -309,7 +311,7 @@ button when you're sure the information you've entered is correct. </p>
 <p>Note that you cannot deposit a later version of a paper that has been
 submitted by someone else. </p>
 
-<h3>Bibliographic Information </h3>
+<h3 id="bibliographic-information">Bibliographic Information</h3>
 
 <p>Next you will be asked to enter bibliographic information about your
 paper. The exact details that are required will vary depending on the
@@ -322,43 +324,37 @@ paper can be deposited; other fields are optional. </p>
 
 <p>The following are the types of input field you may see: </p>
 
-<dl>
-<dt><h4>Text boxes. </h4></dt>
+<dl class="ep_normal" title="Bibliographic Information Field Type">
+  <dt id="bibliographic-information-text-boxes">Text boxes.</dt>
+  <dd><p>Fairly straightforward. Just type the relevant information in, or copy
+and paste direct from your document.</p></dd>
 
-<dd><p>Fairly straightforward. Just type the relevant information in, or copy
-and paste direct from your document. </p></dd>
+  <dt id="bibliographic-information-popup-menus">Popup menus.</dt>
+  <dd><p>Just select the most appropriate option from the popup menu.</p></dd>
 
-<dt><h4>Popup menus. </h4></dt>
+  <dt id="bibliographic-information-checkboxes">Checkboxes.</dt>
+  <dd><p>Used to indicate a yes or no value.</p></dd>
 
-<dd><p>Just select the most appropriate option from the popup menu. </p></dd>
+  <dt id="bibliographic-information-lists">Lists.</dt>
+  <dd><p>Select one or more appropriate options from the list.</p></dd>
 
-<dt><h4>Checkboxes. </h4></dt>
-
-<dd><p>Used to indicate a yes or no value. </p></dd>
-
-<dt><h4>Lists. </h4></dt>
-
-<dd><p>Select one or more appropriate options from the list. </p></dd>
-
-<dt><h4>Page ranges. </h4></dt>
-
-<dd><p>Type the first page in the range into the box on the left, and the last
+  <dt id="bibliographic-information-page-ranges">Page ranges.</dt>
+  <dd><p>Type the first page in the range into the box on the left, and the last
 page in the box on the right. If the range consists of a single page, just
 enter the page number into the left-hand box, and leave the right-hand box
-empty. </p></dd>
+empty.</p></dd>
 
-<dt><h4>Names. </h4></dt>
-
-<dd><p>You can enter title, given name, family name and lineage. Title and
+  <dt id="bibliographic-information-names">Names.</dt>
+  <dd>
+    <p>You can enter title, given name, family name and lineage. Title and
 lineage can be ignored if you wish. Sometimes you can enter a list of
 names. In these cases, you can add more boxes for names by clicking on the
 ``More Spaces'' button on the right. Note that empty boxes are
 ignored. </p>
-
-<p>To remove names from a list just remove the name from the relevant
+    <p>To remove names from a list just remove the name from the relevant
 boxes and leave it empty. Don't worry about leaving a blank box in the
-middle of the list; the system will ``bunch up'' the list. </p></dd>
-
+middle of the list; the system will ``bunch up'' the list. </p>
+  </dd>
 </dl>
 
 <p>Once you've entered the relevant information, click on the ``Next''
@@ -370,7 +366,7 @@ what is wrong and re-present the form so you can fix the problems. </p>
 to move between the input fields, allowing you to enter the information
 quickly. </p>
 
-<h3>Subject Categories </h3>
+<h3 id="subject-categories">Subject Categories</h3>
 
 <p>In the subject categories stage, you should select the subject or
 subjects from the list that best represent the content of your
@@ -388,7 +384,7 @@ serious omissions. </p>
 <p>Once you've selected your subject categories, click on the ``Next''
 button. </p>
 
-<h3>Document Storage Formats </h3>
+<h3 id="document-storage-format">Document Storage Formats</h3>
 
 <p>This page shows you an overview of the document files you have uploaded
 to the repository. The table shows the list of formats you can upload on the
@@ -419,13 +415,13 @@ amiss. </p>
 taken to the ``Deposit Verification'' page described in a later
 section. </p>
 
-<h3>Document File Upload </h3>
+<h3 id="document-file-upload">Document File Upload </h3>
 
 <p>If there are no files uploaded in a particular format, you will be
 presented with an upload menu from here you can select how you'd like to
 upload files to the repository.</p>
 
-<h4>Plain files. </h4>
+<h4 id="document-file-upload-plain-files">Plain files.</h4>
 
 <p>Choose this option if you want to upload files you have on your
 computer as-is. For example, if you have a PDF file on your hard disk, you
@@ -485,7 +481,7 @@ start again. </p>
 necessary files, click on ``Finished''. This will take you back to the
 ``Document Storage Format'' page. </p>
 
-<h4>Uploading From an Existing Web Site </h4>
+<h4 id="document-file-upload-uploading-from-an-existing-web-site">Uploading From an Existing Web Site </h4>
 
 <p>When you give the repository a URL to retrieve your document from, the
 repository stores a copy of the file stored at that URL. If the URL is an
@@ -525,7 +521,7 @@ months and it usually works very well. </p>
 files'' from the ``Document File Upload'' screen, and try another
 uploading method. </p>
 
-<h4>Deposit Verification </h4>
+<h4 id="document-file-upload-deposit-verification">Deposit Verification </h4>
 
 <p>This page will display the abstract page for your document as it will
 appear in the repository. You should carefully check that all information has

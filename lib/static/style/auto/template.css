@@ -147,6 +147,7 @@ hr.ep_tm_last {
         border-width:0;
 	display: flex;
 	justify-content: space-between;
+	white-space: nowrap;
 }
 
 .ep_tm_searchbar td {
@@ -170,7 +171,7 @@ hr.ep_tm_last {
 .ep_tm_footer {
 	clear: both;
 	margin-top: 20px;
-	font-size: 80%;
+	font-size: 90%;
 	border-top-width: 2px;
 	border-top-style: solid;
 	padding: 10px 10px 0px 10px;

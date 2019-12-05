@@ -6,11 +6,10 @@
 	margin-bottom: 10px;
 }
 
-.ep_msg_message_icon, .ep_msg_warning_icon, .ep_msg_error_icon {
+.ep_msg_message_icon, .ep_msg_warning_icon, .ep_msg_error_icon, .ep_msg_other_icon {
 	padding: 1em; 
 	display: table-cell; 
 	vertical-align: middle;
-	max-width: 0;
 }
 
 .ep_msg_message_content, .ep_msg_error_content, .ep_msg_warning_content, .ep_msg_other_content {

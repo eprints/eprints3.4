@@ -1,0 +1,6 @@
+/* EPrints 3 export style */
+
+.ep_export_bar {
+	display: flex; 
+	justify-content: space-between;
+}

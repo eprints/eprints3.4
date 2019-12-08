@@ -464,7 +464,6 @@ sub _render_action_aux
 		{
 			$frag->appendChild( $session->make_element( "img",
 				src=>$icon,
-				title=>$title,
 				alt=>$title,
 				class=>"ep_form_action_icon",
 			) );

@@ -1497,9 +1497,8 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
     <epp:phrase id="lib/searchexpression:any">any of these conditions</epp:phrase>
     <epp:phrase id="lib/searchexpression:all">all of these conditions</epp:phrase>
     <epp:phrase id="lib/searchexpression:must_fulfill">Retrieved records must fulfill</epp:phrase>
-    <epp:phrase id="lib/searchexpression:order_results">Order the results</epp:phrase>
+    <epp:phrase id="lib/searchexpression:order_results"><label for="order">Order the results</label></epp:phrase>
     <epp:phrase id="lib/searchexpression:action_search">Search</epp:phrase>
-    <epp:phrase id="lib/searchexpression:template_action_search">Go</epp:phrase>
     <epp:phrase id="lib/searchexpression:action_filter">Filter</epp:phrase>
     <epp:phrase id="lib/searchexpression:action_reset">Reset the form</epp:phrase>
     <epp:phrase id="lib/searchexpression:action_newsearch">Start new search</epp:phrase>
@@ -1511,16 +1510,17 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
     <epp:phrase id="lib/searchexpression:search_time">Search time: <epc:pin name="searchtime"/>s.</epp:phrase>
     <epp:phrase id="lib/searchexpression:noresults">Search has no matches.</epp:phrase>
     <epp:phrase id="lib/searchexpression:export_section">
-<table width="100%"><tr>
-  <td align="left">Export <epc:pin name="count" /> results as <epc:pin name="menu"/><epc:pin name="button"/></td>
-  <td align="right"><epc:pin name="feeds"/></td>
-</tr>
-<tr>
-  <td align="left" colspan="2">
-    <epc:pin name="tools"/>
-  </td>
-</tr>
-</table>
+<div>
+  <div class="ep_export_bar">
+    <div><label for="search-export-output">Export <epc:pin name="count" /> results as</label> <epc:pin name="menu"/><epc:pin name="button"/></div>
+    <div><epc:pin name="feeds"/></div>
+  </div>
+  <div>
+    <div>
+      <epc:pin name="tools"/>
+    </div>
+  </div>
+</div>
 
 </epp:phrase>
     <epp:phrase id="lib/searchexpression:export_button">Export</epp:phrase>
@@ -2040,10 +2040,17 @@ User Area CGI Scripts
       <epc:pin name="problems"/>
       <div class="ep_block">
         <p>Please enter your username and password. <epc:pin name="reset_link" /></p>
-        <table style="margin:auto" class="ep_login_form_table">
-          <tr><td>Username:</td><td><epc:pin name="input_username"/></td></tr>
-          <tr><td>Password:</td><td><epc:pin name="input_password"/></td><td><epc:pin name="login_button"/></td></tr>
-        </table>
+        <div class="ep_login_form_table">
+          <div>
+            <label for="login_username">Username: </label>
+            <div><epc:pin name="input_username"/></div>
+          </div>
+          <div>
+            <label for="login_password">Password: </label>
+            <div><epc:pin name="input_password"/></div>
+            <div><epc:pin name="login_button"/></div>
+          </div>
+        </div>
         <p>Note: you must have cookies enabled.</p>
       </div>
     </epp:phrase>
@@ -2169,7 +2176,7 @@ Public CGI Scripts
 <!-- advsearch -->
 
     <epp:phrase id="cgi/advsearch:adv_search">Advanced Search</epp:phrase>
-    <epp:phrase id="cgi/advsearch:preamble"><p>Don't panic! Just leave the fields you don't want to search blank. <a href="simple">Click here for a simple search.</a></p></epp:phrase>
+    <epp:phrase id="cgi/advsearch:preamble"><p>Don't panic! Just leave the fields you don't want to search blank. Otherwise, why not try a <a href="simple">simple search</a>.</p></epp:phrase>
 
 <!-- handle_http_error -->
 
@@ -2353,20 +2360,21 @@ Views
     <epp:phrase id="Update/Views:no_grouping_title">Nothing</epp:phrase>
     <epp:phrase id="Update/Views:jump_to"><div class="ep_view_jump_to">Jump to: <epc:pin name="jumps" /></div></epp:phrase>
     <epp:phrase id="Update/Views:jump_seperator"> | </epp:phrase>
-    <epp:phrase id="Update/Views:up_a_level"><table><tr><td><epc:pin name="url"><img src="{$config{rel_path}}/style/images/multi_up.png" border='0' /></epc:pin></td><td><epc:pin name="url">Up a level</epc:pin></td></tr></table></epp:phrase>
+    <epp:phrase id="Update/Views:up_a_level"><div class="no_link_decor"><epc:pin name="url"><img src="{$config{rel_path}}/style/images/multi_up.png" alt="[up]" border='0' /> Up a level</epc:pin></div></epp:phrase>
     <epp:phrase id="Update/Views:no_items"><p>No items in this section.</p></epp:phrase>
     <epp:phrase id="Update/Views:no_value">NULL</epp:phrase>
     <epp:phrase id="Update/Views:export_section">
-<table width="100%"><tr>
-  <td align="left">Export as <epc:pin name="menu"/><epc:pin name="button"/></td>
-  <td align="right"><epc:pin name="feeds"/></td>
-</tr>
-<tr>
-  <td align="left" colspan="2">
-    <epc:pin name="tools"/>
-  </td>
-</tr>
-</table>
+<div>
+  <div class="ep_export_bar">
+    <div><label for="export-format">Export as</label> <epc:pin name="menu"/><epc:pin name="button"/></div>
+    <div><epc:pin name="feeds"/></div>
+  </div>
+  <div>
+    <span>
+      <epc:pin name="tools"/>
+    </span>
+  </div>
+</div>
 
 </epp:phrase>
 
@@ -4136,7 +4144,7 @@ To create a blank EPM entire a new id in the input and click <epc:phrase ref="Pl
 
     <epp:phrase id="lib/metafield:join_image"><br /></epp:phrase>
 
-    <epp:phrase id="summary_page:actions"><h3>Actions (login required)</h3></epp:phrase>
+    <epp:phrase id="summary_page:actions"><h2 id="actions">Actions (login required)</h2></epp:phrase>
     <epp:phrase id="summary_page:download">Download</epp:phrase>
 
 <!--

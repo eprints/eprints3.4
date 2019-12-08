@@ -174,22 +174,29 @@ sub input_field
 	my( $self, $name, $value, @opts ) = @_;
 
 	my $noenter;
+	my $noid = 0;
 	for(my $i = 0; $i < @opts; $i+=2)
 	{
 		if( $opts[$i] eq 'noenter' )
 		{
 			(undef, $noenter) = splice(@opts,$i,2);
-			last;
+		}
+		if ( $opts[$i] eq 'type' && $opts[$i+1] eq 'checkbox' )
+		{
+			$noid = 1;
 		}
 	}
 	if( $noenter )
 	{
 		push @opts, onKeyPress => 'return EPJS_block_enter( event )';
 	}
+	if ( !$noid )
+	{
+		push @opts, id => $name;
+	}
 
 	return $self->{repository}->xml->create_element( "input",
 		name => $name,
-		id => $name,
 		value => $value,
 		@opts );
 }

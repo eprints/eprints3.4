@@ -1765,12 +1765,16 @@ sub render_icon_link
 	{
 		$aopts{onmouseover} = "EPJS_ShowPreview( event, '$preview_id' );";
 		$aopts{onmouseout} = "EPJS_HidePreview( event, '$preview_id' );";
+		$aopts{onfocus} = "EPJS_ShowPreview( event, '$preview_id' );";
+                $aopts{onblur} = "EPJS_HidePreview( event, '$preview_id' );";
 	}
 	my $f = $self->{session}->make_doc_fragment;
+	my $img_alt = $self->value('main');
+	$img_alt = $self->value('formatdesc') if EPrints::Utils::is_set( $self->value('formatdesc') );
 	my $img = $self->{session}->make_element(
 		"img", 
 		class=>"ep_doc_icon",
-		alt=>"[img]",
+		alt=>"[thumbnail of $img_alt]",
 		src=>$self->icon_url( public=>$opts{public} ),
 		border=>0 );
 	if ( $opts{with_link} )
@@ -1788,21 +1792,21 @@ sub render_icon_link
 		my $preview = $self->{session}->make_element( "div",
 				id => $preview_id,
 				class => "ep_preview", );
-		my $table = $self->{session}->make_element( "table" );
-		$preview->appendChild( $table );
-		my $tr = $self->{session}->make_element( "tr" );
-		my $td = $self->{session}->make_element( "td" );
-		$tr->appendChild( $td );
-		$table->appendChild( $tr );
-		$td->appendChild( $self->{session}->make_element( 
+		my $pdiv = $self->{session}->make_element( "div" );
+		$preview->appendChild( $pdiv );
+		my $cdiv = $self->{session}->make_element( "div" );
+		my $span = $self->{session}->make_element( "span" );
+		$cdiv->appendChild( $span );
+		$pdiv->appendChild( $cdiv );
+		$span->appendChild( $self->{session}->make_element( 
 			"img", 
 			class=>"ep_preview_image",
 			alt=>"",
 			src=>$preview_url,
 			border=>0 ));
-		my $div = $self->{session}->make_element( "div", class=>"ep_preview_title" );
-		$div->appendChild( $self->{session}->html_phrase( "lib/document:preview"));
-		$td->appendChild( $div );
+		my $tdiv = $self->{session}->make_element( "div", class=>"ep_preview_title" );
+		$tdiv->appendChild( $self->{session}->html_phrase( "lib/document:preview"));
+		$span->appendChild( $tdiv );
 		$f->appendChild( $preview );
 	}
 
@@ -1852,11 +1856,21 @@ sub render_preview_link
 	my $url = $self->thumbnail_url( $size );
 	if( defined $url )
 	{
-		my $link = $self->{session}->make_element( "a",
-				href=>$url,
-				rel=>"lightbox$set nofollow",
-				title=>EPrints::Utils::tree_to_utf8($caption),
-			);
+		my $link;
+		if ( EPrints::Utils::tree_to_utf8($caption) eq EPrints::Utils::tree_to_utf8( $self->{session}->html_phrase( "lib/document:preview" ) ) )
+		{
+			$link = $self->{session}->make_element( "a",
+					href=>$url,
+					rel=>"lightbox$set nofollow",
+				);
+		}
+		else {
+			$link = $self->{session}->make_element( "a",
+                                        href=>$url,
+                                        rel=>"lightbox$set nofollow",
+                                        title=>EPrints::Utils::tree_to_utf8($caption),
+				);
+		}		
 		$link->appendChild( $self->{session}->html_phrase( "lib/document:preview" ) );
 		$f->appendChild( $link );
 	}

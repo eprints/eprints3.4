@@ -535,7 +535,7 @@ sub render_export_bar
 		}
 	}
 
-	my $select = $session->make_element( "select", name=>"output" );
+	my $select = $session->make_element( "select", name=>"output", id=>"search-export-output" );
 	foreach my $optname ( sort keys %{$options} )
 	{
 		$select->appendChild( $options->{$optname} );
@@ -732,7 +732,7 @@ sub render_search_form
 
 	$form->appendChild( $self->render_controls );
 
-	my $table = $self->{session}->make_element( "table", class=>"ep_search_fields" );
+	my $table = $self->{session}->make_element( "div", class=>"ep_search_fields" );
 	$form->appendChild( $table );
 
 	$table->appendChild( $self->render_search_fields );
@@ -767,12 +767,24 @@ sub render_search_fields
 
 	foreach my $sf ( $self->{processor}->{search}->get_non_filter_searchfields )
 	{
-		$frag->appendChild( 
+		my $label;
+		my $field;
+		if ( $sf->{"field"}->get_type() eq "namedset" )
+		{
+			$label = EPrints::Utils::tree_to_utf8( $sf->render_name );
+			$field = $sf->render( legend => $label );
+		}
+		else {
+			$label = $self->{session}->make_element( "span", id=>$sf->get_form_prefix."_label" );
+			$label->appendChild( $sf->render_name );
+			$field = $sf->render();
+		}
+		$frag->appendChild(
 			$self->{session}->render_row_with_help( 
 				help_prefix => $sf->get_form_prefix."_help",
 				help => $sf->render_help,
-				label => $sf->render_name,
-				field => $sf->render,
+				label => $label,
+				field => $field,
 				no_toggle => ( $sf->{show_help} eq "always" ),
 				no_help => ( $sf->{show_help} eq "never" ),
 			 ) );
@@ -794,6 +806,7 @@ sub render_anyall_field
 
 	my $menu = $self->{session}->render_option_list(
 			name=>"satisfyall",
+			'aria-labelledby'=>"satisfyall_label",
 			values=>[ "ALL", "ANY" ],
 			default=>( defined $self->{processor}->{search}->{satisfy_all} && $self->{processor}->{search}->{satisfy_all}==0 ?
 				"ANY" : "ALL" ),
@@ -802,10 +815,11 @@ sub render_anyall_field
 				  "ANY" => $self->{session}->phrase( 
 						"lib/searchexpression:any" )} );
 
+	my $label = $self->{session}->make_element( 'span', id=>"satisfyall_label" );
+	$label->appendChild( $self->{session}->html_phrase( "lib/searchexpression:must_fulfill" ) );
 	return $self->{session}->render_row_with_help( 
 			no_help => 1,
-			label => $self->{session}->html_phrase( 
-				"lib/searchexpression:must_fulfill" ),  
+			label => $label,
 			field => $menu,
 	);
 }

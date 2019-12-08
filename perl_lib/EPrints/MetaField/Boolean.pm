@@ -203,7 +203,8 @@ sub render_search_input
 		name => $searchfield->get_form_prefix,
 		values => \@bool_tags,
 		default => ( defined $value ? $value : $bool_tags[0] ),
-		labels => \%bool_labels );
+		labels => \%bool_labels,
+		'aria-labelledby' => $searchfield->get_form_prefix . "_label" );
 }
 
 sub from_search_form

@@ -79,3 +79,42 @@ td.ep_form_input_grid_arrows {
 td.ep_form_input_grid_wide {
 	text-align: left;
 }
+
+.ep_field_legend {
+	position: relative;
+	left: -100%;
+	width: 100%;
+	text-align: right;
+	margin-left: -25px;
+	padding-right: 25px;
+	font-weight: bold;
+}
+
+.ep_field_legend::after, .ep_multi_heading::after {
+	content: ":";
+}
+
+.ep_search_fields > div > div {
+	border-top: dashed #bbf 1px;
+	vertical-align: top;
+	padding: 0.5em;
+}
+
+.ep_multi_heading {
+	border-right: dashed #bbf 1px;
+	font-weight: bold;
+	text-align: right;
+}
+
+.ep_login_form_table {
+	margin:auto; 
+	display: table;	
+}
+
+.ep_login_form_table > div {
+	display: table-row;
+}
+
+.ep_login_form_table > div > div, .ep_login_form_table > div > label {
+        display: table-cell;
+}

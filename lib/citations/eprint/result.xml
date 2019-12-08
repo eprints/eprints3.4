@@ -5,15 +5,15 @@
 -->
 
 <cite:citation xmlns="http://www.w3.org/1999/xhtml" xmlns:cite="http://eprints.org/ep3/citation" xmlns:epc="http://eprints.org/ep3/control" type="table_row">
-  <tr class="ep_search_result">
-    <td style="padding-left: 0.5em"><epc:print expr="$n" />.</td>
-    <td style="padding-left: 0.5em">
+  <div class="ep_search_result">
+    <div><epc:print expr="$n" />.</div>
+    <div>
       <epc:print expr="$item.citation('default')" />
-    </td>
-    <td style="padding-left: 0.5em" align="center">
+    </div>
+    <div>
       <epc:set name='docs' expr='$item.documents()'>
         <epc:if test="length($docs) gt 0">
-          <div style="white-space: nowrap">
+          <div class="ep_search_result_docs">
           <epc:foreach expr="$docs" iterator="doc" limit='2'>
              <epc:print expr="$doc.icon( 'HoverPreview', 'noNewWindow' )" />
           </epc:foreach>
@@ -23,6 +23,6 @@
           <div><a href='{$item.uri()}'>+<epc:print expr="length($docs)-2" /> <epc:phrase ref="page:more"/></a></div>
         </epc:if>
       </epc:set>
-    </td>
-  </tr>
+    </div>
+  </div>
 </cite:citation>

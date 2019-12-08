@@ -79,7 +79,8 @@ sub render_search_input
 				name=>$searchfield->get_form_prefix,
 				value=>$searchfield->get_value,
 				size=>9,
-				maxlength=>100 );
+				maxlength=>100,
+				'aria-labelledby'=>$searchfield->get_form_prefix . "_label"  );
 }
 
 sub from_search_form

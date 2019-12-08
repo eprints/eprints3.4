@@ -182,21 +182,19 @@ sub is_feed
 
 sub render_export_icon
 {
-	my( $plugin, $type, $url ) = @_;
+	my( $plugin, $type, $url, $id ) = @_;
 
 	my $session = $plugin->{session};
 	
 	my $span = $session->make_element( "span", class=>"ep_search_$type" );
-	my $a1 = $session->render_link( $url );
+	my $a = $session->render_link( $url );
 
-	my $icon = $session->make_element( "img", src=>$plugin->icon_url(), alt=>"[$type]", border=>0 );
-	$a1->appendChild( $icon );
-        my $a2 = $session->render_link( $url );
-	$a2->appendChild( $plugin->render_name );
+	my $icon = $session->make_element( "img", src=>$plugin->icon_url(), alt=>"[$id $type]", border=>0 );
+	$a->appendChild( $icon );
+        $a->appendChild( $session->make_text( " " ) );
+	$a->appendChild( $plugin->render_name );
 
-	$span->appendChild( $a1 );
-        $span->appendChild( $session->make_text( " " ) );
-        $span->appendChild( $a2 );
+	$span->appendChild( $a );
 
 	return $span;
 }

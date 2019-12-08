@@ -3387,21 +3387,25 @@ sub render_row_with_help
 	}
 
 
-	my $tr = $self->make_element( "tr", class=>$parts{class} );
+	my $tr = $self->make_element( "div", class=>$parts{class} . " ep_table_row" );
 
 	#
 	# COL 1
 	#
-	my $th = $self->make_element( "th", class=>"ep_multi_heading" );
-	$th->appendChild( $parts{label} );
-	$th->appendChild( $self->make_text( ":" ) );
+	my $th = $self->make_element( "div", class=> "ep_multi_heading ep_table_cell" );
+	if ( ref $parts{label} ne "" ) 
+	{
+		$th->appendChild( $parts{label} );
+	}
 	$tr->appendChild( $th );
 
 	if( !defined $parts{help} || $parts{no_help} )
 	{
-		my $td = $self->make_element( "td", class=>"ep_multi_input", colspan=>"2" );
+		my $td = $self->make_element( "div", class=>"ep_multi_input ep_table_cell" );
 		$tr->appendChild( $td );
 		$td->appendChild( $parts{field} );
+		my $td2 = $self->make_element( "div", class=>"ep_table_cell" );
+		$tr->appendChild( $td2 );
 		return $tr;
 	}
 
@@ -3418,7 +3422,7 @@ sub render_row_with_help
 		$colspan = 1;
 	}
 
-	my $td = $self->make_element( "td", class=>"ep_multi_input", colspan=>$colspan, id=>$parts{help_prefix}."_outer" );
+	my $td = $self->make_element( "div", class=>"ep_multi_input ep_table_cell", colspan=>$colspan, id=>$parts{help_prefix}."_outer" );
 	$tr->appendChild( $td );
 
 	my $inline_help = $self->make_element( "div", id=>$parts{help_prefix}, class=>$inline_help_class );
@@ -3439,7 +3443,7 @@ sub render_row_with_help
 	# help toggle
 	#
 
-	my $td2 = $self->make_element( "td", class=>"ep_multi_help ep_only_js_table_cell ep_toggle" );
+	my $td2 = $self->make_element( "div", class=>"ep_multi_help ep_only_js_table_cell ep_toggle ep_table_cell" );
 	my $show_help = $self->make_element( "div", class=>"ep_sr_show_help ep_only_js", id=>$parts{help_prefix}."_show" );
 	my $helplink = $self->make_element( "a", onclick => "EPJS_blur(event); EPJS_toggleSlide('$parts{help_prefix}',false,'block');EPJS_toggle('$parts{help_prefix}_hide',false,'block');EPJS_toggle('$parts{help_prefix}_show',true,'block');return false", href=>"#" );
 	$show_help->appendChild( $self->html_phrase( "lib/session:show_help",link=>$helplink ) );
@@ -3581,6 +3585,7 @@ sub render_option_list
 	# values   :
 	# labels   :
 	# name     :
+	# legend   :
 	# checkbox :
 	# defaults_at_top : move items already selected to top
 	# 			of list, so they are visible.
@@ -3635,11 +3640,14 @@ sub render_option_list
 
 	if( $params{checkbox} )
 	{
-		my $table = $self->make_element( "table", cellspacing=>"10", border=>"0", cellpadding=>"0" );
-		my $tr = $self->make_element( "tr" );
-		$table->appendChild( $tr );	
-		my $td = $self->make_element( "td", valign=>"top" );
-		$tr->appendChild( $td );	
+		my $fieldset = $self->make_element( "fieldset", style=>"display: table; border: 0;" );
+		my $legend = $self->make_element( "legend", id=> "all_".$params{name}, class=>"ep_field_legend" );
+		$legend->appendChild( $self->make_text( $params{legend} ) );
+		$fieldset->appendChild( $legend ); 
+		my $rowdiv = $self->make_element( "div", style=>"display: table-row;" );
+		$fieldset->appendChild( $rowdiv );	
+		my $celldiv = $self->make_element( "div", style=>"display: table-cell;" );
+		$rowdiv->appendChild( $celldiv );	
 		my $i = 0;
 		my $len = scalar @$pairs;
 		foreach my $pair ( @{$pairs} )
@@ -3647,22 +3655,22 @@ sub render_option_list
 			my $div = $self->make_element( "div" );
 			my $label = $self->make_element( "label" );
 			$div->appendChild( $label );
-			my $box = $self->render_input_field( type=>"checkbox", name=>$params{name}, value=>$pair->[0], class=>"ep_form_checkbox" );
+			my $box = $self->render_input_field( type=>"checkbox", name=>$params{name}, value=>$pair->[0], class=>"ep_form_checkbox", 'aria-describedby'=>"all_".$params{name} );
 			$label->appendChild( $box );
 			$label->appendChild( $self->make_text( " ".$pair->[1] ) );
 			if( $defaults{$pair->[0]} )
 			{
 				$box->setAttribute( "checked" , "checked" );
 			}
-			$td->appendChild( $div );
+			$celldiv->appendChild( $div );
 			++$i;
 			if( $len > 5 && int($len / 2)==$i )
 			{
-				$td = $self->make_element( "td", valign=>"top" );
-				$tr->appendChild( $td );	
+				$celldiv = $self->make_element( "div", style=>"display: table-cell;" );
+				$rowdiv->appendChild( $celldiv );	
 			}
 		}
-		return $table;
+		return $fieldset;
 	}
 		
 
@@ -3672,6 +3680,10 @@ sub render_option_list
 	{
 		$element->setAttribute( "multiple" , "multiple" );
 	}
+	if( defined $params{"aria-labelledby"} )
+        {
+                $element->setAttribute( "aria-labelledby" , $params{"aria-labelledby"} );
+        }
 	my $size = 0;
 	foreach my $pair ( @{$pairs} )
 	{

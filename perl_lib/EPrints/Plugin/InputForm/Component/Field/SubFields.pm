@@ -83,7 +83,7 @@ sub render_content
 
 		my $id = $self->{prefix} . "_" . $name;
 
-		my $label = $session->make_element( "label" );
+		my $label = $session->make_element( "label", id=>$id );
 		my $input = $session->render_input_field(
 			type => "checkbox",
 			name => $id,

@@ -27,11 +27,11 @@
   
     <epc:if test="length($docs) gt 0">
       <epc:phrase ref="page:fulltext" />
-      <table>
+      <div>
         <epc:foreach expr="$docs" iterator="doc">
-          <tr>
-            <td valign="top" align="right"><epc:print expr="$doc.icon('HoverPreview','noNewWindow')}" /></td>
-            <td valign="top">
+          <div class="ep_summary_page_document">
+            <span><epc:print expr="$doc.icon('HoverPreview','noNewWindow')}" /></span>
+            <span>
               <epc:print expr="$doc.citation('default')" /><br />
               <a href="{$doc.url()}" class="ep_document_link"><epc:phrase ref="summary_page:download"/> (<epc:print expr="$doc.doc_size().human_filesize()" />)</a>
               <epc:if test="$doc.is_public()">
@@ -58,10 +58,11 @@
                 </epc:if>
               </epc:foreach>
               </ul>
-            </td>
-          </tr>
+            </span>
+          </div>
         </epc:foreach>
-      </table>
+      </div>
+      <div class="ep_summary_page_document"/>
     </epc:if>
 
   </epc:set>
@@ -116,14 +117,12 @@
 
   <epc:if test="!$flags{preview}">
     <epc:phrase ref="summary_page:actions"/>
-    <table class="ep_summary_page_actions">
+    <dl class="ep_summary_page_actions">
     <epc:foreach expr="action_list('eprint_summary_page_actions',$item)" iterator="action">
-      <tr>
-        <td><epc:print expr="$action.action_icon()" /></td>
-        <td><epc:print expr="$action.action_title()" /></td>
-      </tr>
+      <dt><epc:print expr="$action.action_icon()" /></dt>
+      <dd><epc:print expr="$action.action_title()" /></dd>
     </epc:foreach>
-    </table>
+    </dl>
   </epc:if>
 
 </cite:citation>

@@ -354,13 +354,14 @@ sub split_search_value
 
 sub render_search_input
 {
-	my( $self, $session, $searchfield ) = @_;
-	
+	my( $self, $session, $searchfield, %opts ) = @_;
+
 	my $frag = $session->make_doc_fragment;
 	
 	$frag->appendChild( $self->render_search_set_input( 
 				$session,
-				$searchfield ) );
+				$searchfield,
+				%opts  ) );
 
 	if( $self->get_property( "multiple" ) )
 	{
@@ -376,7 +377,8 @@ sub render_search_input
 				name=>$searchfield->get_form_prefix."_merge",
 				values=>\@set_tags,
 				default=>$searchfield->get_merge,
-				labels=>\%set_labels ) );
+				labels=>\%set_labels,
+				'aria-labelledby'=>$searchfield->get_form_prefix."_label" ) );
 	}
 	if( $searchfield->get_match ne $self->property( "match" ) )
 	{
@@ -392,7 +394,7 @@ sub render_search_input
 
 sub render_search_set_input
 {
-	my( $self, $session, $searchfield ) = @_;
+	my( $self, $session, $searchfield, %opts ) = @_;
 
 	my $prefix = $searchfield->get_form_prefix;
 	my $value = $searchfield->get_value;
@@ -433,11 +435,13 @@ sub render_search_set_input
 	return $session->render_option_list( 
 		checkbox => ($self->{search_input_style} eq "checkbox"?1:0),
 		name => $prefix,
+		legend => $opts{legend}, 
 		default => \@defaults,
 		multiple => 1,
 		labels => $labels,
 		values => $tags,
-		height => $height );
+		height => $height,
+		'aria-labelledby' => $prefix . "_label" );
 }	
 
 sub from_search_form

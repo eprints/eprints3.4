@@ -1769,7 +1769,7 @@ sub render_export_bar
 
 	my $feeds = $repo->make_doc_fragment;
 	my $tools = $repo->make_doc_fragment;
-	my $select = $repo->make_element( "select", name=>"format" );
+	my $select = $repo->make_element( "select", name=>"format", id=>"export-format" );
 	my $default_export_plugin = $repo->config( 'default_export_plugin' ) || '_NULL_';
 	foreach my $plugin ( @plugins )
 	{
@@ -1783,7 +1783,7 @@ sub render_export_bar
 			my $fn = join( "_", @{$esc_path_values} );	
 			my $url = $export_url."/".$view->{id}."/$values/$id/$fn".$plugin->param("suffix");
 
-			my $span = $plugin->render_export_icon( $type, $url );
+			my $span = $plugin->render_export_icon( $type, $url, $id );
 
 			if( $type eq "tool" )
 			{

@@ -67,7 +67,8 @@
 
 .ep_search_results
 {
-	margin: 1em 0 1em 0;
+	margin: 1em auto 1em auto;
+	display: table;
 }
 
 .ep_search_desc
@@ -76,10 +77,22 @@
 	margin: 0.25em 0 0 0;
 }
 
-.ep_search_result td
+.ep_search_result 
 {
-	padding: 4px;
+	display: table-row;
+}
+
+.ep_search_result > div
+{
+	padding: 4px 0.5em 4px 4px;
 	border-bottom: dashed #bbf 1px;
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.ep_search_result_docs 
+{
+	white-space: nowrap;
 }
 
 .ep_paginate_list

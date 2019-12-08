@@ -52,5 +52,18 @@
 	vertical-align: -1px;
 }
 
+.ep_summary_page_actions dt {
+	display: inline;
+}
+.ep_summary_page_actions dd {
+	display: inline-block;
+	margin-left: 1em;
+}
 
-
+.ep_summary_page_document {
+	clear: both;
+}
+.ep_summary_page_document > span {
+	float: left;
+	margin-left: 0.5em;
+}

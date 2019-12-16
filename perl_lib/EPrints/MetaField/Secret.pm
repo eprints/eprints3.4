@@ -100,7 +100,8 @@ sub get_basic_input_elements
 		name => $basename,
 		id => $basename,
 		size => $size,
-		maxlength => $maxlength );
+		maxlength => $maxlength,
+		'aria-labelledby' => $basename . "_label" );
 
 	if( !$self->get_property( "repeat_secret" ) )
 	{
@@ -113,7 +114,8 @@ sub get_basic_input_elements
 		name => $basename."_confirm",
 		id => $basename."_confirm",
 		size => $size,
-		maxlength => $maxlength );
+		maxlength => $maxlength,
+		'aria-labelledby' => $basename . "_label" );
 
 	my $label1 = $session->make_element( "div", style=>"margin-right: 4px;" );
 	$label1->appendChild( $session->html_phrase(

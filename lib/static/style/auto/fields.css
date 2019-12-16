@@ -9,3 +9,28 @@ dl.ep_field_set_long dt label {
 dl.ep_field_set_long dd {
 	margin-bottom: 0.5em;
 }
+
+.ep_compound, .ep_compound_list > div {
+	display: table; 
+	border: 1px; 
+	border-spacing: 0; 
+	border-collapse: separate; 
+	padding: 2px;
+}
+
+.ep_compound_header_row, .ep_compound_data_row, .ep_compound_list > div > div {
+	display: table-row;
+}
+
+.ep_compound_header_cell, .ep_compound_data_row > div, .ep_compound_list > div > div > div {
+	display: table-cell; 
+}
+
+.ep_compound_header_cell {
+	font-weight: bold;
+}
+
+.ep_compound_single {
+	display: table; 
+	border: 1px;
+}

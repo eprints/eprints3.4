@@ -2231,7 +2231,8 @@ Public CGI Scripts
 <p>In order to access some areas of the repository, you'll need a <em>user registration</em>. No charge is made for registering with us or using any of our services.</p>
 <p>This page lets you register with <epc:phrase ref="archive_name" />. This will allow you to save searches, receive alerts and deposit items.</p>
 <p>A confirmation email will be sent to you. You need to activate your account using the link in the email.</p>
-<p>If you have already registered but have forgotten your username or password, <a href="reset_password">click here</a> to set a new password.</p>
+<p>If you have already registered but have forgotten your username or password, you can <a href="reset_password">reset your password</a>.</p>
+
 </epp:phrase>
 
 <!-- this is used for the minimal users who have their username locked to their email address -->

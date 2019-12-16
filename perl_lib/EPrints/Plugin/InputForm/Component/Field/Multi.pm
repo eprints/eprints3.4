@@ -145,11 +145,9 @@ sub render_content
 
 	my $frag = $self->{session}->make_doc_fragment;
 
-	my $table = $self->{session}->make_element( "table", class => "ep_multi" );
+	my $table = $self->{session}->make_element( "div", class => "ep_multi" );
 	$frag->appendChild( $table );
 
-	my $tbody = $self->{session}->make_element( "tbody" );
-	$table->appendChild( $tbody );
 	my $first = 1;
 	foreach my $field ( @{$self->{config}->{fields}} )
 	{
@@ -162,9 +160,12 @@ sub render_content
 
 		if( $field->{required} ) # moj: Handle for_archive
 		{
-			$parts{label} = $self->{session}->html_phrase( 
-				"sys:ep_form_required",
-				label=>$parts{label} );
+			my $label = $self->{session}->make_element( "span", id => $self->{prefix}."_".$field->get_name."_label" );
+			my $labeltext = $self->{session}->html_phrase(
+                                "sys:ep_form_required",
+                                label=>$parts{label} );
+			$label->appendChild( $labeltext );
+			$parts{label} = $label;
 		}
 
 		# customisation for type specific help on the eprint workflow
@@ -208,6 +209,7 @@ sub render_content
 			$parts{no_toggle} = $self->{config}->{help_fields}->{$field->name};
 		}
 
+		$parts{prefix} = $self->{prefix};
 		$parts{help_prefix} = $self->{prefix}."_help_".$field->get_name;
 
 		$table->appendChild( $self->{session}->render_row_with_help( %parts ) );

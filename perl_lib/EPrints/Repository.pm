@@ -1615,7 +1615,6 @@ sub _load_core_modules
 	{
 		opendir(my $dh, $archives_path);
 		my @dirs = grep {-d  $archives_path && ! /^\.{1,2}$/} readdir($dh);
-		use Data::Dumper;
 		closedir($dh);
 		$_fpath =  $archives_path . $dirs[0] . "/cfg/cfg.d/00_flavour.pl" if( defined $dirs[0] && -e $archives_path . $dirs[0] );
 	}
@@ -3392,10 +3391,15 @@ sub render_row_with_help
 	#
 	# COL 1
 	#
-	my $th = $self->make_element( "div", class=> "ep_multi_heading ep_table_cell" );
+	my $th;
 	if ( ref $parts{label} ne "" ) 
 	{
+		$th = $self->make_element( "div", class=> "ep_multi_heading ep_table_cell" );
 		$th->appendChild( $parts{label} );
+	}
+	else
+	{
+		$th = $self->make_element( "div", class=> "ep_multi_heading_legend ep_table_cell" );
 	}
 	$tr->appendChild( $th );
 
@@ -3426,7 +3430,7 @@ sub render_row_with_help
 	$tr->appendChild( $td );
 
 	my $inline_help = $self->make_element( "div", id=>$parts{help_prefix}, class=>$inline_help_class );
-	my $inline_help_inner = $self->make_element( "div", id=>$parts{help_prefix}."_inner" );
+	my $inline_help_inner = $self->make_element( "div", id=>$parts{help_prefix}."_inner", role=>'definition', 'aria-labelledby'=>$parts{prefix}."_label" );
 	$inline_help->appendChild( $inline_help_inner );
 	$inline_help_inner->appendChild( $parts{help} );
 	$td->appendChild( $inline_help );
@@ -3641,7 +3645,7 @@ sub render_option_list
 	if( $params{checkbox} )
 	{
 		my $fieldset = $self->make_element( "fieldset", style=>"display: table; border: 0;" );
-		my $legend = $self->make_element( "legend", id=> "all_".$params{name}, class=>"ep_field_legend" );
+		my $legend = $self->make_element( "legend", id=> $params{name}."_label", class=>"ep_field_legend" );
 		$legend->appendChild( $self->make_text( $params{legend} ) );
 		$fieldset->appendChild( $legend ); 
 		my $rowdiv = $self->make_element( "div", style=>"display: table-row;" );
@@ -3655,7 +3659,7 @@ sub render_option_list
 			my $div = $self->make_element( "div" );
 			my $label = $self->make_element( "label" );
 			$div->appendChild( $label );
-			my $box = $self->render_input_field( type=>"checkbox", name=>$params{name}, value=>$pair->[0], class=>"ep_form_checkbox", 'aria-describedby'=>"all_".$params{name} );
+			my $box = $self->render_input_field( type=>"checkbox", name=>$params{name}, value=>$pair->[0], class=>"ep_form_checkbox", 'aria-describedby'=>$params{name}."_label" );
 			$label->appendChild( $box );
 			$label->appendChild( $self->make_text( " ".$pair->[1] ) );
 			if( $defaults{$pair->[0]} )
@@ -4367,12 +4371,13 @@ sub _render_input_form_field
 		# special case for booleans - even if they're required it
 		# dosn't make much sense to highlight them.	
 
-		my $label = $field->render_name( $self );
+		my $label = $self->make_element( "span", id=>$field->get_name . "_label" ); 
+		my $labeltext = $field->render_name( $self );
 		if( $req && !$field->is_type( "boolean" ) )
 		{
-			$label = $self->html_phrase( "sys:ep_form_required",
-				label=>$label );
+			$labeltext = $self->html_phrase( "sys:ep_form_required", label=>$label );
 		}
+		$label->appendChild( $labeltext );
 		$div->appendChild( $label );
 
 		$html->appendChild( $div );
@@ -4380,7 +4385,7 @@ sub _render_input_form_field
 
 	if( $show_help )
 	{
-		$div = $self->make_element( "div", class => "ep_form_field_help" );
+		$div = $self->make_element( "div", class => "ep_form_field_help", id=>$field->get_name . "_help" );
 
 		$div->appendChild( $field->render_help( $self, $type ) );
 		$div->appendChild( $self->make_text( "" ) );
@@ -4393,7 +4398,7 @@ sub _render_input_form_field
 		class => "ep_form_field_input",
 		id => "inputfield_".$field->get_name );
 	$div->appendChild( $field->render_input_field( 
-		$self, $value, $dataset, $staff, $hidden_fields , $object ) );
+		$self, $value, $dataset, $staff, $hidden_fields, $object ) );
 	$html->appendChild( $div );
 				
 	return( $html );

@@ -94,16 +94,25 @@ td.ep_form_input_grid_wide {
 	content: ":";
 }
 
-.ep_search_fields > div > div {
+.ep_search_fields > div > div, .ep_table_row > div {
 	border-top: dashed #bbf 1px;
 	vertical-align: top;
 	padding: 0.5em;
 }
 
-.ep_multi_heading {
+.ep_table_row.ep_first > div {
+	border-top: 0;
+}
+
+.ep_multi_heading, .ep_multi_heading_legend {
 	border-right: dashed #bbf 1px;
 	font-weight: bold;
 	text-align: right;
+}
+
+.ep_multi {
+	width: 100%;
+	display: table;
 }
 
 .ep_login_form_table {
@@ -117,4 +126,25 @@ td.ep_form_input_grid_wide {
 
 .ep_login_form_table > div > div, .ep_login_form_table > div > label {
         display: table-cell;
+}
+
+.ep_form_input_grid {
+	display: table; 
+	border: 0; 
+	padding: 0; 
+	border-spacing: 0; 
+	border-collapse: separate;
+}
+
+.ep_form_input_grid > div {
+	display: table-row;
+}
+
+.ep_form_input_grid > div > div {
+	display: table-cell; 
+	text-align: center;
+}
+
+.ep_form_input_grid > div > div.heading {
+	font-weight: bold; 
 }

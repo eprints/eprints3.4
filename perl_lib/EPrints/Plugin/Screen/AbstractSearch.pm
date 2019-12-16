@@ -780,7 +780,8 @@ sub render_search_fields
 			$field = $sf->render();
 		}
 		$frag->appendChild(
-			$self->{session}->render_row_with_help( 
+			$self->{session}->render_row_with_help(
+				prefix => $sf->get_form_prefix, 
 				help_prefix => $sf->get_form_prefix."_help",
 				help => $sf->render_help,
 				label => $label,

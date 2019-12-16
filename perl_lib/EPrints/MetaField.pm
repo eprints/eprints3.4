@@ -1243,31 +1243,32 @@ sub render_input_field_actual
 
 	my $frag = $session->make_doc_fragment;
 
-	my $table = $session->make_element( "table", border=>0, cellpadding=>0, cellspacing=>0, class=>"ep_form_input_grid" );
+	my $table = $session->make_element( "div", class=>"ep_form_input_grid" );
 	$frag->appendChild ($table);
 
 	my $col_titles = $self->get_input_col_titles( $session, $staff );
 	if( defined $col_titles )
 	{
-		my $tr = $session->make_element( "tr" );
+		my $tr = $session->make_element( "div" );
 		my $th;
 		my $x = 0;
 		if( $self->get_property( "multiple" ) && $self->{input_ordered})
 		{
-			$th = $session->make_element( "th", class=>"empty_heading", id=>$basename."_th_".$x++ );
+			$th = $session->make_element( "div", class=>"empty_heading", id=>$basename."_th_".$x++ );
 			$tr->appendChild( $th );
 		}
 
 		if( !defined $col_titles )
 		{
-			$th = $session->make_element( "th", class=>"empty_heading", id=>$basename."_th_".$x++ );
+			$th = $session->make_element( "div", class=>"empty_heading", id=>$basename."_th_".$x++ );
 			$tr->appendChild( $th );
 		}	
 		else
 		{
+			my @input_ids = $self->get_basic_input_ids( $session, $basename, $staff );
 			foreach my $col_title ( @{$col_titles} )
 			{
-				$th = $session->make_element( "th", id=>$basename."_th_".$x++ );
+				$th = $session->make_element( "div", class=>"heading", id=>$input_ids[$x++]."_label" );
 				$th->appendChild( $col_title );
 				$tr->appendChild( $th );
 			}
@@ -1279,16 +1280,16 @@ sub render_input_field_actual
 	foreach my $row ( @{$elements} )
 	{
 		my $x = 0;
-		my $tr = $session->make_element( "tr" );
+		my $tr = $session->make_element( "div" );
 		foreach my $item ( @{$row} )
 		{
-			my %opts = ( valign=>"top", id=>$basename."_cell_".$x++."_".$y );
+			my %opts = ( id=>$basename."_cell_".$x++."_".$y );
 			foreach my $prop ( keys %{$item} )
 			{
 				next if( $prop eq "el" );
 				$opts{$prop} = $item->{$prop};
 			}	
-			my $td = $session->make_element( "td", %opts );
+			my $td = $session->make_element( "div", %opts );
 			if( defined $item->{el} )
 			{
 				$td->appendChild( $item->{el} );
@@ -1576,14 +1577,16 @@ sub get_basic_input_elements
 			push @classes, join('_', 'ep', $self->{dataset}->base_id, $self->name);
 			push @classes, join('_', 'eptype', $self->{dataset}->base_id, $self->type);
 		}
-		$input = $session->render_noenter_input_field(
+		$input = $session->render_noenter_input_field(  
 			class=> join(' ', @classes),
-			name => $basename,
-			id => $basename,
-			value => $value,
-			size => $size,
-			readonly => $readonly,
-			maxlength => $maxlength );
+                        name => $basename,
+                        id => $basename,
+                        value => $value,
+                        size => $size,
+                        readonly => $readonly,
+                        maxlength => $maxlength,
+                	'aria-labelledby' => $basename . "_label"
+                );
 	}
 
 	return [ [ { el=>$input } ] ];

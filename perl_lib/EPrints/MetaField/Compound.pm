@@ -114,16 +114,16 @@ sub render_value_actual
 
 		# View as table
 
-		my $table = $session->make_element( "table", border=>1, cellspacing=>0, cellpadding=>2, class=>"ep_compound $class" );
+		my $table = $session->make_element( "div", class=>"ep_compound $class" );
 
-		my $tr = $session->make_element( "tr", "class"=>"ep_compound_header_row" );
+		my $tr = $session->make_element( "div", "class"=>"ep_compound_header_row" );
 		$table->appendChild( $tr );
 		my $f = $self->get_property( "fields_cache" );
 		foreach my $field_conf ( @{$f} )
 		{
 			my $fieldname = $field_conf->{name};
 			my $field = $self->{dataset}->get_field( $fieldname );
-			my $th = $session->make_element( "th" );
+			my $th = $session->make_element( "div", class=>"ep_compound_header_cell" );
 			$tr->appendChild( $th );
 			$th->appendChild( $field->render_name( $session ) );
 		}
@@ -152,23 +152,23 @@ sub render_value_actual
 
 		foreach my $record ( @records )
 		{
-			my $table = $session->make_element( "table", border=>1, cellspacing=>0, cellpadding=>2 );
+			my $table = $session->make_element( "div" );
 
 			my $f = $self->get_property( "fields_cache" );
 
 			foreach my $field_conf ( @{$f} )
 			{
-				my $tr = $session->make_element( "tr" );
+				my $tr = $session->make_element( "div" );
 
 				my $fieldname = $field_conf->{name};
 				my $field = $self->{dataset}->get_field( $fieldname );
-				my $th = $session->make_element( "th" );
+				my $th = $session->make_element( "div" );
 
 				$tr->appendChild( $th );
 				$th->appendChild( $field->render_name( $session ) );
 
 				my $alias = $field->property( "sub_name" );
-				my $td = $session->make_element( "td" );
+				my $td = $session->make_element( "div", class=>"ep_compound_header_cell" );
 
 				$tr->appendChild( $td );
 				$td->appendChild( 
@@ -195,12 +195,12 @@ sub render_single_value_row
 {
 	my( $self, $session, $value, $alllangs, $nolink, $object ) = @_;
 
-	my $tr = $session->make_element( "tr", "class"=>"ep_compound_data_row" );
+	my $tr = $session->make_element( "div", "class"=>"ep_compound_data_row" );
 
 	foreach my $field (@{$self->{fields_cache}})
 	{
 		my $alias = $field->property( "sub_name" );
-		my $td = $session->make_element( "td" );
+		my $td = $session->make_element( "div" );
 		$tr->appendChild( $td );
 		$td->appendChild( 
 			$field->render_value_no_multiple( 
@@ -218,7 +218,7 @@ sub render_single_value
 {
 	my( $self, $session, $value, $object ) = @_;
 
-	my $table = $session->make_element( "table", border=>1 );
+	my $table = $session->make_element( "div", class=>"ep_compound_single" );
 	$table->appendChild( $self->render_single_value_row( $session, $value, $object ) );
 	return $table;
 }

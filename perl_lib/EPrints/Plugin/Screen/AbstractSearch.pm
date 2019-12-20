@@ -877,7 +877,8 @@ sub render_order_menu
 		name=>"order",
 		values=>[values %{$methods}],
 		default=>$order,
-		labels=>\%labels );
+		labels=>\%labels,
+		'aria-labelledby'=>"order_label" );
 }
 
 # redirecting from a POST will lose all our parameters, although we always use

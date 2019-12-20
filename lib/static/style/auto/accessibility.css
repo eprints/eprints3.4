@@ -1,0 +1,24 @@
+table.ep_accessibility_results {
+	border: 1px solid #000;
+	width: 100%;
+	border-collapse: collapse;
+}
+
+table.ep_accessibility_results > tbody > tr > td, table.ep_accessibility_results th {
+	border: 1px solid #000;
+	padding: 0.4em;
+	text-align: center;
+}
+	
+table.ep_accessibility_results > tbody > tr > td:last-child {
+        text-align: left;
+}
+
+.ep_accessibility_bad {
+	color: #8b0000;
+}
+
+.ep_accessibility_good {
+        color: #006400;
+}
+

@@ -6,22 +6,18 @@
 
 <div class="ep_msg_warning">
   <div class="ep_msg_warning_content">
-    <table>
-      <tr>
-        <td>
-          <img alt="Warning" src="{$config{rel_path}}/style/images/warning.png" />
-        </td>
-        <td>
-          <p>No policies have been defined for this repository.</p>
-          <p>You can use the <a rel="external" href="http://www.opendoar.org/tools/en/policies.php">OpenDOAR Policies Tool</a> to produce a standard policy page. Use the button below to define your policies.</p>
-        </td>
-      </tr>
-    </table>
+    <div class="ep_msg_warning_icon">
+      <img alt="Warning" src="{$config{rel_path}}/style/images/warning.png" />
+    </div>
+    <div class="ep_msg_warning_text">
+      <p>No policies have been defined for this repository.</p>
+      <p>You can use the <a rel="external" href="http://www.opendoar.org/tools/en/policies.php">OpenDOAR Policies Tool</a> to produce a standard policy page. Use the button below to define your policies.</p>
+    </div>
   </div>
 </div>
 
 <form method="post" action="http://www.opendoar.org/tools/policytool.php">
-  <textarea style="display: none;" name="rName"><epc:phrase ref="archive_name" /></textarea>
+  <textarea style="display: none;" name="rName" aria-label="Archive name"><epc:phrase ref="archive_name" /></textarea>
   <input type="hidden" name="la" value="en" />
   <input type="hidden" name="rUrl" value="{$config{base_url}}/" />
   <input type="hidden" name="rOaiBaseUrl" value="{$config{perl_url}}/oai2" />

@@ -26,7 +26,7 @@
 
 <p>For more information please see <a rel="external" href="http://www.eprints.org/">www.eprints.org</a>.</p>
 
-<p><a rel="external" href="http://www.eprints.org/">EPrints Services</a> based in Southampton can also provide hosting, training and consultancy services for your EPrints repository.</p>
+<p><a rel="external" href="https://www.eprints.org/uk/index.php/services/">EPrints Services</a> based in Southampton can also provide hosting, training and consultancy services for your EPrints repository.</p>
 
 <h2 id="credits">Credits</h2>
 
@@ -118,7 +118,7 @@
 <epc:phrase ref="ruler" />
 
 <div style="text-align: center; margin-top: 2em;">
-  <a href="http://www.ecs.soton.ac.uk/"><img src="{$config{rel_path}}/images/ecslogo.jpg" border="0" alt="School of Electronics and Computer Science, University of Southampton" align="top"/></a>
+  <img src="{$config{rel_path}}/images/ecslogo.jpg" border="0" alt="School of Electronics and Computer Science, University of Southampton" align="top"/>
   <p>EPrints is Copyright &#169; University of Southampton, 2000-2019.</p>
 </div>
 

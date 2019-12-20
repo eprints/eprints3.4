@@ -1517,8 +1517,8 @@ sub render_menu
 
 	if( $cols > 1 )
 	{
-		my $table = $repo->make_element( "table", cellpadding=>"0", cellspacing=>"0", border=>"0", class=>"ep_view_cols ep_view_cols_$cols" );
-		$tr = $repo->make_element( "tr" );
+		my $table = $repo->make_element( "div", cellpadding=>"0", cellspacing=>"0", border=>"0", class=>"ep_view_cols ep_view_cols_$cols" );
+		$tr = $repo->make_element( "div" );
 		$table->appendChild( $tr );	
 		$f->appendChild( $table );
 	}
@@ -1535,7 +1535,7 @@ sub render_menu
 		if( $cols>1 && $i % $col_len == 0 )
 		{
 			++$col_n;
-			my $td = $repo->make_element( "td", valign=>"top", class=>"ep_view_col ep_view_col_".$col_n );
+			my $td = $repo->make_element( "div", class=>"ep_view_col ep_view_col_".$col_n );
 			$add_ul = $repo->make_element( "ul" );
 			$td->appendChild( $add_ul );	
 			$tr->appendChild( $td );	

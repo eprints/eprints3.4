@@ -4,6 +4,15 @@
 <xpage:title>Accessibility</xpage:title>
 <xpage:body>
 
+<div class="ep_msg_message">
+  <div class="ep_msg_message_content">
+    <div class="ep_msg_message_icon" style="width: 32px;">
+      <img alt="Message" src="/style/images/message.png"/>
+    </div>
+    <div class="ep_msg_message_text">This page is intended as a generic accessibility statement for EPrints and should be amended as required before deployment of your EPrints repository.</div>
+  </div>
+</div>
+
 <h2>Table of Contents</h2>
 <ul>
   <li><a href="#accessibility-statement-for-website-name">Accessibility statement for <epc:phrase ref="archive_name" /></a>
@@ -23,7 +32,7 @@
     </ul>
   </li>
   <li><a href="#how-we-tested-this-website">How we tested <epc:phrase ref="archive_name" /></a></li> 
-  <!-- <a href=""what-were-doing-to-improve-accessibility">What we’re doing to improve accessibility</a></li> --> 
+  <li><a href="what-were-doing-to-improve-accessibility">What we’re doing to improve accessibility</a></li>
 </ul>
 
 <h2 id="accessibility-statement-for-website-name">Accessibility statement for <epc:phrase ref="archive_name" /></h2>
@@ -58,7 +67,7 @@
 <p>If you need information on <epc:phrase ref="archive_name" /> in a different formats please contact our <a href="mailto:{$config{adminemail}}">repository administrators</a>. We will consider your request and will aim to get back to you within 7 working days.</p>
 
 <h3 id="reporting-accessibility-problems-with-this-website">Reporting accessibility problems with  <epc:phrase ref="archive_name" /></h3>
-<p>We are always looking to improve the accessibility of <epc:phrase ref="archive_name" />. If you find any problems not listed on this page or think we are not meeting accessibility requirements, contact by email: <a href="mailto:{$config{adminemail}}"><epc:print expr="$config{adminemail}" /></a>.</p>
+<p>We are always looking to improve the accessibility of <epc:phrase ref="archive_name" />. If you find any problems not listed on this page or think we are not meeting accessibility requirements, please <a href="{$config{rel_path}}/contact.html">contact us</a>.</p>
 
 <h3 id="enforcement-procedure">Enforcement procedure</h3>
 <p>The Equality and Human Rights Commission (EHRC) is responsible for enforcing the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018 (the 'accessibility regulations'). If you’re not happy with how we respond to your complaint, <a rel="external" href="https://www.equalityadvisoryservice.com/">contact the Equality Advisory and Support Service (EASS)</a>.</p>
@@ -153,34 +162,16 @@ Other Example:
 -->
 
 <h2 id="how-we-tested-this-website">How we tested <epc:phrase ref="archive_name" /></h2>
-<p><epc:phrase ref="archive_name" /> has yet to be comprehensively tested.</p>
-<!-- 
-<p><epc:phrase ref="archive_name" /> was last tested on [date]. The test was carried out by [add name of organisation that carried out test, or indicate that you did your own testing].</p>
-<p>We used this approach to decide on a sample of pages to test [add link to explanation of how you decided which pages to test].</p>
-<p>We tested:
-<ul>
-  <li><epc:phrase ref="archive_name" />'s homepage, available at <a href="$config{http_url}">{$config{http_url}}</a></li>
-  <li>Its 'About the Repository' page, available at <a href="$config{http_url}/information.html">{$config{http_url}}/information.html</a></li>
-  <li>Its 'Browse Items' page, available at <a href="$config{http_url}/view/">{$config{http_url}}/view/</a></li>
-  <li>Its 'Browse by Year' page, available at <a href="$config{http_url}/view/year/">{$config{http_url}}/view/year/</a></li>
-  <li>Its 'Items where Year is 2019' page, available at <a href="$config{http_url}/view/year/2019.html">{$config{http_url}}/view/year/2019.html</a></li>
-  <li>Its '<epc:phrase ref="archive_name" /> User Documentation' page, available at <a href="$config{http_url}/help/">{$config{http_url}}/help/</a></li>
-  <li>Its 'About EPrints' page, available at <a href="$config{http_url}/eprints/">{$config{http_url}}/eprints/</a></li>
-  <li>Its 'Simple Search' page and subsequent results page, available at <a href="$config{cgi_url}/search/simple/">{$config{cgi_url}}/search/simple/</a></li>
-  <li>Its 'Advanced Search' page and subsequent results page, available at <a href="$config{cgi_url}/search/advanced/">{$config{cgi_url}}/search/advanced/</a></li>
-  <li>A selection of publication summary pages, available at URLs of the format $config{http_url}/eprint/id/[NUMBER]</li>
-</ul>
-</p>
-<p>You can read the full accessibility test report <a href="report.html">here</a>.</p>
--->
+<p><epc:phrase ref="archive_name" /> was last comprehensively tested on <b><epc:phrase ref="accessibility_report_last_tested_date"/></b>.  You can read the <a href="report.html">comprehensive report</a>.</p>
+<epc:phrase ref="accessibility_report_summary"/>
 
 <!--
 [Note: publishing an accessibility roadmap is optional. It’s a good idea to publish one if you want to be specific about the order you’re planning to tackle accessibility issues, and there’s no space to do so in the accessibility statement itself.] 
-<h2 id="what-were-doing-to-improve-accessibility">What we’re doing to improve accessibility</h2>
-<p>Our <a href="roadmap.html">accessibility roadmap</a> shows how and when we plan to improve accessibility on <epc:phrase ref="archive_name" />.</a>    
 -->
+<h2 id="what-were-doing-to-improve-accessibility">What we’re doing to improve accessibility</h2>
+<p>Our <a href="roadmap.html">accessibility roadmap</a> shows how and when we plan to improve accessibility on <epc:phrase ref="archive_name" />.</p>    
 
-<p><em>This statement was prepared on <b>2 December 2019</b>. It was last updated on <b>2 December 2019</b>.</em></p>
+<p><em>This statement was first prepared on <b><epc:phrase ref="accessibility_statement_prepared_date"/></b>. It was last updated on <b><epc:phrase ref="accessibility_statement_last_updated_date"/></b>.</em></p>
 
 </xpage:body>
 </xpage:page>

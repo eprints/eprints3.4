@@ -212,6 +212,12 @@ sub convert_dataobj
 		$data->{"@"} = $dataobj->get_value( "isbn" ) if $dataobj->exists_and_set( "issn" );
 	}
 
+	# R DOI
+	if ( EPrints::DOI->parse( $dataobj->get_value( "id_number" ), ( test => 1 ) ) )
+	{
+		$data->{R} = $dataobj->get_value( "id_number" );
+	}
+
 	# F Label
 	$data->{F} = $plugin->{session}->get_repository->get_id . ":" . $dataobj->get_id;
 

@@ -716,6 +716,12 @@ sub convert_input
 			$epdata->{isbn} = $input_data->get( "@" );
 		}
 	}
+	
+	# R DOI
+	if ( $input_data->get( "R" ) && EPrints::DOI->parse( $input_data->get( "R" ), ( test => 1 ) ) && !EPrints::Utils::is_set( $epdata->{id_number} ) )
+	{
+		$epdata->{id_number} = $input_data->get( "R" );
+	}
 
 	return $epdata;
 }

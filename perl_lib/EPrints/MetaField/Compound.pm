@@ -122,10 +122,14 @@ sub render_value_actual
 		foreach my $field_conf ( @{$f} )
 		{
 			my $fieldname = $field_conf->{name};
-			my $field = $self->{dataset}->get_field( $fieldname );
-			my $th = $session->make_element( "div", class=>"ep_compound_header_cell" );
-			$tr->appendChild( $th );
-			$th->appendChild( $field->render_name( $session ) );
+			(my $subfieldname = $fieldname) =~ s/^$self->{name}_//;
+                        if ( exists @{$value}[0]->{$subfieldname} || !$field_conf->{render_quiet} )
+                        {
+                                my $field = $self->{dataset}->get_field( $fieldname );
+				my $th = $session->make_element( "div", class=>"ep_compound_header_cell" );
+                                $tr->appendChild( $th );
+                                $th->appendChild( $field->render_name( $session ) );
+                        }
 		}
 	
 		if( $self->get_property( "multiple" ) )
@@ -200,15 +204,18 @@ sub render_single_value_row
 	foreach my $field (@{$self->{fields_cache}})
 	{
 		my $alias = $field->property( "sub_name" );
-		my $td = $session->make_element( "div" );
-		$tr->appendChild( $td );
-		$td->appendChild( 
-			$field->render_value_no_multiple( 
-				$session, 
-				$value->{$alias}, 
-				$alllangs,
-				$nolink,
-				$object ) );
+		if ( exists $value->{$alias} || !$field->property( "render_quiet" ) )
+                {
+			my $td = $session->make_element( "div" );
+			$tr->appendChild( $td );
+			$td->appendChild( 
+				$field->render_value_no_multiple( 
+					$session, 
+					$value->{$alias}, 
+					$alllangs,
+					$nolink,
+					$object ) );
+		}
 	}
 
 	return $tr;

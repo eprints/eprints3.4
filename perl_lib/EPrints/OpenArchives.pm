@@ -39,6 +39,7 @@ sub archive_id
 	my $v2 = $repo->config( "oai", "v2", "archive_id" );
 
 	$v1 ||= $repo->config( "host" );
+	$v1 ||= $repo->config( "securehost" );
 	$v2 ||= $v1;
 
 	return $any ? ($v1, $v2) : $v2;

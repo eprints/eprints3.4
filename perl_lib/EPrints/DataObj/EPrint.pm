@@ -403,7 +403,8 @@ sub fileinfo
 	my @finfo = ();
 	foreach my $doc ( $self->get_all_documents )
 	{
-		my $icon = substr($doc->icon_url,length($base_url));
+		my $icon = "";
+                $icon = substr($doc->icon_url,length($base_url)) if length($doc->icon_url) > length($base_url);
 		my $url = substr($doc->get_url,length($base_url));
 		push @finfo, "$icon;$url";
 	}

@@ -85,13 +85,16 @@ END
 sub output_dataobj
 {
 	my( $plugin, $dataobj ) = @_;
-	
+
+	my $hostname = $plugin->get_repository()->config( "host" );
+	$hostname ||= $plugin->get_repository()->config( "securehost" );
+
 	my $r = "";
 
 	$r.="BEGIN:VEVENT\n";
 	$r.="CATEGORY:action\n";
 	$r.="SUMMARY:".$dataobj->get_value( "action" )." on ".$dataobj->get_value( "datasetid" ).".".$dataobj->get_value( "objectid" )."\n";
-	$r.="UID:history.".$dataobj->get_value( 'historyid' )."\@ecs.soton.ac.uk\n";
+	$r.="UID:history.".$dataobj->get_value( 'historyid' )."\@".$hostname."\n";
 	my $timestamp = $dataobj->get_value( "timestamp" ) ;
 	$timestamp =~s/ /T/;
 	$timestamp =~s/[:-]//g;

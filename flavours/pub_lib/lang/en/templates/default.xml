@@ -16,40 +16,40 @@
           <nav aria-label="Main Navigation">
             <ul role="menu" class="ep_tm_menu">
               <li>
-                <a href="{$config{http_url}}" title="{phrase('template/navigation:home:title')}" role="menuitem">
+                <a href="{$config{rel_path}}" title="{phrase('template/navigation:home:title')}" role="menuitem">
                   <epc:phrase ref="template/navigation:home"/>
                 </a>
               </li>
               <li>
-                <a href="{$config{http_url}}/information.html" title="{phrase('template/navigation:about:title')}" role="menuitem">
+                <a href="{$config{rel_path}}/information.html" title="{phrase('template/navigation:about:title')}" role="menuitem">
                   <epc:phrase ref="template/navigation:about"/>
                 </a>
               </li>
               <li>
-                <a href="{$config{http_url}}/view/" title="{phrase('template/navigation:browse:title')}" role="menuitem" menu="ep_tm_menu_browse" aria-owns="ep_tm_menu_browse">
+                <a href="{$config{rel_path}}/view/" title="{phrase('template/navigation:browse:title')}" role="menuitem" menu="ep_tm_menu_browse" aria-owns="ep_tm_menu_browse">
                   <epc:phrase ref="template/navigation:browse"/>
                 </a>
                 <ul role="menu" id="ep_tm_menu_browse" style="display:none;">
                   <li>
-                    <a href="{$config{http_url}}/view/year/" role="menuitem">
+                    <a href="{$config{rel_path}}/view/year/" role="menuitem">
                       <epc:phrase ref="bin/generate_views:indextitleprefix"/>
                       <epc:phrase ref="viewname_eprint_year"/>
                     </a>
                   </li>
                   <li>
-                    <a href="{$config{http_url}}/view/subjects/" role="menuitem">
+                    <a href="{$config{rel_path}}/view/subjects/" role="menuitem">
                       <epc:phrase ref="bin/generate_views:indextitleprefix"/>
                       <epc:phrase ref="viewname_eprint_subjects"/>
                     </a>
                   </li>
                   <li>
-                    <a href="{$config{http_url}}/view/divisions/" role="menuitem">
+                    <a href="{$config{rel_path}}/view/divisions/" role="menuitem">
                       <epc:phrase ref="bin/generate_views:indextitleprefix"/>
                       <epc:phrase ref="viewname_eprint_divisions"/>
                     </a>
                   </li>
                   <li>
-                    <a href="{$config{http_url}}/view/creators/" role="menuitem">
+                    <a href="{$config{rel_path}}/view/creators/" role="menuitem">
                       <epc:phrase ref="bin/generate_views:indextitleprefix"/>
                       <epc:phrase ref="viewname_eprint_creators"/>
                     </a>
@@ -65,7 +65,7 @@
             </div>
             <div>
               <epc:pin ref="languages"/>
-              <form method="get" accept-charset="utf-8" action="{$config{http_cgiurl}}/search" style="display:inline">
+              <form method="get" accept-charset="utf-8" action="{$config{rel_cgipath}}/search" style="display:inline">
                 <input class="ep_tm_searchbarbox" size="20" type="text" name="q" aria-labelledby="searchbutton"/>
                 <input class="ep_tm_searchbarbutton" value="{phrase('lib/searchexpression:action_search')}" type="submit" name="_action_search" id="searchbutton"/>
                 <input type="hidden" name="_action_search" value="Search"/>

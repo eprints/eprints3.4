@@ -276,6 +276,9 @@ sub get_index_codes_basic
 		}
 	}
 
+	# Allow indexcodes file to be generated, but don't add content to full-text index if the document isn't public.
+	return( [], [], [] ) unless $doc->exists_and_set( "security" ) && $doc->value( "security" ) eq "public";
+
 	return( [], [], [] ) unless defined $indexcodes_doc;
 
 	my $data = "";

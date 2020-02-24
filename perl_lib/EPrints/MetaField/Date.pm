@@ -300,8 +300,12 @@ sub get_id_from_value
 
 sub get_value_label
 {
-	my( $self, $session, $value ) = @_;
+	my( $self, $session, $value, %opts ) = @_;
 
+	if( !EPrints::Utils::is_set( $value ) && $opts{fallback_phrase} )
+        {
+                return $session->html_phrase( $opts{fallback_phrase} );
+        }
 	return $self->render_single_value( $session, $value );
 }
 

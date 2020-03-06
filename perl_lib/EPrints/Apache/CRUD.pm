@@ -257,7 +257,7 @@ sub new
 		# adjust /id/eprint/23 to /id/archive/23
 		$self{dataset} = $self{dataobj}->get_dataset if defined $self{dataobj};
 
-		$self{options} = [qw( GET HEAD PUT OPTIONS )];
+		$self{options} = [qw( GET HEAD PUT PATCH OPTIONS )];
 		$self{scope} = CRUD_SCOPE_DATAOBJ;
 	}
 
@@ -497,6 +497,10 @@ sub _priv
 		{
 			$priv = "edit";
 		}
+	}
+	elsif( $self->method eq "PATCH" )
+	{
+		$priv = "edit";
 	}
 	elsif( $self->method eq "DELETE" )
 	{
@@ -1031,6 +1035,10 @@ sub handler
 			return $self->PUT( $owner );
 		}
 	}
+	elsif( $self->method eq "PATCH" )
+	{
+		return $self->PUT( $owner, "patch" => 1 );
+	}
 	elsif( $self->method eq "GET" || $self->method eq "HEAD" || $self->method eq "OPTIONS" )
 	{
 		$r->err_headers_out->{Allow} = join ',', $self->options;
@@ -1476,7 +1484,7 @@ Object was successfully updated.
 # PUT /id/eprint/23
 sub PUT
 {
-	my( $self, $owner ) = @_;
+	my( $self, $owner, %opts ) = @_;
 
 	my $r = $self->request;
 	my $repo = $self->repository;
@@ -1586,8 +1594,8 @@ sub PUT
 				);
 		}
 	}
-
-	$dataobj->empty();
+	
+	$dataobj->empty() unless ( defined $opts{patch} );
 	#$dataobj->set_value('eprint_status','inbox') if $dataobj->get_dataset_id() eq "eprint"; 
 	$dataobj->update( $epdata, include_subdataobjs => 1 );
 	$dataobj->commit;
@@ -1895,6 +1903,7 @@ sub is_file_ok
 {
 	my( $self, $epdata ) = @_;
 	my $file_checking_succ=1;
+	return $file_checking_succ unless defined $epdata->{documents};
 	foreach my $doc (@{$epdata->{documents}})
 	{
 		foreach (@{$doc->{files}})

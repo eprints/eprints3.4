@@ -133,6 +133,10 @@ sub input_text_fh
 	{
 		$data->{type} = 'conference_item';	
 	}
+	elsif ( $dom_item->nodeName eq 'book' )
+	{
+		$data->{type} = 'book';
+	}
 	else
 	{
 		$data->{type} = 'article';
@@ -148,14 +152,14 @@ sub input_text_fh
             {
                 $plugin->contributors( $data, $node );
             }
-	    elsif ( $name eq "pages" || $name eq "posted_date" )
+	    elsif ( $name eq "pages" || $name eq "posted_date" || $name eq "titles" )
 	    {
 		$plugin->compound( $data, $node );
+		if ( $name eq "posted_date" )
+		{
+		    $data->{date_type} = "submitted";
+		}
 	    }
-	    elsif ( $name eq "titles" )
-            {
-                $plugin->title( $data, $node );
-            }
             elsif ( $name eq "journal_metadata" )
             {
                 $plugin->journal_metadata( $data, $node );
@@ -172,9 +176,14 @@ sub input_text_fh
             {
                 $plugin->proceedings_metadata( $data, $node );
             }
-	    elsif ( $name eq "journal_article" || $name eq "conference_paper" )
+	    elsif ( $name eq "journal_article" || $name eq "conference_paper" || $name eq "book_metadata" )
             {
+		$data->{type} = "book_section" if $name eq "content_item" && $data->{type} eq "book";
                 $plugin->item_metadata( $data, $node );
+            }
+	    elsif ( $name eq "content_item" )
+            {
+                $plugin->content_item( $data, $node );
             }
             else
             {
@@ -246,24 +255,43 @@ sub item_metadata
 
     foreach my $part ($node->childNodes) 
     {
-        if ( $part->nodeName eq "titles" )
-        {
-            $plugin->title( $data, $part );	
-        }
-	elsif ( $part->nodeName eq "contributors" )
+	if ( $part->nodeName eq "contributors" )
 	{
 	    $plugin->contributors( $data, $part );
 	}
-	elsif ( $part->nodeName eq "publication_date" || $part->nodeName eq "pages" )
+	elsif ( $part->nodeName eq "publication_date" )
+	{
+	    $plugin->publication_date( $data, $part );
+	}	
+	elsif ( $part->nodeName eq "pages" || $part->nodeName eq "publisher" || $part->nodeName eq "titles" )
 	{
 	    $plugin->compound( $data, $part );
 	}
-	else
+	elsif ( ref ( $part ) ne "XML::LibXML::Text" )
 	{
-	    $data->{$part->nodeName} = EPrints::Utils::tree_to_utf8( $node );
+	    if ( $part->getAttribute( "media_type" ) )
+            {
+                $data->{$part->nodeName.".". $part->getAttribute( "media_type" )} = EPrints::Utils::tree_to_utf8( $part );
+            }
+	    else 
+            { 
+	        $data->{$part->nodeName} = EPrints::Utils::tree_to_utf8( $node );
+            }
 	}
     }
 }
+
+sub content_item
+{
+	my( $plugin, $data, $node ) = @_;
+	if ( $data->{type} eq "book" )
+	{
+		$data->{type} = "book_section";
+		$data->{volume_title} = $data->{title};
+	}
+	$plugin->item_metadata( $data, $node );	
+}
+
 
 sub journal_issue 
 {
@@ -340,12 +368,24 @@ sub proceedings_metadata
         }
         elsif ( $part->nodeName eq "publisher" )
         {
-            $data->{publisher} = EPrints::Utils::tree_to_utf8( ($part->childNodes)[1] );
+            $plugin->compound( $data, $part );
         }
 	elsif ( $part->nodeName eq "publication_date" )
         {
-            $plugin->compound( $data, $part );
+            $plugin->publication_date( $data, $part );	    
         }
+    }
+}
+
+sub publication_date
+{
+    my( $plugin, $data, $node ) = @_;
+
+    unless ( defined $data->{date_type} && $data->{date_type} eq "published" )
+    {
+        $plugin->compound( $data, $node );
+        $data->{date_type} = 'published' if $node->getAttribute( "media_type" ) eq "print";
+        $data->{date_type} = 'published_online' if $node->getAttribute( "media_type" ) eq "electronic";
     }
 }
 
@@ -353,7 +393,7 @@ sub title
 {
     my( $plugin, $data, $node ) = @_;
    
-    $data->{article_title} = EPrints::Utils::tree_to_utf8( ($node->childNodes)[1] );
+    $data->{title} = EPrints::Utils::tree_to_utf8( ($node->childNodes)[1] );
 }
 
 sub convert_input
@@ -378,11 +418,14 @@ sub convert_input
     }
 
     if( defined $data->{year} && $data->{year} =~ /^[0-9]{4}$/ )
-    {
-	
+    {	
         $epdata->{date} = $data->{year};
 	$epdata->{date} .= "-".$data->{month} if defined $data->{month} && $data->{month} =~ /^[0-9]{1,2}$/;
 	$epdata->{date} .= "-".$data->{day} if defined $data->{day} && $data->{day} =~ /^[0-9]{1,2}$/;
+	$epdata->{date_type} = $data->{date_type} if defined $data->{date_type};
+	$epdata->{date_type} = "published" if $epdata->{date_type} eq "published_online";
+	$epdata->{ispublished} = "pub" if defined $epdata->{date_type} && $epdata->{date_type} eq "published";
+	$epdata->{ispublished} = "submitted" if defined $epdata->{date_type} && $epdata->{date_type} eq "submitted";
     }
 
     if( defined $data->{"issn.electronic"} )
@@ -393,6 +436,19 @@ sub convert_input
     {
         $epdata->{issn} = $data->{"issn.print"};
     }
+    if( defined $data->{"isbn.electronic"} )
+    {
+        $epdata->{isbn} = $data->{"isbn.electronic"};
+    }
+    if( defined $data->{"isbn"} )
+    {
+        $epdata->{isbn} = $data->{"isbn"};
+    }
+    if( defined $data->{"issn.print"} )
+    {
+        $epdata->{isbn} = $data->{"isbn.print"};
+    }
+
     if( defined $data->{"doi"} )
     {
         #Use doi field identified from config parameter, in case it has been customised. Alan Stiles, Open University 20140408
@@ -407,11 +463,14 @@ sub convert_input
 	    $epdata->{$doi_field} = $data->{"doi"};
 	}
     }
+    if ( defined $epdata->{official_url} && defined $data->{resource} && $epdata->{official_url} ne $data->{resource} )
+    {
+        $epdata->{official_url} = $data->{resource};
+    }
     if( defined $data->{"volume_title"} )
     {
         $epdata->{book_title} = $data->{"volume_title"};
     }
-
     if( defined $data->{"journal_title"} )
     {
         $epdata->{publication} = $data->{"journal_title"};
@@ -420,17 +479,21 @@ sub convert_input
     {
         $epdata->{publication} = $data->{"proceedings_title"};
     }
-    if( defined $data->{"article_title"} )
+    if( defined $data->{"title"} )
     {
-        $epdata->{title} = $data->{"article_title"};
+        $epdata->{title} = $data->{"title"};
     }
-    if( defined $data->{"publisher"} )
+    if( defined $data->{"subtitle"} )
     {
-        $epdata->{publisher} = $data->{"publisher"};
+        $epdata->{title} .= ": " . $data->{"subtitle"};
     }
-    if( defined $data->{"isbn"} )
+    if( defined $data->{"publisher_name"} )
     {
-        $epdata->{isbn} = $data->{"isbn"};
+        $epdata->{publisher} = $data->{"publisher_name"};
+    }
+    if( defined $data->{"publisher_place"} )
+    {
+        $epdata->{place_of_pub} = $data->{"publisher_place"};
     }
     if( defined $data->{"volume"} )
     {
@@ -444,12 +507,14 @@ sub convert_input
     if( defined $data->{"first_page"} )
     {
         $epdata->{pagerange} = $data->{"first_page"};
+	$epdata->{pages} = 1;
     }
     if( defined $data->{"last_page"} )
-        {
-                $epdata->{pagerange} = "" unless defined $epdata->{pagerange};
-                $epdata->{pagerange} .= "-" . $data->{"last_page"};
-        }
+    {
+        $epdata->{pagerange} = "" unless defined $epdata->{pagerange};
+        $epdata->{pagerange} .= "-" . $data->{"last_page"};
+	$epdata->{pages} = $data->{"last_page"} - $data->{"first_page"} + 1 if defined $data->{"first_page"};
+    }
 
     if( defined $data->{"abstract"} )
     {

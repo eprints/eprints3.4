@@ -7,6 +7,7 @@ EPrints::Sword::Utils
 package EPrints::Sword::Utils;
 
 use strict;
+use EPrints::Apache::Sword;
 
 *authenticate = \&EPrints::Apache::Sword::authenticate;
 

@@ -179,11 +179,26 @@ sub get_basic_input_elements
 	push @classes, join('_', 'ep', $self->{dataset}->base_id, $self->name);
 	push @classes, join('_', 'eptype', $self->{dataset}->base_id, $self->type);
 
+	my $readonly = ( $self->{readonly} && $self->{readonly} eq "1") ? 1 : undef;
+ 	push @classes, "ep_readonly" if $readonly;
+ 	
+ 	# needs to set the selectedIndex back to the original value to enforce readonly
+ 	my $default_index = 0;
+ 	foreach my $t ( @{$tags} )
+ 	{
+ 	        last if $t eq $value;
+ 	        $default_index++;
+	}
+ 	# dont believe the onchange return status is used, just setting it for completeness
+ 	my $onchange = ( $readonly ) ? "selectedIndex = $default_index; return false;" : "return true;";
+
 	return( [ [ { el=>$session->render_option_list(
 			values => $tags,
 			labels => $labels,
 			name => $basename,
 			class => join(" ", @classes),
+			onchange => $onchange,
+			readonly => $readonly,
 			id => $basename,
 			default => $value,
 			multiple => 0,

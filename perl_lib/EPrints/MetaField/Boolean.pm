@@ -77,13 +77,17 @@ sub get_basic_input_elements
 	push @classes, join('_', 'eptype', $self->{dataset}->base_id, $self->type);
 	push @classes, join('_', 'eptype', $self->{dataset}->base_id, $self->type, $self->{input_style}) if $self->{input_style};
 
+	my $readonly = ( $self->{readonly} && $self->{readonly} eq "yes" ) ? 1 : undef;
+	push @classes, "ep_readonly" if $readonly;
+	my $onclick = ( $readonly ) ? "return false;" : "return true;";
+
 	if( $self->{input_style} eq "menu" )
 	{
 		my @values = qw/ TRUE FALSE /;
 		my %labels = (
-TRUE=> $session->phrase( $self->{confid}."_fieldopt_".$self->{name}."_TRUE"),
-FALSE=> $session->phrase( $self->{confid}."_fieldopt_".$self->{name}."_FALSE"),
-);
+			TRUE=> $session->phrase( $self->{confid}."_fieldopt_".$self->{name}."_TRUE" ),
+			FALSE=> $session->phrase( $self->{confid}."_fieldopt_".$self->{name}."_FALSE" ),
+		);
 		my $height = 2;
 		if( !$self->get_property( "required" ) )
 		{
@@ -95,7 +99,7 @@ FALSE=> $session->phrase( $self->{confid}."_fieldopt_".$self->{name}."_FALSE"),
 		{
 			$height = $self->get_property( "input_rows" );
 		}
-push @classes, "foobar0";
+
 		my %settings = (
 			height=>$height,
 			values=>\@values,
@@ -103,6 +107,7 @@ push @classes, "foobar0";
 			name=>$basename,
 			default=>$value,
 			class=>join(" ", @classes),
+			onclick=>$onclick,
 		);
 		return [[{ el=>$session->render_option_list( %settings ) }]];
 	}
@@ -116,6 +121,9 @@ push @classes, "foobar0";
 			checked=>( defined $value && $value eq 
 					"TRUE" ? "checked" : undef ),
 			name => $basename,
+			id => $basename . "_true",
+			readonly => $readonly,
+			onclick => $onclick,
 			class => join(" ", @classes),
 			value => "TRUE" );
 		my $false = $session->render_noenter_input_field(
@@ -123,6 +131,9 @@ push @classes, "foobar0";
 			checked=>( defined $value && $value eq 
 					"FALSE" ? "checked" : undef ),
 			name => $basename,
+			id => $basename . "_false",
+			readonly => $readonly,
+			onclick => $onclick,
 			class => join(" ", @classes),
 			value => "FALSE" );
 		my $f = $session->make_doc_fragment;
@@ -140,6 +151,7 @@ push @classes, "foobar0";
 					checked=>( !EPrints::Utils::is_set($value) ? "checked" : undef ),
 					name => $basename,
 					class => join(" ", @classes),
+					onclick => $onclick,
 					value => "" ) );
 			$f->appendChild( $div );
 			$div->appendChild( $session->html_phrase( 
@@ -151,10 +163,10 @@ push @classes, "foobar0";
 	# render as checkbox (ugly)
 	return [[{ el=>$session->render_noenter_input_field(
 				type => "checkbox",
-				checked=>( defined $value && $value eq 
-						"TRUE" ? "checked" : undef ),
+				checked => ( defined $value && $value eq "TRUE" ) ? "checked" : undef,
 				name => $basename,
-				class=>join(" ", @classes),
+				class => join(" ", @classes),
+				onclick => $onclick,
 				value => "TRUE" ) }]];
 }
 

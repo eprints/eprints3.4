@@ -62,8 +62,8 @@ sub new
 			dataset => $self->get_dataset(), 
 			provenance => $self->get_property( "provenance" ),
 			multiple => $properties{ "multiple" },
-			volatile => $properties{ "volatile" } );
-
+			volatile => $properties{ "volatile" },
+		);
 		# avoid circular references if we can
 		Scalar::Util::weaken( $field->{parent} )
 			if defined &Scalar::Util::weaken;
@@ -107,10 +107,12 @@ sub render_value_actual
 	#}
 
 	my $class = "ep_" . $self->{name};
-
+	my $readonly = ( $self->{readonly} && $self->{readonly} eq "yes" ) ? 1 : undef;
+	$class .= " ep_readonly" if $readonly;
 	my $result;
 
-	if( !EPrints::Utils::is_set( $self->get_property( "as_list"  ) ) || $self->get_property( "as_list" ) == 0 ) {
+	if( !EPrints::Utils::is_set( $self->get_property( "as_list"  ) ) || $self->get_property( "as_list" ) == 0 ) 
+	{
 
 		# View as table
 
@@ -487,15 +489,17 @@ sub get_basic_input_elements
 {
 	my( $self, $session, $value, $basename, $staff, $object ) = @_;
 
+	my $readonly = ( $self->{readonly} && $self->{readonly} eq "yes" ) ? 1 : 0;
 	my $grid_row = [];
 
 	foreach my $field (@{$self->{fields_cache}})
 	{
+		$field->{readonly} = $readonly;
 		my $alias = $field->property( "sub_name" );
 		my $part_grid = $field->get_basic_input_elements( 
 					$session, 
 					$value->{$alias}, 
-					$basename."_".$alias, 
+					$basename."_".$alias,
 					$staff, 
 					$object );
 		my $top_row = $part_grid->[0];

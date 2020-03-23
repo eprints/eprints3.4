@@ -1569,7 +1569,7 @@ sub render_menu
 		{
 			my $link = EPrints::Utils::escape_filename( $fileid );
 
-			if( defined $view->{list} ) #we might be displaying this in a non browse view context (i.e. a list description) and so relative links are no use
+			if( $view->{id} =~ m/^list_([\d]+)/ ) #we might be displaying this in a non browse view context (i.e. a list description) and so relative links are no use
                         {
                                 my $list_id = $view->{id};
                                 my $full_link = "/view/$list_id/"; #link to list id

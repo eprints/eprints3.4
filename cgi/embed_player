@@ -1,0 +1,35 @@
+use EPrints;
+use strict;
+
+# simple script used to embed videos in other pages, takes docid as a parameter
+
+my $session = EPrints::Session->new();
+$session->send_http_header( content_type=>"text/html" );
+
+my $docid = $session->param( "docid" );
+my $doc = undef;
+if( $docid =~ /^[0-9]+$/ )
+{
+  $doc = EPrints::DataObj::Document->new( $session, $docid );
+}
+
+my $title = ( $doc ) ? $doc->get_value( "main" ) : "";
+
+print <<EOT;
+<html>
+<head>
+  <title>$title</title>
+</head>
+<body>
+EOT
+
+if( $doc )
+{
+  my $frag = $doc->render_video_preview();
+  print $session->xhtml->to_xhtml( $frag ) if $frag;
+}
+
+print <<EOT;
+</body>
+</html>
+EOT

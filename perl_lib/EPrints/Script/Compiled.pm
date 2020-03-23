@@ -290,6 +290,15 @@ sub run_substr
         return [ substr( $string->[0], $offset->[0], $length->[0]), "STRING" ];
 }
 	
+# run_contains tests if string has a substring of token
+sub run_contains
+{
+        my( $self, $state, $string, $token, $length ) = @_;
+        my $t = $token->[0];
+
+        return [ ($string->[0] =~ /$t/) ? "TRUE" : "FALSE", "BOOLEAN" ];
+}
+
 sub run_is_set
 {
 	my( $self, $state, $param ) = @_;

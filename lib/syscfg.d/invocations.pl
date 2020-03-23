@@ -18,10 +18,16 @@ my %invocations = (
 	 'doc2txt' => '$(perl) $(doc2txt) $(SOURCE) $(TARGET)',
 	 'rmall' => '$(rm) -rf $(TARGET)/*',
 	 'ffmpeg_i' => '$(ffmpeg) -i $(SOURCE)',
-	 'ffmpeg_video_mp4' => '$(ffmpeg) -y -i $(SOURCE) -acodec $(audio_codec) -ac 2 -ar $(audio_sampling) -ab $(audio_bitrate) -f $(container) -vcodec $(video_codec) -r $(video_frame_rate) -b $(video_bitrate) -s $(width)x$(height) $(TARGET)',
-	 'ffmpeg_video_ogg' => '$(ffmpeg) -y -i $(SOURCE) -acodec $(audio_codec) -ac 2 -ar $(audio_sampling) -ab $(audio_bitrate) -f $(container) -vcodec $(video_codec) -r $(video_frame_rate) -b $(video_bitrate) -s $(width)x$(height) $(TARGET)',
-	 'ffmpeg_audio_mp4' => '$(ffmpeg) -y -i $(SOURCE) -acodec $(audio_codec) -ac 2 -ar $(audio_sampling) -ab $(audio_bitrate) -f $(container) $(TARGET)',
+
+	#'ffmpeg_video_mp4' => '$(ffmpeg) -y -i $(SOURCE) -acodec $(audio_codec) -ac 2 -ar $(audio_sampling) -ab $(audio_bitrate) -f $(container) -vcodec $(video_codec) -r $(video_frame_rate) -b:v $(video_bitrate) -s $(width)x$(height) $(TARGET)',
+	 'ffmpeg_video_mp4' => '$(ffmpeg) -y -i $(SOURCE) -acodec $(audio_codec) -strict -2 -ac 2 -ar $(audio_sampling) -ab $(audio_bitrate) -f $(container) -vcodec $(video_codec) -r $(video_frame_rate) -b:v $(video_bitrate) -s $(width)x$(height) $(TARGET)',
+	 'ffmpeg_video_ogg' => '$(ffmpeg) -y -i $(SOURCE) -acodec $(audio_codec) -ac 2 -ar $(audio_sampling) -ab $(audio_bitrate) -f $(container) -vcodec $(video_codec) -r $(video_frame_rate) -b:v $(video_bitrate) -s $(width)x$(height) $(TARGET)',
+	 'ffmpeg_video_webm'=> '$(ffmpeg) -y -i $(SOURCE) -acodec $(audio_codec) -ac 2 -ar $(audio_sampling) -ab $(audio_bitrate) -f $(container) -vcodec $(video_codec) -r $(video_frame_rate) -b:v $(video_bitrate) -s $(width)x$(height) $(TARGET)',
+
+	#'ffmpeg_audio_mp4' => '$(ffmpeg) -y -i $(SOURCE) -acodec $(audio_codec) -ac 2 -ar $(audio_sampling) -ab $(audio_bitrate) -f $(container) $(TARGET)',
+	 'ffmpeg_audio_mp4' => '$(ffmpeg) -y -i $(SOURCE) -acodec $(audio_codec) -strict -2 -ac 2 -ar $(audio_sampling) -ab $(audio_bitrate) -f $(container) $(TARGET)',
 	 'ffmpeg_audio_ogg' => '$(ffmpeg) -y -i $(SOURCE) -acodec $(audio_codec) -ac 2 -ar $(audio_sampling) -ab $(audio_bitrate) -f $(container) $(TARGET)',
+
 	 'ffmpeg_cell' => '$(ffmpeg) -y -i $(SOURCE) -an -f mjpeg -ss $(offset) -t 00:00:01 -r 1 -s $(width)x$(height) $(TARGET)',
 	 'unoconv' => '$(unoconv) -f $(FORMAT) $(SOURCE)',
 	 'txt2refs' => '$(perl) $(txt2refs) $(SOURCE) $(TARGET)',

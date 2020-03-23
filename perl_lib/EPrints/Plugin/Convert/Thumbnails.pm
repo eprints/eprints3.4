@@ -158,6 +158,7 @@ $DEFAULT{ffmpeg_formats} = {qw(
 	wmv	video/x-ms-wmv
 	ogv	video/ogg
 	flv	video/x-flv
+	webm	video/webm
 	wav	audio/wav
 	ac3	audio/ac3
 	m4a	audio/mp4
@@ -168,6 +169,7 @@ $DEFAULT{sizes} = {(
 	small => [66,50],
 	medium => [200,150],
 	preview => [400,300],
+	# preview => [600,600],
 	lightbox => [640,480],
 )};
 # enable/disable audio/video previews
@@ -186,7 +188,8 @@ $DEFAULT{video_height} = "480";
 #$DEFAULT{video_rate} = "500k";
 
 $DEFAULT{audio_mp4} = {
-	audio_codec => "libvo_aacenc",
+	# audio_codec => "libvo_aacenc",
+	audio_codec => "aac",
 	audio_bitrate => "96k",
 	audio_sampling => "44100",
 	container => "mp4",
@@ -198,11 +201,13 @@ $DEFAULT{audio_ogg} = {
 	container => "ogg",
 };
 $DEFAULT{video_mp4} = {
-	audio_codec => "libvo_aacenc",
+	# audio_codec => "libvo_aacenc",
+	audio_codec => "aac",
 	audio_bitrate => "96k",
 	audio_sampling => "44100",
 	video_codec => "libx264",
-	video_frame_rate => "10.00",
+	# video_frame_rate => "10.00",
+	video_frame_rate => "20.00",
 	video_bitrate => "500k",
 	container => "mp4",
 };
@@ -211,9 +216,19 @@ $DEFAULT{video_ogg} = {
 	audio_bitrate => "96k",
 	audio_sampling => "44100",
 	video_codec => "libtheora",
-	video_frame_rate => "10.00",
+	# video_frame_rate => "10.00",
+	video_frame_rate => "20.00",
 	video_bitrate => "500k",
 	container => "ogg",
+};
+$DEFAULT{video_webm} = {
+	audio_codec => "libvorbis",
+	audio_bitrate => "96k",
+	audio_sampling => "44100",
+	video_codec => "libvpx",
+	video_frame_rate => "20.00",
+	video_bitrate => "500k",
+	container => "webm",
 };
 
 # methods
@@ -230,7 +245,7 @@ sub new
 	$self->{visible} = "all";
 	for(qw(
 		audio video
-		audio_mp4 audio_ogg video_mp4 video_ogg
+		audio_mp4 audio_ogg video_mp4 video_ogg video_webm
 		convert_formats ffmpeg_formats sizes
 		video_height
 		call_convert call_ffmpeg
@@ -294,7 +309,8 @@ sub can_convert
 	}
 	if( exists $self->{ffmpeg_formats}->{lc($ext)} )
 	{
-		if( $doc->exists_and_set( "media_video_codec" ) )
+		# if( $doc->exists_and_set( "media_video_codec" ) )
+		if( $doc->exists_and_set( "format" ) && $doc->value("format") =~ /video/ )
 		{
 			foreach my $size (keys %{$self->{sizes}})
 			{
@@ -308,9 +324,14 @@ sub can_convert
 			{
 				$types{"thumbnail_video_ogg"} = { plugin => $self };
 			}
+			if( $self->{video_webm} )
+			{
+				$types{"thumbnail_video_webm"} = { plugin => $self };
+			}
 		}
 		# only offer audio thumbnailing if there's no video
-		elsif( $doc->exists_and_set( "media_audio_codec" ) )
+		# elsif( $doc->exists_and_set( "media_audio_codec" ) )
+		elsif( $doc->exists_and_set( "format" ) && $doc->value("format") =~ /audio/ )
 		{
 			if( $self->{audio_mp4} )
 			{
@@ -400,7 +421,7 @@ sub export
 	my( $size ) = $type =~ m/^thumbnail_(.*)$/;
 	return () unless defined $size;
 	my $geom;
-	if( $size =~ /^(audio|video)_(mp4|ogg)$/ )
+	if( $size =~ /^(audio|video)_(mp4|ogg|webm)$/ )
 	{
 		$self->{_mime_type} = "$1/$2";
 	}
@@ -566,20 +587,20 @@ sub call_convert
 		# geom^ requires 6.3.8
 		if( $version > 6.3 )
 		{
-			$self->_system($convert, "-strip", "-colorspace", "sRGB", "-background", "white", "-thumbnail","$geom^", "-gravity", "center", "-extent", $geom, "-bordercolor", "gray", "-border", "1x1", $src."[0]", "JPEG:$dst");
+			$self->_system($convert, "-strip", "-colorspace", "sRGB", "-auto-orient", "-flatten", "-background", "white", "-thumbnail","$geom^", "-gravity", "center", "-extent", $geom, "-bordercolor", "gray", "-border", "1x1", $src."[0]", "JPEG:$dst");
 		}
 		else
 		{
-			$self->_system($convert, "-strip", "-colorspace", "sRGB", "-background", "white", "-thumbnail","$geom>", "-extract", $geom, "-bordercolor", "gray", "-border", "1x1", $src."[0]", "JPEG:$dst");
+			$self->_system($convert, "-strip", "-colorspace", "sRGB", "-auto-orient", "-flatten", "-background", "white", "-thumbnail","$geom>", "-extract", $geom, "-bordercolor", "gray", "-border", "1x1", $src."[0]", "JPEG:$dst");
 		}
 	}
 	elsif( $size eq "medium" )
 	{
-		$self->_system($convert, "-strip", "-colorspace", "sRGB", "-trim", "+repage", "-size", "$geom", "-thumbnail","$geom>", "-background", "white", "-gravity", "center", "-extent", $geom, "-bordercolor", "white", "-border", "0x0", $src."[0]", "JPEG:$dst");
+		$self->_system($convert, "-strip", "-colorspace", "sRGB", "-auto-orient", "-flatten", "-trim", "+repage", "-size", "$geom", "-thumbnail","$geom>", "-background", "white", "-gravity", "center", "-extent", $geom, "-bordercolor", "white", "-border", "0x0", $src."[0]", "JPEG:$dst");
 	}
 	else
 	{
-		$self->_system($convert, "-strip", "-colorspace", "sRGB", "-background", "white", "-thumbnail","$geom>", "-extract", $geom, "-bordercolor", "white", "-border", "0x0", $src."[0]", "JPEG:$dst");
+		$self->_system($convert, "-strip", "-colorspace", "sRGB", "-auto-orient", "-flatten", "-background", "white", "-thumbnail","$geom>", "-extract", $geom, "-bordercolor", "white", "-border", "0x0", $src."[0]", "JPEG:$dst");
 	}
 
 	if( -s $dst )
@@ -608,7 +629,7 @@ sub call_ffmpeg
 	{
 		return $self->export_audio( $dir, $doc, $src, $1 );
 	}
-	elsif( $size =~ /^video_(mp4|ogg)$/ )
+	elsif( $size =~ /^video_(mp4|ogg|webm)$/ )
 	{
 		return $self->export_video( $dir, $doc, $src, $1 );
 	}
@@ -754,6 +775,33 @@ sub export_video
 	return ();
 }
 
+=item $plugin->get_aspect_ratio( $doc )
+
+Returns a floating point number representing the ratio of width to height for the given $doc.
+
+=cut
+
+sub get_aspect_ratio
+{
+	my( $self, $doc ) = @_;
+
+	my $aspect_ratio = 16 / 9; # tv widescreen
+	my $width = $doc->get_value( "media_width" );
+	my $height = $doc->get_value( "media_height" );
+	my $aspect = $doc->get_value( "media_aspect_ratio" );
+	if( defined $aspect && $aspect =~ /^(\d+):(\d+)$/ && ( $1 / $2 ) != 0 ) # ignore 0:n
+	{
+		$aspect_ratio = $1 / $2;
+	}
+	elsif( defined $width && defined $height )
+	{
+		$aspect_ratio = $width / $height;
+	}
+	# print STDERR "[W:$width H:$height AR:$aspect_ratio]\n";
+
+ 	return $aspect_ratio;
+}
+
 =item $plugin->export_cell( $dir, $doc, $src, $geom, $size, $offset )
 
 Export $src to $dst in JPG format in dimensions $geom from offset $offset.
@@ -766,7 +814,8 @@ sub export_cell
 	
 	my $ffmpeg = $self->{ffmpeg};
 
-	$offset = _seconds_to_marker( $offset );
+	# $offset = _seconds_to_marker( $offset );
+	$offset = _seconds_to_marker( $offset + 1 ); # allow for fade-in, but goes bang if video duration is less than a second
 
 	$self->{_mime_type} = "image/jpg";
 
@@ -779,7 +828,8 @@ sub export_cell
 		TARGET => $dst,
 		offset => $offset,
 		width => $geom->[0],
-		height => $geom->[1],
+		# height => $geom->[1],
+		height => int($geom->[0] / $self->get_aspect_ratio($doc)),
 	);
 
 	if( -s $dst )

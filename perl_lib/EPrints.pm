@@ -301,6 +301,7 @@ use EPrints::DataObj::SavedSearch;
 use EPrints::DataObj::Triple;
 use EPrints::DataObj::UploadProgress;
 use EPrints::DataObj::User;
+use EPrints::DataObj::RichDataObj;
 use EPrints::DataSet;
 use EPrints::DOI;
 use EPrints::Email;

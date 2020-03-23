@@ -226,9 +226,18 @@ sub _filename
 	}
 	elsif( $parent->isa( "EPrints::DataObj::History" ) )
 	{
-		my $eprint = $parent->get_parent;
-		return if !defined $eprint;
-		$local_path = $eprint->local_path."/revisions";
+		my $object;
+ 		my $this = $parent->get_parent;
+ 		if( $this->isa( "EPrints::List" ) )
+ 		{
+ 		        $object = $this->item(0);
+ 		}
+ 		else
+ 		{
+ 		        $object = $this;
+ 		}
+ 		return if !defined $object;
+ 		$local_path = $object->local_path."/revisions";
 		$filename = $parent->get_value( "revision" ) . ".xml";
 		$in_file = $filename;
 	}
@@ -240,6 +249,7 @@ sub _filename
 	else
 	{
 		# Gawd knows?!
+		print STDERR "EPrints::Plugin::Storage::Local:_local unhandled object type '" . ref( $parent ) . "'\n";
 	}
 
 	return( $local_path, $in_file );

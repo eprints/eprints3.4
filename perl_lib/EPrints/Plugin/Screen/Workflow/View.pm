@@ -159,7 +159,8 @@ sub render
 	for(my $i = 0; $i < @screens; ++$i)
 	{
 		my $screen = $screens[$i];
-		push @labels, $screen->render_tab_title;
+		my $rtt = $screen->render_tab_title;
+ 	        push @labels, ( $rtt ) ? $rtt : $screen;
 		push @expensive, $i if $screen->{expensive};
 		if( $screen->{expensive} && $i != $current )
 		{

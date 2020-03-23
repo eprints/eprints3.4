@@ -182,7 +182,9 @@ sub render
 		local $self->{processor}->{current} = $i;
 
 		my $screen = $screens[$i];
-		push @labels, $screen->render_tab_title;
+		my $rtt = $screen->render_tab_title;
+ 	        push @labels, ($rtt) ? $rtt : "no title";
+
 		push @expensive, $i if $screen->{expensive};
 		if( $screen->{expensive} && $i != $current )
 		{

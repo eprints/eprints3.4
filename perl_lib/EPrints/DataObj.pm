@@ -401,6 +401,40 @@ sub create_subdataobj
 
 =begin InternalDoc
 
+=item $local_path = EPrints::DataObj-local_path( )
+
+Return local_path string for History.
+
+Should be subclassed.
+
+=end InternalDoc
+
+=cut
+
+
+######################################################################
+
+sub local_path
+{
+  my( $self ) = @_;
+
+  return undef unless( $self->is_set( "datasetid" ) );
+
+  my $dataset = $self->{session}->get_repository->get_dataset( $self->get_value( "datasetid" ) );
+  my $object = $dataset->get_object( $self->{session}, $self->get_value( "objectid" ) );
+  my $datasetid = $dataset->base_id;
+  my $objectid = $object->get_id;
+
+  my $lp = $self->{session}->get_repository->get_conf("archiveroot" )."/history/".$datasetid."/".$objectid;
+
+  return $lp;
+}
+
+######################################################################
+=pod
+
+=begin InternalDoc
+
 =item $defaults = EPrints::User->get_defaults( $session, $data, $dataset )
 
 Return default values for this object based on the starting data.
@@ -410,6 +444,8 @@ Should be subclassed.
 =end InternalDoc
 
 =cut
+
+
 ######################################################################
 
 sub get_defaults

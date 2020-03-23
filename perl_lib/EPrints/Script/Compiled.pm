@@ -315,6 +315,20 @@ sub run_citation_link
 	return [ $citation, "XHTML" ];
 }
 
+sub run_embed_video
+{
+        my( $self, $state, $object, $citationid ) = @_;
+
+        if( !$object->[0]->isa( "EPrints::DataObj::Document" ) )
+        {
+                $self->runtime_error( "can't call embed_vidio on non-document objects." );
+        }
+
+        my $xhtml = $object->[0]->render_video_preview( "ep_embedded_video" );
+
+        return [ $xhtml, "XHTML" ];
+}
+
 sub run_citation
 {
 	my( $self, $state, $object, $citationid ) = @_;

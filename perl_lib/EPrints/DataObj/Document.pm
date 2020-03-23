@@ -2223,6 +2223,68 @@ sub render_citation_link
 	return $self->render_citation( $style, %params );
 }
 
+# Utility function for renderering a html5 video preview with optional subtitles
+# access / security concerns should be addressed at a higher level
+sub render_video_preview
+{
+        my ( $self, $css_class ) = @_;
+
+        my $session = $self->{session};
+        my $class = ( $css_class ) ? $css_class : "ep_embedded_video";
+
+        my $eprint = $self->get_eprint;
+        my $doc_frag = $session->make_doc_fragment();
+        my @thumbnail_types = $self->thumbnail_types();
+        my $preview_docs;
+        my $format_to_show;
+
+        foreach my $thumbnail_type (@thumbnail_types)
+        {
+                next unless !($thumbnail_type =~ /(small)|(medium)|(lightbox)/); # we dont want to use small, medium or lightbox for the preview
+                $self->search_related( "is${thumbnail_type}ThumbnailVersionOf" )->map( sub {
+                        my ( undef, undef, $doc ) = @_;
+                        $format_to_show = "video" if( $thumbnail_type =~ /(video)/ );
+                        $format_to_show = "audio" if( $thumbnail_type =~ /(audio)/ );
+                        $preview_docs->{$thumbnail_type} = $doc;
+                });
+        }
+
+        if( defined $preview_docs && defined $format_to_show && $format_to_show =~ /(video)/ )
+        {
+                my $video_link = $session->make_element( "video", class=>$class, controls=>"", id=>"doc_".$self->get_id, "data-src"=>"#doc_".$self->get_id );
+                my $video_type;
+                foreach my $video_format (qw/ video_mp4 video_ogg video_webm /)
+                {
+                        $video_type = $video_format;
+                        $video_type =~ s/_/\//g;
+                        my $video_url = $self->thumbnail_url( $video_format );
+                        # $video_url =~ s/^http/https/;
+                        $video_link->appendChild( $session->make_element("source", src=>$video_url, type=>$video_type) );
+                }
+                $video_link->appendChild( $session->make_text("Your browser does not support HTML5 video") );
+                $doc_frag->appendChild( $video_link );
+
+                # add subtitles - assume for now that tracks are supplied in vtt format with a name matching the video file
+                my $subs = $self->get_value("main");
+                $subs =~ s/\.([^.]+)$/.vtt/; # the file we are looking for
+                my @docs = $eprint->get_all_documents();
+                foreach my $d ( @docs )
+                {
+                        # assume suitable access rights
+                        if( $d->get_value("main") eq $subs )
+                        {
+                                my $srclang = $d->get_value( "language" );
+                                   $srclang = "en" unless $srclang; # default to English
+                                my $label = EPrints::Utils::tree_to_utf8( $session->html_phrase( "languages_typename_" . $srclang ) );
+                                my $track = $session->make_element( "track", src => $d->get_url, kind => "subtitles", srclang => $srclang, label => $label );
+                                $video_link->appendChild( $track );
+                        }
+                }
+        }
+
+        return $doc_frag;
+}
+
 sub permit
 {
 	my( $self, $priv, $user ) = @_;

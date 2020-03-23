@@ -508,6 +508,29 @@ sub render_xml_schema_type
 	return $type;
 }
 
+sub ordervalue_basic
+{
+        my( $self , $value ) = @_;
+
+        unless( ref($value) =~ m/^HASH/ ) {
+                EPrints::abort( "EPrints::MetaField::Name::ordervalue_basic called on something other than a hash." );
+        }
+
+        my @a;
+        foreach( "family", "lineage", "given", "honourific" )
+        {
+                if( defined $value->{$_} )
+                {
+                        push @a, $value->{$_};
+                }
+                else
+                {
+                        push @a, "";
+                }
+        }
+        return join( "\t" , @a );
+}
+
 ######################################################################
 1;
 

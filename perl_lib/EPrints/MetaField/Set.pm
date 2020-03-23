@@ -218,6 +218,9 @@ sub render_set_input
 	push @classes, join('_', 'ep', $self->{dataset}->base_id, $self->name);
 	push @classes, join('_', 'eptype', $self->{dataset}->base_id, $self->type);
 	push @classes, join('_', 'eptype', $self->{dataset}->base_id, $self->type, $input_style) if $input_style;
+	
+	my $readonly = ( $self->{readonly} && $self->{readonly} eq "1" || $self->{readonly} eq "yes" ) ? 1 : undef; # sorry
+ 	push @classes, "ep_readonly" if $readonly;
 
 	if( 
 		!$self->get_property( "multiple" ) && 
@@ -239,11 +242,11 @@ sub render_set_input
 				name => $basename,
 				class => join(" ", @classes),
 				id => $basename,
+				readonly => $readonly,
 				default => $default,
 				multiple => $self->{multiple},
 				height => $self->{input_rows}  ) );
 	}
-
 
 	my( $list );
 	if( $input_style eq "long" )

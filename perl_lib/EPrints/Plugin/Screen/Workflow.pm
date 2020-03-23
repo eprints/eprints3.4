@@ -92,6 +92,8 @@ sub properties_from
 
 	$processor->{"dataobj"} = $dataobj;
 
+	$self->{processor}->{return_to} = $session->param( 'return_to' );
+
 	my $plugin = $self->{session}->plugin(
 		"Screen::" . $self->edit_screen,
 		processor => $self->{processor},
@@ -178,6 +180,7 @@ sub workflow
 
 	my $user = $self->{session}->current_user;
 	my $staff = 0;
+	my %opts;
 	if( defined $user )
 	{
 		my $priv = $self->{processor}->{dataset}->id . '/edit';
@@ -186,6 +189,13 @@ sub workflow
 		$staff =
 			($user->allow( $priv, $self->{processor}->{dataobj} ) & 8) ||
 			$user->has_role( 'admin' );
+
+		foreach my $role ( $user->get_roles )
+		{
+			$role =~ s|/|__|g; # replace / with __
+			$opts{ "ROLE_" . $role } = [ "TRUE", "BOOLEAN" ];
+		}
+		$opts{ "ROLES"} = [ join("|", $user->get_roles), "STRING" ];
 	}
 
 	if( !defined $self->{processor}->{$cache_id} )
@@ -194,6 +204,7 @@ sub workflow
 			item => $self->{processor}->{"dataobj"},
 			STAFF_ONLY => [$staff ? "TRUE" : "FALSE", "BOOLEAN"],
 			processor => $self->{processor},
+			%opts,
 		);
 	}
 

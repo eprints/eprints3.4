@@ -120,7 +120,15 @@ sub action_stop
 {
 	my( $self ) = @_;
 
-	$self->{processor}->{screenid} = $self->view_screen;
+	my $return_to = $self->repository->param('return_to');
+        if ($return_to)
+        {
+                $self->{processor}->{screenid} = $return_to;
+        }
+        else
+        {
+		$self->{processor}->{screenid} = $self->view_screen;
+	}
 }	
 
 sub action_save
@@ -133,7 +141,7 @@ sub action_save
 	my $return_to = $self->repository->param('return_to');
 	if ($return_to)
 	{
-		$self->{processor}->{redirect} = $return_to;
+		$self->{processor}->{screenid} = $return_to;
 	}
 	else
 	{

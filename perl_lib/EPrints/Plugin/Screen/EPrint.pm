@@ -171,6 +171,18 @@ sub workflow
 			STAFF_ONLY => [$staff ? "TRUE" : "FALSE", "BOOLEAN"],
 			STAFF_ONLY_LOCAL => [$soa ? "TRUE" : "FALSE", "BOOLEAN"],
 		);
+		
+		my $user = $self->{session}->current_user;
+                if( $user )
+                {
+                        foreach my $role ( $user->get_roles )
+                        {
+                                $role =~ s|/|__|g; # replace / with __
+                                $opts{ "ROLE_" . $role } = [ "TRUE", "BOOLEAN" ];
+                        }
+                        $opts{ "ROLES" } = [ join("|", $user->get_roles), "STRING" ];
+                }
+
  		$self->{processor}->{workflow} = EPrints::Workflow->new(
 				$self->{session},
 				$self->workflow_id,

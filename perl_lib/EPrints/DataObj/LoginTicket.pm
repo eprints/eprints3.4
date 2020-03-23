@@ -255,11 +255,13 @@ sub generate_cookie
 
 	my $repo = $self->{session};
 
+	my $domain = $repo->config( "host" );
+	$domain ||= $repo->config( "securehost" );
 	return $repo->query->cookie(
 		-name    => $self->session_key($repo),
 		-path    => ($repo->config( "http_root" ) || '/'),
 		-value   => $self->value( "code" ),
-		-domain  => $repo->config( "host" ),
+		-domain  => $domain,
 		-expires => $repo->config( "user_cookie_timeout" ),
 		%opts,
 	);			

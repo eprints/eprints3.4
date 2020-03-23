@@ -24,7 +24,7 @@ isa_ok( $xml, "EPrints::XML", "Get an XML object from the repository" );
 my $xhtml = $repo->xhtml;
 isa_ok( $xhtml, "EPrints::XHTML", "Get an XHTML object from the repository" );
 
-my $config_element = $repo->config( "host" );
+my $config_element = defined $repo->config( "host" ) ? $repo->config( "host" ) :  $repo->config( "securehost" );
 ok( defined $config_element, "Get a config. element" );
 
 my $config_element2 = $repo->config( "search", "simple" );

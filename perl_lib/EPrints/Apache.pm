@@ -22,7 +22,7 @@ sub apache_conf
 	my $id = $repo->get_id;
 	my $adminemail = $repo->config( "adminemail" );
 	my $host = $repo->config( "host" );
-	$host = $repo->config( "securehost" ) if !EPrints::Utils::is_set( $host ) && EPrints::Utils::is_set( $repo->config( "securehost" ) );
+	$host ||= $repo->config( "securehost" );
 	my $port = $repo->config( "port" );
 	$port = 80 if !defined $port;
 	my $hostport = $host;

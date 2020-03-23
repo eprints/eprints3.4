@@ -502,6 +502,7 @@ sub post_config_handler_module_isolation
 		if( !$named{$port} && ( defined $apache_version && $apache_version < 2.3 ) )
 		{
 			my $hostname = $repo->config( "host" );
+			$hostname ||= $repo->config( "securehost" );
 			print STDERR ( "EPrints Warning! '".$repo->get_id."' is configured for port $port but Apache does not have NameVirtualHosts configured for that port. This may cause the wrong repository to respond to '$hostname:$port'. To fix this add to your main Apache configuration file: NameVirtualHost *:$port" );
 		}
 	}
@@ -608,6 +609,7 @@ sub post_config_handler
 		 if( !$named{$port} && ( defined $apache_version && $apache_version < 2.3 ) )
 		 {
 			 my $hostname = $repo->config( "host" );
+			 $hostname ||= $repo->config( "securehost" );
 			 $s->warn( "EPrints Warning! '".$repo->get_id."' is configured for port $port but Apache does not have NameVirtualHosts configured for that port. This may cause the wrong repository to respond to '$hostname:$port'. To fix this add to your main Apache configuration file: NameVirtualHost *:$port" );
 		 }
 	}

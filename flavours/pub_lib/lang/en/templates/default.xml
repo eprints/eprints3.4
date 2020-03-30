@@ -16,7 +16,7 @@
           <nav aria-label="Main Navigation">
             <ul role="menu" class="ep_tm_menu">
               <li>
-                <a href="{$config{rel_path}}" title="{phrase('template/navigation:home:title')}" role="menuitem">
+                <a href="{$config{rel_path}}/" title="{phrase('template/navigation:home:title')}" role="menuitem">
                   <epc:phrase ref="template/navigation:home"/>
                 </a>
               </li>

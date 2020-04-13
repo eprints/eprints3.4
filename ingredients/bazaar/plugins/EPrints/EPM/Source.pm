@@ -144,6 +144,7 @@ sub accolades
 	my( $_ua, $_base_url ) = @_;
 
 	my $ua = ( $_ua ) ? $_ua : LWP::UserAgent->new;
+	$ua->env_proxy;
 	my $base_url = ( $_base_url ) ? $_base_url : "https://bazaar.eprints.org/";
 
 #	my $ua = $self->{ua};

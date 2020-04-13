@@ -106,6 +106,9 @@ sub create_unique
 		if EPrints::Utils::is_set( $data->{params} );
 	$data->{eventqueueid} = $md5->hexdigest;
 
+	# No need to create a new event queue task if one already exists with the same params
+	return undef if defined $dataset->dataobj( $data->{eventqueueid} ); 
+
 	return $class->create_from_data( $session, $data, $dataset );
 }
 

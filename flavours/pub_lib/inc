@@ -1,5 +1,5 @@
 # The library include paths for the flavour.
-# All paths are relative to the install path, eg /opt/eprints3.
+# All paths are relative to the install path, eg /opt/eprints3, /usr/share/eprints, etc.
 # Entries may be separated by semi-colons (;) pr line breaks.
 # Anything after a # is considered as a comment.
 # The include path is constructed in the order in which the entries are encountered in the inc file.

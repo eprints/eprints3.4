@@ -1,4 +1,4 @@
-#!/usr/bin/perl -I/opt/eprints3/perl_lib
+#!/usr/bin/perl -w
 
 # Copyright 2009 University of Southampton.
 # 
@@ -41,6 +41,9 @@ Be more verbose.
 
 use strict;
 use warnings;
+
+use FindBin;
+use lib "$FindBin::Bin/../perl_lib";
 
 use EPrints;
 use Getopt::Long;

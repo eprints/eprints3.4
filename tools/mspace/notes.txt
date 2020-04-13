@@ -1,10 +1,10 @@
  mysql ecs -e 'show tables' -B | grep mspace | xargs mysqldump -u root ecs   >
 /tmp/mspacedump3.sql
 
-add to:
+add to (substituting EPRINTS_PATH as appropriate):
 $c->{set_eprint_automatic_fields} = sub
 
-	require '/opt/eprints3/tools/mspace/EPrints::MSpace.pm';
+	require 'EPRINTS_PATH/tools/mspace/EPrints::MSpace.pm';
 
 	if( $eprint->get_value( "eprint_status" ) eq "archive" )
 	{

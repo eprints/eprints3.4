@@ -1,7 +1,9 @@
-#!/usr/bin/perl -w -I/opt/eprints3/perl_lib 
+#!/usr/bin/perl -w
+
+use FindBin;
+use lib "$FindBin::Bin/../../perl_lib"; 
 
 use EPrints;
-use Data::Dumper;
 
 use strict;
 my $session = new EPrints::Session;
@@ -53,8 +55,6 @@ foreach my $kid ( $body->getChildNodes )
 
 my $tn = (split( ":",$action->getTagName))[-1];
 my $params = unsoap( $action, $map );
-print STDERR Dumper( $params );
-print STDERR "-$ttargetNamespacen\n";
 my $result;
 # hacky hole!
 $tn=~s/[^a-z]//gi;
@@ -700,7 +700,6 @@ sub xsd_type_single
 }
 
 
-use UNIVERSAL qw(isa);
 sub clone
 {
 	my( $data ) = @_;

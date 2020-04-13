@@ -12,7 +12,7 @@
 
 my $user = "eprints";
 my $group = "eprints";
-my $prefix = "/opt/eprints3";
+my $prefix = "EPRINTS_PATH"; # Update before deploying.
 
 ######################################################################
 #

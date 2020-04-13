@@ -23,7 +23,7 @@ Installation
 ------------
 
 If you haven't already done so, unpack the WOS tarball to your EPrints root
-directory (typically /opt/eprints3).
+directory (commonly /opt/eprints3 or /usr/share/eprints).
 
 Install the SOAP::Lite and XML::LibXML Perl libraries (along with any
 dependencies).
@@ -61,7 +61,7 @@ record will match which will cause the update to fail.
 Running the ISI Update Command
 ------------------------------
 
-If your EPrints is installed in /opt/eprints3 you can simply run:
+If your EPrints is installed in /opt/eprints3 or /usr/share/eprints you can simply run:
 
 $ perl tools/isi_citations.pl [repoid]
 

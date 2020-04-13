@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w -I/opt/eprints3/perl_lib
+#!/usr/bin/perl -w
 
 ######################################################################
 #
@@ -70,6 +70,9 @@ Output version information and exit.
 use Getopt::Long;
 use Pod::Usage;
 use strict;
+
+use FindBin;
+use lib "$FindBin::Bin/../perl_lib";
 
 use EPrints;
 use LWP::UserAgent;

@@ -1,4 +1,6 @@
-#!/usr/bin/perl -w -I/opt/eprints3/perl_lib
+#!/usr/bin/perl -w
+use FindBin;
+use lib "$FindBin::Bin/../perl_lib";
 use EPrints;
 
 $delated = [
@@ -84,7 +86,7 @@ $renamed = {
 };
 
 
-my $doc = EPrints::XML::parse_xml( "system.xml", "/opt/eprints3/lib/lang/en/phrases/", 0  );
+my $doc = EPrints::XML::parse_xml( "system.xml", "$FindBin::Bin/../lib/lang/en/phrases/", 0  );
 
 if( !$doc )
 {

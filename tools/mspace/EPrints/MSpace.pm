@@ -4,9 +4,12 @@ EPrints::MSpace
 
 =cut
 
-#!/usr/bin/perl -w -I/opt/eprints3/perl_lib 
+#!/usr/bin/perl -w
 
 package EPrints::MSpace;
+
+use FindBin;
+use lib "$FindBin::Bin/../perl_lib";
 
 use EPrints;
 use EPrints::Database;

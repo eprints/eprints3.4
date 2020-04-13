@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w -I/opt/eprints3/perl_lib
+#!/usr/bin/perl -w
 
 ######################################################################
 #
@@ -82,6 +82,9 @@ this time.
 =back   
 
 =cut
+
+use FindBin;
+use lib "$FindBin::Bin/../perl_lib";
 
 use EPrints;
 

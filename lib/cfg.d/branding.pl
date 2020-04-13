@@ -6,7 +6,7 @@ $c->{site_logo} = "/images/sitelogo.png";
 
 # A theme overrides some of the styles and images used by
 # eprints. A theme must exist as a directory in 
-# /opt/eprints3/lib/themes
+# EPRINTS_PATH/lib/themes
 
 # $c->{theme} = "green";
 

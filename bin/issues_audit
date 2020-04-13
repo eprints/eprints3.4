@@ -27,7 +27,7 @@ This script should probably be called from your "cron" system, soon after
 midnight. Something like:
 
  # 00:23 every morning
- 23 0 * * * /opt/eprints3/bin/isseus_audit my_repo_id
+ 23 0 * * * EPRINTS_PATH/bin/issues_audit REPOSITORY_ID
 
 This script will take longer as your repository grows, so initially you may 
 want to run it more frequently, or on very large systems you might move to

@@ -1,4 +1,5 @@
-use lib '/opt/eprints3/perl_lib';
+use FindBin;
+use lib "$FindBin::Bin/../perl_lib";
 
 # this script is deprecated and is included here to support legacy Apache
 # configurations

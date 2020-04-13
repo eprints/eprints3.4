@@ -27,11 +27,11 @@ This script should probably be called from your "cron" system, soon after
 midnight. Something like:
 
  # 00:15 every morning
- 15 0 * * * /opt/eprints3/bin/send_alerts dookuprints daily
+ 15 0 * * * EPRINTS_PATH/bin/send_alerts dookuprints daily
  # 00:30 every sunday morning
- 30 0 * * 0 /opt/eprints3/bin/send_alerts dookuprints weekly
+ 30 0 * * 0 EPRINTS_PATH/bin/send_alerts dookuprints weekly
  # 00:45 every first of the month
- 45 0 1 * * /opt/eprints3/bin/send_alerts dookuprints monthly
+ 45 0 1 * * EPRINTS_PATH/bin/send_alerts dookuprints monthly
 
 Note the spacing out so that all 3 don't start at once and hammer the database.
 

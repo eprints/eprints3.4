@@ -1,8 +1,10 @@
 #!/usr/bin/perl -w
 
+use FindBin;
+
 my $dh;
 my @files = ();
-opendir( $dh, "/opt/eprints3/lib/defaultcfg/cfg.d" ) || die "Dammit";
+opendir( $dh, "$FindBin::Bin/../lib/defaultcfg/cfg.d" ) || die "Dammit";
 while( my $file = readdir( $dh ) )
 {
 	push @files, $file;
@@ -14,7 +16,7 @@ my $byopt = {};
 
 foreach my $file ( @files )
 {
-	my $fn = "/opt/eprints3/lib/defaultcfg/cfg.d/$file";
+	my $fn = "$FindBin::Bin/../lib/defaultcfg/cfg.d/$file";
 	open( F, $fn ) || die "dang $fn : $!";
 	foreach my $line ( <F> )
 	{

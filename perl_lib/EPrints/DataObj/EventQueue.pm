@@ -106,8 +106,18 @@ sub create_unique
 		if EPrints::Utils::is_set( $data->{params} );
 	$data->{eventqueueid} = $md5->hexdigest;
 
-	# No need to create a new event queue task if one already exists with the same params
-	return undef if defined $dataset->dataobj( $data->{eventqueueid} ); 
+	# No need to create a new event queue task if one already exists with the same params but if failed set to waiting.
+	my $task = $dataset->dataobj( $data->{eventqueueid} );
+	if ( defined $task )
+	{
+		if ( $task->get_value( "status" ) eq "failed" )
+		{
+			$task->set_value( "status", "waiting" );
+			$task->commit;
+			$session->log( "[".EPrints::Time::get_iso_timestamp()."] Resetting failed event ".$data->{eventqueueid}." to waiting." );
+		}
+		return $task;
+	}
 
 	return $class->create_from_data( $session, $data, $dataset );
 }

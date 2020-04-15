@@ -88,7 +88,6 @@ sub _handle_author_editor {
 	my $self = shift;
 	if (@_) {
 		if (@_ == 1) { #single string
-			# my @names = split /\s+and\s+/i, $_[0];
 			my @names = _split_author_field( $_[0] );
 			$self->{"_$type"} = [map {new BibTeX::Parser::Author $_} @names];
 			$self->field($type, join " and ", @{$self->{"_$type"}});
@@ -106,7 +105,6 @@ sub _handle_author_editor {
 		}
 	} else {
 		unless ( defined $self->{"_$type"} ) {
-			#my @names = split /\s+and\s+/i, $self->{$type} || "";
 			my @names = _split_author_field( $self->{$type} || "" );
 			$self->{"_$type"} = [map {new BibTeX::Parser::Author $_} @names];
 		}
@@ -127,14 +125,14 @@ sub _split_author_field {
 
     my $buffer;
     while (!defined pos $field || pos $field < length $field) {
-	if ( $field =~ /\G ( .*? ) ( \{ | \s+ and \s+ )/xcgi ) {
+	if ( $field =~ /\G ( .*? ) ( \{[^\\] | \s+ and \s+ )/xcgi ) {
 	    my $match = $1;
 	    if ( $2 =~ /and/i ) {
 		$buffer .= $match;
 		push @names, $buffer;
 		$buffer = "";
-	    } elsif ( $2 =~ /\{/ ) {
-		$buffer .= $match . "{";
+	    } elsif ( $2 =~ /(\{[^\\])/ ) {
+		$buffer .= $match . "$1";
 		if ( $field =~ /\G (.* \})/cgx ) {
 		    $buffer .= $1;
 		} else {
@@ -144,7 +142,6 @@ sub _split_author_field {
 		$buffer .= $match;
 	    }
 	} else {
-	   #print "# $field " . (pos ($field) || 0) . "\n";
 	   $buffer .= substr $field, (pos $field || 0);
 	   last;
 	}

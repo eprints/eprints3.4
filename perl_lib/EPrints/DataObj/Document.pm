@@ -1253,6 +1253,12 @@ sub commit
 		}
 	}
 	
+	# Make sure full text is reindexed to add/remove documents whose access restrictions have changed.
+	if ( defined $self->{changed}->{security} && $self->{changed}->{security} eq "public" || $self->get_value( "security" ) eq "public" )
+	{
+		$self->get_parent->queue_fulltext;	
+	}
+	
 	return( $success );
 }
 	

@@ -226,8 +226,8 @@ sub render_url_truncate_middle
 
 =item $xhtml = EPrints::Extras::render_related_url( $session, $field, $value )
 
-Hyper link the URL but truncate the middle part if it gets longer 
-than 50 characters.
+Hyper link the related URL named by given type or at the end truncated link
+(if it gets longer than 40 characters) otherwise
 
 =cut
 ######################################################################

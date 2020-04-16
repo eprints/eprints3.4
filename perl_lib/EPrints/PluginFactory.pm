@@ -98,17 +98,7 @@ sub new
 			push @PLUGINS_TO_DISABLE,
 				map { $_->get_id }
 				$self->_load_xslt_dir( \%SYSTEM_PLUGINS, $repository, $dir );
-		}
-
-    
-#		# /site_lib/ extensions plugins - we want those enabled by default
-		$dir = $repository->config( "base_path" )."/site_lib/plugins";
-		$self->_load_dir( \%SYSTEM_PLUGINS, $repository, $dir );
-		if( $use_xslt )
-		{
-			$self->_load_xslt_dir( \%SYSTEM_PLUGINS, $repository, $dir );
-		}
-
+		} 
 
 	}
 

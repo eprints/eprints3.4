@@ -265,8 +265,7 @@ sub load_repository_config_module
 
     ##@libpaths contains a list of cfg to load. later ones overwrite early ones.
 
-    my $site_lib_cfgd = $SYSTEMCONF->{"base_path"}."/site_lib/cfg.d";
-    my @libpaths = ($libcfgd,$site_lib_cfgd);
+    my @libpaths = ($libcfgd);
     my $lib_order = $SYSTEMCONF->{"flavours"}->{$flavour};
     foreach (@$lib_order)
     {

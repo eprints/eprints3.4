@@ -90,7 +90,6 @@ BEGIN
 
 
 	unshift @INC, $conf->{base_path} . "/lib/plugins";
-	unshift @INC, $conf->{base_path} . "/site_lib/plugins";
 
     # @INC looks like:[ site_lib/plugins ; lib/plugins; perl_lib ].  Searching of a module start from the head.
     # Flavour libs can NOT overwrite core modules (core modules are loaded in the list of "use" statements below)

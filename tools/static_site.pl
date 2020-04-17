@@ -75,8 +75,6 @@ $repo->_load_plugins;
 
 my $i = 0;
 
-$repo->{preparing_static_page} = 1;
-
 my $langid = $repo->get_langid;
 
 # static files

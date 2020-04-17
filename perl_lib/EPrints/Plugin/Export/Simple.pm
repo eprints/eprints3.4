@@ -48,7 +48,7 @@ sub dataobj_to_html_header
 
 	my $links = $plugin->{session}->make_doc_fragment;
 
-	my $epdata = $plugin->convert_dataobj( $dataobj );
+	my $epdata = $plugin->convert_dataobj( $dataobj, "no_cache" => 1 );
 	foreach( @{$epdata} )
 	{
 		next unless $_->[1];
@@ -64,7 +64,7 @@ sub dataobj_to_html_header
 
 sub convert_dataobj
 {
-	my( $plugin, $eprint ) = @_;
+	my( $plugin, $eprint, %params ) = @_;
 
 	my @epdata = ();
 	my $dataset = $eprint->get_dataset;
@@ -120,7 +120,7 @@ sub convert_dataobj
 
 	# The citation for this eprint
 	push @epdata, [ "citation",
-		EPrints::Utils::tree_to_utf8( $eprint->render_citation() ) ];
+		EPrints::Utils::tree_to_utf8( $eprint->render_citation( 'default', %params ) ) ];
 
 	foreach my $doc ( $eprint->get_all_documents )
 	{

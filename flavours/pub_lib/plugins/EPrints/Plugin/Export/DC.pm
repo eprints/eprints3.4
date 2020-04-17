@@ -59,7 +59,7 @@ sub dataobj_to_html_header
 		rel => "schema.DC",
 		href => "http://purl.org/DC/elements/1.0/" ) );
 	$links->appendChild( $plugin->{session}->make_text( "\n" ));
-	my $dc = $plugin->convert_dataobj( $dataobj );
+	my $dc = $plugin->convert_dataobj( $dataobj, "no_cache" => 1 );
 	foreach( @{$dc} )
 	{
 		$links->appendChild( $plugin->{session}->make_element(
@@ -76,7 +76,7 @@ sub dataobj_to_html_header
 
 sub convert_dataobj
 {
-	my( $plugin, $eprint ) = @_;
+	my( $plugin, $eprint, %params ) = @_;
 
 	my $dataset = $eprint->{dataset};
 
@@ -172,7 +172,7 @@ sub convert_dataobj
 
 	# The citation for this eprint
 	push @dcdata, [ "identifier",
-		EPrints::Utils::tree_to_utf8( $eprint->render_citation() ) ];
+		EPrints::Utils::tree_to_utf8( $eprint->render_citation( 'default', %params ) ) ];
 
 	# Most commonly a DOI or journal link
 	push @dcdata, $plugin->simple_value( $eprint, official_url => "relation" );

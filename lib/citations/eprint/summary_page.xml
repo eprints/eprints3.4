@@ -7,7 +7,7 @@
 <cite:citation xmlns="http://www.w3.org/1999/xhtml" xmlns:epc="http://eprints.org/ep3/control" xmlns:cite="http://eprints.org/ep3/citation" >
 
   <p style="margin-bottom: 1em">
-    <epc:print expr="$item.citation('default')" />
+    <epc:print expr="$item.citation('default_for_summary_page')" />
   </p>
 
   <epc:if test="$flags{has_multiple_versions}">
@@ -33,7 +33,7 @@
             <td valign="top" align="right"><epc:print expr="$doc.icon('HoverPreview','noNewWindow')}" /></td>
             <td valign="top">
               <epc:print expr="$doc.citation('default')" /><br />
-              <a href="{$doc.url()}" class="ep_document_link"><epc:phrase ref="summary_page:download"/> (<epc:print expr="$doc.doc_size().human_filesize()" />)</a>
+              <a href="{$doc.url()}" class="ep_document_link"/><epc:phrase ref="summary_page:download"/> (<epc:print expr="$doc.doc_size().human_filesize()" />)</a>
               <epc:if test="$doc.is_public()">
 			  <epc:choose>
 			  <epc:when test="$doc.thumbnail_url('video_mp4').is_set()">
@@ -54,7 +54,7 @@
               <ul>
               <epc:foreach expr="$doc.related_objects('http://eprints.org/relation/hasVersion')" iterator="rel">
                 <epc:if test="$rel{relation_type}!='http://eprints.org/relation/isVolatileVersionOf'">
-                  <li><epc:print expr="$rel.citation_link('default')" /></li>
+                  <li><epc:print expr="$rel.citation_link('default_for_summary_page')" /></li>
                 </epc:if>
               </epc:foreach>
               </ul>

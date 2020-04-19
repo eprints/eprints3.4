@@ -218,7 +218,7 @@ while( my( $historyid, $eprintid, $revision, $y, $m, $d ) = $sth->fetchrow_array
         	my $r_file = $previous->get_stored_file( "dataobj.xml" );
  		my $r_file_new = defined($r_file) ? $r_file->get_local_copy() : undef;
 		open(my $fh, "xmllint --recover $r_file_new |");
-		my $parser = XML::LibXML->new();
+		my $parser = XML::LibXML->new( expand_entities=>1, load_external_dtd=>1 );
 		my $doc = XML::LibXML->load_xml( IO => $fh );
 		$old_value = get_content_value( $doc, $fname ) || "Unknown";
 	}
@@ -227,7 +227,7 @@ while( my( $historyid, $eprintid, $revision, $y, $m, $d ) = $sth->fetchrow_array
        	my $r_file = $hist->get_stored_file( "dataobj.xml" );
  	my $r_file_new = defined($r_file) ? $r_file->get_local_copy() : undef;
 	open(my $fh, "xmllint --recover $r_file_new |");
-	my $parser = XML::LibXML->new();
+	my $parser = XML::LibXML->new( expand_entities=>1, load_external_dtd=>1 );
 	my $doc = XML::LibXML->load_xml( IO => $fh );
 	my $new_value = get_content_value( $doc, $fname );
 

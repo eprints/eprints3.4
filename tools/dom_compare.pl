@@ -79,7 +79,7 @@ for(my $i = 0; $i < $attrs->length; $i++)
 	test(sub {$attr->name . "=" . $attr->value . "\n"});
 }
 
-#my $subdoc = XML::LibXML->new->parse_file( "/tmp/index.xpage" );
+#my $subdoc = XML::LibXML->new( expand_entities=>1, load_external_dtd=>1 )->parse_file( "/tmp/index.xpage" );
 #$root->appendChild( $subdoc->documentElement );
 #print $doc->toString;
 #$root->appendChild( $root->cloneNode(0) );

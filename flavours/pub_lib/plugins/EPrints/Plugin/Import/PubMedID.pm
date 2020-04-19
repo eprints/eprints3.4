@@ -68,7 +68,7 @@ sub input_fh
  			next;
  		}
  
- 		my $parser = XML::LibXML->new();
+ 		my $parser = XML::LibXML->new( expand_entities=>1, load_external_dtd=>1 );
  		my $xml = $parser->parse_string( $resp->content );	
 		
 		my $root = $xml->documentElement;

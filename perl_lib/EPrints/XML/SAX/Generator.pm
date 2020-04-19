@@ -141,7 +141,7 @@ XML::LibXML::SAX::Generator - Generate SAX events from a LibXML tree
 
   my $handler = MySAXHandler->new();
   my $generator = XML::LibXML::SAX::Generator->new(Handler => $handler);
-  my $dom = XML::LibXML->new->parse_file("foo.xml");
+  my $dom = XML::LibXML->new(expand_entities=>1, load_external_dtd=>1)->parse_file("foo.xml");
   
   $generator->generate($dom);
 

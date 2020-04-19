@@ -76,7 +76,7 @@ EOH
 	print "Found $total matches\n";
 
 	# the actual records are stored as a serialised XML string
-	my $parser = XML::LibXML->new;
+	my $parser = XML::LibXML->new( expand_entities=>1, load_external_dtd=>1 );
 	my $doc = $parser->parse_string( $result->{records} );
 	foreach my $node ($doc->documentElement->childNodes)
 	{

@@ -271,7 +271,7 @@ sub output_dataobj
 	my @list = ();
 	foreach my $k ( keys %{$data->{bibtex}} )
 	{
-		push @list, sprintf( "%16s = {%s}", $k, encode('bibtex', $data->{bibtex}->{$k} ));
+		push @list, sprintf( "%16s = {%s}", $k, encode( 'bibtex', fix_special_chars( $data->{bibtex}->{$k} ) ) );
 	}
 	foreach my $k ( keys %{$data->{additional}} )
 	{
@@ -282,7 +282,7 @@ sub output_dataobj
 		}
 		else
 		{
-			$value = encode('bibtex', $value );
+			$value =  encode( 'bibtex', fix_special_chars( $value ) );
 		}
 		$value =~ s/\\\{\\\}/\{\}/g if( $k eq "author" );  # 'decode' deliberately inserted code
 		$value =~ s/\\\{,\\\}/\{,\}/g if( $k eq "author" );
@@ -296,6 +296,52 @@ sub output_dataobj
 	$out .= "}\n\n";
 
 	return $out;
+}
+
+$EPrints::Plugin::Export::BibTeX::SPECIAL_CHAR_MAPPING = {
+		'0x00ae' => '(R)', # registered
+		'0x00a1' => '!', # inverted exclaimation mark
+		'0x00a2' => 'c', # cent
+ 		'0x00a5' => 'Y', # Yen
+		'0x00aa' => 'a', # feminine ordinal
+ 		'0x00b0' => 'o', # degree
+                '0x00b2' => '2', # squared
+                '0x00b3' => '3', # cubed
+		'0x00b5' => 'u',  # micro
+		'0x00b7' => '.', # middle dot
+		'0x00b9' => '1', # superscript 1
+                '0x00bc' => '1/4', # quarter
+                '0x00bd' => '1/2', # half
+                '0x00be' => '3/4', # three-quarters
+                '0x00bf' => '?', # inverted question mark
+		'0x00f7' => '/', # divide
+		'0x2010' => '-', # hyphen
+                '0x2011' => '-', # non-breaking hyphen
+                '0x2012' => '-', # figure dash
+                '0x2013' => '-', # en dash
+                '0x2014' => '-', # em dash
+		'0x2015' => '-', # horizontal bar
+		'0x2018' => "'", # left single quote mark
+                '0x2019' => "'", # right single quote mark
+		'0x201a' => "'", # low single quote mark
+		'0x201c' => '"', # left double quote mark
+		'0x201d' => '"', # right double quote mark
+		'0x201e' => '"', # low double quote mark
+		'0x2122' => 'TM', # trademark	
+};
+
+sub fix_special_chars 
+{
+	my( $utext ) = @_;
+
+	$utext = join("", map { 
+		my $char = $_;
+		$char =~ s/(.)/sprintf '0x%04x', ord $1/seg;
+		exists $EPrints::Plugin::Export::BibTeX::SPECIAL_CHAR_MAPPING->{$char} ? 
+		$EPrints::Plugin::Export::BibTeX::SPECIAL_CHAR_MAPPING->{$char} : 
+		$_;
+	} split(//, $utext));
+	return $utext;
 }
 
 1;

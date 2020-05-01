@@ -936,8 +936,22 @@ sub sort_values
 {
 	my( $self, $session, $in_list, $langid ) = @_;
 
-	($in_list, $langid) = ($session, $in_list)
-		if !UNIVERSAL::isa( $session, "EPrints::Repository" );
+	($in_list, $langid) = ($session, $in_list) if !UNIVERSAL::isa( $session, "EPrints::Repository" );
+
+	my $view_sort_function = sub
+	{
+		my( $a, $b, $ov ) = @_;
+		
+		return defined $a <=> defined $b || $EPrints::MetaField::COLLATOR->cmp( $$ov{$a}, $$ov{$b} );
+	};
+
+	if( UNIVERSAL::isa( $session, "EPrints::Repository" ))
+	{
+		if( defined $session->config( "view_sort_function" ))
+		{
+			$view_sort_function = $session->config( "view_sort_function" );
+		}
+	}
 
 	my %ov;
 	VALUE: for(@$in_list)
@@ -946,13 +960,10 @@ sub sort_values
 		$ov{$_} = $self->ordervalue_single( $_, $self->{repository}, $langid );
 	}
 
-        my $col = Unicode::Collate->new();
-
-        my @out_list = sort { defined $a <=> defined $b || $col->cmp( $ov{$a}, $ov{$b} ) } @$in_list;
+	my @out_list = sort { $view_sort_function->( $a, $b, \%ov ) } @$in_list;
 
 	return \@out_list;
 }
-
 
 ######################################################################
 =pod
@@ -1685,7 +1696,7 @@ sub form_value_single
 sub form_value_basic
 {
 	my( $self, $session, $basename, $object ) = @_;
-	
+
 	my $value = $session->param( $basename );
 
 	return undef if( !EPrints::Utils::is_set( $value ) );
@@ -2306,6 +2317,7 @@ sub get_property_defaults
 		confid 		=> EP_PROPERTY_NO_CHANGE,
 		export_as_xml 	=> EP_PROPERTY_TRUE,
 		fromform 	=> EP_PROPERTY_UNDEF,
+		get_item	=> EP_PROPERTY_UNDEF,
 		import		=> EP_PROPERTY_TRUE,
 		input_add_boxes => EP_PROPERTY_FROM_CONFIG,
 		input_boxes 	=> EP_PROPERTY_FROM_CONFIG,

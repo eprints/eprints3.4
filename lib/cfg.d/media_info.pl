@@ -12,19 +12,19 @@ $c->{guess_doc_type} ||= sub {
 		}
 	}
 
-	if( $filename =~ /\.(pdf|doc|docx|odt)$/ && $valid{text} )
+	if( $filename =~ /\.(pdf|doc|docx|odt)$/i && $valid{text} )
 	{
 		return "text";
 	}
-	elsif( $filename =~ /\.(ppt|pptx|odp)$/ && $valid{slideshow} )
+	elsif( $filename =~ /\.(ppt|pptx|odp)$/i && $valid{slideshow} )
 	{
 		return "slideshow";
 	}
-	elsif( $filename =~ /\.(zip|tgz|gz)$/ && $valid{archive} )
+	elsif( $filename =~ /\.(zip|tgz|gz)$/i && $valid{archive} )
 	{
 		return "archive";
 	}
-	elsif( $filename =~ /\.(xls|xlsx|ods)$/ && $valid{spreadsheet} )
+	elsif( $filename =~ /\.(xls|xlsx|ods)$/i && $valid{spreadsheet} )
 	{
 		return "spreadsheet";
 	}

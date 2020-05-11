@@ -110,12 +110,14 @@ use strict;
 use Text::Unidecode qw();
 use Unicode::Collate;
 
-$EPrints::MetaField::VARCHAR_SIZE 	= 255;
+$EPrints::MetaField::VARCHAR_SIZE = 255;
 
-$EPrints::MetaField::FROM_CONFIG = EP_PROPERTY_FROM_CONFIG;
-$EPrints::MetaField::NO_CHANGE   = EP_PROPERTY_NO_CHANGE;
-$EPrints::MetaField::REQUIRED    = EP_PROPERTY_REQUIRED;
-$EPrints::MetaField::UNDEF       = EP_PROPERTY_UNDEF;
+$EPrints::MetaField::FROM_CONFIG  = EP_PROPERTY_FROM_CONFIG;
+$EPrints::MetaField::NO_CHANGE    = EP_PROPERTY_NO_CHANGE;
+$EPrints::MetaField::REQUIRED     = EP_PROPERTY_REQUIRED;
+$EPrints::MetaField::UNDEF        = EP_PROPERTY_UNDEF;
+
+$EPrints::MetaField::COLLATOR     = Unicode::Collate->new();
 
 ######################################################################
 =pod
@@ -941,7 +943,7 @@ sub sort_values
 	my $view_sort_function = sub
 	{
 		my( $a, $b, $ov ) = @_;
-		
+
 		return defined $a <=> defined $b || $EPrints::MetaField::COLLATOR->cmp( $$ov{$a}, $$ov{$b} );
 	};
 

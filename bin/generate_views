@@ -214,7 +214,7 @@ LANGUAGE: foreach my $langid ( @{$repository->get_conf( "languages" )} )
 
 	VIEW: foreach my $view ( @{$views} )
 	{
-		next VIEW if( @view_opts && !grep( /$view->{id}/, @view_opts ) );
+		next VIEW if( @view_opts && !grep( /^$view->{id}$/, @view_opts ) );
 
 		$view = EPrints::Update::Views->new(
 			repository => $session,

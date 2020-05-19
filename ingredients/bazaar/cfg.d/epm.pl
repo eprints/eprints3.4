@@ -10,10 +10,10 @@ $c->{datasets}->{epm} = {
 
 
 # EPM Configuration File
-$c->{epm_sources} = [] if !defined $c->{epm_sources};
+$c->{epm}->{sources} = [] if !defined $c->{epm}->{sources};
 
 # Define the EPM sources
-push @{$c->{epm_sources}}, {
+push @{$c->{epm}->{sources}}, {
                 name => "EPrints Bazaar",
                 base_url => "https://bazaar.eprints.org",
 };

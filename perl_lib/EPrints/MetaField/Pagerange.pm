@@ -44,21 +44,28 @@ sub render_single_value
 			pagerange => $session->make_text( $value ),
 		));
 	}
-	elsif( $value =~ m/^([1-9]\d*)-(\d+)$/ )
+	elsif( ( my $from, my $to ) = $value =~ m/^([1-9]\d*)-(\d+)$/ )
 	{
-		if( $1 == $2 )
+		if ( my $count = () = $value =~ /-/g > 1 )
+        	{
+			use POSIX;
+                	my $middle = ceil( $count / 2 );
+			( $from, $to ) = $value =~ m{\A((?:[^-]+-){$middle})(.+)\z};
+			$from =~ s/-\z//;
+		}
+		if( $from == $to )
 		{
 			$frag->appendChild( $session->html_phrase( "lib/metafield/pagerange:same_page",
-				from => $session->make_text( $1 ),
-				to => $session->make_text( $2 ),
+				from => $session->make_text( $from ),
+				to => $session->make_text( $to ),
 				pagerange => $session->make_text( $value ),
 			));
 		}
 		else
 		{
 			$frag->appendChild( $session->html_phrase( "lib/metafield/pagerange:range",
-				from => $session->make_text( $1 ),
-				to => $session->make_text( $2 ),
+				from => $session->make_text( $from ),
+				to => $session->make_text( $to ),
 				pagerange => $session->make_text( $value ),
 			));
 		}
@@ -77,7 +84,18 @@ sub get_basic_input_elements
 {
 	my( $self, $session, $value, $basename, $staff, $obj ) = @_;
 
-	my @pages = split /-/, $value if( defined $value );
+	my @pages = undef;
+	if( defined $value )
+	{
+		@pages = split /-/, $value;
+		if ( $#pages > 2 )
+		{
+			use POSIX;
+			my $middle = ceil( $#pages / 2 );
+			@pages = $value =~ m{\A((?:[^-]+-){$middle})(.+)\z};
+			$pages[0] =~ s/-\z//;
+		}
+	}
  	my $fromid = $basename."_from";
  	my $toid = $basename."_to";
 		

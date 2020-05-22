@@ -1,6 +1,6 @@
 ######################################################################
 #
-# EPrints::MetaField::Email;
+# EPrints::Search::Condition::NameMatch
 #
 ######################################################################
 #
@@ -11,40 +11,52 @@
 
 =head1 NAME
 
-B<EPrints::MetaField::Email> - no description
+B<EPrints::Search::Condition::Like> - "Like" search condition
 
 =head1 DESCRIPTION
 
-Contains an Email address that is linked when rendered.
-
-=over 4
+Matches items that are the same ignoring case
 
 =cut
 
-package EPrints::MetaField::Email;
+package EPrints::Search::Condition::Like;
 
-use EPrints::MetaField::Idci;
-@ISA = qw( EPrints::MetaField::Idci );
+use EPrints::Search::Condition::Comparison;
+
+@ISA = qw( EPrints::Search::Condition::Comparison );
 
 use strict;
 
-sub render_single_value
+sub new
 {
-	my( $self, $session, $value ) = @_;
-	
-	return $session->make_doc_fragment if !EPrints::Utils::is_set( $value );
+        my( $class, @params ) = @_;
 
-	my $text = $session->make_text( $value );
+        my $self = {};
+        $self->{op} = "like";
+        $self->{dataset} = shift @params;
+        $self->{field} = shift @params;
+        $self->{params} = \@params;
 
-	return $text if !defined $value;
-	return $text if( $self->{render_dont_link} );
-
-	my $link = $session->render_link( "mailto:".$value );
-	$link->appendChild( $text );
-	return $link;
+        return bless $self, $class;
 }
 
-######################################################################
+
+sub logic
+{
+        my( $self, %opts ) = @_;
+
+        my $prefix = $opts{prefix};
+        $prefix = "" if !defined $prefix;
+
+        my $db = $opts{session}->get_database;
+        my $table = $prefix . $self->table;
+        my $sql_name = $self->{field}->get_sql_name;
+
+        return sprintf( "%s ".$db->sql_LIKE." '%s'",
+                $db->quote_identifier( $table, $sql_name ),
+                EPrints::Database::prep_like_value( $self->{params}->[0] ) );
+}
+
 1;
 
 =head1 COPYRIGHT

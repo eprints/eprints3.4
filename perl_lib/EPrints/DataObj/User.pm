@@ -150,7 +150,7 @@ sub get_system_field_info
 		{ name=>"saved_searches", type=>"subobject", datasetid=>'saved_search',
 			multiple=>1 },
 
-		{ name=>"username", type=>"id", required=>1 },
+		{ name=>"username", type=>"idci", required=>1 },
 
 		{ name=>"password", type=>"secret", show_in_html=>0,
 			fromform=>\&EPrints::Utils::crypt_password },

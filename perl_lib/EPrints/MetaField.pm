@@ -2356,6 +2356,7 @@ sub get_property_defaults
 		volatile	=> EP_PROPERTY_FALSE,
 		virtual		=> EP_PROPERTY_FALSE,
 		default_value => EP_PROPERTY_UNDEF,
+		separator       => EP_PROPERTY_UNDEF,
 		match       => "EQ",
 		merge       => "ALL",
 

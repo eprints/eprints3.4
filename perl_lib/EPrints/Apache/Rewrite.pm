@@ -512,6 +512,9 @@ if ($repository->config("use_long_url_format"))
                     # problems and is included as a legacy feature only. Don't use it, 
                     # set ${$opts->{return_code}} = 404; or whatever, instead.
                     return $r->status if $r->status != 200;
+		    
+		    # Disable JavaScript if accessing whilst logged in to avoid malicious HTML files doing nasty things as the user.
+		    $r->headers_out->{'Content-Security-Policy'} = "script-src 'none';" if $user && !$repository->param( "allow_uploaded_doc_js" );
                 }
                 # OK, It's the EPrints abstract page (or something whacky like /23/fish)
                 # ## can't let CRUD to use accept header todo content nego because we have files like .title, .page etc, so just redirect  /8 to /id/eprint/8 
@@ -700,6 +703,9 @@ if(not $repository->config("use_long_url_format"))
 			# problems and is included as a legacy feature only. Don't use it, 
 			# set ${$opts->{return_code}} = 404; or whatever, instead.
 			return $r->status if $r->status != 200;
+
+			# Disable JavaScript if accessing whilst logged in to avoid malicious HTML files doing nasty things as the user.
+                    	$r->headers_out->{'Content-Security-Policy'} = "script-src 'none';" if $user && !$repository->param( "allow_uploaded_doc_js" );
 		}
 		# OK, It's the EPrints abstract page (or something whacky like /23/fish)
 		else

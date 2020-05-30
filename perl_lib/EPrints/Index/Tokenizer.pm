@@ -66,7 +66,7 @@ be ignored when searching.
 
 sub apply_mapping
 {
-	my( $session, $text ) = @_;
+	my( $session, $utext ) = @_;
 
 	if( ref($utext) eq "Unicode::String" )
 	{
@@ -78,7 +78,7 @@ sub apply_mapping
 		exists($EPrints::Index::FREETEXT_CHAR_MAPPING->{$_}) ?
 		$EPrints::Index::FREETEXT_CHAR_MAPPING->{$_} :
 		$_;
-	} split(//, $text));
+	} split(//, $utext));	
 }
 
 ##############################################################################
@@ -373,6 +373,105 @@ $EPrints::Index::FREETEXT_CHAR_MAPPING = {
 		chr(0x017C) => 'z',
 		chr(0x017D) => 'Z',
 		chr(0x017E) => 'z',
+		chr(0x0300) => '', # combining diacritical marks start
+		chr(0x0301) => '',
+		chr(0x0302) => '',
+		chr(0x0303) => '',
+		chr(0x0304) => '',
+		chr(0x0305) => '',
+		chr(0x0306) => '',
+		chr(0x0307) => '',
+		chr(0x0308) => '',
+		chr(0x0309) => '',
+		chr(0x030A) => '',
+		chr(0x030B) => '',
+		chr(0x030C) => '',
+		chr(0x030D) => '',
+		chr(0x030E) => '',
+		chr(0x030F) => '',
+		chr(0x0310) => '',
+                chr(0x0311) => '',
+                chr(0x0312) => '',
+                chr(0x0313) => '',
+                chr(0x0314) => '',
+                chr(0x0315) => '',
+                chr(0x0316) => '',
+                chr(0x0317) => '',
+                chr(0x0318) => '',
+                chr(0x0319) => '',
+		chr(0x031A) => '',
+                chr(0x031B) => '',
+                chr(0x031C) => '',
+                chr(0x031D) => '',
+                chr(0x031E) => '',
+                chr(0x031F) => '',
+		chr(0x0320) => '',
+                chr(0x0321) => '',
+                chr(0x0322) => '',
+                chr(0x0323) => '',
+                chr(0x0324) => '',
+                chr(0x0325) => '',
+                chr(0x0326) => '',
+                chr(0x0327) => '',
+                chr(0x0328) => '',
+                chr(0x0329) => '',
+		chr(0x032A) => '',
+                chr(0x032B) => '',
+                chr(0x032C) => '',
+                chr(0x032D) => '',
+                chr(0x032E) => '',
+                chr(0x032F) => '',
+		chr(0x0330) => '',
+                chr(0x0331) => '',
+                chr(0x0332) => '',
+                chr(0x0333) => '',
+                chr(0x0334) => '',
+                chr(0x0335) => '',
+                chr(0x0336) => '',
+                chr(0x0337) => '',
+                chr(0x0338) => '',
+                chr(0x0339) => '',
+		chr(0x033A) => '',
+                chr(0x033B) => '',
+                chr(0x033C) => '',
+                chr(0x033D) => '',
+                chr(0x033E) => '',
+                chr(0x033F) => '',
+		chr(0x0340) => '',
+                chr(0x0341) => '',
+                chr(0x0342) => '',
+                chr(0x0343) => '',
+                chr(0x0344) => '',
+                chr(0x0345) => '',
+                chr(0x0346) => '',
+                chr(0x0347) => '',
+                chr(0x0348) => '',
+                chr(0x0349) => '',
+		chr(0x034A) => '',
+                chr(0x034B) => '',
+                chr(0x034C) => '',
+                chr(0x034D) => '',
+                chr(0x034E) => '',
+                chr(0x034F) => '',
+		chr(0x0350) => '',
+                chr(0x0351) => '',
+                chr(0x0352) => '',
+                chr(0x0353) => '',
+                chr(0x0354) => '',
+                chr(0x0355) => '',
+                chr(0x0356) => '',
+                chr(0x0357) => '',
+                chr(0x0358) => '',
+                chr(0x0359) => '',
+		chr(0x035A) => '',
+                chr(0x035B) => '',
+                chr(0x035C) => '',
+                chr(0x035D) => '',
+                chr(0x035E) => '',
+                chr(0x035F) => '',
+		chr(0x0360) => '',
+                chr(0x0361) => '',
+                chr(0x0362) => '', # combining diacritical marks end
 		chr(0x0391) => 'A',
 		chr(0x03B1) => 'a',
 		chr(0x0392) => 'B',
@@ -537,6 +636,7 @@ $EPrints::Index::FREETEXT_CHAR_MAPPING = {
 		chr(0x217E) => 'd',
 		chr(0x217F) => 'm',
 		chr(0x2122) => 'TM',
+		chr(0x25CC) => '', # dotted circle left when removing modifier for combining diacritical marks
 };
 
 # Minimum size word to normally index.

@@ -47,7 +47,9 @@ sub allow_edit
 {
 	my( $self ) = @_;
 
-	return $self->can_be_viewed;
+	return
+                !$self->{session}->{preparing_static_page} &&
+                $self->can_be_viewed;
 }
 sub action_edit {} # dummy action for key_tools
 

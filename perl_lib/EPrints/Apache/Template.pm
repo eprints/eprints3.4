@@ -137,6 +137,8 @@ sub handler
 		}
 	}
 
+	local $repo->{preparing_static_page} = 1;
+
 	$parts->{login_status} = EPrints::ScreenProcessor->new(
 		session => $repo,
 	)->render_toolbar;

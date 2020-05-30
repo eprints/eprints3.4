@@ -40,7 +40,7 @@ EPrints can be contacted in the real world at
 
 	EPrints Services
 	Electronics and Computer Science
-	Faculty of Physical Sciences and Engineering
+	Faculty of Engineering and Physical Sciences
 	University of Southampton
 	Southampton, SO17 1BJ
 	United Kingdom

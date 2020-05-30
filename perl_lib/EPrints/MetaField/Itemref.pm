@@ -28,6 +28,16 @@ use EPrints::MetaField::Int;
 
 use strict;
 
+sub new
+{
+        my( $self, %params ) = @_;
+
+	$params{regexp} = '' if defined $params{fromform} && ! defined $params{regexp};
+
+       	return  $self->SUPER::new( %params );
+}
+
+
 sub get_property_defaults
 {
 	my( $self ) = @_;
@@ -77,6 +87,11 @@ sub render_single_value
 sub get_item
 {
 	my( $self, $session, $value ) = @_;
+
+	if( defined $self->{get_item} )
+        {
+                return $self->call_property( "get_item", $value, $session );
+        }
 
 	my $ds = $session->dataset( $self->get_property('datasetid') );
 

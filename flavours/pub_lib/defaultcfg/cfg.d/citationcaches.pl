@@ -9,3 +9,6 @@ $c->{citation_caching}->{excluded_dataobjs} = [
 	'epm',
 	'subject',
 ];
+$c->{citation_caching}->{excluded_styles} = [
+        'result',
+];

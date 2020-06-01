@@ -10,8 +10,19 @@
 #
 ######################################################################
 
-use Text::Unidecode;
-my $dbg = 0;
+$c->{make_orderkey_ignore_extras} = sub
+{
+        my ($name) = @_;
+
+        my  @orderkey;
+        # convert to upper case ASCII
+        my $orderkey = uc( unidecode( $name ) );
+        # keep separating dot (of initials from given name)
+        $orderkey =~ s/[\.]/_/g;
+        # ignore anything else than alphanumeric characters, aka non-word characters, except _
+        $orderkey =~ s/[^_A-Z0-9]//g;
+        return $orderkey;
+};
 
 $c->{make_name_orderkey} = sub
 {
@@ -22,11 +33,10 @@ $c->{make_name_orderkey} = sub
         # foreach( "family", "lineage", "given", "honourific" )
         {
 		next unless defined($value->{$_}) && $value->{$_} ne "";
-		print STDERR "field='", $_, ": " if $dbg;
 		my $name = $value->{$_};
 
 		# convert name appropriately
-		my $orderkey = make_orderkey_ignore_extras( $name );
+		my $orderkey = &$c->{make_orderkey_ignore_extras}( $name );
                 push  @orderkey, $orderkey;
          }
          return join( "_" ,  @orderkey );
@@ -39,7 +49,7 @@ $c->{make_title_orderkey} = sub
         $value =~ s/^[^a-z0-9]+//gi;
         if( $value =~ s/^(a|an|the) [^a-z0-9]*//i ) { $value .= ", $1"; }
 
-        return make_orderkey_ignore_extras($value);
+        return &$c->{make_orderkey_ignore_extras}( $value );
 };
 
 $c->{make_sanitised_value_orderkey} = sub
@@ -47,11 +57,11 @@ $c->{make_sanitised_value_orderkey} = sub
 	my ($field, $value, $session, $langid, $dataset) = @_;
 
 	# convert name appropriately
-	my $orderkey = make_orderkey_ignore_extras( $value );
+	my $orderkey = &$c->{make_orderkey_ignore_extras}( $value );
 	return $orderkey;
 };
 
-sub make_orderkey_ignore_extras
+$c->{make_orderkey_ignore_extras} = sub
 {
 	my ($name) = @_;
 
@@ -62,6 +72,5 @@ sub make_orderkey_ignore_extras
 	$orderkey =~ s/[\.]/_/g;
 	# ignore anything else than alphanumeric characters, aka non-word characters, except _
 	$orderkey =~ s/[^_A-Z0-9]//g;
-	print STDERR "name: '", $name, "', orderkey: '", $orderkey, "'\n" if $dbg;
 	return $orderkey;
 };

@@ -4375,7 +4375,7 @@ sub _render_input_form_field
 		my $labeltext = $field->render_name( $self );
 		if( $req && !$field->is_type( "boolean" ) )
 		{
-			$labeltext = $self->html_phrase( "sys:ep_form_required", label=>$label );
+			$labeltext = $self->html_phrase( "sys:ep_form_required", label=>$labeltext );
 		}
 		$label->appendChild( $labeltext );
 		$div->appendChild( $label );

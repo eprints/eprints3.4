@@ -5777,7 +5777,31 @@ sub flavour_has
 }
 
 
+######################################################################
+=pod
 
+=begin InternalDoc
+
+=item $Boolean = $repository->get_csrf_token("")
+
+return a string containg the CSRF token.
+
+=end InternalDoc
+
+=cut
+######################################################################
+
+
+sub get_csrf_token
+{
+        my ($self) = @_;
+
+	use Digest::MD5;
+        my $ctx = Digest::MD5->new;
+        my $timestamp = time();
+        $ctx->add( $timestamp, $self->current_user->get_id, $self->config( "csrf_token_salt" ) );
+	return $timestamp . ":" . $ctx->hexdigest;
+}
 
 
 1;

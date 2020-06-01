@@ -503,7 +503,15 @@ sub render_row
 	}
 
 	# phrase editing widget
-	$div = $session->make_element( "div", id => "ep_phraseedit_$phraseid", class => "ep_phraseedit_widget", onclick => "ep_phraseedit_edit(this, ep_phraseedit_phrases);" );
+	if ( defined $session->config( "csrf_token_salt" ) && defined $session->current_user )
+        {
+		my $csrf_token = $session->get_csrf_token();
+		$div = $session->make_element( "div", id => "ep_phraseedit_$phraseid", class => "ep_phraseedit_widget", onclick => "ep_phraseedit_edit(this, ep_phraseedit_phrases, '$csrf_token');" );
+	}
+	else
+	{	
+		$div = $session->make_element( "div", id => "ep_phraseedit_$phraseid", class => "ep_phraseedit_widget", onclick => "ep_phraseedit_edit(this, ep_phraseedit_phrases);" );
+	}
 	if( $xml ne $phrase->{xml} )
 	{
 		$div->setAttribute( class => "ep_phraseedit_widget ep_phraseedit_ref" );

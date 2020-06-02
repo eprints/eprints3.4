@@ -62,9 +62,10 @@ sub render
 			$session->html_phrase( "cgi/users/status:cachesize" ) ) );
 
 	my $cache_ds = $session->dataset( "cachemap" );
-	foreach my $name ($session->get_database->get_tables)
+	foreach my $name ($session->get_database->get_tables( $session->config( 'dbname' )))
 	{
 		next unless $name =~ /^cache(\d+)$/;
+		print STDERR "table: $name\n";
 		my $cachemap = $cache_ds->get_object( $session, $1 );
 		my $count = $session->get_database->count_table($name);
 		my $created;
@@ -90,7 +91,7 @@ sub render
 	$html->appendChild( $p );
 	$html->appendChild( $session->make_text( "Schema version " . $session->get_database->get_version ));
 
-	my %all_tables = map { $_ => 1 } $session->get_database->get_tables;
+	my %all_tables = map { $_ => 1 } $session->get_database->get_tables( $session->config( 'dbname' ));
 
 	my $langs = $session->config( "languages" );
 

@@ -1611,7 +1611,7 @@ sub reset_dataset
 	my $repo = &repository( $repoid, check_db => 0 );
 
 	my $db = $repo->database;
-	my @tables = $db->get_tables;
+	my @tables = $db->get_tables( $repo->config( 'dbname' ) );
 	print "Erasing dataset $datasetid\n" if( $noise >= 1 );
 	foreach my $table ( @tables )
 	{

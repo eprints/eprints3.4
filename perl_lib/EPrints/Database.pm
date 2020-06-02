@@ -424,7 +424,7 @@ sub drop_archive_tables
 
 	$self->drop_version_table;
 	
-	foreach my $table ($self->get_tables)
+	foreach my $table ($self->get_tables( $self->{session}->config( 'dbname' ) ))
 	{
 		if( $table =~ /^cache\d+$/i )
 		{
@@ -2488,7 +2488,7 @@ sub drop_orphan_cache_tables
 
 	my $rc = 0;
 
-	foreach my $name ($self->get_tables)
+	foreach my $name ($self->get_tables( $self->{session}->config( 'dbname' ) ))
 	{
 		next unless $name =~ /^cache(\d+)$/;
 		next if defined $self->get_cachemap( $1 );
@@ -4143,7 +4143,7 @@ sub swap_tables
 ######################################################################
 =pod
 
-=item @tables = $db->get_tables
+=item @tables = $db->get_tables( [ $dbname ] )
 
 Return a list of all the tables in the database.
 
@@ -4152,11 +4152,12 @@ Return a list of all the tables in the database.
 
 sub get_tables
 {
-	my( $self ) = @_;
+	my( $self, $dbname ) = @_;
 
 	my @tables;
+	$dbname = '%' unless defined $dbname;
 
-	my $sth = $self->{dbh}->table_info( '%', '%', '%', 'TABLE' );
+	my $sth = $self->{dbh}->table_info( '%', $dbname, '%', 'TABLE' );
 
 	while(my $row = $sth->fetch)
 	{

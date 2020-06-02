@@ -169,7 +169,7 @@ END
 
 	print "Dropping old subscription tables.\n";
 	# drop all the old subscription tables
-	my @tables = $db->get_tables;
+	my @tables = $db->get_tables( $session->config( 'dbname' ) );
 	foreach my $table ( @tables )
 	{
 		if( $table =~ m/^subscription/ )
@@ -264,7 +264,7 @@ END
 	my $ok = 1;
 	$ok = $ok && defined $rootdbh;
 
-	my @tables = $db->get_tables;
+	my @tables = $db->get_tables( $session->config( 'dbname' ) );
 
 	# add "mailempty" to subscription
 
@@ -372,7 +372,7 @@ END
 	my $ok = 1;
 	$ok = $ok && defined $rootdbh;
 
-	my @tables = $db->get_tables;
+	my @tables = $db->get_tables( $session->config( 'dbname' ) );
 
 	# remove rindex tables
 
@@ -435,7 +435,7 @@ $db->set_debug(1);
 	my @epds = qw/ archive buffer inbox deletion /;
 
 	print "Renaming the users* tables to user*.\n";
-	foreach my $table ( $db->get_tables )
+	foreach my $table ( $db->get_tables( $session->config( 'dbname' ) ) )
 	{
 		next unless( $table =~ m/^users(.*)/ );
 		$sql = "RENAME TABLE users$1 TO user$1";
@@ -453,7 +453,7 @@ $db->set_debug(1);
 		$db->do( $sql );
 
 		# add the ordervalues for rev_number
-		foreach my $table ( $db->get_tables )
+		foreach my $table ( $db->get_tables( $session->config( 'dbname' ) ) )
 		{
 			if( $table =~ m/^($tablename)__ordervalues_.*$/ )
 			{
@@ -504,7 +504,7 @@ $db->set_debug(1);
 	print "Convert DATE fields into 3 integers and TIME fields into 6.\n";
 	my @timefields;
 	my @datefields;
-	foreach my $table ( $db->get_tables )
+	foreach my $table ( $db->get_tables( $session->config( 'dbname' ) ) )
 	{
 		next unless( $table =~ m/^(archive|buffer|inbox|deletion|user|document|subscription|subject)/ );
 
@@ -571,7 +571,7 @@ $db->set_debug(1);
 	}
 
 	print "Removing old index index_grep rindex and temporary index tables\n";
-	foreach my $table ( $db->get_tables )
+	foreach my $table ( $db->get_tables( $session->config( 'dbname' ) ) )
 	{
 		next unless $table =~ m/__index(_grep)?(_tmp)?$|__rindex$/;
 		$sql = "DROP TABLE $table";
@@ -590,7 +590,7 @@ $db->set_debug(1);
 	$db->create_dataset_tables( $session->dataset( "eprint" ) );
 
 	print "Moving data from archive,inbox,deletion and buffer into eprint.\n";
-	foreach my $table ( $db->get_tables )
+	foreach my $table ( $db->get_tables( $session->config( 'dbname' ) ) )
 	{
 		next unless( $table=~m/^(archive|inbox|deletion|buffer)(_[^_].*)?$/ );
 		my $from_table = $table;
@@ -601,7 +601,7 @@ $db->set_debug(1);
 	}
 
 	print "Removing archive,inbox,deletion and buffer.\n";
-	foreach my $table ( $db->get_tables )
+	foreach my $table ( $db->get_tables( $session->config( 'dbname' ) ) )
 	{
 		next unless( $table=~m/^(archive|inbox|deletion|buffer)(_[^_].*)?$/ );
 		$sql = "DROP TABLE $table";
@@ -754,7 +754,7 @@ sub add_single_field_after
 
 	my $sql = "ALTER TABLE $datasetid ADD $fieldname $type AFTER $after";
 	$db->do( $sql );
-	foreach my $table ( $db->get_tables )
+	foreach my $table ( $db->get_tables( $db->{session}->config( 'dbname' ) ) )
 	{
 		if( $table =~ m/^$datasetid\__ordervalues_.*$/ )
 		{

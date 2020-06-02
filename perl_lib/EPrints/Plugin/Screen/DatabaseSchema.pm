@@ -65,7 +65,6 @@ sub render
 	foreach my $name ($session->get_database->get_tables( $session->config( 'dbname' )))
 	{
 		next unless $name =~ /^cache(\d+)$/;
-		print STDERR "table: $name\n";
 		my $cachemap = $cache_ds->get_object( $session, $1 );
 		my $count = $session->get_database->count_table($name);
 		my $created;

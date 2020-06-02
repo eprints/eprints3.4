@@ -1218,7 +1218,7 @@ sub render_citation
 	my $citation_caching_enabled = 0;
 	if ( !defined $params{no_cache} || !$params{no_cache} )
 	{
-		my @excluded_dataobjs = ( 'epm', 'subject' );
+		my @excluded_dataobjs = ( 'epm', 'loginticket', 'subject' );
 		my @excluded_styles = ( 'result' );
 		@excluded_dataobjs = @{$self->{session}->config( "citation_caching", "excluded_dataobjs" )} if defined $self->{session}->config( "citation_caching", "excluded_dataobjs" );
 		@excluded_styles = @{$self->{session}->config( "citation_caching", "excluded_styles" )} if defined $self->{session}->config( "citation_caching", "excluded_styles" );

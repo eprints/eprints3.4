@@ -34,3 +34,7 @@ dl.ep_field_set_long dd {
 	display: table; 
 	border: 1px;
 }
+
+#c6_editperms_1_type_label::after {
+        content: "";
+}

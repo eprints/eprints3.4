@@ -107,6 +107,34 @@ sub form_value_actual
 	my $response = $repo->param( "g-recaptcha-response" );
 	if( !EPrints::Utils::is_set( $response ) )
 	{
+		if ( my $ignore_countries = $repo->config( "recaptcha", "ignore_countries" ) )
+                {
+                        # if possible, use the GeoIP data file shipped with EPrints
+                        my $dat_file = $repo->config( "lib_path").'/geoip/GeoIP.dat';
+
+                        # alternatively use the global one
+                        $dat_file = 1 if( !-e $dat_file );
+
+                        #Test Geo::IP first - it's faster!
+                        my $geoip;
+                        foreach my $pkg ( 'Geo::IP', 'Geo::IP::PurePerl' )
+                        {
+                                if( EPrints::Utils::require_if_exists( $pkg ) )
+                                {
+                                        $geoip = $pkg->new( $dat_file );
+                                        last if( defined $geoip );
+                                }
+                        }
+                        if ( defined $geoip )
+                        {
+                                my $code = $geoip->country_code_by_addr( $repo->remote_ip ); 
+                                if ( grep { $_ eq $code } @{ $ignore_countries } )
+                                {
+                                        $repo->log( "NOTICE: No ReCAPTCHA used for IP address ".$repo->remote_ip." from $code." );
+                                        return undef;
+                                }
+                        }
+                }
 		return "invalid-captcha-sol";
 	}
 
@@ -116,7 +144,7 @@ sub form_value_actual
 	$ua->env_proxy;
 	$ua->timeout( $timeout ); #LWP default timeout is 180 seconds. 
 
-	my $r = $ua->post( "https://www.google.com/recaptcha/api/siteverify", [
+	my $r = $ua->post( $url, [
 		secret => $private_key,
 		response => $response
 	]);

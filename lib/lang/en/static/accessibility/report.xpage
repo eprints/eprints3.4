@@ -427,32 +427,32 @@
   <tr>
     <td><a href="{$config{http_path}}/cgi/oai2"><epc:print expr="$config{rel_path}"/>/cgi/oai2</a></td>
     <td><div class="ep_accessibility_bad">Errors:&#160;1&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;3</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;5&#160;|&#160;ARIA:&#160;0</div></td>
-    <td>Page is an HTML of XML using XSLT and is not generally for human use. Issues may be addressed in in 3.4.3. Error due to document language missing.  Alerts due tables used for layout and no page regions.</td>
+    <td>Page is an HTML rendering of XML using XSLT and is not generally for human use. Issues may be addressed in in 3.4.3. Error due to document language missing.  Alerts due tables used for layout and no page regions.</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/oai2?verb=Identity"><epc:print expr="$config{rel_path}"/>/cgi/oai2?verb=Identity</a></td>
     <td><div class="ep_accessibility_bad">Errors:&#160;1&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;4</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;11&#160;|&#160;ARIA:&#160;0</div></td>
-    <td>Page is an HTML of XML using XSLT and is not generally for human use.  Issues may be addressed in in 3.4.3. Error due to document language missing.  Alerts due tables used for layout and no page regions.</td>
+    <td>Page is an HTML rendering of XML using XSLT and is not generally for human use.  Issues may be addressed in in 3.4.3. Error due to document language missing.  Alerts due tables used for layout and no page regions.</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/oai2?verb=ListRecords&amp;metadataPrefix=oai_dc"><epc:print expr="$config{rel_path}"/>/cgi/oai2?verb=ListRecords&amp;metadataPrefix=oai_dc</a></td>
     <td><div class="ep_accessibility_bad">Errors:&#160;1&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;200</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;301&#160;|&#160;ARIA:&#160;0</div></td>
-    <td>Page is an HTML of XML using XSLT and is not generally for human use.  Issues may be addressed in in 3.4.3. Error due to document language missing.  Alerts due tables used for layout and no page regions.</td>
+    <td>Page is an HTML rendering of XML using XSLT and is not generally for human use.  Issues may be addressed in in 3.4.3. Error due to document language missing.  Alerts due tables used for layout and no page regions.</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/oai2?verb=ListSets"><epc:print expr="$config{rel_path}"/>/cgi/oai2?verb=ListSets</a></td>
     <td><div class="ep_accessibility_bad">Errors:&#160;1&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;284</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;286&#160;|&#160;ARIA:&#160;0</div></td>
-    <td>Page is an HTML of XML using XSLT and is not generally for human use.  Issues may be addressed in in 3.4.3. Error due to document language missing.  Alerts due tables used for layout and no page regions.</td>
+    <td>Page is an HTML rendering of XML using XSLT and is not generally for human use.  Issues may be addressed in in 3.4.3. Error due to document language missing.  Alerts due tables used for layout and no page regions.</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/oai2?verb=ListMetadataFormats"><epc:print expr="$config{rel_path}"/>/cgi/oai2?verb=ListMetadataFormats</a></td>
     <td><div class="ep_accessibility_bad">Errors:&#160;1&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;8</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;10&#160;|&#160;ARIA:&#160;0</div></td>
-    <td>Page is an HTML of XML using XSLT and is not generally for human use.  Issues may be addressed in in 3.4.3. Error due to document language missing.  Alerts due tables used for layout and no page regions.</td>
+    <td>Page is an HTML rendering of XML using XSLT and is not generally for human use.  Issues may be addressed in in 3.4.3. Error due to document language missing.  Alerts due tables used for layout and no page regions.</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/oai2?verb=ListIdentifiers&amp;metadataPrefix=oai_dc"><epc:print expr="$config{rel_path}"/>/cgi/oai2?verb=ListIdentifiers&amp;metadataPrefix=oai_dc</a></td>
     <td><div class="ep_accessibility_bad">Errors:&#160;1&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;102</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;103&#160;|&#160;ARIA:&#160;0</div></td>
-    <td>Page is an HTML of XML using XSLT and is not generally for human use.  Issues may be addressed in in 3.4.3. Error due to document language missing.  Alerts due tables used for layou, a skipped heading leavel and no page regions.</td>
+    <td>Page is an HTML rendering of XML using XSLT and is not generally for human use.  Issues may be addressed in in 3.4.3. Error due to document language missing.  Alerts due tables used for layou, a skipped heading leavel and no page regions.</td>
   </tr>
 </table>
 

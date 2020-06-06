@@ -55,9 +55,13 @@ END
 	}
 
 	my $sitemap = "Sitemap: ".$repository->config( 'http_url' )."/sitemap.xml";
-	if( ! ($robots =~ s/User-agent: \*\n/User-agent: \*\n$sitemap\n/ ) )
+
+	# Only add standard sitemap if it is not already added.
+	if ( $robots !~ m/$sitemap/ )
 	{
-		$robots = "User-agent: \*\n$sitemap\n\n$robots";	
+		# Add a new line to separate Sitemap line if necessary
+		$robots .= "\n" unless substr( $robots, -2 ) eq "\n\n";
+		$robots .= $sitemap;
 	}
 
 	binmode( *STDOUT, ":utf8" );

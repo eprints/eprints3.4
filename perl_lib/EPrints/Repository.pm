@@ -5328,6 +5328,38 @@ sub expire_abstracts
 
 
 ######################################################################
+=begin InternalDoc
+
+=item $success = $repository->expire_citations()
+
+Cause the citations to regenerate next time they are requested by expiring them.
+
+Returns success if done successfully.
+
+=end InternalDoc
+
+=cut
+
+sub expire_citations
+{
+        my ( $self ) = @_;
+
+        my $file = $self->get_conf( "variables_path" )."/citations.timestamp";
+
+        unless( open( CHANGEDFILE, ">$file" ) )
+        {
+                return 0;
+        }
+
+        print CHANGEDFILE "This file last poked at: ".EPrints::Time::human_time()."\n";
+        close CHANGEDFILE;
+
+        return 1;
+}
+
+
+
+######################################################################
 =pod
 
 =begin InternalDoc

@@ -1214,6 +1214,7 @@ my $PRIVMAP =
 		"config/add_field",
 		"config/remove_field",
 		"config/regen_abstracts",
+		"config/regen_citations",
 		"config/regen_views",
 		"config/edit/perl",
 

@@ -365,6 +365,20 @@ sub handler
 		return redir_see_other( $r, $url );
 	}
 
+	# Custom Handlers
+	if ( defined $repository->config( "custom_handlers" ) && keys %{$repository->config( "custom_handlers" )} )
+	{
+		while ( my ($ch, $custom_handler) = each ( %{ $repository->config( "custom_handlers" ) } ) )
+		{
+			my $ch_regex = $custom_handler->{regex};
+			$ch_regex =~ s/URLPATH/$urlpath/;
+			if ( $uri =~ m! $ch_regex !x )
+			{
+				return $custom_handler->{function}->( $r );
+			}
+		}
+	}
+
 	if( $uri =~ m! ^$urlpath/id/([^\/]+)/(ext-.*)$ !x )
 	{
 		my $exttype = $1;

@@ -1461,6 +1461,8 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
     <epp:phrase id="lib/metafield/itemref:not_found"><i><epc:pin name="objtype"/> <epc:pin name="id"/> not found.</i></epp:phrase>
     <epp:phrase id="lib/metafield/secret:show_value">[hidden]</epp:phrase>
 
+    <epp:phrase id="lib/metafield:words"> words</epp:phrase>
+
 <!-- File -->
     <epp:phrase id="file_fieldname_fileid">Unique file id</epp:phrase>
     <epp:phrase id="file_fieldname_datasetid">Object dataset id</epp:phrase>

@@ -2331,6 +2331,7 @@ sub get_property_defaults
 		make_value_orderkey 		=> EP_PROPERTY_UNDEF,
 		show_in_fieldlist	=> EP_PROPERTY_TRUE,
 		maxlength 	=> $EPrints::MetaField::VARCHAR_SIZE,
+		maxwords	=> EP_PROPERTY_UNDEF,
 		multiple 	=> EP_PROPERTY_FALSE,
 		name 		=> EP_PROPERTY_REQUIRED,
 		show_in_html	=> EP_PROPERTY_TRUE,

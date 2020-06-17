@@ -148,3 +148,22 @@ td.ep_form_input_grid_wide {
 .ep_form_input_grid > div > div.heading {
 	font-weight: bold; 
 }
+
+.ep_option_list {
+	display: table; 
+	border: 0;
+}
+
+.ep_option_list_row {
+	display: table-row;
+}
+
+.ep_option_list_cell {
+        display: table-cell;
+}
+
+.ep_option_list_option {
+	margin-left: 2em;
+}
+
+

@@ -3644,19 +3644,19 @@ sub render_option_list
 
 	if( $params{checkbox} )
 	{
-		my $fieldset = $self->make_element( "fieldset", style=>"display: table; border: 0;" );
+		my $fieldset = $self->make_element( "fieldset", class=>"ep_options_list" );
 		my $legend = $self->make_element( "legend", id=> $params{name}."_label", class=>"ep_field_legend" );
 		$legend->appendChild( $self->make_text( $params{legend} ) );
 		$fieldset->appendChild( $legend ); 
-		my $rowdiv = $self->make_element( "div", style=>"display: table-row;" );
+		my $rowdiv = $self->make_element( "div", class=>"ep_option_list_row" );
 		$fieldset->appendChild( $rowdiv );	
-		my $celldiv = $self->make_element( "div", style=>"display: table-cell;" );
+		my $celldiv = $self->make_element( "div", class=>"ep_option_list_cell" );
 		$rowdiv->appendChild( $celldiv );	
 		my $i = 0;
 		my $len = scalar @$pairs;
 		foreach my $pair ( @{$pairs} )
 		{
-			my $div = $self->make_element( "div" );
+			my $div = $self->make_element( "div", class=>"ep_option_list_option" );
 			my $label = $self->make_element( "label" );
 			$div->appendChild( $label );
 			my $box = $self->render_input_field( type=>"checkbox", name=>$params{name}, value=>$pair->[0], class=>"ep_form_checkbox", 'aria-describedby'=>$params{name}."_label" );
@@ -3670,7 +3670,7 @@ sub render_option_list
 			++$i;
 			if( $len > 5 && int($len / 2)==$i )
 			{
-				$celldiv = $self->make_element( "div", style=>"display: table-cell;" );
+				$celldiv = $self->make_element( "div", class=>"ep_option_list_cell" );
 				$rowdiv->appendChild( $celldiv );	
 			}
 		}

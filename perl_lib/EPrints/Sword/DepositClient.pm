@@ -30,9 +30,15 @@ sub check_config {
         my $given_url = $config->{host};
 
         my $host = $config->{host};
+	my $secure = 0;
 
         if ((substr $host,0,7) eq "http://") {
                 $host = substr $host, 7;
+        }
+
+	if ((substr $host,0,8) eq "https://") {
+                $host = substr $host, 8;
+		$secure = 1;
         }
 
         if ((index $host,"/") > 0) {
@@ -40,10 +46,11 @@ sub check_config {
         }
 
         if (!((index $host,":") > 0)) {
-                $host = $host . ":80";
+                $host = $host . ":80" unless $secure;
+		$host = $host . ":443" if $secure;
         }
 	
-	        $config->{host} = $host;
+	$config->{host} = $host;
 
         $config->{sword_url} = $host;
         

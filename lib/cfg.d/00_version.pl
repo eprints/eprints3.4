@@ -1,5 +1,5 @@
-$c->{version_long} = "EPrints 3.4.1-rc2";
-$c->{version_alias} = "Brownie Drift";
+$c->{version_long} = "EPrints 3.4.2";
+$c->{version_alias} = "Blueberry Muffin Derecho";
 $c->{vendor_long} = "EPrints Services";
 $c->{vendor_short} = "eps";
 $c->{version_description} = $c->{version_long} . " (" . $c->{version_alias} . ") (" . $c->{vendor_long} . ")";
@@ -8,7 +8,7 @@ $c->{version_description} = $c->{version_long} . " (" . $c->{version_alias} . ")
 
 =for COPYRIGHT BEGIN
 
-Copyright 2019 University of Southampton.
+Copyright 2020 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/

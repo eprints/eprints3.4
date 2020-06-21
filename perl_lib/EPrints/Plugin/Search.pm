@@ -545,7 +545,7 @@ L<EPrints::Const/EP_TRIGGER_INDEX_FIELDS>, L<EPrints::Search>, L<EPrints::List>.
 
 =for COPYRIGHT BEGIN
 
-Copyright 2019 University of Southampton.
+Copyright 2020 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/

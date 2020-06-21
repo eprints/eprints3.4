@@ -97,7 +97,7 @@ foreach my $field_data ( @fields )
 
 =for COPYRIGHT BEGIN
 
-Copyright 2019 University of Southampton.
+Copyright 2020 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/

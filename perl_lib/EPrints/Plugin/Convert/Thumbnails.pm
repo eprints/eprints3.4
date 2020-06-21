@@ -927,9 +927,7 @@ L<EPrints::Plugin>, L<EPrints::Plugin::Convert>.
 
 =head1 AUTHOR
 
-Copyright 2009 Tim Brody <tdb2@ecs.soton.ac.uk>, University of Southampton, UK.
-
-This module is released under the GPLv3 license.
+Tim Brody <tdb2@ecs.soton.ac.uk>, University of Southampton, UK.
 
 =cut
 
@@ -939,7 +937,7 @@ This module is released under the GPLv3 license.
 
 =for COPYRIGHT BEGIN
 
-Copyright 2019 University of Southampton.
+Copyright 2020 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/
@@ -964,4 +962,3 @@ License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
 =for LICENSE END
-

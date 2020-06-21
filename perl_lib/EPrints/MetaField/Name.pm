@@ -48,6 +48,30 @@ sub new
 	return $self;
 }
 
+sub render_value
+{
+        my( $self, $session, $value, $alllangs, $nolink, $object ) = @_;
+
+        if( defined $self->{render_value} )
+        {
+                return $self->call_property( "render_value",
+                        $session,
+                        $self,
+                        $value,
+                        $alllangs,
+                        $nolink,
+                        $object );
+        }
+
+        # Make use of the nolink property, which can be applied in citations if we want to
+        # suppress a link to the browse views when one is added via eprint_fields.pl
+        if($self->get_property( "render_custom" ) eq "nolink")
+        {
+                $nolink = 1;
+        }
+        return $self->render_value_actual( $session, $value, $alllangs, $nolink, $object );
+}
+
 # index the family part only...
 sub get_sql_index
 {
@@ -266,6 +290,11 @@ sub get_search_conditions
 	# obviously match.
 	my $noskip = 0; 
 
+        # Names may contain apostrophes (see above) which need to be escaped
+        # before being used to create a value to use with "LIKE"
+        $family = EPrints::Database::prep_like_value( $family );
+        $given = EPrints::Database::prep_like_value( $given );
+
 	# grep only accepts "%" and "?" as special chars
 	my $list = [ '%' ];
 	foreach my $fpart ( split /\s+/, $family )
@@ -336,11 +365,15 @@ sub get_property_defaults
 		{ sub_name => "honourific", type => "text", maxlength => 10, },
 	];
 	$defaults{input_name_cols} = $EPrints::MetaField::FROM_CONFIG;
-	$defaults{hide_honourific} = $EPrints::MetaField::FROM_CONFIG;
-	$defaults{hide_lineage} = $EPrints::MetaField::FROM_CONFIG;
-	$defaults{family_first} = $EPrints::MetaField::FROM_CONFIG;
-	$defaults{render_order} = "fg";
-	$defaults{text_index} = 1;
+        $defaults{hide_honourific} = $EPrints::MetaField::FROM_CONFIG;
+        $defaults{hide_lineage} = $EPrints::MetaField::FROM_CONFIG;
+        $defaults{family_first} = $EPrints::MetaField::FROM_CONFIG;
+        $defaults{render_order} = "fg";
+        $defaults{render_limit} = $EPrints::MetaField::FROM_CONFIG;
+        $defaults{render_dynamic} = $EPrints::MetaField::FROM_CONFIG;
+        $defaults{text_index} = 1;
+        $defaults{render_custom} = "link";
+
 	return %defaults;
 }
 

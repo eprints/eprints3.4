@@ -28,6 +28,9 @@ $c->{make_name_orderkey} = sub
 {
 	my ($field, $value, $session, $langid, $dataset) = @_;
 
+	# Safeguard in case used on non-compound field
+	return unless ref($value) eq 'HASH';
+	
  	my  @orderkey;
         foreach( "family", "given", "honourific" )
         # foreach( "family", "lineage", "given", "honourific" )

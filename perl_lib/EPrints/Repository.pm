@@ -3644,7 +3644,7 @@ sub render_option_list
 
 	if( $params{checkbox} )
 	{
-		my $fieldset = $self->make_element( "fieldset", class=>"ep_options_list" );
+		my $fieldset = $self->make_element( "fieldset", class=>"ep_option_list" );
 		my $legend = $self->make_element( "legend", id=> $params{name}."_label", class=>"ep_field_legend" );
 		$legend->appendChild( $self->make_text( $params{legend} ) );
 		$fieldset->appendChild( $legend ); 

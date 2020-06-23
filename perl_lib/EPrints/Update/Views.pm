@@ -1071,7 +1071,7 @@ sub create_single_page_menu
 
 	if( scalar(@$values) )
 	{
-		my @render_menu_opts = ( $repo, $menu, $sizes, $values, $menu_fields, $has_submenu, $view );
+		my @render_menu_opts = ( $repo, $menu, $sizes, $values, $menu_fields, $has_submenu, $view, $path_values );
 
 		my $menu_xhtml;
 		if( $menu->{render_menu} )
@@ -1086,7 +1086,6 @@ sub create_single_page_menu
 		{
 			$render_menu_opts[3] = get_showvalues_for_menu( $repo, $menu, $sizes, $values, $menu_fields );
 			$menu_xhtml = render_menu( @render_menu_opts );
-
 		}
 
 		$page->appendChild( $menu_xhtml );

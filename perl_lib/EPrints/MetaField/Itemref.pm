@@ -37,13 +37,14 @@ sub new
        	return  $self->SUPER::new( %params );
 }
 
-
 sub get_property_defaults
 {
 	my( $self ) = @_;
 	my %defaults = $self->SUPER::get_property_defaults;
 	$defaults{datasetid} = $EPrints::MetaField::REQUIRED;
 	$defaults{text_index} = 0;
+	$defaults{get_item} = $EPrints::MetaField::UNDEF;
+	$defaults{render_item} = $EPrints::MetaField::UNDEF;
 	return %defaults;
 }
 
@@ -73,6 +74,7 @@ sub render_single_value
 
 	if( defined $object )
 	{
+		return $self->call_property( "render_item", $value, $session ) if $self->get_property("render_item");
 		return $object->render_citation_link;
 	}
 
@@ -82,6 +84,19 @@ sub render_single_value
 		"lib/metafield/itemref:not_found",
 			id=>$session->make_text($value),
 			objtype=>$session->html_phrase( "datasetname_".$ds->base_id));
+}
+
+sub get_value_label
+{
+        my( $self, $session, $value, %opts ) = @_;
+
+	my $item = $self->get_item( $session, $value );
+	
+        if( !EPrints::Utils::is_set( $item ) && $opts{fallback_phrase} )
+        {
+                return $session->html_phrase( $opts{fallback_phrase} );
+        }
+        return $self->render_single_value( $session, $value );
 }
 
 sub get_item

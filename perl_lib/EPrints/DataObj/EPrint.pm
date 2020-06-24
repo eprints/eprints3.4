@@ -390,15 +390,13 @@ Example:
 
 	/style/images/fileicons/application_pdf.png;/20/1/paper.pdf|/20/4.hassmallThumbnailVersion/tdb_portrait.jpg;/20/4/tdb_portrait.jpg
 
-These URLs are relative to the current repository base path ('http_url').
-
 =cut
 
 sub fileinfo
 {
 	my( $self ) = @_;
 
-	my $base_url = $self->{session}->config( 'http_url' );
+	my $base_url = $self->{session}->config( 'rel_path' );
 
 	my @finfo = ();
 	foreach my $doc ( $self->get_all_documents )

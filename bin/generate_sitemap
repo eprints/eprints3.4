@@ -1,0 +1,143 @@
+#!/usr/bin/perl -w
+
+use FindBin;
+use lib "$FindBin::Bin/../perl_lib";
+
+######################################################################
+#
+#
+######################################################################
+
+=pod
+
+=for Pod2Wiki
+
+=head1 NAME
+
+B<generate_sitemap> - Generates sitemap.xml in standard location for use in Google Search Console and similar tools
+
+=head1 SYNOPSIS
+
+B<generate_sitemap> I<repository_id>
+
+=head1 DESCRIPTION
+
+This script lists the abstract/summary page URLs for every live publication in the repository as part of a sitemap.  The main sitemap links to individual sitemaps containing a maxiumum of 1000 URLs (live publication items). This is preferred for tools like Google Search Console to save individual files getting too large.  The main sitemap's filename is sitemap.xml and can be found on the root path of the repository (e.g. L<http://eprints.example.org/sitemap.xml)>. sitemap.xml and its child sitemaps (e.g. L<http://eprints.example.org/sitemaps/1.xml>) are presented in XML format using the sitemap schema L<http://www.sitemaps.org/schemas/sitemap/0.9>, setting a weekly change frequency.
+
+=head1 ARGUMENTS
+
+=over 8
+
+=item B<repository_id>
+
+The ID of the EPrints repository to use.
+
+=back
+
+=cut
+
+use EPrints;
+
+use strict;
+use warnings;
+
+my $repositoryid = shift;
+
+die "generate_sitemap *repositoryid*\n" unless $repositoryid;
+
+my $ep = EPrints->new;
+my $repo = $ep->repository($repositoryid);
+
+die "Could not load $repositoryid repository\n" unless $repo;
+
+my $ds = $repo->dataset( "archive" );
+my $eprints = $ds->search;
+
+my $n = 0;
+my $sitemaps_dir = $EPrints::SystemSettings::conf->{base_path} . "/archives/$repositoryid/cfg/static/sitemaps";
+mkdir($sitemaps_dir, 0775) unless ( -d $sitemaps_dir );
+for ( my $i = 0; $i < $eprints->count(); $i += 1000 )
+{
+	my $xml = $repo->xml;
+	my $urlset = $xml->create_element( "urlset", xmlns => "http://www.sitemaps.org/schemas/sitemap/0.9" );
+	my @opts = ( $urlset, $xml );
+
+	my $ids = $eprints->ids($i, 1000);
+	my $subset = EPrints::List->new( repository => $repo, dataset => $ds, ids => $ids );
+	$subset->map( \&add_url, \@opts );
+	
+	$n++;
+	open ( my $fh, ">:encoding(UTF-8)", "$sitemaps_dir/$n.xml" );
+	print $fh "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n";
+	print $fh $xml->to_string( $urlset );
+	close $fh;
+}
+
+open ( my $fh, ">:encoding(UTF-8)", $EPrints::SystemSettings::conf->{base_path} . "/archives/$repositoryid/cfg/static/sitemap.xml" );
+print $fh "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n";
+my $xml = $repo->xml;
+my $sitemapindex = $xml->create_element( "sitemapindex", xmlns => "http://www.sitemaps.org/schemas/sitemap/0.9" );
+for ( my $i = 1; $i <= $n; $i++ )
+{
+	my $sitemap = $xml->create_element( "sitemap" );
+	my $loc = $xml->create_element( "loc" );
+	my $url_path = $repo->config("http_url");
+	$url_path =~ s/http:/https:/ if EPrints::Utils::is_set( $repo->config("securehost") );
+        $loc->appendChild( $xml->create_text_node( $url_path . "/sitemaps/$i.xml" ) );
+	$sitemap->appendChild( $loc );
+	$sitemapindex->appendChild( $sitemap );
+}
+print $fh $xml->to_string( $sitemapindex );
+close $fh;
+
+exit 0;
+
+sub add_url 
+{
+	my ( $session, $dataset, $eprint, $opts ) = @_;
+
+	my ( $urlset, $xml ) = @{$opts};
+
+	my $loc = $xml->create_element( "loc" );
+	$loc->appendChild( $xml->create_text_node( $eprint->url_stem ) );
+
+	my $changefreq = $xml->create_element( "changefreq" );
+	$changefreq->appendChild( $xml->create_text_node( "weekly" ) );
+	
+	my $url =  $xml->create_element( "url" );
+	$url->appendChild( $loc );
+	$url->appendChild( $changefreq );
+
+	$urlset->appendChild( $url );
+}
+
+=head1 COPYRIGHT
+
+=for COPYRIGHT BEGIN
+
+Copyright 2020 University of Southampton.
+EPrints 3.4 is supplied by EPrints Services.
+
+http://www.eprints.org/eprints-3.4/
+
+=for COPYRIGHT END
+
+=for LICENSE BEGIN
+
+This file is part of EPrints 3.4 L<http://www.eprints.org/>.
+
+EPrints 3.4 and this file are released under the terms of the
+GNU Lesser General Public License version 3 as published by
+the Free Software Foundation unless otherwise stated.
+
+EPrints 3.4 is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public
+License along with EPrints 3.4.
+If not, see L<http://www.gnu.org/licenses/>.
+
+=for LICENSE END
+

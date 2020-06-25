@@ -30,6 +30,10 @@ sub new
 			place => "eprint_review_actions",
 			position => 400,
 		},
+		{
+                        place => "eprint_actions_bar_archive",
+                        position => 1100,
+                },
 	];
 
 	$self->{actions} = [qw/ send cancel /];

@@ -4,7 +4,7 @@
 	Neat citation for eprints used in search results.
 -->
 
-<cite:citation xmlns="http://www.w3.org/1999/xhtml" xmlns:cite="http://eprints.org/ep3/citation" xmlns:epc="http://eprints.org/ep3/control" type="table_row">
+<cite:citation xmlns="http://www.w3.org/1999/xhtml" xmlns:cite="http://eprints.org/ep3/citation" xmlns:epc="http://eprints.org/ep3/control">
   <div class="ep_search_result">
     <div><epc:print expr="$n" />.</div>
     <div>

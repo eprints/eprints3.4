@@ -339,18 +339,9 @@ sub paginate_list
 	else
 	{
 		$type = $session->get_citation_type( $list->get_dataset );
-		if( $type eq "table_row" )
-		{
-			$pins{results} = $session->make_element( 
-					"table", 
-					class=>"ep_paginate_list" );
-		}
-		else
-		{
-			$pins{results} = $session->make_element( 
-					"div", 
-					class=>"ep_paginate_list" );
-		}
+		$pins{results} = $session->make_element( 
+				"div", 
+				class=>"ep_paginate_list" );
 	}
 
 	if( defined $opts{rows_before} )

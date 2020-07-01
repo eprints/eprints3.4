@@ -617,19 +617,9 @@ sub paginate_opts
 	my $type = $self->{session}->get_citation_type( 
 			$self->{processor}->{results}->get_dataset, 
 			$self->get_citation_id );
-	my $container;
-	if( $type eq "table_row" )
-	{
-		$container = $self->{session}->make_element( 
-				"table", 
-				class=>"ep_paginate_list" );
-	}
-	else
-	{
-		$container = $self->{session}->make_element( 
-				"div", 
-				class=>"ep_paginate_list" );
-	}
+	my $container = $self->{session}->make_element( 
+			"div", 
+			class=>"ep_paginate_list" );
 
 	my $order_div = $self->{session}->make_element( "div", class=>"ep_search_reorder" );
 	my $form = $self->{session}->render_form( "GET" );

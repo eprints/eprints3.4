@@ -24,6 +24,7 @@ dl.ep_field_set_long dd {
 
 .ep_compound_header_cell, .ep_compound_data_row > div, .ep_compound_list > div > div > div {
 	display: table-cell; 
+	padding: 0.2em 0.5em;
 }
 
 .ep_compound_header_cell {

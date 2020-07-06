@@ -60,3 +60,6 @@
 	clear: left;
 }
 
+.ep_tab_panel > div > table {
+	width: 100%;
+}

@@ -31,27 +31,9 @@
                 </a>
                 <ul role="menu" id="ep_tm_menu_browse" style="display:none;">
                   <li>
-                    <a href="{$config{rel_path}}/view/year/" role="menuitem">
-                      <epc:phrase ref="bin/generate_views:indextitleprefix"/>
-                      <epc:phrase ref="viewname_eprint_year"/>
-                    </a>
-                  </li>
-                  <li>
                     <a href="{$config{rel_path}}/view/subjects/" role="menuitem">
                       <epc:phrase ref="bin/generate_views:indextitleprefix"/>
                       <epc:phrase ref="viewname_eprint_subjects"/>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="{$config{rel_path}}/view/divisions/" role="menuitem">
-                      <epc:phrase ref="bin/generate_views:indextitleprefix"/>
-                      <epc:phrase ref="viewname_eprint_divisions"/>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="{$config{rel_path}}/view/creators/" role="menuitem">
-                      <epc:phrase ref="bin/generate_views:indextitleprefix"/>
-                      <epc:phrase ref="viewname_eprint_creators"/>
                     </a>
                   </li>
                 </ul>

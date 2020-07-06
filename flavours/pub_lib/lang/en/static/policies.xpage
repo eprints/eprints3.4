@@ -11,12 +11,12 @@
     </div>
     <div class="ep_msg_warning_text">
       <p>No policies have been defined for this repository.</p>
-      <p>You can use the <a rel="external" href="http://www.opendoar.org/tools/en/policies.php">OpenDOAR Policies Tool</a> to produce a standard policy page. Use the button below to define your policies.</p>
+      <p>You can use the <a rel="external" href="https://v2.sherpa.ac.uk/opendoar/policytool/">OpenDOAR Policies Tool</a> to produce a standard policy page. Use the button below to define your policies.</p>
     </div>
   </div>
 </div>
 
-<form method="post" action="http://www.opendoar.org/tools/policytool.php">
+<form method="post" action="https://v2.sherpa.ac.uk/opendoar/policytool/">
   <textarea style="display: none;" name="rName" aria-label="Archive name"><epc:phrase ref="archive_name" /></textarea>
   <input type="hidden" name="la" value="en" />
   <input type="hidden" name="rUrl" value="{$config{base_url}}/" />

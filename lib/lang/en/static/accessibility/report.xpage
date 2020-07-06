@@ -9,7 +9,7 @@
     <div class="ep_msg_message_icon" style="width: 32px;">
       <img alt="Message" src="/style/images/message.png"/>
     </div>
-    <div class="ep_msg_message_text">This report is based on a default installation of EPrints 3.4 using the data imported by the testdata/bin/import_test_data script.  Any rebranding to EPrints or significant customisation is liable to significantly alter the results show below.</div>
+    <div class="ep_msg_message_text">This report is based on a default publication flavour installation of <a href="https://www.eprints.org/uk/index.php/eprints-3-4/" rel="external">EPrints 3.4</a> using the data imported by the testdata/bin/import_test_data script.  Any rebranding to EPrints or significant customisation is liable to significantly alter the results show below.</div>
   </div>
 </div>
 

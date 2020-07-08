@@ -382,7 +382,7 @@ sub render_action_link
 {
 	my( $self, %opts ) = @_;
 
-	my $uri = URI->new( $self->{session}->config( "http_cgiurl" ) . "/users/home" );
+	my $uri = URI->new( $self->{session}->config( "rel_cgipath" ) . "/users/home" );
 	$uri->query_form(
 		screen => substr($self->{id},8),
 	);

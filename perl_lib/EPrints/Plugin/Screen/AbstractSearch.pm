@@ -192,6 +192,7 @@ sub from
 		my %params = map { $_ => 1 } $self->{session}->param();
 		delete $params{screen};
 		delete $params{dataset};
+		delete $params{csrf_token} if defined $params{csrf_token};	
 		if( scalar keys %params )
 		{
 			$self->{processor}->{action} = "search";

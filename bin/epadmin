@@ -1766,7 +1766,17 @@ sub test
 	}
 
 	my $repo = &repository( $repoid );
-	
+
+	# check for configuration using methods removed from Apache2.4
+	if( !Apache2::Connection->can( 'remote_ip' ) && defined $repo->config( "can_request_view_document" ) )
+	{
+	 	local $Data::Dumper::Deparse=1;
+		if( Dumper( $repo->config( "can_request_view_document" ) ) =~ /connection\S+remote_ip/i )
+		{
+			print "EPrints warning! '".$repo->get_id."' uses 'remote_ip' in the 'can_request_view_document' configuration, but this version of Apache does not have that method. This may lead to the security value for a document being ignored. Please check configuration.\n";
+        	}
+	}
+
 	if( $noise > 1 )
 	{
 		print "PID: $$\n";

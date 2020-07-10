@@ -2300,20 +2300,26 @@ sub permit
 		my $r;
 		if( defined $user )
 		{
-			$r = $self->{session}->call( "can_user_view_document",
-					$self,
-					$user
-				);
+			eval {
+				$r = $self->{session}->call( "can_user_view_document",
+						$self,
+						$user
+					);
+			};
+			EPrints->abort( "can_user_view_document call caused an error" ) if $@;
 			return 1 if $r eq "ALLOW";
 			return 0 if $r eq "DENY";
 			EPrints->abort( "can_user_view_document returned '$r': expected ALLOW or DENY" );
 		}
 		else
 		{
-			$r = $self->{session}->call( "can_request_view_document",
-					$self,
-					$self->{session}->{request}
-				);
+			eval {
+				$r = $self->{session}->call( "can_request_view_document",
+						$self,
+						$self->{session}->{request}
+					);
+			};
+			EPrints->abort( 'can_request_view_document call caused an error. Hint: is security.pl still using $r->connection()->remote_ip();' ) if $@;
 			return 1 if $r eq "ALLOW";
 			return 0 if $r eq "DENY" || $r eq "USER";
 			EPrints->abort( "can_request_view_document returned '$r': expected ALLOW, DENY or USER" );

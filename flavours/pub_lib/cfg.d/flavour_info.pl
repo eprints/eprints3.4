@@ -1,8 +1,8 @@
 $c->{flavour_id} = "pub";
 $c->{flavour_name} = "Publication";
-$c->{flavour_version} = "1.0";
+$c->{flavour_version} = "1.2";
 
-$c->{version_alias} = "Fudge Tornado";
+$c->{version_alias} = "Pecan Pie Huaico";
 
 =head1 COPYRIGHT
 

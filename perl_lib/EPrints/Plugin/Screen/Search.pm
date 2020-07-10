@@ -442,7 +442,6 @@ sub from
 		foreach my $param (keys %{{$self->hidden_bits}}) {
 			delete $params{$param};
 		}
-		delete $params{csrf_token} if defined $params{csrf_token};
 		if( EPrints::Utils::is_set( $self->{session}->param( "output" ) ) )
 		{
 			$self->{processor}->{action} = "export";

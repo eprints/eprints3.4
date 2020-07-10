@@ -143,7 +143,7 @@ sub form
 	}
 
 	# Add a CSRF token to the form if a salt has been set and there is a logged in user.
-	if ( defined $self->{repository}->config( "csrf_token_salt" ) && defined $self->{repository}->current_user )
+	if ( defined $self->{repository}->config( "csrf_token_salt" ) && defined $self->{repository}->current_user && $method ne "get" )
         {
 		my $csrf_token = $self->{repository}->get_csrf_token();
                 my $csrf_token_input = $self->{repository}->xml->create_element( "input",

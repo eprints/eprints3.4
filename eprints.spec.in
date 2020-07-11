@@ -13,7 +13,7 @@ Summary: Open Access Repository Software
 License: GPLv3
 Group: Applications/Communications
 URL: http://www.eprints.org/
-Source0: http://files.eprints.org/cgi/source/%{_eppackage}.tar.gz
+Source0: https://github.com/eprints/eprints3.4/archive/v%{_epversion}.tar.gz
 BuildArch: noarch
 # Patch0: %{source_name}-%{version}.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-buildroot
@@ -27,6 +27,7 @@ Requires: perl(Time::HiRes) perl(CGI) perl(Digest::MD5)
 Requires: perl(XML::LibXML) >= 1.63 perl(XML::LibXSLT)
 Requires: perl(XML::SAX) perl(Digest::SHA) perl(IO::Socket::SSL)
 Requires: perl(MIME::Lite) perl(Apache::DBI)
+Requires: perl(JSON) perl(Text::Unidecode)
 Requires: tetex-latex wget gzip tar ImageMagick unzip elinks
 Requires: poppler-utils
 Requires: chkconfig
@@ -156,6 +157,9 @@ popd > /dev/null
 #fi
 
 %changelog
+* Sat Jul 11 2020 David R Newman <drn@ecs.soton.ac.uk>
+ - Added perl-JSON and perl-Text-Unidecode dependencies
+
 * Mon Apr 15 2013 Tim Brody <tdb2@ecs.soton.ac.uk>
  - Moved to git for source distribution
 

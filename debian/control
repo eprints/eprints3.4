@@ -4,9 +4,9 @@ Priority: extra
 Maintainer: EPrints Software <software@eprints.org>
 Build-Depends: debhelper (>= 8.0.0), autotools-dev
 Standards-Version: 3.9.2
-Homepage: http://www.eprints.org/
-Vcs-Git: git://github.com/eprints/eprints.git
-Vcs-Browser: https://github.com/eprints/eprints
+Homepage: http://www.eprints.org/eprints-3.4
+Vcs-Git: git://github.com/eprints/eprints3.4.git
+Vcs-Browser: https://github.com/eprints/eprints3.4
 
 Package: eprints
 Architecture: all

@@ -1,4 +1,4 @@
-$c->{version_long} = "EPrints 3.4.2";
+$c->{version_long} = "EPrints v3.4.2";
 $c->{version_alias} = "Blueberry Muffin Derecho";
 $c->{vendor_long} = "EPrints Services";
 $c->{vendor_short} = "eps";

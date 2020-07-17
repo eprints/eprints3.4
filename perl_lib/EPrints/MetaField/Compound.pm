@@ -125,13 +125,17 @@ sub render_value_actual
 		{
 			my $fieldname = $field_conf->{name};
 			(my $subfieldname = $fieldname) =~ s/^$self->{name}_//;
-                        if ( exists @{$value}[0]->{$subfieldname} || !$field_conf->{render_quiet} )
-                        {
-                                my $field = $self->{dataset}->get_field( $fieldname );
+			if (
+				   ( $self->get_property( "multiple" ) && exists @{$value}[0]->{$subfieldname} )
+				|| ( !$self->get_property( "multiple" ) && exists $value->{$subfieldname} )
+				|| !$field_conf->{render_quiet}
+			)
+			{
+				my $field = $self->{dataset}->get_field( $fieldname );
 				my $th = $session->make_element( "div", class=>"ep_compound_header_cell" );
-                                $tr->appendChild( $th );
-                                $th->appendChild( $field->render_name( $session ) );
-                        }
+				$tr->appendChild( $th );
+				$th->appendChild( $field->render_name( $session ) );
+			}
 		}
 	
 		if( $self->get_property( "multiple" ) )

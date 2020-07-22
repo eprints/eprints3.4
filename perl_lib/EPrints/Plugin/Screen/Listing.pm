@@ -654,7 +654,7 @@ sub render_search_form
 	my $form = $self->render_form;
 	$form->setAttribute( method => "get" );
 
-	my $table = $self->{session}->make_element( "table", class=>"ep_search_fields" );
+	my $table = $self->{session}->make_element( "div", class=>"ep_search_fields" );
 	$form->appendChild( $table );
 
 	$table->appendChild( $self->render_search_fields );

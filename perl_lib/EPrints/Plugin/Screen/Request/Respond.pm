@@ -134,13 +134,16 @@ sub action_confirm
 				       EPrints::Time::get_iso_timestamp( $expiry )
 		);
 
-		my @a = ();
-		srand;
-		for(1..16) { push @a, sprintf( "%02X",int rand 256 ); }
-		my $code = join( "", @a );
-		$self->{processor}->{request}->set_value( "code", "$code" );
-		$self->{processor}->{request}->commit;
-
+		my $code = $self->{processor}->{request}->get_value( "code" );
+		if ( !EPrints::Utils::is_set( $code ) )
+		{
+			my @a = ();
+			srand;
+			for(1..16) { push @a, sprintf( "%02X",int rand 256 ); }
+			$code = join( "", @a );
+			$self->{processor}->{request}->set_value( "code", "$code" );
+			$self->{processor}->{request}->commit;
+		}
 		my $cgi_url = $session->config( "http_cgiurl" )."/process_request?code=$code";
 		my $link = $session->make_element( "a", href=>"$cgi_url" );
 		$link->appendChild( $session->html_phrase( "request/response_email:download_label" ) );
@@ -233,6 +236,11 @@ sub render
 	$action = "reject" if !defined $action || $action ne "accept";
 	# Requested document has been made OA in the meantime
 	$action = "oa" if $self->{processor}->{document}->is_public;
+
+	if ( EPrints::Utils::is_set( $self->{processor}->{request}->get_value( "code" ) ) )
+	{
+		$page->appendChild( $session->html_phrase( "request/respond_page:already_approved" ) );
+	}
 
 	$page->appendChild( $session->html_phrase(
 		"request/respond_page:$action",

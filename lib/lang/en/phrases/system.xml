@@ -3576,6 +3576,20 @@ PY = 2006 and OG = (Cambridge)<br />
 <epp:phrase id="request/respond_page:reject"><p>You have chosen to <strong>reject</strong> the request for the following item:</p><p><epc:pin name="eprint"/><br/><epc:pin name="document"/></p><p>You may enter a reason below if you wish. This will be emailed to the requester along with a rejection notice.</p></epp:phrase>
 <epp:phrase id="request/respond_page:oa"><p>This item has been made publicly accessible since the request was made:</p><p><epc:pin name="eprint"/><br/><epc:pin name="document"/></p><p>A notice will be emailed to the requester.</p></epp:phrase>
 <epp:phrase id="request/respond_page:fieldname_oa">Tick here to make this document publicly available from now on.</epp:phrase>
+<epp:phrase id="request/respond_page:already_approved"><div class="ep_msg_warning">
+  <div class="ep_msg_warning_content">
+    <div>
+      <div>
+        <div class="ep_msg_warning_icon">
+          <img alt="Warning" src="{$config{rel_path}}/style/images/warning.png" />
+        </div>
+        <div class="ep_msg_warning_text">
+          <p>Request has already been approved.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></epp:phrase>
 
 <epp:phrase id="request/response_email:subject">Result of request for &quot;<epc:pin name="eprint"/>&quot;</epp:phrase>
 <epp:phrase id="request/response_email:body_accept"><p>Your request for the following item has been accepted:</p>

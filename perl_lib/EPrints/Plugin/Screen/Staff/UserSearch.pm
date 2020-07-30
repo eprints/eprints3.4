@@ -81,11 +81,12 @@ sub render_result_row
 {
 	my( $self, $session, $result, $searchexp, $n ) = @_;
 
-	return $result->render_citation_link_staff(
-			$self->{processor}->{sconf}->{citation},  #undef unless specified
-			n => [$n,"INTEGER"] );
+	my $div = $session->make_element( "div", class=>"ep_search_result" );
+        $div->appendChild( $result->render_citation_link_staff(
+                        $self->{processor}->{sconf}->{citation},  #undef unless specified
+                        n => [$n,"INTEGER"] ) );
+        return $div;
 }
-
 
 
 

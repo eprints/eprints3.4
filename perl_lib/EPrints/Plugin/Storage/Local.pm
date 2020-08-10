@@ -228,7 +228,7 @@ sub _filename
 	{
 		my $object;
  		my $this = $parent->get_parent;
- 		if( $this->isa( "EPrints::List" ) )
+ 		if( defined $this && $this->isa( "EPrints::List" ) )
  		{
  		        $object = $this->item(0);
  		}

@@ -619,7 +619,7 @@ sub render_changes_form
 
 	$page->appendChild( $div = $session->make_element( "div" ) );
 
-	my $select = $session->make_element( "select", id => "${prefix}_field_name" );
+	my $select = $session->make_element( "select", id => "${prefix}_field_name", 'aria-labelledby' => join('_', $self->get_subtype, "action_add_change") );
 	$div->appendChild( $select );
 
 	foreach my $field ($self->get_fields( $dataset ))

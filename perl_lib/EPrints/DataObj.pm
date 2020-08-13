@@ -1507,8 +1507,13 @@ sub render_export_bar
 	$frag->appendChild( $form );
 	$form->appendChild( $xhtml->hidden_field( dataset => $self->get_dataset_id ) );
 	$form->appendChild( $xhtml->hidden_field( dataobj => $self->id ) );
-	my $select = $xml->create_element( "select", name => "format" );
-	$form->appendChild( $select );
+
+	my $label = $xml->create_element( "label" );
+        $form->appendChild( $label );
+        $label->appendChild( $repo->make_text( $repo->phrase( "lib/searchexpression:export_label" ) . " " ) );
+
+        my $select = $xml->create_element( "select", name => "format" );
+        $label->appendChild( $select );
 
 	my @plugins = $self->{session}->get_plugins( 
 					type=>"Export",
@@ -1528,7 +1533,8 @@ sub render_export_bar
 		$xml->create_element( "input",
 			type => "submit",
 			value => $repo->phrase( "lib/searchexpression:export_button" ),
-			class => "ep_form_action_button"
+			class => "ep_form_action_button",
+			role => "button",
 		)
 	);
 

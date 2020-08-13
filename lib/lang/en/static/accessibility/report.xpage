@@ -27,7 +27,7 @@
 </ul>
 
 <h2 id="introduction">Introduction</h2>
-<p>This report is intended to present the results of the testing of <epc:phrase ref="archive_name"/> to assess its accessibility compliance.  This has been undertaken with the use of the <a href="https://wave.webaim.org/extension/" rel="external">Chrome Extension</a> of the <a href="https://wave.webaim.org/" rel="external">WAVE web accessibilty evaluation tool</a>.  To emulate user-generated content EPrints' testdata/bin/import_test_data script has been used to import 100 publications to populate various pages under test.</p>
+<p>This report is intended to present the results of the testing of <epc:phrase ref="archive_name"/> to assess its accessibility compliance.  This has been undertaken with the use of the <a href="https://wave.webaim.org/extension/" rel="external">Chrome Extension</a> of the <a href="https://wave.webaim.org/" rel="external">WAVE web accessibilty evaluation tool</a>.  To emulate user-generated content EPrints' testdata/bin/import_test_data script has been used to import 100 publications to populate various pages under test.  In addition to this one empty (unedited) publication was added and a Saved Search for "Habits" was created.</p>
 <p>Where there are known issues, the comments section should describe the reasons and where appropriate how these issues are likely be addressed.  For more details on planned future accessiibility improvements, please see <a href="roadmap.html">our accessibility roadmap</a>.</p>
 
 <h2 id="test-results">Test Results</h2>
@@ -41,142 +41,142 @@
   </tr>
   <tr> 
     <td><a href="{$config{http_path}}/"><epc:print expr="$config{rel_path}"/>/</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;9&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;11</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;9&#160;|&#160;Structural&#160;Elements:&#160;9&#160;|&#160;ARIA:&#160;13</div></td>
     <td>None</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/information.html"><epc:print expr="$config{rel_path}"/>/information.html</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;11</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;9&#160;|&#160;ARIA:&#160;13</div></td>
     <td>None</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/view/"><epc:print expr="$config{rel_path}"/>/view/</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;11</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;9&#160;|&#160;ARIA:&#160;13</div></td>
     <td>None</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/view/year/"><epc:print expr="$config{rel_path}"/>/view/year/</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;11</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;9&#160;|&#160;ARIA:&#160;13</div></td>
     <td>Index based on user-generated content.</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/view/year/2004.html"><epc:print expr="$config{rel_path}"/>/view/year/2004.html</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;10&#160;|&#160;Structural&#160;Elements:&#160;20&#160;|&#160;ARIA:&#160;11</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;10&#160;|&#160;Structural&#160;Elements:&#160;21&#160;|&#160;ARIA:&#160;14</div></td>
     <td>Contains user-generated content.  Only testing one listing per browse view type.</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/view/subjects/"><epc:print expr="$config{rel_path}"/>/view/subjects/</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;219&#160;|&#160;ARIA:&#160;11</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;220&#160;|&#160;ARIA:&#160;13</div></td>
     <td>Index based on user-generated content.</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/view/subjects/D.html"><epc:print expr="$config{rel_path}"/>/view/subjects/D.html</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;10&#160;|&#160;Structural&#160;Elements:&#160;23&#160;|&#160;ARIA:&#160;11</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;10&#160;|&#160;Structural&#160;Elements:&#160;24&#160;|&#160;ARIA:&#160;14</div></td>
     <td>Index based on user-generated content. Only testing one sub-menu per browse view type.</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/view/subjects/D051.html"><epc:print expr="$config{rel_path}"/>/view/subjects/D051.html</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;10&#160;|&#160;Structural&#160;Elements:&#160;14&#160;|&#160;ARIA:&#160;11</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;10&#160;|&#160;Structural&#160;Elements:&#160;15&#160;|&#160;ARIA:&#160;14</div></td>
     <td>Contains user-generated content. Only testing one listing per browse view type.</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/view/divisions/"><epc:print expr="$config{rel_path}"/>/view/divisions/</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;10&#160;|&#160;ARIA:&#160;11</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;11&#160;|&#160;ARIA:&#160;13</div></td>
     <td>Index based on user-generated content.</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/view/divisions/sch=5Fmat/"><epc:print expr="$config{rel_path}"/>/view/divisions/sch=5fmat/</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;6&#160;|&#160;Structural&#160;Elements:&#160;11&#160;|&#160;ARIA:&#160;11</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;6&#160;|&#160;Structural&#160;Elements:&#160;12&#160;|&#160;ARIA:&#160;13</div></td>
     <td>Index based on user-generated content. Only testing one sub-menu per browse view type.</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/view/divisions/sch=5Fmat/1998.html"><epc:print expr="$config{rel_path}"/>/view/divisions/sch=5Fmat/1998.html</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;10&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;11</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;10&#160;|&#160;Structural&#160;Elements:&#160;9&#160;|&#160;ARIA:&#160;14</div></td>
     <td>Contains user-generated content. Only testing one listing per browse view type.</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/view/creators/"><epc:print expr="$config{rel_path}"/>/view/creators/</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;11&#160;|&#160;ARIA:&#160;11</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;12&#160;|&#160;ARIA:&#160;13</div></td>
     <td>Index based on user-generated content.</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/view/creators/Bonardi=3AN=2E=3A=3A.html"><epc:print expr="$config{rel_path}"/>/view/creators/Bonardi=3AN=2E=3A=3A.html</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;10&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;11</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;10&#160;|&#160;Structural&#160;Elements:&#160;9&#160;|&#160;ARIA:&#160;14</div></td>
     <td>Contains user-generated content. Only testing one listing per browse view type.</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/id/eprint/4/"><epc:print expr="$config{rel_path}"/>/id/eprint/4/</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;3</div><div class="ep_accessibility_good">Features:&#160;8&#160;|&#160;Structural&#160;Elements:&#160;19&#160;|&#160;ARIA:&#160;11</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;3</div><div class="ep_accessibility_good">Features:&#160;8&#160;|&#160;Structural&#160;Elements:&#160;19&#160;|&#160;ARIA:&#160;14</div></td>
     <td>Contains user-generated content. Only testing one eprint summary page per eprint type, in this case &quot;Conference of Workshop Item&quot;. 3 alerts are caused by linking to PDFs, which is cannot be fixed as is essential to the purpose of an Open Access repository.</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/id/eprint/54/"><epc:print expr="$config{rel_path}"/>/id/eprint/54/</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;3</div><div class="ep_accessibility_good">Features:&#160;8&#160;|&#160;Structural&#160;Elements:&#160;18&#160;|&#160;ARIA:&#160;11</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;3</div><div class="ep_accessibility_good">Features:&#160;8&#160;|&#160;Structural&#160;Elements:&#160;19&#160;|&#160;ARIA:&#160;14</div></td>
     <td>Contains user-generated content. Only testing one eprint summary page per eprint type, in this case &quot;Article&quot;. 3 alerts are caused by linking to PDFs, which is cannot be fixed as is essential to the purpose of an Open Access repository.</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/users/login"><epc:print expr="$config{rel_path}"/>/cgi/users/login</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;7&#160;|&#160;Structural&#160;Elements:&#160;7&#160;|&#160;ARIA:&#160;11</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;7&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;14</div></td>
     <td>None</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/logout"><epc:print expr="$config{rel_path}"/>/cgi/logout</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;6&#160;|&#160;Structural&#160;Elements:&#160;7&#160;|&#160;ARIA:&#160;11</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;6&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;13</div></td>
     <td>None</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/latest"><epc:print expr="$config{rel_path}"/>/cgi/latest</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;11&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;11</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;11&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;13</div></td>
     <td>Contains user-generated content.</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/search/advanced"><epc:print expr="$config{rel_path}"/>/cgi/search/advanced</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;44&#160;|&#160;Structural&#160;Elements:&#160;7&#160;|&#160;ARIA:&#160;54</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;66&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;97</div></td>
     <td>None</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/search/archive/advanced?screen=Search&amp;dataset=archive&amp;_action_search=Search&amp;documents_merge=ALL&amp;documents=&amp;title_merge=ALL&amp;title=habits&amp;subjects_merge=ANY&amp;satisfyall=ALL&amp;order=title%2Ftype"><epc:print expr="$config{rel_path}"/>/cgi/search/archive/advanced?screen=Search...</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;21</div><div class="ep_accessibility_good">Features:&#160;31&#160;|&#160;Structural&#160;Elements:&#160;7&#160;|&#160;ARIA:&#160;11</div></td>
-    <td>Based on a search of "Habits" in title field. Contains user-generated content. 10 (of 21) alerts are caused by thumbnail image previews of PDFs having the same alternative text, due to the original PDF filenames are the same, due to the wat the import_test_data script works. The other 11 (of 21) alerts are caused by linking to PDFs, which is cannot be fixed as is essential to the purpose of an Open Access repository.</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;21</div><div class="ep_accessibility_good">Features:&#160;32&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;20</div></td>
+    <td>10 (of 21) alerts are caused by thumbnail image previews of PDFs having the same alternative text, due to the original PDF filenames are the same, due to the wat the import_test_data script works. The other 11 (of 21) alerts are caused by linking to PDFs, which is cannot be fixed as is essential to the purpose of an Open Access repository. (Based on a search of "Habits" in title field. Contains user-generated content.)</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/search/simple"><epc:print expr="$config{rel_path}"/>/cgi/search/simple</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;7&#160;|&#160;ARIA:&#160;12</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;17</div></td>
     <td>None</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/search/archive/simple?screen=Search&amp;dataset=archive&amp;_action_search=Search&amp;dataset=archive&amp;order=&amp;q=habits&amp;_action_search=Search"><epc:print expr="$config{rel_path}"/>/cgi/search/archive/simple?screen=Search...</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;21</div><div class="ep_accessibility_good">Features:&#160;31&#160;|&#160;Structural&#160;Elements:&#160;7&#160;|&#160;ARIA:&#160;11</div></td>
-    <td>Based on a search of "Habits" in title field. Contains user-generated content. Same alerts as for /cgi/search/archive/advanced?screen=Search...</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;21</div><div class="ep_accessibility_good">Features:&#160;31&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;18</div></td>
+    <td>Same alerts as for /cgi/search/archive/advanced?screen=Search... (Based on a search of "Habits" in title field. Contains user-generated content.)</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/policies.html"><epc:print expr="$config{rel_path}"/>/policies.html</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;6&#160;|&#160;Structural&#160;Elements:&#160;7&#160;|&#160;ARIA:&#160;12</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;6&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;14</div></td>
     <td>None</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/eprints/"><epc:print expr="$config{rel_path}"/>/eprints/</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;6&#160;|&#160;Structural&#160;Elements:&#160;23&#160;|&#160;ARIA:&#160;11</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;6&#160;|&#160;Structural&#160;Elements:&#160;24&#160;|&#160;ARIA:&#160;13</div></td>
     <td>None</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/error401.html"><epc:print expr="$config{rel_path}"/>/error401.html</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;7&#160;|&#160;ARIA:&#160;11</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;13</div></td>
     <td>None</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/accessibility/"><epc:print expr="$config{rel_path}"/>/accessibility/</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;6&#160;|&#160;Structural&#160;Elements:&#160;29&#160;|&#160;ARIA:&#160;11</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;6&#160;|&#160;Structural&#160;Elements:&#160;31&#160;|&#160;ARIA:&#160;13</div></td>
     <td>None</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/accessibility/report.html"><epc:print expr="$config{rel_path}"/>/accessibility/report.html</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;6&#160;|&#160;Structural&#160;Elements:&#160;28&#160;|&#160;ARIA:&#160;11</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;6&#160;|&#160;Structural&#160;Elements:&#160;29&#160;|&#160;ARIA:&#160;13</div></td>
     <td>None</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/accessibility/roadmap.html"><epc:print expr="$config{rel_path}"/>/accessibility/roadmap.html</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;6&#160;|&#160;Structural&#160;Elements:&#160;10&#160;|&#160;ARIA:&#160;11</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;6&#160;|&#160;Structural&#160;Elements:&#160;11&#160;|&#160;ARIA:&#160;13</div></td>
     <td>None</td>
   </tr>
 </table>
@@ -191,228 +191,233 @@
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/users/home"><epc:print expr="$config{rel_path}"/>/cgi/users/home</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;7&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;13</div><div class="ep_accessibility_good">Features:&#160;61&#160;|&#160;Structural&#160;Elements:&#160;27&#160;|&#160;ARIA:&#160;11</div></td>
-    <td>Issues to be addressed in 3.4.3. Errors due to missing form labels and empty table headers.  Alerts due to redundant links, tables used for layout and a caption for a table that is not explicitly associated.</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;64&#160;|&#160;Structural&#160;Elements:&#160;25&#160;|&#160;ARIA:&#160;58</div></td>
+    <td>None</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/users/home?screen=Items"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Items</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;7&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;13</div><div class="ep_accessibility_good">Features:&#160;61&#160;|&#160;Structural&#160;Elements:&#160;27&#160;|&#160;ARIA:&#160;11</div></td>
-    <td>Issues to be addressed in 3.4.3. By default same page as /cgi/users/home</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;64&#160;|&#160;Structural&#160;Elements:&#160;25&#160;|&#160;ARIA:&#160;58</div></td>
+    <td>None</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/users/home?screen=EPrint%3A%3AView&amp;eprintid=4"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=EPrint%3A%3AView&amp;eprintid=4</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;1&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;10</div><div class="ep_accessibility_good">Features:&#160;10&#160;|&#160;Structural&#160;Elements:&#160;58&#160;|&#160;ARIA:&#160;11</div></td>
-    <td>Issues to be addressed in 3.4.3. Error is a missing form label. Alerts are links to PDF documents (essential to the purpose of an Open Access repository), tables used for layout and a suspicious link text.</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;6</div><div class="ep_accessibility_good">Features:&#160;10&#160;|&#160;Structural&#160;Elements:&#160;63&#160;|&#160;ARIA:&#160;67</div></td>
+    <td>Alerts due to five links to PDF documents (essential to the purpose of an Open Access repository) and one suspicious link text "Details" which within the context of the page is appropriate.</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/users/home?screen=EPrint%3A%3AEdit&amp;eprintid=4&amp;stage=type"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=EPrint%3A%3AEdit&amp;eprintid=4&amp;stage=type</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;18&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;21</div><div class="ep_accessibility_good">Features:&#160;8&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;11</div></td>
-    <td>Issues to be addressed in 3.4.3. Errors are due to missing form labels.  Alers are due to orphaned form labels, tables used for layout and a missing fieldset.</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;8&#160;|&#160;Structural&#160;Elements:&#160;9&#160;|&#160;ARIA:&#160;59</div></td>
+    <td>None</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/users/home?screen=EPrint%3A%3AEdit&amp;eprintid=4&amp;stage=files"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=EPrint%3A%3AEdit&amp;eprintid=4&amp;stage=files</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;27&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;11</div><div class="ep_accessibility_good">Features:&#160;27&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;19</div></td>
-    <td>Issues to be addressed in 3.4.3. Errors are due to broken ARIA references missing form labels and missing alternative text for both linked and unlinked images. Alerts are due to redundant links, tables used for layout and a link to a PDF document (essential to the purpose of an Open Access repository).</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;1</div><div class="ep_accessibility_good">Features:&#160;39&#160;|&#160;Structural&#160;Elements:&#160;9&#160;|&#160;ARIA:&#160;64</div></td>
+    <td>Alert due to one link to a PDF document (essential to the purpose of an Open Access repository).</td>
   </tr>
   <tr>
-    <td><a href="{$config{http_path}}/cgi/users/home?screen=EPrint%3A%3AEdit&amp;eprintid=4&amp;stage=type"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=EPrint%3A%3AEdit&amp;eprintid=4&amp;stage=core</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;100&#160;|&#160;Contrast&#160;Errors:&#160;1&#160;|&#160;Alerts:&#160;39</div><div class="ep_accessibility_good">Features:&#160;74&#160;|&#160;Structural&#160;Elements:&#160;7&#160;|&#160;ARIA:&#160;23</div></td>
-    <td>Issues to be addressed in 3.4.3. Errors due to missing form labels.  Errors are due to broken ARIA references, missing form labels and missinga alternative texts for linked images.  Alerts are due redundant links, tables used for layout and missing fieldsets.</td>
+    <td><a href="{$config{http_path}}/cgi/users/home?screen=EPrint%3A%3AEdit&amp;eprintid=4&amp;stage=core"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=EPrint%3A%3AEdit&amp;eprintid=4&amp;stage=core</a></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;79&#160;|&#160;Structural&#160;Elements:&#160;10&#160;|&#160;ARIA:&#160;144</div></td>
+    <td>None</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/users/home?screen=EPrint%3A%3AEdit&amp;eprintid=4&amp;stage=subjects"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=EPrint%3A%3AEdit&amp;eprintid=4&amp;stage=subjects</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;1&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;3</div><div class="ep_accessibility_good">Features:&#160;9&#160;|&#160;Structural&#160;Elements:&#160;51&#160;|&#160;ARIA:&#160;11</div></td>
-    <td>Issues to be addressed in 3.4.3. Error is due to a missing form label.  Alerts are due to tables being used for layout.</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;8&#160;|&#160;Structural&#160;Elements:&#160;51&#160;|&#160;ARIA:&#160;267</div></td>
+    <td>None</td>
   </tr>
   <tr>
-    <td><a href="{$config{http_path}}/cgi/users/home?screen=EPrint%3A%3AEdit&amp;eprintid=4&amp;stage=type"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=EPrint%3%3Deposit&amp;eprintid=4</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;1</div><div class="ep_accessibility_good">Features:&#160;6&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;11</div></td>
-    <td>Issues to be addressed in 3.4.3. Alert due to table being used for layout.</td>
+    <td><a href="{$config{http_path}}/cgi/users/home?screen=EPrint%3A%3ADeposit&amp;eprintid=101"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=EPrint%3A%3ADeposit&amp;eprintid=4</a></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;7&#160;|&#160;Structural&#160;Elements:&#160;10&#160;|&#160;ARIA:&#160;20</div></td>
+    <td>None</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/users/home?screen=DataSets"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=DataSets</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;15&#160;|&#160;ARIA:&#160;11</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;16&#160;|&#160;ARIA:&#160;13</div></td>
     <td>None</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/users/home?screen=Listing&amp;dataset=eprint"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Listing&amp;dataset=eprint</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;12&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;12</div><div class="ep_accessibility_good">Features:&#160;58&#160;|&#160;Structural&#160;Elements:&#160;22&#160;|&#160;ARIA:&#160;15</div></td>
-    <td>Issues to be addressed in 3.4.3. Errors due to broken ARIA references, am empty table header and a missing form label.  Alerts due to links to PDF documents (essential for an Open Access repository), tables used for layout and redundant links.</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;10</div><div class="ep_accessibility_good">Features:&#160;59&#160;|&#160;Structural&#160;Elements:&#160;25&#160;|&#160;ARIA:&#160;71</div></td>
+    <td>Alerts due to ten links to PDF documents (essential for an Open Access repository).</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/users/home?screen=Workflow%3A%3AView&amp;dataset=eprint&amp;dataobj=4"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Workflow%3A%3AView&amp;dataset=eprint&amp;dataobj=4</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;6</div><div class="ep_accessibility_good">Features:&#160;7&#160;|&#160;Structural&#160;Elements:&#160;41&#160;|&#160;ARIA:&#160;11</div></td>
-    <td>Issues to be addressed in 3.4.3. Alerts are due to tables used for layout, links to PDF documents (essential for an Open Access repository) and a suspicious link text.</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;3</div><div class="ep_accessibility_good">Features:&#160;7&#160;|&#160;Structural&#160;Elements:&#160;48&#160;|&#160;ARIA:&#160;24</div></td>
+    <td>Alerts due to two links to PDF documents (essential for an Open Access repository) and a suspicious link text "Details" which within the context of the page is appropriate.</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/users/home?screen=Listing&amp;dataset=event_queue"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Listing&amp;dataset=event_queue</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;10&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;12</div><div class="ep_accessibility_good">Features:&#160;36&#160;|&#160;Structural&#160;Elements:&#160;13&#160;|&#160;ARIA:&#160;20</div></td>
-    <td>Issues to be addressed in 3.4.3. Errors are due broken ARIA references, an empty table header and a missing form label. Alerts are due to tables used for layout and a redundant link.</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;1</div><div class="ep_accessibility_good">Features:&#160;37&#160;|&#160;Structural&#160;Elements:&#160;16&#160;|&#160;ARIA:&#160;34</div></td>
+    <td>Alert due to possible table caption due to deliberate feature to indicate a table has "No items" rather than displaying as empty that might imply something is broken.</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/users/home?screen=Listing&amp;dataset=file"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Listing&amp;dataset=file</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;14&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;14</div><div class="ep_accessibility_good">Features:&#160;56&#160;|&#160;Structural&#160;Elements:&#160;24&#160;|&#160;ARIA:&#160;16</div></td>
-    <td>Issues to be addressed in 3.4.3. Errors are due broken ARIA references, an empty table header and a missing form label. Alerts are due to tables used for layout and a redundant link.</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;59&#160;|&#160;Structural&#160;Elements:&#160;25&#160;|&#160;ARIA:&#160;69</div></td>
+    <td>None</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/users/home?screen=Workflow%3A%3AView&amp;dataset=file&amp;dataobj=3"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Workflow%3A%3AView&amp;dataset=file&amp;dataobj=3</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;1</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;21&#160;|&#160;ARIA:&#160;11</div></td>
-    <td>Issues to be addressed in 3.4.3. Alert due to suspicious link text.</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;1</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;23&#160;|&#160;ARIA:&#160;20</div></td>
+    <td>Alert due to suspicious link text "Details" which within the context of the page is appropriate.</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/users/home?screen=Listing&amp;dataset=import"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Listing&amp;dataset=import</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;11&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;10</div><div class="ep_accessibility_good">Features:&#160;28&#160;|&#160;Structural&#160;Elements:&#160;12&#160;|&#160;ARIA:&#160;15</div></td>
-    <td>Issues to be addressed in 3.4.3. Errors are due broken ARIA references, an empty table header and a missing form label. Alerts are due to tables used for layout and a redundant link.</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;1</div><div class="ep_accessibility_good">Features:&#160;29&#160;|&#160;Structural&#160;Elements:&#160;15&#160;|&#160;ARIA:&#160;30</div></td>
+    <td>Alert due to possible table caption due to deliberate feature to indicate a table has "No items" rather than displaying as empty that might imply something is broken.</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/users/home?screen=Listing&amp;dataset=saved_search"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Listing&amp;dataset=saved_search</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;7&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;6</div><div class="ep_accessibility_good">Features:&#160;21&#160;|&#160;Structural&#160;Elements:&#160;11&#160;|&#160;ARIA:&#160;13</div></td>
-    <td>Issues to be addressed in 3.4.3. Errors are due broken ARIA references, an empty table header and a missing form label. Alerts are due to tables used for layout and a redundant link.</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;22&#160;|&#160;Structural&#160;Elements:&#160;14&#160;|&#160;ARIA:&#160;28</div></td>
+    <td>None</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/users/home?screen=Workflow%3A%3AView&amp;dataset=saved_search&amp;dataobj=1"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Workflow%3A%3AView&amp;dataset=saved_search&amp;dataobj=1</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;2</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;19&#160;|&#160;ARIA:&#160;11</div></td>
-    <td>Issues to be addressed in 3.4.3. Alerts due to a suspicious link text and a table used for layout.</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;1</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;23&#160;|&#160;ARIA:&#160;21</div></td>
+    <td>Alert due to suspicious link text "Details" which within the context of the page is appropriate.</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/users/home?screen=Workflow%3A%3AEdit&amp;dataset=saved_search&amp;dataobj=1"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Workflow%3A%3AEdit&amp;dataset=saved_search&amp;dataobj=1</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;6&#160;|&#160;Contrast&#160;Errors:&#160;&#160;|&#160;Alerts:&#160;4</div><div class="ep_accessibility_good">Features:&#160;19&#160;|&#160;Structural&#160;Elements:&#160;7&#160;|&#160;ARIA:&#160;13</div></td>
-    <td>Issues to be addressed in 3.4.3. Errors are due missing form labels and broken ARIA references. Alerts are due to missing fieldsets and tables used for layout.</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;15&#160;|&#160;Structural&#160;Elements:&#160;10&#160;|&#160;ARIA:&#160;15</div></td>
+    <td>None</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/users/home?screen=Listing&amp;dataset=subject"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Listing&amp;dataset=subject</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;12&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;10</div><div class="ep_accessibility_good">Features:&#160;38&#160;|&#160;Structural&#160;Elements:&#160;22&#160;|&#160;ARIA:&#160;15</div></td>
-    <td>Issues to be addressed in 3.4.3. Errors are due broken ARIA references, an empty table header and a missing form label. Alerts are due to tables used for layout and a redundant link.</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;39&#160;|&#160;Structural&#160;Elements:&#160;25&#160;|&#160;ARIA:&#160;51</div></td>
+    <td>None</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/users/home?screen=Workflow%3A%3AView&amp;dataset=subject&amp;dataobj=A"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Workflow%3A%3AView&amp;dataset=subject&amp;dataobj=A</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;10&#160;|&#160;ARIA:&#160;11</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;11&#160;|&#160;ARIA:&#160;17</div></td>
     <td>None</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/users/home?screen=Listing&amp;dataset=user"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Listing&amp;dataset=user</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;11&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;10</div><div class="ep_accessibility_good">Features:&#160;34&#160;|&#160;Structural&#160;Elements:&#160;14&#160;|&#160;ARIA:&#160;15</div></td>
-    <td>Issues to be addressed in 3.4.3. Errors are due broken ARIA references, an empty table header and a missing form label. Alerts are due to tables used for layout and a redundant link.</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;32&#160;|&#160;Structural&#160;Elements:&#160;16&#160;|&#160;ARIA:&#160;34</div></td>
+    <td>None</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/users/home?screen=Workflow%3A%3AView&amp;dataset=user&amp;dataobj=1"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Workflow%3A%3AView&amp;dataset=user&amp;dataobj=1</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;3</div><div class="ep_accessibility_good">Features:&#160;6&#160;|&#160;Structural&#160;Elements:&#160;27&#160;|&#160;ARIA:&#160;11</div></td>
-    <td>Issues to be addressed in 3.4.3. Alerts due to tables used for layour and a suspicious link text.</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;1</div><div class="ep_accessibility_good">Features:&#160;6&#160;|&#160;Structural&#160;Elements:&#160;31&#160;|&#160;ARIA:&#160;22</div></td>
+    <td>Alert due to suspicious link text "Details" which within the context of the page is appropriate.</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/users/home?screen=Workflow%3A%3AEdit&amp;dataset=user&amp;dataobj=1&amp;stage=usertype"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Workflow%3A%3AEdit&amp;dataset=user&amp;dataobj=1&amp;stage=usertype</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;12&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;8</div><div class="ep_accessibility_good">Features:&#160;12&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;11</div></td>
-    <td>Issues to be addressed in 3.4.3. Errors are due to missing alternative texts in linked images, broken ARIA references and missing form labels.  Alerts are due to redundant links, tables used for layout and a missing fieldset.</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;16&#160;|&#160;Structural&#160;Elements:&#160;9&#160;|&#160;ARIA:&#160;36</div></td>
+    <td>None</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/users/home?screen=Workflow%3A%3AEdit&amp;dataset=user&amp;dataobj=1&amp;stage=default"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Workflow%3A%3AEdit&amp;dataset=user&amp;dataobj=1&amp;stage=default</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;20&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;5</div><div class="ep_accessibility_good">Features:&#160;47&#160;|&#160;Structural&#160;Elements:&#160;7&#160;|&#160;ARIA:&#160;38</div></td>
-    <td>Issues to be addressed in 3.4.3. Errors are due to broken ARIA references and missing form labels. Alerts are due to missing fieldsets and tables used as layout.</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;22&#160;|&#160;Structural&#160;Elements:&#160;9&#160;|&#160;ARIA:&#160;51</div></td>
+    <td>None</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/users/home?screen=Review"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Review</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;13&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;11</div><div class="ep_accessibility_good">Features:&#160;62&#160;|&#160;Structural&#160;Elements:&#160;17&#160;|&#160;ARIA:&#160;34</div></td>
-    <td>Issues to be addressed in 3.4.3.  Errors are due to missing alternative texts in linked images, broken ARIA references and missing form labels.  Alerts are due to tables used for layout, a redundant link and a caption for a table that is not explicitly associated.</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;1</div><div class="ep_accessibility_good">Features:&#160;58&#160;|&#160;Structural&#160;Elements:&#160;14&#160;|&#160;ARIA:&#160;45</div></td>
+    <td>Alert due to possible table caption due to deliberate feature to indicate a table has "No items" rather than displaying as empty that might imply something is broken.</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/users/home?screen=EPrint%3A%3ARemoveWithEmail&amp;eprintid=4"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=EPrint%3A%3ARemoveWithEmail&amp;eprintid=4</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;1&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;8</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;7&#160;|&#160;ARIA:&#160;11</div></td>
-    <td>Issues to be addressed in 3.4.3. Error is due to missing form label. Alerts are due to very small text, suspicious link text and a table used for layout. </td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;1</div><div class="ep_accessibility_good">Features:&#160;6&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;16</div></td>
+    <td>Alert is due to email address for the one and only admin being linked for the To and From address, which is just a result of the testing regime.</td> 
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/users/home?edit_phrases=yes"><epc:print expr="$config{rel_path}"/>/cgi/users/home?edit_phrases=yes</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;133</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;7&#160;|&#160;ARIA:&#160;11</div></td>
-    <td>Issues to be addressed in 3.4.3. Alerts all due to mouse-limited events that cannot currently be used by keyboard-only users.</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;12&#160;|&#160;ARIA:&#160;13</div></td>
+    <td>None</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/users/home?screen=Admin"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Admin</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;11&#160;|&#160;ARIA:&#160;11</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;12&#160;|&#160;ARIA:&#160;101</div></td>
     <td>None</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/search/eprint/staff"><epc:print expr="$config{rel_path}"/>/cgi/search/eprint/staff</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;58&#160;|&#160;Structural&#160;Elements:&#160;7&#160;|&#160;ARIA:&#160;75</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;81&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;117</div></td>
     <td>None</td>
   </tr>
   <tr>
-    <td><a href="{$config{http_path}}/cgi/search/eprint/staff?screen=Search"><epc:print expr="$config{rel_path}"/>/cgi/search/eprint/staff?screen=Search&amp;...</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;1&#160;|&#160;Alerts:&#160;39</div><div class="ep_accessibility_good">Features:&#160;50&#160;|&#160;Structural&#160;Elements:&#160;7&#160;|&#160;ARIA:&#160;13</div></td>
-    <td>Based on a search for all items under review and in the live archive. Contains user-generated content. 19 (of 39) alerts are caused by thumbnail image previews of PDFs having the same alternative text, due to the original PDF filenames are the same, due to the way the import_test_data script works. The other 20 (of 39) alerts are caused by linking to PDFs, which is cannot be fixed as is essential to the purpose of an Open Access repository. Contrast error is due to a low contrast icon.</td>
+    <td><a href="{$config{http_path}}/cgi/search/eprint/staff?screen=Search&eprintid=&userid.username=&userid.name_merge=ALL&userid.name=&eprint_status=archive&dir_merge=ALL&dir=&documents_merge=ALL&documents=&title_merge=ALL&title=Habits&creators_name_merge=ALL&creators_name=&abstract_merge=ALL&abstract=&date=&keywords_merge=ALL&keywords=&subjects_merge=ANY&department_merge=ALL&department=&editors_name_merge=ALL&editors_name=&refereed=EITHER&publication_merge=ALL&publication=&satisfyall=ALL&order=-date%2Fcreators_name%2Ftitle&_action_search=Search"><epc:print expr="$config{rel_path}"/>/cgi/search/eprint/staff?screen=Search&amp;...</a></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;39</div><div class="ep_accessibility_good">Features:&#160;50&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;20</div></td>
+    <td>19 (of 39) alerts are caused by thumbnail image previews of PDFs having the same alternative text, as a result of the original PDF filenames are the same, due to the way the import_test_data script works. The other 20 (of 39) alerts are caused by linking to PDFs, which is cannot be fixed as is essential to the purpose of an Open Access repository. (Based on a search where "Item Status" is "Live Archive".)</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/users/home?screen=Staff%3A%3AIssueSearch"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Staff%3A%3AIssueSearch</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;46&#160;|&#160;Structural&#160;Elements:&#160;7&#160;|&#160;ARIA:&#160;58</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;45&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;64</div></td>
     <td>None</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/users/home?screen=Staff%3A%3AUserSearch"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Staff%3A%3AUserSearch</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;24&#160;|&#160;Structural&#160;Elements:&#160;7&#160;|&#160;ARIA:&#160;39</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;23&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;45</div></td>
     <td>None</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/users/home?screen=Staff%3A%3AUserSearch&amp;name_merge=ALL&amp;name=&amp;username=&amp;userid=1&amp;dept%2Forg_merge=ALL&amp;dept%2Forg=&amp;address%2Fcountry_merge=ALL&amp;address%2Fcountry=&amp;email=&amp;satisfyall=ALL&amp;order=name%2Fjoined&amp;_action_search=Search"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Staff%3A%3AUserSearch...</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;1</div><div class="ep_accessibility_good">Features:&#160;6&#160;|&#160;Structural&#160;Elements:&#160;7&#160;|&#160;ARIA:&#160;13</div></td>
-    <td>Search for user with ID 1. Issues to be addressed in 3.4.3. Alert due to table being used for layout.</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;6&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;20</div></td>
+    <td>None. (Search for user with ID 1.)</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/users/home?screen=Staff%3A%3AHistorySearch"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Staff%3A%3AHistorySearch</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;24&#160;|&#160;Structural&#160;Elements:&#160;7&#160;|&#160;ARIA:&#160;31</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;29&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;45</div></td>
     <td>None</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/users/home?screen=Staff%3A%3AHistorySearch&amp;userid.username=&amp;action=create&amp;timestamp=&amp;objectid=&amp;satisfyall=ALL&amp;order=-timestamp&amp;_action_search=Search"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Staff%3A%3AHistorySearch...</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;1</div><div class="ep_accessibility_good">Features:&#160;6&#160;|&#160;Structural&#160;Elements:&#160;7&#160;|&#160;ARIA:&#160;13</div></td>
-    <td>Search for history records related to creation of items. Issues to be addressed in 3.4.3. Alert due to table being used for layout.</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;1</div><div class="ep_accessibility_good">Features:&#160;6&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;20</div></td>
+    <td>Alert due to multiple links to same user's email address as there is only one user under the testing regime.  Also, as this user has no name set so "Unnamed user with email user@domain" is used as a placeholder.  If a name had been set no alert would be reported. (Search for history records related to creation of items..)</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/users/home?screen=Status"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Status</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;1&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;36&#160;|&#160;ARIA:&#160;11</div></td>
-    <td>Issues to be addressed in 3.4.3. Error due to empty table header.</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;38&#160;|&#160;ARIA:&#160;13</div></td>
+    <td>None</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/users/home?screen=NewUser"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=NewUser</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;1&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;7&#160;|&#160;ARIA:&#160;11</div></td>
-    <td>Issues to be addressed in 3.4.3. Error due to missing form label.</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;6&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;15</div></td>
+    <td>None</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/users/home?screen=Admin%3A%3AEPM"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Admin%3A%3AEPM</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;1&#160;|&#160;Contrast&#160;Errors:&#160;103&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;6&#160;|&#160;Structural&#160;Elements:&#160;10&#160;|&#160;ARIA:&#160;11</div></td>
-    <td>Issues to be addressed in 3.4.3.  All errors due to issues with external content being displayed and may need to be dealt with separately.</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;1</div><div class="ep_accessibility_good">Features:&#160;102&#160;|&#160;Structural&#160;Elements:&#160;11&#160;|&#160;ARIA:&#160;121</div></td>
+    <td>Alert is due to two nearby images with the same alt text due two identically named plugins in the Bazaar, which cannot be controlled.</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/users/home?screen=Admin%3A%3ATestEmail"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Admin%3A%3ATestEmail</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;6&#160;|&#160;Structural&#160;Elements:&#160;7&#160;|&#160;ARIA:&#160;12</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;6&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;17</div></td>
     <td>None</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/users/home?screen=DatabaseSchema"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=DatabaseSchema</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;1&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;1</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;175&#160;|&#160;ARIA:&#160;11</div></td>
-    <td>Issues to be addressed in 3.4.3. Error due to being table header.  Alert due to skipped heading level.</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;174&#160;|&#160;ARIA:&#160;13</div></td>
+    <td>None</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/users/home?screen=Admin%3A%3AStorageManager"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Admin%3A%3AStorageManager</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;3&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;5</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;11&#160;|&#160;ARIA:&#160;11</div></td>
-    <td>Issues to be addressed in 3.4.3. Errors due missing form labels and alternative text. Alerts due to using tables for layout and skipped heading level.</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;6&#160;|&#160;Structural&#160;Elements:&#160;16&#160;|&#160;ARIA:&#160;19</div></td>
+    <td>None</td>
+  </tr>
+  <tr>
+    <td><a href="{$config{http_path}}/cgi/users/home?screen=Admin%3A%3AConfig"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Admin%3A%3AConfig</a></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;23&#160;|&#160;Structural&#160;Elements:&#160;27&#160;|&#160;ARIA:&#160;49</div></td>
+    <td>None</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/users/home?screen=Admin%3A%3APhrases"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Admin%3A%3APhrases</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;1&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;2953</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;7&#160;|&#160;ARIA:&#160;11</div></td>
-    <td>Issues to be addressed in 3.4.3. Error due to missing form label. Alerts all due to mouse-limited events that cannot currently be used by keyboard-only users.</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;1&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;2953</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;12&#160;|&#160;ARIA:&#160;15</div></td>
+    <td>None</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/users/home?screen=Subject%3A%3AEdit"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Subject%3A%3AEdit</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;3&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;11&#160;|&#160;ARIA:&#160;11</div></td>
-    <td>Issues to be addressed in 3.4.3. Errors due to missing form labels and an emopty table header.</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;6&#160;|&#160;Structural&#160;Elements:&#160;13&#160;|&#160;ARIA:&#160;18</div></td>
+    <td>None</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/users/home?screen=MetaField%3A%3AListing"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=MetaField%3A%3AListing</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;27&#160;|&#160;ARIA:&#160;11</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;28&#160;|&#160;ARIA:&#160;13</div></td>
     <td>None</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/users/home?screen=MetaField%3A%3AListing&amp;dataset=access"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=MetaField%3A%3AListing&amp;dataset=access</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;19&#160;|&#160;ARIA:&#160;11</div></td>
-    <td>Only testing one object type for its MetaField listing.</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;20&#160;|&#160;ARIA:&#160;14</div></td>
+    <td>None (Only testing one object type for its MetaField listing.)</td>
   </tr>
 </table>
 
@@ -426,33 +431,33 @@
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/oai2"><epc:print expr="$config{rel_path}"/>/cgi/oai2</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;1&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;3</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;5&#160;|&#160;ARIA:&#160;0</div></td>
-    <td>Page is an HTML rendering of XML using XSLT and is not generally for human use. Issues may be addressed in in 3.4.3. Error due to document language missing.  Alerts due tables used for layout and no page regions.</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;2</div><div class="ep_accessibility_good">Features:&#160;0&#160;|&#160;Structural&#160;Elements:&#160;9&#160;|&#160;ARIA:&#160;0</div></td>
+    <td>Two alerts are due to suspicion of tables being used for layout but are actually being used as tables.</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/oai2?verb=Identity"><epc:print expr="$config{rel_path}"/>/cgi/oai2?verb=Identity</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;1&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;4</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;11&#160;|&#160;ARIA:&#160;0</div></td>
-    <td>Page is an HTML rendering of XML using XSLT and is not generally for human use.  Issues may be addressed in in 3.4.3. Error due to document language missing.  Alerts due tables used for layout and no page regions.</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;3</div><div class="ep_accessibility_good">Features:&#160;0&#160;|&#160;Structural&#160;Elements:&#160;15&#160;|&#160;ARIA:&#160;0</div></td>
+    <td>Three alerts are due to suspicion of tables being used for layout but are actually being used as tables.</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/oai2?verb=ListRecords&amp;metadataPrefix=oai_dc"><epc:print expr="$config{rel_path}"/>/cgi/oai2?verb=ListRecords&amp;metadataPrefix=oai_dc</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;1&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;200</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;301&#160;|&#160;ARIA:&#160;0</div></td>
-    <td>Page is an HTML rendering of XML using XSLT and is not generally for human use.  Issues may be addressed in in 3.4.3. Error due to document language missing.  Alerts due tables used for layout and no page regions.</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;201</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;308&#160;|&#160;ARIA:&#160;0</div></td>
+    <td>201 alerts are due to suspicion of tables being used for layout but are actually being used as tables.</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/oai2?verb=ListSets"><epc:print expr="$config{rel_path}"/>/cgi/oai2?verb=ListSets</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;1&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;284</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;286&#160;|&#160;ARIA:&#160;0</div></td>
-    <td>Page is an HTML rendering of XML using XSLT and is not generally for human use.  Issues may be addressed in in 3.4.3. Error due to document language missing.  Alerts due tables used for layout and no page regions.</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;283</div><div class="ep_accessibility_good">Features:&#160;-&#160;|&#160;Structural&#160;Elements:&#160;290&#160;|&#160;ARIA:&#160;0</div></td>
+    <td>283 alerts are due to suspicion of tables being used for layout but are actually being used as tables.</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/oai2?verb=ListMetadataFormats"><epc:print expr="$config{rel_path}"/>/cgi/oai2?verb=ListMetadataFormats</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;1&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;8</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;10&#160;|&#160;ARIA:&#160;0</div></td>
-    <td>Page is an HTML rendering of XML using XSLT and is not generally for human use.  Issues may be addressed in in 3.4.3. Error due to document language missing.  Alerts due tables used for layout and no page regions.</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;7</div><div class="ep_accessibility_good">Features:&#160;0&#160;|&#160;Structural&#160;Elements:&#160;14&#160;|&#160;ARIA:&#160;0</div></td>
+    <td>Seven alerts are due to suspicion of tables being used for layout but are actually being used as tables.</td>
   </tr>
   <tr>
     <td><a href="{$config{http_path}}/cgi/oai2?verb=ListIdentifiers&amp;metadataPrefix=oai_dc"><epc:print expr="$config{rel_path}"/>/cgi/oai2?verb=ListIdentifiers&amp;metadataPrefix=oai_dc</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;1&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;102</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;103&#160;|&#160;ARIA:&#160;0</div></td>
-    <td>Page is an HTML rendering of XML using XSLT and is not generally for human use.  Issues may be addressed in in 3.4.3. Error due to document language missing.  Alerts due tables used for layou, a skipped heading leavel and no page regions.</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;10</div><div class="ep_accessibility_good">Features:&#160;0&#160;|&#160;Structural&#160;Elements:&#160;108&#160;|&#160;ARIA:&#160;0</div></td>
+    <td>10 alerts are due to suspicion of tables being used for layout but are actually being used as tables.</td>
   </tr>
 </table>
 

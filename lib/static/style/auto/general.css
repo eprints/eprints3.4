@@ -103,6 +103,30 @@ th.ep_title_row {
 	font-weight: normal;
 }
 
+.ep_title_row_inner {
+        display: table;
+        width: 100%;
+}
+
+.ep_title_row_inner > div {
+	display: table-row;
+}
+
+.ep_title_row_inner > div > div {
+	display: table-cell;
+}
+
+.ep_title_row_inner > div > div:first-child {
+	text-align: left;
+	margin-right: 1em;
+}
+
+.ep_title_row_inner > div > div:last-child {
+        text-align: right;
+        margin-left: 1em;
+	font-size: 80%;
+}
+
 .ep_highlight {
 	padding: 0.5em;
 	border: solid 2px #ff8888;
@@ -130,6 +154,15 @@ th.ep_title_row {
 	display: table-row;
 }
 
-.ep_table_cell {
+.ep_table {
+	display: table;
+}
+
+.ep_table > div, .ep_table_row {
+	display: table-row;
+}
+
+.ep_table > div > div, .ep_table_row > div, .ep_table_cell {
 	display: table-cell;
+	padding: 0.3em;
 }

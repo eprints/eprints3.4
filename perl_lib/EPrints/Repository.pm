@@ -3395,7 +3395,9 @@ sub render_row_with_help
 	if ( ref $parts{label} ne "" ) 
 	{
 		$th = $self->make_element( "div", class=> "ep_multi_heading ep_table_cell" );
-		$th->appendChild( $parts{label} );
+		my $label = $self->make_element( "span", id=>$parts{prefix}."_label" );
+		$label->appendChild( $parts{label} );
+		$th->appendChild( $label );
 	}
 	else
 	{
@@ -3594,6 +3596,8 @@ sub render_option_list
 	# defaults_at_top : move items already selected to top
 	# 			of list, so they are visible.
 	# class    : css classes to apply to the select
+	# aria-labelledby :
+	# aria-describedby :
 
 	my %defaults = ();
 	if( ref( $params{default} ) eq "ARRAY" )
@@ -3659,7 +3663,7 @@ sub render_option_list
 			my $div = $self->make_element( "div", class=>"ep_option_list_option" );
 			my $label = $self->make_element( "label" );
 			$div->appendChild( $label );
-			my $box = $self->render_input_field( type=>"checkbox", name=>$params{name}, value=>$pair->[0], class=>"ep_form_checkbox", 'aria-describedby'=>$params{name}."_label" );
+			my $box = $self->render_input_field( type=>"checkbox", name=>$params{name}, value=>$pair->[0], class=>"ep_form_checkbox", 'aria-labelledby'=>$params{name}."_label" );
 			$label->appendChild( $box );
 			$label->appendChild( $self->make_text( " ".$pair->[1] ) );
 			if( $defaults{$pair->[0]} )
@@ -3684,10 +3688,8 @@ sub render_option_list
 	{
 		$element->setAttribute( "multiple" , "multiple" );
 	}
-	if( defined $params{"aria-labelledby"} )
-        {
-                $element->setAttribute( "aria-labelledby" , $params{"aria-labelledby"} );
-        }
+        $element->setAttribute( "aria-labelledby", $params{"aria-labelledby"} ) if EPrints::Utils::is_set( $params{"aria-labelledby"} );
+        $element->setAttribute( "aria-describedby", $params{"aria-describedby"} ) if EPrints::Utils::is_set( $params{"aria-describedby"} );
 	my $size = 0;
 	foreach my $pair ( @{$pairs} )
 	{
@@ -3789,14 +3791,15 @@ sub render_noenter_input_field
 	my( $self, %opts ) = @_;
 	
 	$opts{type} = 'text' unless( exists $opts{type} );
-
+	delete $opts{'aria-labelledby'} unless EPrints::Utils::is_set( $opts{'aria-labelledby'} );
+	delete $opts{'aria-describedby'} unless EPrints::Utils::is_set( $opts{'aria-describedby'} );
+	
 	return $self->xhtml->input_field(
-		delete($opts{name}),
-		delete($opts{value}),
-		noenter => 1,
-		%opts );
+                delete($opts{name}),
+                delete($opts{value}),
+                noenter => 1,
+                %opts );
 }
-
 
 ######################################################################
 =pod
@@ -3940,6 +3943,10 @@ sub render_button
 	{
 		$opts{class} = "ep_form_action_button";
 	}
+	if( !defined $opts{role} )
+        {
+                $opts{role} = "button";
+        }
 	$opts{type} = "submit";
 
 	return $self->make_element( "input", %opts );
@@ -4385,7 +4392,7 @@ sub _render_input_form_field
 
 	if( $show_help )
 	{
-		$div = $self->make_element( "div", class => "ep_form_field_help", id=>$field->get_name . "_help" );
+		$div = $self->make_element( "div", class => "ep_form_field_help", id=>$field->get_name . "_help", role=>"definition" );
 
 		$div->appendChild( $field->render_help( $self, $type ) );
 		$div->appendChild( $self->make_text( "" ) );

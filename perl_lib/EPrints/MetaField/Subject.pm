@@ -98,7 +98,7 @@ sub get_top_subject
 
 sub render_set_input
 {
-	my( $self, $session, $default, $required, $obj, $basename ) = @_;
+	my( $self, $session, $default, $required, $obj, $basename, $one_field_component ) = @_;
 
 
 	my $topsubj = $self->get_top_subject( $session );
@@ -127,7 +127,8 @@ sub render_set_input
 		default => $default,
 		multiple => $self->{multiple},
 		height => $self->{input_rows},
-		'aria-labelledby' => $basename . "_label" );
+		'aria-labelledby' => $self->get_labelledby( $basename ),
+		'aria-describedby' => $self->get_describedby( $basename, $one_field_component ) );
 
 } 
 

@@ -131,7 +131,9 @@ sub render
 	my $username_field = $ds->get_field( "username" );
 	my $usertype_field = $ds->get_field( "usertype" );
 	my $div = $session->make_element( "div", style=>"margin-bottom: 1em" );
-	$div->appendChild( $username_field->render_name( $session ) );
+	my $label = $session->make_element( "label", for=>"username" );
+	$label->appendChild( $username_field->render_name( $session ) );
+	$div->appendChild( $label );
 	$div->appendChild( $session->make_text( ": " ) );
 	$div->appendChild( 
 		$session->make_element( 

@@ -40,22 +40,27 @@ use EPrints::MetaField::Longtext;
 
 sub get_basic_input_elements
 {
-        my( $self, $session, $value, $basename, $staff, $obj ) = @_;
+        my( $self, $session, $value, $basename, $staff, $obj, $one_field_component ) = @_;
 
         my %defaults = $self->get_property_defaults;
 
         my @classes = defined $self->{dataset} ?
                 join('_', 'ep', $self->dataset->base_id, $self->name) :
                 ();
-        my $textarea = $session->make_element(
-                "textarea",
+
+	my %attributes = (
                 name => $basename,
                 id => $basename,
                 class => join(' ', @classes),
                 rows => $self->{input_rows},
                 cols => $self->{input_cols},
                 maxlength => $self->{maxlength},
-                wrap => "virtual" );
+                wrap => "virtual",
+		'aria-labelledby' => $self->get_labelledby( $basename ),
+	);
+	my $describedby = $self->get_describedby( $basename, $one_field_component );
+        $attributes{'aria-describedby'} = $describedby if EPrints::Utils::is_set( $describedby );
+	my $textarea = $session->make_element( "textarea", %attributes );
         $textarea->appendChild( $session->make_text( $value ) );
 
         my $frag = $session->make_doc_fragment;

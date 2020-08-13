@@ -113,6 +113,12 @@ sub paginate_list
 		my $last = ($i == $len-1);
 		# Column headings
 		my $th = $session->make_element( "th", style=>"padding:0px", class=>"ep_columns_title".($last?" ep_columns_title_last":"") );
+		if ( !defined $col )
+		{
+			my $span = $session->make_element( "span", style=>"padding: 4px" );
+			$span->appendChild( $session->make_text( $session->html_phrase( "general:actions_column_name" ) ) );
+			$th->appendChild( $span );
+		}
 		$tr->appendChild( $th );
 		next if !defined $col;
 	
@@ -130,13 +136,13 @@ sub paginate_list
 				$linkurl = "$url&${basename}order=$col";
 			}
 		}
-		my $itable = $session->make_element( "table", cellpadding=>0, border=>0, cellspacing=>0, width=>"100%" );
+		my $itable = $session->make_element( "div", class=>"ep_columns_title_inner" );
 		$th->appendChild( $itable );
-		my $itr = $session->make_element( "tr" );
+		my $itr = $session->make_element( "div" );
 		$itable->appendChild( $itr );
-		my $itd1 = $session->make_element( "td" );
+		my $itd1 = $session->make_element( "div" );
 		$itr->appendChild( $itd1 );
-		my $link = $session->make_element( "a", href=>$linkurl, style=>'display:block;padding:4px' );
+		my $link = $session->make_element( "a", href=>$linkurl . "&link=name", style=>'display:block;padding:4px' );
 		$link->appendChild( $list->get_dataset->get_field( $col )->render_name( $session ) );
 		$itd1->appendChild( $link );
 
@@ -144,17 +150,15 @@ sub paginate_list
 
 		if( $sort_order eq $col || $sort_order eq "-$col")
 		{
-			my $itd2 = $session->make_element( "td", style=>"width:22px; text-align: right" );
+			my $itd2 = $session->make_element( "div", class=>"ep_columns_title_inner_sort" );
 			$itr->appendChild( $itd2 );
-			my $link2 = $session->render_link( $linkurl );
+			my $link2 = $session->render_link( $linkurl . "&link=icon" );
 			$itd2->appendChild( $link2 );
 			if( $sort_order eq $col )
 			{
 				$link2->appendChild( $session->make_element(
 					"img",
 					alt=>"Up",
-					style=>"border:0px;padding:4px",
-					border=>0,
 					src=> "$imagesurl/sorting_up_arrow.gif" ));
 			}
 			if( $sort_order eq "-$col" )
@@ -162,8 +166,6 @@ sub paginate_list
 				$link2->appendChild( $session->make_element(
 					"img",
 					alt=>"Down",
-					style=>"border:0px;padding:4px",
-					border=>0,
 					src=> "$imagesurl/sorting_down_arrow.gif" ));
 			}
 		}

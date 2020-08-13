@@ -123,7 +123,6 @@ sub ajax_stats
 		) );
 
 	my $table = $session->make_element( "table" );
-	$html->appendChild( $table );
 
 	my $max = 1;
 	my $max_bytes = 1;
@@ -137,6 +136,7 @@ sub ajax_stats
 
 	my @plugins = $session->get_plugins( type => "Storage" );
 
+	my $has_rows = 0;
 	foreach my $datasetid (sort { $a cmp $b } keys %{$data->{parent}})
 	{
 		my $ddata = $data->{parent}->{$datasetid};
@@ -147,10 +147,11 @@ sub ajax_stats
 		$form->appendChild( $session->render_hidden_field( store => $pluginid ) );
 		$form->appendChild( $session->render_hidden_field( datasetid => $datasetid ) );
 		$form->appendChild( $session->render_button(
+			id => $pluginid . "_migrate",
 			onclick => "return js_admin_storagemanager_migrate(this);",
 			value => $self->phrase( "migrate" )
 			) );
-		my $select = $session->make_element( "select", name => "target" );
+		my $select = $session->make_element( "select", name => "target", 'aria-labelledby' => $pluginid . "_migrate" );
 		$form->appendChild( $select );
 		my $option = $session->make_element( "option" );
 		$select->appendChild( $option );
@@ -167,6 +168,7 @@ sub ajax_stats
 			value => $self->phrase( "delete" )
 			) );
 
+		$has_rows = 1;
 		$table->appendChild( $session->render_row(
 			$session->html_phrase( "datasetname_$datasetid" ),
 			$self->get_count_bar( "#00f", $total_width, $session->make_text( $ddata->{total} ) ),
@@ -174,6 +176,7 @@ sub ajax_stats
 			$form
 			) );
 	}
+	$html->appendChild( $table ) if $has_rows;
 
 	binmode(STDOUT, ":utf8");
 	print EPrints::XML::to_string( $html );
@@ -318,7 +321,8 @@ sub render
 	$div = $session->make_element( "div", id => $LOADING_DIV, style => "display: none" );
 	$html->appendChild( $div );
 	$div->appendChild( $session->make_element( "img",
-		src => $session->config( "rel_path" )."/style/images/loading.gif"
+		src => $session->config( "rel_path" )."/style/images/loading.gif",
+		alt => "loading $LOADING_DIV", 
 		) );
 
 	my @plugins = $session->get_plugins( type => "Storage" );
@@ -334,11 +338,7 @@ sub render
 	foreach my $plug (sort {$a cmp $b} keys(%{$plugin_classes})) {
 		my $part = $session->make_element( "div", class=>"ep_toolbox", id=>"blue" );
 		my $part_content_div = $session->make_element( "div", class=>"ep_toolbox_content", style=>"padding-left:6px; padding-bottom: 6px;" );
-		my $heading_blue = $session->make_element( "div", align=>"center", style=>"margin: 0px 0px 10px 0px;
-		    		font: bold 130% Arial,Sans-serif;
-				text-align: center;
-				color: #606060;"
-				);
+		my $heading_blue = $session->make_element( "h2", class=>"ep_storage_heading" );
 		$heading_blue->appendChild( $plugin->html_phrase($plug) );
 		
 		my $pic = $plug . "_pic";
@@ -376,7 +376,7 @@ sub render
 		my $heading = $plugin->{session}->make_element( "h1" );
 	        $heading->appendChild( $plugin->html_phrase($plugin_id) );
 	        $content_div->appendChild( $heading );
-		my $count_table = $plugin->{session}->make_element( "table", width => "100%");
+		my $count_table = $plugin->{session}->make_element( "div", "ep_table" );
 
 		foreach my $datasetid (keys %{$plugin_datasets->{$plugin_id}})
 		{
@@ -396,17 +396,15 @@ sub render
 			my $max = $max_counts->{$plugin_id}->{"MAX"};
 	                my $count = $plugin_datasets->{$plugin_id}->{$datasetid};
 			my $panel_tr = $plugin->{session}->make_element(
-				"tr",
+				"div",
 				id => $plugin->{prefix}."_".$plugin_id . "_" . $datasetid );
 			my $details_td = $plugin->{session}->make_element(
-				"td",
-				width => "50%",
-				align => "right"
+				"div",
+				style => "width: 50%; text-align: right;"
 				);
 			my $count_td = $plugin->{session}->make_element(
-                                "td",
-                                width => "50%",
-                                align => "left"
+                                "div",
+                                style => "width: 50%; text-align: left;"
 	                );
 			my $width = ($count / $max) * $max_width;	
 			my $count_bar = $plugin->get_count_bar("blue",$width,$count);
@@ -467,23 +465,20 @@ sub get_count_bar
 		$width = 10;
 	}
 	my $count_bar = $plugin->{session}->make_element(
-			"table",
-			cellpadding => 0,
-			cellspacing => 0,
-			width => "100%",
+			"div",
+			class => "ep_table",
+			style => "width: 100%;",
 			);
 	my $count_bar_tr = $plugin->{session}->make_element(
-			"tr"
+			"div"
 			);
 	my $count_bar_td = $plugin->{session}->make_element(
-			"td",
-			width => $width."px",
-			style => "background-color: $color;"
+			"div",
+			style => "width: ".$width."px; background-color: $color;"
 			);
 	my $count_bar_td2 = $plugin->{session}->make_element(
-			"td",
+			"div",
 			style => "padding-left: 2px"
-
 			);
 
 	$count_bar_td->appendChild( $plugin->{session}->make_text( "  " ) );

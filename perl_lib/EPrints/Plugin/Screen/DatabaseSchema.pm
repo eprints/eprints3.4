@@ -57,7 +57,7 @@ sub render
 
 	$table->appendChild(
 		$session->render_row( 
-			undef,
+			$session->html_phrase( "cgi/users/status:cachename" ),
 			$session->html_phrase( "cgi/users/status:cachedate" ),
 			$session->html_phrase( "cgi/users/status:cachesize" ) ) );
 
@@ -183,7 +183,7 @@ sub render
 			my $link = $session->make_element( "a",
 				name => $datasetid,
 			);
-			my $h = $session->make_element( "h4" );
+			my $h = $session->make_element( "h3" );
 			$html->appendChild( $link );
 			$link->appendChild( $h );
 			$h->appendChild( $session->html_phrase( "datasetname_$datasetid" ) );

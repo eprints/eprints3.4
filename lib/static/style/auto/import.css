@@ -1,0 +1,15 @@
+/* EPrints 3 import style */
+
+.ep_import_bar {
+	display: table; 
+	width: 100%;
+}
+
+.ep_import_bar > div {
+	display: table-row;
+}
+
+.ep_import_bar > div > div {
+	text-align: center;
+	display: table-cell;
+}

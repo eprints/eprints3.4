@@ -171,26 +171,26 @@ sub input_field
 	my( $self, $name, $value, @opts ) = @_;
 
 	my $noenter;
-	my $noid = 0;
+#	my $noid = 0;
 	for(my $i = 0; $i < @opts; $i+=2)
 	{
 		if( $opts[$i] eq 'noenter' )
 		{
 			(undef, $noenter) = splice(@opts,$i,2);
 		}
-		if ( $opts[$i] eq 'type' && $opts[$i+1] eq 'checkbox' )
-		{
-			$noid = 1;
-		}
+#		if ( $opts[$i] eq 'type' && $opts[$i+1] eq 'checkbox' )
+#		{
+#			$noid = 1;
+#		}
 	}
 	if( $noenter )
 	{
 		push @opts, onKeyPress => 'return EPJS_block_enter( event )';
 	}
-	if ( !$noid )
-	{
-		push @opts, id => $name;
-	}
+#	if ( !$noid )
+#	{
+#		push @opts, id => $name;
+#	}
 
 	return $self->{repository}->xml->create_element( "input",
 		name => $name,
@@ -229,6 +229,7 @@ sub action_button
 	my( $self, $name, $value, %opts ) = @_;
 
 	$opts{class} = join ' ', 'ep_form_action_button', ($opts{class}||());
+	$opts{role} = "button" unless defined $opts{role};
 
 	return $self->{repository}->xml->create_element( "input",
 		name => "_action_$name",
@@ -779,6 +780,7 @@ sub tabs
 	my $ul = $xml->create_element( "ul",
 		id=>$basename."_tabs",
 		class => "ep_tab_bar",
+		role => "tablist",
 	);
 	$frag->appendChild( $ul );
 
@@ -787,7 +789,8 @@ sub tabs
 	{
 		$panel = $xml->create_element( "div", 
 				id => $basename."_panels",
-				class => "ep_tab_panel" );
+				class => "ep_tab_panel",
+				role => "tabpanel" );
 		$frag->appendChild( $panel );
 	}
 
@@ -801,6 +804,7 @@ sub tabs
 		my $tab = $ul->appendChild( $xml->create_element( "li",
 			($current == $_ ? (class => "ep_tab_selected") : ()),
 			id => $basename."_tab_".$label,
+			role => "tab",
 			style => "width: $width\%",
 		) );
 
@@ -942,7 +946,7 @@ sub action_list
 	my $repo = $self->{repository};
 	my $xml = $repo->xml;
 
-	my $ul = $xml->create_element( "ul", class => "ep_action_list" );
+	my $ul = $xml->create_element( "ul", class => "ep_action_list", role => "toolbar" );
 	for(@$actions)
 	{
 		$ul->appendChild( $xml->create_data_element( "li", $_ ) );
@@ -964,12 +968,14 @@ sub action_definition_list
 	my $repo = $self->{repository};
 	my $xml = $repo->xml;
 
-	my $dl = $xml->create_element( "dl", class => "ep_action_list" );
+	$opts{id} = "action_list" unless defined $opts{id};
+	my $dl = $xml->create_element( "dl",class => "ep_action_list", id => $opts{id}, role => "menu" );
+	$dl->setAttribute( 'id', $opts{id} );
 
 	for(my $i = 0; $i < @$actions; ++$i)
 	{
-		$dl->appendChild( $xml->create_data_element( "dt", $actions->[$i] ) );
-		$dl->appendChild( $xml->create_data_element( "dd", $definitions->[$i] ) );
+		$dl->appendChild( $xml->create_data_element( "dt", $actions->[$i], role=>"menuitem", "aria-describedby"=>"ep_".$opts{id}."_desc_$i" ) );
+		$dl->appendChild( $xml->create_data_element( "dd", $definitions->[$i], id=>"ep_".$opts{id}."_desc_$i", role=>"description" ) );
 	}
 
 	return $dl;

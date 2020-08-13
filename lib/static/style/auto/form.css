@@ -82,10 +82,11 @@ td.ep_form_input_grid_wide {
 
 .ep_field_legend {
 	position: relative;
+	top: 4px;
 	left: -100%;
 	width: 100%;
 	text-align: right;
-	margin-left: -25px;
+	margin-left: -28px;
 	padding-right: 25px;
 	font-weight: bold;
 }
@@ -167,3 +168,19 @@ td.ep_form_input_grid_wide {
 }
 
 
+.ep_field_set_medium,  .ep_boolean_list {
+	display: inline-block;
+	margin: 0;
+}
+
+.ep_field_set_medium > dd, .ep_boolean_list > dd {
+	float: left;	
+	margin: 0;
+	padding-top: 0.2em;
+	padding-bottom: 0.5em;
+}
+
+.ep_field_set_medium > dt, .ep_boolean_list > dt {
+	float: left;
+	clear: both;
+}

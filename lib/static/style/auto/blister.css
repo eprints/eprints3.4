@@ -7,6 +7,16 @@
 
 .ep_blister_bar {
 	margin: auto;
+	display: table;
+	border-spacing: 0;
+        border-collapse: collapse;
+        padding: 0;	
+}
+.ep_blister_bar > div {
+        display: table-row;
+}
+.ep_blister_bar > div > div {
+        display: table-cell;
 }
 .ep_blister_join {
 	background-image: url(images/blister_arrow.png);

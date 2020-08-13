@@ -201,7 +201,7 @@ sub render
 
 		$tr = $session->make_element( "tr" );
 		$table->appendChild( $tr );
-		$th = $session->make_element( "th", colspan => 2, class => "ep_title_row" );
+		$th = $session->make_element( "th", colspan => 2, class => "ep_title_row", "role" => "banner" );
 
 		$tr->appendChild( $th );
 
@@ -212,16 +212,16 @@ sub render
 		else
 		{
 			my $title = $stage->render_title();
-			my $table_inner = $session->make_element( "table", style=>'width:100%' );
-			my $tr_inner = $session->make_element( "tr" );
-			my $td_inner_1 = $session->make_element( "td", style=>'text-align:left;margin-right:1em' );
+			my $table_inner = $session->make_element( "div", class=>"ep_title_row_inner" );
+			my $tr_inner = $session->make_element( "div" );
+			my $td_inner_1 = $session->make_element( "div" );
 			$th->appendChild( $table_inner );
 			$table_inner->appendChild( $tr_inner );
 			$tr_inner->appendChild( $td_inner_1 );
 			$td_inner_1->appendChild( $title );
 			if( $edit_ok )
 			{
-				my $td_inner_2  = $session->make_element( "td",style=>'text-align:right;font-size:80%' );
+				my $td_inner_2  = $session->make_element( "div" );
 				$tr_inner->appendChild( $td_inner_2 );
 				$td_inner_2->appendChild( $self->render_edit_button( $stage ) );
 			}

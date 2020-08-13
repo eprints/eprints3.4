@@ -177,8 +177,10 @@ sub get_basic_input_elements
  	$monthid = $basename."_month";
  	$yearid = $basename."_year";
 
-	$div->appendChild( 
+	my $ylabel = $session->make_element( "label", for=>$yearid );
+	$ylabel->appendChild( 
 		$session->html_phrase( "lib/metafield:year" ) );
+	$div->appendChild( $ylabel );
 	$div->appendChild( $session->make_text(" ") );
 
 	$div->appendChild( $session->render_noenter_input_field(
@@ -191,8 +193,10 @@ sub get_basic_input_elements
 
 	$div->appendChild( $session->make_text(" ") );
 
-	$div->appendChild( 
+	my $mlabel = $session->make_element( "label", for=>$monthid );
+	$mlabel->appendChild( 
 		$session->html_phrase( "lib/metafield:month" ) );
+	$div->appendChild( $mlabel );
 	$div->appendChild( $session->make_text(" ") );
 	$div->appendChild( $session->render_option_list(
 		name => $monthid,
@@ -203,8 +207,10 @@ sub get_basic_input_elements
 
 	$div->appendChild( $session->make_text(" ") );
 
-	$div->appendChild( 
+	my $dlabel = $session->make_element( "label", for=>$dayid );
+	$dlabel->appendChild( 
 		$session->html_phrase( "lib/metafield:day" ) );
+	$div->appendChild( $dlabel );
 	$div->appendChild( $session->make_text(" ") );
 	my @daykeys = ();
 	my %daylabels = ();

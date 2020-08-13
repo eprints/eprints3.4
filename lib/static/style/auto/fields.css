@@ -1,7 +1,7 @@
 
 /* style for metafields */
 
-dl.ep_field_set_long dt label {
+dl.ep_field_set_long dt {
 	margin-bottom: 0.2em;
 	font-weight: bold;
 }

@@ -38,6 +38,9 @@ sub render
 		class => "ep_sr_component",
 		id => $component->{prefix} );
 
+	my $label_id = $component->{prefix} . "_label";
+	$label_id = $component->{prefix} . "_".$component->{config}->{field}->{name}."_label" if defined $component->{config}->{field};
+
 	$surround->appendChild( $self->{session}->make_element( "a", name=>$component->{prefix} ) );
 	foreach my $field_id ( $component->get_fields_handled )
 	{
@@ -54,7 +57,7 @@ sub render
 	}
 		
 	my $title_bar = $self->{session}->make_element( "div", class=>"ep_sr_title_bar $title_bar_class", id=>$barid );
-	my $title_div = $self->{session}->make_element( "div", class=>"ep_sr_title" );
+	my $title_div = $self->{session}->make_element( "div", class=>"ep_sr_title", id=>$label_id );
 
 	my $content = $self->{session}->make_element( "div", id => $component->{prefix}."_content", class=>"$content_class ep_sr_content" );
 	my $content_inner = $self->{session}->make_element( "div", id => $component->{prefix}."_content_inner" );
@@ -143,14 +146,10 @@ sub _render_help
 	}
 
 	# construct a table with left/right columns
-	my $table = $session->make_element( "table",
-		cellpadding=>"0",
-		border=>"0",
-		cellspacing=>"0",
-		width=>"100%" );
-	my $tr = $session->make_element( "tr" );
-	my $left = $session->make_element( "td" );
-	my $right = $session->make_element( "td", align=>"right" );
+	my $table = $session->make_element( "div", class=>"ep_sr_title_bar_inner" );
+	my $tr = $session->make_element( "div" );
+	my $left = $session->make_element( "div" );
+	my $right = $session->make_element( "div", align=>"right" );
 	$table->appendChild( $tr );
 	$tr->appendChild( $left );
 	$tr->appendChild( $right );

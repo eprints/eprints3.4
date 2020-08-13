@@ -485,7 +485,7 @@ sub render_help
 
 =begin InternalDoc
 
-=item $xhtml = $field->render_input_field( $session, $value, [$dataset], [$staff], [$hidden_fields], $obj, [$basename] )
+=item $xhtml = $field->render_input_field( $session, $value, [$dataset], [$staff], [$hidden_fields], $obj, [$basename], $one_field_component )
 
 Return the XHTML of the fields for an form which will allow a user
 to input metadata to this field. $value is the default value for
@@ -500,7 +500,7 @@ The actual function called may be overridden from the config.
 
 sub render_input_field
 {
-	my( $self, $session, $value, $dataset, $staff, $hidden_fields, $obj, $prefix ) = @_;
+	my( $self, $session, $value, $dataset, $staff, $hidden_fields, $obj, $prefix, $one_field_component ) = @_;
 
 	my $basename = $self->basename( $prefix );
 
@@ -519,7 +519,8 @@ sub render_input_field
 			$staff,
 			$hidden_fields,
 			$obj,
-			$basename );
+			$basename,
+			$one_field_component );
 	}
 
 	return $self->render_input_field_actual( 
@@ -529,7 +530,8 @@ sub render_input_field
 			$staff,
 			$hidden_fields,
 			$obj,
-			$basename );
+			$basename,
+			$one_field_component );
 }
 
 
@@ -1228,7 +1230,7 @@ sub render_single_value
 
 =begin InternalDoc
 
-=item $xhtml = $field->render_input_field_actual( $session, $value, [$dataset], [$staff], [$hidden_fields], [$obj], [$basename] )
+=item $xhtml = $field->render_input_field_actual( $session, $value, [$dataset], [$staff], [$hidden_fields], [$obj], [$basename], $one_field_component )
 
 Return the XHTML of the fields for an form which will allow a user
 to input metadata to this field. $value is the default value for
@@ -1247,12 +1249,12 @@ with, if any.
 
 sub render_input_field_actual
 {
-	my( $self, $session, $value, $dataset, $staff, $hidden_fields, $obj, $basename ) = @_;
+	my( $self, $session, $value, $dataset, $staff, $hidden_fields, $obj, $basename, $one_field_component ) = @_;
 
 	# Note: if there is only one element we still need the table to
 	# centre-align the input
 
-	my $elements = $self->get_input_elements( $session, $value, $staff, $obj, $basename );
+	my $elements = $self->get_input_elements( $session, $value, $staff, $obj, $basename, $one_field_component );
 
 	my $frag = $session->make_doc_fragment;
 
@@ -1264,23 +1266,24 @@ sub render_input_field_actual
 	{
 		my $tr = $session->make_element( "div" );
 		my $th;
-		my $x = 0;
 		if( $self->get_property( "multiple" ) && $self->{input_ordered})
 		{
-			$th = $session->make_element( "div", class=>"empty_heading", id=>$basename."_th_".$x++ );
+			$th = $session->make_element( "div", class=>"empty_heading", id=>$basename."_th_0" );
 			$tr->appendChild( $th );
 		}
 
 		if( !defined $col_titles )
 		{
-			$th = $session->make_element( "div", class=>"empty_heading", id=>$basename."_th_".$x++ );
+			$th = $session->make_element( "div", class=>"empty_heading", id=>$basename."_th_0" );
 			$tr->appendChild( $th );
 		}	
 		else
 		{
+			my $x = 0;
 			my @input_ids = $self->get_basic_input_ids( $session, $basename, $staff );
 			foreach my $col_title ( @{$col_titles} )
 			{
+				
 				$th = $session->make_element( "div", class=>"heading", id=>$input_ids[$x++]."_label" );
 				$th->appendChild( $col_title );
 				$tr->appendChild( $th );
@@ -1352,7 +1355,7 @@ sub get_input_col_titles
 
 sub get_input_elements
 {
-	my( $self, $session, $value, $staff, $obj, $basename ) = @_;	
+	my( $self, $session, $value, $staff, $obj, $basename, $one_field_component ) = @_;	
 
 	my $n = length( $basename) - length( $self->{name}) - 1;
 	my $componentid = substr( $basename, 0, $n );
@@ -1364,7 +1367,8 @@ sub get_input_elements
 				$value,
 				$basename,
 				$staff,
-				$obj );
+				$obj,
+				$one_field_component );
 	}
 
 	# multiple field...
@@ -1404,7 +1408,8 @@ sub get_input_elements
 				$value->[$i-1], 
 				$basename."_".$i,
 				$staff,
-				$obj );
+				$obj,
+				$one_field_component );
 		my $first = 1;
 		for my $n (0..(scalar @{$section})-1)
 		{
@@ -1413,7 +1418,9 @@ sub get_input_elements
 			my $lastcol = {};
 			if( $n == 0 && $self->{input_ordered})
 			{
-				$col1 = { el=>$session->make_text( $i.". " ), class=>"ep_form_input_grid_pos" };
+				my $row_label = $session->make_element( "span" , id=>$basename."_".$i."_label" );
+				$row_label->appendChild( $session->make_text( $i.". " ) );
+				$col1 = { el=>$row_label, class=>"ep_form_input_grid_pos" };
 				my $arrows = $session->make_doc_fragment;
 				$arrows->appendChild( $session->make_element(
 					"input",
@@ -1541,21 +1548,22 @@ sub get_state_params
 
 sub get_input_elements_single
 {
-	my( $self, $session, $value, $basename, $staff, $obj ) = @_;
+	my( $self, $session, $value, $basename, $staff, $obj, $one_field_component ) = @_;
 
 	return $self->get_basic_input_elements( 
 			$session, 
 			$value, 
 			$basename, 
 			$staff,
-			$obj );
+			$obj,
+			$one_field_component );
 }	
 
 
 
 sub get_basic_input_elements
 {
-	my( $self, $session, $value, $basename, $staff, $obj ) = @_;
+	my( $self, $session, $value, $basename, $staff, $obj, $one_field_component ) = @_;
 
 	my $maxlength = $self->get_max_input_size;
 	my $size = ( $maxlength > $self->{input_cols} ?
@@ -1578,7 +1586,8 @@ sub get_basic_input_elements
 			$staff,
 			undef,
 			$obj,
-			$basename );
+			$basename,
+			$one_field_component );
 	}
 	else
 	{
@@ -1593,6 +1602,7 @@ sub get_basic_input_elements
 			push @classes, join('_', 'ep', $self->{dataset}->base_id, $self->name);
 			push @classes, join('_', 'eptype', $self->{dataset}->base_id, $self->type);
 		}
+
 		$input = $session->render_noenter_input_field(  
 			class=> join(' ', @classes),
                         name => $basename,
@@ -1601,7 +1611,8 @@ sub get_basic_input_elements
                         size => $size,
                         readonly => $readonly,
                         maxlength => $maxlength,
-                	'aria-labelledby' => $basename . "_label"
+                	'aria-labelledby' => $self->get_labelledby( $basename ),
+			'aria-describedby' => $self->get_describedby( $basename, $one_field_component ),
                 );
 	}
 
@@ -1622,6 +1633,46 @@ sub get_max_input_size
 	my( $self ) = @_;
 
 	return $self->get_property( "maxlength" );
+}
+
+sub get_labelledby
+{
+	my ( $self, $basename ) = @_;
+
+	my $basename_top = $basename;
+       	$basename_top =~ s/_\d+_/_/ if $self->{multiple} || ( defined $self->{parent} && $self->{parent}->{multiple} );
+        return $basename_top . "_label";
+}
+
+sub get_describedby
+{
+	my ( $self, $basename, $one_field_component ) = @_;
+
+	return "" if EPrints::XML::to_string( $self->repository->html_phrase( $self->{dataset}->confid . "_fieldhelp_" . $self->get_name ) ) eq "";
+	return "" if defined $self->{parent} && EPrints::XML::to_string( $self->repository->html_phrase( $self->{dataset}->confid . "_fieldhelp_" . $self->{parent}->get_name ) ) eq "";
+
+	my $basename_top = $basename;
+        $basename_top =~ s/_\d+_/_/ if $self->{multiple} || ( defined $self->{parent} && $self->{parent}->{multiple} );
+        my $parent = $self;
+        my $multiple = $self->{multiple};
+        while ( defined $parent->{parent} )
+        {
+                $parent = $parent->{parent};
+                $multiple = $multiple || $parent->{multiple};
+        }
+        $basename_top =~ s/_\d+$// if $multiple;
+        $basename_top =~ s/$self->{name}/$parent->{name}/ unless $self->{name} eq $parent->{name};
+        $basename_top =~ s/$parent->{name}// if $one_field_component;
+        my @basename_bits = split( "_", $basename_top );
+        if ( $basename_bits[1] =~ m/^doc\d+/ || $basename_bits[0] eq "requester" )
+        {
+                push @basename_bits, 'help';
+        }
+        else
+        {
+                splice(@basename_bits, 1, 0, ('help') );
+        }
+        return join( "_", @basename_bits );
 }
 
 
@@ -2216,13 +2267,18 @@ sub render_search_input
 		my %text_labels = ( 
 			"ANY" => $session->phrase( "lib/searchfield:text_any" ),
 			"ALL" => $session->phrase( "lib/searchfield:text_all" ) );
+		my $labelledby = ( $searchfield->get_form_prefix =~ m/^(c[0-9]+)?q[0-9]*$/ ) ? "Search" : $searchfield->get_form_prefix . "_label";
+		if ( $searchfield->get_form_prefix =~ m/^(c[0-9]+)q[0-9]*$/ )
+		{
+			$labelledby = "_internal_" . $1 . "_search";
+		}
 		$frag->appendChild( 
 			$session->render_option_list(
 				name=>$searchfield->get_form_prefix."_merge",
 				values=>\@text_tags,
 				default=>$searchfield->get_merge,
 				labels=>\%text_labels,
-				'aria-labelledby' => $searchfield->get_form_prefix . "_label" ) );
+				'aria-labelledby' => $labelledby ) );
 		$frag->appendChild( $session->make_text(" ") );
 	}
 	$frag->appendChild(
@@ -2318,6 +2374,7 @@ sub get_property_defaults
 		can_clone 	=> EP_PROPERTY_TRUE,
 		confid 		=> EP_PROPERTY_NO_CHANGE,
 		export_as_xml 	=> EP_PROPERTY_TRUE,
+		false_first	=> EP_PROPERTY_FALSE,
 		fromform 	=> EP_PROPERTY_UNDEF,
 		get_item	=> EP_PROPERTY_UNDEF,
 		import		=> EP_PROPERTY_TRUE,

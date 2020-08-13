@@ -298,7 +298,8 @@ sub render_children
 		class => "ep_columns_title",
 	) );
 
-	$tr->appendChild( $xml->create_element( "th",
+	$tr->appendChild( $xml->create_data_element( "th",
+		$self->phrase( "actions" ),
 		class => "ep_columns_title",
 	) );
 
@@ -344,9 +345,11 @@ sub render_children
 			colspan => 3,
 		) );
 		my $form = $td->appendChild( $self->render_form );
-		$form->appendChild( $dataset->field( "subjectid" )->render_name );
+		my $label = $xml->create_element( "label", "for"=>'new_childid' ); 
+		$label->appendChild( $dataset->field( "subjectid" )->render_name );
+		$form->appendChild( $label );
 		$form->appendChild( $xml->create_text_node( ": " ) );
-		$form->appendChild( $xhtml->input_field( childid => undef ) );
+		$form->appendChild( $xhtml->input_field( childid => undef, id => "new_childid" ) );
 		$form->appendChild( $xhtml->action_button(
 			create => $repo->phrase( "lib/submissionform:action_create" )
 		) );
@@ -366,6 +369,7 @@ sub render_children
 		$form->appendChild( $xml->create_text_node( ": " ) );
 		my $select = $form->appendChild( $xml->create_element( "select",
 			name => "childid",
+			'aria-labelledby' => "existing_childid_label",
 		) );
 		$subject->get_dataset->search->map(sub {
 			my( undef, undef, $child ) = @_;

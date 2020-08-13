@@ -229,7 +229,7 @@ sub _format_subjects
 	my( $self, %params ) = @_;
 
 	my $session = $self->{session};
-	my $table = $session->make_element( "table", class=>$params{table_class} );
+	my $table = $session->make_element( "div", class=>$params{table_class}." ep_table" );
 	my @subjects = @{$params{subjects}};
 	if( scalar @subjects )
 	{
@@ -241,15 +241,15 @@ sub _format_subjects
 			my $subject_id = $subject->get_id();
 			next if ( $params{hide_selected} && $self->{selected}->{ $subject_id } );
 			my $prefix = $self->{prefix}."_".$subject_id;
-			my $tr = $session->make_element( "tr" );
+			my $tr = $session->make_element( "div" );
 			
-			my $td1 = $session->make_element( "td" );
+			my $td1 = $session->make_element( "div" );
 			my $remove_button = $session->render_button(
 				class=> "ep_subjectinput_remove_button",
 				name => "_internal_".$prefix."_".$params{button_id},
 				value => $params{button_text} );
 			$td1->appendChild( $remove_button );
-			my $td2 = $session->make_element( "td" );
+			my $td2 = $session->make_element( "div" );
 			$td2->appendChild( $subject->render_description );
 			
 			my @td1_attr = ( $params{subject_class} );

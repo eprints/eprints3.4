@@ -363,16 +363,16 @@ sub _render_doc_div
 	$doc_div->appendChild( $content );
 
 
-	my $table = $session->make_element( "table", width=>"100%", border=>0 );
-	my $tr = $session->make_element( "tr" );
+	my $table = $session->make_element( "div", class=>"ep_upload_doc_title_bar_inner" );
+	my $tr = $session->make_element( "div" );
 	$doc_title_bar->appendChild( $table );
 	$table->appendChild( $tr );
-	my $td_left = $session->make_element( "td", align=>"left", valign=>"middle", width=>"60%" );
+	my $td_left = $session->make_element( "div", class=>"ep_upload_doc_title_bar_inner_left" );
 	$tr->appendChild( $td_left );
 
 	$td_left->appendChild( $self->_render_doc_icon_info( $doc, $files ) );
 
-	my $td_right = $session->make_element( "td", align=>"right", valign=>"middle", class => "ep_upload_doc_actions" );
+	my $td_right = $session->make_element( "div", class => "ep_upload_doc_actions" );
 	$tr->appendChild( $td_right );
 
 	$td_right->appendChild( $self->_render_doc_actions( $doc ) );
@@ -383,21 +383,29 @@ sub _render_doc_div
 	my $opts_toggle = $session->make_element( "a", onclick => "EPJS_blur(event); EPJS_toggleSlideScroll('${doc_prefix}_opts',".($hide?"false":"true").",'${doc_prefix}_block');EPJS_toggle('${doc_prefix}_opts_hide',".($hide?"false":"true").",'block');EPJS_toggle('${doc_prefix}_opts_show',".($hide?"true":"false").",'block');return false" );
 	$doc_expansion_bar->appendChild( $opts_toggle );
 
-	my $s_options = $session->make_element( "div", id=>$doc_prefix."_opts_show", class=>"ep_update_doc_options ".($hide?"":"ep_hide") );
-	$s_options->appendChild( $self->html_phrase( "show_options" ) );
+	my $s_options = $session->make_element( "div", id=>$doc_prefix."_opts_show", class=>"ep_update_doc_options ".($hide?"":"ep_hide"),  );
+	my $show_label = $session->make_element( "label", id=>$doc_prefix."_opts_show_label" );
+	$show_label->appendChild( $self->html_phrase( "show_options" ) );
+	$s_options->appendChild( $show_label );
 	$s_options->appendChild( $session->make_text( " " ) );
 	$s_options->appendChild( 
 			$session->make_element( "img",
 				src=>"$imagesurl/style/images/plus.png",
+				alt=>'+',
+				'aria-labelledby'=>$doc_prefix."_opts_show_label",
 				) );
 	$opts_toggle->appendChild( $s_options );
 
 	my $h_options = $session->make_element( "div", id=>$doc_prefix."_opts_hide", class=>"ep_update_doc_options ".($hide?"ep_hide":"") );
-	$h_options->appendChild( $self->html_phrase( "hide_options" ) );
+	my $hide_label = $session->make_element( "label", id=>$doc_prefix."_opts_hide_label" );
+        $hide_label->appendChild( $self->html_phrase( "show_options" ) );
+        $h_options->appendChild( $hide_label );
 	$h_options->appendChild( $session->make_text( " " ) );
 	$h_options->appendChild( 
 			$session->make_element( "img",
 				src=>"$imagesurl/style/images/minus.png",
+				alt=>'-',
+				'aria-labelledby'=>$doc_prefix."_opts_hide_label",
 				) );
 	$opts_toggle->appendChild( $h_options );
 
@@ -415,17 +423,15 @@ sub _render_doc_icon_info
 
 	my $session = $self->{session};
 
-	my $table = $session->make_element( "table", border=>0 );
-	my $tr = $session->make_element( "tr" );
-	my $td_left = $session->make_element( "td", align=>"center" );
-	my $td_right = $session->make_element( "td", align=>"left", class=>"ep_upload_doc_title" );
-	$table->appendChild( $tr );
-	$tr->appendChild( $td_left );
-	$tr->appendChild( $td_right );
+	my $doc_icon_info = $session->make_element( "div", class=>"ep_upload_doc_icon_info" );
+	my $dii_left = $session->make_element( "div" );
+	my $dii_right = $session->make_element( "div", class=>"ep_upload_doc_title" );
+	$doc_icon_info->appendChild( $dii_left );
+	$doc_icon_info->appendChild( $dii_right );
 
-	$td_left->appendChild( $doc->render_icon_link( new_window=>1, preview=>1, public=>0 ) );
+	$dii_left->appendChild( $doc->render_icon_link( new_window=>1, preview=>1, public=>0 ) );
 
-	$td_right->appendChild( $doc->render_citation );
+	$dii_right->appendChild( $doc->render_citation );
 	my $size = 0;
 	foreach my $file (@$files)
 	{
@@ -433,11 +439,11 @@ sub _render_doc_icon_info
 	}
 	if( $size > 0 )
 	{
-		$td_right->appendChild( $session->make_element( 'br' ) );
-		$td_right->appendChild( $session->make_text( EPrints::Utils::human_filesize($size) ));
+		$dii_right->appendChild( $session->make_element( 'br' ) );
+		$dii_right->appendChild( $session->make_text( EPrints::Utils::human_filesize($size) ));
 	}
 
-	return $table;
+	return $doc_icon_info;
 }
 
 sub _render_doc_actions
@@ -448,11 +454,11 @@ sub _render_doc_actions
 
 	my $doc_prefix = $self->{prefix}."_doc".$doc->id;
 
-	my $table = $session->make_element( "table" );
+	my $table = $session->make_element( "div", class=>"ep_upload_doc_actions_inner" );
 
 	my( $tr, $td );
 
-	$tr = $session->make_element( "tr" );
+	$tr = $session->make_element( "div" );
 	$table->appendChild( $tr );
 
 	my $screen = $self->{processor}->screen;
@@ -464,7 +470,7 @@ sub _render_doc_actions
 
 	foreach my $params ($screen->action_list( "document_item_actions" ))
 	{
-		$td = $session->make_element( "td" );
+		$td = $session->make_element( "div" );
 		$tr->appendChild( $td );
 
 		my $aux = $params->{screen};
@@ -529,11 +535,11 @@ sub _render_volatile_div
 
 	my $doc_title_bar = $session->make_element( "div", class=>"ep_upload_doc_title_bar" );
 
-	my $table = $session->make_element( "table", width=>"100%", border=>0 );
-	my $tr = $session->make_element( "tr" );
+	my $table = $session->make_element( "div", class=>"ep_upload_doc_title_bar_inner", width=>"100%", border=>0 );
+	my $tr = $session->make_element( "div" );
 	$doc_title_bar->appendChild( $table );
 	$table->appendChild( $tr );
-	my $td_left = $session->make_element( "td", valign=>"middle" );
+	my $td_left = $session->make_element( "div" );
 	$tr->appendChild( $td_left );
 
 	$td_left->appendChild( $self->_render_doc_icon_info(
@@ -541,7 +547,7 @@ sub _render_volatile_div
 			[] # $doc->value( "files" )
 		) );
 
-	my $td_right = $session->make_element( "td", align=>"right", valign=>"middle", width=>"20%" );
+	my $td_right = $session->make_element( "div" );
 	$tr->appendChild( $td_right );
 	my $msg = $self->phrase( "unlink_document_confirm" );
 	my $unlink_button = $session->render_button(
@@ -578,7 +584,7 @@ sub _render_doc_metadata
 	my $docid = $doc->get_id;
 	my $doc_prefix = $self->{prefix}."_doc".$docid;
 
-	my $table = $session->make_element( "table", class=>"ep_upload_fields ep_multi" );
+	my $table = $session->make_element( "div", class=>"ep_upload_fields ep_multi" );
 	$doc_cont->appendChild( $table );
 	my $first = 1;
 	foreach my $field ( @fields )

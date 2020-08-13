@@ -67,9 +67,11 @@ sub render
 
 	my $f = $self->{session}->make_doc_fragment;
 
-	$f->appendChild( $self->{session}->html_phrase( "Plugin/InputForm/Component/Upload:new_from_url" ) );
-
 	my $ffname = join('_', $self->{prefix}, "url");
+	my $label = $self->{session}->make_element( "label", for => $ffname );
+	$label->appendChild( $self->{session}->html_phrase( "Plugin/InputForm/Component/Upload:new_from_url" ) );
+	$f->appendChild( $label );
+
 	my $file_button = $self->{session}->make_element( "input",
 		name => $ffname,
 		size => "30",

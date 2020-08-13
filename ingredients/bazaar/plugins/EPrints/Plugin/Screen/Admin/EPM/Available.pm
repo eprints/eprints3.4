@@ -279,6 +279,7 @@ sub render
 	$form->appendChild( $xhtml->input_field(
 		"${prefix}_q" => scalar($repo->param( "${prefix}_q" )),
 		id => "${prefix}_q",
+		'aria-labelledby' => "ep_form_action_search_button",
 	) );
 
 
@@ -293,12 +294,14 @@ sub render
 		values => [ sort { $acc{$a} cmp $acc{$b} } keys %acc ],
 		default => $default,
 		labels => \%acc,
+		'aria-labelledby' => "ep_form_action_search_button",
 	) );
 
 	$form->appendChild( $xhtml->input_field(
 		"_action_search" => $repo->phrase( "lib/searchexpression:action_search" ),
 		type => "submit",
 		class => "ep_form_action_button",
+		id => "ep_form_action_search_button",
 	) );
 
 	$frag->appendChild( $xml->create_data_element( "div",
@@ -314,13 +317,14 @@ sub render
 			type => "file",
 			size=> 40,
 			maxlength=>40,
+			'aria-labelledby'=>"epm_upload_label",
 	);
 	$form->appendChild( $file_button );
 	$form->appendChild( $repo->render_action_buttons(
 		upload => $self->phrase( "action_install" ),
 	) );
 	$frag->appendChild( $self->html_phrase( "upload_form",
-		form => $form,
+		form => $form
 		) );
 
 	return $frag;

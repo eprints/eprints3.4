@@ -440,7 +440,12 @@ sub render_dir
 	$form->appendChild( $xhtml->hidden_field( "relpath", $relpath ) );
 	$form->appendChild( $xhtml->input_field( "text", undef,
 		name => "filename",
+		id => "filename",
 	) );
+	my $label = $self->{session}->make_element( "label", for=>"filename" );
+        $label->appendChild( $self->html_phrase( "filename_label" ) );
+        $form->appendChild( $label );
+	$form->appendChild( $self->{session}->make_text( ": " ) );
 	$form->appendChild( $self->{session}->render_button(
 		type => "submit",
 		name => "_action_add_file",
@@ -458,8 +463,13 @@ sub render_add_file
 
 	my $form = $self->render_form;
 	$form->appendChild( $xhtml->hidden_field( "relpath", $relpath ) );
+	my $label = $self->{session}->make_element( "label", for=>"filename_" . $relpath );
+        $label->appendChild( $self->html_phrase( "filename_label" ) );
+        $form->appendChild( $label );
+	$form->appendChild( $self->{session}->make_text( ": " ) );
 	$form->appendChild( $xhtml->input_field( "text", undef,
 		name => "filename",
+		id => "filename_" . $relpath, 
 	) );
 	$form->appendChild( $self->{session}->render_button(
 		type => "submit",

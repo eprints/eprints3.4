@@ -65,7 +65,7 @@
             </div>
             <div>
               <epc:pin ref="languages"/>
-              <form method="get" accept-charset="utf-8" action="{$config{rel_cgipath}}/search" style="display:inline">
+              <form method="get" accept-charset="utf-8" action="{$config{rel_cgipath}}/search" style="display:inline" role="search" aria-label="Publication simple search">
                 <input class="ep_tm_searchbarbox" size="20" type="text" name="q" aria-labelledby="searchbutton"/>
                 <input class="ep_tm_searchbarbutton" value="{phrase('lib/searchexpression:action_search')}" type="submit" name="_action_search" id="searchbutton"/>
                 <input type="hidden" name="_action_search" value="Search"/>

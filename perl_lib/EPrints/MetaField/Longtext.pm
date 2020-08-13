@@ -69,7 +69,7 @@ sub render_single_value
 
 sub get_basic_input_elements
 {
-	my( $self, $session, $value, $basename, $staff, $obj ) = @_;
+	my( $self, $session, $value, $basename, $staff, $obj, $one_field_component ) = @_;
 	my @classes = defined $self->{dataset} ?
 		( join('_', 'ep', $self->dataset->base_id, $self->name),
 		join('_', 'eptype', $self->dataset->base_id, $self->type) ) :
@@ -78,15 +78,19 @@ sub get_basic_input_elements
 	my $readonly = ( $self->{readonly} && $self->{readonly} eq "yes" ) ? 1 : undef;
 	push @classes, "ep_readonly" if $readonly;
 
-	my $textarea = $session->make_element(
-		"textarea",
+	my %attributes = ( 
 		name => $basename,
-		id => $basename,
-		class => join(' ', @classes),
-		rows => $self->{input_rows},
-		cols => $self->{input_cols},
-		readonly => $readonly,
-		wrap => "virtual" );
+                id => $basename,
+                class => join(' ', @classes),
+                rows => $self->{input_rows},
+                cols => $self->{input_cols},
+                readonly => $readonly,
+                wrap => "virtual",
+                'aria-labelledby' => $self->get_labelledby( $basename ),
+	);
+	my $describedby = $self->get_describedby( $basename, $one_field_component );
+	$attributes{'aria-describedby'} = $describedby if EPrints::Utils::is_set( $describedby ); 
+	my $textarea = $session->make_element( "textarea", %attributes );
 	$textarea->appendChild( $session->make_text( $value ) );
 
 	return [ [ { el=>$textarea } ] ];

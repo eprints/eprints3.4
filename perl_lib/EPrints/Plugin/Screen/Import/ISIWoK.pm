@@ -211,6 +211,7 @@ sub render
 		_action_test_data => $repo->phrase( "lib/searchexpression:action_search" ),
 		type => "submit",
 		class => "ep_form_action_button",
+		role => "button",
 	) );
 
 	if( defined $items )

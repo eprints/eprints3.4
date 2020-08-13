@@ -323,6 +323,7 @@ sub render_simple_form
 		name => "_action_search",
 		value => $self->{session}->phrase( "lib/searchexpression:action_search" ),
 		class => "ep_form_action_button",
+		role => "button",
 		id => $self->{session}->phrase( "lib/searchexpression:action_search" ),
 	);
 	$form->appendChild( $input );
@@ -332,6 +333,7 @@ sub render_simple_form
 		name => "_action_advanced",
 		value => $self->{session}->phrase( "lib/searchexpression:advanced_link" ),
 		class => "ep_form_action_button ep_form_search_advanced_link",
+		role => "button",
 	);
 	$form->appendChild( $input );
 

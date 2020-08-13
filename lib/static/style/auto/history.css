@@ -1,0 +1,61 @@
+/* EPrints 3 history style */
+
+.ep_history_item {
+	padding: 0.3em; 
+	margin-top: 2em; 
+	border: solid 1px black; 
+	background-color: #ccc;
+}
+
+.ep_history_action {
+	padding: 0.3em; 
+	background-color: black; 
+	color: white; 
+	font-weight: bold;
+
+}
+
+.ep_history_details {
+        padding: 0.3em;
+	margin-bottom: 2em; 
+	border: solid 1px black !important;
+}
+
+.ep_history_action a {
+	color: yellow;
+}
+
+.ep_history_xmlblock {
+	margin: 0 0 0 0; 
+	padding: 3px 3px 3px 3px; 
+	border-left: 1px 
+	dashed black; 
+	border-bottom: 1px dashed black; 
+	font-size: 120%;
+}
+
+table.ep_history_diff_table {
+	width: 100%;
+	border-spacing: 0;
+	border-collapse: collapse; 
+	padding: 0;
+}
+
+table.ep_history_diff_table th, table.ep_history_diff_table td {
+	width: 50%;
+	vertical-align: top;
+	text-align: left;
+}
+
+.ep_history_diff_table_add {
+	background-color: #cfc;
+}
+
+.ep_history_diff_table_remove {
+        background-color: #fcc;
+}
+
+.ep_history_diff_table_change {
+        background-color: #ffc;
+}
+

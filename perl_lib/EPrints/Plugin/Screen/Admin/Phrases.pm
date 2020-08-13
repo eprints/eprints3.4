@@ -421,7 +421,7 @@ EOJ
 					src => $src,
 				},
 				undef,
-				"message"
+				"message",
 			) );
 		}
 		elsif( defined $info )
@@ -436,7 +436,7 @@ EOJ
 					src => $src,
 				},
 				undef,
-				"message"
+				"message",
 			) );
 		}
 		else
@@ -448,7 +448,8 @@ EOJ
 					src => $src,
 				}, 
 				$self->html_phrase( "phrase_not_defined" ),
-				"warning" ) );
+				"warning",
+			 ) );
 		}
 	}	
 	$table->appendChild( $undefined_rows );
@@ -506,11 +507,11 @@ sub render_row
 	if ( defined $session->config( "csrf_token_salt" ) && defined $session->current_user )
         {
 		my $csrf_token = $session->get_csrf_token();
-		$div = $session->make_element( "div", id => "ep_phraseedit_$phraseid", class => "ep_phraseedit_widget", onclick => "ep_phraseedit_edit(this, ep_phraseedit_phrases, '$csrf_token');" );
+		$div = $session->make_element( "div", id => "ep_phraseedit_$phraseid", class => "ep_phraseedit_widget", onfocus => "ep_phraseedit_edit(this, ep_phraseedit_phrases, '$csrf_token');" );
 	}
 	else
 	{	
-		$div = $session->make_element( "div", id => "ep_phraseedit_$phraseid", class => "ep_phraseedit_widget", onclick => "ep_phraseedit_edit(this, ep_phraseedit_phrases);" );
+		$div = $session->make_element( "div", id => "ep_phraseedit_$phraseid", class => "ep_phraseedit_widget", onfocus => "ep_phraseedit_edit(this, ep_phraseedit_phrases);" );
 	}
 	if( $xml ne $phrase->{xml} )
 	{
@@ -546,16 +547,25 @@ sub render_new_phrase
 			size => "50",
 			name => "ep_phraseedit_newid",
 			style => "border: solid 1px #88c",
-			id => "ep_phraseedit_newid" ));
-	$form->appendChild( $session->make_text( " " ) );	
+			id => "ep_phraseedit_newid",
+			'aria-labelledby' => "ep_phraseedit_add" ));
+	$form->appendChild( $session->make_text( " " ) );
+	my $csrf_token = "";
+	if ( defined $session->config( "csrf_token_salt" ) && defined $session->current_user )
+	{
+		$csrf_token = $session->get_csrf_token();
+	}
 	$form->appendChild(
 		$session->make_element( 
 			"input", 
 			class => "ep_form_action_button",
+			role => "button",
 			type => "submit", 
 			value => $self->phrase( "new_phrase" ),
 			id => "ep_phraseedit_add",
-			onclick => "return ep_phraseedit_addphrase(event,\$F('ep_phraseedit_newid'))" ));
+			onclick => "return ep_phraseedit_addphrase(event,\$F('ep_phraseedit_newid'),'$csrf_token')",
+		)
+	);
 	$f->appendChild( $add_div );
 	$add_div->appendChild( $form );
 

@@ -234,6 +234,11 @@ sub render
 			id => join('_', $self->{prefix}, "dropbox_help"),
 		) );
 
+	# file selection label
+	my $label = $xml->create_element( "label", for=>$ffname, class=>"ep_upload_file_label" );
+	$label->appendChild( $session->html_phrase( "Plugin/InputForm/Component/Upload:file_label" ) ); 
+	$container->appendChild( $label );
+
 	# file selection button
 	$container->appendChild( $xml->create_element( "input",
 		name => $ffname,
@@ -252,7 +257,7 @@ sub render
 	$container->appendChild( $session->make_text( " " ) );
 	$container->appendChild( $add_format_button );
 
-	$container->appendChild( $xml->create_element( "table",
+	$container->appendChild( $xml->create_element( "div",
 			id => join('_', $self->{prefix}, "progress_table"),
 			class => "UploadMethod_file_progress_table",
 		) );

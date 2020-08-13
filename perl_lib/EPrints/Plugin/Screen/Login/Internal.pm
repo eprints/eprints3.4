@@ -66,11 +66,12 @@ sub render
 	$bits{problems} = $repo->make_doc_fragment;
 	$bits{input_username} = $repo->render_input_field(
 			class => "ep_form_text",
-			id => "login_username",
+			id => 'login_username',
 			name => 'login_username' );
 
 	$bits{input_password} = $repo->render_input_field(
 			class => "ep_form_text",
+			id => 'login_password',
 			name => 'login_password',
 			type => "password" );
 
@@ -78,7 +79,8 @@ sub render
 	$bits{login_button} = $repo->render_button(
 			name => "_action_login",
 			value => $repo->xhtml->to_text_dump( $title ),
-			class => 'ep_form_action_button', );
+			class => 'ep_form_action_button',
+			role => "button" );
 	$repo->xml->dispose( $title );
 
 	my $form = $repo->render_form( "POST" );

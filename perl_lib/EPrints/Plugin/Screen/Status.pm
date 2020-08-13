@@ -279,7 +279,7 @@ sub render
 	
 	$table->appendChild(
 		$session->render_row( 
-			undef,
+			$session->html_phrase( "cgi/users/status:frequency" ),
 			$session->html_phrase( "cgi/users/status:subcount" ),
 			$session->html_phrase( "cgi/users/status:subsent" ) ) );
 	foreach my $freq ( "never", "daily", "weekly", "monthly" )

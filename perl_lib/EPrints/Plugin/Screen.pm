@@ -466,12 +466,14 @@ sub _render_action_aux
 				src=>$icon,
 				alt=>$title,
 				class=>"ep_form_action_icon",
+				role=>"button",
 			) );
 		}
 		# never called because mixing <input> and <href> is ugly
 		else
 		{
 			$frag->setAttribute( class => "ep_form_action_button" );
+			$frag->setAttribute( role => "button" );
 			$frag->appendChild( $session->make_text( $title ) );
 		}
 	}
@@ -491,6 +493,7 @@ sub _render_action_aux
 					"input",
 					type=>"image",
 					class=>"ep_form_action_icon",
+					role=>"button",
 					($action ? (name=>"_action_$action") : ()),
 					src=>$icon,
 					title=>$title,
@@ -502,6 +505,7 @@ sub _render_action_aux
 			$frag->appendChild( 
 				$session->render_button(
 					class=>"ep_form_action_button",
+					role=>"button",
 					($action ? (name=>"_action_$action") : ()),
 					value=>$title ));
 		}
@@ -537,7 +541,7 @@ sub render_action_list
 		push @definitions, $self->get_description( $params );
 	}
 
-	return $repo->xhtml->action_definition_list( \@actions, \@definitions );
+	return $repo->xhtml->action_definition_list( \@actions, \@definitions, id=>$list_id );
 }
 
 

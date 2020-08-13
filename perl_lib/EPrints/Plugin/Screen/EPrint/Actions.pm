@@ -65,7 +65,7 @@ sub render
 	if( $contents->hasChildNodes )
 	{
 		$tr = $table->appendChild( $session->make_element( "tr" ) );
-		$th = $tr->appendChild( $session->make_element( "th", class => "ep_title_row" ) );
+		$th = $tr->appendChild( $session->make_element( "th", class => "ep_title_row", role => "banner" ) );
 		$th->appendChild( $session->html_phrase( "Plugin/Screen/EPrint/Actions/Editor:title" ) );
 
 		$tr = $table->appendChild( $session->make_element( "tr" ) );
@@ -78,7 +78,7 @@ sub render
 	if( $contents->hasChildNodes )
 	{
 		$tr = $table->appendChild( $session->make_element( "tr" ) );
-		$th = $tr->appendChild( $session->make_element( "th", class => "ep_title_row" ) );
+		$th = $tr->appendChild( $session->make_element( "th", class => "ep_title_row", role => "banner" ) );
 		$th->appendChild( $session->html_phrase( "Plugin/Screen/EPrint/Export:title" ) );
 
 		$tr = $table->appendChild( $session->make_element( "tr" ) );

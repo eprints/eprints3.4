@@ -209,7 +209,7 @@ sub render_content
 			$parts{no_toggle} = $self->{config}->{help_fields}->{$field->name};
 		}
 
-		$parts{prefix} = $self->{prefix};
+		$parts{prefix} = $self->{prefix} . "_" . $field->get_name;
 		$parts{help_prefix} = $self->{prefix}."_help_".$field->get_name;
 
 		$table->appendChild( $self->{session}->render_row_with_help( %parts ) );

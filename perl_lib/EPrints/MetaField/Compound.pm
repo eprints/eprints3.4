@@ -487,7 +487,7 @@ sub get_input_col_titles
 # assumes all basic input elements are 1 high, x wide.
 sub get_basic_input_elements
 {
-	my( $self, $session, $value, $basename, $staff, $object ) = @_;
+	my( $self, $session, $value, $basename, $staff, $object, $one_field_component ) = @_;
 
 	my $readonly = ( $self->{readonly} && $self->{readonly} eq "yes" ) ? 1 : 0;
 	my $grid_row = [];
@@ -501,7 +501,8 @@ sub get_basic_input_elements
 					$value->{$alias}, 
 					$basename."_".$alias,
 					$staff, 
-					$object );
+					$object,
+					$one_field_component );
 		my $top_row = $part_grid->[0];
 		push @{$grid_row}, @{$top_row};
 	}

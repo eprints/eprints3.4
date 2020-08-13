@@ -125,13 +125,19 @@ sub render
 		local $self->{session}->{lang} = $user->language();
 
 		my $reason = $self->{session}->make_doc_fragment;
+		my $reason_label = $self->{session}->make_element( "label", for=>"ep_mail_reason_edit" );
+		$reason_label->appendChild( $self->html_phrase( "reason_label" ) );
+		$reason_label->appendChild( $self->{session}->make_text( ":" ) );
+		$reason->appendChild( $reason_label );
 		my $reason_static = $self->{session}->make_element( "div", id=>"ep_mail_reason_fixed",class=>"ep_only_js" );
 		$reason_static->appendChild( $self->{session}->html_phrase( "mail_bounce_reason" ) );
 		$reason_static->appendChild( $self->{session}->make_text( " " ));	
 		
-		my $edit_link = $self->{session}->make_element( "a", href=>"#", onclick => "EPJS_blur(event); EPJS_toggle('ep_mail_reason_fixed',true,'block');EPJS_toggle('ep_mail_reason_edit',false,'block');\$('ep_mail_reason_edit').focus(); \$('ep_mail_reason_edit').select(); return false", );
+		my $edit_link = $self->{session}->make_element( "a", href=>"#", role=>"button", onclick => "EPJS_blur(event); EPJS_toggle('ep_mail_reason_fixed',true,'block');EPJS_toggle('ep_mail_reason_edit',false,'block');\$('ep_mail_reason_edit').focus(); \$('ep_mail_reason_edit').select(); return false", );
 		$reason_static->appendChild( $self->{session}->html_phrase( "mail_edit_click",
-			edit_link => $edit_link ) ); 
+			edit_link => $edit_link,
+			change_field => $self->html_phrase( "reason_label" ) 
+		) ); 
 		$reason->appendChild( $reason_static );
 		
 		my $textarea = $self->{session}->make_element(

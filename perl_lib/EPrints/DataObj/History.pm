@@ -578,12 +578,12 @@ sub render_modify
 	my $table;
 	my $tr;
 	my $td;
-	$table = $self->{session}->make_element( "table" , width=>"100%", cellspacing=>"0", cellpadding=>"0");
+	$table = $self->{session}->make_element( "table", class=>"ep_history_diff_table" );
 	$tr = $self->{session}->make_element( "tr" );
-	$td = $self->{session}->make_element( "td", valign=>"top", width=>"50%" );
+	$td = $self->{session}->make_element( "th" );
 	$td->appendChild( $self->{session}->html_phrase( "lib/history:before" ) );
 	$tr->appendChild( $td );
-	$td = $self->{session}->make_element( "td", valign=>"top", width=>"50%" );
+	$td = $self->{session}->make_element( "th" );
 	$td->appendChild( $self->{session}->html_phrase( "lib/history:after" ) );
 	$tr->appendChild( $td );
 	$table->appendChild( $tr );
@@ -595,11 +595,11 @@ sub render_modify
 			my( $old, $pad ) = render_xml( $self->{session}, $old_nodes{$fn}, 0, 1, int($width/2)-1 );
 			$tr = $self->{session}->make_element( "tr" );
 
-			$td = $self->{session}->make_element( "td", valign=>"top", width=>"50%", style=>"background-color: #fcc; " );
+			$td = $self->{session}->make_element( "td", class=>"ep_history_diff_table_remove" );
 			$td->appendChild( $self->{session}->html_phrase( "lib/history:xmlblock", xml=>$old ) );
 			$tr->appendChild( $td );
 
-			$td = $self->{session}->make_element( "td", valign=>"top", width=>"50%" );
+			$td = $self->{session}->make_element( "td"  );
 			my $f = $self->{session}->make_doc_fragment;			
 			$f->appendChild( $self->{session}->render_nbsp );
 			$f->appendChild( $pad );
@@ -612,7 +612,7 @@ sub render_modify
 		{
 			my( $new, $pad ) = render_xml( $self->{session}, $new_nodes{$fn}, 0, 1, int($width/2)-1 );
 			$tr = $self->{session}->make_element( "tr" );
-			$td = $self->{session}->make_element( "td", valign=>"top", width=>"50%" );
+			$td = $self->{session}->make_element( "td" );
 
 			my $f = $self->{session}->make_doc_fragment;			
 			$f->appendChild( $self->{session}->render_nbsp );
@@ -620,7 +620,7 @@ sub render_modify
 			$td->appendChild( $self->{session}->html_phrase( "lib/history:xmlblock", xml=>$f ) );
 			$tr->appendChild( $td );
 
-			$td = $self->{session}->make_element( "td", valign=>"top", width=>"50%", style=>"background-color: #cfc" );
+			$td = $self->{session}->make_element( "td", class=>"ep_history_diff_table_add" );
 			$td->appendChild( $self->{session}->html_phrase( "lib/history:xmlblock", xml=>$new ) );
 			$tr->appendChild( $td );
 
@@ -631,11 +631,11 @@ sub render_modify
 			$tr = $self->{session}->make_element( "tr" );
 			my( $t1, $t2 ) = render_xml_diffs( $self->{session}, $old_nodes{$fn}, $new_nodes{$fn}, 0, int($width/2)-1 );
 
-			$td = $self->{session}->make_element( "td", valign=>"top", width=>"50%", style=>"background-color: #ffc" );
+			$td = $self->{session}->make_element( "td", class=>"ep_history_diff_table_change" );
 			$td->appendChild( $self->{session}->html_phrase( "lib/history:xmlblock", xml=>$t1 ) );
 			$tr->appendChild( $td );
 
-			$td = $self->{session}->make_element( "td", valign=>"top", width=>"50%", style=>"background-color: #ffc" );
+			$td = $self->{session}->make_element( "td", class=>"ep_history_diff_table_change" );
 			$td->appendChild( $self->{session}->html_phrase( "lib/history:xmlblock", xml=>$t2 ) );
 			$tr->appendChild( $td );
 

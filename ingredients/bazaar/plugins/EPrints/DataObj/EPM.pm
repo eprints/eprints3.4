@@ -148,6 +148,7 @@ sub render_icon
 	return $repo->xml->create_element( "img",
 		width => "70px",
 		src => $url,
+		alt => $epm->value( "title" ) . " icon",
 	);
 }
 

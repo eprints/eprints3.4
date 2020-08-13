@@ -82,7 +82,7 @@ sub render_single_value
 
 sub get_basic_input_elements
 {
-	my( $self, $session, $value, $basename, $staff, $obj ) = @_;
+	my( $self, $session, $value, $basename, $staff, $obj, $one_field_component ) = @_;
 
 	my @pages = undef;
 	if( defined $value )
@@ -107,7 +107,9 @@ sub get_basic_input_elements
 		id => $fromid,
 		value => $pages[0],
 		size => 6,
-		maxlength => 120 ) );
+		maxlength => 120,
+		'aria-labelledby' => $self->get_labelledby( $basename ),
+		'aria-describedby' => $self->get_describedby( $basename, $one_field_component ) ) );
 
 	$frag->appendChild( $session->make_text(" ") );
 	$frag->appendChild( $session->html_phrase( 
@@ -120,7 +122,9 @@ sub get_basic_input_elements
 		id => $toid,
 		value => $pages[1],
 		size => 6,
-		maxlength => 120 ) );
+		maxlength => 120,
+		'aria-labelledby' => $self->get_labelledby( $basename ),
+                'aria-describedby' => $self->get_describedby( $basename, $one_field_component ) ) );
 
 	return [ [ { el=>$frag } ] ];
 }

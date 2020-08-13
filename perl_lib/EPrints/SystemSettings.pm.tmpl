@@ -51,7 +51,6 @@ $EPrints::SystemSettings::conf = {
                               
                                 };
 
-
 ## load the flavour inc files into the system settings' 'flavour' key.
 my $flavour_dir = $conf->{base_path}."/flavours";
 opendir(LIB, $flavour_dir);
@@ -69,10 +68,6 @@ foreach my $flavour (@flavours){
         $conf->{flavours}->{$fname}=\@paths;
     }
 }
-
-
-
-
 
 
 sub read_inc

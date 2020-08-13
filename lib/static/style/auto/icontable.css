@@ -11,3 +11,33 @@ table.ep_icontable td {
 	padding-left: 4px;
 	border: solid 1px #999;
 }
+
+.ep_icontable {
+	border-collapse: collapse;
+	display: table;
+}
+
+.ep_icontable > div {
+	display: table-row;
+}
+
+.ep_icontable > div > div {
+        display: table-cell;
+        border: solid 1px #999;
+	padding: 1px;
+}
+
+.ep_icontable > div > div:first-child {
+	background-color: #fff;
+        text-align: center;
+}
+
+.ep_icontable > div > div:last-child {
+        padding-left: 4px;
+}
+
+.ep_icontable > div > div img {
+	border-width: 0;
+	vertical-align: middle
+}
+

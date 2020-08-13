@@ -218,7 +218,7 @@ sub _render_add_file
 		$f->appendChild( $hide_add_files );
 	}
 
-	my %l = ( id=>$doc_prefix."_af2", class=>"ep_upload_add_file_toolbar" );
+	my %l = ( id=>$doc_prefix."_af2", class=>"ep_upload_add_file_toolbar", role=>"toolbar" );
 	$l{class} .= " ep_no_js" if( $hide );
 	my $form = $self->render_form();
 	my $toolbar = $session->make_element( "div", %l );
@@ -231,6 +231,7 @@ sub _render_add_file
 	my $upload_button = $session->render_button(
 		name => "_action_add_file",
 		class => "ep_form_internal_button",
+		role => "button",
 		value => $session->phrase( "Plugin/InputForm/Component/Documents:add_file" ),
 		);
 	$toolbar->appendChild( $file_button );

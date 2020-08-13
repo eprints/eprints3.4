@@ -306,6 +306,7 @@ sub render_content
 			undef,
 			$self->{dataobj},
 			$self->{prefix},
+			1 # Single field component
  	) );
 
 	$frag->appendChild( $self->{session}->make_javascript( <<EOJ ) );

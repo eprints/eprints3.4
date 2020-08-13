@@ -70,7 +70,7 @@ sub render_single_value
 
 sub get_basic_input_elements
 {
-	my( $self, $session, $value, $basename, $staff, $obj ) = @_;
+	my( $self, $session, $value, $basename, $staff, $obj, $one_field_component ) = @_;
 
 	my @classes;
 	push @classes, join('_', 'ep', $self->{dataset}->base_id, $self->name);
@@ -116,7 +116,10 @@ sub get_basic_input_elements
 	{
 		# render as radio buttons
 
-		my $true = $session->render_noenter_input_field(
+		my $f = $session->make_element( "dl", class=>"ep_option_list ep_boolean_list" );
+		
+		my $inputs = {};
+		$inputs->{true} = $session->render_noenter_input_field(
 			type => "radio",
 			checked=>( defined $value && $value eq 
 					"TRUE" ? "checked" : undef ),
@@ -125,8 +128,9 @@ sub get_basic_input_elements
 			readonly => $readonly,
 			onclick => $onclick,
 			class => join(" ", @classes),
-			value => "TRUE" );
-		my $false = $session->render_noenter_input_field(
+			value => "TRUE",
+			'aria-labelledby' => $basename . "_true_label" );
+		$inputs->{false} = $session->render_noenter_input_field(
 			type => "radio",
 			checked=>( defined $value && $value eq 
 					"FALSE" ? "checked" : undef ),
@@ -135,28 +139,35 @@ sub get_basic_input_elements
 			readonly => $readonly,
 			onclick => $onclick,
 			class => join(" ", @classes),
-			value => "FALSE" );
-		my $f = $session->make_doc_fragment;
-		$f->appendChild( 
-			$session->html_phrase(
-				$self->{confid}."_radio_".$self->{name},
-				true=>$true,
-				false=>$false ) );
+			value => "FALSE",
+			'aria-labelledby' => $basename . "_false_label" );
 		if( !$self->get_property( "required" ) )
-		{
-			my $div = $session->make_element( "div" );
-			$div->appendChild( 
-				$session->render_noenter_input_field(
-					type => "radio",
-					checked=>( !EPrints::Utils::is_set($value) ? "checked" : undef ),
-					name => $basename,
-					class => join(" ", @classes),
-					onclick => $onclick,
-					value => "" ) );
-			$f->appendChild( $div );
-			$div->appendChild( $session->html_phrase( 
-				"lib/metafield:unspecified_selection" ) );
+                {
+                        $inputs->{unspecified} = $session->render_noenter_input_field(
+                                type => "radio",
+                                checked=>( !EPrints::Utils::is_set($value) ? "checked" : undef ),
+                                name => $basename . "_unspecified",
+                                class => join(" ", @classes),
+                                onclick => $onclick,
+                                value => "",
+				'aria-labelledby' => $basename . "_unspecified_label" )
 		}
+
+		my @options = qw/ true false /;
+		@options = reverse( @options ) if $self->{false_first};
+		push @options, "unspecified" if defined $inputs->{unspecified};
+            
+		foreach my $option ( @options )
+		{
+			my $dt = $session->make_element( "dt" );
+			$dt->appendChild( $inputs->{$option} );
+			$f->appendChild( $dt );
+			my $dd = $session->make_element( "dd", id => $basename . "_" . $option . "_label" );
+			$dd->appendChild( $session->html_phrase( $self->{confid} . "_radio_" . $self->{name} . "_" . $option ) ) unless $option eq "unspecified";
+			$dd->appendChild( $session->html_phrase( "lib/metafield:unspecified_selection" ) ) if $option eq "unspecified";
+			$f->appendChild( $dd );
+		}
+		
 		return [[{ el=>$f }]];
 	}
 			
@@ -268,6 +279,7 @@ sub get_property_defaults
 	$defaults{input_style} = 0;
 	$defaults{text_index} = 0;
 	$defaults{input_rows} = $EPrints::MetaField::FROM_CONFIG;
+	$defaults{false_first} = 0;
 	return %defaults;
 }
 

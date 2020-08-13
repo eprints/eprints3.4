@@ -90,7 +90,7 @@ sub render_single_value
 
 sub get_basic_input_elements
 {
-	my( $self, $session, $value, $basename, $staff, $obj ) = @_;
+	my( $self, $session, $value, $basename, $staff, $obj, $one_field_component ) = @_;
 
 	my $maxlength = $self->get_property( "maxlength" );
 	my $size = $self->{input_cols};
@@ -101,7 +101,8 @@ sub get_basic_input_elements
 		id => $basename,
 		size => $size,
 		maxlength => $maxlength,
-		'aria-labelledby' => $basename . "_label" );
+		'aria-labelledby' => $self->get_labelledby( $basename ),
+		'aria-describedby' => $self->get_describedby( $basename, $one_field_component ) );
 
 	if( !$self->get_property( "repeat_secret" ) )
 	{
@@ -115,7 +116,8 @@ sub get_basic_input_elements
 		id => $basename."_confirm",
 		size => $size,
 		maxlength => $maxlength,
-		'aria-labelledby' => $basename . "_label" );
+		'aria-labelledby' => $self->get_labelledby( $basename ),
+                'aria-describedby' => $self->get_describedby( $basename, $one_field_component ) );
 
 	my $label1 = $session->make_element( "div", style=>"margin-right: 4px;" );
 	$label1->appendChild( $session->html_phrase(

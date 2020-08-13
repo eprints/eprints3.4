@@ -13,6 +13,17 @@
 	margin-bottom: 1em; */
 }
 
+.ep_upload_fields {
+	display: table;
+}
+.ep_upload_fields > div {
+	display: table-row;
+}
+.ep_upload_fields > div > div {
+        display: table-cell;
+}
+
+
 .ep_upload_fields th
 {
 	text-align: right;
@@ -110,3 +121,87 @@
 }
 
 /* End of Drap and drop */
+
+
+.ep_upload_file_label {
+        margin-right: 0.3em;
+	font-weight: bold;
+}
+
+
+.UploadMethod_file_progress_table {
+	display: table;
+}
+
+.UploadMethod_file_progress_table > div {
+	display: table-row;
+}
+
+.UploadMethod_file_progress_table > div > div {
+        display: table-cell;
+	padding: 0.5em;
+}
+
+
+.ep_upload_doc_title_bar_inner {
+	display: table;
+	width: 100%;
+	border-width: 0;
+}
+
+.ep_upload_doc_title_bar_inner > div {
+	display: table-row;
+}
+
+.ep_upload_doc_title_bar_inner > div > div {
+        display: table-cell;
+	vertical-align: middle;
+}
+
+.ep_upload_doc_title_bar_inner_left {
+        text-align: left;
+        width: 60%;
+}
+
+
+.ep_upload_doc_title_bar_inner > div > div:last-child {
+	text-align: right;
+	width: 20%;
+}
+
+.ep_upload_doc_icon_info {
+	display: block;
+	border-width: 0;
+	padding: 0.4em;
+}
+
+.ep_upload_doc_icon_info > div {
+	display: inline-block;
+}
+
+.ep_upload_doc_icon_info > div:first-child {
+	text-align: center;
+}
+
+.ep_upload_doc_icon_info > div.ep_upload_doc_title {
+	text-align: left;
+	vertical-align: top;
+	margin: 0.3em;
+}
+
+.ep_upload_doc_actions_inner {
+	display: table;
+	width: auto;
+	margin-left: auto;
+	margin-right: 0;
+}
+
+.ep_upload_doc_actions_inner > div {
+	display: table-row;
+}
+
+.ep_upload_doc_actions_inner > div > div {
+        display: table-cell;
+	padding: 0.2em;
+}
+

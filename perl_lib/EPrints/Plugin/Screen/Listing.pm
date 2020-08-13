@@ -420,11 +420,11 @@ sub render
 		my $td = $session->make_element( "td", class=>"ep_columns_alter" );
 		$final_row->appendChild( $td );
 
-		my $acts_table = $session->make_element( "table", cellpadding=>0, cellspacing=>0, border=>0, width=>"100%" );
-		my $acts_row = $session->make_element( "tr" );
-		my $acts_td1 = $session->make_element( "td", align=>"left", width=>"14px" );
-		my $acts_td2 = $session->make_element( "td", align=>"center", width=>"100%");
-		my $acts_td3 = $session->make_element( "td", align=>"right", width=>"14px" );
+		my $acts_table = $session->make_element( "div", class=>"ep_columns_alter_inner", cellpadding=>0, cellspacing=>0, border=>0, width=>"100%" );
+		my $acts_row = $session->make_element( "div" );
+		my $acts_td1 = $session->make_element( "div" );
+		my $acts_td2 = $session->make_element( "div" );
+		my $acts_td3 = $session->make_element( "div" );
 		$acts_table->appendChild( $acts_row );
 		$acts_row->appendChild( $acts_td1 );
 		$acts_row->appendChild( $acts_td2 );
@@ -552,16 +552,22 @@ sub render
 
 	my @tags = sort { $fieldnames->{$a} cmp $fieldnames->{$b} } keys %$fieldnames;
 
-	$form_add->appendChild( $session->render_option_list( 
+	my $label = $session->make_element( "label" );
+	$label->appendChild( $session->make_text( $session->phrase( "lib/paginate:add_column_label" ) . " " ) );
+
+	$label->appendChild( $session->render_option_list( 
 		name => 'column',
 		height => 1,
 		multiple => 0,
 		'values' => \@tags,
 		labels => $fieldnames ) );
+
+	$form_add->appendChild( $label );
 		
 	$form_add->appendChild( 
 			$session->render_button(
 				class=>"ep_form_action_button",
+				role=>"button",
 				name=>"_action_add_col", 
 				value => $session->phrase( "lib/paginate:add_column" ),
 			) );
@@ -654,7 +660,7 @@ sub render_search_form
 	my $form = $self->render_form;
 	$form->setAttribute( method => "get" );
 
-	my $table = $self->{session}->make_element( "table", class=>"ep_search_fields" );
+	my $table = $self->{session}->make_element( "div", class=>"ep_search_fields" );
 	$form->appendChild( $table );
 
 	$table->appendChild( $self->render_search_fields );

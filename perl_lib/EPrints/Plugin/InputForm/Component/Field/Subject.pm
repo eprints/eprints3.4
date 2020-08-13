@@ -307,7 +307,7 @@ sub _format_subjects
 
 	my $session = $self->{session};
 	my $field = $self->{config}->{field};
-	my $table = $session->make_element( "table", class=>$params{table_class} );
+	my $table = $session->make_element( "div", class=>$params{table_class} . " ep_table" );
 	my $first = 1;
 	foreach my $subject_id (@{$params{values}})
 	{
@@ -315,15 +315,15 @@ sub _format_subjects
 
 		next if $params{hide_selected} && $self->{selected}->{ $subject_id };
 		my $prefix = $self->{prefix}."_".$subject_id;
-		my $tr = $session->make_element( "tr" );
+		my $tr = $session->make_element( "div" );
 		
-		my $td1 = $session->make_element( "td" );
+		my $td1 = $session->make_element( "div" );
 		my $remove_button = $session->render_button(
 			class=> "ep_subjectinput_remove_button",
 			name => "_internal_".$prefix."_".$params{button_id},
 			value => $params{button_text} );
 		$td1->appendChild( $remove_button );
-		my $td2 = $session->make_element( "td" );
+		my $td2 = $session->make_element( "div" );
 		if( defined $subject )
 		{
 			$td2->appendChild( $subject->render_description );
@@ -358,11 +358,15 @@ sub _render_search
 	my $prefix = $self->{prefix};
 	my $session = $self->{session};
 	my $field = $self->{config}->{field};
+	my $label = $session->make_element( "span", id=>$prefix."q_label" );
+	$label->appendChild( $session->make_text( $self->phrase( $field->get_name."_search_label_text" ) ) );
 	my $bar = $self->html_phrase(
 		$field->get_name."_search_bar",
+		label => $label,
 		input => $self->{search}->render_simple_fields(
 			noenter => 0,
 			size => 40,
+			'aria-labelledby' => $prefix . "q_label",
 		),
 		search_button=>$session->render_button( 
 			name=>"_internal_".$prefix."_search",

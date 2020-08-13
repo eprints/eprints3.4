@@ -382,7 +382,7 @@ terms.</p>
     <epp:phrase id="eprint_fieldhelp_keywords">Natural language terms to describe the content of the item</epp:phrase>
 
     <epp:phrase id="eprint_fieldname_contributors">Contributors</epp:phrase>
-    <epp:phrase id="eprint_fieldhelp_contributors"></epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_contributors">Enter contributors' names along with type of contribution. If there are more than four contributors, click on the [More&#160;input&#160;rows] button.</epp:phrase>
     <epp:phrase id="eprint_fieldname_contributors_type">Contribution</epp:phrase>
     <epp:phrase id="eprint_fieldname_contributors_id">Email</epp:phrase>
 
@@ -545,6 +545,8 @@ This field is required if no creators are listed.
     <epp:phrase id="eprint_fieldname_refereed">Refereed</epp:phrase>
     <epp:phrase id="eprint_fieldhelp_refereed">Please indicate whether this version of the work been refereed below.</epp:phrase>
     <epp:phrase id="eprint_radio_refereed"><label><epc:pin name="true"/>Yes, this version has been refereed.</label><br/><label><epc:pin name="false"/>No, this version has not been refereed.</label></epp:phrase>
+    <epp:phrase id="eprint_radio_refereed_true">Yes, this version has been refereed.</epp:phrase>
+    <epp:phrase id="eprint_radio_refereed_false">No, this version has not been refereed.</epp:phrase>
 
     <epp:phrase id="eprint_fieldname_referencetext">References</epp:phrase>
     <epp:phrase id="eprint_fieldhelp_referencetext">You are strongly encouraged to paste in the reference list of your item into the box below. It may be used to link your item to those it cites and to those that cite it.</epp:phrase>
@@ -1350,11 +1352,11 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
     <epp:phrase id="lib/history:no_earlier">Earlier revision not available. No diff possible. Showing all data in this revision.</epp:phrase>
     <epp:phrase id="lib/history:no_file">Revision file not available.</epp:phrase>
     <epp:phrase id="lib/history:record">
-<div style="padding: 0.3em; margin-top: 2em; border: solid 1px black; background-color: #ccc;"><epc:pin name="item"/></div>
-<div style="padding: 0.3em; background-color: black; color: white; font-weight: bold;"><epc:pin name="action"/> by <epc:pin name="cause"/> at <epc:pin name="when"/></div>
-<div style="padding: 0.3em; margin-bottom: 2em; border: solid 1px black;"><epc:pin name="details"/></div>
+<div class="ep_history_item"><epc:pin name="item"/></div>
+<div class="ep_history_action"><epc:pin name="action"/> by <epc:pin name="cause"/> at <epc:pin name="when"/></div>
+<div class="ep_history_details"><epc:pin name="details"/></div>
     </epp:phrase>
-    <epp:phrase id="lib/history:xmlblock"><pre style="margin: 0 0 0 0; padding: 3px 3px 3px 3px; border-left: 1px dashed black; border-bottom: 1px dashed black; font-size: 100%;"><epc:pin name="xml"/></pre></epp:phrase>
+    <epp:phrase id="lib/history:xmlblock"><pre class="ep_history_xmlblock"><epc:pin name="xml"/></pre></epp:phrase>
     <epp:phrase id="lib/history:no_such_item"><epc:pin name="datasetid"/> <epc:pin name="objectid"/> does not exist. It may have been erased.</epp:phrase>
 
     <epp:phrase id="history_fieldname_action">Action</epp:phrase>
@@ -1364,7 +1366,7 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
     <epp:phrase id="history_fieldname_userid">User ID Number</epp:phrase>
     <epp:phrase id="history_fieldname_details">Details</epp:phrase>
     <epp:phrase id="history_fieldname_revision">Revision</epp:phrase>
-    <epp:phrase id="history_search_premble">Search the logs of changes made to records.</epp:phrase>
+    <epp:phrase id="history_search_preamble">Search the logs of changes made to records.</epp:phrase>
     <epp:phrase id="history_search_title">History Search</epp:phrase>
 
     <epp:phrase id="ordername_history_timestamp">Time (oldest first)</epp:phrase>
@@ -1514,12 +1516,12 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
     <epp:phrase id="lib/searchexpression:noresults">Search has no matches.</epp:phrase>
     <epp:phrase id="lib/searchexpression:export_section">
 <div>
-  <div class="ep_export_bar">
+  <div class="ep_export_bar" role="toolbar">
     <div><label for="search-export-output">Export <epc:pin name="count" /> results as</label> <epc:pin name="menu"/><epc:pin name="button"/></div>
     <div><epc:pin name="feeds"/></div>
   </div>
   <div>
-    <div>
+    <div role="toolbar">
       <epc:pin name="tools"/>
     </div>
   </div>
@@ -1527,6 +1529,7 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
 
 </epp:phrase>
     <epp:phrase id="lib/searchexpression:export_button">Export</epp:phrase>
+    <epp:phrase id="lib/searchexpression:export_label">Export Format</epp:phrase>
     <epp:phrase id="lib/searchexpression:reorder_button">Reorder</epp:phrase>
     <epp:phrase id="lib/searchexpression:search"><epc:phrase ref="lib/searchexpression:action_search" /> <epc:phrase ref="archive_name" /></epp:phrase>
     <epp:phrase id="lib/searchexpression:first">First</epp:phrase>
@@ -1657,7 +1660,8 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
     
     
     <epp:phrase id="lib/paginate:no_items">No items</epp:phrase>
-    <epp:phrase id="lib/paginate:add_column">Add Column</epp:phrase>
+    <epp:phrase id="lib/paginate:add_column">Add</epp:phrase>
+    <epp:phrase id="lib/paginate:add_column_label">Add Column</epp:phrase>
     <epp:phrase id="lib/paginate:move_left">Move Left</epp:phrase>
     <epp:phrase id="lib/paginate:move_right">Move Right</epp:phrase>
     <epp:phrase id="lib/paginate:remove_column">Remove Column</epp:phrase>
@@ -1885,11 +1889,13 @@ User Area CGI Scripts
     <epp:phrase id="cgi/users/status:diskspace"><h2>Disk Space</h2></epp:phrase>
     <epp:phrase id="cgi/users/status:saved_searches"><h2>Saved Searches and Alerts</h2></epp:phrase>
     <epp:phrase id="cgi/users/status:cache_tables"><h2>Cache Tables</h2></epp:phrase>
+    <epp:phrase id="cgi/users/status:cachename">Table name</epp:phrase>
     <epp:phrase id="cgi/users/status:cachedate">Created at</epp:phrase>
     <epp:phrase id="cgi/users/status:cachesize">Size</epp:phrase>
     <epp:phrase id="cgi/users/status:database_tables"><h2>Database Tables</h2></epp:phrase>
-    <epp:phrase id="cgi/users/status:dataset_tables"><h4>Dataset Tables</h4></epp:phrase>
-    <epp:phrase id="cgi/users/status:misc_tables"><h4>Misc. Tables</h4></epp:phrase>
+    <epp:phrase id="cgi/users/status:dataset_tables"><h3>Dataset Tables</h3></epp:phrase>
+    <epp:phrase id="cgi/users/status:misc_tables"><h3>Misc. Tables</h3></epp:phrase>
+    <epp:phrase id="cgi/users/status:frequency">Frequency</epp:phrase>
     <epp:phrase id="cgi/users/status:subsent">Last completed alert mailing</epp:phrase>
     <epp:phrase id="cgi/users/status:subcount">Total Number</epp:phrase>
     <epp:phrase id="cgi/users/status:set_archive">Repository</epp:phrase>
@@ -2402,6 +2408,7 @@ General phrases, used alot
     <epp:phrase id="general:disabled_feature_title">Disabled Feature</epp:phrase> 
     <epp:phrase id="general:disabled_feature_body"><p>This feature has been disabled for this repository.</p></epp:phrase> 
     <epp:phrase id="general:email_failed"><p>The system is currently unable to send email. Please try again later. If this problem persists, please contact the <a href="mailto:{$config{adminemail}}">administrator</a> with details.</p></epp:phrase>
+    <epp:phrase id="general:actions_column_name">Actions</epp:phrase>
 
 <!--********************************************************************** 
 Titles and Help for the System Fields
@@ -2530,6 +2537,8 @@ Titles and Help for the System Fields
     <epp:phrase id="user_fieldname_mailempty">Mail Empty Results</epp:phrase>
     <epp:phrase id="user_fieldhelp_mailempty">If there are no items under review, within your scope, should the repository still send you an empty email?</epp:phrase>
     <epp:phrase id="user_radio_mailempty"><label><epc:pin name="true"/>Yes, mail me when there is nothing under review.</label><br/><label><epc:pin name="false"/>No. Only mail me when there is something under review and within my scope.</label></epp:phrase>
+    <epp:phrase id="user_radio_mailempty_true">Yes, mail me when there is nothing under review.</epp:phrase>
+    <epp:phrase id="user_radio_mailempty_false">>No. Only mail me when there is something under review and within my scope.</epp:phrase>
     <epp:phrase id="user_fieldname_latitude">Latitude</epp:phrase>
     <epp:phrase id="user_fieldname_longitude">Longitude</epp:phrase>
     <epp:phrase id="user_fieldhelp_latitude">The Latitude associated with this user. Southern latitudes should be expressed as a negative.</epp:phrase>
@@ -2601,6 +2610,8 @@ Titles and Help for the System Fields
     <epp:phrase id="subject_fieldname_depositable">Depositable</epp:phrase>
     <epp:phrase id="subject_fieldhelp_depositable">Can users add items to this subject?</epp:phrase>
     <epp:phrase id="subject_radio_depositable"><label><epc:pin name="true"/>Yes, users can add items to this subject.</label><br/><label><epc:pin name="false"/>No. (In which case it should probably have some children.</label></epp:phrase>
+    <epp:phrase id="subject_radio_depositable_true">Yes, users can add items to this subject.</epp:phrase>
+    <epp:phrase id="subject_radio_depositable_false">No. (In which case it should probably have some children.</epp:phrase>
     <epp:phrase id="subject_fieldname_subjectid">Subject ID String</epp:phrase>
     <epp:phrase id="subject_fieldhelp_subjectid">This is the internal key for this subject. It is used in the database and to generate the "views" filenames. It should contain only a-z, 0-9 and dash "/"and underscore "_".</epp:phrase>
     <epp:phrase id="subject_fieldname_sortvalue">Sort Value</epp:phrase>
@@ -2645,7 +2656,7 @@ Titles and Help for the System Fields
     <epp:phrase id="Plugin/Screen:no_render_subclass">Error. $screen->render should be sub-classed for <epc:pin name="screen"/>.</epp:phrase>
     <epp:phrase id="Plugin/Screen:item_locked">This item is temporarily locked. Please go back and try again in a few minutes.</epp:phrase>
     <epp:phrase id="Plugin/Screen:csrf_detected">Cross-Site Request Forgery (CSRF) was detected whilst processing your last request and therefore its action was not authorised.</epp:phrase>
- 
+
     <epp:phrase id="Plugin/Screen/Items:title">Manage deposits</epp:phrase>
     <epp:phrase id="Plugin/Screen/Items:remove_column_confirm">Really remove this column from the display?</epp:phrase>
     <epp:phrase id="Plugin/Screen/Items:help_title">Help</epp:phrase>
@@ -2655,44 +2666,44 @@ Titles and Help for the System Fields
 <p>If you stop before completing the deposit, or a deposit is returned for corrections, it will appear in the list as in the "User Workarea".</p>
 
 <p style='margin-bottom: 1px;'>Click on an icon to the right of an item to:</p>
-<table class='ep_icontable'>
-  <tr><th><img src="{$config{rel_path}}/style/images/action_view.png" border="0" align='absmiddle' alt=""/></th><td>View Item in Detail, including additional actions</td></tr>
-  <tr><th><img src="{$config{rel_path}}/style/images/action_edit.png" border="0" align='absmiddle' alt=""/></th><td>Edit Item</td></tr>
-  <tr><th><img src="{$config{rel_path}}/style/images/action_reject.png" border="0" align='absmiddle' alt=""/></th><td>Destroy Item</td></tr>
-  <tr><th><img src="{$config{rel_path}}/style/images/action_approve.png" border="0" align='absmiddle' alt=""/></th><td>Deposit Item</td></tr>
-</table>
+<div class='ep_icontable'>
+  <div><div><img src="{$config{rel_path}}/style/images/action_view.png" alt=""/></div><div>View Item in Detail, including additional actions</div></div>
+  <div><div><img src="{$config{rel_path}}/style/images/action_edit.png" alt=""/></div><div>Edit Item</div></div>
+  <div><div><img src="{$config{rel_path}}/style/images/action_reject.png" alt=""/></div><div>Destroy Item</div></div>
+  <div><div><img src="{$config{rel_path}}/style/images/action_approve.png" alt=""/></div><div>Deposit Item</div></div>
+</div>
 <p>To reorder the list of items, click on the title of the column to sort by. Clicking a second time will reverse the order.</p>
 <p>You may modify the columns displayed. Add a new column using the menu at the bottom of the page.</p>
 
-<table class='ep_icontable'>
-<tr><th style='padding: 4px;'><img title="Move Left" src="{$config{rel_path}}/style/images/left.png" alt="&lt;" align="absmiddle" /></th><td>Move column left</td></tr>
-<tr><th style='padding: 4px;'><img title="Remove Column" src="{$config{rel_path}}/style/images/delete.png" alt="X" align='absmiddle' /></th><td>Remove column</td></tr>
-<tr><th style='padding: 4px;'><img title="Move Right" src="{$config{rel_path}}/style/images/right.png" alt="&lt;" align="absmiddle" /></th><td>Move column right</td></tr>
-</table>
+<div class='ep_icontable'>
+<div><div style='padding: 4px;'><img title="Move Left" src="{$config{rel_path}}/style/images/left.png" alt="&lt;" /></div><div>Move column left</div></div>
+<div><div style='padding: 4px;'><img title="Remove Column" src="{$config{rel_path}}/style/images/delete.png" alt="X" /></div><div>Remove column</div></div>
+<div><div style='padding: 4px;'><img title="Move Right" src="{$config{rel_path}}/style/images/right.png" alt="&gt;" /></div><div>Move column right</div></div>
+</div>
 </epp:phrase>
-    <epp:phrase id="Plugin/Screen/Items:add">Add Column</epp:phrase>
-
+    <epp:phrase id="Plugin/Screen/Items:add">Add</epp:phrase>
+    <epp:phrase id="Plugin/Screen/Items:add_label">Add Column</epp:phrase>
     <epp:phrase id="Plugin/Screen/Review:title">Review</epp:phrase>
     <epp:phrase id="Plugin/Screen/Review:list_desc">Items under review</epp:phrase>
     <epp:phrase id="Plugin/Screen/Review:help_title">Help</epp:phrase>
     <epp:phrase id="Plugin/Screen/Review:help">
 <p>This page shows items awaiting review.</p>
 <p style='margin-bottom: 1px;'>Click on an icon to the right of an item to:</p>
-<table class='ep_icontable'>
-  <tr><th><img src="{$config{rel_path}}/style/images/action_view.png" border="0" align='absmiddle' alt=""/></th><td>View Item in Detail, including additional actions</td></tr>
-  <tr><th><img src="{$config{rel_path}}/style/images/action_edit.png" border="0" align='absmiddle' alt=""/></th><td>Edit Item</td></tr>
-  <tr><th><img src="{$config{rel_path}}/style/images/action_bounce.png" border="0" align='absmiddle' alt=""/></th><td>Return Item to Depositor (and notify depositing user)</td></tr>
-  <tr><th><img src="{$config{rel_path}}/style/images/action_reject.png" border="0" align='absmiddle' alt=""/></th><td>Destroy Item (with notification to depositing user)</td></tr>
-  <tr><th><img src="{$config{rel_path}}/style/images/action_approve.png" border="0" align='absmiddle' alt=""/></th><td>Move Item to Repository</td></tr>
-</table>
+<div class='ep_icontable'>
+  <div><div><img src="{$config{rel_path}}/style/images/action_view.png" alt=""/></div><div>View Item in Detail, including additional actions</div></div>
+  <div><div><img src="{$config{rel_path}}/style/images/action_edit.png" alt=""/></div><div>Edit Item</div></div>
+  <div><div><img src="{$config{rel_path}}/style/images/action_bounce.png" alt=""/></div><div>Return Item to Depositor (and notify depositing user)</div></div>
+  <div><div><img src="{$config{rel_path}}/style/images/action_reject.png" alt=""/></div><div>Destroy Item (with notification to depositing user)</div></div>
+  <div><div><img src="{$config{rel_path}}/style/images/action_approve.png" alt=""/></div><div>Move Item to Repository</div></div>
+</div>
 <p>To reorder the list of items, click on the title of the column to sort by. Clicking a second time will reverse the order.</p>
 <p>You may modify the columns displayed. Add a new column using the menu at the bottom of the page.</p>
 
-<table class='ep_icontable'>
-<tr><th style='padding: 4px;'><img title="Move Left" src="{$config{rel_path}}/style/images/left.png" alt="&lt;" align="absmiddle" /></th><td>Move column left</td></tr>
-<tr><th style='padding: 4px;'><img title="Remove Column" src="{$config{rel_path}}/style/images/delete.png" alt="X" align='absmiddle' /></th><td>Remove column</td></tr>
-<tr><th style='padding: 4px;'><img title="Move Right" src="{$config{rel_path}}/style/images/right.png" alt="&lt;" align="absmiddle" /></th><td>Move column right</td></tr>
-</table>
+<div class='ep_icontable'>
+<div><div style='padding: 4px;'><img title="Move Left" src="{$config{rel_path}}/style/images/left.png" alt="&lt;" /></div><div>Move column left</div></div>
+<div><div style='padding: 4px;'><img title="Remove Column" src="{$config{rel_path}}/style/images/delete.png" alt="X" /></div><div>Remove column</div></div>
+<div><div style='padding: 4px;'><img title="Move Right" src="{$config{rel_path}}/style/images/right.png" alt="&gt;" /></div><div>Move column right</div></div>
+</div>
 </epp:phrase>
     <epp:phrase id="Plugin/Screen/Review:remove_column_confirm">Really remove this column from the display?</epp:phrase>
     <epp:phrase id="Plugin/Screen/Review:ep_review_filters_title">Filters</epp:phrase>
@@ -2776,15 +2787,16 @@ Titles and Help for the System Fields
     <epp:phrase id="Plugin/Screen/Import:warning">Unhandled warning in <epc:pin name="plugin" />: <epc:pin name="warning" /></epp:phrase>
     <epp:phrase id="Plugin/Screen/Import:intro">To import items from an external source enter the required data below. To test whether the data to import is correctly formatted click <em><epc:phrase ref="Plugin/Screen/Import:action:test:title"/></em>, otherwise click <em><epc:phrase ref="Plugin/Screen/Import:action:import:title"/></em> to import.</epp:phrase>
     <epp:phrase id="Plugin/Screen/Import:import_section">
-<table width="100%"><tr>
-  <td align="center">Import from <epc:pin name="menu"/><epc:pin name="button"/></td>
-</tr>
-<tr>
-  <td align="center">
+<div class="ep_import_bar">
+<div>
+  <div><label>Import from <epc:pin name="menu"/></label><epc:pin name="button"/></div>
+</div>
+<div>
+  <div>
     <epc:pin name="tools"/>
-  </td>
-</tr>
-</table></epp:phrase>
+  </div>
+</div>
+</div></epp:phrase>
 
     <epp:phrase id="Plugin/Import/ExplodeArchive:input:form">Select an archive from your system: <epc:pin name="input_file_upload"/> e.g. my_photos.zip<br />
 Each file inside this archive will be created as an <b>individual</b> document inside the resulting eprint.</epp:phrase>
@@ -2878,6 +2890,7 @@ PY = 2006 and OG = (Cambridge)<br />
     
     <epp:phrase id="Plugin/Screen/EPrint/RemoveWithEmail:title">Remove item (with notification)</epp:phrase>
     <epp:phrase id="Plugin/Screen/EPrint/RemoveWithEmail:description">Remove this item from the system forever, but send an email to the user who deposited it to inform them why.</epp:phrase>
+    <epp:phrase id="Plugin/Screen/EPrint/RemoveWithEmail:reason_label">Reason</epp:phrase>
     <epp:phrase id="Plugin/Screen/EPrint/RemoveWithEmail:item_removed">Item has been removed.</epp:phrase>
     <epp:phrase id="Plugin/Screen/EPrint/Document/Remove:item_removed" ref="Plugin/Screen/EPrint/RemoveWithEmail:item_removed"/>
     <epp:phrase id="Plugin/Screen/EPrint/RemoveWithEmail:item_not_removed">Item could not be removed.</epp:phrase>
@@ -2981,6 +2994,7 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="Plugin/Screen/EPrint/RequestRemoval:title">Request deletion</epp:phrase>
     <epp:phrase id="Plugin/Screen/EPrint/RequestRemoval:description">Request that this item is removed from the repository.</epp:phrase>
     <epp:phrase id="Plugin/Screen/EPrint/RequestRemoval:subject">Item removal request</epp:phrase>
+    <epp:phrase id="Plugin/Screen/EPrint/RequestRemomval:reason_label">Reason</epp:phrase>
     <epp:phrase id="Plugin/Screen/EPrint/RequestRemoval:action:send:title">Send</epp:phrase>
     <epp:phrase id="Plugin/Screen/EPrint/RequestRemoval:action:cancel:title">Cancel</epp:phrase>
     <epp:phrase id="Plugin/Screen/EPrint/RequestRemoval:intro">
@@ -2988,7 +3002,7 @@ PY = 2006 and OG = (Cambridge)<br />
     </epp:phrase>
 
     <epp:phrase id="Plugin/Screen/EPrint/Issues:title">Issues</epp:phrase>
-    <epp:phrase id="Plugin/Screen/EPrint/Issues:live_audit_intro"><h3>Current Issues</h3><p>The current issues section may not contain all issues discovered in the periodic audit, such as items with similar titles.</p></epp:phrase>
+    <epp:phrase id="Plugin/Screen/EPrint/Issues:live_audit_intro"><h2>Current Issues</h2><p>The current issues section may not contain all issues discovered in the periodic audit, such as items with similar titles.</p></epp:phrase>
     <epp:phrase id="Plugin/Screen/EPrint/Issues:no_live_issues">No issues found.</epp:phrase>
     <epp:phrase id="Plugin/Screen/EPrint/Issues:issues"><h3>Issues recorded</h3></epp:phrase>
 
@@ -3039,7 +3053,8 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="Plugin/Screen/Subject/Edit:action_delete">Delete</epp:phrase>
     <epp:phrase id="Plugin/Screen/Subject/Edit:action_unlink">Unlink</epp:phrase>
     <epp:phrase id="Plugin/Screen/Subject/Edit:children">Children</epp:phrase>
-    <epp:phrase id="Plugin/Screen/Subject/Edit:existing">Link Existing Subject</epp:phrase>
+    <epp:phrase id="Plugin/Screen/Subject/Edit:actions">Actions</epp:phrase>
+    <epp:phrase id="Plugin/Screen/Subject/Edit:existing"><span id="existing_childid_label">Link Existing Subject</span></epp:phrase>
     <epp:phrase id="Plugin/Screen/Subject/Edit:exists">A subject with that id already exists.</epp:phrase>
     <epp:phrase id="subject_fieldname_name_name">Name</epp:phrase>
     <epp:phrase id="subject_fieldname_name_sortvalue">Sort name</epp:phrase>
@@ -3089,8 +3104,8 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="Plugin/InputForm/Component/Upload:new_from_compressed">New document(s) (from Archive): </epp:phrase>
     <epp:phrase id="Plugin/InputForm/Component/Upload:new_from_targz">New document (from .tar.gz file): </epp:phrase>
     <epp:phrase id="Plugin/InputForm/Component/Upload:new_from_url">Capture from URL: </epp:phrase>
-
     <epp:phrase id="Plugin/InputForm/Component/Upload:drag_and_drop">Drop files here to begin uploading.</epp:phrase>
+    <epp:phrase id="Plugin/InputForm/Component/Upload:file_label">Select file to upload</epp:phrase>
 
     <epp:phrase id="Plugin/InputForm/UploadMethod/xcompressed:extract_type">Extraction Result: </epp:phrase>
     <epp:phrase id="Plugin/InputForm/UploadMethod/xcompressed:single">Single Document (e.g. a web page)</epp:phrase>
@@ -3142,7 +3157,8 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="Plugin/InputForm/Component/Field/Subject:selections">Current selections:</epp:phrase>
     
     <epp:phrase id="Plugin/InputForm/Component/Field/Subject:search_no_matches"><p>No matches</p></epp:phrase>
-    <epp:phrase id="Plugin/InputForm/Component/Field/Subject:subjects_search_bar"><div class="ep_subjectinput_searchbar">Search for subject: <epc:pin name="input"/> <epc:pin name="search_button"/> <epc:pin name="clear_button"/></div></epp:phrase>
+    <epp:phrase id="Plugin/InputForm/Component/Field/Subject:subjects_search_bar"><div class="ep_subjectinput_searchbar"><epc:pin name="label"/>: <epc:pin name="input"/> <epc:pin name="search_button"/> <epc:pin name="clear_button"/></div></epp:phrase>
+    <epp:phrase id="Plugin/InputForm/Component/Field/Subject:subjects_search_label_text">Search for subject</epp:phrase>
     <epp:phrase id="Plugin/InputForm/Component/Field/Subject:search_search_button">Search</epp:phrase>
     <epp:phrase id="Plugin/InputForm/Component/Field/Subject:search_clear_button">Clear</epp:phrase>
     <epp:phrase id="Plugin/InputForm/Component/Field/Subject:add">Add</epp:phrase>
@@ -3429,9 +3445,13 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="saved_search_fieldname_mailempty">Mail empty results</epp:phrase>
     <epp:phrase id="saved_search_fieldhelp_mailempty">If there are no new items matching your saved search, since it was last mailed, do you still want to be mailed?</epp:phrase>
     <epp:phrase id="saved_search_radio_mailempty"><label><epc:pin name="true"/>Yes, mail me empty alerts.</label><br/><label><epc:pin name="false"/>No. Only mail me alerts with content.</label></epp:phrase>
+    <epp:phrase id="saved_search_radio_mailempty_true">Yes, mail me empty alerts.</epp:phrase>
+    <epp:phrase id="saved_search_radio_mailempty_false">No. Only mail me alerts with content.</epp:phrase>
     <epp:phrase id="saved_search_fieldname_public">Make search public?</epp:phrase>
     <epp:phrase id="saved_search_fieldhelp_public">Do you want to be able to link directly to this search via a public URL?</epp:phrase>
     <epp:phrase id="saved_search_radio_public"><label><epc:pin name="true"/>Yes, make this search available to anyone.</label><br/><label><epc:pin name="false"/>No. Only I will have access to this search.</label></epp:phrase>
+    <epp:phrase id="saved_search_radio_public_true">Yes, make this search available to anyone.</epp:phrase>
+    <epp:phrase id="saved_search_radio_public_false">No. Only I will have access to this search.</epp:phrase>
 
 
 <!-- Web-viewable version of email -->
@@ -3439,11 +3459,11 @@ PY = 2006 and OG = (Cambridge)<br />
 <div class="ep_mail_view">
 
 <div class="ep_mail_header">
-<table>
-<tr><td>To:</td><td><epc:pin name="to" /></td></tr>
-<tr><td>From:</td><td><epc:pin name="from" /></td></tr>
-<tr><td>Subject:</td><td><epc:pin name="subject" /></td></tr>
-</table>
+<div class="ep_table">
+<div><div>To:</div><div><epc:pin name="to" /></div></div>
+<div><div>From:</div><div><epc:pin name="from" /></div></div>
+<div><div>Subject:</div><div><epc:pin name="subject" /></div></div>
+</div>
 </div>
 
 <div class="ep_mail_body">
@@ -3461,7 +3481,7 @@ PY = 2006 and OG = (Cambridge)<br />
 </epp:phrase>
 
 <epp:phrase id="mail_edit_click">
-[<epc:pin name="edit_link">click to edit</epc:pin>]
+[<epc:pin name="edit_link">Change <epc:pin name="change_field"/></epc:pin>]
 </epp:phrase>
 
 <!-- Wrapper for HTML email -->
@@ -3778,6 +3798,8 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="user_fieldname_hideemail">Hide Email</epp:phrase>
     <epp:phrase id="user_fieldhelp_hideemail">This option allows or prevents a users email being shown on their public summary page.</epp:phrase>
     <epp:phrase id="user_radio_hideemail"><label><epc:pin name="false"/> Make email visible to all.</label><br/><label><epc:pin name="true"/> Hide email to all except repository administrators.</label></epp:phrase>
+    <epp:phrase id="user_radio_hideemail_false">Make email visible to all.</epp:phrase>
+    <epp:phrase id="user_radio_hideemail_true">Hide email to all except repository administrators.</epp:phrase>
 
 
     <epp:phrase id="user_fieldname_dept">Department</epp:phrase>
@@ -3922,6 +3944,7 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="Plugin/Screen/Listing:page_title">Manage <epc:pin name="dataset" /></epp:phrase>
     <epp:phrase id="Plugin/Screen/Listing:remove_column_confirm" ref="Plugin/Screen/Review:remove_column_confirm" />
     <epp:phrase id="Plugin/Screen/Listing:add" ref="Plugin/Screen/Items:add" />
+    <epp:phrase id="Plugin/Screen/Listing:add_label" ref="Plugin/Screen/Items:add_label" />
     <epp:phrase id="Plugin/Screen/NewDataobj:action:create:title">Create an Item</epp:phrase>
     <epp:phrase id="Plugin/Screen/Workflow/Export:title" ref="Plugin/Screen/EPrint/Export:title" />
     <epp:phrase id="Plugin/Screen/Workflow/View:title">View</epp:phrase>
@@ -4013,8 +4036,9 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="Plugin/Import/PDF:action_bibliography" ref="Plugin/Import/OpenXML:action_bibliography"/>
     <epp:phrase id="Plugin/Import/PDF:action_metadata" ref="Plugin/Import/OpenXML:action_metadata"/>
     <epp:phrase id="Plugin/Import/OpenXML:zip_failed">Failed to process file - perhaps it isn't an OpenXML document?</epp:phrase>
-    <epp:phrase id="Plugin/Screen/Admin/Config:add_file">File</epp:phrase>
-    <epp:phrase id="Plugin/Screen/Admin/Config:add_directory">Directory</epp:phrase>
+    <epp:phrase id="Plugin/Screen/Admin/Config:filename_label">Filename</epp:phrase>
+    <epp:phrase id="Plugin/Screen/Admin/Config:add_file">Add File</epp:phrase>
+    <epp:phrase id="Plugin/Screen/Admin/Config:add_directory">Add Directory</epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/Config:bad_file">Missing or badly named file name (can only contain [A-Za-z0-9_.]).</epp:phrase>
     <epp:phrase id="Plugin/Screen/EPrint/Document/Files:help">Add or remove files, change the main file for this document or fix an incorrectly identified MIME-type.</epp:phrase>
     <epp:phrase id="Plugin/Screen/EPrint/Document/Files:update">Apply</epp:phrase>
@@ -4047,7 +4071,7 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="Plugin/Screen/Admin/EPM/Available:error:corrupted">Corrupted or unrecognised package format</epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/EPM/Available:installed">Installed <epc:pin name="epm" /></epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/EPM/Available:upload_form"><h2>Upload and Install</h2>
-<div class="ep_block">Select a file from your local system and click <epc:phrase ref="Plugin/Screen/Admin/EPM/Available:action_install" />.<br /><epc:pin name="form" /></div></epp:phrase>
+<div class="ep_block"><span id="epm_upload_label">Select a file from your local system and click <epc:phrase ref="Plugin/Screen/Admin/EPM/Available:action_install" />.</span><br /><epc:pin name="form" /></div></epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/EPM/Available:source_error">An error occurred while talking to the EPM source <em><epc:pin name="name" /> (<epc:pin name="base_url" />)</em>: <epc:pin name="error" /></epp:phrase>
 
     <epp:phrase id="Plugin/Screen/Admin/EPM/Developer:title">Developer Tools</epp:phrase>
@@ -4055,8 +4079,8 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="Plugin/Screen/Admin/EPM/Developer:action_download">Download</epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/EPM/Developer:action_create">Create</epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/EPM/Developer:action_publish">Publish</epp:phrase>
-    <epp:phrase id="Plugin/Screen/Admin/EPM/Developer:create_form"><h2>Create a new EPM</h2>
-To create a blank EPM entire a new id in the input and click <epc:phrase ref="Plugin/Screen/Admin/EPM/Developer:action_create" />. EPM ids may only contain the characters A-Za-z0-9_.<br /><epc:pin name="form" /></epp:phrase>
+    <epp:phrase id="Plugin/Screen/Admin/EPM/Developer:create_form"><h2 id="epmid_label">Create a new EPM</h2>
+<span id="epmid_help">To create a blank EPM entire a new id in the input and click <epc:phrase ref="Plugin/Screen/Admin/EPM/Developer:action_create" />. EPM ids may only contain the characters A-Za-z0-9_.</span><br /><epc:pin name="form" /></epp:phrase>
 
     <epp:phrase id="Plugin/Screen/Admin/EPM/Edit:title">Edit</epp:phrase>
 
@@ -4196,13 +4220,19 @@ EPrints Accessibility
  
 -->
     <epp:phrase id="accessibility_statement_prepared_date">2 December 2019</epp:phrase>
-    <epp:phrase id="accessibility_statement_last_updated_date">20 December 2019</epp:phrase>
+    <epp:phrase id="accessibility_statement_last_updated_date">7 August 2020</epp:phrase>
     <epp:phrase id="accessibility_roadmap_last_updated_date">20 December 2019</epp:phrase>
-    <epp:phrase id="accessibility_report_last_tested_date">4 June 2020</epp:phrase>
+    <epp:phrase id="accessibility_report_last_tested_date">13 August 2020</epp:phrase>
     <epp:phrase id="accessibility_report_summary">
-<p>Based on testing a default publication flavour installation of EPrints using standard test data, all tested public-facing pages currently report no errors, contrast errors or alerts except where this is essential for the functioning of EPrints as on Open Access repository (i.e. links to PDF documents) or due to duplications in the test data leading to alerts about shared alternative texts for nearby images.  It should be noted that although Chromium's WAVE extension does not report any contrast errors for public-facing pages Firefox's does but the former was used for testing.  Firefox's contrast errors are due to its default settings for the background colour of select boxes.</p>
-<p>Many non-public administration pages do have significant numbers of errors or alerts.  This will be addressed by the release of EPrints 3.4.3 if not EPrints 3.4.2.  Typically where very large number of errors or alerts exist on a page, the majority are the same issue generated by a programmatic layout of information, (e.g. if one search result has an issue, the remainder of search results on that page are likely to have the same issue). This means it is likely only a small number of changes should be necessary to eliminate a significant number of these issues.</p>
-<p>Miscellaneous pages like those for OAI metadata harvesting have been tested and found to have issues but are being considered low priority, as they are not generally intended for human use.</p>
+<p>Based on testing a default publication flavour installation of EPrints using standard test data, all tested public-facing and back-end administration pages currently report no errors or contrast errors.  There are a number of alerts that are considered acceptable and/or essential for the functioning of EPrintsas on Open Access repository as the fall into one of the following categories:</p>
+<ol>
+  <li>Links to PDF documents.</li>
+  <li>Duplications in the test or third-party data leading to alerts about shared alternative texts for nearby images.</li>
+  <li>Reports of suspicious link texts that is not suspicious within the context of where they appear.</li> 
+  <li>Apparent missing table captions due to a feature in EPrints to make clear a table has no items rather than leaving it blank that might lead to an assu,ption that something is broken.</li>
+</ol> 
+<p>It should be noted that although Chromium's WAVE extension does not report any contrast errors for public-facing pages Firefox's does but the former was used for testing.  Firefox's contrast errors are due to its default settings for the background colour of select boxes.</p>
+<p>Miscellaneous pages like those for OAI metadata harvesting have been tested and found to have issues with tables being reported as being used for layout when they are used as tables, and as these pages are not generally intended for human use, it is not intended to do anything further to address this.</p>
 </epp:phrase>
     
 </epp:phrases>

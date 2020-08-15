@@ -66,17 +66,16 @@ sub get_basic_input_elements
         my $frag = $session->make_doc_fragment;
         $frag->appendChild($textarea);
 
-        my $p = $session->make_element("p");
-        #$p->appendChild($session->make_text( "Counter: " ));
-        $p->appendChild($session->make_element("span",id=>$basename."_display_count"));
+        my $p = $session->make_element( "p", id=>$basename . "_counter_line" );
+        $p->appendChild($session->make_element( "span", id=>$basename."_display_count"));
         if (($self->{maxwords}) ne $defaults{maxwords})
         {
-                $p->appendChild($session->make_text( "/".$self->{maxwords}.$session->html_phrase( "lib/metafield:words" ) ));
+                $p->appendChild( $session->make_text( "/".$self->{maxwords} ) );
         }
-        $frag->appendChild($p);
+	$p->appendChild( $session->html_phrase( "lib/metafield:words" ) );
+        $frag->appendChild( $p );
 
 
-#$frag->appendChild( $session->make_javascript( undef,src => $session->get_url( path => "static", "javascript/00_jquery.js" ),) ); 
 $frag->appendChild( $session->make_javascript( <<EOJ ) );
 jQuery.noConflict();
 function getWordCount(words_string)
@@ -89,8 +88,9 @@ function getWordCount(words_string)
         }
 	return word_count;
 }
-jQuery.fn.wordCount = function()
+jQuery.fn.wordCount = function(max_words)
 {
+	var counterLine = "counter_line";
         var counterElement = "display_count";
         var cid = jQuery(this).attr('id');
         var total_words;
@@ -100,12 +100,21 @@ jQuery.fn.wordCount = function()
         {
 		total_words = getWordCount(this.value);
                 jQuery('#'+cid+"_"+counterElement).html(total_words);
+		console.log("total_words: "+total_words+" | max_words: "+max_words);
+		if (total_words > max_words )
+		{
+			jQuery('#'+cid+"_"+counterLine).attr('class', 'ep_over_word_limit');
+		}
+		else if (jQuery('#'+cid+"_"+counterLine).attr('class') == "ep_over_word_limit")
+		{
+			jQuery('#'+cid+"_"+counterLine).attr('class', '');
+		}
         });
 	total_words = getWordCount(jQuery(this).text());
         jQuery('#'+cid+"_"+counterElement).html(total_words);
 };
 jQuery( document ).ready(function() {
-	jQuery("#$basename").wordCount();
+	jQuery("#$basename").wordCount($self->{maxwords});
 });
 EOJ
 

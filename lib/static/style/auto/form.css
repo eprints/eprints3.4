@@ -184,3 +184,8 @@ td.ep_form_input_grid_wide {
 	float: left;
 	clear: both;
 }
+
+.ep_over_word_limit {
+	color: red;
+	font-weight: bold;
+}

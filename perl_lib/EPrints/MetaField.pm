@@ -2403,6 +2403,7 @@ sub get_property_defaults
 		render_dynamic 	=> EP_PROPERTY_FALSE,
 		render_custom   => EP_PROPERTY_UNDEF,
 		render_item	=> EP_PROPERTY_UNDEF,
+		render_path	=> EP_PROPERTY_TRUE,
 		required 	=> EP_PROPERTY_FALSE,
 		requiredlangs 	=> [],
 		search_cols 	=> EP_PROPERTY_FROM_CONFIG,

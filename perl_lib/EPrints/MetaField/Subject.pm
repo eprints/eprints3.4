@@ -231,13 +231,26 @@ sub render_value
             }
             $html->appendChild( $session->html_phrase( $phraseid ) );
         }
-        $html->appendChild(
-            $self->render_value_sepa_link(
-                $session,
-                $value[$i],
-                $alllangs,
-                $nolink,
-                $object ) );
+	if ( $self->{render_path} )
+	{
+	        $html->appendChild(
+        	    $self->render_value_sepa_link(
+                	$session,
+	                $value[$i],
+        	        $alllangs,
+                	$nolink,
+	                $object ) );
+	}
+	else
+	{
+		$html->appendChild(
+                    $self->render_value_no_multiple(
+                        $session,
+                        $value[$i],
+                        $alllangs,
+                        $nolink,
+                        $object ) );
+	}
     }
     return $html;
 }

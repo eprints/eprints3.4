@@ -177,8 +177,31 @@ sub new_from_data
 		}
 		foreach( keys %{$data} )
 		{
+			my $fieldname = $_;
+			if ( ref $data->{$fieldname} eq "ARRAY" )
+			{
+				my @datum = @{$data->{$fieldname}};
+				for ( my $i = 0; $i < scalar @datum; $i++ )
+				{
+					if ( ref $datum[$i] eq "HASH" ) 
+					{
+						foreach my $k ( keys %{$datum[$i]} )
+						{
+							delete $data->{$fieldname}[$i]{$k} if $data->{$fieldname}[$i]{$k} eq "";
+						}	
+					}
+				}
+			}
+			elsif ( ref $data->{$fieldname} eq "HASH" )
+			{
+				foreach my $k ( keys %{$data->{$fieldname}} )
+                                {
+                                        delete $data->{$fieldname}{$k} if $data->{$fieldname}{$k} eq "";
+                                }
+			}
+
 			# this will cause an error if the field is unknown
-			$self->set_value( $_, $data->{$_} );
+			$self->set_value( $fieldname, $data->{$fieldname} );
 		}
 	}
 

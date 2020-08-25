@@ -1648,7 +1648,7 @@ sub get_describedby
 {
 	my ( $self, $basename, $one_field_component ) = @_;
 
-	return "" if EPrints::XML::to_string( $self->repository->html_phrase( $self->{dataset}->confid . "_fieldhelp_" . $self->get_name ) ) eq "";
+	return "" if defined $self->{dataset} && EPrints::XML::to_string( $self->repository->html_phrase( $self->{dataset}->confid . "_fieldhelp_" . $self->get_name ) ) eq "";
 	return "" if defined $self->{parent} && EPrints::XML::to_string( $self->repository->html_phrase( $self->{dataset}->confid . "_fieldhelp_" . $self->{parent}->get_name ) ) eq "";
 
 	my $basename_top = $basename;

@@ -158,7 +158,8 @@ sub get_basic_input_elements
 	{
 		my $sfdiv = $session->make_element( 
 				"div" , 
-				class => "ep_search_field_name" );
+				class => "ep_search_field_name",
+				id => $basename."_".$sf->{id}."_label" );
 		$sfdiv->appendChild( $sf->render_name );
 		$div->appendChild( $sfdiv );
 		$div->appendChild( $sf->render() );

@@ -1425,6 +1425,52 @@ sub make_sitemap_url
 	return $url;
 }
 
+# EPrints::Utils::compare_version( $cmp, $versiom );
+#  Compare the current EPrints version against a specific version number.
+#  Comparator can be one of 6 values:
+#   '<' is current version less than version specified
+#   '<=' is current version less than or equal to version specified
+#   '=' is current version exactly equal to version specified
+#   '>' is current version greater than version specified
+#   '>=' is current version greater than or equal to version specified
+#   '~' is current version approximately equal to version specified (e.g. 3.4.2 is approximately equal to 3.4)
+
+sub compare_version
+{
+        my ( $cmp, $version ) = @_;
+	
+        $version =~ s/[^\d\.]//;
+        my @v_bits = split( /\./, $version );
+        my $vnum = 0;
+        for ( my $i = 0; $i < 3; $i++ )
+        {
+                $vnum *= 100;
+                $vnum += $v_bits[$i];
+        }
+	my @cv_bits = split( /\./, EPrints->human_version );
+        my $cvnum = 0;
+        for ( my $i = 0; $i < 3 ; $i++ )
+        {
+                $cvnum *= 100;
+                $cvnum += $cv_bits[$i];
+        }
+        return $cvnum < $vnum if $cmp eq '<';
+        return $cvnum <= $vnum if $cmp eq '<=';
+        return $cvnum == $vnum if $cmp eq '=';
+        return $cvnum >= $vnum if $cmp eq '>=';
+        return $cvnum > $vnum if $cmp eq '>';
+        if ( $cmp eq '~')
+        {
+                for ( my $i = 0; $i < scalar @cv_bits; $i++ )
+                {
+                        return 1 unless defined $v_bits[$i];
+                        return 0 if $cv_bits[$i] != $v_bits[$i];
+                }
+                return 1;
+        }
+        return 0;
+}
+
 1;
 
 =head1 COPYRIGHT

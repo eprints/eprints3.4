@@ -169,6 +169,32 @@ sub _epdata_to_json
 			next if !$field->get_property( "export_as_xml" );
 			next if defined $field->{sub_name};
 			my $value = $field->get_value( $epdata );
+
+			# filter out sub_values with export_as_xml=>0, such as creators_id
+			my $nmax = ( defined $field->{fields} ) ? length($field->{fields})-1 : 0;
+			for my $n ( 0 .. $nmax )
+			{
+				if( $field->{fields}[$n] )
+				{
+					my $export_as_xml = $field->{fields}[$n]{export_as_xml};
+					if( defined $export_as_xml && $export_as_xml eq 0 )
+					{
+                                                my $sub_name = $field->{fields}[$n]{sub_name}; # probably ID
+						if ( ref( $value ) eq "ARRAY" )
+						{
+							for my $v ( 0 .. length( $value )-1 )
+							{
+								delete $value->[$v]->{$sub_name} if defined $value->[$v];
+							}
+						}
+						else
+						{
+							delete $value->{$sub_name};
+						}
+					}
+				}
+			}
+
 			next if !EPrints::Utils::is_set( $value );
 			$subdata->{$field->get_name} = $value;
 		}

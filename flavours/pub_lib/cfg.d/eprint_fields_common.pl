@@ -5,7 +5,8 @@ push @{$c->{fields}->{eprint}},
 	name => "contact_email", 
 	type => "email", 
 	required => 0, 
-	can_clone => 0 
+	can_clone => 0, 
+	export_as_xml => 0,
 },
 
 ;

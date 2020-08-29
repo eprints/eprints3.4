@@ -498,6 +498,14 @@ sub render_import_form
 
 	my $div = $xml->create_element( "div", class => "ep_block ep_sr_component" );
 
+	my $title = $xml->create_element( "h2", id => "data_label" );
+	$title->appendChild( $self->html_phrase( "data" ) );
+	$div->appendChild( $title );
+
+	my $help = $xml->create_element( "p", id => "data_help" );
+        $help->appendChild( $self->html_phrase( "data_help" ) );
+	$div->appendChild( $help );
+
 	my $form = $div->appendChild( $self->{processor}->screen->render_form );
 	$form->appendChild(EPrints::MetaField->new(
 			name => "data",
@@ -527,11 +535,25 @@ sub render_upload_form
 
 	my $div = $xml->create_element( "div", class => "ep_block" );
 
+	my $title = $xml->create_element( "h2", id => "upload_label" );
+        $title->appendChild( $self->html_phrase( "upload" ) );
+        $div->appendChild( $title );
+
+        my $help = $xml->create_element( "p", id => "upload_help" );
+        $help->appendChild( $self->html_phrase( "upload_help" ) );
+        $div->appendChild( $help );
+
+
 	my $form = $div->appendChild( $self->{processor}->screen->render_form );
 	$form->appendChild( $xhtml->input_field(
 		file => undef,
-		type => "file"
+		type => "file",
+		'aria-labelledby' => "upload_label",
+		'aria-describedby' => "upload_help",
 		) );
+	my $encoding_label = $xml->create_element( "span", id => "encoding_label" );
+	$encoding_label->appendChild( $self->html_phrase( "encoding_label" ) );
+	$form->appendChild( $encoding_label );
 	$form->appendChild( $repo->render_option_list(
 		name => "encoding",
 		default => ($repo->param( "encoding" ) || $self->param( "default_encoding" )),
@@ -539,7 +561,11 @@ sub render_upload_form
 		labels => {
 			map { $_ => $_ } @{$self->param( "encodings" )},
 		},
+		'aria-labelledby' => "encoding_label",
+		'areia-describedby' => "upload_help",
 	) );
+	$form->appendChild( $xml->create_element( "br" ) );
+	$form->appendChild( $xml->create_element( "br" ) );
 	$form->appendChild( $self->render_actions );
 	$form->appendChild( $repo->render_action_buttons(
 		test_upload => $repo->phrase( "Plugin/Screen/Import:action_test_upload" ),

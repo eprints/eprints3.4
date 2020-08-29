@@ -230,6 +230,11 @@
     <td>None</td>
   </tr>
   <tr>
+    <td><a href="{$config{http_path}}/cgi/users/home?format=XML&amp;_action_import_from=Import&amp;screen=Import"><epc:print expr="$config{rel_path}"/>/cgi/users/home?format=XML&amp;_action_import_from=Import&amp;screen=Import</a></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;11&#160;|&#160;ARIA:&#160;26</div></td>
+    <td>None. (Only one EPrint import form is tested as forms for different formats are almost identical).</td>
+  </tr>
+  <tr>
     <td><a href="{$config{http_path}}/cgi/users/home?screen=DataSets"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=DataSets</a></td>
     <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;5&#160;|&#160;Structural&#160;Elements:&#160;16&#160;|&#160;ARIA:&#160;13</div></td>
     <td>None</td>

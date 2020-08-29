@@ -5542,6 +5542,22 @@ sub valid_login
 	my( $self, $username, $password ) = @_;
 
 	my $real_username;
+	
+	my $user = user_by_username( $self, $username );
+	return unless defined $user;
+	my $loginattempts = $user->get_value( "loginattempts" ) || 0;
+	my $unlocktime = $user->get_value( "unlocktime" ) || 0;
+	my $max_login_attempts = $self->get_conf( "max_login_attempts" );
+	if ( $unlocktime && ( $unlocktime <= time() || $loginattempts < $max_login_attempts ) )
+	{	
+		$loginattempts = 0 if $unlocktime <= time();
+		$unlocktime = undef;
+		$user->set_value( "unlocktime", undef );
+	}
+	return if $unlocktime > time();
+	$loginattempts++;
+	$user->set_value( "loginattempts", $loginattempts );
+	
 	if( $self->can_call( "check_user_password" ) )
 	{
 		$real_username = $self->call( "check_user_password",
@@ -5566,6 +5582,19 @@ sub valid_login
 	{
 		$real_username = $self->get_database->valid_login( $username, $password );
 	}
+
+	if ( EPrints::Utils::is_set( $real_username ) )
+	{
+		$user->set_value( "loginattempts", 0 );
+                $user->set_value( "unlocktime", undef );
+	}
+	elsif ( $loginattempts >= $max_login_attempts )
+	{
+		my $unlocktime = time() + $self->get_conf( "lockout_minutes" ) * 60;
+		$user->set_value( "unlocktime", $unlocktime );
+	}
+
+	$user->commit;
 
 	return $real_username;
 }

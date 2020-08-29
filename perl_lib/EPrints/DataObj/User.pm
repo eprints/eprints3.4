@@ -167,6 +167,10 @@ sub get_system_field_info
 
 		{ name=>"pinsettime", type=>"int", show_in_html=>0 },
 
+		{ name=>"loginattempts", type=>"int", "volatile" => 0, show_in_html=>0 },
+	
+		{ name=>"unlocktime", type=>"int", "volatile" => 0, show_in_html=>0 },
+
 		{ name=>"joined", type=>"timestamp", required=>1 },
 
 		{ name=>"email", type=>"email", required=>1 },

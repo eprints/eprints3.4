@@ -110,7 +110,16 @@ sub action_login
 
 	if( defined $username && !defined $real_username )
 	{
-		$processor->add_message( "error", $repo->html_phrase( "cgi/login:failed" ) );
+		my $user = $repo->user_by_username( $username );
+		if ( defined $user && $user->get_value( "unlocktime" ) )
+		{
+			my $unlocktime = $repo->make_text( EPrints::Time::rfc822_datetime( $user->get_value( "unlocktime" ) ) );
+			$processor->add_message( "error", $repo->html_phrase( "cgi/login:locked", unlocktime=>$unlocktime ) );
+		}
+		else
+		{
+			$processor->add_message( "error", $repo->html_phrase( "cgi/login:failed" ) );
+		}
 		return;
 	}
 

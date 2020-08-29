@@ -2079,6 +2079,7 @@ User Area CGI Scripts
     <epp:phrase id="cgi/login:bind">yes (more secure)</epp:phrase>
     <epp:phrase id="cgi/login:dont_bind">no (more convenient)</epp:phrase>
     <epp:phrase id="cgi/login:failed">Incorrect username or password.</epp:phrase>
+    <epp:phrase id="cgi/login:locked">Too many failed login attempts.  Account locked until <epc:pin name="unlocktime"/>.</epp:phrase>
     <epp:phrase id="cgi/login:logged_in_as"><p>You are already logged in as <epc:pin name="name"/>.</p> <p>If you wish to log in as a different user you must <a href="{$config{http_url}}/logout">Logout</a> first.</p></epp:phrase>
     <epp:phrase id="cgi/login:title">Login</epp:phrase>
     <epp:phrase id="cgi/login:message">Login successful.</epp:phrase>
@@ -2516,6 +2517,10 @@ Titles and Help for the System Fields
     <epp:phrase id="user_fieldhelp_pin">Personal Identification Number for resetting user account.</epp:phrase>
     <epp:phrase id="user_fieldname_pinsettime">PIN set time</epp:phrase>
     <epp:phrase id="user_fieldhelp_pinsettime">The time at which the PIN for this user was set.</epp:phrase> 
+    <epp:phrase id="user_fieldname_loginattempts">Login attempts</epp:phrase>
+    <epp:phrase id="user_fieldhelp_loginattempts">Attempts to login since last successful login.</epp:phrase>
+    <epp:phrase id="user_fieldname_unlocktime">Unlock time</epp:phrase>
+    <epp:phrase id="user_fieldhelp_unlocktime">Time account will unlocked after execessive login attempts.</epp:phrase>
 
     <epp:phrase id="user_fieldname_lang">Preferred Language</epp:phrase>
     <epp:phrase id="user_fieldhelp_lang">Your preferred language. Where possible information will be mailed in this language.</epp:phrase>

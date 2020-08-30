@@ -69,6 +69,14 @@ to the user to confirm they are who they say they are.
 
 When the pin code was set, so we can make it time out.
 
+=item loginattempts (int)
+
+Number of login attempts since last successful login.
+
+=item unlocktime (int)
+
+Time at which user account will be unlocked after too many failed login attempts.
+
 =item joined (time)
 
 The date and time that the user account was created. Before EPrints 2.4 this

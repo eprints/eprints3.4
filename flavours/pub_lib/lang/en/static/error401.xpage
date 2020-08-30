@@ -6,7 +6,7 @@
 
 <p>In order to access some areas of the repository you require a username and password.</p>
 
-<p><a href="{$config{perl_url}}/set_password">Register / Reset my password</a></p>
+<p><a href="{$config{perl_url}}/register">Register</a> / <a href="{$config{perl_url}}/reset_password">Reset my password</a></p>
 
 </xpage:body>
 </xpage:page>

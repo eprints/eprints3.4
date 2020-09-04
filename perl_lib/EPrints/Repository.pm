@@ -788,11 +788,15 @@ sub _add_http_paths
 		path => "cgi",
 	);
 
+	# Protocol-relative URLs;
+	( $config->{"pr_url"} = $config->{"http_url"} ) =~ s/^https?://;
+	( $config->{"pr_cgiurl"} = $config->{"http_cgiurl"} ) =~ s/^https?://;
+	
 	# old-style configuration names
 	$config->{"urlpath"} ||= $config->{"http_root"};
-	$config->{"base_url"} ||= $config->{"http_url"} . "/";
-	$config->{"perl_url"} ||= $config->{"http_cgiurl"};
-	$config->{"frontpage"} ||= $config->{"http_url"} . "/";
+	$config->{"base_url"} ||= $config->{"pr_url"} . "/";
+	$config->{"perl_url"} ||= $config->{"pr_cgiurl"};
+	$config->{"frontpage"} ||= $config->{"pr_url"} . "/";
 	$config->{"userhome"} ||= $config->{"http_cgiroot"} . "/users/home";
 }
  

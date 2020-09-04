@@ -56,7 +56,7 @@ sub output_list
 	}
 	else
 	{
-		$uri = URI->new_abs( $uri, $session->config( "http_url" ));
+		$uri = URI->new_abs( $uri, $session->config( "pr_url" ));
 		if( $opts{fh} )
 		{
 			print {$opts{fh}} "$uri\n";

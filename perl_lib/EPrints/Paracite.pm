@@ -49,9 +49,9 @@ sub render_reference
 	my $mode = 0;
 	my $html = $session->make_doc_fragment();
 	my $perlurl = $session->config( 
-		"http_cgiurl" );
+		"pr_cgiurl" );
 	my $baseurl = $session->config( 
-		"http_url" );
+		"pr_url" );
 
 	# Loop through all references
 	my @references = split "\n", $value;	

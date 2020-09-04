@@ -396,7 +396,7 @@ sub fileinfo
 {
 	my( $self ) = @_;
 
-	my $base_url = $self->{session}->config( 'rel_path' );
+	my $base_url = $self->{session}->config( 'pr_url' );
 
 	my @finfo = ();
 	foreach my $doc ( $self->get_all_documents )
@@ -414,7 +414,7 @@ sub render_fileinfo
 {
 	my( $session, $field, $value, $alllangs, $nolink, $eprint ) = @_;
 
-	my $baseurl = $session->config( 'rel_path' );
+	my $baseurl = $session->config( 'pr_url' );
 
 	my $f = $session->make_doc_fragment;
 
@@ -1381,7 +1381,7 @@ sub url_stem
 	my $repository = $self->{session}->get_repository;
 
 	my $url;
-	$url = $repository->get_conf( "http_url" );
+	$url = $repository->get_conf( "pr_url" );
 	$url .= '/';
 	$url .= 'id/eprint/' if $repository->get_conf( "use_long_url_format");
 	$url .= $self->get_value( "eprintid" )+0;

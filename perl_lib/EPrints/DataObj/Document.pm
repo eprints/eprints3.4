@@ -597,7 +597,7 @@ sub get_url
 	my $path = $self->file_path( $file );
 	return undef if !defined $path;
 
-	my $url = $self->{session}->config( "rel_path" ) . "/";
+	my $url = $self->{session}->config( "pr_url" ) . "/";
 
 	$url .= 'id/eprint/' if $self->{session}->get_conf( "use_long_url_format");
 
@@ -1706,7 +1706,7 @@ sub icon_url
 		}
 	}
 
-	return $session->config( "rel_path" )."/$rel_path/$icon";
+	return $session->config( "pr_url" )."/$rel_path/$icon";
 }
 
 =item $frag = $doc->render_icon_link( %opts )
@@ -2308,22 +2308,18 @@ sub permit
 			};
 			EPrints->abort( "can_user_view_document call caused an error" ) if $@;
 			return 1 if $r eq "ALLOW";
-			return 0 if $r eq "DENY";
-			EPrints->abort( "can_user_view_document returned '$r': expected ALLOW or DENY" );
+			EPrints->abort( "can_user_view_document returned '$r': expected ALLOW or DENY" ) if $r ne "DENY";
 		}
-		else
-		{
-			eval {
-				$r = $self->{session}->call( "can_request_view_document",
-						$self,
-						$self->{session}->{request}
-					);
-			};
-			EPrints->abort( 'can_request_view_document call caused an error. Hint: is security.pl still using $r->connection()->remote_ip();' ) if $@;
-			return 1 if $r eq "ALLOW";
-			return 0 if $r eq "DENY" || $r eq "USER";
-			EPrints->abort( "can_request_view_document returned '$r': expected ALLOW, DENY or USER" );
-		}
+		eval {
+			$r = $self->{session}->call( "can_request_view_document",
+					$self,
+					$self->{session}->{request}
+				);
+		};
+		EPrints->abort( 'can_request_view_document call caused an error. Hint: is security.pl still using $r->connection()->remote_ip();' ) if $@;
+		return 1 if $r eq "ALLOW";
+		return 0 if $r eq "DENY" || $r eq "USER";
+		EPrints->abort( "can_request_view_document returned '$r': expected ALLOW, DENY or USER" );
 	}
 
 	return $self->SUPER::permit( $priv, $user );

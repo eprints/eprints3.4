@@ -142,7 +142,7 @@ To change the blue heading box colour, set the RGB here
         <ul class="clearfix">
 <!-- breadcrumbs -->
           <li>
-              <a href="{$config{http_url}}">
+              <a href="{$config{rel_path}}">
                 <epc:phrase ref="template/navigation:home"/>
               </a>
           </li>
@@ -172,13 +172,13 @@ To change the blue heading box colour, set the RGB here
          
 
 
-            <h1><a href="{$config{http_url}}"><epc:phrase ref="archive_name"/></a></h1>
+            <h1><a href="{$config{rel_path}}"><epc:phrase ref="archive_name"/></a></h1>
         </div>
         <div class="aside">
           <div class="nav" id="sNav">
             <ul>
             <li>              
-              <a href="{$config{http_url}}/information.html">
+              <a href="{$config{rel_path}}/information.html">
                 <epc:phrase ref="template/navigation:about"/>
               </a>
             </li>
@@ -189,32 +189,32 @@ To change the blue heading box colour, set the RGB here
 <a href="{$config{perl_url}}/search/advanced">Search</a>
             </li>
             <li class="ep_drop_down">
-              <a href="{$config{http_url}}/view/" menu="ep_tm_menu_browse">
+              <a href="{$config{rel_path}}/view/" menu="ep_tm_menu_browse">
               <epc:phrase ref="template/navigation:browse"/>  
               </a>
               
 
             <ul>
                 <li>
-                  <a href="{$config{http_url}}/view/year/">
+                  <a href="{$config{rel_path}}/view/year/">
                     <epc:phrase ref="bin/generate_views:indextitleprefix"/>
                     <epc:phrase ref="viewname_eprint_year"/>
                   </a>
                 </li>
                 <li>
-                  <a href="{$config{http_url}}/view/subjects/">
+                  <a href="{$config{rel_path}}/view/subjects/">
                     <epc:phrase ref="bin/generate_views:indextitleprefix"/>
                     <epc:phrase ref="viewname_eprint_subjects"/>
                   </a>
                 </li>
                 <li>
-                  <a href="{$config{http_url}}/view/divisions/">
+                  <a href="{$config{rel_path}}/view/divisions/">
                     <epc:phrase ref="bin/generate_views:indextitleprefix"/>
                     <epc:phrase ref="viewname_eprint_divisions"/>
                   </a>
                 </li>
                 <li>
-                  <a href="{$config{http_url}}/view/creators/">
+                  <a href="{$config{rel_path}}/view/creators/">
                     <epc:phrase ref="bin/generate_views:indextitleprefix"/>
                     <epc:phrase ref="viewname_eprint_creators"/>
                   </a>

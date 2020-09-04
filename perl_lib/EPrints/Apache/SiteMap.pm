@@ -80,7 +80,7 @@ sub handler
 			# append the location of the semantic web sitemap
 			my $sw_loc = $sitemap->createElement("loc");
 			$sw_sitemap->appendChild($sw_loc);
-			$sw_loc->appendChild($sitemap->createTextNode($repository->config('http_url')."/sitemap-sc.xml"));
+			$sw_loc->appendChild($sitemap->createTextNode($repository->config('pr_url')."/sitemap-sc.xml"));
 		}
 	}
 
@@ -133,19 +133,19 @@ sub _insert_semantic_web_extensions
 	$urlset->appendChild( $sc_dataset );	
 	$sc_dataset->appendChild( _create_data( $xml,
 		"sc:linkedDataPrefix",
-		$repository->config( 'http_url' )."/id/",
+		$repository->config( 'pr_url' )."/id/",
 		slicing => "subject-object", ));
 	$sc_dataset->appendChild( _create_data( $xml,
 		"sc:datasetURI",
-		$repository->config( 'http_url' )."/id/repository" ));
+		$repository->config( 'pr_url' )."/id/repository" ));
 	
 	
 	$sc_dataset->appendChild( _create_data( $xml,
 		"sc:dataDumpLocation",
-		$repository->config( 'http_url' )."/id/repository" ));
+		$repository->config( 'pr_url' )."/id/repository" ));
 	$sc_dataset->appendChild( _create_data( $xml,
 		"sc:dataDumpLocation",
-		$repository->config( 'http_url' )."/id/dump" ));
+		$repository->config( 'pr_url' )."/id/dump" ));
 
 	my $root_subject = $repository->dataset("subject")->dataobj("ROOT");
 	foreach my $top_subject ( $root_subject->get_children )

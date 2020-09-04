@@ -81,8 +81,7 @@ for ( my $i = 1; $i <= $n; $i++ )
 {
 	my $sitemap = $xml->create_element( "sitemap" );
 	my $loc = $xml->create_element( "loc" );
-	my $url_path = $repo->config("http_url");
-	$url_path =~ s/http:/https:/ if EPrints::Utils::is_set( $repo->config("securehost") );
+	my $url_path = $repo->config("pr_url");
         $loc->appendChild( $xml->create_text_node( $url_path . "/sitemaps/$i.xml" ) );
 	$sitemap->appendChild( $loc );
 	$sitemapindex->appendChild( $sitemap );

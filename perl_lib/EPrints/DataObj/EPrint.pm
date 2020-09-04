@@ -1376,12 +1376,16 @@ trailing slash, unlike the local_path method.
 
 sub url_stem
 {
-	my( $self ) = @_;
+	my( $self, $proto ) = @_;
 
 	my $repository = $self->{session}->get_repository;
 
+	my $conf_name = "pr_url";
+ 	$conf_name = "http_url" if defined $proto && $proto eq "http";
+        $conf_name = "https_url" if defined $proto && $proto eq "https";	
+	
 	my $url;
-	$url = $repository->get_conf( "pr_url" );
+	$url = $repository->get_conf( $conf_name );
 	$url .= '/';
 	$url .= 'id/eprint/' if $repository->get_conf( "use_long_url_format");
 	$url .= $self->get_value( "eprintid" )+0;
@@ -1658,9 +1662,9 @@ Return the public URL of this eprints abstract page.
 
 sub get_url
 {
-	my( $self , $staff ) = @_;
+	my( $self , $proto ) = @_;
 
-	return( $self->url_stem );
+	return( $self->url_stem( $proto ) );
 }
 
 

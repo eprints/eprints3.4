@@ -12,9 +12,7 @@ $c->{can_request_view_document} = sub
 {
 	my( $doc, $r ) = @_;
 
-	#my $eprint = $doc->get_eprint();
 	my $security = $doc->value( "security" );
-
 	my $eprint = $doc->get_eprint();
 	my $status = $eprint->value( "eprint_status" );
 	if( $security eq "public" && $status eq "archive" )
@@ -39,10 +37,9 @@ $c->{can_request_view_document} = sub
         }
 
 
-#EPSERVICES-138: [2015-07-06/drn] If you use remote_ip() on 2.4+ it will cause an error which allows
-	# access to embargoed documents from any IP. This is intentionally commented out and 
-	# should only be use if you need to whitelist a set of IPs so they can access restricted 
-	# documents without a login.
+	# If you use remote_ip() on 2.4+ it will cause an error which allows access to embargoed 
+	# documents from any IP. This is intentionally commented out and should only be use if you 
+	# need to whitelist a set of IPs so they can access restricted documents without a login.
 	#my $version = Apache2::ServerUtil::get_server_version();
 	#$version =~ /^Apache\/([0-9]+\.[0-9]+)/;
 	#my $ip = $1 >= 2.4 ? $r->useragent_ip : $r->connection()->remote_ip();

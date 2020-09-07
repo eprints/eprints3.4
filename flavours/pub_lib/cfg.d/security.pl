@@ -12,9 +12,7 @@ $c->{can_request_view_document} = sub
 {
 	my( $doc, $r ) = @_;
 
-	#my $eprint = $doc->get_eprint();
 	my $security = $doc->value( "security" );
-
 	my $eprint = $doc->get_eprint();
 	my $status = $eprint->value( "eprint_status" );
 	if( $security eq "public" && $status eq "archive" )
@@ -37,12 +35,18 @@ $c->{can_request_view_document} = sub
                         }
                 }
         }
-	
+
+
+	# If you use remote_ip() on 2.4+ it will cause an error which allows access to embargoed 
+	# documents from any IP. This is intentionally commented out and should only be use if you 
+	# need to whitelist a set of IPs so they can access restricted documents without a login.
+	#my $version = Apache2::ServerUtil::get_server_version();
+	#$version =~ /^Apache\/([0-9]+\.[0-9]+)/;
+	#my $ip = $1 >= 2.4 ? $r->useragent_ip : $r->connection()->remote_ip();
+
 	# Example of how to allow an override for certain basic auth type usernames/passwords.
 	# This is useful if you want the site to be read by a crawler, for example.
 	# You may wish to wrap it all in a if( $ip eq "xxx" ) for added security.
-	#
-	# my $ip = $doc->repository->remote_ip();
 	#
 	# my( $res, $passwd_sent ) = $r->get_basic_auth_pw;
 	# my( $user_sent ) = $r->user;

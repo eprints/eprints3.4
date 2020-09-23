@@ -14,7 +14,7 @@ use lib "$FindBin::Bin/../perl_lib";
 
 =head1 NAME
 
-B<check_xapian> - Checks that Xapian is successfully indexing items in the live archive.
+B<check_xapian> - Checks that Xapian is successfully indexing eprint items.
 
 =head1 SYNOPSIS
 
@@ -22,7 +22,7 @@ B<check_xapian> I<repository_id> [B<options>]
 
 =head1 DESCRIPTION
 
-This script checks that items in the live archive have successfully been indexed by Xapian.  It does this my using "/usr/bin/quest" to search the Xapian database filesystem for the title of the particular item.  This requires the 'xapian-tools' package to be installed.  If the title does not contain any special characters or quote marks it will attempt to search for the title within quote marks.  If this is not the case or this returns no matching results, it will search for all the terms in the title in an attempt to find a result.  The script will print a success message to the standard output if a result with the correct EPrint ID is returned othewise it will print a failure message to the standard error.  A summary message will be printed before the script exits totalling the number of items found not to be indexed.
+This script checks that eprint items have successfully been indexed by Xapian.  It does this my using "/usr/bin/quest" to search the Xapian database filesystem for the title of the particular item.  This requires the 'xapian-tools' package to be installed.  If the title does not contain any special characters or quote marks it will attempt to search for the title within quote marks.  If this is not the case or this returns no matching results, it will search for all the terms in the title in an attempt to find a result.  The script will print a success message to the standard output if a result with the correct EPrint ID is returned othewise it will print a failure message to the standard error.  A summary message will be printed before the script exits totalling the number of items found not to be indexed.
 
 
 =head1 ARGUMENTS
@@ -41,7 +41,7 @@ The ID of the eprint repository to use.
 
 =item B<--all> 
 
-Check all live archive items rather than those last modified in the last 2 days.
+Check all eprint items rather than those last modified in the last 2 days.
 
 =item B<--idlist=1,2,3> 
 
@@ -53,7 +53,7 @@ Check search results using the facets matching protocol rather than the standard
 
 =item B<--days=n>
 
-Check live archive items last modified in the last n days rathar than the last 2 days.
+Check eprint items last modified in the last n days rathar than the last 2 days.
 
 =item B<--results=n>
 
@@ -77,7 +77,7 @@ This option will supress all output unless an error occurs.
 
 =item B<--random>
 
-Takes a random sample of 100 live archive items to check whether they are indexed.  Can be used with --sample=n to specify a different random sample size.  Can be used with --days to specify how recently the random sample should taken from.
+Takes a random sample of 100 eprint items to check whether they are indexed.  Can be used with --sample=n to specify a different random sample size.  Can be used with --days to specify how recently the random sample should taken from.
 
 =item B<--reindex> 
 
@@ -86,6 +86,10 @@ If a item is not found then schedule it for reindexing.
 =item B<--sample=n>
 
 Used in conjuction with --random to specify the sample size of items to check. By default sample size is 100.
+
+=item B<--status=archive,deletion>
+
+Used to specify the status of eprint (inbox, buffer, archive, deletion) to be check.  If not specified eprints of all statuses will be checked. Specify multiple statuses through a comma-separated list. Ignored if used in conjunction with --idlist.
 
 =item B<--user=admin>
 
@@ -127,6 +131,7 @@ my $path_opt;
 my $days_opt;
 my $results_opt;
 my $sample_opt;
+my $status_opt;
 my $user_opt;
 
 Getopt::Long::Configure("permute");
@@ -147,6 +152,7 @@ GetOptions(
 	'days=s' => \$days_opt,
 	'results=s' => \$results_opt,
 	'sample=s' => \$sample_opt,
+	'status=s' => \$status_opt,
 	'user=s' => \$user_opt,
 ) || pod2usage( 2 );
 EPrints::Utils::cmd_version( "check_xapian" ) if $version;
@@ -255,6 +261,26 @@ if ( defined $sample_opt )
         }
 }
 
+my $status = undef;
+if ( defined $status_opt )
+{
+	my $status_error = 0;
+	my @statuses = split( ',', $status_opt ); 
+	for my $a_status ( @statuses )
+	{
+	        unless ( grep ( /^$a_status$/, ( 'inbox', 'buffer', 'archive', 'deletion' ) ) )
+        	{
+                	$status_error = 1;
+       		}
+	}
+        if ( $status_error )
+        {
+                print STDERR "\nError: $status_opt is not a valid status or list of statuses.\n\n";
+                exit 1;
+        }
+	$status = join( " ", @statuses );
+}
+
 my $inc_rows = 2;
 $inc_rows = 1 if $facets;
 my $no_result_lines = 3;
@@ -297,7 +323,10 @@ if ( ( $random && defined($days_opt) ) || ( !$random && !$all && !$idlist ) )
 	$period = " in the last $days days";
 	my $since = localtime() - $days*24*60*60;
 	my $since_timestamp = localtime($since)->strftime('%F-');
-	$list = $ds->search(filters => [ { meta_fields => [ 'eprint_status' ], value => 'archive', describe=>0 }, { meta_fields => [ 'lastmod' ], value => $since_timestamp, describe=>0 } ], custom_order => "-lastmod");
+	my $searchexp = new EPrints::Search( session=>$session, dataset=>$ds, custom_order=>"-lastmod" );
+	$searchexp->add_field( fields => [ $ds->get_field( "lastmod" ) ], value => $since_timestamp, describe => 0 );
+	$searchexp->add_field( fields => [ $ds->get_field( "eprint_status" ) ], value => $status, match => 'IN', describe => 0 ) if defined $status;
+	$list = $searchexp->perform_search;	
 }
 
 my @ids = ();
@@ -314,7 +343,9 @@ elsif ( $random )
 	}
 	else
 	{
-		my $sql = "SELECT eprintid from eprint WHERE eprint_status = 'archive'";
+		my $sql = "SELECT eprintid FROM eprint";
+		$sql .= " WHERE eprint_status = '".$status."'" if $status;
+		$sql .= ";";
 		my $statement = $db->prepare($sql);
 		$db->execute($statement, $sql);
 		while (my $row = $statement->fetchrow_hashref)
@@ -346,7 +377,12 @@ if ( @ids )
 	$list = EPrints::List->new( repository => $repo, dataset => $ds, ids => \@chosen );
 }
 
-$list = $ds->search(filters => [ { meta_fields => [ 'eprint_status' ], value => 'archive', describe=>0 } ], custom_order => "-lastmod") unless defined $list;
+unless ( defined $list )
+{
+	my $searchexp = new EPrints::Search( session=>$session, dataset=>$ds, custom_order=>"-lastmod" );
+	$searchexp->add_field( fields => [ $ds->get_field( "eprint_status" ) ], value => $status, match => 'IN', describe => 0 ) if defined $status;	
+	$list = $searchexp->perform_search;
+}
 
 my $counter = 0;
 my $unfound = 0;
@@ -420,7 +456,7 @@ for ( my $i = 0; $i < $listcount; $i++ )
 				if ( defined($delve_results[0]) )
 				{
 					$delve_results[0] =~ s/\n//;
-					$status_correct = 1 if $delve_results[0] eq "archive";
+					$status_correct = 1 if $delve_results[0] eq $eprint->get_value( "eprint_status" );
 				}
 				my $year = substr( $eprint->get_value('date'), 0, 4 );
 				$year_correct = 1 if $year eq "";
@@ -488,8 +524,8 @@ for ( my $i = 0; $i < $listcount; $i++ )
 	$status_wrong++ if $errfacets ne "" && $found;
         $counter++;
 }
-print "\n$unfound/$counter EPrints in the live archive were found not to be indexed by Xapian$period.\n" unless $quiet;
-print "$status_wrong/$counter EPrints in the live archive were found to be indexed by Xapian$period but whose status were not live or their year or type were not set correctly.\n" unless $quiet;
+print "\n$unfound/$counter EPrints were found not to be indexed by Xapian$period.\n" unless $quiet;
+print "$status_wrong/$counter EPrints were found to be indexed by Xapian$period but whose status, year or type were not set correctly.\n" unless $quiet;
 
 $session->terminate();
 exit;
@@ -526,4 +562,3 @@ License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
 =for LICENSE END
-

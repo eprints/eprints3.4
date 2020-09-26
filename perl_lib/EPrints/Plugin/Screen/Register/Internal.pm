@@ -87,6 +87,26 @@ sub action_register
 		return;
 	}
 
+	if ( defined $repo->config( "max_account_requests" ) && defined $repo->config( "max_account_requests_minutes" )  )
+        {
+                my $minutes = $repo->config( "max_account_requests_minutes" );
+                if ( $minutes > 0 )
+                {
+                        my $since = time() - 60 * $minutes;
+                        my $users = $dataset->search( filters => [{
+				meta_fields => [qw( joined )], value => EPrints::Time::iso_datetime( $since ) . "-",
+  			}]);
+                        if ( $users->count >= $repo->config( "max_account_requests" ) )
+                        {
+                                $self->{processor}->add_message( "error", $repo->html_phrase(
+                                        "cgi/register:excessive_account_requests",
+                                        minutes => $repo->make_text( $minutes )
+                                ) );
+                                return;
+                        }
+                }
+        }
+	
 	my $user = $self->register_user( $item->get_data );
 
 	$processor->{user} = $user;

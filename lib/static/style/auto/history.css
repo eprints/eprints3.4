@@ -59,3 +59,8 @@ table.ep_history_diff_table th, table.ep_history_diff_table td {
         background-color: #ffc;
 }
 
+#ep_workflow_views_panel_1 .ep_paginate_list .ep_search_result,
+#ep_workflow_views_panel_1 .ep_paginate_list .ep_search_result > div {
+        display: block;
+}
+

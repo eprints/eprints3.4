@@ -163,7 +163,10 @@ sub get_system_field_info
 			render_option=>\&main_render_option },
 
 		{ name=>"date_embargo", type=>"date", required=>0,
-			min_resolution=>"year" },	
+			min_resolution=>"year" },
+
+		{ name=>"date_embargo_retained", type=>"date", required=>0,
+                        min_resolution=>"year" },	
 
 		{ name => "embargo_reason", type => "namedset", set_name => 'embargo_reason', required=>0, input_rows => 1, },
 
@@ -1237,6 +1240,11 @@ sub commit
 	if( $self->{non_volatile_change} )
 	{
 		$self->set_value( "rev_number", ($self->get_value( "rev_number" )||0) + 1 );	
+                if ( $self->{changed}->{date_embargo} || ( !defined $self->get_value( 'date_embargo_retained') && defined $self->get_value( 'date_embargo' ) ) )
+                {
+                        $self->set_value( 'date_embargo_retained', $self->get_value( 'date_embargo' ) ) unless !defined $self->{session}->current_user && $0 =~ /lift_embargos/;
+                }
+
 	}
 
 	# SUPER::commit clears non_volatile_change

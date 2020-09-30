@@ -1240,11 +1240,17 @@ sub commit
 	if( $self->{non_volatile_change} )
 	{
 		$self->set_value( "rev_number", ($self->get_value( "rev_number" )||0) + 1 );	
-                if ( $self->{changed}->{date_embargo} || ( !defined $self->get_value( 'date_embargo_retained') && defined $self->get_value( 'date_embargo' ) ) )
+                if ( defined $self->{changed}->{date_embargo} || defined $self->get_value( 'date_embargo' ) )
                 {
-                        $self->set_value( 'date_embargo_retained', $self->get_value( 'date_embargo' ) ) unless !defined $self->{session}->current_user && $0 =~ /lift_embargos/;
+			if ( !defined $self->{session}->current_user && $0 =~ /lift_embargos/ )
+			{
+				$self->set_value( 'date_embargo_retained', $self->{changed}->{date_embargo} ) if EPrints::Utils::is_set( $self->{changed}->{date_embargo} );
+			}
+			else
+			{
+	                        $self->set_value( 'date_embargo_retained', $self->get_value( 'date_embargo' ) );
+			}
                 }
-
 	}
 
 	# SUPER::commit clears non_volatile_change

@@ -165,6 +165,14 @@ sub get_basic_input_elements
 	}
 
 	$div = $session->make_element( "div" );
+
+	my $workflow_datepicker = $session->config( "workflow_datepicker" );
+	if( defined $workflow_datepicker )
+	{
+		my $datepicker = &{ $workflow_datepicker }( $session, $basename );
+		$div->appendChild( $datepicker ) if $datepicker;
+	}
+
 	my( $year, $month, $day ) = ("", "", "");
 	if( defined $value && $value ne "" )
 	{
@@ -493,6 +501,40 @@ sub get_resolution
 	return 5 if $l == 16;
 	return 6;
 }
+
+sub validate
+{
+        my( $self, $session, $value, $object ) = @_;
+
+	use POSIX /isdigit/;
+	my @probs = ( $session->html_phrase( "validate:invalid_date", fieldname => $session->make_text( $self->name ) ) );
+	my $resolution = $self->get_resolution( $value );
+
+	return () if $resolution == 0;
+	return @probs if $resolution > 6;
+
+	$value = $self->trim_date( $value, $resolution );
+	my @date = split( /[-:]/, $value );
+
+	return @probs if scalar( @date ) != $resolution;
+	foreach ( @date ) 
+	{
+		return @probs unless isdigit( $_ );
+	}
+	return @probs if $resolution >= 2 && ( $date[1] < 1 || $date[1] > 12 );
+	if ( $resolution > 2 )
+	{
+		return @probs if $date[2] < 1 || $date[2] > 31;
+		return @probs if $date[2] == 31 && grep( /^$date[1]$/, ( '02', '04', '06', '09', '11' ) );
+		return @probs if $date[2] == 30 && $date[1] == 2;
+		return @probs if $date[2] == 29 && $date[1] == 2 && ( $date[0] % 4 != 0 || ( $date[0] % 100 == 0 && $date[0] % 1000 != 0 ) );
+		return @probs if $resolution > 3 && ( $date[3] < 0 || $date[3] > 23 );
+		return @probs if $resolution > 4 && ( $date[4] < 0 || $date[4] > 59 );
+		return @probs if $resolution == 6 && ( $date[5] < 0 || $date[5] > 59 );			
+	}
+        return ();
+}
+
 
 sub should_reverse_order { return 1; }
 

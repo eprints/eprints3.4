@@ -385,9 +385,18 @@ terms.</p>
     <epp:phrase id="eprint_fieldhelp_contributors">Enter contributors' names along with type of contribution. If there are more than four contributors, click on the [More&#160;input&#160;rows] button.</epp:phrase>
     <epp:phrase id="eprint_fieldname_contributors_type">Contribution</epp:phrase>
     <epp:phrase id="eprint_fieldname_contributors_id">Email</epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_contributors_name"/>
+    <epp:phrase id="eprint_fieldhelp_contributors_id"/>
+    <epp:phrase id="eprint_fieldhelp_contributors_name_family"/>
+    <epp:phrase id="eprint_fieldhelp_contributors_name_given"/>
+    <epp:phrase id="eprint_fieldhelp_contributors_type"/>
 
     <epp:phrase id="eprint_fieldname_creators">Creators</epp:phrase>
     <epp:phrase id="eprint_fieldname_editors">Editors</epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_editors_name"/>
+    <epp:phrase id="eprint_fieldhelp_editors_id"/>
+    <epp:phrase id="eprint_fieldhelp_editors_name_family"/>
+    <epp:phrase id="eprint_fieldhelp_editors_name_given"/>
 
     <epp:phrase id="eprint_fieldname_corp_creators">Corporate Creators</epp:phrase>
     <epp:phrase id="eprint_fieldhelp_corp_creators">Companies that are considered authors of this item.</epp:phrase>
@@ -400,6 +409,10 @@ terms.</p>
 <br/>Example: [<span class="ep_form_example">Fu</span>] [<span class="ep_form_example">Yan-Li</span>] []
 <br/>Example: [<span class="ep_form_example">von Höpfner</span>] [<span class="ep_form_example">Ludwig G.</span>] []
 </epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_creators_name"/>
+    <epp:phrase id="eprint_fieldhelp_creators_id"/>
+    <epp:phrase id="eprint_fieldhelp_creators_name_family"/>
+    <epp:phrase id="eprint_fieldhelp_creators_name_given"/>
 
     <epp:phrase id="eprint_fieldname_pages">Number of Pages</epp:phrase>
     <epp:phrase id="eprint_fieldhelp_pages">The total number of pages of the item.
@@ -492,7 +505,9 @@ terms.</p>
     <epp:phrase id="eprint_fieldname_related_url">Related URLs</epp:phrase>
     <epp:phrase id="eprint_fieldhelp_related_url">URLs that are related to this item.</epp:phrase>
     <epp:phrase id="eprint_fieldname_related_url_url">URL</epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_related_url_url"/>
     <epp:phrase id="eprint_fieldname_related_url_type">URL Type</epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_related_url_type"/>
     <epp:phrase id="eprint_fieldopt_related_url_type_pub">Publisher</epp:phrase>
     <epp:phrase id="eprint_fieldopt_related_url_type_org">Organisation</epp:phrase>
     <epp:phrase id="eprint_fieldopt_related_url_type_author">Author</epp:phrase>

@@ -289,6 +289,7 @@ sub generate_secure_cookie
 		-value   => $self->value( "securecode" ),
 		-domain  => $repo->config( "securehost" ),
 		-secure  => 1,
+		-samesite => 'None',
 		-expires => $repo->config( "user_cookie_timeout" ),
 		%opts,
 	);			

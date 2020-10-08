@@ -47,12 +47,29 @@ if( defined $doc_secu && $doc_secu eq 'public' )
 }
 
 # don't set expiry date -> will expire at the end of the current session
-my $cookie = $session->{query}->cookie(
-	-name    => "eprints_doc_request",
-	-path    => "/",
-	-value   => $code,
-	-domain  => $session->config( "cookie_domain" ),
-);
+my $cookie;
+my $document_url = $document->get_url;
+if ( EPrints::Utils::is_set( $session->config( "securehost" ) ) )
+{
+        $document_url =~ s/^http:/https:/;
+	$cookie  = $session->{query}->cookie(
+		-name    => "eprints_doc_request",
+		-path    => "/",
+		-value   => $code,
+		-secure  => 1,
+		-samesite => 'None',
+		-domain  => $session->config( "cookie_domain" ),
+	);
+}
+else
+{
+	$cookie  = $session->{query}->cookie(
+                -name    => "eprints_doc_request",
+                -path    => "/",
+                -value   => $code,
+                -domain  => $session->config( "cookie_domain" ),
+        );
+}
 
 unless( defined $cookie )
 {
@@ -65,7 +82,7 @@ my $r = $session->get_request;
 $r->err_headers_out->{"Set-Cookie"} = $cookie;
 
 EPrints::Apache::AnApache::send_status_line( $r, 302, "Moved" );
-EPrints::Apache::AnApache::header_out( $r, "Location", $document->get_url );
+EPrints::Apache::AnApache::header_out( $r, "Location", $document_url );
 EPrints::Apache::AnApache::send_http_header( $r );
 
 $session->terminate;

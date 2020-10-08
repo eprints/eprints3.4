@@ -144,7 +144,16 @@ sub action_confirm
 			$self->{processor}->{request}->set_value( "code", "$code" );
 			$self->{processor}->{request}->commit;
 		}
-		my $cgi_url = $session->config( "http_cgiurl" )."/process_request?code=$code";
+		my $cgi_url;
+		# Make HTTPS if available to allow SameSite for cookie to be set to None to avoid authentication popups when getting restricted document.	
+		if ( EPrints::Utils::is_set( $session->config( 'securehost' ) ) )
+		{
+			$cgi_url = $session->config( "https_cgiurl" )."/process_request?code=$code";
+		}
+		else
+		{
+			$cgi_url = $session->config( "http_cgiurl" )."/process_request?code=$code";
+		}
 		my $link = $session->make_element( "a", href=>"$cgi_url" );
 		$link->appendChild( $session->html_phrase( "request/response_email:download_label" ) );
 		$mail->appendChild( $link );

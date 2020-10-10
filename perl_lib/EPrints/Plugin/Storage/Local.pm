@@ -49,6 +49,11 @@ sub open_write
 	my $filepath = "$path/$fn";
 	$filepath =~ s/[^\\\/]+$//;
 
+	if ( $self->{session}->config( "generic_filenames" ) && $fileobj->get_value( 'datasetid' ) ne "history" )
+	{
+		$fn = $self->_generic_filepath( $fileobj );
+	}
+
 	EPrints::Platform::mkdir( $filepath );
 
 	my $mode = O_WRONLY|O_CREAT;
@@ -115,11 +120,14 @@ sub open_read
 	return undef if !defined $path;
 
 	my $in_fh;
-	if( !open($in_fh, "<", "$path/$fn") )
-	{
-		$self->{error} = "Unable to read from $path/$fn: $!";
-		$self->{session}->get_repository->log( $self->{error} );
-		return undef;
+	if( !open($in_fh, "<", $self->_generic_filepath( $fileobj, $path ) ) )
+        {
+		if( !open($in_fh, "<", "$path/$fn") )
+		{
+			$self->{error} = "Unable to read from $path/$fn: $!";
+			$self->{session}->get_repository->log( $self->{error} );
+			return undef;
+		}
 	}
 	binmode($in_fh);
 
@@ -174,6 +182,8 @@ sub delete
 
 	return undef if !defined $path;
 
+	return 0 if -e $self->_generic_filepath( $fileobj, $path ) && !unlink $self->_generic_filepath( $fileobj, $path );
+
 	return 1 if !-e "$path/$fn";
 
 	return 0 if !unlink("$path/$fn");
@@ -200,7 +210,17 @@ sub get_local_copy
 
 	return undef if !defined $path;
 
+	return $self->_generic_filepath( $fileobj, $path ) if -r $self->_generic_filepath( $fileobj, $path );
+
 	return -r "$path/$fn" ? "$path/$fn" : undef;
+}
+
+sub _generic_filepath
+{
+	my( $self, $fileobj, $path ) = @_;
+
+	$path = $path ? "$path/" : "";	
+	return $path . $fileobj->id . ".bin";
 }
 
 sub _filename

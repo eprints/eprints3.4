@@ -530,6 +530,14 @@ sub render_modify
 	}
 
 	my $file_new = EPrints::XML::parse_xml( "$r_file_new" );
+
+	if ( !defined $file_new )
+	{
+		my $div = $self->{session}->make_element( "div" );
+                $div->appendChild( $self->{session}->html_phrase( "lib/history:corrupt_file" ) );
+                return $div;
+	}
+
 	my $dom_new = $file_new->getFirstChild;
 
 	$r_file = undef;
@@ -555,6 +563,13 @@ sub render_modify
 	}
 
 	my $file_old = EPrints::XML::parse_xml( "$r_file_old" );
+	if ( !defined $file_old )
+        {
+                my $div = $self->{session}->make_element( "div" );
+                $div->appendChild( $self->{session}->html_phrase( "lib/history:corrupt_old_file" ) );
+                return $div;
+        }
+
 	my $dom_old = $file_old->getFirstChild;
 
 	my %fieldnames = ();

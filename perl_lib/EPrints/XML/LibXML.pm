@@ -111,7 +111,8 @@ sub parse_xml
 	}
 
 	open(my $fh, "<", $file) or die "Error opening $file: $!";
-	my $doc = $PARSER->parse_fh( $fh, $basepath );
+	my $doc; 
+	eval { $doc = $PARSER->parse_fh( $fh, $basepath ) };
 	close($fh);
 
 	return $doc;

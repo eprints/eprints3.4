@@ -506,7 +506,7 @@ sub validate
 {
         my( $self, $session, $value, $object ) = @_;
 
-	use POSIX /isdigit/;
+	use POSIX qw/isdigit/;
 	my @probs = ( $session->html_phrase( "validate:invalid_date", fieldname => $session->make_text( $self->name ) ) );
 	my $resolution = $self->get_resolution( $value );
 

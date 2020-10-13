@@ -91,7 +91,7 @@ td.ep_form_input_grid_wide {
 	font-weight: bold;
 }
 
-.ep_field_legend::after, .ep_multi_heading::after {
+.ep_multi_heading::after {
 	content: ":";
 }
 

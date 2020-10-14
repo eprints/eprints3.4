@@ -33,7 +33,20 @@ $c->{can_request_view_document} = sub
                         {
                                 return( "ALLOW" ) unless( $request->has_expired() );
                         }
-                }
+
+			# Ensure request a copy permits for documents still work when coversheets are enabled.
+			my $doc_ds = $doc->get_dataset($doc);
+			my $target_doc = $doc_ds->dataobj( $target_docid );
+			my $original_doc = $target_doc->search_related("isCoversheetVersionOf")->item(0);
+			if ( EPrints::Utils::is_set( $original_doc ) )
+			{
+				my $orig_docid = $original_doc->get_id;
+				if( "$orig_docid" eq "$docid" )
+				{
+					return( "ALLOW" ) unless( $request->has_expired() );
+				}
+			}
+		}
         }
 
 

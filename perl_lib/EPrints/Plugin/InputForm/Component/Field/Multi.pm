@@ -209,8 +209,15 @@ sub render_content
 			$parts{no_toggle} = $self->{config}->{help_fields}->{$field->name};
 		}
 
+		# Allow for individual field setting of show_help
+		$parts{no_toggle} = 1 if $field->{show_help} eq "always";
+                $parts{no_toggle} = 0 if $field->{show_help} eq "toggle";
+                $parts{no_help} = 1 if $field->{show_help} eq "never";
+
 		$parts{prefix} = $self->{prefix} . "_" . $field->get_name;
 		$parts{help_prefix} = $self->{prefix}."_help_".$field->get_name;
+
+		
 
 		$table->appendChild( $self->{session}->render_row_with_help( %parts ) );
 	}

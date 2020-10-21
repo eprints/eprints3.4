@@ -587,8 +587,11 @@ sub _render_doc_metadata
 	my $table = $session->make_element( "div", class=>"ep_upload_fields ep_multi" );
 	$doc_cont->appendChild( $table );
 	my $first = 1;
+
 	foreach my $field ( @fields )
 	{
+		my $no_toggle = $self->{no_toggle},
+		my $no_help = $self->{no_help};
 		my $labeltext = $field->render_name($session);
 		if( $field->{required} ) # moj: Handle for_archive
 		{
@@ -596,6 +599,9 @@ sub _render_doc_metadata
 				"sys:ep_form_required",
 				label=>$labeltext );
 		}
+		$no_toggle = 1 if $field->{show_help} eq "always";
+		$no_toggle = 0 if $field->{show_help} eq "toggle";
+		$no_help = 1 if $field->{show_help} eq "never";
 		my $label = $self->{session}->make_element( "span", id => $field->get_name . "_label" );
 		$label->appendChild( $labeltext );
 		
@@ -612,7 +618,8 @@ sub _render_doc_metadata
 			prefix=>$doc_prefix."_".$field->get_name,
 			help=>$field->render_help($session),
 			help_prefix=>$doc_prefix."_".$field->get_name."_help",
-			no_toggle=>$self->{no_toggle}
+			no_toggle=>$no_toggle,
+			no_help=>$no_help,
 		));
 		$first = 0;
 	}

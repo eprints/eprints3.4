@@ -2406,6 +2406,7 @@ sub get_property_defaults
 		required 	=> EP_PROPERTY_FALSE,
 		requiredlangs 	=> [],
 		search_cols 	=> EP_PROPERTY_FROM_CONFIG,
+		show_help	=> EP_PROPERTY_UNDEF,
 		sql_index 	=> EP_PROPERTY_TRUE,
 		sql_langid 	=> EP_PROPERTY_UNDEF,
 		sql_sorted	=> EP_PROPERTY_FALSE,

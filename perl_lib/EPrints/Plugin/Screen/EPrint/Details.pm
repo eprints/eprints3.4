@@ -203,6 +203,10 @@ sub render
 				"license",
 				"date_embargo",
 			);
+			if ( defined $session->config( "eprint_details_document_fields" ) ) 
+			{
+				@list = @{ $session->config( "eprint_details_document_fields" ) };	
+			}
 			if( scalar keys %files > 1 )
 			{
 				push @list, "main";

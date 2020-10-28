@@ -7,6 +7,17 @@ $c->{set_document_defaults} = sub
 	$data->{security} = "public";
 };
 
+$c->{eprint_details_document_fields} = [
+        "content",
+        "format",
+        "formatdesc",
+        "language",
+        "security",
+        "license",
+        "date_embargo",
+        "embargo_reason",
+];
+
 =head1 COPYRIGHT
 
 =for COPYRIGHT BEGIN

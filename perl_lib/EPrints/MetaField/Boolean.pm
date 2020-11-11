@@ -178,7 +178,9 @@ sub get_basic_input_elements
 				name => $basename,
 				class => join(" ", @classes),
 				onclick => $onclick,
-				value => "TRUE" ) }]];
+				value => "TRUE",  
+				'aria-labelledby' => $self->get_labelledby( $basename ),
+				'aria-describedby' => $self->get_describedby( $basename, $one_field_component ) ) }]];
 }
 
 sub form_value_basic

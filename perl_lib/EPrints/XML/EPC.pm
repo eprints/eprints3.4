@@ -167,15 +167,10 @@ sub _process_pin
 	}
 		
 
-	my $retnode;	
-	if( $params{pindata}->{used}->{$ref} || $node->hasChildNodes )
+	my $retnode = EPrints::XML::clone_node( $params{pindata}->{inserts}->{$ref}, 1 );
+
+	unless ( $params{pindata}->{used}->{$ref} || $node->hasChildNodes )
 	{
-		$retnode = EPrints::XML::clone_node( 
-				$params{pindata}->{inserts}->{$ref}, 1 );
-	}
-	else
-	{
-		$retnode = $params{pindata}->{inserts}->{$ref};
 		$params{pindata}->{used}->{$ref} = 1;
 	}
 

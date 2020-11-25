@@ -32,3 +32,17 @@
 #overlay{ position: absolute; top: 0; left: 0; z-index: 90; width: 100%; height: 500px; background-color: #000; }
 
 #lightboxMovie {}
+
+/* scale more nicely on narrow devices */
+#lightbox #outerImageContainer,
+#lightbox #imageDataContainer
+{
+  max-width: 95%;
+  height: fit-content!important;
+}
+#lightbox #lightboxImage,
+#lightbox #lightboxMovie,
+#lightbox #lightboxMovie video
+{
+  max-width: 100%;
+}

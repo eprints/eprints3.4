@@ -660,7 +660,7 @@ sub page
 
 		if( $type eq "print" )
 		{
-			my ( $pin, $pinid ) = split /:/, $rest, 3;
+			my ( $pin, $pinid ) = split /:/, $rest, 2;
 			my $frag;
 			if ( $pin eq "pin" )
 			{

@@ -612,6 +612,7 @@ sub page
 	if( defined $options{page_id} )
 	{
 		$ph->{bodyattr}->{id} = "page_".$options{page_id};
+		$map->{page_id} = $options{page_id};
 	}
 
 	# only really useful for head & pagetop, but it might as
@@ -659,7 +660,16 @@ sub page
 
 		if( $type eq "print" )
 		{
-			my $frag = EPrints::Script::print( $rest, { session=>$repo } );
+			my ( $pin, $pinid ) = split /:/, $rest, 3;
+			my $frag;
+			if ( $pin eq "pin" )
+			{
+				$frag = $repo->xml->create_text_node( $map->{$pinid} );
+			}
+			else 
+			{
+				$frag = EPrints::Script::print( $rest, { session=>$repo } );
+			}
 			$bit = $self->to_xhtml( $frag );
 			$repo->xml->dispose( $frag );
 		}

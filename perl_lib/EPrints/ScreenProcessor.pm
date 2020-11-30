@@ -424,6 +424,9 @@ sub process
     my $template = $self->{template};
     $template = "default_internal" if not defined $template;
 
+	my $page_id = $self->{screenid};
+	$page_id =~ s/::/_/g;
+	$page_id .= "_" . $opts{session}->param( "dataset" ) if defined $opts{session}->param( "dataset" );
 	$self->{session}->prepare_page(  
 		{
 			title => $title, 
@@ -432,7 +435,10 @@ sub process
 			login_status => $self->render_toolbar,
 #			toolbar => $toolbar,
 		},
-		template => $template,
+		(
+			template => $template,
+			page_id => $page_id,
+		),
  	);
 	$self->{session}->send_page();
 

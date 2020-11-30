@@ -759,7 +759,8 @@ sub render_search_fields
 	{
 		my $label;
 		my $field;
-		if ( $sf->{"field"}->get_type() eq "namedset" )
+		my $ft = $sf->{"field"}->get_type();
+		if ( $ft eq "namedset" )
 		{
 			$label = EPrints::Utils::tree_to_utf8( $sf->render_name );
 			$field = $sf->render( legend => $label );
@@ -769,6 +770,7 @@ sub render_search_fields
 			$label->appendChild( $sf->render_name );
 			$field = $sf->render();
 		}
+
 		$frag->appendChild(
 			$self->{session}->render_row_with_help(
 				prefix => $sf->get_form_prefix, 
@@ -778,6 +780,7 @@ sub render_search_fields
 				field => $field,
 				no_toggle => ( $sf->{show_help} eq "always" ),
 				no_help => ( $sf->{show_help} eq "never" ),
+				context => "type_$ft",
 			 ) );
 	}
 

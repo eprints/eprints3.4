@@ -9,7 +9,7 @@
     <div class="ep_msg_message_icon" style="width: 32px;">
       <img alt="Message" src="/style/images/message.png"/>
     </div>
-    <div class="ep_msg_message_text">This page is intended as a generic accessibility statement for EPrints and should be amended as required before deployment of your EPrints repository.</div>
+    <div class="ep_msg_message_text">This page is intended as a generic accessibility statement for EPrints and should be amended as required before deployment of your EPrints repository. In particular the <code>organisation_name</code> phrase may need to be set if upgrading to EPrints 3.4.2+.</div>
   </div>
 </div>
 

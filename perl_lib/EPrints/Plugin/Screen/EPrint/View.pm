@@ -120,11 +120,16 @@ sub render_status
 	my $status = $self->{processor}->{eprint}->get_value( "eprint_status" );
 
 	my $url = $self->{processor}->{eprint}->get_url;
+	my $print_url = $url;
+	if ( $print_url =~ m!^//! )
+	{
+		$print_url = ( EPrints::Utils::is_set( $self->{session}->config( "securehost" ) ) ) ? "https:" . $print_url : "http:" . $print_url;
+	}
 
 	my $div = $self->{session}->make_element( "div", class=>"ep_block" );
 	$div->appendChild( $self->{session}->html_phrase( "cgi/users/edit_eprint:item_is_in_".$status,
 		link => $self->{session}->render_link( $url ), 
-		url  => $self->{session}->make_text( $url ) ) );
+		url  => $self->{session}->make_text( $print_url ) ) );
 
 	return $div;
 }

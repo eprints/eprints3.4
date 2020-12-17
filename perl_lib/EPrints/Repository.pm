@@ -3601,6 +3601,7 @@ sub render_option_list
 	# defaults_at_top : move items already selected to top
 	# 			of list, so they are visible.
 	# class    : css classes to apply to the select
+	# onchange :
 	# aria-labelledby :
 	# aria-describedby :
 
@@ -3675,6 +3676,10 @@ sub render_option_list
 			{
 				$box->setAttribute( "checked" , "checked" );
 			}
+			if ( $params{onchange} )
+			{
+				$box->setAttribute( "onchange" , $params{onchange} );
+			}
 			$celldiv->appendChild( $div );
 			++$i;
 			if( $len > 5 && int($len / 2)==$i )
@@ -3693,6 +3698,10 @@ sub render_option_list
 	{
 		$element->setAttribute( "multiple" , "multiple" );
 	}
+	if( $params{onchange} )
+        {
+        	$element->setAttribute( "onchange" , $params{onchange} );
+        }
         $element->setAttribute( "aria-labelledby", $params{"aria-labelledby"} ) if EPrints::Utils::is_set( $params{"aria-labelledby"} );
         $element->setAttribute( "aria-describedby", $params{"aria-describedby"} ) if EPrints::Utils::is_set( $params{"aria-describedby"} );
 	my $size = 0;

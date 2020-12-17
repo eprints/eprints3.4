@@ -871,6 +871,7 @@ sub render_order_menu
 		values=>[values %{$methods}],
 		default=>$order,
 		labels=>\%labels,
+		onchange=>"this.form.submit();",
 		'aria-labelledby'=>"order_label" );
 }
 

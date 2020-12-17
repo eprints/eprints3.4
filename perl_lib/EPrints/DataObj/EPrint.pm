@@ -1569,13 +1569,17 @@ sub render
 			$self->{session}->get_repository->call( 
 				"eprint_render", 
 				$self, $self->{session}, $preview );
-		my $content = $self->{session}->make_element( "div", class=>"ep_summary_content" );
-		my $content_top = $self->{session}->make_element( "div", class=>"ep_summary_content_top" );
-		my $content_left = $self->{session}->make_element( "div", class=>"ep_summary_content_left" );
-		my $content_main = $self->{session}->make_element( "div", class=>"ep_summary_content_main" );
-		my $content_right = $self->{session}->make_element( "div", class=>"ep_summary_content_right" );
-		my $content_bottom = $self->{session}->make_element( "div", class=>"ep_summary_content_bottom" );
-		my $content_after = $self->{session}->make_element( "div", class=>"ep_summary_content_after" );
+
+		my $summary_content_classes = { ROOT=>'', top=>'', left=>'', main=>'', right=>'', bottom=>'', after=>'' };
+		$summary_content_classes = $self->{session}->config( "eprint", "summary_content_class" ) if defined $self->{session}->config( "eprint", "summary_content_class" );
+
+		my $content = $self->{session}->make_element( "div", class=>"ep_summary_content " . $summary_content_classes->{ROOT} );
+		my $content_top = $self->{session}->make_element( "div", class=>"ep_summary_content_top " . $summary_content_classes->{top} );
+		my $content_left = $self->{session}->make_element( "div", class=>"ep_summary_content_left " . $summary_content_classes->{left} );
+		my $content_main = $self->{session}->make_element( "div", class=>"ep_summary_content_main " . $summary_content_classes->{main} );
+		my $content_right = $self->{session}->make_element( "div", class=>"ep_summary_content_right " . $summary_content_classes->{right} );
+		my $content_bottom = $self->{session}->make_element( "div", class=>"ep_summary_content_bottom " . $summary_content_classes->{bottom} );
+		my $content_after = $self->{session}->make_element( "div", class=>"ep_summary_content_after " . $summary_content_classes->{after} );
 	
 		$content_left->appendChild( render_box_list( $self->{session}, $self, "summary_left" ) );
 		$content_right->appendChild( render_box_list( $self->{session}, $self, "summary_right" ) );

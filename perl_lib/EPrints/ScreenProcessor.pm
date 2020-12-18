@@ -274,9 +274,12 @@ sub render_toolbar
 {
 	my( $self ) = @_;
 
+	my $class = "ep_tm_key_tools";
+	$class = $self->{session}->config( "toolbar_class" ) if defined $self->{session}->config( "toolbar_class" );
+
 	return $self->render_item_list( [
 		$self->list_items( "key_tools" ),
-	] );
+	], ( class => $class ) );
 }
 
 =item EPrints::ScreenProcessor->process( %opts )

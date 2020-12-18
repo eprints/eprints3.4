@@ -210,6 +210,11 @@ sub list_items
 				next if !$screen->allow_action( $opt->{action} );
 			}
 		}
+		if ( defined $screen->{class} )
+                {
+                        $opt->{class} = $screen->{class} unless defined $opt->{class};
+                        $opt->{class} .= " " . $screen->{class} if defined $opt->{class};
+                }
 		push @list, {
 			%$opt,
 			screen => $screen,
@@ -244,6 +249,12 @@ sub render_item_list
 		my $screen = $opt->{screen};
 
 		my $li = $xml->create_element( "li" );
+
+		my $li_class = "";
+                $li_class = $self->{session}->config( 'item_list_class' ) if defined $self->{session}->config( 'item_list_class' );
+                $li_class .= $screen->{class} if defined $screen->{class};
+                $li->setAttribute( class => $li_class ) unless $li_class eq "";
+
 		$ul->appendChild( $li );
 
 		my $link = $screen->render_action_link();
@@ -421,12 +432,13 @@ sub process
 
 	$page->appendChild( $content );
     
-    my $template = $self->{template};
-    $template = "default_internal" if not defined $template;
+	my $template = $self->{template};
+	$template = "default_internal" if not defined $template;
 
 	my $page_id = $self->{screenid};
 	$page_id =~ s/::/_/g;
 	$page_id .= "_" . $opts{session}->param( "dataset" ) if defined $opts{session}->param( "dataset" );
+	$page_id .= "_" . $self->{action} if defined $self->{action};
 	$self->{session}->prepare_page(  
 		{
 			title => $title, 

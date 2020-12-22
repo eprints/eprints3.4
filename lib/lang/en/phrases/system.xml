@@ -779,7 +779,7 @@ This field is required if no creators are listed.
         <epp:phrase id="Plugin/Screen/Admin/Config/Edit/XPage:upload_html">Upload HTML (encapsulated)</epp:phrase>
         <epp:phrase id="Plugin/Screen/Admin/Config/Edit/XPage:upload">Upload</epp:phrase>
         <epp:phrase id="Plugin/Screen/Admin/Config/Edit/XPage:external_edit_title">Edit using external Editor</epp:phrase>
-        <epp:phrase id="Plugin/Screen/Admin/Config/Edit/XPage:external_edit_description">Here you can download the entire page to edit offline using editors such as frontpage and re-upload it back into EPrints. Image manipulation is not supported.</epp:phrase>
+        <epp:phrase id="Plugin/Screen/Admin/Config/Edit/XPage:external_edit_description">Here you can download the entire page to edit offline using editors such as Frontpage and re-upload it back into EPrints. Image manipulation is not supported.</epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/Config/Edit/XPage:really_next">Next?</epp:phrase>
         <epp:phrase id="Plugin/Screen/Admin/Config/Edit/XPage:phrases_updated">Phrase update complete.</epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/Config/Edit/XPage:inline_edit_title">Edit XPage code</epp:phrase>
@@ -897,7 +897,7 @@ Phrases related to the Manage Metadata Fields tool.
 .ep_sr_component .ep_form_input_grid { margin: 0px }
 .ep_tm_pagetitle { margin-left: 0px; text-align: left; }
     </style></epp:phrase>
-    <epp:phrase id="metafield_properties_help">Metadata field properties have sensible defaults that can be overriden by specifying a value on this page. If you wish to use the default leave the value as <em>UNSPECIFIED</em>.</epp:phrase>
+    <epp:phrase id="metafield_properties_help">Metadata field properties have sensible defaults that can be overridden by specifying a value on this page. If you wish to use the default leave the value as <em>UNSPECIFIED</em>.</epp:phrase>
     <epp:phrase id="priv:action/metafield/commit">Add field now</epp:phrase>
     <epp:phrase id="priv:action/metafield/save">Save for Later</epp:phrase>
 
@@ -913,7 +913,7 @@ Phrases related to the Manage Metadata Fields tool.
 
 <p>When you commit this new metadata field its configuration will be written to the metadata fields configuration file and the appropriate columns added to the database. If you specified a name and help phrase for this field they will be added to the <code>fields.xml</code> phrases file for each language you specified (see also the <a href="http://eprints.org/d/?keyword=PhraseConfigFile&amp;filename=lang/en/phrases/fields.xml">phrases documentation</a>).</p>
 
-<p>If this field is being added to the Eprints dataset it will also be added to the Eprints submission workflow (see also the <a href="http://eprints.org/d/?keyword=WorkflowConfigFile&amp;filename=workflows/eprint/default.xml">workflow documentation</a>).</p>
+<p>If this field is being added to the eprint dataset it will also be added to the eprint submission workflow (see also the <a href="http://eprints.org/d/?keyword=WorkflowConfigFile&amp;filename=workflows/eprint/default.xml">workflow documentation</a>).</p>
 
 <p>To make use of your new field (e.g. by adding it to the abstract page) look at <a href="http://eprints.org/d/?keyword=HOW_TO:_Add_a_New_Field">HOW TO: Add a New Field</a>.</p>
 
@@ -1018,7 +1018,7 @@ Phrases related to the Manage Metadata Fields tool.
 <epp:phrase id="metafield_optdetails_type_multilang">A multi-lingual field behaves the same as a Compound field but always has a "lang" sub-field that is a set of the currently configured languages. Use this type of field to allow users to enter metadata in more than one language.</epp:phrase>
 <epp:phrase id="metafield_fieldopt_type_name">name</epp:phrase>
 <epp:phrase id="metafield_fieldopt_fields_type_name">name</epp:phrase>
-<epp:phrase id="metafield_optdetails_type_name">The name of a person, consisting of honourific, given, family and lineage parts.</epp:phrase>
+<epp:phrase id="metafield_optdetails_type_name">The name of a person, consisting of honorific, given, family and lineage parts.</epp:phrase>
 <epp:phrase id="metafield_fieldopt_type_namedset">namedset</epp:phrase>
 <epp:phrase id="metafield_fieldopt_fields_type_namedset">namedset</epp:phrase>
 <epp:phrase id="metafield_optdetails_type_namedset">A Set that takes its values from a namedset file.</epp:phrase>
@@ -1042,7 +1042,7 @@ Phrases related to the Manage Metadata Fields tool.
 <epp:phrase id="metafield_optdetails_type_subobject">A sub-object container (eprints contain documents).</epp:phrase>
 <epp:phrase id="metafield_fieldopt_type_text">text</epp:phrase>
 <epp:phrase id="metafield_fieldopt_fields_type_text">text</epp:phrase>
-<epp:phrase id="metafield_optdetails_type_text">A free-text field (upto 255 characters).</epp:phrase>
+<epp:phrase id="metafield_optdetails_type_text">A free-text field (up to 255 characters).</epp:phrase>
 <epp:phrase id="metafield_fieldopt_type_time">time</epp:phrase>
 <epp:phrase id="metafield_fieldopt_fields_type_time">time</epp:phrase>
 <epp:phrase id="metafield_optdetails_type_time">A year-month-day hour-minute-second field (YYYY-MM-DD:hh:mm:ss).</epp:phrase>
@@ -1130,9 +1130,9 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
 <epp:phrase id="metafield_fieldname_render_order">Name Render Order</epp:phrase>
 <epp:phrase id="metafield_fieldname_fields_render_order">Render Order</epp:phrase>
 <epp:phrase id="metafield_fieldhelp_render_order">The order to render the name <b>value</b> in (family, given or given family).</epp:phrase>
-<epp:phrase id="metafield_fieldname_hide_honourific">Hide Honourific Part</epp:phrase>
-<epp:phrase id="metafield_fieldname_fields_hide_honourific">Hide Honourific</epp:phrase>
-<epp:phrase id="metafield_fieldhelp_hide_honourific">Hide the honourific name part in the submission workflow.</epp:phrase>
+<epp:phrase id="metafield_fieldname_hide_honourific">Hide Honorific Part</epp:phrase>
+<epp:phrase id="metafield_fieldname_fields_hide_honourific">Hide Honorific</epp:phrase>
+<epp:phrase id="metafield_fieldhelp_hide_honourific">Hide the honorific name part in the submission workflow.</epp:phrase>
 <epp:phrase id="metafield_fieldname_hide_lineage">Hide Lineage Part</epp:phrase>
 <epp:phrase id="metafield_fieldname_fields_hide_lineage">Hide Lineage</epp:phrase>
 <epp:phrase id="metafield_fieldhelp_hide_lineage">Hide the lineage name part in the submission workflow.</epp:phrase>
@@ -1292,7 +1292,7 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
     <!-- Platforms -->
     
     
-    <epp:phrase id="Plugin/Screen/Admin/StorageManager:Storage::HoneyComb">The Honeycomb Platofrm</epp:phrase>
+    <epp:phrase id="Plugin/Screen/Admin/StorageManager:Storage::HoneyComb">The Honeycomb Platform</epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/StorageManager:Storage::Local">Local Disk Storage</epp:phrase>
     
     <epp:phrase id="Plugin/Screen/Admin/StorageManager:a_local_disk_storage">Local Disk Storage</epp:phrase>
@@ -1338,7 +1338,7 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
 <!-- EPrint -->
 
     <epp:phrase id="lib/eprint:disklow_sub">Warning: Low on disk space</epp:phrase>
-    <epp:phrase id="lib/eprint:disklow"><p>The amount of disk space available for new EPrints has dropped below the repository threshold. New disk space will be needed soon.</p><p>If you get sick of this message, lower the "diskspace_warn_threshold" in the config file. If you do this then don't forget to put it back after you add more disk space.</p><p>The usual way to add disk space is to symlink a directory on a new drive into the repository "documents" directory.</p></epp:phrase>
+    <epp:phrase id="lib/eprint:disklow"><p>The amount of disk space available for new EPrints has dropped below the repository threshold. New disk space will be needed soon.</p><p>If you get sick of this message, lower the "diskspace_warn_threshold" in the configuration file. If you do this then don't forget to put it back after you add more disk space.</p><p>The usual way to add disk space is to symlink a directory on a new drive into the repository "documents" directory.</p></epp:phrase>
     <epp:phrase id="lib/eprint:diskout_sub">ERROR: Out of Disk Space</epp:phrase>
     <epp:phrase id="lib/eprint:diskout"><p>There are no available partitions with enough disk space to create new items. This needs sorting out urgently.</p><p>NO NEW ITEMS WILL BE ADDED UNTIL YOU FIX THIS.</p><p>To add more capacity, symlink a directory on a new drive into the repository "documents" directory.</p></epp:phrase>
     <epp:phrase id="lib/eprint:no_type">You haven't selected a type for this item.</epp:phrase>
@@ -1447,7 +1447,7 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
     <epp:phrase id="lib/metafield:date_res_month"></epp:phrase>
     <epp:phrase id="lib/metafield:date_res_year"></epp:phrase>
 
-    <!-- phrases used to seperate multiple values in a field -->
+    <!-- phrases used to separate multiple values in a field -->
     <!-- you can use .first and .last to make the first or 
          last joins in a list different. eg. set
         join_name to ',' 
@@ -1588,7 +1588,7 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
     <epp:phrase id="lib/searchfield:help_email">Enter some text to search for.</epp:phrase>
     <epp:phrase id="lib/searchfield:help_datatype">Select one or more values from the list. Default is (Any).</epp:phrase>
     <epp:phrase id="lib/searchfield:help_longtext">Enter a term or terms to search for.</epp:phrase>
-    <epp:phrase id="lib/searchfield:help_name">Enter a name or names to search for. Either the family name, or the family name followed by a comma and the first name or initial. Names with spaces may be indicated by surrounding them with double quotes, eg. "van Damme, J".</epp:phrase>
+    <epp:phrase id="lib/searchfield:help_name">Enter a name or names to search for. Either the family name, or the family name followed by a comma and the first name or initial. Names with spaces may be indicated by surrounding them with double quotes, e.g. "van Damme, J".</epp:phrase>
     <epp:phrase id="lib/searchfield:help_set">Select one or more values from the list, and whether you want to search for records with any one or all of those values. Default is (Any).</epp:phrase>
     <epp:phrase id="lib/searchfield:help_subject">Select one or more values from the list, and whether you want to search for records with any one or all of those values. Default is (Any).</epp:phrase>
     <epp:phrase id="lib/searchfield:help_namedset">Select one or more values from the list, and whether you want to search for records with any one or all of those values. Default is (Any).</epp:phrase>
@@ -1757,7 +1757,7 @@ Enter a URL to capture a file from: <epc:pin name="url"/><br/>
     <epp:phrase id="lib/submissionform:action_capture">Capture File</epp:phrase>
     <epp:phrase id="lib/submissionform:action_newdoc">Add another Format to this Item</epp:phrase>
     <epp:phrase id="lib/submissionform:action_firstdoc">Add a Format to this Item</epp:phrase>
-    <epp:phrase id="lib/submissionform:action_verify">Verify ID's</epp:phrase>
+    <epp:phrase id="lib/submissionform:action_verify">Verify IDs</epp:phrase>
     <epp:phrase id="lib/submissionform:action_remove">Remove</epp:phrase>
     <epp:phrase id="lib/submissionform:action_create">Create</epp:phrase>
     <epp:phrase id="lib/submissionform:action_later">Deposit Item Later</epp:phrase>
@@ -1953,7 +1953,7 @@ User Area CGI Scripts
     <epp:phrase id="Plugin/Screen/Admin/Backup:action:backup_repository:description">Exports a single compressed file of EPrints system, archive data and database files for this repository.</epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/Restore:title">Restore Repository</epp:phrase>
 
-    <epp:phrase id="Plugin/Screen/Admin/Restore:description">Restores a complete repository, including all eprints system files..</epp:phrase>
+    <epp:phrase id="Plugin/Screen/Admin/Restore:description">Restores a complete repository, including all EPrints system files..</epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/Restore:backup_archive">Backup archive file:</epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/Restore:upload">Upload</epp:phrase>
     
@@ -2037,11 +2037,11 @@ User Area CGI Scripts
     <epp:phrase id="Plugin/Screen/Admin/Config/Edit/XML:title">Edit config file</epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/Config/Edit/XPage:title">Edit config file</epp:phrase>
 
-    <epp:phrase id="Plugin/Screen/Admin/Config/Edit/Apache:intro"><p>Changes to this file will not take effect until the the webserver is restarted.</p></epp:phrase>
+    <epp:phrase id="Plugin/Screen/Admin/Config/Edit/Apache:intro"><p>Changes to this file will not take effect until the web server is restarted.</p></epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/Config/Edit/Autocomplete:intro"></epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/Config/Edit/Citation:intro"></epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/Config/Edit/NamedSet:intro"></epp:phrase>
-    <epp:phrase id="Plugin/Screen/Admin/Config/Edit/Perl:intro"><p>Changes to this file will not take effect until the repository configuration is reloaded or the webserver is restarted.</p></epp:phrase>
+    <epp:phrase id="Plugin/Screen/Admin/Config/Edit/Perl:intro"><p>Changes to this file will not take effect until the repository configuration is reloaded or the web server is restarted.</p></epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/Config/Edit/Phrase:intro"></epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/Config/Edit/Static:intro"></epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/Config/Edit/Template:intro"></epp:phrase>
@@ -2061,7 +2061,7 @@ User Area CGI Scripts
 
 
     <epp:phrase id="cgi/export:no_id"><p>No valid EPrint ID Number was specified.</p></epp:phrase>
-    <epp:phrase id="cgi/export:eprint_not_fount">EPrint with ID <epc:pin name="eprintid"/> was not found.</epp:phrase>
+    <epp:phrase id="cgi/export:eprint_not_found">EPrint with ID <epc:pin name="eprintid"/> was not found.</epp:phrase>
     <epp:phrase id="cgi/export:title">Export: <epc:pin name="shortname"/></epp:phrase>
     <epp:phrase id="cgi/export:page">
 <p><epc:pin name="citation"/></p>
@@ -2537,17 +2537,17 @@ Titles and Help for the System Fields
     <epp:phrase id="user_fieldname_loginattempts">Login attempts</epp:phrase>
     <epp:phrase id="user_fieldhelp_loginattempts">Attempts to login since last successful login.</epp:phrase>
     <epp:phrase id="user_fieldname_unlocktime">Unlock time</epp:phrase>
-    <epp:phrase id="user_fieldhelp_unlocktime">Time account will unlocked after execessive login attempts.</epp:phrase>
+    <epp:phrase id="user_fieldhelp_unlocktime">Time account will unlocked after excessive login attempts.</epp:phrase>
 
     <epp:phrase id="user_fieldname_lang">Preferred Language</epp:phrase>
     <epp:phrase id="user_fieldhelp_lang">Your preferred language. Where possible information will be mailed in this language.</epp:phrase>
     <epp:phrase id="user_fieldname_roles">Roles</epp:phrase>
-    <epp:phrase id="user_fieldhelp_roles">This field allows an administrator to assign roles to a user. It may also be used to assign (and remove) individual privileges by prefixing the priv string with plus (+) or minus (-).</epp:phrase>
+    <epp:phrase id="user_fieldhelp_roles">This field allows an administrator to assign roles to a user. It may also be used to assign (and remove) individual privileges by prefixing the privilege string with plus (+) or minus (-).</epp:phrase>
 
     <epp:phrase id="user_fieldname_openid_identifier">OpenID</epp:phrase>
     <epp:phrase id="user_fieldhelp_openid_identifier">This must be a valid OpenID endpoint e.g. https://www.google.com/accounts/o8/id</epp:phrase>
 
-    <!-- These fields are only used by users with "editor" privs -->
+    <!-- These fields are only used by users with "editor" privileges -->
     <epp:phrase id="user_fieldname_editperms">Editorial Rights Restriction</epp:phrase>
     <epp:phrase id="user_fieldhelp_editperms">The user will only be able to approve and modify items which match the following rules. If there are no restriction conditions the user will be able to edit any item.</epp:phrase>
     <epp:phrase id="user_fieldname_frequency">Frequency of items-under-review mailings</epp:phrase>
@@ -3246,7 +3246,7 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="Plugin/Convert/ImageMagick/Images:image/x-portable-pixmap">PPM</epp:phrase>
     <epp:phrase id="Plugin/Convert/ImageMagick/Images:application/pdf">Adobe PDF</epp:phrase>
     <epp:phrase id="Plugin/Convert/PlainText:text/plain">Plain Text</epp:phrase>
-    <epp:phrase id="Plugin/Convert/DocPDF:application/pdf">PDF (via antiword)</epp:phrase>
+    <epp:phrase id="Plugin/Convert/DocPDF:application/pdf">PDF (via Antiword)</epp:phrase>
 
   <epp:phrase id="Plugin/Screen/Admin/Config/Edit:could_not_write">Could not write file '<epc:pin name="filename" />'. Error message: <epc:pin name="error_msg" /></epp:phrase>  
 
@@ -3589,7 +3589,7 @@ PY = 2006 and OG = (Cambridge)<br />
 
 <epp:phrase id="cgi/process_request:bad_params">Do not try to access this script directly.</epp:phrase>
 <epp:phrase id="cgi/process_request:request_expired">The request is no longer valid.</epp:phrase>
-<epp:phrase id="cgi/process_request:doc_deleted">The document you have requeted is no longer available.</epp:phrase>
+<epp:phrase id="cgi/process_request:doc_deleted">The document you have requested is no longer available.</epp:phrase>
 <epp:phrase id="cgi/process_request:cookie_error">Failed to create a cookie: please try again later.</epp:phrase>
 
 <epp:phrase id="Plugin/Screen/Request/Respond:title">Confirm response</epp:phrase>
@@ -3601,7 +3601,7 @@ PY = 2006 and OG = (Cambridge)<br />
 <epp:phrase id="Plugin/Screen/Admin/TestEmail:send">Send</epp:phrase>
 <epp:phrase id="Plugin/Screen/Admin/TestEmail:mail_sent">Email successfully sent to <em><epc:pin name="requester"/></em>. It may take a few minutes for the email to arrive, depending on your local conditions.</epp:phrase>
 
-<epp:phrase id="Plugin/Screen/Admin/Phrases:intro"><div>This tool writes modified phrases to zz_webcfg.xml. Click the phrase text to edit it. Javascript required.</div></epp:phrase>
+<epp:phrase id="Plugin/Screen/Admin/Phrases:intro"><div>This tool writes modified phrases to zz_webcfg.xml. Click the phrase text to edit it. JavaScript required.</div></epp:phrase>
 <epp:phrase id="Plugin/Screen/Admin/Phrases:new_phrase">Add New Phrase</epp:phrase>
 <epp:phrase id="Plugin/Screen/Admin/Phrases:save">Save</epp:phrase>
 <epp:phrase id="Plugin/Screen/Admin/Phrases:cancel">Cancel Edit</epp:phrase>
@@ -3686,9 +3686,9 @@ PY = 2006 and OG = (Cambridge)<br />
 <epp:phrase id="datasetname_metafield">Metafield</epp:phrase>
 <epp:phrase id="datasethelp_metafield">Used to store metadata field records</epp:phrase>
 <epp:phrase id="datasetname_eprint">Eprints</epp:phrase>
-<epp:phrase id="datasethelp_eprint">Used to store eprints records</epp:phrase>
+<epp:phrase id="datasethelp_eprint">Used to store EPrints records</epp:phrase>
 <epp:phrase id="datasetname_user">Users</epp:phrase>
-<epp:phrase id="datasethelp_user">Used to store info on eprints users</epp:phrase>
+<epp:phrase id="datasethelp_user">Used to store info on EPrints users</epp:phrase>
 <epp:phrase id="datasetname_subject">Subjects</epp:phrase>
 <epp:phrase id="datasethelp_subject">Used to store the hierarchical subject tree(s)</epp:phrase>
 <epp:phrase id="datasetname_document">Documents</epp:phrase>
@@ -3723,7 +3723,7 @@ PY = 2006 and OG = (Cambridge)<br />
 <epp:phrase id="message_fieldopt_type_error">Error</epp:phrase>
 <epp:phrase id="message_fieldname_messageid">Message ID</epp:phrase>
 <epp:phrase id="message_fieldname_datestamp">Date</epp:phrase>
-<epp:phrase id="message_fieldname_message">Messsage text</epp:phrase>
+<epp:phrase id="message_fieldname_message">Message text</epp:phrase>
 <epp:phrase id="message_fieldname_type">Type</epp:phrase>
 <epp:phrase id="message_fieldname_userid">User ID</epp:phrase>
 
@@ -3748,8 +3748,8 @@ PY = 2006 and OG = (Cambridge)<br />
 
 <!-- Captcha -->
 <epp:phrase id="validate:recaptcha_mismatch">There was an error with the reCAPTCHA. Please try again.</epp:phrase>
-<epp:phrase id="user_fieldname_captcha">Captcha Challenge</epp:phrase>
-<epp:phrase id="user_fieldhelp_captcha">To prevent robots from filling in this form you must verify this captcha.</epp:phrase>
+<epp:phrase id="user_fieldname_captcha">CAPTCHA Challenge</epp:phrase>
+<epp:phrase id="user_fieldhelp_captcha">To prevent robots from filling in this form you must verify this CAPTCHA.</epp:phrase>
 
 <!-- Cachemap -->
 <epp:phrase id="cachemap_fieldname_cachemapid">Cache Table ID</epp:phrase>
@@ -4146,7 +4146,7 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="Plugin/Screen/Admin/EPM/Publish:source">Repository</epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/EPM/Publish:action_publish" ref="Plugin/Screen/Admin/EPM/Developer:action_publish"></epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/EPM/Publish:action_cancel" ref="lib/submissionform:action_cancel"></epp:phrase>
-    <epp:phrase id="Plugin/Screen/Admin/EPM/Publish:bad_endpoint">Unable to locate SwordDeposit endpoint at <epc:pin name="base_url" /></epp:phrase>
+    <epp:phrase id="Plugin/Screen/Admin/EPM/Publish:bad_endpoint">Unable to locate SWORD deposit endpoint at <epc:pin name="base_url" /></epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/EPM/Publish:success">Package published at <epc:pin name="uri" /></epp:phrase>
 
     <epp:phrase id="Plugin/Screen/EPMC/Cfgd:missing">No configuration file found to configure.</epp:phrase>
@@ -4238,7 +4238,7 @@ EPrint Template Field
 
 -->
     <epp:phrase id="eprint_fieldname_template">Template</epp:phrase>
-    <epp:phrase id="eprint_fieldhelp_template">Choose a template to change the way this EPrint is displayed.</epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_template">Choose a template to change the way this eprint is displayed.</epp:phrase>
     <epp:phrase id="template_typename_default">Default</epp:phrase>
 
 
@@ -4252,15 +4252,15 @@ EPrints Accessibility
     <epp:phrase id="accessibility_roadmap_last_updated_date">20 December 2019</epp:phrase>
     <epp:phrase id="accessibility_report_last_tested_date">29 August 2020</epp:phrase>
     <epp:phrase id="accessibility_report_summary">
-<p>Based on testing a default publication flavour installation of EPrints using standard test data, all tested public-facing and back-end administration pages currently report no errors or contrast errors.  There are a number of alerts that are considered acceptable and/or essential for the functioning of EPrintsas on Open Access repository as the fall into one of the following categories:</p>
+<p>Based on testing a default publication flavour installation of EPrints using standard test data, all tested public-facing and back-end administration pages currently report no errors or contrast errors. These pages may have one or more alerts. If so, these alerts are considered acceptable and/or essential for the functioning of EPrints as an Open Access repository and will fall into one of the following categories:</p>
 <ol>
   <li>Links to PDF documents.</li>
   <li>Duplications in the test or third-party data leading to alerts about shared alternative texts for nearby images.</li>
-  <li>Reports of suspicious link texts that is not suspicious within the context of where they appear.</li> 
-  <li>Apparent missing table captions due to a feature in EPrints to make clear a table has no items rather than leaving it blank that might lead to an assu,ption that something is broken.</li>
+  <li>Reports of suspicious link texts that are not considered suspicious within the context of where they appear.</li> 
+  <li>Apparent missing table captions due to a feature in EPrints to make clear a table has no items rather than leaving the table empty.</li>
 </ol> 
-<p>It should be noted that although Chromium's WAVE extension does not report any contrast errors for public-facing pages Firefox's does but the former was used for testing.  Firefox's contrast errors are due to its default settings for the background colour of select boxes.</p>
-<p>Miscellaneous pages like those for OAI metadata harvesting have been tested and found to have issues with tables being reported as being used for layout when they are used as tables, and as these pages are not generally intended for human use, it is not intended to do anything further to address this.</p>
+<p>It should be noted that whilst Chromium's WAVE extension that was used for testing.  It did not report any contrast errors for any of the tested public-facing and back-end administration pages.  However, Firefox's WAVE extension has been seen to report some contrast errors.  Firefox's contrast errors are due to its default setting for the background colour of select form elements.</p>
+<p>Miscellaneous pages like those for OAI metadata harvesting have been tested and found to have issues with tables being reported as being used for layout when they are genuinely being used as tables. However, as these pages are not intended for general human use, there is no intention to further address these issues.</p>
 </epp:phrase>
     
 </epp:phrases>

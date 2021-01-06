@@ -941,7 +941,16 @@ sub clone
 }
 
 # crypt_password( $value, $session )
-sub crypt_password { &crypt( $_[0] ) }
+sub crypt_password { 
+	
+	my( $value, $session ) = @_;
+
+        my $maxlength = $session->config( "password_maxlength" ) || 200;
+		
+	return undef if !EPrints::Utils::is_set( $value ) || length( $value ) > $maxlength;
+
+	&crypt( $value );
+}
 
 =item $crypt = EPrints::Utils::crypt( $value [, $method ] )
 

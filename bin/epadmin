@@ -752,7 +752,7 @@ Please enter all the aliases which could reach the repository, and indicate if
 you would like EPrints to write a Redirect Rule to redirect requests to this
 alias to the correct URL.
 END
-	if( scalar @{$config{aliases}}==0 )
+	if( !defined $config{aliases} || scalar @{$config{aliases}}==0 )
 	{
 		print "Some suggestions:\n";
 		foreach( @example_aliases )
@@ -766,7 +766,7 @@ Enter a single hash (#) when you're done.
 
 END
 
-	my @aliases = @{$config{aliases}};
+	my @aliases = ( defined $config{aliases} ) ? @{$config{aliases}} : ();
 	$config{aliases} = [];
 
 	for(;;)

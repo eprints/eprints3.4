@@ -34,7 +34,7 @@ EPrints::Plugin::Convert::Thumbnails - thumbnail-sized versions of audio/video/i
 
 Conversion of images, videos and audio into preview/thumbnail versions.
 
-This plugin wraps the ImageMagick I<convert> and I<ffmpeg> tools.
+This plugin wraps the ImageMagick I<convert> (has its own security policy, cf. https://imagemagick.org/script/security-policy.php) and I<ffmpeg> tools.
 
 =head1 PARAMETERS
 

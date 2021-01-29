@@ -6,7 +6,7 @@ my %invocations = (
 	 'dvips' => '$(dvips) $(SOURCE) -o $(TARGET)',
 	 'sendmail' => '$(sendmail) -oi -t -odb --',
 	 'elinks' => '$(elinks) -dump 1 -dump-charset UTF-8 $(SOURCE) > $(TARGET)',
-	 'latex' => '$(latex) $(SOURCE)',
+	 'latex' => '$(latex) -no-shell-escape -output-directory=$(TARGET) $(SOURCE)',
 	 'targz' => '$(gunzip) -c < $(ARC) 2>/dev/null | $(tar) xf - -C $(DIR) >/dev/null 2>&1',
 	 'antiwordpdf' => '$(antiword) -a a4 -m 8859-1 $(SOURCE) > $(TARGET)',
 	 'pdftotext' => '$(pdftotext) -enc UTF-8 -layout $(SOURCE) $(TARGET)',

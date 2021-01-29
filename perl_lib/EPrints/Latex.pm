@@ -273,7 +273,7 @@ $texstring
 END
 	close TEX;
 
-	$repository->exec( "latex", SOURCE=>"$fbase.tex" );
+	$repository->exec( "latex", SOURCE=>"$fbase.tex", TARGET=>$cachedir );
 	$repository->exec( "dvips", SOURCE=>"$fbase.dvi", TARGET=>"$fbase.ps" );
 	$repository->exec( 
 		"convert_crop_white", 
@@ -284,14 +284,13 @@ END
 		"$fbase.dvi", 
 		"$fbase.tex", 
 		"$fbase.ps", 
-		"$fbase.log" );
+		"$fbase.log" 
+	);
 
 	chdir( $prev_dir );
 	return $ofile;
 }
 
-
-	
 1;
 
 ######################################################################

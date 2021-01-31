@@ -18,7 +18,6 @@ $session->send_http_header( content_type=>$content );
 my @params = $session->param;
 for ( @params )
 {
-	print STDERR "param: ".$_." = ".$session->param( $_ )."\n";
 	unless ( $session->param( $_ ) =~ m/^[0-9]+$/ ) {
 		my $message = "Invalid Parameter '".$_."'";
 		EPrints::Apache::AnApache::send_status_line( $session->{"request"}, 422, $message );

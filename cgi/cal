@@ -19,7 +19,7 @@ my @params = $session->param;
 for ( @params )
 {
 	unless ( $session->param( $_ ) =~ m/^[0-9]+$/ ) {
-		my $message = "Invalid Parameter '".$_."'";
+		my $message = "Invalid value for parameter '".$_."'";
 		EPrints::Apache::AnApache::send_status_line( $session->{"request"}, 422, $message );
 		exit( 0 );
 	}

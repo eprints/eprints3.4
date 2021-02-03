@@ -7,14 +7,11 @@ $session->send_http_header( content_type=>$content );
 
 my $dataset = $session->param( "dataset" );
 $dataset = "eprint" unless $dataset;
-unless ( $dataset =~  m/^[a-zA-Z0-9_]+$/ )
+if ( $dataset !~ m/^[a-zA-Z0-9_]+$/ || !defined $session->dataset( $dataset ) )
 {
-	unless ( $session->param( $_ ) =~ m/^[0-9]+$/ )
-        {
-                my $message = "Specified dataset does not exist";
-                EPrints::Apache::AnApache::send_status_line( $session->{"request"}, 422, $message );
-                exit( 0 );
-        }
+	my $message = "Specified dataset does not exist";
+	EPrints::Apache::AnApache::send_status_line( $session->{"request"}, 422, $message );
+	exit( 0 );
 } 
 
 my $nohead = $session->param( "nohead" );

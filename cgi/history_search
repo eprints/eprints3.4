@@ -29,6 +29,27 @@ my $start_date = $session->param( "start_date" );
 #get end date
 my $end_date = $session->param( "end_date" );
 
+
+# Validation against XSS
+if ( $fname !~ m/^[a-zA-Z0-9_]+$/ )
+{
+        my $message = "Specified field name is not valid";
+        EPrints::Apache::AnApache::send_status_line( $session->{"request"}, 422, $message );
+        exit( 0 );
+}
+if ( defined $start_date && $start_date !~ m/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/ )
+{
+	my $message = "Specified start date is not valid";
+        EPrints::Apache::AnApache::send_status_line( $session->{"request"}, 422, $message );
+        exit( 0 );
+}
+if ( defined $end_date && $end_date !~ m/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/ )
+{
+        my $message = "Specified end date is not valid";
+        EPrints::Apache::AnApache::send_status_line( $session->{"request"}, 422, $message );
+        exit( 0 );
+}
+
 #title
 my $title = $session->make_element( "h2" );
 $title->appendChild( $session->make_text( "History Search" ) );

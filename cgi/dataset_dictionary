@@ -6,10 +6,20 @@ my $content = "text/html";
 $session->send_http_header( content_type=>$content );
 
 my $dataset = $session->param( "dataset" );
-   $dataset = "eprint" unless $dataset;
+$dataset = "eprint" unless $dataset;
+unless ( $dataset =~  m/^[a-zA-Z0-9_]+$/ )
+{
+	unless ( $session->param( $_ ) =~ m/^[0-9]+$/ )
+        {
+                my $message = "Specified dataset does not exist";
+                EPrints::Apache::AnApache::send_status_line( $session->{"request"}, 422, $message );
+                exit( 0 );
+        }
+} 
 
 my $nohead = $session->param( "nohead" );
-   $nohead = 0 unless $nohead;
+$nohead = 0 unless $nohead;
+$nohead = 1 if $nohead;
 
 if( !( $session->current_user && $session->current_user->value("usertype") =~ /^(admin|local_admin)$/ ) )
 {

@@ -127,8 +127,8 @@ Returns an XML document parsed from $string.
 
 sub parse_string
 {
-	my( $self, $string ) = @_;
-	return parse_xml_string( $string );
+	my( $self, $string, %opts ) = @_;
+	return parse_xml_string( $string, %opts );
 }
 
 =item $doc = $xml->parse_file( $filename, %opts )

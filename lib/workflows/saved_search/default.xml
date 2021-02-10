@@ -12,7 +12,7 @@
     <component><field ref="name"/></component>
 
     <!-- see https://github.com/eprints/eprints/issues/169 - can be removed when this issue fixed -->
-    <epc:if test="substr(spec.as_string(),0,30) = '?plugin=Xapian&amp;searchid=simple'">
+    <epc:if test="substr(spec.as_string(),0,30) = '?plugin=Xapian&amp;searchid=simple' or substr(spec.as_string(),0,33) = '?plugin=Xapianv2&amp;searchid=simple2'">
       <component type="XHTML"><epc:phrase ref="saved_search_xapian_warning"/></component>
     </epc:if>
 

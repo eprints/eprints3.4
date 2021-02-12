@@ -548,7 +548,7 @@ sub _decode_bibtex
 	{
 		while( my($k,$v) = each(%$epdata) )
 		{
-			next if( $k eq 'type' );
+			next if( $k eq 'type' || $k eq 'monograph_type' );
 			$epdata->{$k} = _decode_bibtex( $v );
 		}
 	}

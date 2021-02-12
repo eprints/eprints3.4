@@ -20,13 +20,25 @@ sub from
 	my $langid = $session->param( "lang" );
 	$langid = "" if !defined $langid;
 
+	my $samesite = "Lax";
+	my $secure = 0;
+	my $httponly = 1;
+	if ( $session->{request}->scheme() eq "https" )
+	{
+		my $samesite = "None";
+		my $secure = 1;
+		my $httponly = 0;
+	}
 	my $cookie = $session->{query}->cookie(
-		-name    => "eprints_lang",
-		-path    => "/",
-		-expires => 0,
-		-value   => $langid,
-		-expires => ($langid ? "+10y" : "+0s"), # really long time
-		-domain  => $session->config("cookie_domain") );
+		-name     => "eprints_lang",
+		-path     => "/",
+		-samesite => $samesite,
+		-secure   => $secure,
+		-httponly => $httponly,
+		-expires  => 0,
+		-value    => $langid,
+		-expires  => ($langid ? "+10y" : "+0s"), # really long time
+		-domain   => $session->config("cookie_domain") );
 	$session->{request}->err_headers_out->add('Set-Cookie' => $cookie);
 
 	my $referrer = $session->param( "referrer" );
@@ -62,7 +74,8 @@ sub render_action_link
 	}
 
 	my $imagesurl = $session->config( "rel_path" )."/images/flags";
-	my $scripturl = URI->new( $session->current_url( path => "cgi", "set_lang" ), 'http' );
+	my $scheme = EPrints::Utils::is_set( $session->config( "securehost" ) ) ? "https" : "http";
+	my $scripturl = URI->new( $session->current_url( path => "cgi", "set_lang" ), $scheme );
 	my $curl = "";
 	if( $session->get_online )
 	{

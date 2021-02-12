@@ -3746,6 +3746,9 @@ PY = 2006 and OG = (Cambridge)<br />
 <epp:phrase id="event_queue_fieldname_cleanup">Remove on Completion</epp:phrase>
 <epp:phrase id="event_queue_fieldname_pluginid">Plugin</epp:phrase>
 <epp:phrase id="event_queue_fieldname_userid">Owner</epp:phrase>
+<epp:phrase id="event_queue_fieldhelp_status">The status of the task.</epp:phrase>
+<epp:phrase id="event_queue_fieldhelp_start_time">The time the task is scheduled to start running.</epp:phrase>
+
 
 <!-- Captcha -->
 <epp:phrase id="validate:recaptcha_mismatch">There was an error with the reCAPTCHA. Please try again.</epp:phrase>

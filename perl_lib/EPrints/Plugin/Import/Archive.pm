@@ -68,6 +68,7 @@ sub create_epdata_from_directory
 	my( $self, $dir, $single ) = @_;
 
 	my $repo = $self->{repository};
+	my $too_many_files = $repo->config( 'archive_max_files' ) || 100;
 
 	my $epdata = $single ?
 		{ files => [] } :
@@ -98,7 +99,7 @@ sub create_epdata_from_directory
 					mime_type => $media_info->{mime_type},
 					_content => $fh,
 				};
-				die "Too many files" if @{$epdata->{files}} > 100;
+				die "Too many files" if @{$epdata->{files}} > $too_many_files
 			}
 			else
 			{
@@ -112,7 +113,7 @@ sub create_epdata_from_directory
 						_content => $fh,
 					}],
 				};
-				die "Too many files" if @{$epdata} > 100;
+				die "Too many files" if @{$epdata} > $too_many_files
 			}
 		},
 	}, $dir ) };

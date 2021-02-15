@@ -796,7 +796,7 @@ sub _add_http_paths
 	$config->{"urlpath"} ||= $config->{"http_root"};
 	$config->{"base_url"} ||= $config->{"pr_url"} . "/";
 	$config->{"perl_url"} ||= $config->{"pr_cgiurl"};
-	$config->{"frontpage"} ||= $config->{"pr_url"} . "/";
+	$config->{"frontpage"} ||= $config->{"securehost"} ? $config->{"https_url"} . "/" : $config->{"http_url"} . "/";
 	$config->{"userhome"} ||= $config->{"http_cgiroot"} . "/users/home";
 }
  

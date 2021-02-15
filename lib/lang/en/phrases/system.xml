@@ -2927,6 +2927,7 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="Plugin/Screen/EPrint/RejectWithEmail:description">Return this item from to the user work area and send an email to the user who deposited it to explain why it cannot yet be accepted.</epp:phrase>
     <epp:phrase id="Plugin/Screen/EPrint/RejectWithEmail:item_removed">Item has been removed.</epp:phrase>
     <epp:phrase id="Plugin/Screen/EPrint/RejectWithEmail:item_not_removed">Item could not be removed.</epp:phrase>
+    <epp:phrase id="Plugin/Screen/EPrint/RejectWithEmail:reason_label">Reason</epp:phrase>
 
     <epp:phrase id="Plugin/Screen/EPrint/Remove:title">Remove item</epp:phrase>
     <epp:phrase id="Plugin/Screen/EPrint/Remove:description">Remove this item from the system forever.</epp:phrase>

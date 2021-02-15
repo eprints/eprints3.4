@@ -189,15 +189,12 @@ sub get_basic_input_elements
  	        last if $t eq $value;
  	        $default_index++;
 	}
- 	# dont believe the onchange return status is used, just setting it for completeness
- 	my $onchange = ( $readonly ) ? "selectedIndex = $default_index; return false;" : "return true;";
 
 	return( [ [ { el=>$session->render_option_list(
 			values => $tags,
 			labels => $labels,
 			name => $basename,
 			class => join(" ", @classes),
-			onchange => $onchange,
 			readonly => $readonly,
 			id => $basename,
 			default => $value,

@@ -3694,6 +3694,22 @@ sub render_option_list
 
 	my $class = ( defined($params{class}) ) ? $params{class} : "";
 	my $element = $self->make_element( "select" , name => $params{name}, id => $params{name}, class => $class );
+	my $span = undef;
+	if( $params{readonly} )
+        {
+                $element->setAttribute( "readonly" , "readonly" );
+		$span = $self->make_element( "span" , class => "ep_set_disabled" );
+		$element = $self->make_element( "select", name => $params{name} . "_disabled", id => $params{name} . "_disabled", class => $class, disabled => "disabled" );
+		foreach my $pair ( @{$pairs} )
+		{
+			if( $defaults{$pair->[0]} )
+			{
+				my $hidden = $self->make_element( "input", name => $params{name}, id => $params{name}, type => "hidden", value => $pair->[0] );
+				$span->appendChild( $hidden );
+			}
+		}
+		
+        }
 	if( $params{multiple} )
 	{
 		$element->setAttribute( "multiple" , "multiple" );
@@ -3725,6 +3741,12 @@ sub render_option_list
 		}
 		$element->setAttribute( "size" , $size );
 	}
+	
+	if ( defined $span )
+	{
+		$span->appendChild( $element );
+		return $span;
+	}		
 	return $element;
 }
 

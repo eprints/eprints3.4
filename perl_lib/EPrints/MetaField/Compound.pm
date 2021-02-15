@@ -493,12 +493,12 @@ sub get_basic_input_elements
 {
 	my( $self, $session, $value, $basename, $staff, $object, $one_field_component ) = @_;
 
-	my $readonly = ( $self->{readonly} && $self->{readonly} eq "yes" ) ? 1 : 0;
+	my $readonly = ( $self->{readonly} && ( $self->{readonly} eq "1" || $self->{readonly} eq "yes" ) ) ? 1 : 0;
 	my $grid_row = [];
 
 	foreach my $field (@{$self->{fields_cache}})
 	{
-		$field->{readonly} = $readonly;
+		$field->{readonly} = $readonly unless defined $field->{readonly};
 		my $alias = $field->property( "sub_name" );
 		my $part_grid = $field->get_basic_input_elements( 
 					$session, 

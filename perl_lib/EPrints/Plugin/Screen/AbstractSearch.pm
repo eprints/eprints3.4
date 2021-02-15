@@ -626,7 +626,7 @@ sub paginate_opts
 	$order_div->appendChild( $form );
 	$form->appendChild( $self->{session}->html_phrase( "lib/searchexpression:order_results" ) );
 	$form->appendChild( $self->{session}->make_text( ": " ) );
-	$form->appendChild( $self->render_order_menu );
+	$form->appendChild( $self->render_order_menu( ( auto_submit => 1 ) ) );
 
 	$form->appendChild( $self->{session}->render_button(
 			name=>"_action_search",
@@ -849,7 +849,7 @@ sub render_order_field
 
 sub render_order_menu
 {
-	my( $self ) = @_;
+	my( $self, %opts ) = @_;
 
 	my $raworder = $self->{processor}->{search}->{custom_order};
 	$raworder = "" if !defined $raworder;
@@ -866,13 +866,15 @@ sub render_order_menu
                 	"ordername_".$self->{processor}->{search}->{dataset}->confid() . "_" . $_ );
         }
 
-	return $self->{session}->render_option_list(
+	my %attrs = (
 		name=>"order",
-		values=>[values %{$methods}],
-		default=>$order,
-		labels=>\%labels,
-		onchange=>"this.form.submit();",
-		'aria-labelledby'=>"order_label" );
+                values=>[values %{$methods}],
+                default=>$order,
+                labels=>\%labels,
+                'aria-labelledby'=>"order_label"
+	);
+	$attrs{onchange} = "this.form.submit();" if $opts{auto_submit} && $self->{session}->config( 'order_auto_submit' );
+	return $self->{session}->render_option_list( %attrs );
 }
 
 # redirecting from a POST will lose all our parameters, although we always use

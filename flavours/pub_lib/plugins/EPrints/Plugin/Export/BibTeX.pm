@@ -152,7 +152,10 @@ sub convert_dataobj
 	}
 	if( $dataobj->exists_and_set( "ispublished" ) )
 	{
-		$data->{type} = "unpublished" if $dataobj->get_value( "ispublished" ) eq "unpub";
+		my $publication_status_type_override = $plugin->{session}->config( 'export', 'publication_status_type_override' );
+		$publication_status_type_override = 1 unless EPrints::Utils::is_set( $publication_status_type_override );
+		$data->{type} = "unpublished" if $dataobj->get_value( "ispublished" ) eq "unpub" && ( $data->{type} eq "misc" || $publication_status_type_override );
+		$data->{bibtex}->{note} = $plugin->{session}->phrase( "eprint_fieldopt_ispublished_".$dataobj->get_value( "ispublished" ) ) if $dataobj->get_value( "ispublished" ) ne "pub";
 	}
 
 	# address

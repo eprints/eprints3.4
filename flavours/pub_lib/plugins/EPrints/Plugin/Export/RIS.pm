@@ -354,8 +354,11 @@ sub convert_dataobj
 	if( $dataobj->exists_and_set( "ispublished" ) )
 	{
 		my $status = $dataobj->get_value( "ispublished" );
-		$data->{TY} = "INPR" if $status eq "inpress"; 
-		$data->{TY} = "UNPB" if $status eq "unpub";
+		my $publication_status_type_override = $plugin->{session}->config( 'export', 'publication_status_type_override' );
+                $publication_status_type_override = 1 unless EPrints::Utils::is_set( $publication_status_type_override );
+		$data->{TY} = "INPR" if $status eq "inpress" && ( $data->{type} eq "GEN" || $publication_status_type_override ); 
+		$data->{TY} = "UNPB" if $status eq "unpub" && ( $data->{type} eq "GEN" || $publication_status_type_override );
+                $data->{N1} = $plugin->{session}->phrase( "eprint_fieldopt_ispublished_".$dataobj->get_value( "ispublished" ) ) if $status ne "pub";	
 	}
 
 	# T1 Title

@@ -1,14 +1,11 @@
 <?xml version="1.0" ?>
 
 <!-- 
-	Result row for user searching.
+	Citation Style for history records
 -->
 
 <cite:citation xmlns="http://www.w3.org/1999/xhtml" xmlns:cite="http://eprints.org/ep3/citation" xmlns:epc="http://eprints.org/ep3/control" type="table_row">
-      <epc:print expr="action" /> on <epc:print expr="datasetid" />.<epc:print expr="objectid" />
-      at <epc:print expr="timestamp" />
-      by <epc:print expr="actor" />.
+      <epc:print expr="action" /> <epc:phrase ref="lib/citation:dataset_prefix" /> <epc:print expr="datasetid" />.<epc:print expr="objectid" />
+      <epc:phrase ref="lib/citation:timestamp_prefix" /> <epc:print expr="timestamp" />
+      <epc:phrase ref="lib/citation:actor_prefix" /> <epc:print expr="actor" />.
 </cite:citation>
-
-
-

@@ -324,7 +324,8 @@ sub dataobj_export_url
 	}
 	my $format = $1;
 
-	my $url = $plugin->{session}->get_repository->get_conf( "http_cgiurl" );
+	my $conf_name = ( $plugin->{session}->get_repository->get_conf( "securehost" ) ? "https_cgiurl" : "http_cgiurl" );
+	my $url = $plugin->{session}->get_repository->get_conf( $conf_name );
 	$url .= '/export/' . join('/', map { URI::Escape::uri_escape($_) }
 		$dataobj->get_dataset->base_id,
 		$dataobj->get_id,

@@ -330,7 +330,9 @@ sub search_url
 		order => $self->{custom_order},
 	);
 
-	return "$url";
+	$url = "$url";
+	$url =~ s/^http:/https:/ if $self->{session}->config( "securehost" );
+	return $url;
 }
 
 =item $searchexp->is_blank()

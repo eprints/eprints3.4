@@ -898,7 +898,9 @@ sub get_control_url
 {
 	my( $self ) = @_;
 
-	return $self->{session}->get_repository->get_conf( "http_cgiurl" )."/users/home?screen=User::View&userid=".$self->get_value( "userid" );
+	my $conf_name = ( $self->{session}->get_repository->get_conf( "securehost" ) ? "https_cgiurl" : "http_cgiurl" );
+
+	return $self->{session}->get_repository->get_conf( $conf_name )."/users/home?screen=User::View&userid=".$self->get_value( "userid" );
 }
 	
 

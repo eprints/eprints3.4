@@ -69,7 +69,7 @@ sub convert_dataobj
 	# T Title
 	$data->{T} = $dataobj->get_value( "title" ) if $dataobj->exists_and_set( "title" );
 	# U URL
-	$data->{U} = $dataobj->get_url;
+	$data->{U} = $dataobj->get_url( 'preferred' );
 	# X Abstract
 	$data->{X} = $dataobj->get_value( "abstract" ) if $dataobj->exists_and_set( "abstract" );
 	# Z Notes

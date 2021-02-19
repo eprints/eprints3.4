@@ -595,15 +595,12 @@ If file is not specified then the "main" file is used.
 
 sub get_url
 {
-	my( $self, $file, $proto ) = @_;
+	my( $self, $file ) = @_;
 
 	my $path = $self->file_path( $file );
 	return undef if !defined $path;
 
-	my $conf_name = "pr_url";
-	$conf_name = "http_url" if defined $proto && $proto eq "http";
-	$conf_name = "https_url" if defined $proto && $proto eq "https";
-	my $url = $self->{session}->config( $conf_name ) . "/";
+	my $url = ( $self->{session}->config( 'securehost' ) ? $self->{session}->config( 'https_url' ) : $self->{session}->config( 'http_url' ) ) . '/';
 
 	$url .= 'id/eprint/' if $self->{session}->get_conf( "use_long_url_format");
 

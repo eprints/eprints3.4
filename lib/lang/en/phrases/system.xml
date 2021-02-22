@@ -393,6 +393,7 @@ terms.</p>
 
     <epp:phrase id="eprint_fieldname_creators">Creators</epp:phrase>
     <epp:phrase id="eprint_fieldname_editors">Editors</epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_editors"/>
     <epp:phrase id="eprint_fieldhelp_editors_name"/>
     <epp:phrase id="eprint_fieldhelp_editors_id"/>
     <epp:phrase id="eprint_fieldhelp_editors_name_family"/>
@@ -612,7 +613,7 @@ This field is required if no creators are listed.
 </epp:phrase>
 
     <epp:phrase id="eprint_fieldname_full_text_status">Full Text Status</epp:phrase>
-    <epp:phrase id="eprint_fieldhelp_full_text_status"></epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_full_text_status"/>
     <epp:phrase id="eprint_fieldopt_full_text_status_public">Public</epp:phrase>
     <epp:phrase id="eprint_fieldopt_full_text_status_none">None</epp:phrase>
     <epp:phrase id="eprint_fieldopt_full_text_status_restricted">Restricted</epp:phrase>
@@ -650,13 +651,13 @@ This field is required if no creators are listed.
 </epp:phrase>
 
     <epp:phrase id="eprint_fieldname_producers">Producers</epp:phrase>
-    <epp:phrase id="eprint_fieldhelp_producers"></epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_producers"/>
     <epp:phrase id="eprint_fieldname_producers_id">Email</epp:phrase>
     <!--<epp:phrase id="eprint_fieldhelp_producers">The producers of the recording.</epp:phrase>-->
     <epp:phrase id="eprint_fieldname_producers_name">The producers name</epp:phrase>
 
     <epp:phrase id="eprint_fieldname_conductors">Conductors</epp:phrase>
-    <epp:phrase id="eprint_fieldhelp_conductors"></epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_conductors"/>
     <epp:phrase id="eprint_fieldname_conductors_id">Email</epp:phrase>
     <!--<epp:phrase id="eprint_fieldhelp_conductors">The conductors of the recording.</epp:phrase>-->
     <epp:phrase id="eprint_fieldname_conductors_name">The conductors name</epp:phrase>
@@ -665,7 +666,7 @@ This field is required if no creators are listed.
     <epp:phrase id="eprint_fieldhelp_accompaniment">Example: <span class="ep_form_example">BBC Singers</span></epp:phrase>
 
     <epp:phrase id="eprint_fieldname_lyricists">Lyricists</epp:phrase>
-    <epp:phrase id="eprint_fieldhelp_lyricists"></epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_lyricists"/>
     <epp:phrase id="eprint_fieldname_lyricists_id">Email</epp:phrase>
     <epp:phrase id="eprint_fieldname_lyricists_name">The conductors name</epp:phrase>
     <!--<epp:phrase id="eprint_fieldhelp_lyricists">The lyricists.</epp:phrase>-->
@@ -1259,7 +1260,7 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
 
 
 
-    <epp:phrase id="page:fulltext"></epp:phrase>
+    <epp:phrase id="page:fulltext"/>
     <epp:phrase id="page:nofulltext">Full text not available from this repository.</epp:phrase>
     <epp:phrase id="page:abstract">Abstract</epp:phrase>
     <epp:phrase id="page:deposited_by">Deposited By</epp:phrase>
@@ -1301,13 +1302,13 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
     <epp:phrase id="Plugin/Screen/Admin/StorageManager:Storage::Local">Local Disk Storage</epp:phrase>
     
     <epp:phrase id="Plugin/Screen/Admin/StorageManager:a_local_disk_storage">Local Disk Storage</epp:phrase>
-    <epp:phrase id="Plugin/Screen/Admin/StorageManager:a_local_disk_storage_pic"></epp:phrase>
+    <epp:phrase id="Plugin/Screen/Admin/StorageManager:a_local_disk_storage_pic"/>
     <epp:phrase id="Plugin/Screen/Admin/StorageManager:a_epm_disk_storage">EPM Disk Storage</epp:phrase>
-    <epp:phrase id="Plugin/Screen/Admin/StorageManager:a_epm_disk_storage_pic"></epp:phrase>
+    <epp:phrase id="Plugin/Screen/Admin/StorageManager:a_epm_disk_storage_pic"/>
     <epp:phrase id="Plugin/Screen/Admin/StorageManager:m_local_archival_storage">Archival Storage</epp:phrase>
-    <epp:phrase id="Plugin/Screen/Admin/StorageManager:m_local_archival_storage_pic"></epp:phrase>
+    <epp:phrase id="Plugin/Screen/Admin/StorageManager:m_local_archival_storage_pic"/>
     <epp:phrase id="Plugin/Screen/Admin/StorageManager:z_cloud_storage">Cloud Storage Platforms</epp:phrase>
-    <epp:phrase id="Plugin/Screen/Admin/StorageManager:z_cloud_storage_pic"></epp:phrase>
+    <epp:phrase id="Plugin/Screen/Admin/StorageManager:z_cloud_storage_pic"/>
 
 
 
@@ -1418,7 +1419,7 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
 
 <!-- MetaField -->
 
-    <epp:phrase id="lib/metafield:drop_loading"></epp:phrase>
+    <epp:phrase id="lib/metafield:drop_loading"/>
     <epp:phrase id="lib/metafield:year">Year:</epp:phrase>
     <epp:phrase id="lib/metafield:month">Month:</epp:phrase>
     <epp:phrase id="lib/metafield:day">Day:</epp:phrase>
@@ -1438,7 +1439,7 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
     <epp:phrase id="lib/metafield:true">Yes</epp:phrase>
     <epp:phrase id="lib/metafield:false">No</epp:phrase>
 
-    <epp:phrase id="lib/metafield:date_res_second"></epp:phrase>
+    <epp:phrase id="lib/metafield:date_res_second"/>
 <!--
     <epp:phrase id="lib/metafield:date_res_minute">"Second" may be omitted.<br/></epp:phrase>
     <epp:phrase id="lib/metafield:date_res_hour">"Minute" and "Second" may be omitted.<br/></epp:phrase>
@@ -1446,11 +1447,11 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
     <epp:phrase id="lib/metafield:date_res_month">Only "Year" and "Month" are necessary.<br/></epp:phrase>
     <epp:phrase id="lib/metafield:date_res_year">Only "Year" is necessary.<br/></epp:phrase>
 -->
-    <epp:phrase id="lib/metafield:date_res_minute"></epp:phrase>
-    <epp:phrase id="lib/metafield:date_res_hour"></epp:phrase>
-    <epp:phrase id="lib/metafield:date_res_day"></epp:phrase>
-    <epp:phrase id="lib/metafield:date_res_month"></epp:phrase>
-    <epp:phrase id="lib/metafield:date_res_year"></epp:phrase>
+    <epp:phrase id="lib/metafield:date_res_minute"/>
+    <epp:phrase id="lib/metafield:date_res_hour"/>
+    <epp:phrase id="lib/metafield:date_res_day"/>
+    <epp:phrase id="lib/metafield:date_res_month"/>
+    <epp:phrase id="lib/metafield:date_res_year"/>
 
     <!-- phrases used to separate multiple values in a field -->
     <!-- you can use .first and .last to make the first or 
@@ -1489,21 +1490,35 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
 
 <!-- File -->
     <epp:phrase id="file_fieldname_fileid">Unique file id</epp:phrase>
+    <epp:phrase id="file_fieldhelp_fileid"/>
     <epp:phrase id="file_fieldname_datasetid">Object dataset id</epp:phrase>
+    <epp:phrase id="file_fieldhelp_datasetid"/>
     <epp:phrase id="file_fieldname_mime_type">Mime-Type</epp:phrase>
+    <epp:phrase id="file_fieldhelp_mime_type"/>
     <epp:phrase id="file_fieldname_objectid">Object id</epp:phrase>
+    <epp:phrase id="file_fieldhelp_objectid"/>
     <epp:phrase id="file_fieldname_bucket">File bucket</epp:phrase>
     <epp:phrase id="file_fieldname_filename">File name</epp:phrase>
+    <epp:phrase id="file_fieldhelp_filename"/>
     <epp:phrase id="file_fieldname_filesize">File size</epp:phrase>
+    <epp:phrase id="file_fieldhelp_filesize"/>
     <epp:phrase id="file_fieldname_hash">File checksum</epp:phrase>
+    <epp:phrase id="file_fieldhelp_hash"/>
     <epp:phrase id="file_fieldname_hash_type">Checksum type</epp:phrase>
+    <epp:phrase id="file_fieldhelp_hash_type"/>
     <epp:phrase id="file_fieldname_mtime">File modification time</epp:phrase>
+    <epp:phrase id="file_fieldhelp_mtime"/>
     <epp:phrase id="file_fieldname_pronom_uid">Pronom Format Identifier</epp:phrase>
     <epp:phrase id="file_fieldname_url">URL</epp:phrase>
+    <epp:phrase id="file_fieldhelp_url"/>
     <epp:phrase id="file_fieldname_data">Data</epp:phrase>
+    <epp:phrase id="file_fieldhelp_data"/>
     <epp:phrase id="file_fieldname_copies">Copies</epp:phrase>
+    <epp:phrase id="file_fieldhelp_copies"/>
     <epp:phrase id="file_fieldname_copies_pluginid">Plugin ID</epp:phrase>
+    <epp:phrase id="file_fieldhelp_copies_pluginid"/>
     <epp:phrase id="file_fieldname_copies_sourceid">Source ID</epp:phrase>
+    <epp:phrase id="file_fieldhelp_copies_sourceid"/>
     
 <!-- Page ranges -->
     <!-- 123-123 -->
@@ -1558,7 +1573,7 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
     <epp:phrase id="lib/searchexpression:next">Next</epp:phrase>
     <epp:phrase id="lib/searchexpression:prev">Previous</epp:phrase>
     <epp:phrase id="lib/searchexpression:self">Self</epp:phrase>
-    <epp:phrase id="lib/searchexpression:previous" ref="lib/searchexpression:prev"></epp:phrase>
+    <epp:phrase id="lib/searchexpression:previous" ref="lib/searchexpression:prev"/>
     <epp:phrase id="lib/searchexpression:new">New search</epp:phrase>
     <epp:phrase id="lib/searchexpression:refine">Refine search</epp:phrase>
     <epp:phrase id="lib/searchexpression:seperator"> | </epp:phrase>
@@ -1573,7 +1588,7 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
 
 <!-- Search::Field (Used to be SearchField)-->
 
-    <epp:phrase id="lib/searchfield:help_subobject" ref="lib/searchfield:help_text"></epp:phrase>
+    <epp:phrase id="lib/searchfield:help_subobject" ref="lib/searchfield:help_text"/>
     <epp:phrase id="lib/searchfield:year_err">A year search must be specified as a single year, e.g. `2000', or a range of years, e.g. `1990-2000', `1990-' or `-2000'</epp:phrase>
     <epp:phrase id="lib/searchfield:int_err">A numerical search must be specified as a single integer number, e.g. `23', or a range of numbers, e.g. `9-21', `17-' or `-93'</epp:phrase>
     <epp:phrase id="lib/searchfield:date_err">A date search must be specified as a single date or a range.</epp:phrase>
@@ -2043,16 +2058,16 @@ User Area CGI Scripts
     <epp:phrase id="Plugin/Screen/Admin/Config/Edit/XPage:title">Edit config file</epp:phrase>
 
     <epp:phrase id="Plugin/Screen/Admin/Config/Edit/Apache:intro"><p>Changes to this file will not take effect until the web server is restarted.</p></epp:phrase>
-    <epp:phrase id="Plugin/Screen/Admin/Config/Edit/Autocomplete:intro"></epp:phrase>
-    <epp:phrase id="Plugin/Screen/Admin/Config/Edit/Citation:intro"></epp:phrase>
-    <epp:phrase id="Plugin/Screen/Admin/Config/Edit/NamedSet:intro"></epp:phrase>
+    <epp:phrase id="Plugin/Screen/Admin/Config/Edit/Autocomplete:intro"/>
+    <epp:phrase id="Plugin/Screen/Admin/Config/Edit/Citation:intro"/>
+    <epp:phrase id="Plugin/Screen/Admin/Config/Edit/NamedSet:intro"/>
     <epp:phrase id="Plugin/Screen/Admin/Config/Edit/Perl:intro"><p>Changes to this file will not take effect until the repository configuration is reloaded or the web server is restarted.</p></epp:phrase>
-    <epp:phrase id="Plugin/Screen/Admin/Config/Edit/Phrase:intro"></epp:phrase>
-    <epp:phrase id="Plugin/Screen/Admin/Config/Edit/Static:intro"></epp:phrase>
-    <epp:phrase id="Plugin/Screen/Admin/Config/Edit/Template:intro"></epp:phrase>
-    <epp:phrase id="Plugin/Screen/Admin/Config/Edit/Workflow:intro"></epp:phrase>
-    <epp:phrase id="Plugin/Screen/Admin/Config/Edit/XML:intro"></epp:phrase>
-    <epp:phrase id="Plugin/Screen/Admin/Config/Edit/XPage:intro"></epp:phrase>
+    <epp:phrase id="Plugin/Screen/Admin/Config/Edit/Phrase:intro"/>
+    <epp:phrase id="Plugin/Screen/Admin/Config/Edit/Static:intro"/>
+    <epp:phrase id="Plugin/Screen/Admin/Config/Edit/Template:intro"/>
+    <epp:phrase id="Plugin/Screen/Admin/Config/Edit/Workflow:intro"/>
+    <epp:phrase id="Plugin/Screen/Admin/Config/Edit/XML:intro"/>
+    <epp:phrase id="Plugin/Screen/Admin/Config/Edit/XPage:intro"/>
 
     <epp:phrase id="Plugin/Screen/Admin/Config/Edit:did_not_install">Did not install modified configuration file.</epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/Config/Edit:broken">You are viewing a version of this configuration file which has been edited via the web interface, but not successfully installed. To revert to the last (probably OK) version, use the Revert button below.</epp:phrase>
@@ -2312,7 +2327,7 @@ Public CGI Scripts
     <epp:phrase id="register_fieldhelp_newpassword">A combination of uppercase and lowercase letters and numerals.</epp:phrase>
 
     <!-- You may wish to override this phrase in the repository phrase file with something like "By pushing the Register button you agree to...". -->
-    <epp:phrase id="cgi/register:register_agreement"></epp:phrase>
+    <epp:phrase id="cgi/register:register_agreement"/>
 
 
 <!-- set_password -->
@@ -2343,7 +2358,7 @@ Public CGI Scripts
 <!-- latest -->
 
     <epp:phrase id="cgi/latest:title">Latest Additions to <epc:phrase ref="archive_name" /></epp:phrase>
-    <epp:phrase id="cgi/latest:intro"></epp:phrase>
+    <epp:phrase id="cgi/latest:intro"/>
     <epp:phrase id="cgi/latest:none"><p>Nothing new in the last 7 days.</p></epp:phrase>
     <epp:phrase id="cgi/latest:today">Today</epp:phrase>
     <epp:phrase id="cgi/latest:yesterday">Yesterday</epp:phrase>
@@ -2438,21 +2453,30 @@ Titles and Help for the System Fields
 ***********************************************************************-->
 
     <epp:phrase id="eprint_fieldname_eprintid">Item ID</epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_eprintid"/>
     <epp:phrase id="eprint_fieldname_rev_number">Revision</epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_rev_number"/>
     <epp:phrase id="eprint_fieldname_eprint_status">Item Status</epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_eprint_status"/>
     <epp:phrase id="eprint_fieldopt_eprint_status_buffer">Under Review</epp:phrase>
     <epp:phrase id="eprint_fieldopt_eprint_status_inbox">User Workarea</epp:phrase>
     <epp:phrase id="eprint_fieldopt_eprint_status_deletion">Retired</epp:phrase>
     <epp:phrase id="eprint_fieldopt_eprint_status_archive">Live Archive</epp:phrase>
     <epp:phrase id="eprint_fieldname_userid">Depositing User</epp:phrase>
     <epp:phrase id="eprint_fieldname_importid">Import Collection</epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_importid"/>
     <epp:phrase id="eprint_fieldname_source_id">Source Identifier</epp:phrase>
     <epp:phrase id="eprint_fieldname_contributors_name">Name</epp:phrase>
     <epp:phrase id="eprint_fieldname_source">Source</epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_source"/>
     <epp:phrase id="eprint_fieldname_dir">Directory</epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_dir"/>
     <epp:phrase id="eprint_fieldname_datestamp">Date Deposited</epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_datestamp"/>
     <epp:phrase id="eprint_fieldname_lastmod">Last Modified</epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_lastmod"/>
     <epp:phrase id="eprint_fieldname_status_changed">Last Status Change</epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_status_changed"/>
     <epp:phrase id="eprint_fieldname_type">Item Type</epp:phrase>
     <epp:phrase id="eprint_fieldhelp_type">Please select the most appropriate type for your deposit.</epp:phrase>
     <epp:phrase id="eprint_fieldname_succeeds">Later Version of</epp:phrase>
@@ -2461,8 +2485,9 @@ Titles and Help for the System Fields
     <epp:phrase id="eprint_fieldhelp_commentary">If your item is a commentary on another item (or author's response to a commentary) in the repository, please enter its ID in this box.</epp:phrase>
     <epp:phrase id="eprint_fieldname_replacedby">Replaced by</epp:phrase>
     <epp:phrase id="eprint_fieldname_fileinfo">Links to files</epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_fileinfo"/>
     <epp:phrase id="eprint_fieldname_metadata_visibility">Metadata Visibility</epp:phrase>
-    <epp:phrase id="eprint_fieldhelp_metadata_visibility"></epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_metadata_visibility"/>
     <epp:phrase id="eprint_fieldopt_metadata_visibility_show">Always Show</epp:phrase>
     <epp:phrase id="eprint_fieldopt_metadata_visibility_no_search">Hide in search results</epp:phrase>
     <epp:phrase id="eprint_fieldopt_metadata_visibility_hide">Always Hide</epp:phrase>
@@ -2474,16 +2499,29 @@ Titles and Help for the System Fields
     <epp:phrase id="eprint_fieldname_relation">Relationships</epp:phrase>
     <epp:phrase id="eprint_fieldhelp_relation">This field describes relationships this item has to other entities. Ideally, use URIs for the target identifier.</epp:phrase>
     <epp:phrase id="eprint_fieldname_relation_uri">Target identifier</epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_relation_uri"/>     
     <epp:phrase id="eprint_fieldname_relation_type">Relation type</epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_relation_type"/>
     <epp:phrase id="eprint_fieldname_item_issues">Issues</epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_item_issues"/>
     <epp:phrase id="eprint_fieldname_item_issues_id">Issue ID</epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_item_issues_id"/>
     <epp:phrase id="eprint_fieldname_item_issues_type">Issue type</epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_item_issues_type"/>
     <epp:phrase id="eprint_fieldname_item_issues_description">Description</epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_item_issues_description"/>
     <epp:phrase id="eprint_fieldname_item_issues_timestamp">Timestamp</epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_item_issues_timestamp"/>
     <epp:phrase id="eprint_fieldname_item_issues_status">Status</epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_item_issues_status"/>
     <epp:phrase id="eprint_fieldname_item_issues_reported_by">Reported by</epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_item_issues_reported_by"/>
     <epp:phrase id="eprint_fieldname_item_issues_resolved_by">Resolved by</epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_item_issues_resolved_by"/>
     <epp:phrase id="eprint_fieldname_item_issues_comment">Comments</epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_item_issues_comment"/>
+    <epp:phrase id="eprint_fieldname_item_issues_count">Number of issues</epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_item_issues_count"/>
     <epp:phrase id="eprint_fieldopt_item_issues_status_discovered">Auto Discovered</epp:phrase>
     <epp:phrase id="eprint_fieldopt_item_issues_status_ignored">Ignored</epp:phrase>
     <epp:phrase id="eprint_fieldopt_item_issues_status_autoresolved">Auto Resolved</epp:phrase>
@@ -2491,11 +2529,13 @@ Titles and Help for the System Fields
     <epp:phrase id="eprint_fieldopt_item_issues_status_resolved">Resolved</epp:phrase>
 
     <epp:phrase id="eprint_fieldname_edit_lock">Lock</epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_edit_lock"/>
     <epp:phrase id="eprint_fieldname_edit_lock_user">Locked by</epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_edit_lock_user"/>
     <epp:phrase id="eprint_fieldname_edit_lock_since">Locked since</epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_edit_lock_since"/>
     <epp:phrase id="eprint_fieldname_edit_lock_until">Locked until</epp:phrase>
-
-    <epp:phrase id="eprint_fieldname_item_issues_count">Number of issues</epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_edit_lock_until"/>
 
     <epp:phrase id="eprint_fieldname__fulltext_">Full Text</epp:phrase>
     <epp:phrase id="eprint_fieldname_documents">Documents</epp:phrase>
@@ -2508,6 +2548,7 @@ Titles and Help for the System Fields
     <epp:phrase id="eprint_fieldname_rdf_type">Datatype</epp:phrase>
 
     <epp:phrase id="eprint_fieldname_files">Files</epp:phrase>
+    <epp:phrase id="eprint_fieldname_files"/>
 
     <epp:phrase id="ordername_eprint_bydatestampoldest">by date deposited (oldest first)</epp:phrase>
     <epp:phrase id="ordername_eprint_bydatestamp">by date deposited</epp:phrase>
@@ -2523,17 +2564,17 @@ Titles and Help for the System Fields
     <epp:phrase id="user_fieldhelp_password">Leaving this field blank will not affect the password.</epp:phrase>
     <epp:phrase id="user_fieldname_newpassword"><epc:phrase ref="user_fieldname_password"/></epp:phrase>
     <epp:phrase id="user_fieldname_newpassword_confirm">Re-type <epc:phrase ref="user_fieldname_password"/></epp:phrase>
-    <epp:phrase id="user_fieldname_password_confirm" ref="user_fieldname_newpassword_confirm"></epp:phrase>
+    <epp:phrase id="user_fieldname_password_confirm" ref="user_fieldname_newpassword_confirm"/>
     <epp:phrase id="user_fieldname_usertype">User Type</epp:phrase>
-    <epp:phrase id="user_fieldhelp_usertype"></epp:phrase>
+    <epp:phrase id="user_fieldhelp_usertype"/>
     <epp:phrase id="user_fieldhelp_newpassword">Set a password. This will not be activated until you enter a security code which will be mailed to you.</epp:phrase>
     <epp:phrase id="user_fieldname_editorsubjects">Editor Subjects</epp:phrase>
     <epp:phrase id="user_fieldhelp_editorsubjects">The subjects within which this user may "edit" eprints. That is they may review and approve/bounce them etc.</epp:phrase>
     <epp:phrase id="user_fieldname_joined">User Registration Date</epp:phrase>
-    <epp:phrase id="user_fieldhelp_joined"></epp:phrase>
+    <epp:phrase id="user_fieldhelp_joined"/>
     <epp:phrase id="user_fieldname_email">Email address</epp:phrase>
     <epp:phrase id="user_fieldhelp_email">The email address for this user</epp:phrase>
-    <epp:phrase id="user_fieldname_newemail" ref="user_fieldname_email"></epp:phrase>
+    <epp:phrase id="user_fieldname_newemail" ref="user_fieldname_email"/>
     <epp:phrase id="user_fieldhelp_newemail">This must be a valid email address.</epp:phrase>
     <epp:phrase id="user_fieldname_pin">PIN</epp:phrase>
     <epp:phrase id="user_fieldhelp_pin">Personal Identification Number for resetting user account.</epp:phrase>
@@ -2572,9 +2613,13 @@ Titles and Help for the System Fields
     <epp:phrase id="user_fieldhelp_longitude">The Longitude associated with this user. Western longitudes should be expressed as a negative.</epp:phrase>
 
     <epp:phrase id="document_fieldname_docid">ID of Document</epp:phrase>
+    <epp:phrase id="document_fieldhelp_docid"/> 
     <epp:phrase id="document_fieldname_pos">Document number (within item)</epp:phrase>
+    <epp:phrase id="document_fieldhelp_pos"/>
     <epp:phrase id="document_fieldname_eprintid">ID of the owning item</epp:phrase>
+    <epp:phrase id="document_fieldhelp_eprintid"/>
     <epp:phrase id="document_fieldname_rev_number">Metadata Revision</epp:phrase>
+    <epp:phrase id="document_fieldhelp_rev_number"/>
     <epp:phrase id="document_fieldname_language">Language</epp:phrase>
     <epp:phrase id="document_fieldhelp_language">Please indicate the primary language of this format.</epp:phrase>
     <epp:phrase id="document_fieldname_files">Files</epp:phrase>
@@ -2624,7 +2669,9 @@ Titles and Help for the System Fields
     <epp:phrase id="document_fieldname_relation">Relationships</epp:phrase>
     <epp:phrase id="document_fieldhelp_relation">This field describes relationships this document has to other entities. Ideally, use URIs for the target identifier.</epp:phrase>
     <epp:phrase id="document_fieldname_relation_uri">Target identifier</epp:phrase>
+    <epp:phrase id="document_fieldhelp_relation_uri"/>
     <epp:phrase id="document_fieldname_relation_type">Relation type</epp:phrase>
+    <epp:phrase id="document_fieldhelp_relation_type"/>
     <!-- these phrases are to stop warnings in 30_search tests -->
     <epp:phrase id="document_relation_typename_NOMATCH">NOMATCH</epp:phrase>
     <epp:phrase id="document_relation_typename_article">article</epp:phrase>
@@ -2893,9 +2940,9 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="Plugin/Screen/Import:bulk_input:title">Import more than one item</epp:phrase>
     <epp:phrase id="Plugin/Screen/Import:action:import_from:title">Import</epp:phrase>
     <epp:phrase id="Plugin/Screen/Import:action_test_data">Test without Importing</epp:phrase>
-    <epp:phrase id="Plugin/Screen/Import:action_test_upload" ref="Plugin/Screen/Import:action_test_data"></epp:phrase>
+    <epp:phrase id="Plugin/Screen/Import:action_test_upload" ref="Plugin/Screen/Import:action_test_data"/>
     <epp:phrase id="Plugin/Screen/Import:action_import_data">Import Items</epp:phrase>
-    <epp:phrase id="Plugin/Screen/Import:action_import_upload" ref="Plugin/Screen/Import:action_import_data"></epp:phrase>
+    <epp:phrase id="Plugin/Screen/Import:action_import_upload" ref="Plugin/Screen/Import:action_import_data"/>
     <epp:phrase id="Plugin/Screen/Import:nothing_to_import">You must specify something to import!</epp:phrase>
 
     <epp:phrase id="Plugin/Screen/Import:multiple_inputs">Encountered more than one set of input - make sure you haven't filled in more than one field.</epp:phrase>
@@ -3085,7 +3132,7 @@ PY = 2006 and OG = (Cambridge)<br />
 
     <epp:phrase id="Plugin/Screen/Subject/Edit:problem_ancestor">New child is an ancestor of this subject (This would cause a loop)</epp:phrase>
     <epp:phrase id="Plugin/Screen/Subject/Edit:problem_noid">No ID given for new child</epp:phrase>
-    <epp:phrase id="Plugin/Screen/Subject/Edit:eprints" ref="datasetname_eprint"></epp:phrase>
+    <epp:phrase id="Plugin/Screen/Subject/Edit:eprints" ref="datasetname_eprint"/>
     <epp:phrase id="Plugin/Screen/Subject/Edit:action_delete">Delete</epp:phrase>
     <epp:phrase id="Plugin/Screen/Subject/Edit:action_unlink">Unlink</epp:phrase>
     <epp:phrase id="Plugin/Screen/Subject/Edit:children">Children</epp:phrase>
@@ -3541,9 +3588,9 @@ PY = 2006 and OG = (Cambridge)<br />
 <epp:phrase id="request_fieldhelp_reason">You may enter a rationale for requesting this document.</epp:phrase>
 
 <epp:phrase id="request_fieldname_code">Code</epp:phrase>
-<epp:phrase id="request_fieldhelp_code"></epp:phrase>
+<epp:phrase id="request_fieldhelp_code"/>
 <epp:phrase id="request_fieldname_expiry_date">Expiry date</epp:phrase>
-<epp:phrase id="request_fieldhelp_expiry_date"></epp:phrase>
+<epp:phrase id="request_fieldhelp_expiry_date"/>
 
 <epp:phrase id="request_fieldname_captcha">CAPTCHA</epp:phrase>
 <epp:phrase id="request_fieldhelp_captcha">Challenge to check user making this request is a human being.</epp:phrase>
@@ -3675,11 +3722,11 @@ PY = 2006 and OG = (Cambridge)<br />
 <epp:phrase id="database/name_">???</epp:phrase>
 <epp:phrase id="database/help_">Not created by EPrints</epp:phrase>
 <epp:phrase id="database/name__index">Reverse Index</epp:phrase>
-<epp:phrase id="database/help__index"></epp:phrase>
+<epp:phrase id="database/help__index"/>
 <epp:phrase id="database/name__rindex">Indexed Terms</epp:phrase>
-<epp:phrase id="database/help__rindex"></epp:phrase>
+<epp:phrase id="database/help__rindex"/>
 <epp:phrase id="database/name__index_grep">Index for Grep</epp:phrase>
-<epp:phrase id="database/help__index_grep"></epp:phrase>
+<epp:phrase id="database/help__index_grep"/>
 <epp:phrase id="database/name__ordervalues">Order-by Values</epp:phrase>
 <epp:phrase id="database/help__ordervalues">Values used to sort the dataset for <epc:pin name="lang"/></epp:phrase>
 
@@ -3740,12 +3787,14 @@ PY = 2006 and OG = (Cambridge)<br />
 
 <epp:phrase id="event_queue_fieldname_eventqueueid">Id</epp:phrase>
 <epp:phrase id="event_queue_fieldname_status">Status</epp:phrase>
+<epp:phrase id="event_queue_fieldhelp_status"/>
 <epp:phrase id="event_queue_fieldopt_status_success">Success</epp:phrase>
 <epp:phrase id="event_queue_fieldopt_status_inprogress">In Progress</epp:phrase>
 <epp:phrase id="event_queue_fieldopt_status_waiting">Waiting</epp:phrase>
 <epp:phrase id="event_queue_fieldopt_status_failed">Failed</epp:phrase>
 <epp:phrase id="event_queue_fieldname_priority">Priority</epp:phrase>
 <epp:phrase id="event_queue_fieldname_start_time">Start Time</epp:phrase>
+<epp:phrase id="event_queue_fieldhelp_start_time"/>
 <epp:phrase id="event_queue_fieldname_end_time">Completed</epp:phrase>
 <epp:phrase id="event_queue_fieldname_hash">Event Hash</epp:phrase>
 <epp:phrase id="event_queue_fieldname_action">Action</epp:phrase>
@@ -3801,20 +3850,31 @@ PY = 2006 and OG = (Cambridge)<br />
 
 <!-- Triple -->
 <epp:phrase id="triple_fieldname_lang">Language</epp:phrase>
+<epp:phrase id="triple_fieldhelp_lang"/>
 <epp:phrase id="triple_fieldname_object">Object</epp:phrase>
+<epp:phrase id="triple_fieldhelp_object"/>
 <epp:phrase id="triple_fieldname_predicate">Predicate</epp:phrase>
+<epp:phrase id="triple_fieldhelp_predicate"/>
 <epp:phrase id="triple_fieldname_primary_resource">Primary resource</epp:phrase>
+<epp:phrase id="triple_fieldhelp_primary_resource"/>
 <epp:phrase id="triple_fieldname_secondary_resource">Secondary resource</epp:phrase>
+<epp:phrase id="triple_fieldhelp_secondary_resource"/>
 <epp:phrase id="triple_fieldname_subject">Subject</epp:phrase>
+<epp:phrase id="triple_fieldhelp_subject"/>
 <epp:phrase id="triple_fieldname_tripleid">Triple ID</epp:phrase>
+<epp:phrase id="triple_fieldhelp_tripleid"/>
 <epp:phrase id="triple_fieldname_type">Type</epp:phrase>
+<epp:phrase id="triple_fieldhelp_type"/>
 
 <!-- Upload Progress -->
 <epp:phrase id="upload_progress_fieldname_expires">Expires at</epp:phrase>
+<epp:phrase id="upload_progress_fieldhelp_expires"/>
 <epp:phrase id="upload_progress_fieldname_progressid">Progress ID</epp:phrase>
+<epp:phrase id="upload_progress_fieldhelp_progressid"/>
 <epp:phrase id="upload_progress_fieldname_received">Received (bytes)</epp:phrase>
+<epp:phrase id="upload_progress_fieldhelp_received"/>
 <epp:phrase id="upload_progress_fieldname_size">Size (bytes)</epp:phrase>
-
+<epp:phrase id="upload_progress_fieldhelp_size"/>
 
 
 <!-- Section Names -->
@@ -3824,10 +3884,13 @@ PY = 2006 and OG = (Cambridge)<br />
 <!-- User Field Names -->
 
     <epp:phrase id="user_fieldname_name">Name</epp:phrase>
-    <epp:phrase id="user_fieldhelp_name"></epp:phrase>
+    <epp:phrase id="user_fieldhelp_name"/>
+    <epp:phrase id="user_fieldhelp_name_honourific"/>
+    <epp:phrase id="user_fieldhelp_name_given"/>
+    <epp:phrase id="user_fieldhelp_name_family"/>
 
     <epp:phrase id="user_fieldname_os">Operating System</epp:phrase>
-    <epp:phrase id="user_fieldhelp_os"></epp:phrase>
+    <epp:phrase id="user_fieldhelp_os"/>
     <epp:phrase id="user_fieldopt_os_win">Windows/DOS</epp:phrase>
     <epp:phrase id="user_fieldopt_os_unix">UNIX</epp:phrase>
     <epp:phrase id="user_fieldopt_os_vms">VMS</epp:phrase>
@@ -3842,19 +3905,19 @@ PY = 2006 and OG = (Cambridge)<br />
 
 
     <epp:phrase id="user_fieldname_dept">Department</epp:phrase>
-    <epp:phrase id="user_fieldhelp_dept"></epp:phrase>
+    <epp:phrase id="user_fieldhelp_dept"/>
 
     <epp:phrase id="user_fieldname_org">Organisation</epp:phrase>
-    <epp:phrase id="user_fieldhelp_org"></epp:phrase>
+    <epp:phrase id="user_fieldhelp_org"/>
 
     <epp:phrase id="user_fieldname_address">Address</epp:phrase>
-    <epp:phrase id="user_fieldhelp_address"></epp:phrase>
+    <epp:phrase id="user_fieldhelp_address"/>
 
     <epp:phrase id="user_fieldname_country">Country</epp:phrase>
-    <epp:phrase id="user_fieldhelp_country"></epp:phrase>
+    <epp:phrase id="user_fieldhelp_country"/>
 
     <epp:phrase id="user_fieldname_url">Homepage URL</epp:phrase>
-    <epp:phrase id="user_fieldhelp_url"></epp:phrase>
+    <epp:phrase id="user_fieldhelp_url"/>
 
     <epp:phrase id="user_fieldname_expertise">Expertise</epp:phrase>
     <epp:phrase id="user_fieldhelp_expertise">Please list keyword/phrases describing your areas of specialisation using the terms likely to be used by someone searching for work in those areas. Avoid over-general terms (`chemistry') and over-particular terms (`my non-quantal theory of chemical reactions') that no one is likely to search on. Enter as many keyword/phrases as you wish.</epp:phrase>
@@ -3998,9 +4061,13 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="Plugin/Screen/Workflow/Destroy:item_removed" ref="Plugin/Screen/EPrint/Remove:item_removed" />
 
     <epp:phrase id="eprint_fieldname_gscholar_datestamp">Datestamp</epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_gscholar_datestamp"/>
     <epp:phrase id="eprint_fieldname_gscholar_cluster">Cluster ID</epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_gscholar_cluster"/>
     <epp:phrase id="eprint_fieldname_gscholar_impact">Citations</epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_gscholar_impact"/>
     <epp:phrase id="eprint_fieldname_gscholar">Google Scholar</epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_gscholar"/>
 
     <epp:phrase id="template/navigation:home">Home</epp:phrase>
     <epp:phrase id="template/navigation:about">About</epp:phrase>
@@ -4073,7 +4140,7 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="Plugin/Screen/EPrint/Document/Unpack:help">Would you like to unpack this archive into a single document (e.g. an HTML document) or multiple documents with one file per document (e.g. a collection of images)?</epp:phrase>
     <epp:phrase id="Plugin/Screen/EPrint/Document/Unpack:action_unpack">Single</epp:phrase>
     <epp:phrase id="Plugin/Screen/EPrint/Document/Unpack:action_explode">Multiple</epp:phrase>
-    <epp:phrase id="Plugin/Screen/EPrint/Document/Convert:title" ref="Plugin/InputForm/Component/Documents:convert_document"></epp:phrase>
+    <epp:phrase id="Plugin/Screen/EPrint/Document/Convert:title" ref="Plugin/InputForm/Component/Documents:convert_document"/>
     <epp:phrase id="Plugin/Screen/EPrint/Document/Convert:help">To convert this document to another format select the format to convert to and click Convert.</epp:phrase>
     <epp:phrase id="Plugin/Screen/EPrint/Document/Convert:action_convert" ref="Plugin/InputForm/Component/Documents:convert_document_button"/>
     <epp:phrase id="Plugin/Screen/EPrint/Document/Extract:title">Extract data</epp:phrase>
@@ -4107,8 +4174,8 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="Plugin/Screen/Admin/EPM/Installed:action_enable">Enable</epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/EPM/Installed:action_disable">Disable</epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/EPM/Installed:action_uninstall">Uninstall</epp:phrase>
-    <epp:phrase id="Plugin/Screen/Admin/EPM/Installed:action_cancel" ref="lib/submissionform:action_cancel"></epp:phrase>
-    <epp:phrase id="Plugin/Screen/Admin/EPM/Installed:action_confirm" ref="Plugin/Screen/Admin/EPM/Installed:action_uninstall"></epp:phrase>
+    <epp:phrase id="Plugin/Screen/Admin/EPM/Installed:action_cancel" ref="lib/submissionform:action_cancel"/>
+    <epp:phrase id="Plugin/Screen/Admin/EPM/Installed:action_confirm" ref="Plugin/Screen/Admin/EPM/Installed:action_uninstall"/>
     <epp:phrase id="Plugin/Screen/Admin/EPM/Installed:error:enabled">Can not uninstall while this add-on is enabled in: <epc:pin name="repoids" /></epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/EPM/Installed:confirm">Are you sure you want to uninstall this add-on? This will remove all files associated with this add-on and can not be undone. A copy of the add-on will be placed in var/cache/epm.<br /><epc:pin name="actions" /></epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/EPM/Installed:uninstalled">Add-on removed</epp:phrase>
@@ -4117,7 +4184,7 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="Plugin/Screen/Admin/EPM/Available:title">Available</epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/EPM/Available:action_install">Install</epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/EPM/Available:action_upgrade">Upgrade</epp:phrase>
-    <epp:phrase id="Plugin/Screen/Admin/EPM/Available:error:upload" ref="Plugin/InputForm/Component/Upload:upload_failed"></epp:phrase>
+    <epp:phrase id="Plugin/Screen/Admin/EPM/Available:error:upload" ref="Plugin/InputForm/Component/Upload:upload_failed"/>
     <epp:phrase id="Plugin/Screen/Admin/EPM/Available:error:corrupted">Corrupted or unrecognised package format</epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/EPM/Available:installed">Installed <epc:pin name="epm" /></epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/EPM/Available:upload_form"><h2>Upload and Install</h2>
@@ -4125,7 +4192,7 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="Plugin/Screen/Admin/EPM/Available:source_error">An error occurred while talking to the EPM source <em><epc:pin name="name" /> (<epc:pin name="base_url" />)</em>: <epc:pin name="error" /></epp:phrase>
 
     <epp:phrase id="Plugin/Screen/Admin/EPM/Developer:title">Developer Tools</epp:phrase>
-    <epp:phrase id="Plugin/Screen/Admin/EPM/Developer:action_edit" ref="lib/submissionform:action_edit"></epp:phrase>
+    <epp:phrase id="Plugin/Screen/Admin/EPM/Developer:action_edit" ref="lib/submissionform:action_edit"/>
     <epp:phrase id="Plugin/Screen/Admin/EPM/Developer:action_download">Download</epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/EPM/Developer:action_create">Create</epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/EPM/Developer:action_publish">Publish</epp:phrase>
@@ -4143,31 +4210,32 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="epm:error">The EPM caused a configuration failure: <epc:pin name="error" /></epp:phrase>
 
     <epp:phrase id="epm_fieldname_creators">Creators</epp:phrase>
-    <epp:phrase id="epm_fieldhelp_creators"></epp:phrase>
+    <epp:phrase id="epm_fieldhelp_creators"/>
     <epp:phrase id="epm_fieldname_creators_id">Email</epp:phrase>
-    <epp:phrase id="epm_fieldhelp_creators_id"></epp:phrase>
+    <epp:phrase id="epm_fieldhelp_creators_id"/>
     <epp:phrase id="epm_fieldname_title">Title</epp:phrase>
-    <epp:phrase id="epm_fieldhelp_title"></epp:phrase>
+    <epp:phrase id="epm_fieldhelp_title"/>
     <epp:phrase id="epm_fieldname_description">Description</epp:phrase>
-    <epp:phrase id="epm_fieldhelp_description"></epp:phrase>
+    <epp:phrase id="epm_fieldhelp_description"/>
     <epp:phrase id="epm_fieldname_version">Version</epp:phrase>
     <epp:phrase id="epm_fieldhelp_version">Must be in form x.y.z</epp:phrase>
     <epp:phrase id="epm_fieldname_controller">Control Screen</epp:phrase>
-    <epp:phrase id="epm_fieldhelp_controller"></epp:phrase>
+    <epp:phrase id="epm_fieldhelp_controller"/>
     <epp:phrase id="epm_fieldname_requirements">Requirements</epp:phrase>
-    <epp:phrase id="epm_fieldhelp_requirements"></epp:phrase>
+    <epp:phrase id="epm_fieldhelp_requirements"/>
     <epp:phrase id="epm_fieldname_home_page">Home Page</epp:phrase>
-    <epp:phrase id="epm_fieldhelp_home_page"></epp:phrase>
+    <epp:phrase id="epm_fieldhelp_home_page"/>
+    <epp:phrase id="epm_fieldhelp_epmid"/>
 
-    <epp:phrase id="Plugin/InputForm/Component/FileSelector:title" ref="Plugin/Screen/EPrint/Document/Files:title"></epp:phrase>
+    <epp:phrase id="Plugin/InputForm/Component/FileSelector:title" ref="Plugin/Screen/EPrint/Document/Files:title"/>
 
     <epp:phrase id="Plugin/Screen/EPMC:saved"><epc:pin name="filename" /> has been changed and was saved at <epc:pin name="saved" />.</epp:phrase>
     <epp:phrase id="Plugin/Screen/EPMC:restored">An existing <epc:pin name="filename" /> has been restored and the new entry saved at <epc:pin name="saved" />.</epp:phrase>
 
     <epp:phrase id="Plugin/Screen/Admin/EPM/Publish:title">Publish Add-on</epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/EPM/Publish:source">Repository</epp:phrase>
-    <epp:phrase id="Plugin/Screen/Admin/EPM/Publish:action_publish" ref="Plugin/Screen/Admin/EPM/Developer:action_publish"></epp:phrase>
-    <epp:phrase id="Plugin/Screen/Admin/EPM/Publish:action_cancel" ref="lib/submissionform:action_cancel"></epp:phrase>
+    <epp:phrase id="Plugin/Screen/Admin/EPM/Publish:action_publish" ref="Plugin/Screen/Admin/EPM/Developer:action_publish"/>
+    <epp:phrase id="Plugin/Screen/Admin/EPM/Publish:action_cancel" ref="lib/submissionform:action_cancel"/>
     <epp:phrase id="Plugin/Screen/Admin/EPM/Publish:bad_endpoint">Unable to locate SWORD deposit endpoint at <epc:pin name="base_url" /></epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/EPM/Publish:success">Package published at <epc:pin name="uri" /></epp:phrase>
 

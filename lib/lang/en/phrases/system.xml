@@ -516,6 +516,10 @@ terms.</p>
     <epp:phrase id="eprint_fieldhelp_editors_name">Please enter the names of the editors.<br/>
 This field is required if no creators are listed.
 </epp:phrase>
+    <epp:phrase id="eprint_fieldname_editors_name_cite">(ed.)</epp:phrase>
+    <epp:phrase id="eprint_fieldname_editors_names_cite">(eds.)</epp:phrase>
+    <epp:phrase id="eprint_typename_thesis_cite">thesis</epp:phrase>    
+
     <epp:phrase id="eprint_fieldname_editors_id">Email</epp:phrase>
 
     <epp:phrase id="eprint_fieldname_date">Date</epp:phrase>
@@ -2583,8 +2587,10 @@ Titles and Help for the System Fields
     <epp:phrase id="document_fieldhelp_content">The content of this document, as opposed to the format.</epp:phrase>
     <epp:phrase id="document_fieldname_security">Visible to</epp:phrase>
     <epp:phrase id="document_fieldhelp_security">Please indicate the required "security level" of this document. Who is allowed to download it?  If you set this to anything other than "anyone" then consider adding a contact email for this eprint (on the next page), this will allow users to use a web form to request a copy of the document, and you can decide on a case-by-case basis.</epp:phrase>
+    <epp:phrase id="document_security_info">Restricted to</epp:phrase>
     <epp:phrase id="document_fieldname_license">License</epp:phrase>
     <epp:phrase id="document_fieldhelp_license">Specify an explicit license for this document (does not affect the access rights you grant at the end of this deposit process). This repository allows <a href="http://creativecommons.org/about/licenses/" target="_blank">Creative Commons</a> licenses.</epp:phrase>
+    <epp:phrase id="document_license_restriction_info">Available under</epp:phrase>
     <epp:phrase id="document_fieldname_media">Media</epp:phrase>
     <epp:phrase id="document_fieldhelp_media">Specifies to media used for this document where applicable.</epp:phrase>
     <epp:phrase id="document_fieldname_media_aspect_ratio">Aspect ratio</epp:phrase>
@@ -2612,6 +2618,7 @@ Titles and Help for the System Fields
 <br/>Example: <span class="ep_form_example">2014 - all documents made publicly accessible on 1st January 2014</span>
 <br/>Example: <span class="ep_form_example">2014 June - all documents made publicly accessible on 1st June 2014</span>
 </epp:phrase>
+    <epp:phrase id="document_embargo_info">until</epp:phrase>
     <epp:phrase id="document_fieldname_date_embargo_retained">Retained embargo expiry date</epp:phrase>
     <epp:phrase id="document_fieldhelp_date_embargo_retained">Retains the <epp:phrase ref="document_fieldname_date_embargo"/> after the embargo has been lifted.</epp:phrase>
     <epp:phrase id="document_fieldname_relation">Relationships</epp:phrase>
@@ -4034,6 +4041,16 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="Plugin/Screen/Search:title">Search</epp:phrase>
 
     <epp:phrase id="lib/citation:not_available">No default citation style available for <epc:pin name="dataset" /></epp:phrase>
+    <epp:phrase id="lib/citation:deposited">deposited</epp:phrase>
+    <epp:phrase id="lib/citation:part_of_prefix">In:</epp:phrase>
+    <epp:phrase id="lib/citation:dataset_prefix">on</epp:phrase>
+    <epp:phrase id="lib/citation:timestamp_prefix">at</epp:phrase>
+    <epp:phrase id="lib/citation:actor_prefix">by</epp:phrase>
+    <epp:phrase id="lib/citation:user">User:</epp:phrase>
+    <epp:phrase id="lib/citation:untitled_search">Untitled search</epp:phrase>
+    <epp:phrase id="lib/citation:untitled_subject">Untitled subject</epp:phrase>
+    <epp:phrase id="lib/citation:unnamed_user_email">Unnamed user with email</epp:phrase>
+    <epp:phrase id="lib/citation:unnamed_user_name">Unnamed user with username</epp:phrase>
 
     <epp:phrase id="lib/saved_search:bad_search">The saved search could not be re-instated - a search engine or field it depends on may no longer be available.</epp:phrase>
 

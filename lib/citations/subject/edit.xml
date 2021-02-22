@@ -8,7 +8,7 @@
 
 <cite:linkhere><epc:choose>
   <epc:when test="is_set(name)"><epc:print expr="name"/></epc:when> 
-  <epc:otherwise>Untitled subject #<epc:print expr="subjectid"/></epc:otherwise>
+  <epc:otherwise><epc:phrase ref="lib/citation:untitled_subject" /> #<epc:print expr="subjectid"/></epc:otherwise>
 </epc:choose></cite:linkhere>
 
 </cite:citation>

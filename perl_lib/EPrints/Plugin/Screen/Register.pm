@@ -111,6 +111,9 @@ sub action_confirm
 	my $repo = $self->{repository};
 	my $processor = $self->{processor};
 
+	# Check not just a HEAD ping
+	return if $repo->request()->header_only();
+
 	my $user_ds = $repo->get_dataset( "user" );
 
 	# Process the form.

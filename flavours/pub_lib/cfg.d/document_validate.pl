@@ -51,19 +51,26 @@ $c->{validate_document} = sub
 					fieldname=>$fieldname );
 	}
 
-	# embargo expiry date must be in the future
+	# embargo expiry date must be a full year, month and day and must be in the future
 	if( EPrints::Utils::is_set( $document->value( "date_embargo" ) ) )
 	{
 		my $value = $document->value( "date_embargo" );
-		my ($thisyear, $thismonth, $thisday) = EPrints::Time::get_date_array();
 		my ($year, $month, $day) = split( '-', $value );
-		if( $year < $thisyear || ( $year == $thisyear && $month < $thismonth ) ||
-			( $year == $thisyear && $month == $thismonth && $day <= $thisday ) )
+		if ( !EPrints::Utils::is_set( $month ) || !EPrints::Utils::is_set( $day ) )
 		{
 			my $fieldname = $xml->create_element( "span", class=>"ep_problem_field:documents" );
-			push @problems,
-				$repository->html_phrase( "validate:embargo_invalid_date",
-				fieldname=>$fieldname );
+                        push @problems, $repository->html_phrase( "validate:embargo_incomplete_date", fieldname=>$fieldname );
+		}
+		else {
+			my ($thisyear, $thismonth, $thisday) = EPrints::Time::get_date_array();
+			if( $year < $thisyear || ( $year == $thisyear && $month < $thismonth ) ||
+				( $year == $thisyear && $month == $thismonth && $day <= $thisday ) )
+			{
+				my $fieldname = $xml->create_element( "span", class=>"ep_problem_field:documents" );
+				push @problems,
+					$repository->html_phrase( "validate:embargo_invalid_date",
+					fieldname=>$fieldname );
+			}
 		}
 	}
 

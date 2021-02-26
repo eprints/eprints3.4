@@ -2659,10 +2659,7 @@ Titles and Help for the System Fields
     <epp:phrase id="document_fieldname_placement">Placement</epp:phrase>
     <epp:phrase id="document_fieldhelp_placement">The placement of this document</epp:phrase>
     <epp:phrase id="document_fieldname_date_embargo">Embargo expiry date</epp:phrase>
-    <epp:phrase id="document_fieldhelp_date_embargo">The date that a publisher- or sponsor-imposed embargo expires. On and after this date, this document will be made publicly accessible.
-<br/>Example: <span class="ep_form_example">2014 - all documents made publicly accessible on 1st January 2014</span>
-<br/>Example: <span class="ep_form_example">2014 June - all documents made publicly accessible on 1st June 2014</span>
-</epp:phrase>
+    <epp:phrase id="document_fieldhelp_date_embargo">The date that a publisher- or sponsor-imposed embargo expires. On and after this date, this document will be made publicly accessible.</epp:phrase>
     <epp:phrase id="document_embargo_info">until</epp:phrase>
     <epp:phrase id="document_fieldname_date_embargo_retained">Retained embargo expiry date</epp:phrase>
     <epp:phrase id="document_fieldhelp_date_embargo_retained">Retains the <epp:phrase ref="document_fieldname_date_embargo"/> after the embargo has been lifted.</epp:phrase>
@@ -3963,6 +3960,7 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="validate:invalid_date">Date set for <epc:pin name="fieldname"/> is invalid.</epp:phrase>
 
     <epp:phrase id="validate:embargo_invalid_date"><epc:pin name="fieldname">Embargo expiry date</epc:pin> must be in the future.</epp:phrase>
+    <epp:phrase id="validate:embargo_incomplete_date"><epc:pin name="fieldname">Embargo expiry date</epc:pin> must include a year, month and day.</epp:phrase>
     <epp:phrase id="validate:embargo_check_security">An embargo date has been specified, but the document is visible to anyone. Check the <epc:pin name="fieldname">document visibility settings</epc:pin>.</epp:phrase>
 
 

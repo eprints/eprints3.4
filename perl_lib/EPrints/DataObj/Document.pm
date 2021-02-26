@@ -163,10 +163,10 @@ sub get_system_field_info
 			render_option=>\&main_render_option },
 
 		{ name=>"date_embargo", type=>"date", required=>0,
-			min_resolution=>"year" },
+			min_resolution=>"day" },
 
 		{ name=>"date_embargo_retained", type=>"date", required=>0,
-                        min_resolution=>"year" },	
+                        min_resolution=>"day" },	
 
 		{ name => "embargo_reason", type => "namedset", set_name => 'embargo_reason', required=>0, input_rows => 1, },
 

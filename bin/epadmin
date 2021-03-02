@@ -304,7 +304,7 @@ my $REGEXP_HOSTNAME_FULL = '^[a-z0-9-]+(\.[a-z0-9-]+)*$';
 my $REGEXP_VARNAME = '^[a-zA-Z][_A-Za-z0-9]*$';
 my $REGEXP_NUMBER = '^[0-9]+$';
 my $REGEXP_YESNO = '^(yes|no)$';
-my $REGEXP_ANY = '^.*$';
+my $REGEXP_ANY = '^.+$';
 my @PASSWORD_CHARS = ( 'a'..'z','A'..'Z','0'..'9' );
 
 my $eprints = EPrints->new();
@@ -801,7 +801,7 @@ be '/'.
 
 END
 	$config{http_root} .= "/" if defined $config{http_root};
-	$config{http_root} = EPrints::Utils::get_input( '.*', 'Path', $config{http_root} );
+	$config{http_root} = EPrints::Utils::get_input( $REGEXP_ANY, 'Path', $config{http_root} );
 	$config{http_root} =~ s! ^/? !/!x;
 	$config{http_root} =~ s! /$ !!x;
 	$config{http_root} = undef if $config{http_root} eq "";
@@ -864,7 +864,7 @@ enter something as a placeholder and edit the XML config file which this
 script generates.
 
 END
-	$config{archive_name} = EPrints::Utils::get_input( '^.+$', 'Archive Name',  $config{archive_name} );
+	$config{archive_name} = EPrints::Utils::get_input( $REGEXP_ANY, 'Archive Name',  $config{archive_name} );
 
         print <<END;
 
@@ -973,7 +973,7 @@ sub config_db
 
 	$config{dbsock} = "#" if( !defined $config{dbsock} );
 	# can't remember what is a legal mysql socket... cjg
-	$config{dbsock} = EPrints::Utils::get_input( '^.*$', 'MySQL Socket (# for no setting)',  $config{dbsock} );
+	$config{dbsock} = EPrints::Utils::get_input( $REGEXP_ANY, 'MySQL Socket (# for no setting)',  $config{dbsock} );
 	$config{dbsock} = undef if( $config{dbsock} eq "#" );
 
 	my $defaultpass = $config{dbpass};
@@ -1055,7 +1055,7 @@ Ok, I'll need to connect to the mysql database as root. What is the root
 password? 
 	
 END
-	$mysql_root_password = EPrints::Utils::get_input_hidden( '^.*$', "MySQL Root Password" );
+	$mysql_root_password = EPrints::Utils::get_input_hidden( $REGEXP_ANY, "MySQL Root Password" );
 
 	return $mysql_root_password;
 }
@@ -1184,8 +1184,8 @@ sub create_db
 
 	BADPASSWORD:
 
-	my $username = EPrints::Utils::get_input( '^.*$', "Database Superuser Username", "root" );
-	my $password = EPrints::Utils::get_input_hidden( '^.*$', "Database Superuser Password" );
+	my $username = EPrints::Utils::get_input( $REGEXP_ANY, "Database Superuser Username", "root" );
+	my $password = EPrints::Utils::get_input_hidden( $REGEXP_ANY, "Database Superuser Password" );
 
 	my $database = EPrints::Database->new( $repo, db_connect => 0 );
 

@@ -272,6 +272,7 @@ my $help = 0;
 my $man = 0;
 my $version = 0;
 my $force = 0;
+my $db_ok = 0;
 
 Getopt::Long::Configure("permute");
 
@@ -508,10 +509,17 @@ END
 	if( $config_db eq "yes" )
 	{
 		config_db( $repoid );	
-	}
+
+	        if( !$db_ok )
+        	{
+                	print "Hm, something went wrong with the database :(\nReuse epadmin stepwise (config_db, create_db or create_tables, e.g.) or make the database available by hand.\n";
+                	exit 1;
+		}
+        }
 	else
 	{
 		print "OK, but you'll need to edit database.pl by hand in that case, and make sure the database exists.\n";
+               	exit 1;
 	}
 
 
@@ -721,7 +729,7 @@ END
 		# No dots in the actual hostname! Lets try and got the
 		# domain from resolv.conf
 		my $domain = "";
-		if( open( RESOLV, "/etc/resolv.conf" ) && 0)
+		if( open( RESOLV, "/etc/resolv.conf" ) )
 		{
 			while( <RESOLV> )
 			{
@@ -1529,6 +1537,7 @@ sub create_tables
 	if( $repo->database->create_archive_tables )
 	{
 		if( $noise>=1 ) { print "Done creating database tables.\n\n"; }
+		$db_ok = 1;
 	}
 	else
 	{

@@ -141,7 +141,7 @@ sub send_mail
 #
 #=item EPrints::Email::send_mail_via_smtp( %properties )
 #
-#Send an email via STMP. Should not be called directly, but rather by
+#Send an email via SMTP. Should not be called directly, but rather by
 #EPrints::Email::send_mail.
 #
 #=cut
@@ -159,7 +159,7 @@ sub send_mail_via_smtp
 
 	if( !defined $smtphost )
 	{
-		$repository->log( "No STMP host has been defined. To fix this, find the full\naddress of your SMTP server (eg. smtp.example.com) and add it\nas the value of smtp_server in\nperl_lib/EPrints/SystemSettings.pm" );
+		$repository->log( "No SMTP host has been defined. To fix this, find the full\naddress of your SMTP server (eg. smtp.example.com) and add it\nas the value of smtp_server in\nperl_lib/EPrints/SystemSettings.pm" );
 		return( 0 );
 	}
 

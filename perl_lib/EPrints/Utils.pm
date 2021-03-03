@@ -65,6 +65,20 @@ use strict;
 
 $EPrints::Utils::FULLTEXT = "documents";
 
+$EPrints::Utils::REGEXP_HOSTNAME_MIDDLE = '[a-z0-9-]+(\.[a-z0-9-]+)*';
+$EPrints::Utils::REGEXP_HOSTNAME = '^'.$EPrints::Utils::REGEXP_HOSTNAME_MIDDLE.'$';
+$EPrints::Utils::REGEXP_HOSTNAME_OR_HASH= '^('.$EPrints::Utils::REGEXP_HOSTNAME_MIDDLE.'|#)$';
+$EPrints::Utils::REGEXP_HOSTNAME_OR_UNSET= '^$|'.$EPrints::Utils::REGEXP_HOSTNAME;
+$EPrints::Utils::REGEXP_EMAIL = '^[^@]+@'.$EPrints::Utils::REGEXP_HOSTNAME_MIDDLE.'$';
+$EPrints::Utils::REGEXP_VARNAME = '^[a-z][_a-z0-9]*$';
+$EPrints::Utils::REGEXP_USERNAME = '^[a-zA-Z][_\-\.@A-Za-z0-9]*$';
+$EPrints::Utils::REGEXP_PASSWORD = '^[^\s]{5,}$';
+$EPrints::Utils::REGEXP_NUMBER = '^[0-9]+$';
+$EPrints::Utils::REGEXP_NUMBER_OR_HASH = '^[0-9]+|#$';
+$EPrints::Utils::REGEXP_YESNO = '^(yes|no)$';
+$EPrints::Utils::REGEXP_ANY = '^.+$';
+
+
 BEGIN {
 	eval "use Term::ReadKey";
 	eval "use Compat::Term::ReadKey" if $@;
@@ -770,7 +784,8 @@ sub get_input
 		}
 		else
 		{
-			print "Bad Input, try again.\n";
+			my $regexp_type = get_regexp_type( $regexp );
+                        print "Bad input. Not $regexp_type. Try again.\n";
 		}
 	}
 }
@@ -817,11 +832,31 @@ sub get_input_hidden
 		}
 		else
 		{
-			print "Bad Input, try again.\n";
+			my $regexp_type = get_regexp_type( $regexp );
+			print "Bad input. Not $regexp_type. Try again.\n";
 		}
 	}
 
 }
+
+sub get_regexp_type
+{
+	my( $regexp ) = @_;
+	
+	return "middle of a hostname" if $regexp eq $EPrints::Utils::REGEXP_HOSTNAME_MIDDLE;
+	return "a hostname" if $regexp eq $EPrints::Utils::REGEXP_HOSTNAME;
+	return "a hostname or unset" if $regexp eq $EPrints::Utils::REGEXP_HOSTNAME_OR_UNSET;
+	return "a hostname or #" if $regexp eq $EPrints::Utils::REGEXP_HOSTNAME_OR_HASH;
+	return "an email address" if $regexp eq $EPrints::Utils::REGEXP_EMAIL;
+	return "a valid variable name (lowercase letters, numbers and underscores only)" if $regexp eq $EPrints::Utils::REGEXP_VARNAME;
+	return "a valid username (letters, numbers and certain special characters [-_.@] only)" if $regexp eq $EPrints::Utils::REGEXP_USERNAME;
+	return "a valid password (at least 5 characters with no spaces)" if $regexp eq $EPrints::Utils::REGEXP_PASSWORD;
+	return "a number" if $regexp eq $EPrints::Utils::REGEXP_NUMBER;
+	return "a number or #" if $regexp eq $EPrints::Utils::REGEXP_NUMBER_OR_HASH;
+	return "a yes/no" if $regexp eq $EPrints::Utils::REGEXP_YESNO;
+	return "set a value" if $regexp eq $EPrints::Utils::REGEXP_ANY;
+	return "matching regular expression '$regexp'";
+ }
 
 ######################################################################
 

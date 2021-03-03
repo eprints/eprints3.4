@@ -296,14 +296,8 @@ my $noise = 1;
 $noise = 0 if( $quiet );
 $noise = 1+$verbose if( $verbose );
 
-my $REGEXP_HOSTNAME_MIDDLE = '[a-z0-9-]+(\.[a-z0-9-]+)*';
-my $REGEXP_HOSTNAME = '^'.$REGEXP_HOSTNAME_MIDDLE.'$';
-my $REGEXP_EMAIL = '^[^@]+@'.$REGEXP_HOSTNAME_MIDDLE.'$';
-my $REGEXP_HOSTNAME_FULL = '^[a-z0-9-]+(\.[a-z0-9-]+)*$';
-my $REGEXP_VARNAME = '^[a-zA-Z][_A-Za-z0-9]*$';
-my $REGEXP_NUMBER = '^[0-9]+$';
-my $REGEXP_YESNO = '^(yes|no)$';
-my $REGEXP_ANY = '^.*$';
+my $db_ok = 0;
+
 my @PASSWORD_CHARS = ( 'a'..'z','A'..'Z','0'..'9' );
 
 my $eprints = EPrints->new();
@@ -405,8 +399,8 @@ sub create
 Create a $repo_type Repository
 
 Please select an ID for the repository, which will be used to create a directory
-and identify the repository. Lower case letters and numbers, may not start with
-a number. examples: "lemurprints" or "test3"
+and identify the repository. Lower case letters, numbers and underscores, may not start with
+a number or underscore. examples: "lemurprints", "test3" or "research_archive"
 
 END
 	if( scalar EPrints::Config::get_repository_ids() )
@@ -415,7 +409,7 @@ END
 		print join( ", ", EPrints::Config::get_repository_ids() )."\n\n";
 	}
 
-	my $repoid = EPrints::Utils::get_input( $REGEXP_VARNAME, 'Archive ID' );
+	my $repoid = EPrints::Utils::get_input( $EPrints::Utils::REGEXP_VARNAME, 'Archive ID' );
 
 	my $repodir = EPrints::Config::get( "base_path" )."/archives/".$repoid;
 
@@ -493,7 +487,7 @@ END
 
 	EPrints::Config::init(); # rescan repositories
 
-	my $config_core = EPrints::Utils::get_input( $REGEXP_YESNO, "Configure vital settings?", "yes" );
+	my $config_core = EPrints::Utils::get_input( $EPrints::Utils::REGEXP_YESNO, "Configure vital settings?", "yes" );
 	if( $config_core eq "yes" )
 	{
 		config_core( $repoid );	
@@ -504,48 +498,61 @@ END
 	}
 
 	print "\n";
-	my $config_db = EPrints::Utils::get_input( $REGEXP_YESNO, "Configure database?", "yes" );
+	my $config_db = EPrints::Utils::get_input( $EPrints::Utils::REGEXP_YESNO, "Configure database?", "yes" );
 	if( $config_db eq "yes" )
 	{
 		config_db( $repoid );	
+		
+		if( !$db_ok )
+        	{
+                	print STDERR "Hmm, something went wrong with the database.\nUse 'config_db', or manually edit the archive's cfg/cfg.d/database.pl before running 'create_db' or 'create_tables'.";
+                	exit 1;
+		}
 	}
 	else
 	{
-		print "OK, but you'll need to edit database.pl by hand in that case, and make sure the database exists.\n";
+		print "OK, but you'll need to edit the archive's cfg/cfg.d/database.pl by hand in that case, and make sure the database exists.  You may also need to use 'epadmin create_user' and 'import_subjects' to complete the setup of your archive.\n";
 	}
-
 
 	print "\n";
-	my $create_user = EPrints::Utils::get_input( $REGEXP_YESNO, "Create an initial user?", "yes" );
-	if( $create_user eq "yes" )
+
+	if( $config_db eq "yes" ) 
 	{
-		create_user( $repoid );	
+		my $create_user = EPrints::Utils::get_input( $EPrints::Utils::REGEXP_YESNO, "Create an initial user?", "yes" );
+		if( $create_user eq "yes" )
+		{
+			create_user( $repoid );	
+		}
+		else
+		{
+			print "OK, but you will not be able to log into the website. You can always run 'epadmin create_user $repoid' later.\n"
+		}
 	}
-	else
-	{
-		print "OK, but you will not be able to log into the website. You can always run 'epadmin create_user $repoid' later.\n"
-	}
-# cjg: Register with website!
 
 	my $ok;
-	$ok = EPrints::Utils::get_input( $REGEXP_YESNO, "Do you want to build the static web pages?", "yes" );
+	$ok = EPrints::Utils::get_input( $EPrints::Utils::REGEXP_YESNO, "Do you want to build the static web pages?", "yes" );
 	if( $ok eq "yes" )
 	{
 		run_script( $repoid, "generate_static", "--verbose", $repoid );	
 	}
 
-    if ($repo_type eq "zero")
-    {
-        run_script( $repoid, "import_subjects", "--verbose", "--force", $repoid );
-    }
-    else{
-        $ok = EPrints::Utils::get_input( $REGEXP_YESNO, "Do you want to import the LOC subjects and sample divisions?", "yes" );
-        if( $ok eq "yes" )
-        {
-            run_script( $repoid, "import_subjects", "--verbose", "--force", $repoid );	
-        }
-    }
-	$ok = EPrints::Utils::get_input( $REGEXP_YESNO, "Do you want to update the apache config files? (you still need to add the 'Include' line)", "yes" );
+	if( $config_db eq "yes" )
+	{
+		if ($repo_type eq "zero")
+		{
+			run_script( $repoid, "import_subjects", "--verbose", "--force", $repoid );
+		}
+		else
+		{
+			$ok = EPrints::Utils::get_input( $EPrints::Utils::REGEXP_YESNO, "Do you want to import the LOC subjects and sample divisions?", "yes" );
+			if( $ok eq "yes" )
+			{
+				run_script( $repoid, "import_subjects", "--verbose", "--force", $repoid );	
+			}
+		}
+	}
+
+	$ok = EPrints::Utils::get_input( $EPrints::Utils::REGEXP_YESNO, "Do you want to update the apache config files? (you still need to add the 'Include' line)", "yes" );
 	if( $ok eq "yes" )
 	{
 		run_script( $repoid, "generate_apacheconf", "--verbose" );
@@ -683,6 +690,8 @@ sub config_core
 		$config{organisation_name} = $repo->phrase( "organisation_name" );
 	}
 
+	my $eg_hostname = $repoid;
+	$eg_hostname =~ s/_/-/g;
 print <<END;
 
 Please enter the fully qualified hostname of the repository. 
@@ -690,12 +699,12 @@ Please enter the fully qualified hostname of the repository.
 For a production system we recommend against using the real hostname of the 
 machine. 
 
-Example: $repoid.footle.ac.uk
+Example: $eg_hostname.footle.ac.uk
 
 END
 
 	HOSTNAME:
-	$config{host} = EPrints::Utils::get_input( $REGEXP_HOSTNAME_FULL, 'Hostname', $config{host} );
+	$config{host} = EPrints::Utils::get_input( $EPrints::Utils::REGEXP_HOSTNAME, 'Hostname', $config{host} );
 
 	if( $config{host} eq "localhost" || $config{host} =~ /^\d{1,3}(.\d{1,3}){3}$/ )
 	{
@@ -711,30 +720,14 @@ to run apache on a different port if you are experimenting.
 
 END
 
-	$config{port} = EPrints::Utils::get_input( $REGEXP_NUMBER, 'Webserver Port', $config{port} );
+	$config{port} = EPrints::Utils::get_input( $EPrints::Utils::REGEXP_NUMBER, 'Webserver Port', $config{port} );
 
 
 	# calculate example aliases
 	my $realhostname = hostname();
 	if( $realhostname !~ m/\./ )
 	{
-		# No dots in the actual hostname! Lets try and got the
-		# domain from resolv.conf
-		my $domain = "";
-		if( open( RESOLV, "/etc/resolv.conf" ) && 0)
-		{
-			while( <RESOLV> )
-			{
-				if( m/^search\s+([^\s]+)/ )
-				{
-					$domain = $1;	
-					last;
-				}
-			}
-			close RESOLV;
-		}
-		$domain = "mydomain.com" if( $domain eq "" );
-		$realhostname.=".".$domain;
+		$realhostname.=".example.org";
 	}
 	my @example_aliases = ();
 	push @example_aliases,$realhostname;
@@ -772,14 +765,14 @@ END
 	for(;;)
 	{
 		my $default = shift @aliases;
-		my $alias = EPrints::Utils::get_input( '^('.$REGEXP_HOSTNAME_MIDDLE.'|#)$', 'Alias (enter # when done)',
+		my $alias = EPrints::Utils::get_input( '^('.$EPrints::Utils::REGEXP_HOSTNAME_MIDDLE.'|#)$', 'Alias (enter # when done)',
 			(defined $default ? $default->{name} : '#' ) );
 		last if( $alias eq "#" );
 		my $aliasrecord = {};
 		$aliasrecord->{name} = $alias;
 		$aliasrecord->{redirect} = 
 			EPrints::Utils::get_input( 
-				$REGEXP_YESNO,
+				$EPrints::Utils::REGEXP_YESNO,
 				"Redirect $alias to $config{host}",
 				(defined $default && $default->{redirect} ne 'yes' ? 'no' : 'yes' ) );
 		push @{$config{aliases}},$aliasrecord;
@@ -793,7 +786,7 @@ be '/'.
 
 END
 	$config{http_root} .= "/" if defined $config{http_root};
-	$config{http_root} = EPrints::Utils::get_input( '.*', 'Path', $config{http_root} );
+	$config{http_root} = EPrints::Utils::get_input( $EPrints::Utils::REGEXP_ANY, 'Path', $config{http_root} );
 	$config{http_root} =~ s! ^/? !/!x;
 	$config{http_root} =~ s! /$ !!x;
 	$config{http_root} = undef if $config{http_root} eq "";
@@ -805,7 +798,7 @@ here, or leave blank when using http only.
 
 END
 
-	$config{securehost} = EPrints::Utils::get_input( "^\$|$REGEXP_HOSTNAME_FULL", 'HTTPS Hostname', $config{securehost}||"" );
+	$config{securehost} = EPrints::Utils::get_input( $EPrints::Utils::REGEXP_HOSTNAME_OR_UNSET, 'HTTPS Hostname', $config{securehost}||"" );
 
 	if( $config{securehost} )
 	{
@@ -815,7 +808,7 @@ Please enter the port of your secure (https) server. This is probably 443.
 
 END
 
-		$config{secureport} = EPrints::Utils::get_input( $REGEXP_NUMBER, 'Secure Webserver Port', $config{secureport} );
+		$config{secureport} = EPrints::Utils::get_input( $EPrints::Utils::REGEXP_NUMBER, 'Secure Webserver Port', $config{secureport} );
 	}
 
 #print <<END;
@@ -847,7 +840,7 @@ END
 	print "\n";
 	print "\n";
 
-	$config{adminemail} = EPrints::Utils::get_input( $REGEXP_EMAIL, 'Administrator Email',  $config{adminemail} );
+	$config{adminemail} = EPrints::Utils::get_input( $EPrints::Utils::REGEXP_EMAIL, 'Administrator Email',  $config{adminemail} );
 	print <<END;
 
 Enter the name of the repository in the default language. If you wish to enter 
@@ -871,7 +864,7 @@ END
 	# Write files?
 
 	print "\n";
-	my $config_core = EPrints::Utils::get_input( $REGEXP_YESNO, "Write these core settings?", "yes" );
+	my $config_core = EPrints::Utils::get_input( $EPrints::Utils::REGEXP_YESNO, "Write these core settings?", "yes" );
 	if( $config_core eq "no" )
 	{
 		print "\nOK. Not writing after all.\n";
@@ -955,17 +948,17 @@ sub config_db
 
 	print "\nConfiguring Database for: $repoid\n";
 
-	$config{dbname} = EPrints::Utils::get_input( $REGEXP_VARNAME, 'Database Name',  $config{dbname} );
-	$config{dbhost} = EPrints::Utils::get_input( $REGEXP_HOSTNAME, 'MySQL Host',  $config{dbhost} );
+	$config{dbname} = EPrints::Utils::get_input( $EPrints::Utils::REGEXP_VARNAME, 'Database Name',  $config{dbname} );
+	$config{dbhost} = EPrints::Utils::get_input( $EPrints::Utils::REGEXP_HOSTNAME, 'MySQL Host',  $config{dbhost} );
 
 	print "\nYou probably don't need to set socket and port (unless you do!?).\n";
 	$config{dbport} = "#" if( !defined $config{dbport} );
-	$config{dbport} = EPrints::Utils::get_input( '^[0-9]+|#$', 'MySQL Port (# for no setting)',  $config{dbport} );
+	$config{dbport} = EPrints::Utils::get_input( $EPrints::Utils::REGEXP_NUMBER_OR_HASH, 'MySQL Port (# for no setting)',  $config{dbport} );
 	$config{dbport} = undef if( $config{dbport} eq "#" );
 
 	$config{dbsock} = "#" if( !defined $config{dbsock} );
 	# can't remember what is a legal mysql socket... cjg
-	$config{dbsock} = EPrints::Utils::get_input( '^.*$', 'MySQL Socket (# for no setting)',  $config{dbsock} );
+	$config{dbsock} = EPrints::Utils::get_input( $EPrints::Utils::REGEXP_ANY, 'MySQL Socket (# for no setting)',  $config{dbsock} );
 	$config{dbsock} = undef if( $config{dbsock} eq "#" );
 
 	my $defaultpass = $config{dbpass};
@@ -973,18 +966,18 @@ sub config_db
 	{
 		$defaultpass = "";
 		srand;
-		for( 1..8 )
+		for( 1..16 )
 		{
 			$defaultpass .= $PASSWORD_CHARS[int rand scalar @PASSWORD_CHARS];
 		}
 	}
-	$config{dbuser} = EPrints::Utils::get_input( $REGEXP_VARNAME, 'Database User',  $config{dbuser} );
-	$config{dbpass} = EPrints::Utils::get_input_hidden( $REGEXP_VARNAME, 'Database Password',  $defaultpass );
+	$config{dbuser} = EPrints::Utils::get_input( $EPrints::Utils::REGEXP_USERNAME, 'Database User',  $config{dbuser} );
+	$config{dbpass} = EPrints::Utils::get_input_hidden( $EPrints::Utils::REGEXP_VARNAME, 'Database Password',  $defaultpass );
 
-	$config{dbengine} = EPrints::Utils::get_input( $REGEXP_VARNAME, 'Database Engine',  $config{dbengine} );
+	$config{dbengine} = EPrints::Utils::get_input( "(InnoDB|MyISAM)", 'Database Engine',  $config{dbengine} );
 
 	print "\n";
-	my $config_db = EPrints::Utils::get_input( $REGEXP_YESNO, "Write these database settings?", "yes" );
+	my $config_db = EPrints::Utils::get_input( $EPrints::Utils::REGEXP_YESNO, "Write these database settings?", "yes" );
 	if( $config_db eq "no" )
 	{
 		print "\nOK. Not writing after all.\n";
@@ -1022,7 +1015,7 @@ sub config_db
 EPrints can create the database, and grant the correct permissions.
 	
 END
-	my $makedb = EPrints::Utils::get_input( $REGEXP_YESNO, "Create database \"$config{dbname}\"", "yes" );
+	my $makedb = EPrints::Utils::get_input( $EPrints::Utils::REGEXP_YESNO, "Create database \"$config{dbname}\"", "yes" );
 	if( $makedb eq "yes" )
 	{
 		create_db( $repoid );
@@ -1083,7 +1076,7 @@ sub root_dbh
 		{
 			$mysql_root_password = undef;
 			print "\nCould not connect to database: $DBI::errstr\n\n";
-			my $try_again = EPrints::Utils::get_input( $REGEXP_YESNO, "Try again?", "yes" );
+			my $try_again = EPrints::Utils::get_input( $EPrints::Utils::REGEXP_YESNO, "Try again?", "yes" );
 			if( $try_again eq "no" )
 			{
 				exit( 1 );
@@ -1176,7 +1169,7 @@ sub create_db
 
 	BADPASSWORD:
 
-	my $username = EPrints::Utils::get_input( '^.*$', "Database Superuser Username", "root" );
+	my $username = EPrints::Utils::get_input( $EPrints::Utils::REGEXP_ANY, "Database Superuser Username", "root" );
 	my $password = EPrints::Utils::get_input_hidden( '^.*$', "Database Superuser Password" );
 
 	my $database = EPrints::Database->new( $repo, db_connect => 0 );
@@ -1188,7 +1181,7 @@ sub create_db
 		exit 1;
 	}
 
-	my $mktables = EPrints::Utils::get_input( $REGEXP_YESNO, "Create database tables?", "yes" );
+	my $mktables = EPrints::Utils::get_input( $EPrints::Utils::REGEXP_YESNO, "Create database tables?", "yes" );
 	if( $mktables eq "yes" )
 	{
 		create_tables( $repoid );
@@ -1235,17 +1228,17 @@ sub create_user
 	}
 
 	print "Creating a new user in $repoid\n\n";
-	$info{username} ||= EPrints::Utils::get_input( $REGEXP_VARNAME, 'Enter a username', 'admin' );
+	$info{username} ||= EPrints::Utils::get_input( $EPrints::Utils::REGEXP_USERNAME, 'Enter a username', 'admin' );
 	while( defined $repo->user_by_username( $info{username} ) )
 	{
 		print STDERR "User with username '".$info{username}."' already exists.\n";
-		$info{username} = EPrints::Utils::get_input( $REGEXP_VARNAME, 'Enter a username', 'admin' );
+		$info{username} = EPrints::Utils::get_input( $EPrints::Utils::REGEXP_USERNAME, 'Enter a username', 'admin' );
 	}
 	my @utypes = $repo->get_types( "user" );
 	$info{usertype} ||= EPrints::Utils::get_input( '^('.join( '|', @utypes ).')$', 'Select a user type ('.join( "|",@utypes).')', 'admin' );
-	$info{password} ||= EPrints::Utils::get_input_hidden( $REGEXP_VARNAME, 'Enter Password' );
+	$info{password} ||= EPrints::Utils::get_input_hidden( $EPrints::Utils::REGEXP_PASSWORD, 'Enter Password' );
 	$info{password} = EPrints::Utils::crypt_password( $info{password}, $repo );
-	$info{email} ||= EPrints::Utils::get_input( $REGEXP_EMAIL, 'Email' );
+	$info{email} ||= EPrints::Utils::get_input( $EPrints::Utils::REGEXP_EMAIL, 'Email' );
 	
 	my $user_ds = $repo->dataset( "user" );
 	my $new_user = $user_ds->create_dataobj( \%info );
@@ -1529,6 +1522,7 @@ sub create_tables
 	if( $repo->database->create_archive_tables )
 	{
 		if( $noise>=1 ) { print "Done creating database tables.\n\n"; }
+		$db_ok = 1;
 	}
 	else
 	{
@@ -1670,7 +1664,7 @@ sub drop_and_recreate_db
 
 	if( $noise>=1 ) { print "Done recreating database\n\n"; }
 
-	my $mktables = EPrints::Utils::get_input( $REGEXP_YESNO, "Create database tables?", "yes" );
+	my $mktables = EPrints::Utils::get_input( $EPrints::Utils::REGEXP_YESNO, "Create database tables?", "yes" );
 	if( $mktables eq "yes" )
 	{
 		create_tables( $repoid );

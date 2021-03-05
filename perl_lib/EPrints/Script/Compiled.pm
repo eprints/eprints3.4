@@ -938,6 +938,25 @@ sub run_documents
 	return [ [$eprint->[0]->get_all_documents()],  "ARRAY" ];
 }
 
+sub run_has_role
+{
+	my( $self, $state, $user, $role ) = @_;
+
+	if(( ref $user->[0] ) ne "EPrints::DataObj::User" )
+	{
+		$self->runtime_error( "has_role can only be used on a user object" );
+	}
+
+	if( $role->[1] ne "STRING" )
+	{
+		$self->runtime_error( "role must be a string" );
+	}
+
+	my $has_role = $user->[0]->has_role( $role->[0] );
+
+	return [ $has_role, "BOOLEAN" ];
+}
+
 =item OBJ.render_value_function( FUNC, FIELD[, EXTRA...] )
 
 Extracts the value of the given FIELD from the OBJ data object, and renders

@@ -1042,7 +1042,7 @@ Ok, I'll need to connect to the mysql database as root. What is the root
 password? 
 	
 END
-	$mysql_root_password = EPrints::Utils::get_input_hidden( $EPrints::Utils::REGEXP_ANY, "MySQL Root Password" );
+	$mysql_root_password = EPrints::Utils::get_input_hidden( '^.*$', "MySQL Root Password" );
 
 	return $mysql_root_password;
 }
@@ -1172,7 +1172,7 @@ sub create_db
 	BADPASSWORD:
 
 	my $username = EPrints::Utils::get_input( $EPrints::Utils::REGEXP_ANY, "Database Superuser Username", "root" );
-	my $password = EPrints::Utils::get_input_hidden( $EPrints::Utils::REGEXP_ANY, "Database Superuser Password" );
+	my $password = EPrints::Utils::get_input_hidden( '^.*$', "Database Superuser Password" );
 
 	my $database = EPrints::Database->new( $repo, db_connect => 0 );
 
@@ -2186,7 +2186,7 @@ sub migrate_to_multiple_values
 {
 	my( $db, $dataset, $field ) = @_;
 	
-	print "\tMigrating ".$field->get_name." to multiple values ...\n";
+	print "\tMigrating ".$field->get_name." to multiple values ...";
 
 	my $rc = 1;
 	my $Q_key = $db->quote_identifier( $dataset->key_field->get_name );
@@ -2215,7 +2215,7 @@ sub migrate_to_multiple_values
 	}
 	else
 	{
-		print STDERR " ERRORS";
+		print " ERRORS";
 	}
 	print "\n";
 }
@@ -2227,7 +2227,7 @@ sub migrate_to_multilang
 
 	my $lang = $repo->config( 'defaultlanguage' ) || 'en';
 
-	print "\tMigrating ".$field->get_name." to multilang (default language: [$lang]) ...\n";
+	print "\tMigrating ".$field->get_name." to multilang (default language: [$lang]) ...";
 	
 	# the field that holds the actual data
 	my $text_field = $field->property( 'fields_cache' )->[0];
@@ -2273,7 +2273,7 @@ sub migrate_to_multilang
 	}
 	else
 	{
-		print STDERR " ERRORS";
+		print " ERRORS";
 	}
 	print "\n";
 }

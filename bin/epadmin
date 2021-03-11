@@ -1,8 +1,11 @@
 #!/usr/bin/perl -w
 
+use strict;
 use FindBin;
 use lib "$FindBin::Bin/../perl_lib";
 no if $] >= 5.017011, warnings => 'experimental::smartmatch';
+
+use EPrints::Utils;
 
 ######################################################################
 #
@@ -297,6 +300,7 @@ $noise = 0 if( $quiet );
 $noise = 1+$verbose if( $verbose );
 
 my $db_ok = 0;
+my $core_ok = 0;
 
 my @PASSWORD_CHARS = ( 'a'..'z','A'..'Z','0'..'9' );
 
@@ -379,18 +383,17 @@ sub repository
 
 sub create
 {
-    pod2usage( 2 ) if( scalar @ARGV > 1 ); 
+	pod2usage( 2 ) if( scalar @ARGV > 1 ); 
 
-    my $conf = $EPrints::SystemSettings::conf;
-    my @flavours =  keys %{$conf->{flavours}};
-    my $repo_type = $ARGV[0]? $ARGV[0]:"";
-    if (not $repo_type ~~ @flavours)
-    {
-        print STDERR "Available repository types are: \n   ",join("\n   ",@flavours),"\n";
-        print STDERR "Usage: epadmin create [repository type]\n";
-        exit(1);
-    }
-    
+	my $conf = $EPrints::SystemSettings::conf;
+	my @flavours =  keys %{$conf->{flavours}};
+	my $repo_type = $ARGV[0]? $ARGV[0]:"";
+	if (not $repo_type ~~ @flavours)
+	{
+		print STDERR "Available repository types are: \n   ",join("\n   ",@flavours),"\n";
+		print STDERR "Usage: epadmin create [repository type]\n";
+		exit 1;
+	}
 
 	my $system = EPrints::System->new;
 
@@ -418,13 +421,13 @@ END
 
 	if( $exists )
 	{
-		print "A repository with that ID already exist.\n";
+		print "A repository with that ID already exists.\n";
 		exit;	
 	}
 
 	unless( -e $repodir )
 	{
-		print "We need to create $repodir, doing it now...\n";
+		print "We need to create $repodir, doing it now ...\n";
 		unless( $system->mkdir( $repodir ) )
 		{
 			print "Problem creating directory\n\n";
@@ -436,15 +439,15 @@ END
 		print "$repodir MUST be a directory.\n\n";
 	}
 
-    my $cfg_dir;
-    if ($repo_type eq "zero")
-    {
-        $cfg_dir = "/lib/defaultcfg_zero";
-    }
-    else
-    {
-        $cfg_dir = "/flavours/$repo_type"."_lib/defaultcfg";
-    }
+	my $cfg_dir;
+	if ($repo_type eq "zero")
+	{
+		$cfg_dir = "/lib/defaultcfg_zero";
+	}
+	else
+	{
+		$cfg_dir = "/flavours/$repo_type"."_lib/defaultcfg";
+	}
 
 	print "\nCreating initial files:\n";
 	&install( 
@@ -456,21 +459,21 @@ END
 	{
 		$system->mkdir( "$repodir/$_" );
 	}
-    
-    ##create the 00_flavour.pl
-    my $flavourfile = "$repodir/cfg/cfg.d/00_flavour.pl";
-    mkdir "$repodir/cfg/cfg.d" unless -d "$repodir/cfg/cfg.d";
-    open( FLAV, ">$flavourfile" ) || die "Could not write to $flavourfile: $!";
-    print FLAV Data::Dumper->Dump(
-        [
-            $repo_type,
-        ],
-        [qw/
-            $c->{flavour} 
-        /]
-    );
-    close FLAV;
-    print "Wrote $flavourfile\n";
+	
+	##create the 00_flavour.pl
+	my $flavourfile = "$repodir/cfg/cfg.d/00_flavour.pl";
+	mkdir "$repodir/cfg/cfg.d" unless -d "$repodir/cfg/cfg.d";
+	open( FLAV, ">$flavourfile" ) || die "Could not write to $flavourfile: $!";
+	print FLAV Data::Dumper->Dump(
+		[
+			$repo_type,
+		],
+		[qw/
+			$c->{flavour} 
+		/]
+	);
+	close FLAV;
+	print "Wrote $flavourfile\n";
 
 
 	print <<END;
@@ -504,9 +507,9 @@ END
 		config_db( $repoid );	
 		
 		if( !$db_ok )
-        	{
-                	print STDERR "Hmm, something went wrong with the database.\nUse 'config_db', or manually edit the archive's cfg/cfg.d/database.pl before running 'create_db' or 'create_tables'.";
-                	exit 1;
+		{
+			print STDERR "\n\nHmm, something went wrong with the database.\nUse 'epadmin config_db $repoid', or manually edit the archive's cfg/cfg.d/database.pl before running 'epadmin create_db $repoid' or 'epadmin create_tables $repoid'.\n";
+			exit 1;
 		}
 	}
 	else
@@ -527,17 +530,13 @@ END
 		{
 			print "OK, but you will not be able to log into the website. You can always run 'epadmin create_user $repoid' later.\n"
 		}
-	}
 
-	my $ok;
-	$ok = EPrints::Utils::get_input( $EPrints::Utils::REGEXP_YESNO, "Do you want to build the static web pages?", "yes" );
-	if( $ok eq "yes" )
-	{
-		run_script( $repoid, "generate_static", "--verbose", $repoid );	
-	}
+		my $ok = EPrints::Utils::get_input( $EPrints::Utils::REGEXP_YESNO, "Do you want to build the static web pages?", "yes" );
+		if( $ok eq "yes" )
+		{
+			run_script( $repoid, "generate_static", "--verbose", $repoid );	
+		}
 
-	if( $config_db eq "yes" )
-	{
 		if ($repo_type eq "zero")
 		{
 			run_script( $repoid, "import_subjects", "--verbose", "--force", $repoid );
@@ -552,17 +551,19 @@ END
 		}
 	}
 
-	$ok = EPrints::Utils::get_input( $EPrints::Utils::REGEXP_YESNO, "Do you want to update the apache config files? (you still need to add the 'Include' line)", "yes" );
-	if( $ok eq "yes" )
+	if( $db_ok && $core_ok )
 	{
-		run_script( $repoid, "generate_apacheconf", "--verbose" );
-	}
+		my $ok = EPrints::Utils::get_input( $EPrints::Utils::REGEXP_YESNO, "Do you want to update the apache config files? (you still need to add the 'Include' line)", "yes" );
+		if( $ok eq "yes" )
+		{
+			run_script( $repoid, "generate_apacheconf", "--verbose" );
+		}
 
 	my $base_path = EPrints::Config::get( "base_path" );
 print <<END;
 
 --------------------------------------------------------------------------
-That seemed to more or less work...
+That seemed to more or less work ...
 --------------------------------------------------------------------------
 
 Now make any required changes to the cfg files. 
@@ -589,6 +590,7 @@ And then try connecting to your repository.
 Don't forget to register your repository at http://roar.eprints.org/
 
 END
+	}
 
 exit;
 
@@ -629,7 +631,7 @@ sub run_script
 	Carp::croak "Fatal! bin_path not defined"
 		if !defined $dir;
 	my $path = "$dir/$script";
-	Carp::croak "Fatal! Wanted to execute $path, but it doesn't exist"
+	Carp::croak "Fatal! Wanted to execute $path, but it doesn't exist."
 		if !-e $path;
 
 	system( 'perl', $path, @opts );
@@ -837,8 +839,7 @@ END
 #
 #END
 
-	print "\n";
-	print "\n";
+	print "\n\n";
 
 	$config{adminemail} = EPrints::Utils::get_input( $EPrints::Utils::REGEXP_EMAIL, 'Administrator Email',  $config{adminemail} );
 	print <<END;
@@ -849,9 +850,9 @@ enter something as a placeholder and edit the XML config file which this
 script generates.
 
 END
-	$config{archive_name} = EPrints::Utils::get_input( '^.+$', 'Archive Name',  $config{archive_name} );
+	$config{archive_name} = EPrints::Utils::get_input( $EPrints::Utils::REGEXP_ANY, 'Archive Name',  $config{archive_name} );
 
-        print <<END;
+		print <<END;
 
 Enter the name of the organisation in the default language. Again, if you wish to enter 
 other titles for other languages or enter non ascii characters then you may
@@ -859,7 +860,7 @@ enter something as a placeholder and edit the XML config file which this
 script generates.
 
 END
-	$config{organisation_name} = EPrints::Utils::get_input( '^.+$', 'Organisation Name',  $config{organisation_name} );
+	$config{organisation_name} = EPrints::Utils::get_input( $EPrints::Utils::REGEXP_ANY, 'Organisation Name',  $config{organisation_name} );
 
 	# Write files?
 
@@ -914,6 +915,7 @@ EOF
 	);
 	close CORE;
 	print "Wrote $corefile\n";
+	$core_ok = 1;
 
 	my $anamefile = "$repodir/cfg/lang/en/phrases/archive_name.xml";
 	open( ANAME, ">$anamefile" ) || die "Could not write to $anamefile: $!";
@@ -922,10 +924,10 @@ EOF
 <!DOCTYPE phrases SYSTEM "entities.dtd">
 
 <epp:phrases xmlns="http://www.w3.org/1999/xhtml"
-            xmlns:epp="http://eprints.org/ep3/phrase">
+			xmlns:epp="http://eprints.org/ep3/phrase">
 
-    <epp:phrase id="archive_name">$config{archive_name}</epp:phrase>
-    <epp:phrase id="organisation_name">$config{organisation_name}</epp:phrase>
+	<epp:phrase id="archive_name">$config{archive_name}</epp:phrase>
+	<epp:phrase id="organisation_name">$config{organisation_name}</epp:phrase>
 
 </epp:phrases>
 END
@@ -957,7 +959,7 @@ sub config_db
 	$config{dbport} = undef if( $config{dbport} eq "#" );
 
 	$config{dbsock} = "#" if( !defined $config{dbsock} );
-	# can't remember what is a legal mysql socket... cjg
+	# can't remember what is a legal mysql socket ... cjg
 	$config{dbsock} = EPrints::Utils::get_input( $EPrints::Utils::REGEXP_ANY, 'MySQL Socket (# for no setting)',  $config{dbsock} );
 	$config{dbsock} = undef if( $config{dbsock} eq "#" );
 
@@ -1040,7 +1042,7 @@ Ok, I'll need to connect to the mysql database as root. What is the root
 password? 
 	
 END
-	$mysql_root_password = EPrints::Utils::get_input_hidden( '^.*$', "MySQL Root Password" );
+	$mysql_root_password = EPrints::Utils::get_input_hidden( $EPrints::Utils::REGEXP_ANY, "MySQL Root Password" );
 
 	return $mysql_root_password;
 }
@@ -1061,7 +1063,7 @@ sub root_dbh
 	while( !defined $dbh )
 	{
 		my $password = get_mysql_root_password();
-		print "Connecting to the database...\n";
+		print "Connecting to the database ...\n";
 		$dbh = DBI->connect(
 			EPrints::Database::build_connection_string(
 				dbname => $dbname,
@@ -1079,7 +1081,7 @@ sub root_dbh
 			my $try_again = EPrints::Utils::get_input( $EPrints::Utils::REGEXP_YESNO, "Try again?", "yes" );
 			if( $try_again eq "no" )
 			{
-				exit( 1 );
+				exit 1;
 			}
 		}
 	}
@@ -1170,13 +1172,13 @@ sub create_db
 	BADPASSWORD:
 
 	my $username = EPrints::Utils::get_input( $EPrints::Utils::REGEXP_ANY, "Database Superuser Username", "root" );
-	my $password = EPrints::Utils::get_input_hidden( '^.*$', "Database Superuser Password" );
+	my $password = EPrints::Utils::get_input_hidden( $EPrints::Utils::REGEXP_ANY, "Database Superuser Password" );
 
 	my $database = EPrints::Database->new( $repo, db_connect => 0 );
 
 	if( !$database->create( $username, $password ) )
 	{
-		print "Error creating database: [$DBI::err] $DBI::errstr\n";
+		print STDERR "Error creating database: [$DBI::err] $DBI::errstr\n";
 		goto BADPASSWORD if $DBI::err == 1045;
 		exit 1;
 	}
@@ -1409,13 +1411,13 @@ restarting the server at this point is slightly more efficient.
 
 END
 		if ( defined $repo->config( "citation_caching", "enabled" ) && $repo->config( "citation_caching", "enabled" ) )
-                {
-                        print <<END;
+				{
+						print <<END;
 You will also need to running "refresh_citations" if you have made changes 
 to any of the citation files that are used by view (browse) pages.
 
 END
-                }
+				}
 
 	}
 
@@ -1460,25 +1462,25 @@ END
 
 sub refresh_citations
 {
-        my( $repoid ) = @_;
+		my( $repoid ) = @_;
 
-        my $repo = &repository( $repoid );
+		my $repo = &repository( $repoid );
 
-        my $file = $repo->config( "variables_path" )."/citations.timestamp";
-        unless( open( CHANGEDFILE, ">$file" ) )
-        {
-                EPrints::abort( "Cannot write to file $file" );
-        }
-        print CHANGEDFILE "This file last poked at: ".EPrints::Time::human_time()."\n";
-        close CHANGEDFILE;
-        if( $noise > 0 )
-        {
-                print <<END;
+		my $file = $repo->config( "variables_path" )."/citations.timestamp";
+		unless( open( CHANGEDFILE, ">$file" ) )
+		{
+				EPrints::abort( "Cannot write to file $file" );
+		}
+		print CHANGEDFILE "This file last poked at: ".EPrints::Time::human_time()."\n";
+		close CHANGEDFILE;
+		if( $noise > 0 )
+		{
+				print <<END;
 Citation caches will be updated when they are next requested.  You may wish to run
 refresh_abstracts and/or refresh_views as citations will only be updated on 
 non-cached pages.
 END
-        }
+		}
 }
 	
 
@@ -1513,12 +1515,12 @@ sub create_tables
 
 	if( $repo->database->has_table( "eprint" ) )
 	{
-		print "WARNING: Database is NOT empty. Contains an \"eprint\" table.\n";
-		print "You might consider running 'epadmin erase_data $repoid' instead.\n";
+		print STDERR "WARNING: Database is NOT empty. Contains an \"eprint\" table.\n";
+		print STDERR "You might consider running 'epadmin erase_data $repoid' instead.\n";
 		exit 1;
 	}
 
-	if( $noise>=1 ) { print "Creating database tables...\n"; }
+	if( $noise>=1 ) { print "Creating database tables ...\n"; }
 	if( $repo->database->create_archive_tables )
 	{
 		if( $noise>=1 ) { print "Done creating database tables.\n\n"; }
@@ -1550,8 +1552,8 @@ END
 	my $sure = $force || EPrints::Utils::get_input_confirm( "Are you sure you want this to happen" );
 	unless( $sure )
 	{
-		print "Aborting then.\n";
-		exit( 1 );
+		print STDERR "Aborting then.\n";
+		exit 1;
 	}
 
 	erase_eprint_files( $repo );
@@ -1580,8 +1582,8 @@ END
 	my $sure = $force || EPrints::Utils::get_input_confirm( "Are you sure you want this to happen" );
 	unless( $sure )
 	{
-		print "Aborting then.\n";
-		exit( 1 );
+		print STDERR "Aborting then.\n";
+		exit 1;
 	}
 
 	erase_eprint_files( $repo );
@@ -1646,14 +1648,14 @@ sub drop_and_recreate_db
 	my $repo = &repository( $repoid, db_connect => 0 );
 	my $database = $repo->get_conf( "dbname" );
 	
-	if( $noise>=1 ) { print "Connecting to mysql...\n"; }
+	if( $noise>=1 ) { print "Connecting to mysql ...\n"; }
 
 	my $dbh = root_dbh( $repoid, "mysql" );
 
 	if( !defined $dbh )
 	{
 		print STDERR "\n\nFailed to connect to database. Aborting.\n\n";
-		exit( 1 );
+		exit 1;
 	}
 
 	if( $noise>=1 ) { print "Dropping database \"$database\"\n"; }
@@ -1676,7 +1678,7 @@ sub erase_eprint_files
 {
 	my( $repoid ) = @_;
 
-	if( $noise>=1 ) { print "Erasing eprint files...\n"; }
+	if( $noise>=1 ) { print "Erasing eprint files ...\n"; }
 
 	my $repo = &repository( $repoid, check_db => 0 );
 	my $documents_path = $repo->config( "documents_path" );
@@ -1702,7 +1704,7 @@ sub erase_eprint_files
 		}
 		closedir $dh2;
 	}
-	if( $noise>=1 ) { print "...done erasing eprint files.\n"; }
+	if( $noise>=1 ) { print "... done erasing eprint files.\n"; }
 }
 
 sub erase_fulltext_index
@@ -1768,7 +1770,7 @@ sub test
 		if( Dumper( $repo->config( "can_request_view_document" ) ) =~ /connection\S+remote_ip/i )
 		{
 			print "EPrints warning! '".$repo->get_id."' uses 'remote_ip' in the 'can_request_view_document' configuration, but this version of Apache does not have that method. This may lead to the security value for a document being ignored. Please check configuration.\n";
-        	}
+			}
 	}
 
 	if( $noise > 1 )
@@ -1833,7 +1835,7 @@ sub profile
 	exit(1) if !runtests($test_file);
 
 	print "To generate profile reports: nytprofhtml\n";
-	exit(0);
+	exit 0;
 }
 
 sub rehash
@@ -1909,8 +1911,8 @@ sub recommit
 	my $dataset = $repo->dataset( $datasetid );
 	if( !defined $dataset )
 	{
-		print "Exiting due to unknown dataset.\n" if( $noise >= 1 );
-		exit( 1 );
+		print STDERR "Exiting due to unknown dataset.\n" if( $noise >= 1 );
+		exit 1;
 	}
 
 	
@@ -1925,8 +1927,7 @@ sub recommit
 
 		if( $noise > 0 )
 		{
-			print "\n";
-			print "You are about to recommit \"$datasetid\" in the $repoid repository.\n";
+			print "\nYou are about to recommit \"$datasetid\" in the $repoid repository.\n";
 			print "This can take some time.\n\n";
 			print "Number of records in set: ".$list->count."\n";
 		}
@@ -1934,19 +1935,19 @@ sub recommit
 		my $sure = $force || EPrints::Utils::get_input_confirm( "Continue", 1 );
 		unless( $sure )
 		{
-			print "Aborting then.\n\n";
-			exit( 1 );
+			print STDERR "Aborting then.\n\n";
+			exit 1;
 		}
 	}
 
 	$list->map( sub {
-        	my( $session, $dataset, $item ) = @_;
+			my( $session, $dataset, $item ) = @_;
 	
-        	if( $noise >= 2 )
-        	{
-                	print STDERR "Committing item: ".$dataset->id()."/".$item->id()."\n";
-        	}
-        	$item->commit( 1 );
+			if( $noise >= 2 )
+			{
+					print STDERR "Committing item: ".$dataset->id()."/".$item->id()."\n";
+			}
+			$item->commit( 1 );
 	} );
 
 	if( !scalar @ids )
@@ -1964,8 +1965,8 @@ sub reorder
 	my $dataset = $repo->dataset( $datasetid );
 	if( !defined $dataset )
 	{
-		print "Exiting due to unknown dataset.\n" if( $noise >= 1 );
-		exit( 1 );
+		print STDERR "Exiting due to unknown dataset.\n" if( $noise >= 1 );
+		exit 1;
 	}
 
 	my $list;
@@ -2007,8 +2008,8 @@ sub rebuild_triples
 	my $dataset = $repo->dataset( $datasetid );
 	if( !defined $dataset )
 	{
-		print "Exiting due to unknown dataset.\n" if( $noise >= 1 );
-		exit( 1 );
+		print STDERR "Exiting due to unknown dataset.\n" if( $noise >= 1 );
+		exit 1;
 	}
 
 	my $list;
@@ -2022,7 +2023,7 @@ sub rebuild_triples
 	}
 
 	$list->map( sub {
-        	my( $repository, $dataset, $item ) = @_;
+			my( $repository, $dataset, $item ) = @_;
 	
 		my $action = "clear_triples";
 		if( $item->get_value( "eprint_status" ) eq "archive" )
@@ -2051,8 +2052,8 @@ sub reindex
 	my $dataset = $repo->dataset( $datasetid );
 	if( !defined $dataset )
 	{
-		print "Exiting due to unknown dataset.\n" if( $noise >= 1 );
-		exit( 1 );
+		print STDERR "Exiting due to unknown dataset.\n" if( $noise >= 1 );
+		exit 1;
 	}
 
 	my $list;
@@ -2066,8 +2067,7 @@ sub reindex
 
 		if( $noise > 0 )
 		{
-			print "\n";
-			print "You are about to reindex \"$datasetid\" in the ".$repo->get_id." repository.\n";
+			print "\nYou are about to reindex \"$datasetid\" in the ".$repo->get_id." repository.\n";
 			print "This can take some time.\n\n";
 			print "Number of records in set: ".$list->count."\n";
 		}
@@ -2075,8 +2075,8 @@ sub reindex
 		my $sure = $force || EPrints::Utils::get_input_confirm( "Continue", 1 );
 		unless( $sure )
 		{
-			print "Aborting then.\n\n";
-			exit( 1 );
+			print STDERR "Aborting then.\n\n";
+			exit 1;
 		}
 	}
 
@@ -2139,13 +2139,13 @@ sub set_developer_mode
 	my ( $repoid, $set_to ) = @_;
 
 	if( !defined $set_to )
-        {
-                pod2usage( "Do you want to set developer mode to 'on' or 'off'?" );
-        }
+		{
+				pod2usage( "Do you want to set developer mode to 'on' or 'off'?" );
+		}
 
 	my $repo = &repository( $repoid );
 
-        my $file = $repo->config( "variables_path" )."/developer_mode_on";
+		my $file = $repo->config( "variables_path" )."/developer_mode_on";
 
 	if($set_to eq "on")
 	{
@@ -2161,9 +2161,9 @@ sub set_developer_mode
 
 	if($set_to eq "off"){
 		if( -e $file && !unlink( $file ) )
-                {
-                        EPrints::abort( "Cannot remove file $file" );
-                }
+				{
+						EPrints::abort( "Cannot remove file $file" );
+				}
 		print "Developer mode is for $repoid is set to off\n";
 		
 		return;	
@@ -2186,7 +2186,7 @@ sub migrate_to_multiple_values
 {
 	my( $db, $dataset, $field ) = @_;
 	
-	print "\tMigrating ".$field->get_name." to multiple values... ";
+	print "\tMigrating ".$field->get_name." to multiple values ...\n";
 
 	my $rc = 1;
 	my $Q_key = $db->quote_identifier( $dataset->key_field->get_name );
@@ -2215,7 +2215,7 @@ sub migrate_to_multiple_values
 	}
 	else
 	{
-		print " ERRORS";
+		print STDERR " ERRORS";
 	}
 	print "\n";
 }
@@ -2227,7 +2227,7 @@ sub migrate_to_multilang
 
 	my $lang = $repo->config( 'defaultlanguage' ) || 'en';
 
-	print "\tMigrating ".$field->get_name." to multilang (default language: [$lang])... ";
+	print "\tMigrating ".$field->get_name." to multilang (default language: [$lang]) ...\n";
 	
 	# the field that holds the actual data
 	my $text_field = $field->property( 'fields_cache' )->[0];
@@ -2273,7 +2273,7 @@ sub migrate_to_multilang
 	}
 	else
 	{
-		print " ERRORS";
+		print STDERR " ERRORS";
 	}
 	print "\n";
 }
@@ -3105,7 +3105,7 @@ sub upgrade_3_2_1_to_3_2_2
 	# Tell indexer to generate RDF dataset
 	my $all_eprints = $repo->dataset( "eprint" )->search;
 	$all_eprints->map( sub {
-        	my( $repository, $dataset, $eprint ) = @_;
+			my( $repository, $dataset, $eprint ) = @_;
 	
 		my $action = "clear_triples";
 		if( $eprint->get_value( "eprint_status" ) eq "archive" )
@@ -3264,7 +3264,7 @@ sub upgrade_3_3_1_to_3_3_2
 		);
 	});
 
-	print <<'EOH';
+	print <<EOH;
 You may want to update cfg.d/document_upload.pl and namedsets/document then
 ./bin/epadmin redo_mime_type [REPOID] document
 EOH
@@ -3362,4 +3362,3 @@ License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
 =for LICENSE END
-

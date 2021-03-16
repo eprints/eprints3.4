@@ -1821,6 +1821,7 @@ sub render_icon_link
 		$span->appendChild( $self->{session}->make_element( 
 			"img", 
 			class=>"ep_preview_image",
+			id=>$preview_id . "_img",
 			alt=>"",
 			src=>$preview_url,
 			border=>0 ));

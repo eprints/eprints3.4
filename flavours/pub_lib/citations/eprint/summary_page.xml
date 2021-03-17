@@ -30,7 +30,7 @@
       <div>
         <epc:foreach expr="$docs" iterator="doc">
           <div class="ep_summary_page_document">
-            <span><epc:print expr="$doc.icon('HoverPreview','noNewWindow')}" /></span>
+            <span><epc:print expr="$doc.icon('HoverPreview','noNewWindow','previewRight')}" /></span>
             <span>
               <epc:print expr="$doc.citation('default')" /><br />
               <a href="{$doc.url()}" class="ep_document_link"><epc:phrase ref="summary_page:download"/> (<epc:print expr="$doc.doc_size().human_filesize()" />)</a>

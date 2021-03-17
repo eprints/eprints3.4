@@ -1783,10 +1783,11 @@ sub render_icon_link
 	}
 	if( $opts{preview} )
 	{
-		$aopts{onmouseover} = "EPJS_ShowPreview( event, '$preview_id' );";
-		$aopts{onmouseout} = "EPJS_HidePreview( event, '$preview_id' );";
-		$aopts{onfocus} = "EPJS_ShowPreview( event, '$preview_id' );";
-                $aopts{onblur} = "EPJS_HidePreview( event, '$preview_id' );";
+		$opts{preview_side} = 'right' unless defined $opts{preview_side};
+		$aopts{onmouseover} = "EPJS_ShowPreview( event, '$preview_id', '$opts{preview_side}' );";
+		$aopts{onmouseout} = "EPJS_HidePreview( event, '$preview_id', '$opts{preview_side}' );";
+		$aopts{onfocus} = "EPJS_ShowPreview( event, '$preview_id', '$opts{preview_side}' );";
+                $aopts{onblur} = "EPJS_HidePreview( event, '$preview_id', '$opts{preview_side}' );";
 	}
 	my $f = $self->{session}->make_doc_fragment;
 	my $img_alt = $self->value('main');

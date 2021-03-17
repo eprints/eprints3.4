@@ -15,7 +15,7 @@
         <epc:if test="length($docs) gt 0">
           <div class="ep_search_result_docs">
           <epc:foreach expr="$docs" iterator="doc" limit='2'>
-             <epc:print expr="$doc.icon( 'HoverPreview', 'noNewWindow' )" />
+             <epc:print expr="$doc.icon( 'HoverPreview', 'noNewWindow', 'previewLeft' )" />
           </epc:foreach>
           </div>
         </epc:if>

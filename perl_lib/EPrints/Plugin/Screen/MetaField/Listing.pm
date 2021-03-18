@@ -46,19 +46,22 @@ sub properties_from
 	my $ds = $repo->dataset( "metafield" );
 	$self->{processor}->{dataset} = $ds;
 
-	my $dataset = $repo->dataset( $datasetid );
-	if( $self->{processor}->{notes}->{dataset} = $dataset )
+	if ( defined $datasetid )
 	{
-		if( defined $fieldname )
+		my $dataset = $repo->dataset( $datasetid );
+		if( $self->{processor}->{notes}->{dataset} = $dataset )
 		{
-			$self->{processor}->{notes}->{field} = $dataset->field( $fieldname );
+			if( defined $fieldname )
+			{
+				$self->{processor}->{notes}->{field} = $dataset->field( $fieldname );
+			}
+			$self->{processor}->{search} = $ds->prepare_search(
+				filters => [
+					{ meta_fields => [qw( mfdatasetid )], value => $datasetid }
+				],
+				custom_order => "name",
+			);
 		}
-		$self->{processor}->{search} = $ds->prepare_search(
-			filters => [
-				{ meta_fields => [qw( mfdatasetid )], value => $datasetid }
-			],
-			custom_order => "name",
-		);
 	}
 
 	$self->SUPER::properties_from;

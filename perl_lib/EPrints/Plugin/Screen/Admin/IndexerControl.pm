@@ -149,7 +149,9 @@ sub action_force_start_indexer
 	{
 		$self->{processor}->add_message( 
 			"error", 
-			$self->html_phrase( "cant_start_indexer", logpath => EPrints::Index::logfile() ) 
+			$self->html_phrase( "cant_start_indexer", 
+				logpath => $self->{session}->make_text( EPrints::Index::logfile() )
+			)
 		);
 	}
 }

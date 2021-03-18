@@ -148,6 +148,8 @@ sub parse
 {
 	my( $class, $string, %opts ) = @_;
 
+	$string = "" unless defined $string;
+
 	my $doi = "$string";
 
 	if( $doi =~ s!^https?://(?:(?:dx\.)?doi\.org|doi\.acm\.org|doi\.ieeecomputersociety\.org)/+(?:doi:)?!!i )

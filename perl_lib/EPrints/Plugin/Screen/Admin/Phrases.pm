@@ -489,7 +489,7 @@ sub render_row
 
 	$tr = $session->make_element( "tr", class => "ep_phraseedit_$src" );
 
-	$td = $session->make_element( "td" );
+	$td = $session->make_element( "td", id => "ep_phraseedit_".$phraseid."_label" );
 	$tr->appendChild( $td );
 	$td->appendChild( $session->make_text( $phraseid ) );
 
@@ -507,11 +507,11 @@ sub render_row
 	if ( defined $session->config( "csrf_token_salt" ) && defined $session->current_user )
         {
 		my $csrf_token = $session->get_csrf_token();
-		$div = $session->make_element( "div", id => "ep_phraseedit_$phraseid", class => "ep_phraseedit_widget", onfocus => "ep_phraseedit_edit(this, ep_phraseedit_phrases, '$csrf_token');" );
+		$div = $session->make_element( "div", id => "ep_phraseedit_$phraseid", class => "ep_phraseedit_widget", onfocus => "ep_phraseedit_edit(this, ep_phraseedit_phrases, '$csrf_token');", tabindex => "0" );
 	}
 	else
 	{	
-		$div = $session->make_element( "div", id => "ep_phraseedit_$phraseid", class => "ep_phraseedit_widget", onfocus => "ep_phraseedit_edit(this, ep_phraseedit_phrases);" );
+		$div = $session->make_element( "div", id => "ep_phraseedit_$phraseid", class => "ep_phraseedit_widget", onfocus => "ep_phraseedit_edit(this, ep_phraseedit_phrases);", tabindex => "0" );
 	}
 	if( $xml ne $phrase->{xml} )
 	{

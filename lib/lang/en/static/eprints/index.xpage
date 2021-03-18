@@ -109,7 +109,7 @@
   <dd><a href="http://www.openarchives.org/">Open Archives Initiative Protocol for Metadata Harvesting</a></dd>
   <dd><a href="http://www.w3.org/MarkUp/">Valid XHTML</a></dd>
   <dd><a href="http://jigsaw.w3.org/css-validator/">Valid CSS</a></dd>
-  <dd class="last"><a href="http://linkeddata.org/">Linked Data</a></dd>
+  <dd class="last"><a href="https://www.w3.org/standards/semanticweb/data">Linked Data</a></dd>
 
   <dt>Part of:</dt>
   <dd class="last"><a href="http://www.gnu.org/">The GNU Project</a></dd>

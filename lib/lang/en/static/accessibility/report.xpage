@@ -326,7 +326,7 @@
   </tr>
   <tr>
     <td><a href="{$config{rel_path}}/cgi/users/home?edit_phrases=yes"><epc:print expr="$config{rel_path}"/>/cgi/users/home?edit_phrases=yes</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;6&#160;|&#160;Structural&#160;Elements:&#160;12&#160;|&#160;ARIA:&#160;13</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;6&#160;|&#160;Structural&#160;Elements:&#160;12&#160;|&#160;ARIA:&#160;150</div></td>
     <td>None</td>
   </tr>
   <tr>
@@ -411,7 +411,7 @@
   </tr>
   <tr>
     <td><a href="{$config{rel_path}}/cgi/users/home?screen=Admin%3A%3APhrases"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Admin%3A%3APhrases</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;1&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;2953</div><div class="ep_accessibility_good">Features:&#160;6&#160;|&#160;Structural&#160;Elements:&#160;12&#160;|&#160;ARIA:&#160;15</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;1&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;2953</div><div class="ep_accessibility_good">Features:&#160;6&#160;|&#160;Structural&#160;Elements:&#160;12&#160;|&#160;ARIA:&#160;3144</div></td>
     <td>None</td>
   </tr>
   <tr>

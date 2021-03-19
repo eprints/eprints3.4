@@ -1,1 +1,13 @@
-default.xml
+<?xml version="1.0" ?>
+
+<!-- 
+	Full citation for an eprint. 
+-->
+
+<cite:citation xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:epc="http://eprints.org/ep3/control" xmlns:cite="http://eprints.org/ep3/citation" >
+
+
+<cite:linkhere><xhtml:em><epc:print expr="title" opts="magicstop"/></xhtml:em></cite:linkhere>
+
+</cite:citation>
+

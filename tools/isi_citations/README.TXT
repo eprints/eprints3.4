@@ -1,7 +1,7 @@
 ISI SOAP API Harvester
 ----------------------
 
-Copyright 2020 University of Southampton.
+Copyright 2021 University of Southampton.
 
 This file is part of EPrints 3.4 http://www.eprints.org/
 

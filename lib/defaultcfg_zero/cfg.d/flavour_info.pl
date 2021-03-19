@@ -1,13 +1,13 @@
 $c->{flavour_id} = "zero";
 $c->{flavour_name} = "Zero";
-$c->{flavour_version} = "1.2";
+$c->{flavour_version} = "1.3";
 
 
 =head1 COPYRIGHT
 
 =for COPYRIGHT BEGIN
 
-Copyright 2020 University of Southampton.
+Copyright 2021 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/

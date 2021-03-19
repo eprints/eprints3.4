@@ -1,1 +1,16 @@
-default.xml
+<?xml version="1.0" ?>
+
+<!-- 
+	File citation style.
+-->
+
+<cite:citation xmlns="http://www.w3.org/1999/xhtml" xmlns:cite="http://eprints.org/ep3/citation" xmlns:epc="http://eprints.org/ep3/control">
+
+<!-- file citation -->
+
+
+<span class="ep_file_citation">
+<cite:linkhere><epc:print expr='filename'/> (<epc:print expr="filesize"/>) [<epc:print expr="mime_type"/>]</cite:linkhere>
+</span>
+
+</cite:citation>

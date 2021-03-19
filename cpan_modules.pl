@@ -11,13 +11,17 @@ umask( 0022 );
 
 print "Attempting to install PERL modules required by GNU EPrints...\n";
 
+install( 'Config::General' );
 install( 'Data::ShowTable' ); # used by DBD::mysql
 install( 'DBI' ); # used by DBD::mysql
 install( 'DBD::mysql' );
+install( 'JSON' );
+install( 'LWP::Protocol::https' );
 install( 'MIME::Base64' );
-install( 'XML::Parser' );
 install( 'Net::SMTP' );
 install( 'TeX::Encode' );
+install( 'Text::Unidecode' );
+install( 'XML::Parser' );
 
 # not required since 2.3.7
 #foreach $mod_name ( "Apache::Test", "Apache::Request" )
@@ -34,7 +38,7 @@ install( 'TeX::Encode' );
 
 =for COPYRIGHT BEGIN
 
-Copyright 2019 University of Southampton.
+Copyright 2021 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/

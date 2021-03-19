@@ -1469,7 +1469,7 @@ sub make_sitemap_url
 	return $url;
 }
 
-# EPrints::Utils::compare_version( $cmp, $versiom );
+# EPrints::Utils::compare_version( $cmp, $version );
 #  Compare the current EPrints version against a specific version number.
 #  Comparator can be one of 6 values:
 #   '<' is current version less than version specified
@@ -1521,7 +1521,7 @@ sub compare_version
 
 =for COPYRIGHT BEGIN
 
-Copyright 2020 University of Southampton.
+Copyright 2021 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/

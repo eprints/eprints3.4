@@ -22,7 +22,7 @@ sub new
 	$self->{appears} = [
 		{
 			place => "key_tools",
-			position => 100,
+			position => 125,
 		}
 	];
 

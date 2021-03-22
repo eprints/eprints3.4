@@ -131,7 +131,7 @@ sub serve_dataset
 			return redir_add_slash( $repository );
 		}
 
-		my( $item_id, $format) = split( /\./, $file, 2 );
+		my( $item_id, $format) = split( /\.(?=[^.]+$)/, $file, 2 );
 		my $object = $dataset->get_object( $repository, $item_id );
 		if( !defined $object )
 		{

@@ -1762,7 +1762,7 @@ sub in_thread
                 my $parentid = $self->get_value( $field->name );
                 my $dataset = $self->{session}->dataset( "eprint" );
                 my $parent = $dataset->dataobj( $parentid );
-                if( $parent->get_value( "eprint_status" ) eq "archive" )
+                if( defined $parent && $parent->get_value( "eprint_status" ) eq "archive" )
                 {
                         return 1;
                 }

@@ -541,7 +541,7 @@ This field is required if no creators are listed.
     <epp:phrase id="eprint_fieldhelp_number">Enter the issue number of the journal or series in which your item appeared.</epp:phrase>
 
     <epp:phrase id="eprint_fieldname_id_number">Identification Number</epp:phrase>
-    <epp:phrase id="eprint_fieldhelp_id_number">The unique identification number of this item, or a DOI.</epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_id_number">The unique (case-sensitive) identification number of this item, or a DOI.</epp:phrase>
     <epp:phrase id="eprint_fieldhelp_id_number.patent">The patent application number of this item.</epp:phrase>
     <epp:phrase id="eprint_fieldhelp_id_number.monograph">The number, if any, of a technical report or similar item.</epp:phrase>
 

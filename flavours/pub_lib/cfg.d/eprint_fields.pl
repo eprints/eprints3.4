@@ -147,7 +147,7 @@ push @{$c->{fields}->{eprint}},
 
 {
 	name => 'id_number',
-	type => 'text',
+	type => 'id',
 	render_value => 'EPrints::Extras::render_possible_doi',
 },
 

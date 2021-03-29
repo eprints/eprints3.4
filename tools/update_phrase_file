@@ -1,4 +1,8 @@
-#!/usr/bin/perl -w -I/opt/eprints2/perl_lib
+#!/usr/bin/perl -w
+use FindBin;
+use lib "$FindBin::Bin/../perl_lib";
+use EPrints;
+
 
 ######################################################################
 #
@@ -55,9 +59,9 @@ $noise = 1+$verbose if( $verbose );
 # Set STDOUT to auto flush (without needing a \n)
 $|=1;
 
-my $old_phr_en = EPrints::XML::parse_xml( $ARGV[1], $ARGV[0], 1);
-my $new_phr_en = EPrints::XML::parse_xml( $ARGV[2], $ARGV[0], 1);
-my $old_phr_other = EPrints::XML::parse_xml( $ARGV[3], $ARGV[0], 1);
+my $old_phr_en = EPrints::XML::parse_xml( $ARGV[0].$ARGV[1], $ARGV[0], 1);
+my $new_phr_en = EPrints::XML::parse_xml( $ARGV[0].$ARGV[2], $ARGV[0], 1);
+my $old_phr_other = EPrints::XML::parse_xml( $ARGV[0].$ARGV[3], $ARGV[0], 1);
 
 my $phrases;
 

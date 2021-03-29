@@ -4,7 +4,7 @@ use FindBin;
 
 my $dh;
 my @files = ();
-opendir( $dh, "$FindBin::Bin/../lib/defaultcfg/cfg.d" ) || die "Dammit";
+opendir( $dh, "$FindBin::Bin/../lib/defaultcfg_zero/cfg.d" ) || die "$FindBin::Bin/../lib/defaultcfg_zero/cfg.d couldn't be opened ...";
 while( my $file = readdir( $dh ) )
 {
 	push @files, $file;
@@ -16,7 +16,7 @@ my $byopt = {};
 
 foreach my $file ( @files )
 {
-	my $fn = "$FindBin::Bin/../lib/defaultcfg/cfg.d/$file";
+	my $fn = "$FindBin::Bin/../lib/defaultcfg_zero/cfg.d/$file";
 	open( F, $fn ) || die "dang $fn : $!";
 	foreach my $line ( <F> )
 	{

@@ -257,8 +257,14 @@ sub input_text_fh
 
 	my $fh = $opts{fh};
 	binmode( $fh, ":utf8" );
-	my $parser = BibTeX::Parser->new( $fh );
 
+	# Hack to work with latest version of third-party BibTex::Parser.
+	read $fh, my $data, -s $fh;
+	use IO::String;
+	my $fh2 = IO::String->new( $data );
+
+        my $parser = BibTeX::Parser->new( $fh2 );
+	
 	while(my $entry = $parser->next)
 	{
 		if( !$entry->parse_ok )

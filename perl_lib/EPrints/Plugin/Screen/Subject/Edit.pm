@@ -398,6 +398,12 @@ sub action_create
 	my $childid = $session->param( "childid" );
 	return if !EPrints::Utils::is_set( $childid );
 
+	if( $childid =~ /[^a-zA-Z0-9_\.\-]/ )
+        {
+		$self->{processor}->add_message( "error", $self->html_phrase( "invalid_subjectid", id => $session->xml->create_text_node( $childid ) ) );
+		return;
+        }
+
 	my $child = $subject_ds->dataobj( $childid );
 	if( defined $child )
 	{

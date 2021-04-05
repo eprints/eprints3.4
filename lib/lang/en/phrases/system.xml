@@ -3137,6 +3137,7 @@ PY = 2006 and OG = (Cambridge)<br />
     <!-- Subject Editor -->
     <epp:phrase id="Plugin/Screen/Subject/Edit:action_link">Link</epp:phrase>
     <epp:phrase id="Plugin/Screen/Subject/Edit:no_such_subject">No such subject: <epc:pin name="id" />.</epp:phrase>
+    <epp:phrase id="Plugin/Screen/Subject/Edit:invalid_subjectid">ID string '<epc:pin name="id" />' for new subject is invalid.  Subject ID strings can contain only alpha-numeric characters, hyphens (-) underscores (_) and full stops (.).</epp:phrase>
     <epp:phrase id="Plugin/Screen/Subject/Edit:title">Edit subject</epp:phrase>
     <epp:phrase id="Plugin/Screen/Subject/Edit:subjectid"><p>Subject ID: <epc:pin name="id"/></p></epp:phrase>
 

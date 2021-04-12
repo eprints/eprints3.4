@@ -114,7 +114,7 @@ sub local_uri
 
 	my $id = $self->{id};
 	$id =~ s!::!/!g;
-	return $self->{repository}->get_conf( "pr_url" )."/#Plugin/".$id;
+	return $self->{repository}->get_conf( "base_url" )."/#Plugin/".$id;
 }
 
 ######################################################################

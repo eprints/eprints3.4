@@ -4,7 +4,7 @@
 <xpage:title>About the Repository</xpage:title>
 <xpage:body>
 
-<p>This site is powered by <a href="{$config{base_url}}/eprints/">EPrints 3</a>, free software developed by the University of Southampton.</p>
+<p>This site is powered by <a href="{$config{rel_path}}/eprints/">EPrints 3</a>, free software developed by the University of Southampton.</p>
 
 <h2 id="contact-information">Contact Information</h2>
 

@@ -19,6 +19,6 @@ if ( defined $url )
         }
 }
 
-$url = $repo->config( "http_cgiroot" ) . "/users/home" if !defined $url;
+$url = $repo->config( "rel_cgipath" ) . "/users/home" if !defined $url;
 
 $repo->redirect( $url );

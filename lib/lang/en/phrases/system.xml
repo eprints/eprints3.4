@@ -352,9 +352,9 @@ terms.</p>
 
 
     <epp:phrase id="dynamic:logged_in">Logged in as <epc:pin name="user"/> <epc:phrase ref="Plugin/Screen:tool_divide" />
-       <epc:pin name="tools" /> <epc:phrase ref="Plugin/Screen:tool_divide" /> <a href="{$config{http_cgiurl}}/logout">Logout</a>
+       <epc:pin name="tools" /> <epc:phrase ref="Plugin/Screen:tool_divide" /> <a href="{$config{rel_cgipath}}/logout">Logout</a>
     </epp:phrase>
-    <epp:phrase id="dynamic:not_logged_in"><a href="{$config{userhome}}">Login</a> <epc:phrase ref="Plugin/Screen:tool_divide" /> <a href="{$config{http_cgiurl}}/register">Create Account</a></epp:phrase>
+    <epp:phrase id="dynamic:not_logged_in"><a href="{$config{userhome}}">Login</a> <epc:phrase ref="Plugin/Screen:tool_divide" /> <a href="{$config{rel_cgipath}}/register">Create Account</a></epp:phrase>
 
 
 
@@ -2123,14 +2123,14 @@ User Area CGI Scripts
         <p>Note: you must have cookies enabled.</p>
       </div>
     </epp:phrase>
-    <epp:phrase id="cgi/login:reset_link">If you have forgotten your password, you may <a href="{$config{perl_url}}/reset_password">reset</a> it.</epp:phrase>
+    <epp:phrase id="cgi/login:reset_link">If you have forgotten your password, you may <a href="{$config{rel_cgipath}}/reset_password">reset</a> it.</epp:phrase>
     <epp:phrase id="cgi/login:until_close">until the browser closes</epp:phrase>
     <epp:phrase id="cgi/login:forever">forever (until I log out)</epp:phrase>
     <epp:phrase id="cgi/login:bind">yes (more secure)</epp:phrase>
     <epp:phrase id="cgi/login:dont_bind">no (more convenient)</epp:phrase>
     <epp:phrase id="cgi/login:failed">Incorrect username or password.</epp:phrase>
     <epp:phrase id="cgi/login:locked">Too many failed login attempts. Account locked until <epc:pin name="unlocktime"/>.</epp:phrase>
-    <epp:phrase id="cgi/login:logged_in_as"><p>You are already logged in as <epc:pin name="name"/>.</p> <p>If you wish to log in as a different user you must <a href="{$config{pr_url}}/logout">Logout</a> first.</p></epp:phrase>
+    <epp:phrase id="cgi/login:logged_in_as"><p>You are already logged in as <epc:pin name="name"/>.</p> <p>If you wish to log in as a different user you must <a href="{$config{rel_cgipath}}/logout">Logout</a> first.</p></epp:phrase>
     <epp:phrase id="cgi/login:title">Login</epp:phrase>
     <epp:phrase id="cgi/login:message">Login successful.</epp:phrase>
     <epp:phrase id="cgi/login:link_text"><p>You may now view <epc:pin name="link">your requested document</epc:pin>.</p></epp:phrase>
@@ -3110,7 +3110,7 @@ PY = 2006 and OG = (Cambridge)<br />
 
     <epp:phrase id="Plugin/Screen/User/SavedSearches:title">Saved searches</epp:phrase>
     <epp:phrase id="Plugin/Screen/User/SavedSearches:description">View and configure saved searches</epp:phrase>
-    <epp:phrase id="Plugin/Screen/User/SavedSearches:intro"><p>You may view your saved searches and request to receive a periodic email update if anything in the search changes.</p><p>To create a new saved search, carry out a <a href="{$config{perl_url}}/search">search</a> and select <strong>Save search</strong> from the search results page.</p></epp:phrase>
+    <epp:phrase id="Plugin/Screen/User/SavedSearches:intro"><p>You may view your saved searches and request to receive a periodic email update if anything in the search changes.</p><p>To create a new saved search, carry out a <a href="{$config{rel_cgipath}}/search">search</a> and select <strong>Save search</strong> from the search results page.</p></epp:phrase>
     <epp:phrase id="Plugin/Screen/User/SavedSearches:no_searches"><p>You currently have no saved searches.</p></epp:phrase>
 
     <epp:phrase id="Plugin/Screen/User/SavedSearch/Edit:title">Settings</epp:phrase>

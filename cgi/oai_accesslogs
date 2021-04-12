@@ -1433,7 +1433,7 @@ sub get_baseurl
 {
 	my( $session ) = @_;
 
-	my $url = $session->config( "http_cgiurl" );
+	my $url = $session->config( "perl_url" );
 	$url .= "/oai_accesslogs";
 
 	return $url;

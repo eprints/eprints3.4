@@ -600,7 +600,7 @@ sub get_url
 	my $path = $self->file_path( $file );
 	return undef if !defined $path;
 
-	my $url = ( $self->{session}->config( 'securehost' ) ? $self->{session}->config( 'https_url' ) : $self->{session}->config( 'http_url' ) ) . '/';
+	my $url = $self->{session}->config( 'base_url' ) . '/';
 
 	$url .= 'id/eprint/' if $self->{session}->get_conf( "use_long_url_format");
 
@@ -1672,7 +1672,7 @@ sub thumbnail_url
 	}
 
 	return $self->{session}->current_url(
-		host => 0,
+		host => 1,
 		path => "static",
 		$path
 	);
@@ -1720,7 +1720,7 @@ sub icon_url
 		}
 	}
 
-	return $session->config( "pr_url" )."/$rel_path/$icon";
+	return $session->config( "base_url" )."/$rel_path/$icon";
 }
 
 =item $frag = $doc->render_icon_link( %opts )
@@ -1770,7 +1770,7 @@ sub render_icon_link
 	$aopts{class} = "ep_document_link";
 	$aopts{target} = "_blank" if( $opts{new_window} );
 	$aopts{href} = $self->{session}->current_url(
-		host => 0,
+		host => 1,
 		path => "static",
 		$self->file_path
 	);

@@ -95,7 +95,7 @@ EOX
 		$image->appendChild( $session->render_data_element(
 			8,
 			"url",
-			$session->config( "pr_url" ) . $session->config( "site_logo" )
+			$session->config( "base_url" ) . $session->config( "site_logo" )
 		) );
 
 		$image->appendChild( $session->render_data_element(

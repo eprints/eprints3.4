@@ -85,7 +85,7 @@ sub convert_dataobj
 	# The URL of the abstract page
 	if( $eprint->is_set( "eprintid" ) )
 	{
-		push @dcdata, [ "relation", $eprint->get_url( 'preferred' ) ];
+		push @dcdata, [ "relation", $eprint->get_url ];
 	}
 
 	push @dcdata, $plugin->simple_value( $eprint, title => "title" );

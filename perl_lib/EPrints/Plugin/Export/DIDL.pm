@@ -148,7 +148,7 @@ sub xml_dataobj
 				"didl:Resource",
 					[],
 				mimeType => "application/html",
-				ref => $eprint->get_url( 'preferred' ),
+				ref => $eprint->get_url,
 			],
 		] ) );
 

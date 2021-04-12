@@ -396,7 +396,7 @@ sub fileinfo
 {
 	my( $self ) = @_;
 
-	my $base_url = $self->{session}->config( 'pr_url' );
+	my $base_url = $self->{session}->config( 'base_url' );
 
 	my @finfo = ();
 	foreach my $doc ( $self->get_all_documents )
@@ -417,7 +417,7 @@ sub render_fileinfo
 {
 	my( $session, $field, $value, $alllangs, $nolink, $eprint ) = @_;
 
-	my $baseurl = $session->config( 'pr_url' );
+	my $baseurl = $session->config( 'base_url' );
 
 	my $f = $session->make_doc_fragment;
 
@@ -1379,17 +1379,12 @@ trailing slash, unlike the local_path method.
 
 sub url_stem
 {
-	my( $self, $proto ) = @_;
+	my( $self ) = @_;
 
 	my $repository = $self->{session}->get_repository;
-
-	my $conf_name = "pr_url";
- 	$conf_name = "http_url" if defined $proto && $proto eq "http";
-	$conf_name = "https_url" if defined $proto && $proto eq "https";
-	$conf_name = ( defined $proto && $proto eq "preferred" && $repository->get_conf( "securehost" ) ? "https_url" : "http_url" );
 	
 	my $url;
-	$url = $repository->get_conf( $conf_name );
+	$url = $repository->get_conf( 'base_url' );
 	$url .= '/';
 	$url .= 'id/eprint/' if $repository->get_conf( "use_long_url_format");
 	$url .= $self->get_value( "eprintid" )+0;
@@ -1661,10 +1656,9 @@ sub get_control_url
 {
 	my( $self ) = @_;
 
-	my $conf_name = ( $self->{session}->get_repository->get_conf( "securehost" ) ? "https_cgiurl" : "http_cgiurl" );
-	return $self->{session}->get_repository->get_conf( $conf_name ).
+	return $self->{session}->get_repository->get_conf( "perl_url" ).
 		"/users/home?screen=EPrint::View&eprintid=".
-		$self->get_value( "eprintid" )
+		$self->get_value( "eprintid" );
 }
 
 ######################################################################

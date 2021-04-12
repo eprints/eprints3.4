@@ -119,7 +119,7 @@ sub render_status
 
 	my $status = $self->{processor}->{eprint}->get_value( "eprint_status" );
 
-	my $url = $self->{processor}->{eprint}->get_url( 'preferred' );
+	my $url = $self->{processor}->{eprint}->get_url;
 
 	my $div = $self->{session}->make_element( "div", class=>"ep_block" );
 	$div->appendChild( $self->{session}->html_phrase( "cgi/users/edit_eprint:item_is_in_".$status,

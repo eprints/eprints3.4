@@ -44,7 +44,7 @@ sub output_list
     );
 
 	my $uri = URI->new("");
-	$uri->path( $session->config( "rel_cgipath" ) . "/users/home" );
+	$uri->path( $session->config( "perl_url" ) . "/users/home" );
 	$uri->query_form(
 		screen => "BatchEdit",
 		cache => $list->get_cache_id,
@@ -56,7 +56,7 @@ sub output_list
 	}
 	else
 	{
-		$uri = URI->new_abs( $uri, $session->config( "pr_url" ));
+		$uri = URI->new_abs( $uri, $session->config( "base_url" ));
 		if( $opts{fh} )
 		{
 			print {$opts{fh}} "$uri\n";

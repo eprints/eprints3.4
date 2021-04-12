@@ -81,7 +81,7 @@ for ( my $i = 1; $i <= $n; $i++ )
 {
 	my $sitemap = $xml->create_element( "sitemap" );
 	my $loc = $xml->create_element( "loc" );
-	my $url_path = $repo->config("pr_url");
+	my $url_path = $repo->config("base_url");
         $loc->appendChild( $xml->create_text_node( $url_path . "/sitemaps/$i.xml" ) );
 	$sitemap->appendChild( $loc );
 	$sitemapindex->appendChild( $sitemap );

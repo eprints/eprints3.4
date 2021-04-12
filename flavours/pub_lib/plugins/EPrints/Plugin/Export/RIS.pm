@@ -530,7 +530,7 @@ sub convert_dataobj
 	}
 	else
 	{
-		$data->{UR} = $dataobj->get_url( 'preferred' );
+		$data->{UR} = $dataobj->get_url;
 	}
 
 	return $data;

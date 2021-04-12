@@ -130,7 +130,7 @@ sub render_string
 				$param =~ s/\\?\s/~/g;     
 
 				$url = $session->config( 
-        				"http_cgiurl" )."/mimetex.cgi?".$param;
+        				"perl_url" )."/mimetex.cgi?".$param;
 			}
 			else
 			{
@@ -143,7 +143,7 @@ sub render_string
 				$param =~ s/^\$(.*)\$$/$1/; 
 	
 				$url = $session->config( 
-					"http_cgiurl" )."/latex2png?latex=".$param;
+					"perl_url" )."/latex2png?latex=".$param;
 			}
 
 			my $img = $session->make_element( 

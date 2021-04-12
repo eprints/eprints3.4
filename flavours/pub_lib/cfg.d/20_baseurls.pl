@@ -23,6 +23,9 @@
 	$c->{base_url} = "$uri";
 # CGI base URL without trailing slash
 	$c->{perl_url} = "$uri/cgi";
+# Uncomment to keep URI for eprint items as http or different to base_url.
+# May need editing, if repository on unusual port number, not on the root path or host is unset because HTTPS everywhere is configured.
+	#$c->{uri_url} = "http://" . $c->{host};
 }
 
 # If you don't want EPrints to respond to a specific URL add it to the

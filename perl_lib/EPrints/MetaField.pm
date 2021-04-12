@@ -816,7 +816,7 @@ sub render_value_no_multiple
 		return $rendered;
 	}
 
-	my $url = $session->config( "pr_url" );
+	my $url = $session->config( "base_url" );
 	my $views = $session->config( "browse_views" );
 	my $linkview;
 	foreach my $view ( @{$views} )

@@ -6,6 +6,9 @@ $c->add_trigger( EP_TRIGGER_DYNAMIC_TEMPLATE, sub {
 	my $pins = $params{pins};
 	my $xhtml = $repo->xhtml;
 
+	my $baseurl = URI->new( $repo->config( "base_url" ) );
+	my $scheme = $baseurl->scheme;
+
 	my $head = $repo->xml->create_document_fragment;
 
 	# Top
@@ -18,12 +21,12 @@ $c->add_trigger( EP_TRIGGER_DYNAMIC_TEMPLATE, sub {
 	# SWORD endpoints
 	$head->appendChild( $repo->xml->create_element( "link",
 			rel => "Sword",
-			href => $repo->current_url( scheme => 'https', host => 1, path => "static", "sword-app/servicedocument" ),
+			href => $repo->current_url( scheme => $scheme, host => 1, path => "static", "sword-app/servicedocument" ),
 		) );
 	$head->appendChild( $repo->xml->create_text_node( "\n    " ) );
 	$head->appendChild( $repo->xml->create_element( "link",
 			rel => "SwordDeposit",
-			href => $repo->current_url( scheme => 'https', host => 1, path => "static", "id/contents" ),
+			href => $repo->current_url( scheme => $scheme, host => 1, path => "static", "id/contents" ),
 		) );
 	$head->appendChild( $repo->xml->create_text_node( "\n    " ) );
 
@@ -31,7 +34,7 @@ $c->add_trigger( EP_TRIGGER_DYNAMIC_TEMPLATE, sub {
 	$head->appendChild( $repo->xml->create_element( "link",
 			rel => "Search",
 			type => "text/html",
-			href => $repo->current_url( scheme => 'http', host => 1, path => "cgi", "search" ),
+			href => $repo->current_url( scheme => $scheme, host => 1, path => "cgi", "search" ),
 		) );
 	$head->appendChild( $repo->xml->create_text_node( "\n    " ) );
 
@@ -39,7 +42,7 @@ $c->add_trigger( EP_TRIGGER_DYNAMIC_TEMPLATE, sub {
 	$head->appendChild( $repo->xml->create_element( "link",
 			rel => "Search",
 			type => "application/opensearchdescription+xml",
-			href => $repo->current_url( scheme => 'http', host => 1, path => "cgi", "opensearchdescription" ),
+			href => $repo->current_url( scheme => $scheme, host => 1, path => "cgi", "opensearchdescription" ),
             title=> $repo->phrase( 'archive_name' ),
 		) );
 	$head->appendChild( $repo->xml->create_text_node( "\n    " ) );

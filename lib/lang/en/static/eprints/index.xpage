@@ -22,9 +22,9 @@
 
 <p>This site is running <epc:print expr="$config{version_description}" />.</p>
 
-<p>EPrints has been developed at the <a rel="external" href="http://www.ecs.soton.ac.uk/">School of Electronics and Computer Science</a> at the <a ref="external" href="http://www.soton.ac.uk/">University of Southampton</a>, UK.</p>
+<p>EPrints has been developed at the <a rel="external" href="https://www.ecs.soton.ac.uk/">School of Electronics and Computer Science</a> at the <a ref="external" href="https://www.soton.ac.uk/">University of Southampton</a>, UK.</p>
 
-<p>For more information please see <a rel="external" href="http://www.eprints.org/">www.eprints.org</a>.</p>
+<p>For more information please see <a rel="external" href="https://www.eprints.org/">www.eprints.org</a>.</p>
 
 <p><a rel="external" href="https://www.eprints.org/uk/index.php/services/">EPrints Services</a> based in Southampton can also provide hosting, training and consultancy services for your EPrints repository.</p>
 
@@ -93,26 +93,26 @@
 
 <dl class="technology">
   <dt>Powered by:</dt>
-  <dd><a href="http://www.mysql.com/">MySQL</a></dd>
-  <dd><a href="http://www.apache.org/">Apache Webserver</a></dd>
-  <dd><a href="http://www.perl.org/">Perl</a></dd>
-  <dd><a href="http://perl.apache.org/">mod_perl</a></dd>
+  <dd><a href="https://www.mysql.com/">MySQL</a></dd>
+  <dd><a href="https://www.apache.org/">Apache Webserver</a></dd>
+  <dd><a href="https://www.perl.org/">Perl</a></dd>
+  <dd><a href="https://perl.apache.org/">mod_perl</a></dd>
   <dd><a href="https://xapian.org/">Xapian</a></dd>
-  <dd><a href="http://www.w3c.org/XML/">XML</a></dd>
-  <dd><a href="http://www.w3c.org/DOM/">DOM</a></dd>
-  <dd><a href="http://www.w3c.org/RDF/">RDF</a></dd>
-  <dd><a href="http://codemirror.net/">CodeMirror</a></dd>
-  <dd><a href="http://flowplayer.org/">Flowplayer</a></dd>
-  <dd class="last"><a href="http://www.cpan.org/">CPAN</a></dd>
+  <dd><a href="https://www.w3c.org/XML/">XML</a></dd>
+  <dd><a href="https://www.w3c.org/DOM/">DOM</a></dd>
+  <dd><a href="https://www.w3c.org/RDF/">RDF</a></dd>
+  <dd><a href="https://codemirror.net/">CodeMirror</a></dd>
+  <dd><a href="https://flowplayer.org/">Flowplayer</a></dd>
+  <dd class="last"><a href="https://www.cpan.org/">CPAN</a></dd>
 
   <dt>Supports:</dt>
-  <dd><a href="http://www.openarchives.org/">Open Archives Initiative Protocol for Metadata Harvesting</a></dd>
-  <dd><a href="http://www.w3.org/MarkUp/">Valid XHTML</a></dd>
-  <dd><a href="http://jigsaw.w3.org/css-validator/">Valid CSS</a></dd>
+  <dd><a href="https://www.openarchives.org/">Open Archives Initiative Protocol for Metadata Harvesting</a></dd>
+  <dd><a href="https://www.w3.org/MarkUp/">Valid XHTML</a></dd>
+  <dd><a href="https://jigsaw.w3.org/css-validator/">Valid CSS</a></dd>
   <dd class="last"><a href="https://www.w3.org/standards/semanticweb/data">Linked Data</a></dd>
 
   <dt>Part of:</dt>
-  <dd class="last"><a href="http://www.gnu.org/">The GNU Project</a></dd>
+  <dd class="last"><a href="https://www.gnu.org/">The GNU Project</a></dd>
 </dl>
 
 <epc:phrase ref="ruler" />

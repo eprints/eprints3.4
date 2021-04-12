@@ -21,7 +21,7 @@
     <epc:if test="length($docs) = 0">
       <epc:phrase ref="page:nofulltext" />
       <!--<epc:if test="$item.contact_email().is_set() and eprint_status = 'archive'">
-        (<a href="{$config{http_cgiurl}}/request_doc?eprintid={eprintid}"><epc:phrase ref="request:button" /></a>)
+        (<a href="{$config{perl_url}/request_doc?eprintid={eprintid}"><epc:phrase ref="request:button" /></a>)
       </epc:if>-->
     </epc:if>
   
@@ -48,7 +48,7 @@
 			  </epc:choose>
 			  </epc:if>
               <epc:if test="!$doc.is_public() and $item.contact_email().is_set() and eprint_status = 'archive'">
-                | <a href="{$config{http_cgiurl}}/request_doc?docid={$doc{docid}"><epc:phrase ref="request:button" /></a>
+                | <a href="{$config{perl_url}}/request_doc?docid={$doc{docid}"><epc:phrase ref="request:button" /></a>
               </epc:if>
   
               <ul>

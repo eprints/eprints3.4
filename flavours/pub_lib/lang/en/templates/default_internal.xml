@@ -91,7 +91,7 @@
         <div class="ep_tm_footer ep_noprint">
           <epc:phrase ref="template:about_eprints"/>
           <div class="ep_tm_eprints_logo">
-            <a rel="external" href="http://eprints.org/software/">
+            <a rel="external" href="https://eprints.org/software/">
               <img alt="EPrints Logo" src="{$config{rel_path}}/images/eprintslogo.png"/><img alt="EPrints Publications Flavour Logo" src="{$config{rel_path}}/images/flavour.png" style="width: 28px"/>
             </a>
           </div>

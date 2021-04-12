@@ -1769,7 +1769,7 @@ sub render_export_bar
 
 	return $repo->make_doc_fragment if scalar @plugins == 0;
 
-	my $export_url = $repo->config( "perl_url" )."/exportview";
+	my $export_url = $repo->config( "rel_cgipath" )."/exportview";
 	my $values = join( "/", @{$esc_path_values} );	
 
 	my $feeds = $repo->make_doc_fragment;

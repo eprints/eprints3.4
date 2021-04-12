@@ -78,8 +78,7 @@ sub get_control_url
   my( $self ) = @_;
 
   my $i = $self->get_dataset_id;
-  my $conf_name = ( $self->{session}->get_repository->get_conf( "securehost" ) ? "https_cgiurl" : "http_cgiurl" );
-  return $self->{session}->get_repository->get_conf( $conf_name )."/users/home?screen=Workflow::View&dataset=${i}&dataobj=".$self->get_value( "${i}id" );
+  return $self->{session}->get_repository->get_conf( "perl_url" )."/users/home?screen=Workflow::View&dataset=${i}&dataobj=".$self->get_value( "${i}id" );
 }
 
 # utility routine for updating the revision history on a dataobj

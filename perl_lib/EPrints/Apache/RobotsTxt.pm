@@ -54,7 +54,7 @@ END
 		}
 	}
 
-	my $sitemap = "Sitemap: ".$repository->config( 'pr_url' )."/sitemap.xml";
+	my $sitemap = "Sitemap: ".$repository->config( 'base_url' )."/sitemap.xml";
 
 	# Only add standard sitemap if it is not already added.
 	if ( $robots !~ m/$sitemap/ )

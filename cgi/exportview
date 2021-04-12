@@ -55,7 +55,7 @@ if( defined $session->param( "view" ) )
 		exit;
 	}
 
-	my $export_url = $session->config( "perl_url" )."/exportview";
+	my $export_url = $session->config( "rel_cgipath" )."/exportview";
 	my $fn = $values;
 	$fn =~ s/\//_/g;
 	$export_url .= "/$viewid/$values/$format/$fn".$plugin->param("suffix");

@@ -73,18 +73,8 @@ sub handler
 
 	my $esec = $r->dir_config( "EPrints_Secure" );
 	my $secure = (defined $esec && $esec eq "yes" );
-	my $urlpath;
-	my $cgipath;
-	if( $secure ) 
-	{ 
-		$urlpath = $repository->get_conf( "https_root" );
-		$cgipath = $repository->get_conf( "https_cgiroot" );
-	}
-	else
-	{ 
-		$urlpath = $repository->get_conf( "http_root" );
-		$cgipath = $repository->get_conf( "http_cgiroot" );
-	}
+	my $urlpath = $repository->get_conf( "rel_path" );
+	my $cgipath = $repository->get_conf( "http_cgiroot" );
 
 	my $uri = $r->uri;
 	{
@@ -359,7 +349,7 @@ sub handler
 	
 		if( !defined $plugin )  { return NOT_FOUND; }
 
-		my $url = $repository->config( "http_cgiurl" )."/export/$file/".
+		my $url = $repository->config( "perl_url" )."/export/$file/".
 			$plugin->get_subtype."/".$repository->get_id.$plugin->param("suffix");
 
 		return redir_see_other( $r, $url );
@@ -400,7 +390,7 @@ sub handler
 
 		my $fn = $id;
 		$fn=~s/\//_/g;
-		my $url = $repository->config( "http_cgiurl" )."/export/$exttype/".
+		my $url = $repository->config( "perl_url" )."/export/$exttype/".
 			$id."/".$plugin->get_subtype."/$fn".$plugin->param("suffix");
 
 		return redir_see_other( $r, $url );

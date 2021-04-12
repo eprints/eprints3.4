@@ -742,9 +742,32 @@ sub _add_http_paths
 	my $config = $self->{config};
 
 	if( $config->{securehost} )
+        {
+                $config->{secureport} ||= 443;
+        }
+
+	# Ensure base_url and perl_url are still defined up front in case 20_baseurls.pl goes missing.
+	unless ( $config->{base_url} )
 	{
-		$config->{secureport} ||= 443;
+		my $uri = URI->new( "http://" );
+	        if( EPrints::Utils::is_set( $config->{securehost} ) )
+        	{
+                	$uri->scheme( "https" );
+	                $uri->host( $config->{securehost} );
+        	        $uri->port( $config->{secureport} );
+                	$uri = $uri->canonical;
+	                $uri->path( $config->{https_root} );
+        	}
+        	else
+        	{
+                	$uri->scheme( "http" );
+	                $uri->host( $config->{host} );
+        	        $uri->port( $config->{port} );
+                	$uri = $uri->canonical;
+                	$uri->path( $config->{http_root} );
+        	}
 	}
+        $config->{"perl_url"} ||= $config->{"base_url"} . "/cgi";
 
 	# Backwards-compatibility: http is fairly simple, https may go wrong
 	if( !defined($config->{"http_root"}) )
@@ -768,12 +791,12 @@ sub _add_http_paths
 	}
 
 	$config->{"http_url"} ||= $self->get_url(
-		scheme => ($config->{host} ? "http" : "https"),
+		scheme => "http",
 		host => 1,
 		path => "static",
 	);
 	$config->{"http_cgiurl"} ||= $self->get_url(
-		scheme => ($config->{host} ? "http" : "https"),
+		scheme => "http",
 		host => 1,
 		path => "cgi",
 	);
@@ -788,16 +811,10 @@ sub _add_http_paths
 		path => "cgi",
 	);
 
-	# Protocol-relative URLs;
-	( $config->{"pr_url"} = $config->{"http_url"} ) =~ s/^https?://;
-	( $config->{"pr_cgiurl"} = $config->{"http_cgiurl"} ) =~ s/^https?://;
-	
 	# old-style configuration names
-	$config->{"urlpath"} ||= $config->{"http_root"};
-	$config->{"base_url"} ||= $config->{"pr_url"} . "/";
-	$config->{"perl_url"} ||= $config->{"pr_cgiurl"};
-	$config->{"frontpage"} ||= $config->{"securehost"} ? $config->{"https_url"} . "/" : $config->{"http_url"} . "/";
-	$config->{"userhome"} ||= $config->{"http_cgiroot"} . "/users/home";
+	$config->{"urlpath"} ||= $config->{"base_url"};
+	$config->{"frontpage"} ||= $config->{"base_url"} . "/";
+	$config->{"userhome"} ||= $config->{"perl_url"} . "/users/home";
 }
  
 ######################################################################
@@ -5659,18 +5676,7 @@ sub get_static_page_conf_file
 	my( $repository ) = @_;
 
 	my $r = $repository->get_request;
-	my $esec = $r->dir_config( "EPrints_Secure" );
-	my $secure = (defined $esec && $esec eq "yes" );
-	my $urlpath;
-	if( $secure ) 
-	{ 
-		$urlpath = $repository->get_conf( "https_root" );
-	}
-	else
-	{ 
-		$urlpath = $repository->get_conf( "http_root" );
-	}
-
+	my $urlpath = $repository->get_conf( "rel_path" );
 	my $uri = $r->uri;
 
 	my $lang = EPrints::Repository::get_session_language( $repository, $r );

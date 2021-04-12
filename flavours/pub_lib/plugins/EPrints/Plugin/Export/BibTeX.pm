@@ -254,7 +254,7 @@ sub convert_dataobj
 
 	# Not part of BibTeX
 	$data->{additional}->{abstract} = $dataobj->get_value( "abstract" ) if $dataobj->exists_and_set( "abstract" );
-	$data->{additional}->{url} = $dataobj->get_url( 'preferred' ); 
+	$data->{additional}->{url} = $dataobj->get_url; 
 	$data->{additional}->{url} = $dataobj->get_value( "official_url" ) if $dataobj->exists_and_set( "official_url" );
 
 	$data->{additional}->{keywords} = $dataobj->get_value( "keywords" ) if $dataobj->exists_and_set( "keywords" );

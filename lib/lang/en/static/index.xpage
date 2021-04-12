@@ -2,10 +2,10 @@
 <!DOCTYPE page SYSTEM "entities.dtd" >
 <xpage:page xmlns="http://www.w3.org/1999/xhtml" xmlns:xpage="http://eprints.org/ep3/xpage" xmlns:epc="http://eprints.org/ep3/control">
 <xpage:head>
-  <link rel="alternate" type="application/rss+xml" title="Items in {phrase('archive_name')}" href="{$config{http_cgiurl}}/latest_tool?output=RSS2"></link>
-  <link rel="alternate" type="application/atom+xml" title="Items in {phrase('archive_name')}" href="{$config{http_cgiurl}}/latest_tool?output=Atom"></link>
-  <link rel="alternate" type="application/rdf+xml" title="Repository Summary RDF+XML" href="{$config{http_cgiurl}}/export/repository/RDFXML/devel.rdf"></link>
-  <link rel="alternate" type="text/n3" title="Repository Summary RDF+N3" href="{$config{http_cgiurl}}/export/repository/RDFN3/devel.n3"></link>
+  <link rel="alternate" type="application/rss+xml" title="Items in {phrase('archive_name')}" href="{$config{perl_url}}/latest_tool?output=RSS2"></link>
+  <link rel="alternate" type="application/atom+xml" title="Items in {phrase('archive_name')}" href="{$config{perl_url}}/latest_tool?output=Atom"></link>
+  <link rel="alternate" type="application/rdf+xml" title="Repository Summary RDF+XML" href="{$config{perl_url}}/export/repository/RDFXML/devel.rdf"></link>
+  <link rel="alternate" type="text/n3" title="Repository Summary RDF+N3" href="{$config{perl_url}}/export/repository/RDFN3/devel.n3"></link>
 </xpage:head>
 <xpage:title>Welcome to <epc:phrase ref="archive_name" /></xpage:title>
 <xpage:body>
@@ -41,24 +41,24 @@
 </div>
 
 <dl id="ep-homepage-menu" title="Homepage Menu">
-  <dt id="latest-additions"><a href="{$config{perl_url}}/latest">Latest Additions</a></dt>
+  <dt id="latest-additions"><a href="{$config{rel_cgipath}}/latest">Latest Additions</a></dt>
   <dd>View items added to the repository in the past week.</dd>
 
-  <dt id="search-repository"><a href="{$config{perl_url}}/search/advanced">Search Repository</a></dt>
+  <dt id="search-repository"><a href="{$config{rel_cgipath}}/search/advanced">Search Repository</a></dt>
   <dd>Search the repository using a full range of fields. Use the search field at the top of the page for a quick search.</dd>
     
-  <dt id="browse-repository"><a href="{$config{base_url}}/view/subjects/">Browse Repository</a></dt>
+  <dt id="browse-repository"><a href="{$config{rel_path}}/view/subjects/">Browse Repository</a></dt>
   <dd>Browse the items in the repository by subject.</dd>
  
-  <dt id="about-this-repository"><a href="{$config{base_url}}/information.html">About this Repository</a></dt>
+  <dt id="about-this-repository"><a href="{$config{rel_path}}/information.html">About this Repository</a></dt>
   <dd>More information about this site.</dd>
 
-  <dt id="repository-policies"><a href="{$config{base_url}}/policies.html">Repository Policies</a></dt>
+  <dt id="repository-policies"><a href="{$config{rel_path}}/policies.html">Repository Policies</a></dt>
   <dd>Policy for use of material in this repository.</dd>
 </dl>
 
 <p style="margin-top: 2em; font-size: 90%">
-<epc:phrase ref="archive_name" /> supports <a href="http://www.openarchives.org"><abbr title="Open Archives Protocol for Metadata Harvesting v2.0">OAI 2.0</abbr></a> with a base URL of <code><epc:print expr="$config{perl_url}" />/oai2</code>
+<epc:phrase ref="archive_name" /> supports <a href="https://www.openarchives.org"><abbr title="Open Archives Protocol for Metadata Harvesting v2.0">OAI 2.0</abbr></a> with a base URL of <code><epc:print expr="$config{perl_url}" />/oai2</code>
 </p>
 
 </xpage:body>

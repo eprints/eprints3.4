@@ -504,10 +504,8 @@ sub replace_urls
 	my %map_url = (
 		$self->{session}->get_repository->get_conf("http_url") => '$config{rel_path}',
 		$self->{session}->get_repository->get_conf("https_url") => '$config{rel_path}',
-		$self->{session}->get_repository->get_conf("pr_url") => '$config{rel_path}',
 		$self->{session}->get_repository->get_conf("http_cgiurl") => '$config{rel_cgipath}',
 		$self->{session}->get_repository->get_conf("https_cgiurl") => '$config{rel_cgipath}',
-		$self->{session}->get_repository->get_conf("pr_cgiurl") => '$config{rel_cgipath}'
 	);
 	my $frontpage = $self->{session}->get_repository->get_conf("frontpage");	
 	$instring =~ s/$frontpage\"/\{\$config\{frontpage\}\}"/g;

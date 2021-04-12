@@ -259,7 +259,7 @@ sub generate_cookie
 	$domain ||= $repo->config( "securehost" );
 	return $repo->query->cookie(
 		-name    => $self->session_key($repo),
-		-path    => ($repo->config( "http_root" ) || '/'),
+		-path    => ($repo->config( "rel_path" ) || '/'),
 		-value   => $self->value( "code" ),
 		-domain  => $domain,
 		-expires => $repo->config( "user_cookie_timeout" ),

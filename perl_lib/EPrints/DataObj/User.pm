@@ -898,9 +898,7 @@ sub get_control_url
 {
 	my( $self ) = @_;
 
-	my $conf_name = ( $self->{session}->get_repository->get_conf( "securehost" ) ? "https_cgiurl" : "http_cgiurl" );
-
-	return $self->{session}->get_repository->get_conf( $conf_name )."/users/home?screen=User::View&userid=".$self->get_value( "userid" );
+	return $self->{session}->get_repository->get_conf( "perl_url" )."/users/home?screen=User::View&userid=".$self->get_value( "userid" );
 }
 	
 
@@ -1041,7 +1039,7 @@ sub send_out_editor_alert
 
 	if( $list->count > 0 || $self->get_value( "mailempty" ) eq 'TRUE' )
 	{
-		my $url = URI->new($self->{session}->get_repository->get_conf( "http_cgiurl" )."/users/home");
+		my $url = URI->new($self->{session}->get_repository->get_conf( "perl_url" )."/users/home");
 		$url->query_form(
 			screen => "User::Edit",
 			userid => $self->get_id

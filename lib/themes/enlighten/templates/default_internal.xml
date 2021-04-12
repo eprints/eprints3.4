@@ -8,8 +8,8 @@
     <meta http-equiv="Content-Language" content="en" />
 <!--standard meta tags-->
 <!-- navigation object : 1kGenericCSSJScallsPHP -->
-    <link rel="stylesheet" type="text/css" href="/style/basicprint.css" media="print" />
-    <link rel="stylesheet" type="text/css" href="/style/print.css" media="print" />
+    <link rel="stylesheet" type="text/css" href="{$config{rel_path}}/style/basicprint.css" media="print" />
+    <link rel="stylesheet" type="text/css" href="{$config{rel_path}}/style/print.css" media="print" />
     <!--<link rel="stylesheet" type="text/css" href="/style/main.css" /> -->
     <style type="text/css" media="screen">
 
@@ -29,41 +29,41 @@
 
 
 
-    <script type="text/javascript" src="/javascript/jwplayer.js"></script>
-    <script type="text/javascript" src="/javascript/jquery.ba-bbq.min.js"></script>
+    <script type="text/javascript" src="{$config{rel_path}}/javascript/jwplayer.js"></script>
+    <script type="text/javascript" src="{$config{rel_path}}/javascript/jquery.ba-bbq.min.js"></script>
     
-    <script type="text/javascript" src="/javascript/jquery.flexslider.js"></script>
-    <script type="text/javascript" src="/javascript/main-dev.js"></script>
-    <script type="text/javascript" src="/javascript/raccoon.js"></script>
+    <script type="text/javascript" src="{$config{rel_path}}/javascript/jquery.flexslider.js"></script>
+    <script type="text/javascript" src="{$config{rel_path}}/javascript/main-dev.js"></script>
+    <script type="text/javascript" src="{$config{rel_path}}/javascript/raccoon.js"></script>
 
 
 
 
 
 <!--[if IE 9]>
-        <link href="/style/ie9.css" rel="stylesheet" type="text/css" media="screen" />
+        <link href="{$config{rel_path}}/style/ie9.css" rel="stylesheet" type="text/css" media="screen" />
         <![endif]-->
 <!--[if IE 8]>
-        <link href="/style/ie8.css" rel="stylesheet" type="text/css" media="screen" />
+        <link href="{$config{rel_path}}/style/ie8.css" rel="stylesheet" type="text/css" media="screen" />
         <![endif]-->
 <!--[if IE 7]>
-        <link href="/style/ie7.css" rel="stylesheet" type="text/css" media="screen" />
+        <link href="{$config{rel_path}}/style/ie7.css" rel="stylesheet" type="text/css" media="screen" />
         <![endif]-->
 <!-- Funnelback autocomplete -->
 <!--[if lte IE 6]>
-        <link rel="stylesheet" type="text/css" href="/style/ie6.css" />
+        <link rel="stylesheet" type="text/css" href="{$config{rel_path}}/style/ie6.css" />
    <![endif]-->
 
 
 
 
-    <link rel="stylesheet" type="text/css" href="/style/searchautocomplete.css" />
+    <link rel="stylesheet" type="text/css" href="{$config{rel_path}}/style/searchautocomplete.css" />
 
-    <script type="text/javascript" src="/javascript/jquery.tmpl.min.js"></script>
-    <script type="text/javascript" src="/javascript/jquery.funnelback-completion.js"></script>
+    <script type="text/javascript" src="{$config{rel_path}}/javascript/jquery.tmpl.min.js"></script>
+    <script type="text/javascript" src="{$config{rel_path}}/javascript/jquery.funnelback-completion.js"></script>
 
     
-    <link rel="stylesheet" type="text/css" href="/style/menu_across.css" />
+    <link rel="stylesheet" type="text/css" href="{$config{rel_path}}/style/menu_across.css" />
     
     
     <script type="text/javascript">
@@ -71,7 +71,7 @@
 </script>
 <epc:pin ref="head"/>
 
-<link rel="stylesheet" type="text/css" href="/style/local.css"/>
+<link rel="stylesheet" type="text/css" href="{$config{rel_path}}/style/local.css"/>
 
 <style type="text/css">
   /*
@@ -114,12 +114,12 @@ To change the blue heading box colour, set the RGB here
           <a href="#mainpage">Skip to main content</a>
         </li>
         <li>
-          <a href="http://www.gla.ac.uk/about/accessibility/">Accessibility information</a>
+          <a href="{$config{rel_path}}/accessibility/">Accessibility information</a>
         </li>
       </ul>
     </div>
         <div id="pageBackgroundImage">
-            <img src="/images/backgroundaa.jpg" alt="" class="" 
+            <img src="{$config{rel_path}}/images/backgroundaa.jpg" alt="" class="" 
                 title="" style="width : 832px; height : 1000px; border : ; padding : ; margin : ; float : ;  " />
         </div>    
     <div id="pageContainer">
@@ -129,7 +129,7 @@ To change the blue heading box colour, set the RGB here
 <!-- navigation object : 1kGenericExternalHeaderPHP -->
 <!--noindex-->
         <div class="ep_tm_site_logo">
-        <a href="{$config{frontpage}}" title="{phrase('archive_name')}">
+        <a href="{$config{rel_path}}/" title="{phrase('archive_name')}">
           <img alt="{phrase('archive_name')}" src="{$config{rel_path}}{$config{site_logo}}"/>
         </a>
         </div>
@@ -142,7 +142,7 @@ To change the blue heading box colour, set the RGB here
         <ul class="clearfix">
 <!-- breadcrumbs -->
           <li>
-              <a href="{$config{rel_path}}">
+              <a href="{$config{rel_path}}/">
                 <epc:phrase ref="template/navigation:home"/>
               </a>
           </li>
@@ -154,7 +154,7 @@ To change the blue heading box colour, set the RGB here
   <!-- Site search start -->
             <div id="siteSearch">
            
-                <form method="get" accept-charset="utf-8" action="{$config{http_cgiurl}}/search" style="display:inline">
+                <form method="get" accept-charset="utf-8" action="{$config{rel_cgipath}}/search" style="display:inline">
                   <label>Search</label>
                   <input class="ep_tm_searchbarbox" size="20" type="text" name="q" text="Search Repository"/>
                   <button class="" value="{phrase('lib/searchexpression:action_search')}" type="submit" name="_action_search" id="ssSubmit">Search</button>
@@ -172,7 +172,7 @@ To change the blue heading box colour, set the RGB here
          
 
 
-            <h1><a href="{$config{rel_path}}"><epc:phrase ref="archive_name"/></a></h1>
+            <h1><a href="{$config{rel_path}}/"><epc:phrase ref="archive_name"/></a></h1>
         </div>
         <div class="aside">
           <div class="nav" id="sNav">
@@ -183,10 +183,10 @@ To change the blue heading box colour, set the RGB here
               </a>
             </li>
             <li>
-<a href="{$config{perl_url}}/latest">Latest Additions</a>
+<a href="{$config{rel_cgipath}}/latest">Latest Additions</a>
             </li>
             <li>
-<a href="{$config{perl_url}}/search/advanced">Search</a>
+<a href="{$config{rel_cgipath}}/search/advanced">Search</a>
             </li>
             <li class="ep_drop_down">
               <a href="{$config{rel_path}}/view/" menu="ep_tm_menu_browse">
@@ -271,7 +271,7 @@ To change the blue heading box colour, set the RGB here
 
     <div class="ep_tm_footer ep_noprint">
       <div class="ep_tm_eprints_logo">
-        <a href="http://eprints.org/software/">
+        <a href="https://eprints.org/software/">
           <img alt="EPrints Logo" src="{$config{rel_path}}/images/eprintslogo.gif"/>
         </a>
       </div>
@@ -279,7 +279,7 @@ To change the blue heading box colour, set the RGB here
     </div>
 
 <!-- navigation object : Generic Footer resources -->
-    <script type="text/javascript" src="/javascript/retina-1.1.0.js"></script>
+    <script type="text/javascript" src="{$config{rel_path}}/javascript/retina-1.1.0.js"></script>
 </div>
 </body>
 

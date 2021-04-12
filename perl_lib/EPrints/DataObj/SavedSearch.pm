@@ -313,7 +313,7 @@ sub send_out_alert
 			$last_month."-" );
 	}
 
-	my $settings_url = $self->{session}->get_repository->get_conf( "http_cgiurl" ).
+	my $settings_url = $self->{session}->get_repository->get_conf( "perl_url" ).
 		"/users/home?screen=Workflow::Edit&dataset=saved_search&dataobj=".$self->get_id;
 	my $freqphrase = $self->{session}->html_phrase(
 		"lib/saved_search:".$freq );

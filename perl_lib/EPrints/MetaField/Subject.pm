@@ -119,6 +119,24 @@ sub render_set_input
 		$pairs = [ [ "", $unspec ], @{$pairs} ];
 	}
 
+	# Ensure subjects made undepositable are not unknowingly unset when user edits an item.
+	my ( $allpairs ) = $topsubj->get_subjects(
+                0,
+                $self->{showtop},
+                0,
+                ($self->{input_style} eq "short"?1:0) );
+	foreach my $value ( @{$obj->get_value( $self->{name} )} )
+	{
+		foreach my $pair ( @{$allpairs} )
+		{
+			if ( $pair->[0] eq $value )
+			{
+				unshift @{$pairs}, $pair;
+				last;
+			}
+		}
+	}
+
 	return $session->render_option_list(
 		pairs => $pairs,
 		defaults_at_top => 1,

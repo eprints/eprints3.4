@@ -44,7 +44,7 @@ sub output_list
     );
 
 	my $uri = URI->new("");
-	$uri->path( $session->config( "perl_url" ) . "/users/home" );
+	$uri->path( $session->config( "rel_cgipath" ) . "/users/home" );
 	$uri->query_form(
 		screen => "BatchEdit",
 		cache => $list->get_cache_id,

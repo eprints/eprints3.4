@@ -161,12 +161,12 @@
   </tr>
   <tr>
     <td><a href="{$config{rel_path}}/error401.html"><epc:print expr="$config{rel_path}"/>/error401.html</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;6&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;13</div></td>
-    <td>None</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;1</div><div class="ep_accessibility_good">Features:&#160;6&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;13</div></td>
+    <td>One alert is due to registration link appear in both the menu and main content of the page.  This is appropriate, to make it as straightforward as possible for a user to gain legitimate access.</td>
   </tr>
   <tr>
     <td><a href="{$config{rel_path}}/accessibility/"><epc:print expr="$config{rel_path}"/>/accessibility/</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;7&#160;|&#160;Structural&#160;Elements:&#160;30&#160;|&#160;ARIA:&#160;13</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;7&#160;|&#160;Structural&#160;Elements:&#160;32&#160;|&#160;ARIA:&#160;13</div></td>
     <td>None</td>
   </tr>
   <tr>
@@ -191,12 +191,12 @@
   </tr>
   <tr>
     <td><a href="{$config{rel_path}}/cgi/users/home"><epc:print expr="$config{rel_path}"/>/cgi/users/home</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;2</div><div class="ep_accessibility_good">Features:&#160;64&#160;|&#160;Structural&#160;Elements:&#160;25&#160;|&#160;ARIA:&#160;58</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;2</div><div class="ep_accessibility_good">Features:&#160;64&#160;|&#160;Structural&#160;Elements:&#160;25&#160;|&#160;ARIA:&#160;57</div></td>
     <td>Alerts due to two redundant links as &quot;Show All&quot; links are same as links to show 100 items, as there is exactly 100 items from test data.</td>
   </tr>
   <tr>
     <td><a href="{$config{rel_path}}/cgi/users/home?screen=Items"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Items</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;2</div><div class="ep_accessibility_good">Features:&#160;64&#160;|&#160;Structural&#160;Elements:&#160;25&#160;|&#160;ARIA:&#160;58</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;2</div><div class="ep_accessibility_good">Features:&#160;64&#160;|&#160;Structural&#160;Elements:&#160;25&#160;|&#160;ARIA:&#160;57</div></td>
     <td>Alerts the same as /cgi/users/home as this is effectively the same page.</td>
   </tr>
   <tr>
@@ -221,7 +221,7 @@
   </tr>
   <tr>
     <td><a href="{$config{rel_path}}/cgi/users/home?screen=EPrint%3A%3AEdit&amp;eprintid=4&amp;stage=subjects"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=EPrint%3A%3AEdit&amp;eprintid=4&amp;stage=subjects</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;9&#160;|&#160;Structural&#160;Elements:&#160;51&#160;|&#160;ARIA:&#160;266</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;10&#160;|&#160;Structural&#160;Elements:&#160;52&#160;|&#160;ARIA:&#160;266</div></td>
     <td>None</td>
   </tr>
   <tr>
@@ -326,7 +326,7 @@
   </tr>
   <tr>
     <td><a href="{$config{rel_path}}/cgi/users/home?edit_phrases=yes"><epc:print expr="$config{rel_path}"/>/cgi/users/home?edit_phrases=yes</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;6&#160;|&#160;Structural&#160;Elements:&#160;12&#160;|&#160;ARIA:&#160;150</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;6&#160;|&#160;Structural&#160;Elements:&#160;12&#160;|&#160;ARIA:&#160;148</div></td>
     <td>None</td>
   </tr>
   <tr>
@@ -341,8 +341,8 @@
   </tr>
   <tr>
     <td><a href="{$config{rel_path}}/cgi/search/eprint/staff?screen=Search&amp;eprintid=&amp;userid.username=&amp;userid.name_merge=ALL&amp;serid.name=&amp;eprint_status=archive&amp;dir_merge=ALL&amp;dir=&amp;documents_merge=ALL&amp;documents=&amp;title_merge=ALL&amp;title=Habits&amp;creators_name_merge=ALL&amp;creators_name=&amp;abstract_merge=ALL&amp;abstract=&amp;date=&amp;keywords_merge=ALL&amp;keywords=&amp;subjects_merge=ANY&amp;department_merge=ALL&amp;department=&amp;editors_name_merge=ALL&amp;editors_name=&amp;refereed=EITHER&amp;publication_merge=ALL&amp;publication=&amp;satisfyall=ALL&amp;order=-date%2Fcreators_name%2Ftitle&amp;_action_search=Search"><epc:print expr="$config{rel_path}"/>/cgi/search/eprint/staff?screen=Search&amp;...</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;39</div><div class="ep_accessibility_good">Features:&#160;51&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;20</div></td>
-    <td>19 (of 39) alerts are caused by thumbnail image previews of PDFs having the same alternative text, as a result of the original PDF filenames are the same, due to the way the import_test_data script works. The other 20 (of 39) alerts are caused by linking to PDFs, which is cannot be fixed as is essential to the purpose of an Open Access repository. (Based on a search where "Item Status" is "Live Archive".)</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;21</div><div class="ep_accessibility_good">Features:&#160;33&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;20</div></td>
+    <td>10 (of 21) alerts are caused by thumbnail image previews of PDFs having the same alternative text, as a result of the original PDF filenames are the same, due to the way the import_test_data script works. The other 11 (of 21) alerts are caused by linking to PDFs, which is cannot be fixed as is essential to the purpose of an Open Access repository. (Based on a search where "Item Status" is "Live Archive".)</td>
   </tr>
   <tr>
     <td><a href="{$config{rel_path}}/cgi/users/home?screen=BatchEdit&amp;cache=1">/cgi/users/home?screen=BatchEdit&amp;...</a></td>
@@ -371,8 +371,8 @@
   </tr>
   <tr>
     <td><a href="{$config{rel_path}}/cgi/users/home?screen=Staff%3A%3AHistorySearch&amp;userid.username=&amp;action=create&amp;timestamp=&amp;objectid=&amp;satisfyall=ALL&amp;order=-timestamp&amp;_action_search=Search"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Staff%3A%3AHistorySearch...</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;7&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;20</div></td>
-    <td>Search for Action: Created.</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;2</div><div class="ep_accessibility_good">Features:&#160;7&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;20</div></td>
+    <td>Search for Action: Created.  Two alerts are due the there being exactly 100 results so show 100 results and show all results links are the same.</td>
   </tr>
   <tr>
     <td><a href="{$config{rel_path}}/cgi/users/home?screen=Status"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Status</a></td>
@@ -386,8 +386,8 @@
   </tr>
   <tr>
     <td><a href="{$config{rel_path}}/cgi/users/home?screen=Admin%3A%3AEPM"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Admin%3A%3AEPM</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;2</div><div class="ep_accessibility_good">Features:&#160;174&#160;|&#160;Structural&#160;Elements:&#160;11&#160;|&#160;ARIA:&#160;123</div></td>
-    <td>2 alerts are due to two nearby images with the same alt text due two identically named plugins in the Bazaar, which cannot be controlled.</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;2</div><div class="ep_accessibility_good">Features:&#160;170&#160;|&#160;Structural&#160;Elements:&#160;11&#160;|&#160;ARIA:&#160;122</div></td>
+    <td>Two alerts are due to two nearby images with the same alt text due two identically named plugins in the Bazaar, which cannot be controlled.</td>
   </tr>
   <tr>
     <td><a href="{$config{rel_path}}/cgi/users/home?screen=Admin%3A%3ATestEmail"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Admin%3A%3ATestEmail</a></td>
@@ -397,7 +397,7 @@
   <tr>
     <td><a href="{$config{rel_path}}/cgi/users/home?screen=DatabaseSchema"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=DatabaseSchema</a></td>
     <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;6&#160;|&#160;Structural&#160;Elements:&#160;177&#160;|&#160;ARIA:&#160;13</div></td>
-    <td>Number of structured elements liable to vary based on number of cache tables in teh database.</td>
+    <td>Number of structured elements liable to vary based on number of cache tables in the database.</td>
   </tr>
   <tr>
     <td><a href="{$config{rel_path}}/cgi/users/home?screen=Admin%3A%3AStorageManager"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Admin%3A%3AStorageManager</a></td>
@@ -411,8 +411,8 @@
   </tr>
   <tr>
     <td><a href="{$config{rel_path}}/cgi/users/home?screen=Admin%3A%3APhrases"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Admin%3A%3APhrases</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;1&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;2953</div><div class="ep_accessibility_good">Features:&#160;6&#160;|&#160;Structural&#160;Elements:&#160;12&#160;|&#160;ARIA:&#160;3144</div></td>
-    <td>None</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;1&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;6&#160;|&#160;Structural&#160;Elements:&#160;12&#160;|&#160;ARIA:&#160;3145</div></td>
+    <td>Number ARIA elements likely to vary dependent on total number of phrases defined.</td>
   </tr>
   <tr>
     <td><a href="{$config{rel_path}}/cgi/users/home?screen=Subject%3A%3AEdit"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Subject%3A%3AEdit</a></td>
@@ -446,7 +446,7 @@
   </tr>
   <tr>
     <td><a href="{$config{rel_path}}/cgi/oai2?verb=Identity"><epc:print expr="$config{rel_path}"/>/cgi/oai2?verb=Identity</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;3</div><div class="ep_accessibility_good">Features:&#160;1&#160;|&#160;Structural&#160;Elements:&#160;15&#160;|&#160;ARIA:&#160;0</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;3</div><div class="ep_accessibility_good">Features:&#160;1&#160;|&#160;Structural&#160;Elements:&#160;9&#160;|&#160;ARIA:&#160;0</div></td>
     <td>Three alerts are due to suspicion of tables being used for layout but are actually being used as tables.</td>
   </tr>
   <tr>

@@ -44,7 +44,7 @@ $EPrints::SystemSettings::conf = {
                                    'dir_perms' => '02775',
                                    'flavours' => {
                                                    'zero' => [##site_lib has been removed from the flavour path and now a special lib that can overwrite core modules.
-                                                       'ingredients/bazaar_stub', ## this is loaded here to prevent warning for EPMC.pm module when other repos install bazaar in the /lib dir
+                                                       'ingredients/bazaar',
                                                     ]
                                                 },
                                    'perl_module_isolation' => 0, #after changing this setting, you need to bin/generate_apacheconf --system --replace, then restart apache
@@ -64,7 +64,7 @@ foreach my $flavour (@flavours){
     my $incpath = "$flavour_dir/$flavour/inc";
     my @paths = read_inc($incpath);
 
-    if (!exists $conf->{flavours}->{$fname}) ##safty check.
+    if (!exists $conf->{flavours}->{$fname}) ##safety check.
     {
         $conf->{flavours}->{$fname}=\@paths;
     }

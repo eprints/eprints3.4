@@ -2,6 +2,7 @@
 $c->{rdf}->{xmlns}->{event} = "http://purl.org/NET/c4dm/event.owl#";
 $c->{rdf}->{xmlns}->{bibo}  = "http://purl.org/ontology/bibo/";
 $c->{rdf}->{xmlns}->{geo}   = "http://www.w3.org/2003/01/geo/wgs84_pos#";
+$c->{rdf}->{xmlns}->{doi}   = "https://doi.org/";
 
 
 $c->{rdf}->{bibo_type}->{article} = "bibo:AcademicArticle"; # bit risky, but most things in a repo are.
@@ -183,7 +184,7 @@ $c->add_dataset_trigger( "eprint", EP_TRIGGER_RDF, sub {
 			$o{"graph"}->add(
 				  subject => $eprint_uri,
 				predicate => "owl:sameAs",
-				   object => "<$doi>" );	
+				   object => "$doi" );	
 		}
 	}
 

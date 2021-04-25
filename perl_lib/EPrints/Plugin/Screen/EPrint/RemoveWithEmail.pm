@@ -57,6 +57,9 @@ sub can_be_viewed
 	return 0 if( !defined $self->{processor}->{eprint}->get_user );
 	return 0 unless $self->could_obtain_eprint_lock;
 
+	# Do not allow items that are or have once been in the live archive to be removed unless the user has an extra special permission.
+	return 0 if $self->{processor}->{eprint}->is_set( 'datestamp' ) && !$self->allow( "eprint/remove_once_archived" );         
+
 	return $self->allow( "eprint/remove_with_email" );
 }
 
@@ -101,6 +104,14 @@ sub render
 	}
 
 	my $page = $self->{session}->make_doc_fragment();
+
+	if( $eprint->is_set( "datestamp" ) )
+        {
+                $page->appendChild(
+                        $self->{session}->html_phrase(
+                                "cgi/users/edit_eprint:remove_once_archived" ) );
+        }
+
 	
 	$page->appendChild( 
 		$self->{session}->html_phrase( 

@@ -2184,6 +2184,7 @@ Staff CGI Scripts
     <epp:phrase id="cgi/users/edit_eprint:cant_clone">Problem cloning item with the ID "<epc:pin name="id"/>"</epp:phrase>
     <epp:phrase id="cgi/users/edit_eprint:reject_form_intro"><p>Please enter in the box below the reason for returning this item, and any possible fix. This will be emailed to the relevant author.</p></epp:phrase>
     <epp:phrase id="cgi/users/edit_eprint:remove_form_intro"><p>Please enter in the box below the reason for removing this item. This will be emailed to the relevant author.</p></epp:phrase>
+    <epp:phrase id="cgi/users/edit_eprint:remove_once_archived"><p style="font-weight: bold;">Removing an item that is currently or has once been in the live archive is strongly discouraged. Retiring such an item is generally the most appropriate action.</p></epp:phrase>
     <epp:phrase id="cgi/users/edit_eprint:author_lang_pref"><p>The author&apos;s language of preference is &quot;<epc:pin name="langpref"/>&quot;.</p></epp:phrase>
     <epp:phrase id="cgi/users/edit_eprint:title_delete_form">Deleting Submission</epp:phrase>
     <epp:phrase id="cgi/users/edit_eprint:title_bounce_form">Bouncing Submission</epp:phrase>
@@ -2786,10 +2787,11 @@ Titles and Help for the System Fields
 <div class='ep_icontable'>
   <div><div><img src="{$config{rel_path}}/style/images/action_view.png" alt=""/></div><div>View Item in Detail, including additional actions</div></div>
   <div><div><img src="{$config{rel_path}}/style/images/action_edit.png" alt=""/></div><div>Edit Item</div></div>
+  <div><div><img src="{$config{rel_path}}/style/images/action_approve.png" alt=""/></div><div>Move Item to Repository</div></div>
   <div><div><img src="{$config{rel_path}}/style/images/action_bounce.png" alt=""/></div><div>Return Item to Depositor (and notify depositing user)</div></div>
   <div><div><img src="{$config{rel_path}}/style/images/action_reject.png" alt=""/></div><div>Destroy Item (with notification to depositing user)</div></div>
-  <div><div><img src="{$config{rel_path}}/style/images/action_approve.png" alt=""/></div><div>Move Item to Repository</div></div>
 </div>
+<p>Items that have previously been in the live archive cannot be destroyed unless you have the additional <em>eprint/remove_once_archived</em> permission.</p>
 <p>To reorder the list of items, click on the title of the column to sort by. Clicking a second time will reverse the order.</p>
 <p>You may modify the columns displayed. Add a new column using the menu at the bottom of the page.</p>
 

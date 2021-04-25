@@ -51,6 +51,10 @@ sub can_be_viewed
 	my( $self ) = @_;
 
 	return 0 unless $self->could_obtain_eprint_lock;
+
+	# Do not allow items that are or have once been in the live archive be removed unless the user has an extra special permission.
+	return 0 if $self->{processor}->{eprint}->is_set( 'datestamp' ) && !$self->allow( "eprint/remove_once_archived" );
+
 	return $self->allow( "eprint/remove" );
 }
 
@@ -59,6 +63,13 @@ sub render
 	my( $self ) = @_;
 
 	my $div = $self->{session}->make_element( "div", class=>"ep_block" );
+
+	if( $self->{processor}->{eprint}->is_set( "datestamp" ) )
+        {
+                $div->appendChild(
+                        $self->{session}->html_phrase(
+                                "cgi/users/edit_eprint:remove_once_archived" ) );
+        }
 
 	$div->appendChild( $self->html_phrase("sure_delete",
 		title=>$self->{processor}->{eprint}->render_description() ) );

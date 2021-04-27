@@ -506,7 +506,6 @@ sub validate
 {
         my( $self, $session, $value, $object ) = @_;
 
-	use POSIX qw/isdigit/;
 	my @probs = ( $session->html_phrase( "validate:invalid_date", fieldname => $session->make_text( $self->name ) ) );
 	my $resolution = $self->get_resolution( $value );
 
@@ -519,7 +518,7 @@ sub validate
 	return @probs if scalar( @date ) != $resolution;
 	foreach ( @date ) 
 	{
-		return @probs unless isdigit( $_ );
+		return @probs unless $_ =~ /^\d+$/;
 	}
 	return @probs if $resolution >= 2 && ( $date[1] < 1 || $date[1] > 12 );
 	if ( $resolution > 2 )

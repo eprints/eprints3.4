@@ -30,7 +30,7 @@ VERSION:
 
 dist-core: distdir
 	-rm -f $(distdir).tar.gz
-	tar czf $(distdir).tar.gz $(distdir) --exclude "$(distdir)/flavours"
+	tar czf $(distdir).tar.gz --exclude "$(distdir)/flavours" $(distdir)
 	$(am__post_remove_distdir)
 dist-flavours: distdir
 	-rm -f $(distdir)-flavours.tar.gz

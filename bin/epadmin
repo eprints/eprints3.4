@@ -2949,11 +2949,13 @@ sub upgrade
 			3.3.3
 			3.3.4
 		);
-
+	
+	my $upgraded = 0;
 	for(my $i = 0; $i < $#versions; ++$i)
 	{
 		if( $db->get_version() eq $versions[$i] )
 		{
+			$upgraded = 1;
 			no strict 'refs';
 			my $f = "upgrade_".$versions[$i]."_to_".$versions[$i+1];
 			$f =~ s/\./_/g;
@@ -2963,8 +2965,13 @@ sub upgrade
 		}
 	}
 
+	unless ( $upgraded )
+	{
+		update_datasets( $repo, $db ); 
+		update_counters( $repo, $db );
+	}
 	print STDERR "Please restart the indexer\n";
-	print $db->get_version()."\n";
+	print "Database version is now: ".$db->get_version()."\n";
 }
 
 sub upgrade_3_0_to_3_0_1 { }

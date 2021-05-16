@@ -1,0 +1,90 @@
+#!/usr/bin/perl -w
+
+use FindBin;
+use lib "$FindBin::Bin/../perl_lib";
+
+use EPrints;
+
+use Sys::Hostname;
+use DBI;
+use Data::Dumper;
+use File::Path;
+
+use strict;
+use Getopt::Long;
+use Pod::Usage;
+
+my $verbose = 0;
+my $quiet = 0;
+my $help = 0;
+my $man = 0;
+my $version = 0;
+my $force = 0;
+my $output_file = "unit_test_results.xml";
+
+GetOptions(
+        'output-file=s' => \$output_file,
+) || pod2usage( 2 );
+
+my( @todo ) = @ARGV;
+
+my %todo = map { $_ => 1 } @todo;
+
+eval "use TAP::Harness::JUnit";
+if( $@ )
+{
+    die "Can't do unit tests without TAP::Harness::JUnit: $@";
+}
+
+my $base_path = $EPrints::SystemSettings::conf->{base_path};
+my $test_path = "$base_path/tests";
+
+opendir( DIR, $test_path ) or die "Unable to open unit test path $test_path: $!";
+my @test_files = grep { -f "$test_path/$_" && $_ !~ /^\./ && $_ =~ /\.pl$/ } readdir( DIR );
+closedir( DIR );
+
+@test_files = sort { $a cmp $b } @test_files;
+if( scalar(@todo) )
+{
+    @test_files = grep { $todo{$_} or $todo{substr($_,0,-3)} } @test_files;
+}
+
+use TAP::Harness::JUnit;
+my $harness = TAP::Harness::JUnit->new({
+    lib     => [ "$FindBin::Bin/../perl_lib" ],
+    xmlfile => $output_file,
+    package => 'unit_tests',
+});
+
+exit(0) if $harness->runtests(map { "$test_path/$_" } @test_files);
+
+=head1 COPYRIGHT
+
+=for COPYRIGHT BEGIN
+
+Copyright 2021 University of Southampton.
+EPrints 3.4 is supplied by EPrints Services.
+
+http://www.eprints.org/eprints-3.4/
+
+=for COPYRIGHT END
+
+=for LICENSE BEGIN
+
+This file is part of EPrints 3.4 L<http://www.eprints.org/>.
+
+EPrints 3.4 and this file are released under the terms of the
+GNU Lesser General Public License version 3 as published by
+the Free Software Foundation unless otherwise stated.
+
+EPrints 3.4 is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public
+License along with EPrints 3.4.
+If not, see L<http://www.gnu.org/licenses/>.
+
+=for LICENSE END
+

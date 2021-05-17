@@ -33,7 +33,8 @@ $repo->cache_subjects;
 my $cached = EPrints::DataObj::Subject->new( $repo, $childless->get_id );
 
 #3451
-ok(!$cached->get_children, "can call get_children on childless subject")
+ok(!$cached->get_children, "can call get_children on childless subject");
+
 
 =head1 COPYRIGHT
 

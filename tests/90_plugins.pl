@@ -39,7 +39,7 @@ EOB
 		epdata_to_dataobj => sub {
 			my( $epdata ) = @_;
 
-			is($epdata->{volume}, "3", "bibtext import volume");
+			is($epdata->{volume}, "3", "BibTeX import volume");
 
 			undef;
 		},

@@ -1,10 +1,13 @@
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 BEGIN { use_ok( "EPrints" ); }
+BEGIN { use_ok( "EPrints::Test" ); }
+
+my $session = EPrints::Test::get_test_session();
 
 my $password = "bears love picnics";
 
-my $crypt = EPrints::Utils::crypt_password( $password );
+my $crypt = EPrints::Utils::crypt_password( $password, $session );
 ok($crypt =~ /^\?/, "crypt is typed");
 my $uri = URI->new( $crypt );
 ok(length({$uri->query_form}->{digest}), "digest is non-blank");

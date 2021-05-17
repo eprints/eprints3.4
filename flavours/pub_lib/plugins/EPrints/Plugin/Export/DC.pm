@@ -182,8 +182,7 @@ sub convert_dataobj
 	# export id_number field as DC.identifier # SHEFFHALLAM-168
 	push @dcdata, $plugin->simple_value( $eprint, id_number => "identifier" );
 	# export id_number field as doi, if it matches the regx # SHEFFHALLAM-176:
-	if (EPrints::Utils::is_set( $eprint->get_value("id_number") ) && 
-		$eprint->get_value("id_number") =~ m|^10\.\d{4,9}/[-._;()/:A-Z0-9]+$|i)
+	if ( $eprint->exists_and_set( "id_number" ) && EPrints::DOI->parse( eprint->get_value( "id_number" ), ( test => 1 ) ) )
 	{
 		push @dcdata, $plugin->simple_value( $eprint, id_number => "doi" );
 	}

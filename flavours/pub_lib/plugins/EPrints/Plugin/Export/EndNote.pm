@@ -213,7 +213,7 @@ sub convert_dataobj
 	}
 
 	# R DOI
-	if ( EPrints::DOI->parse( $dataobj->get_value( "id_number" ), ( test => 1 ) ) )
+	if ( $dataobj->exists_and_set( "id_number" ) && EPrints::DOI->parse( $dataobj->get_value( "id_number" ), ( test => 1 ) ) )
 	{
 		$data->{R} = $dataobj->get_value( "id_number" );
 	}

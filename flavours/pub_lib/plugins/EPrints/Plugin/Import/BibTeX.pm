@@ -259,7 +259,7 @@ sub input_text_fh
 	binmode( $fh, ":utf8" );
 
 	# Hack to work with latest version of third-party BibTex::Parser.
-	read $fh, my $data, -s $fh;
+	my $data = do { local $/; <$fh> };
 	use IO::String;
 	my $fh2 = IO::String->new( $data );
 

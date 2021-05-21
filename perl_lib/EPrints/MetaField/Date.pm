@@ -502,34 +502,48 @@ sub get_resolution
 	return 6;
 }
 
-sub validate
+sub validate 
 {
         my( $self, $session, $value, $object ) = @_;
 
-	my @probs = ( $session->html_phrase( "validate:invalid_date", fieldname => $session->make_text( $self->name ) ) );
-	my $resolution = $self->get_resolution( $value );
+	# closure for generating the field link fragment
+        my $f_fieldname = sub {
+                my $f = defined $self->property( "parent" ) ? $self->property( "parent" ) : $self;
+                my $fieldname = $session->xml->create_element( "span", class=>"ep_problem_field:".$f->get_name );
+                $fieldname->appendChild( $f->render_name( $session ) );
+                return $fieldname;
+        };
 
-	return () if $resolution == 0;
-	return @probs if $resolution > 6;
+	my @probs = ( $session->html_phrase( "validate:invalid_date", fieldname => &$f_fieldname ) );
 
-	$value = $self->trim_date( $value, $resolution );
-	my @date = split( /[-:]/, $value );
+	my $values = ( ref $value eq "ARRAY" ? $value : [ $value ] );
 
-	return @probs if scalar( @date ) != $resolution;
-	foreach ( @date ) 
+	for my $value ( @{$values} )
 	{
-		return @probs unless $_ =~ /^\d+$/;
-	}
-	return @probs if $resolution >= 2 && ( $date[1] < 1 || $date[1] > 12 );
-	if ( $resolution > 2 )
-	{
-		return @probs if $date[2] < 1 || $date[2] > 31;
-		return @probs if $date[2] == 31 && grep( /^$date[1]$/, ( '02', '04', '06', '09', '11' ) );
-		return @probs if $date[2] == 30 && $date[1] == 2;
-		return @probs if $date[2] == 29 && $date[1] == 2 && ( $date[0] % 4 != 0 || ( $date[0] % 100 == 0 && $date[0] % 1000 != 0 ) );
-		return @probs if $resolution > 3 && ( $date[3] < 0 || $date[3] > 23 );
-		return @probs if $resolution > 4 && ( $date[4] < 0 || $date[4] > 59 );
-		return @probs if $resolution == 6 && ( $date[5] < 0 || $date[5] > 59 );			
+		my $resolution = $self->get_resolution( $value );
+
+		return () if $resolution == 0;
+		return @probs if $resolution > 6;
+
+		$value = $self->trim_date( $value, $resolution );
+		my @date = split( /[-:]/, $value );
+
+		return @probs if scalar( @date ) != $resolution;
+		foreach ( @date )
+		{
+			return @probs unless $_ =~ /^\d+$/;
+		}
+		return @probs if $resolution >= 2 && ( $date[1] < 1 || $date[1] > 12 );
+		if ( $resolution > 2 
+		{
+			return @probs if $date[2] < 1 || $date[2] > 31;
+			return @probs if $date[2] == 31 && grep( /^$date[1]$/, ( '02', '04', '06', '09', '11' ) );
+			return @probs if $date[2] == 30 && $date[1] == 2;
+			return @probs if $date[2] == 29 && $date[1] == 2 && ( $date[0] % 4 != 0 || ( $date[0] % 100 == 0 && $date[0] % 1000 != 0 ) );
+			return @probs if $resolution > 3 && ( $date[3] < 0 || $date[3] > 23 );
+			return @probs if $resolution > 4 && ( $date[4] < 0 || $date[4] > 59 );
+			return @probs if $resolution == 6 && ( $date[5] < 0 || $date[5] > 59 );
+		}
 	}
         return ();
 }

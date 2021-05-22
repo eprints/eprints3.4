@@ -534,7 +534,7 @@ sub validate
 			return @probs unless $_ =~ /^\d+$/;
 		}
 		return @probs if $resolution >= 2 && ( $date[1] < 1 || $date[1] > 12 );
-		if ( $resolution > 2 
+		if ( $resolution > 2 ) 
 		{
 			return @probs if $date[2] < 1 || $date[2] > 31;
 			return @probs if $date[2] == 31 && grep( /^$date[1]$/, ( '02', '04', '06', '09', '11' ) );

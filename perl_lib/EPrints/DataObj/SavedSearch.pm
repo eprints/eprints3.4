@@ -76,6 +76,8 @@ sub get_system_field_info
 		{ name=>"mailempty", type=>"boolean", input_style=>"radio",
 			default_value=>"TRUE" },
 
+		{ name=>"additional_recipients", type=>"text" },
+
 		{ name=>"public", type=>"boolean", input_style=>"radio",
 			default_value=>"FALSE" },
 	);
@@ -254,7 +256,7 @@ sub send_out_alert
 
 	my $searchexp = $self->make_searchexp;
 
-	if( $searchexp->isa( "EPrints::Plugin::Search::Xapian" ) )
+	if( $searchexp->isa( "EPrints::Plugin::Search::Xapian" ) || $searchexp->isa( "EPrints::Plugin::Search::Xapianv2" ) )
 	{
 		$self->{session}->log( "send_alerts: Xapian search engine not yet supported. Cannot send alerts for SavedSearch id=".$self->id );
 		return;
@@ -332,6 +334,20 @@ sub send_out_alert
 	my $mempty = $self->get_value( "mailempty" );
 	$mempty = 0 unless defined $mempty;
 
+	my @additional_recipients;
+	if( $self->{session}->config( "saved_search_additional_recipients" ) )
+	{
+		my $additional_recipients_str = $self->get_value( "additional_recipients" );
+		if($additional_recipients_str)
+		{
+			foreach my $ar (split(/, ?/, $additional_recipients_str))
+			{
+				next unless $ar =~ /\@/;
+				push @additional_recipients, $ar;
+			}
+		}
+	}
+
 	if( $list->count > 0 || $mempty eq 'TRUE' )
 	{
 		my $info = {};
@@ -351,7 +367,12 @@ sub send_out_alert
 		}
 		$user->mail( 
 			"lib/saved_search:sub_subj",
-			$mail );
+			$mail,
+			undef,
+			undef,
+			\@additional_recipients # cc_list
+		);
+
 		EPrints::XML::dispose( $mail );
 	}
 	$list->dispose;

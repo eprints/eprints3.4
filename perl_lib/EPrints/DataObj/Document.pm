@@ -156,7 +156,7 @@ sub get_system_field_info
 			set_name=>"security" },
 
 		{ name=>"license", type=>"namedset", required=>0, input_rows=>1,
-			set_name=>"licenses" },
+			set_name=>"licenses", "search_input_style" => "default" },
 
 		{ name=>"main", type=>"set", required=>1, options=>[], input_rows=>1,
 			input_tags=>\&main_input_tags,
@@ -234,6 +234,28 @@ sub doc_with_eprintid_and_pos
 			},
 		]);
 
+	#if no results, fall back to a different document dataset
+	if( !defined $results->item( 0 ) )
+	{
+		$dataset = $repository->dataset( "dark_document" );
+		#try dark_document dataset
+		if (  EPrints::Utils::is_set( $dataset ) )
+		{
+			$results = $dataset->search(
+				filters => [
+					{
+						meta_fields => [qw( eprintid )],
+						value => $eprintid
+					},
+					{
+						meta_fields => [qw( pos )],
+						value => $pos
+					},
+				]);
+		}
+	}
+
+	#return the result
 	return $results->item( 0 );
 }
 
@@ -351,7 +373,15 @@ sub get_defaults
 
 	$class->SUPER::get_defaults( $session, $data, $dataset );
 
-	$data->{pos} = $session->get_database->next_doc_pos( $data->{eprintid} );
+	#if more than one document dataset, we want the next pos from any of them
+	if( $session->can_call( "ultimate_doc_pos" ) )
+	{
+		$data->{pos} = $session->call( "ultimate_doc_pos", $session->get_database, $data->{eprintid} );
+	}
+	else #otherwise just get the next one for the document dataset
+	{
+		$data->{pos} = $session->get_database->next_doc_pos( $data->{eprintid} );
+	}
 
 	$data->{placement} = $data->{pos};
 
@@ -525,6 +555,8 @@ sub is_public
 	my( $self ) = @_;
 
 	my $eprint = $self->get_parent;
+	
+	return 0 unless( EPrints::Utils::is_set( $self->get_value( "security" ) ) );
 
 	return 0 if( $self->get_value( "security" ) ne "public" );
 
@@ -606,7 +638,7 @@ sub get_url
 
 	$url .= $path;
 
-	return $url;    
+	return $url;
 }
 
 
@@ -1237,17 +1269,17 @@ sub commit
 	if( $self->{non_volatile_change} )
 	{
 		$self->set_value( "rev_number", ($self->get_value( "rev_number" )||0) + 1 );	
-                if ( defined $self->{changed}->{date_embargo} || defined $self->get_value( 'date_embargo' ) )
-                {
+		if ( defined $self->{changed}->{date_embargo} || defined $self->get_value( 'date_embargo' ) )
+		{
 			if ( !defined $self->{session}->current_user && $0 =~ /lift_embargos/ )
 			{
 				$self->set_value( 'date_embargo_retained', $self->{changed}->{date_embargo} ) if EPrints::Utils::is_set( $self->{changed}->{date_embargo} );
 			}
 			else
 			{
-	                        $self->set_value( 'date_embargo_retained', $self->get_value( 'date_embargo' ) );
+				$self->set_value( 'date_embargo_retained', $self->get_value( 'date_embargo' ) );
 			}
-                }
+		}
 	}
 
 	# SUPER::commit clears non_volatile_change
@@ -1270,7 +1302,7 @@ sub commit
 	# Make sure full text is reindexed to add/remove documents whose access restrictions have changed.
 	if ( defined $self->{changed}->{security} && $self->{changed}->{security} eq "public" || $self->get_value( "security" ) eq "public" )
 	{
-		$self->get_parent->queue_fulltext;	
+		$self->get_parent->queue_fulltext;
 	}
 	
 	return( $success );
@@ -1787,13 +1819,13 @@ sub render_icon_link
 		$aopts{onmouseover} = "EPJS_ShowPreview( event, '$preview_id', '$opts{preview_side}' );";
 		$aopts{onmouseout} = "EPJS_HidePreview( event, '$preview_id', '$opts{preview_side}' );";
 		$aopts{onfocus} = "EPJS_ShowPreview( event, '$preview_id', '$opts{preview_side}' );";
-                $aopts{onblur} = "EPJS_HidePreview( event, '$preview_id', '$opts{preview_side}' );";
+		$aopts{onblur} = "EPJS_HidePreview( event, '$preview_id', '$opts{preview_side}' );";
 	}
 	my $f = $self->{session}->make_doc_fragment;
 	my $img_alt = $self->value('main');
 	$img_alt = $self->value('formatdesc') if EPrints::Utils::is_set( $self->value('formatdesc') );
 	my $img = $self->{session}->make_element(
-		"img", 
+		"img",
 		class=>"ep_doc_icon",
 		alt=>"[thumbnail of $img_alt]",
 		src=>$self->icon_url( public=>$opts{public} ),
@@ -1888,11 +1920,11 @@ sub render_preview_link
 		}
 		else {
 			$link = $self->{session}->make_element( "a",
-                                        href=>$url,
-                                        rel=>"lightbox$set nofollow",
-                                        title=>EPrints::Utils::tree_to_utf8($caption),
+					href=>$url,
+					rel=>"lightbox$set nofollow",
+					title=>EPrints::Utils::tree_to_utf8($caption),
 				);
-		}		
+		}
 		$link->appendChild( $self->{session}->html_phrase( "lib/document:preview" ) );
 		$f->appendChild( $link );
 	}
@@ -2249,62 +2281,62 @@ sub render_citation_link
 # access / security concerns should be addressed at a higher level
 sub render_video_preview
 {
-        my ( $self, $css_class ) = @_;
+	my ( $self, $css_class ) = @_;
 
-        my $session = $self->{session};
-        my $class = ( $css_class ) ? $css_class : "ep_embedded_video";
+	my $session = $self->{session};
+	my $class = ( $css_class ) ? $css_class : "ep_embedded_video";
 
-        my $eprint = $self->get_eprint;
-        my $doc_frag = $session->make_doc_fragment();
-        my @thumbnail_types = $self->thumbnail_types();
-        my $preview_docs;
-        my $format_to_show;
+	my $eprint = $self->get_eprint;
+	my $doc_frag = $session->make_doc_fragment();
+	my @thumbnail_types = $self->thumbnail_types();
+	my $preview_docs;
+	my $format_to_show;
 
-        foreach my $thumbnail_type (@thumbnail_types)
-        {
-                next unless !($thumbnail_type =~ /(small)|(medium)|(lightbox)/); # we dont want to use small, medium or lightbox for the preview
-                $self->search_related( "is${thumbnail_type}ThumbnailVersionOf" )->map( sub {
-                        my ( undef, undef, $doc ) = @_;
-                        $format_to_show = "video" if( $thumbnail_type =~ /(video)/ );
-                        $format_to_show = "audio" if( $thumbnail_type =~ /(audio)/ );
-                        $preview_docs->{$thumbnail_type} = $doc;
-                });
-        }
+	foreach my $thumbnail_type (@thumbnail_types)
+	{
+		next unless !($thumbnail_type =~ /(small)|(medium)|(lightbox)/); # we dont want to use small, medium or lightbox for the preview
+		$self->search_related( "is${thumbnail_type}ThumbnailVersionOf" )->map( sub {
+			my ( undef, undef, $doc ) = @_;
+			$format_to_show = "video" if( $thumbnail_type =~ /(video)/ );
+			$format_to_show = "audio" if( $thumbnail_type =~ /(audio)/ );
+			$preview_docs->{$thumbnail_type} = $doc;
+		});
+	}
 
-        if( defined $preview_docs && defined $format_to_show && $format_to_show =~ /(video)/ )
-        {
-                my $video_link = $session->make_element( "video", class=>$class, controls=>"", id=>"doc_".$self->get_id, "data-src"=>"#doc_".$self->get_id );
-                my $video_type;
-                foreach my $video_format (qw/ video_mp4 video_ogg video_webm /)
-                {
-                        $video_type = $video_format;
-                        $video_type =~ s/_/\//g;
-                        my $video_url = $self->thumbnail_url( $video_format );
-                        # $video_url =~ s/^http/https/;
-                        $video_link->appendChild( $session->make_element("source", src=>$video_url, type=>$video_type) );
-                }
-                $video_link->appendChild( $session->make_text("Your browser does not support HTML5 video") );
-                $doc_frag->appendChild( $video_link );
+	if( defined $preview_docs && defined $format_to_show && $format_to_show =~ /(video)/ )
+	{
+		my $video_link = $session->make_element( "video", class=>$class, controls=>"", id=>"doc_".$self->get_id, "data-src"=>"#doc_".$self->get_id );
+		my $video_type;
+		foreach my $video_format (qw/ video_mp4 video_ogg video_webm /)
+		{
+			$video_type = $video_format;
+			$video_type =~ s/_/\//g;
+			my $video_url = $self->thumbnail_url( $video_format );
+			# $video_url =~ s/^http/https/;
+			$video_link->appendChild( $session->make_element("source", src=>$video_url, type=>$video_type) );
+		}
+		$video_link->appendChild( $session->make_text("Your browser does not support HTML5 video") );
+		$doc_frag->appendChild( $video_link );
 
-                # add subtitles - assume for now that tracks are supplied in vtt format with a name matching the video file
-                my $subs = $self->get_value("main");
-                $subs =~ s/\.([^.]+)$/.vtt/; # the file we are looking for
-                my @docs = $eprint->get_all_documents();
-                foreach my $d ( @docs )
-                {
-                        # assume suitable access rights
-                        if( $d->get_value("main") eq $subs )
-                        {
-                                my $srclang = $d->get_value( "language" );
-                                   $srclang = "en" unless $srclang; # default to English
-                                my $label = EPrints::Utils::tree_to_utf8( $session->html_phrase( "languages_typename_" . $srclang ) );
-                                my $track = $session->make_element( "track", src => $d->get_url, kind => "subtitles", srclang => $srclang, label => $label );
-                                $video_link->appendChild( $track );
-                        }
-                }
-        }
+		# add subtitles - assume for now that tracks are supplied in vtt format with a name matching the video file
+		my $subs = $self->get_value("main");
+		$subs =~ s/\.([^.]+)$/.vtt/; # the file we are looking for
+		my @docs = $eprint->get_all_documents();
+		foreach my $d ( @docs )
+		{
+			# assume suitable access rights
+			if( $d->get_value("main") eq $subs )
+			{
+				my $srclang = $d->get_value( "language" );
+				   $srclang = "en" unless $srclang; # default to English
+				my $label = EPrints::Utils::tree_to_utf8( $session->html_phrase( "languages_typename_" . $srclang ) );
+				my $track = $session->make_element( "track", src => $d->get_url, kind => "subtitles", srclang => $srclang, label => $label );
+				$video_link->appendChild( $track );
+			}
+		}
+	}
 
-        return $doc_frag;
+	return $doc_frag;
 }
 
 sub permit

@@ -418,6 +418,7 @@ sub render_fileinfo
 	my( $session, $field, $value, $alllangs, $nolink, $eprint ) = @_;
 
 	my $baseurl = $session->config( 'base_url' );
+	$baseurl = $session->config( 'https_url' ) if EPrints::Utils::is_set( $session->config( "securehost" ) );
 
 	my $f = $session->make_doc_fragment;
 

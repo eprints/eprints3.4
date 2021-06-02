@@ -23,11 +23,11 @@ sub from
 	my $samesite = "Lax";
 	my $secure = 0;
 	my $httponly = 1;
-	if ( $session->{request}->scheme() eq "https" )
+	if ( $session->is_secure eq "on" )
 	{
-		my $samesite = "None";
-		my $secure = 1;
-		my $httponly = 0;
+		$samesite = "None";
+		$secure = 1;
+		$httponly = 0;
 	}
 	my $cookie = $session->{query}->cookie(
 		-name     => "eprints_lang",

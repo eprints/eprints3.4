@@ -191,13 +191,12 @@ use strict;
 
 my $MAX_ITEMS = 2000;
 
-=item $filename = update_view_file( $repo, $langid, $localpath, $uri )
+=item $filename = update_view_file( $repo, $langid, $uri )
 
 This is the function which decides which type of view it is:
 
 	* the main menu of views
 	* the top level menu of a view
-	* the sub menu of a view
 	* a page within a single value of a view
 
 Does not update the file if it's not needed.

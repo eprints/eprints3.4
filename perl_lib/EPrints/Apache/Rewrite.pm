@@ -777,7 +777,7 @@ if(not $repository->config("use_long_url_format"))
 		}
 
 		local $repository->{preparing_static_page} = 1;
-		my $filename = EPrints::Update::Views::update_view_file( $repository, $lang, $localpath, $uri );
+		my $filename = EPrints::Update::Views::update_view_file( $repository, $lang, $uri );
 		return NOT_FOUND if( !defined $filename );
 
 		$r->filename( $filename );

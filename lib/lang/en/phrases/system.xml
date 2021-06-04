@@ -3334,7 +3334,10 @@ PY = 2006 and OG = (Cambridge)<br />
 
   <epp:phrase id="Plugin/Screen/Admin/Config/Edit:could_not_write">Could not write file '<epc:pin name="filename" />'. Error message: <epc:pin name="error_msg" /></epp:phrase>
 
+  <!-- Language -->
 
+  <epp:phrase id="Plugin/Screen/SetLang:title">Set Language</epp:phrase>
+  <epp:phrase id="Plugin/Screen/SetLang:no_redirect">If you are viewing this page, something has gone wrong.  This page only exists as a means for setting the language in which you want to view this repository and then redirecting you back to your original page.</epp:phrase>
 
   <epp:phrase id="languages_typename_" ref="lib/metafield:unspecified" />
 

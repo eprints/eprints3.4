@@ -47,12 +47,12 @@ sub from
         {
                 my $referrer_uri = URI->new($referrer);
                 my $repository_uri = URI->new($session->config('base_url'));
-                if ($referrer_uri->host ne $repository_uri->host)
+                if ($referrer_uri->can( "host" ) && $referrer_uri->host ne $repository_uri->host)
                 {
                         $referrer = undef;
                 }
         }
-	$referrer = $session->config( "home_page" ) unless( EPrints::Utils::is_set( $referrer ) );
+	$referrer = $session->config( "frontpage" ) unless( EPrints::Utils::is_set( $referrer ) );
 
 	$self->{processor}->{redirect} = $referrer;
 }
@@ -128,6 +128,17 @@ sub render_action_link
 
 	return $div;
 }
+
+sub render
+{
+        my( $self ) = @_;
+
+        my $chunk = $self->{session}->make_doc_fragment;
+	$chunk->appendChild( $self->html_phrase( "no_redirect" ) );
+
+        return $chunk;
+}
+
 
 1;
 

@@ -191,7 +191,7 @@ use strict;
 
 my $MAX_ITEMS = 2000;
 
-=item $filename = update_view_file( $repo, $langid, $uri )
+=item $filename = update_view_file( $repo, $langid, $localpath )
 
 This is the function which decides which type of view it is:
 
@@ -205,14 +205,14 @@ Does not update the file if it's not needed.
 
 sub update_view_file
 {
-	my( $repo, $langid, $uri ) = @_;
+	my( $repo, $langid, $localpath ) = @_;
 
-	$uri =~ s# ^/ ##x;
+	$localpath =~ s# ^/ ##x;
 
 	# remove extension from target e.g. .type.html [grouping + HTML]
-	my $ext = $uri =~ s/(\.[^\/]*)$// ? $1 : "";
+	my $ext = $localpath =~ s/(\.[^\/]*)$// ? $1 : "";
 
-	my $target = join "/", $repo->config( "htdocs_path" ), $langid, abbr_path( split '/', $uri );
+	my $target = join "/", $repo->config( "htdocs_path" ), $langid, abbr_path( split '/', $localpath );
 
 	my $age;
 	if( -e "$target.page" ) 
@@ -235,7 +235,7 @@ sub update_view_file
 undef $age if $DEBUG;
 
 	# 'view', view-id, escaped path values
-	my( undef, $viewid, @view_path ) = split '/', $uri;
+	my( undef, $viewid, @view_path ) = split '/', $localpath;
 
 	if( !@view_path )
 	{

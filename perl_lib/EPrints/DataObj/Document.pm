@@ -696,6 +696,7 @@ sub files
 
 	foreach my $file (@{($self->get_value( "files" ))})
 	{
+		next unless defined $file->get_value( "filename" );
 		$files{$file->get_value( "filename" )} = $file->get_value( "filesize" );
 	}
 
@@ -943,6 +944,18 @@ sub upload
 		$repository->log( "Bad filename for file '$filename' in document: starts with slash (will not add)\n" );
 		return 0;
 	}
+
+	if( $filename =~ m/^ / )
+        {
+                $repository->log( "Bad filename for file '$filename' in document: starts with a space (will not add)\n" );
+                return 0;
+        }
+
+        if( $filename =~ m/ $/ )
+        {
+                $repository->log( "Bad filename for file '$filename' in document: ends with a space (will not add)\n" );
+                return 0;
+        }
 
 	$filename = sanitise( $filename );
 
@@ -1735,6 +1748,7 @@ sub icon_url
 	my $rel_path = "style/images/fileicons";
 
 	my $format = $self->value( "format" );
+	return $session->config( "base_url" )."/$rel_path/$icon" unless defined $format;
 
 	# support old-style MIME types e.g. application/zip
 	my( $major, $minor ) = split '/', $format, 2;

@@ -412,7 +412,7 @@ sub Identify
 	);
 	$searchexp->add_field(
 		$dataset->field( "eprint_status" ),
-		"archive",
+		"archive deletion",
 		"EQ",
 		"ANY"
 	);

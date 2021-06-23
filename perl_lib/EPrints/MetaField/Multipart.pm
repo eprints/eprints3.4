@@ -133,10 +133,10 @@ sub render_single_value
 
 sub get_basic_input_elements
 {
-	my( $self, $session, $value, $basename, $staff, $obj ) = @_;
+	my( $self, $session, $value, $basename, $staff, $obj, $one_component_field ) = @_;
 
 	return $self->EPrints::MetaField::Compound::get_basic_input_elements(
-		$session, $value, $basename, $staff, $obj
+		$session, $value, $basename, $staff, $obj, $one_component_field
 	);
 }
 
@@ -154,19 +154,37 @@ sub get_basic_input_ids
 	return @ids;
 }
 
+sub get_input_elements
+{
+        my( $self, $session, $value, $staff, $obj, $basename, $one_field_component ) = @_;
+
+        my $input = $self->SUPER::get_input_elements( $session, $value, $staff, $obj, $basename, $one_field_component );
+
+	return $input;
+}
+
 sub get_input_col_titles
 {
-	my( $self, $session, $staff ) = @_;
+        my( $self, $session, $staff ) = @_;
 
-	my @r;
+        my @r  = ();
+        my $f = $self->get_property( "fields_cache" );
+        foreach my $field ( @{$f} )
+        {
+                my $fieldname = $field->get_name;
+                my $sub_r = $field->get_input_col_titles( $session, $staff );
 
-	foreach my $field (@{$self->{fields_cache}})
-	{
-		push @r, $field->get_input_col_titles( $session, $staff );
-	}
+                if( !defined $sub_r )
+                {
+                        $sub_r = [ $field->render_name( $session ) ];
+                }
 
-	return \@r;
+                push @r, @{$sub_r};
+        }
+
+        return \@r;
 }
+
 
 sub form_value_basic
 {

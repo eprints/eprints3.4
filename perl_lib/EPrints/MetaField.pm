@@ -1641,7 +1641,8 @@ sub get_labelledby
 
 	my $basename_top = $basename;
        	$basename_top =~ s/_\d+_/_/ if $self->{multiple} || ( defined $self->{parent} && $self->{parent}->{multiple} );
-        return $basename_top . "_label";
+	$basename_top =~ s/_\d+$// if $self->{multiple} && !$self->{input_ordered};
+	return $basename_top . "_label";
 }
 
 sub get_describedby

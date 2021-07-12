@@ -366,7 +366,7 @@ sub proc_exists
 {
 	my( $self, $pid ) = @_;
 
-	return -d "/proc/$pid";
+	return `ls /proc/ | grep '^$pid\$' | wc -l`;
 }
 
 =item get_hash_name()

@@ -1271,6 +1271,8 @@ sub commit
 
 	my $dataset = $self->{session}->get_repository->get_dataset( "document" );
 
+	my $security_changed = $self->{changed}->{security} if defined $self->{changed}->{security};
+
 	$self->update_triggers(); # might cause a new revision
 
 	if( scalar( keys %{$self->{changed}} ) == 0 )
@@ -1313,18 +1315,56 @@ sub commit
 	}
 	
 	# Make sure full text is reindexed to add/remove documents whose access restrictions have changed.
-	if ( defined $self->{changed}->{security} && $self->{changed}->{security} eq "public" || $self->get_value( "security" ) eq "public" )
+	if ( defined $security_changed && $security_changed eq "public" || $self->get_value( "security" ) eq "public" )
 	{
 		$self->get_parent->queue_fulltext;
+	}
+
+	if ( defined $security_changed )
+	{
+		my @derived_docs = $self->get_derived_versions;	
+		foreach my $ddoc ( @derived_docs )
+		{
+			$ddoc->set_value( 'security', $self->get_value( "security" ) );
+			$ddoc->commit;
+		}
 	}
 	
 	return( $success );
 }
+
+
+######################################################################
+=pod
+
+=item @derived_docs = $doc->get_derived_versions
+
+Return an array of documents that are derived from the current
+document through the isVersionOf relation.
+
+=cut
+######################################################################	
+
+sub get_derived_versions 
+{
+	my( $self ) = @_;
+
+	my $dataset = $self->{session}->get_repository->get_dataset( "document" );
+
+	my $search_exp = $dataset->prepare_search();
+	$search_exp->add_field(
+        	fields => [ $dataset->field( 'relation_type' ) ],
+        	value => 'http://eprints.org/relation/isVersionOf',
+        	match => "EQ",
+	);
+	$search_exp->add_field(
+                fields => [ $dataset->field( 'relation_uri' ) ],
+                value => '/id/document/' . $self->id,
+                match => "EQ",
+        );
 	
-
-
-
-	
+	return $search_exp->perform_search->slice;
+}	
 
 
 ######################################################################

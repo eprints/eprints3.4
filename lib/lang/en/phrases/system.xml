@@ -4091,6 +4091,7 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="Plugin/Screen/Workflow/Details:other" ref="Plugin/Screen/EPrint/Details:other" />
     <epp:phrase id="Plugin/Screen/Workflow/Commit:save" ref="lib/submissionform:action_staff_save" />
     <epp:phrase id="Plugin/Screen/Workflow/Destroy:item_removed" ref="Plugin/Screen/EPrint/Remove:item_removed" />
+    <epp:phrase id="Plugin/Screen/Workflow/Edit:form_must_post">Workflow forms can only update using POST method.</epp:phrase>
 
     <epp:phrase id="eprint_fieldname_gscholar_datestamp">Datestamp</epp:phrase>
     <epp:phrase id="eprint_fieldhelp_gscholar_datestamp"/>

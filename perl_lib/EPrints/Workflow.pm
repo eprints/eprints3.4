@@ -380,6 +380,14 @@ sub update_from_form
 	my( $self, $processor, $new_stage, $quiet ) = @_;
 		
 	# Process data from previous stage
+	
+	# If workflow form data is not submitted by POST then something went wrong
+	if( $ENV{REQUEST_METHOD} ne 'POST' )
+	{
+		$processor->add_message( "error", $self->{session}->html_phrase(
+                        "Plugin/Screen/Workflow/Edit:form_must_post" ) );
+                return( 0 );
+	}
 
 	# If we don't have an item then something's
 	# gone wrong.

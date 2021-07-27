@@ -422,7 +422,7 @@ sub handler
     		my $accept = EPrints::Apache::AnApache::header_in( $r, "Accept" );
     		my $method = eval {$r->method} || "";
     		if ( ( $method eq "GET" || $method eq "HEAD" ) ## request method must be GET or HEAD
-        		&&  (index(lc($accept), "text/html") != -1 || index(lc($accept),"*/*") != -1 || $accept eq ""  )   ## header must be text/html, or */*, or undef
+        		&&  (index(lc($accept), "text/html") != -1 || index(lc($accept), "text/*") != -1 || index(lc($accept),"*/*") != -1 || $accept eq ""  )   ## header must be text/html, text/*, */* or undef
         		&&  ($uri !~ m!^${urlpath}/id/eprint/0*[1-9][0-9]*/contents$! )   ## uri must not be id/eprint/XX/contents
         		&&  ($uri =~ s! ^${urlpath}/id/eprint/(0*)([1-9][0-9]*)\b !!x )     ## uri must be id/eprint/XX
         	)

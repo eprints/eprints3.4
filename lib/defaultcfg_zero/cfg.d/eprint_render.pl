@@ -98,6 +98,7 @@ $c->{eprint_render} = sub
 	my $links = $repository->xml()->create_document_fragment();
 	if( !$preview )
 	{
+		# See note below relating to control of which fields to include in the <meta> tags
 		$links->appendChild( $repository->plugin( "Export::Simple" )->dataobj_to_html_header( $eprint ) );
 	}
 
@@ -109,6 +110,17 @@ $c->{eprint_render} = sub
 	# return ( $page, $title, $links, $template );
 	return( $page, $title, $links );
 };
+
+# To only include specific fields in the <meta name="eprints.X" content="..." /> tags, defined a list of fields
+# as follows. Use sub-field names for compound fields.
+#
+#	$c->{plugins}->{"Export::Simple"}->{params}->{convert_dataobj_fieldlist} = [qw/
+#		eprintid
+#		title
+#		creators_name
+#		creators_orcid
+#		...
+#	/];
 
 
 

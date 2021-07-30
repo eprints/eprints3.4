@@ -73,6 +73,12 @@ sub convert_dataobj
 	{
 		my $fieldname = $field->name;
 
+		if( defined $plugin->param( "convert_dataobj_fieldlist" ) )
+		{
+			# if a list is defined, only output fields when they're specifically listed
+			next unless grep { $_ eq $fieldname } @{$plugin->param( "convert_dataobj_fieldlist" )};
+		}
+
 		next if( !$field->property( 'export_as_xml' ) ); 
 
 		# export "creators_name" but not "creators"

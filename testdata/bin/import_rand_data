@@ -3,8 +3,6 @@
 use FindBin;
 use lib "$FindBin::Bin/../../perl_lib";
 
-#-d:DProf
-
 ######################################################################
 #
 #
@@ -17,6 +15,36 @@ import_rand_data - import random eprint data records
 =head1 SYNOPSIS
 
 import_rand_data <repoid> [dataset] [count]
+
+=head1 COPYRIGHT
+
+for COPYRIGHT BEGIN
+
+Copyright 2021 University of Southampton.
+EPrints 3.4 is supplied by EPrints Services.
+
+http://www.eprints.org/eprints-3.4/
+
+=for COPYRIGHT END
+
+=for LICENSE BEGIN
+
+This file is part of EPrints 3.4 L<http://www.eprints.org/>.
+
+EPrints 3.4 and this file are released under the terms of the
+GNU Lesser General Public License version 3 as published by
+the Free Software Foundation unless otherwise stated.
+
+EPrints 3.4 is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public
+License along with EPrints 3.4.
+If not, see L<http://www.gnu.org/licenses/>.
+
+=for LICENSE END
 
 =cut
 
@@ -303,7 +331,7 @@ sub rand_title
 sub rand_abstract
 {
 	return trim($SCIGEN->generate( [qw(SCI_INTRO_A SCI_ABSTRACT_A SCI_INTRO_THESIS)] )) if $scigen;
-	return $lorem->paragraphs(int(rand(3))+2);
+	return join( '\n\n', $lorem->paragraphs(int(rand(3))+2) );
 }
 
 sub rand_date
@@ -379,41 +407,6 @@ sub trim
 	$str =~ s/  +/ /;
 	return $str;
 }
-
-=pod
-
-=cut
-
-
-=head1 COPYRIGHT
-
-=for COPYRIGHT BEGIN
-
-Copyright 2021 University of Southampton.
-EPrints 3.4 is supplied by EPrints Services.
-
-http://www.eprints.org/eprints-3.4/
-
-=for COPYRIGHT END
-
-=for LICENSE BEGIN
-
-This file is part of EPrints 3.4 L<http://www.eprints.org/>.
-
-EPrints 3.4 and this file are released under the terms of the
-GNU Lesser General Public License version 3 as published by
-the Free Software Foundation unless otherwise stated.
-
-EPrints 3.4 is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-See the GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public
-License along with EPrints 3.4.
-If not, see L<http://www.gnu.org/licenses/>.
-
-=for LICENSE END
 
 __DATA__
 Πιο κι άγχος συνηθίζουν χαρακτηριστικό μια μιας σελίδων περιμένουν τι αρέσει

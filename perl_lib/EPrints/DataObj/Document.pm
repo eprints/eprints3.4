@@ -1354,7 +1354,7 @@ sub get_derived_versions
 	my $search_exp = $dataset->prepare_search();
 	$search_exp->add_field(
         	fields => [ $dataset->field( 'relation_type' ) ],
-        	value => 'http://eprints.org/relation/isVersionOf',
+        	value => 'http://eprints.org/relation/isVolatileVersionOf',
         	match => "EQ",
 	);
 	$search_exp->add_field(

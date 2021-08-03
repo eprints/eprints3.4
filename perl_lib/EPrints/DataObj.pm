@@ -1822,7 +1822,7 @@ sub to_sax
 
 	foreach my $field ($dataset->fields)
 	{
-		next if !$field->property( "export_as_xml" );
+		next if !$field->property( "export_as_xml" ) && !$opts{revision_generation};
 
 		$field->to_sax(
 			$field->get_value( $self ),

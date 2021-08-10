@@ -5914,6 +5914,53 @@ sub get_csrf_token
 }
 
 
+######################################################################
+=pod
+
+=begin InternalDoc
+
+=item $arrayref = $repository->export_fieldlist_for_dataobj( $dataobj_id )
+
+return an arrayref of fields to be exported or nothing if no export 
+field list exists for the dataset.
+
+=end InternalDoc
+
+=cut
+######################################################################
+
+sub export_fieldlist_for_dataset
+{
+	my( $self, $dataset ) = @_;
+	my $export_fieldlists = $self->config( 'export_fieldlists' );
+	my $dataset_id = ( defined $export_fieldlists->{$dataset->id} ? $dataset->id : $dataset->base_id );
+        return $export_fieldlists->{$dataset_id} if defined $export_fieldlists && defined $export_fieldlists->{$dataset_id};
+	return undef;
+}
+
+
+######################################################################
+=pod
+
+=begin InternalDoc
+
+=item $Boolean = $repository->in_export_fieldlist_for_dataobj( $dataobj_id )
+
+return a Boolean.  True if field is not be exported or no export field 
+list defined, false otherwise 
+
+=end InternalDoc
+
+=cut
+######################################################################
+
+sub in_export_fieldlist
+{
+	my( $self, $export_fieldlist, $field_name ) = @_;
+	return !defined $export_fieldlist || grep { $_ eq $field_name } @{$export_fieldlist};	
+}
+
+
 1;
 
 

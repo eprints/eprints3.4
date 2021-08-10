@@ -114,11 +114,13 @@ $c->{eprint_render} = sub
 # To only include specific fields in the <meta name="eprints.X" content="..." /> tags, defined a list of fields
 # as follows. Use sub-field names for compound fields.
 #
-#	$c->{plugins}->{"Export::Simple"}->{params}->{convert_dataobj_fieldlist} = [qw/
+#	$c->{export_fieldlists}->{eprint} = [qw/
 #		eprintid
+#		type
 #		title
+#		abstract
 #		creators_name
-#		creators_orcid
+#		date
 #		...
 #	/];
 

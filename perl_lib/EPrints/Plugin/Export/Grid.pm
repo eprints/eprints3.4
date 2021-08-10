@@ -76,10 +76,13 @@ sub dataobj_to_rows
 	my $fields = $opts{fields} || [$self->fields($dataobj->{dataset})];
 
 	my @rows = ([]);
+	my $export_fieldlist = $dataobj->export_fieldlist;
 	foreach my $field (@$fields)
 	{
-		my $i = @{$rows[0]};
+		next unless $self->repository->in_export_fieldlist( $export_fieldlist, $field->name ) || $opts{ignore_export_fieldlist};
 
+		my $i = @{$rows[0]};
+		
 		my $_rows = $self->value_to_rows($field, $field->get_value( $dataobj ));
 		foreach my $j (0..$#$_rows)
 		{

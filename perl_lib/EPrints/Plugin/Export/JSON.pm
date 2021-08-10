@@ -164,9 +164,11 @@ sub _epdata_to_json
 			$epdata->has_relation( undef, "isVolatileVersionOf" )
 		  );
 
+		my $export_fieldlist = $self->repository->export_fieldlist_for_dataset( $self->repository->dataset( 'eprint' ) );
 		foreach my $field ($epdata->get_dataset->get_fields)
 		{
-			next if !$field->get_property( "export_as_xml" );
+			next unless $field->repository->in_export_fieldlist( $export_fieldlist, $field->name );
+			next if !$field->get_property( "export_as_xml" );	 
 			next if defined $field->{sub_name};
 			my $value = $field->get_value( $epdata );
 

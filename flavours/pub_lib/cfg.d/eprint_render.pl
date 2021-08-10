@@ -146,6 +146,18 @@ if(0){
 	return( $page, $title, $links );
 };
 
+# To only include specific fields in the <meta name="eprints.X" content="..." /> tags, defined a list of fields
+# as follows. Use sub-field names for compound fields.
+#
+#       $c->{export_fieldlists}->{eprint} = [qw/
+#               eprintid
+#               type
+#               title
+#               abstract
+#               creators_name
+#               date
+#               ...
+#       /];
 
 
 =head1 COPYRIGHT

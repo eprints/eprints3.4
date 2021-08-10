@@ -1822,7 +1822,11 @@ sub to_sax
 
 	foreach my $field ($dataset->fields)
 	{
-		next if !$field->property( "export_as_xml" ) && !$opts{revision_generation};
+		unless ( $opts{revision_generation} )
+		{
+			next unless $self->in_export_fieldlist( $field );
+			next if !$field->property( "export_as_xml" );
+		}
 
 		$field->to_sax(
 			$field->get_value( $self ),
@@ -1836,6 +1840,39 @@ sub to_sax
 		Name => $name,
 		NamespaceURI => EPrints::Const::EP_NS_DATA,
 	});
+}
+
+=begin InternalDoc
+
+=item EPrints::Dataobj->export_fieldlist
+
+Returns fields to be exported by plugins that do not have predefined fields to export, (e.g. Export::XML).
+
+=end InternalDoc
+
+=cut
+
+sub export_fieldlist
+{
+	my( $self ) = @_;
+	return $self->repository->export_fieldlist_for_dataset( $self->dataset );
+}
+
+
+=begin InternalDoc
+
+=item EPrints::Dataobj->in_export_fieldlist
+
+Returns whether a field is in the export fieldlist for a particular data object.  Returns true if there is no fieldlist restriction.
+
+=end InternalDoc
+
+=cut
+
+sub in_export_fieldlist
+{
+	my( $self, $field ) = @_;
+	return $self->repository->in_export_fieldlist( $self->export_fieldlist, $field->name );	
 }
 
 =begin InternalDoc

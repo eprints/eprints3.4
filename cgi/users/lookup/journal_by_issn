@@ -18,6 +18,7 @@ my $Q_eprintid = $database->quote_identifier( "eprintid" );
 my $Q_num_matches = $database->quote_identifier( "num_matches" );
 my $Q_eprint_status = $database->quote_identifier( "eprint_status" );
 my $Q_publication = $database->quote_identifier( "publication" );
+my $Q_publisher = $database->quote_identifier( "publisher" );
 my $Q_issn = $database->quote_identifier( "issn" );
 
 my $sql = "SELECT COUNT($Q_eprintid) $Q_num_matches," .
@@ -27,7 +28,7 @@ my $sql = "SELECT COUNT($Q_eprintid) $Q_num_matches," .
 	" $Q_eprint_status=" .  $database->quote_value( "archive" ) .
 	" AND $Q_publication IS NOT NULL" .
 	" AND $Q_issn ".$database->sql_LIKE().$database->quote_value( EPrints::Database::prep_like_value($q) . '%' ) .
-	" GROUP BY $Q_publication,$Q_issn" .
+	" GROUP BY $Q_publication,$Q_publisher,$Q_issn" .
 	" ORDER BY $Q_num_matches DESC";
 	
 my @rows;

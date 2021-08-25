@@ -1,4 +1,4 @@
-# For instructions on how to use see http://serviceswiki.eprints.org/index.php/Limiting_names_shown
+# For instructions on how to use see https://wiki.eprints.org/w/Limiting_names_shown
 $c->{limit_names_shown} = sub
 {
         my( $session, $field, $value, $alllangs, $nolink, $object ) = @_;

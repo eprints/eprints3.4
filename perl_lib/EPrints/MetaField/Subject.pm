@@ -125,13 +125,31 @@ sub render_set_input
                 $self->{showtop},
                 0,
                 ($self->{input_style} eq "short"?1:0) );
-	foreach my $value ( @{$obj->get_value( $self->{name} )} )
+	my ( $depospairs ) = $topsubj->get_subjects(
+                1,
+                $self->{showtop},
+                0,
+                ($self->{input_style} eq "short"?1:0) );
+	
+	my $values = $obj->get_value( $self->{name} );
+	$values ||= [];
+	$values = [ $values ] unless ref $values eq 'ARRAY';
+	foreach my $value ( @{$values} )
 	{
 		foreach my $pair ( @{$allpairs} )
 		{
 			if ( $pair->[0] eq $value )
 			{
-				unshift @{$pairs}, $pair;
+				my $depositable = 0;
+				foreach my $dpair ( @{$depospairs} )
+				{
+					if ( $dpair->[0] eq $value )
+					{
+						$depositable = 1;	
+						last;
+					}
+				}	
+				unshift @{$pairs}, $pair unless $depositable;
 				last;
 			}
 		}

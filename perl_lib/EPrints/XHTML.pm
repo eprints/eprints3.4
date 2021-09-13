@@ -920,13 +920,18 @@ sub tree2
 		{
 			my( $key, $children, %nopts ) = @$node;
 
+			my $subjectid = $key->get_id;
+			$subjectid =~ s/[^a-zA-Z0-9_-]/_/g;
+
 			$dl->appendChild( $xml->create_data_element( "dt",
 				$opts{render_value}( @$node ),
 				class => ($nopts{show} ? "$opts{class} $opts{class}_open" : $opts{class}),
+				id => "ep_subj_title_".$subjectid,
 			) );
 			$dl->appendChild( $xml->create_data_element( "dd",
 				$self->tree2( $children, %opts ),
 				class => ($nopts{show} ? "" : "ep_no_js"),
+				id => "ep_subj_desc_".$subjectid,
 			) );
 		}
 		else

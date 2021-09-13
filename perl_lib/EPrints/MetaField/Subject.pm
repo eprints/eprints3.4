@@ -96,6 +96,31 @@ sub get_top_subject
 	return $topsubject;
 }
 
+sub get_expanded_subjects
+{
+	my( $self, $session ) = @_;
+
+	if ( defined $self->get_property( "expanded_subjects" ) )
+	{
+		my $expanded_subjects = {};
+		foreach my $subj_id ( @{$self->get_property( "expanded_subjects" )} )
+		{	
+			my $subject = new EPrints::DataObj::Subject( $session, $subj_id ); 
+         		my @paths = $subject->get_paths( $session, $self->get_top_subject( $session ) );
+                	foreach my $path ( @paths )
+                	{
+                        	foreach my $s ( @{$path} )
+                        	{
+                                	$expanded_subjects->{$s->get_id} = 1;
+				}
+                        }
+                }
+		return $expanded_subjects;
+	
+	}
+	return {};
+}
+
 sub render_set_input
 {
 	my( $self, $session, $default, $required, $obj, $basename, $one_field_component ) = @_;

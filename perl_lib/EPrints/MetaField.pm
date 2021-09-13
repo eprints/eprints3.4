@@ -2436,6 +2436,7 @@ sub get_property_defaults
 		input_assist	=> EP_PROPERTY_FALSE,
 		as_list 	=> EP_PROPERTY_UNDEF,
 		readonly	=> EP_PROPERTY_FALSE,
+		expanded_subjects => [],
 );
 }
 

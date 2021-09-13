@@ -112,7 +112,7 @@ sub render_content
 
 	# populate selected and expanded values	
 
-	$self->{expanded} = {};
+	$self->{expanded} = $field->get_expanded_subjects( $session );
 	$self->{selected} = {};
 	$self->{whitelist} = undef;
 

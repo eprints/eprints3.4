@@ -919,8 +919,8 @@ sub tree2
 		if( ref($node) eq "ARRAY" )
 		{
 			my( $key, $children, %nopts ) = @$node;
-
-			my $subjectid = $key->get_id;
+	
+			my $subjectid = ( ref($key) ? $key->get_id : $key );
 			$subjectid =~ s/[^a-zA-Z0-9_-]/_/g;
 
 			$dl->appendChild( $xml->create_data_element( "dt",

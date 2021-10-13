@@ -46,42 +46,48 @@ sub allow_test_email
 
 sub action_test_email
 {
-	my( $self ) = @_;
+        my( $self ) = @_;
 
-	my $session = $self->{session};
+        my $session = $self->{session};
 
-	my $email = $session->param( "requester_email" );
+        my @emails = split(/[, \s\/]+/ ,$session->param( "requester_email" ) );
 
-	unless( $email )
-	{
-		$self->{processor}->add_message( "error", $session->html_phrase( "request:no_email" ) );
-		return;
-	}
+        unless( @emails )
+        {
+                $self->{processor}->add_message( "error", $self->html_phrase( "no_email" ) );
+                return;
+        }
 
-	my $mail = $session->make_element( "mail" );
-	$mail->appendChild( $self->html_phrase( "test_mail" ));
+        my $mail = $session->make_element( "mail" );
+        $mail->appendChild( $self->html_phrase( "test_mail" ));
 
-	my $rc = EPrints::Email::send_mail(
-		session => $session,
-		langid => $session->get_langid,
-		to_email => $email,
-		subject => $self->phrase( "test_mail_subject" ),
-		message => $mail,
-		sig => $session->html_phrase( "mail_sig" )
-	);
+        for my $email (@emails) {
+                my $rc = EPrints::Email::send_mail(
+                        session => $session,
+                        langid => $session->get_langid,
+                        to_email => $email,
+                        subject => $self->phrase( "test_mail_subject" ),
+                        message => $mail,
+                        sig => $session->html_phrase( "mail_sig" )
+                );
 
-	if( !$rc )
-	{
-		$self->{processor}->add_message( "error", $session->html_phrase( "general:email_failed" ) );
-	}
-	else
-	{
-		$self->{processor}->add_message( "message",
-			$self->html_phrase( "mail_sent",
-				requester => $session->make_text( $email )
-			) );
-	}
-}	
+                if( !$rc )
+                {
+                        $self->{processor}->add_message( "error",
+                                $self->html_phrase( "mail_failed",
+                                        requester => $session->make_text( $email )
+                                 ) );
+                }
+                else
+                {
+                        $self->{processor}->add_message( "message",
+                                $self->html_phrase( "mail_sent",
+                                        requester => $session->make_text( $email )
+                                ) );
+                }
+
+        }
+}
 
 sub render
 {

@@ -99,6 +99,8 @@ sub render
 	
 	$html = $session->make_doc_fragment;
 
+	$html->appendChild( $self->html_phrase( "preamble" ) );
+
 	my $form = $session->render_input_form(
 		fields => [
 			$session->dataset( "request" )->get_field( "requester_email" ),

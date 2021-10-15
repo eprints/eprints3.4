@@ -198,8 +198,8 @@ sub action_send
 	}
 	
 	my $from_user = $self->{session}->current_user;
-	$mail{from_name} = EPrints::Utils::tree_to_utf8( $from_user->render_description() );
-	$mail{from_email} = $from_user->get_value( "email" );
+	$mail{replyto_name} = EPrints::Utils::tree_to_utf8( $from_user->render_description() );
+	$mail{replyto_email} = $from_user->get_value( "email" );
 
 	my $reason = $self->{session}->make_text( $self->{session}->param( "reason" ) );
 	$mail{message} = $self->html_phrase(

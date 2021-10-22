@@ -148,7 +148,8 @@ sub get_basic_input_elements
                         $inputs->{unspecified} = $session->render_noenter_input_field(
                                 type => "radio",
                                 checked=>( !EPrints::Utils::is_set($value) ? "checked" : undef ),
-                                name => $basename . "_unspecified",
+				name => $basename,
+                                id => $basename . "_unspecified",
                                 class => join(" ", @classes),
                                 onclick => $onclick,
                                 value => "",

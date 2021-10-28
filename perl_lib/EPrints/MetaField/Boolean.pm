@@ -92,7 +92,7 @@ sub get_basic_input_elements
 		if( !$self->get_property( "required" ) )
 		{
 			push @values, "";
-			$labels{""} = $session->phrase( "lib/metafield:unspecified_selection" );
+			$labels{""} = $self->unspecified_phrase( $session );
 			$height++;
 		}
 		if( $self->get_property( "input_rows" ) )
@@ -167,7 +167,7 @@ sub get_basic_input_elements
 			$f->appendChild( $dt );
 			my $dd = $session->make_element( "dd", id => $basename . "_" . $option . "_label" );
 			$dd->appendChild( $session->html_phrase( $self->{confid} . "_radio_" . $self->{name} . "_" . $option ) ) unless $option eq "unspecified";
-			$dd->appendChild( $session->html_phrase( "lib/metafield:unspecified_selection" ) ) if $option eq "unspecified";
+			$dd->appendChild( $self->unspecified_phrase( $session ) ) if $option eq "unspecified";
 			$f->appendChild( $dd );
 		}
 		
@@ -303,6 +303,17 @@ sub render_xml_schema_type
 	}
 
 	return $type;
+}
+
+sub unspecified_phrase
+{
+	my( $self, $session ) = @_;
+
+	return $session->html_phrase( $self->{confid} . "_radio_" . $self->{name} . "_unspecified" ) if $session->has_phrase( $self->{confid} . "_radio_" . $self->{name} . "_unspecified" );
+	return $session->html_phrase( $self->{confid} . "_fieldopt_" . $self->{name} . "_unspecified" ) if $session->has_phrase( $self->{confid} . "_radio_" . $self->{name} . "_unspecified" );
+        return $session->html_phrase( $self->{confid} . "_radio_" . $self->{name} . "_" ) if $session->has_phrase( $self->{confid} . "_radio_" . $self->{name} . " " );
+        return $session->html_phrase( $self->{confid} . "_fieldopt_" . $self->{name} . "_" ) if $session->has_phrase( $self->{confid} . "_radio_" . $self->{name} . " " );
+        return $session->html_phrase( "lib/metafield:unspecified_selection" );
 }
 
 ######################################################################

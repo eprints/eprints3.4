@@ -311,8 +311,8 @@ sub unspecified_phrase
 
 	return $session->html_phrase( $self->{confid} . "_radio_" . $self->{name} . "_unspecified" ) if $session->has_phrase( $self->{confid} . "_radio_" . $self->{name} . "_unspecified" );
 	return $session->html_phrase( $self->{confid} . "_fieldopt_" . $self->{name} . "_unspecified" ) if $session->has_phrase( $self->{confid} . "_radio_" . $self->{name} . "_unspecified" );
-        return $session->html_phrase( $self->{confid} . "_radio_" . $self->{name} . "_" ) if $session->has_phrase( $self->{confid} . "_radio_" . $self->{name} . " " );
-        return $session->html_phrase( $self->{confid} . "_fieldopt_" . $self->{name} . "_" ) if $session->has_phrase( $self->{confid} . "_radio_" . $self->{name} . " " );
+        return $session->html_phrase( $self->{confid} . "_radio_" . $self->{name} . "_" ) if $session->has_phrase( $self->{confid} . "_radio_" . $self->{name} . "_" );
+        return $session->html_phrase( $self->{confid} . "_fieldopt_" . $self->{name} . "_" ) if $session->has_phrase( $self->{confid} . "_radio_" . $self->{name} . "_" );
         return $session->html_phrase( "lib/metafield:unspecified_selection" );
 }
 

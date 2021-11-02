@@ -1172,7 +1172,8 @@ sub _update
 
 	if( $self->{debug} )
 	{
-		$self->{session}->get_repository->log( "Database execute debug: $sql" );
+		use Time::HiRes;
+		$self->{session}->get_repository->log( "Database execute debug (" . Time::HiRes::time() ."): $sql" );
 	}
 
 	my $rv = 0;
@@ -1275,7 +1276,8 @@ sub insert
 
 	if( $self->{debug} )
 	{
-		$self->{session}->get_repository->log( "Database execute debug: $sql" );
+		use Time::HiRes;
+		$self->{session}->get_repository->log( "Database execute debug (" .  Time::HiRes::time() ."): $sql" );
 	}
 
 	my $sth = $self->prepare($sql);
@@ -3049,7 +3051,8 @@ sub do
 	
 	if( $self->{debug} )
 	{
-		$self->{session}->get_repository->log( "Database execute debug: $sql" );
+		use Time::HiRes;
+		$self->{session}->get_repository->log( "Database execute debug (" . Time::HiRes::time() . "): $sql" );
 	}
 	my $result = $self->{dbh}->do( $sql );
 
@@ -3207,7 +3210,8 @@ sub execute
 
 	if( $self->{debug} )
 	{
-		$self->{session}->get_repository->log( "Database execute debug: $sql" );
+		use Time::HiRes;
+		$self->{session}->get_repository->log( "Database execute debug (" . Time::HiRes::time() . "): $sql" );
 	}
 
 	my $result = $sth->execute;

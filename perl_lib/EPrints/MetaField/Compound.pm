@@ -500,9 +500,11 @@ sub get_basic_input_elements
 	{
 		$field->{readonly} = $readonly unless defined $field->{readonly};
 		my $alias = $field->property( "sub_name" );
+		my $field_value = $value->{$alias} if EPrints::Utils::is_set( $value->{$alias} );
+		$field_value ||= EPrints::Utils::is_set( $field->{default_value} ) ? $field->{default_value} : undef;
 		my $part_grid = $field->get_basic_input_elements( 
 					$session, 
-					$value->{$alias}, 
+					$field_value,
 					$basename."_".$alias,
 					$staff, 
 					$object,

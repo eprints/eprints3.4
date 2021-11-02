@@ -196,10 +196,26 @@ sub action_send
 			$self->{session} ) );
  		$mail{to_email} = $self->{session}->get_repository->get_conf( "adminemail" );
 	}
+	unless( EPrints::Utils::validate_email( $mail{to_email} ) )
+        {
+		$self->{processor}->add_message( "warning", $self->{session}->html_phrase(
+                                "cgi/users/edit_eprint:bad_to_email",
+                                username => $self->{session}->make_text( $mail{to_name} ),
+                                email => $self->{session}->make_text( $mail{to_email} ) ));	
+		return;
+	}
 	
 	my $from_user = $self->{session}->current_user;
 	$mail{replyto_name} = EPrints::Utils::tree_to_utf8( $from_user->render_description() );
 	$mail{replyto_email} = $from_user->get_value( "email" );
+
+	unless( EPrints::Utils::validate_email( $mail{replyto_email} ) )
+	{
+		 $self->{processor}->add_message( "warning", $self->{session}->html_phrase(
+                                "cgi/users/edit_eprint:bad_replyto_email",
+                                username => $self->{session}->make_text( $mail{replyto_name} ),
+                                email => $self->{session}->make_text( $mail{replyto_email} ) ));
+	}
 
 	my $reason = $self->{session}->make_text( $self->{session}->param( "reason" ) );
 	$mail{message} = $self->html_phrase(

@@ -116,13 +116,19 @@ sub action_request
 	my $blacklist = $session->config( 'email_blacklist' );
 	if( $email && $blacklist && grep { $email eq $_ } @$blacklist )
 	{
-		$self->{processor}->add_message( "error", $session->html_phrase( "general:email_denied" ) );
+		$self->{processor}->add_message( "error", $self->html_phrase( "blocked_email", email => $session->make_text( $email ) ) );
 		return;
 	}
 
 	my $eprint = $self->{processor}->{eprint};
 	my $doc = $self->{processor}->{document};
 	my $contact_email = $self->{processor}->{contact_email};
+
+	unless( defined $contact_email && EPrints::Utils::validate_email( $contact_email ) )
+	{
+		$self->{processor}->add_message( "error", $self->html_phrase( "bad_contact_email" ) );
+		return;
+	}
 
 	my $user = EPrints::DataObj::User::user_with_email( $session, $contact_email );
 	if( defined $user )

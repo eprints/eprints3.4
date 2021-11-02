@@ -1515,6 +1515,16 @@ sub compare_version
         return 0;
 }
 
+# EPrints::Utils::validate_email( $email );
+#  Check if email address is valid according to W3C:
+#   https://www.w3.org/TR/2012/WD-html-markup-20120329/input.email.html
+sub validate_email 
+{
+	my ( $email ) = @_;
+
+	return defined $email && $email =~ m/^[a-zA-Z0-9.!#$%&’*+i\/=\?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+}
+
 1;
 
 =head1 COPYRIGHT

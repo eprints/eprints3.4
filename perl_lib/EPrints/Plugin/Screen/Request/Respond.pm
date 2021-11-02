@@ -93,6 +93,12 @@ sub action_confirm
 	my $doc = $self->{processor}->{document};
 
 	my $email = $self->{processor}->{request}->get_value( "requester_email" );
+	unless( EPrints::Utils::validate_email( $email ) )
+	{
+		$self->{processor}->add_message( "error", $self->{session}->html_phrase(
+			"general:bad_email", email => $session->make_text( $email ) ) );
+		return;		
+	}
 
 	my $action = $session->param("action");
 	$action = "reject" if !defined $action || $action ne "accept";

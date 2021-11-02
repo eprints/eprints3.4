@@ -62,6 +62,11 @@ sub action_test_email
         $mail->appendChild( $self->html_phrase( "test_mail" ));
 
         for my $email (@emails) {
+		unless( EPrints::Utils::validate_email( $email ) ) 
+		{ 
+			$self->{processor}->add_message( "error", $session->html_phrase( "general:bad_email", email => $session->make_text( $email ) ) ); 
+			next;
+ 		} 
                 my $rc = EPrints::Email::send_mail(
                         session => $session,
                         langid => $session->get_langid,

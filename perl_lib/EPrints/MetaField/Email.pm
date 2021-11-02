@@ -44,6 +44,30 @@ sub render_single_value
 	return $link;
 }
 
+sub validate
+{
+        my( $self, $session, $value, $object ) = @_;
+
+	# closure for generating the field link fragment
+        my $f_fieldname = sub {
+                my $f = defined $self->property( "parent" ) ? $self->property( "parent" ) : $self;
+                my $fieldname = $session->xml->create_element( "span", class=>"ep_problem_field:".$f->get_name );
+                $fieldname->appendChild( $f->render_name( $session ) );
+                return $fieldname;
+        };
+
+        my @probs = $self->SUPER::validate( $session, $value, $object );
+
+	my $values = ( ref $value eq "ARRAY" ? $value : [ $value ] );
+
+        for my $value ( @{$values} )
+        {
+		push @probs, $session->html_phrase( "validate:bad_email", fieldname =>  &$f_fieldname ) if defined $value && $value !~ m/^[a-zA-Z0-9.!#$%&’*+i\/=\?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+	}
+
+	return @probs;
+}
+
 ######################################################################
 1;
 

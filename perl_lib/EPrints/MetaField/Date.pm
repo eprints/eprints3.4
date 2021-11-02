@@ -514,7 +514,9 @@ sub validate
                 return $fieldname;
         };
 
-	my @probs = ( $session->html_phrase( "validate:invalid_date", fieldname => &$f_fieldname ) );
+	my @probs = $self->SUPER::validate( $session, $value, $object );
+
+	push @probs, $session->html_phrase( "validate:invalid_date", fieldname => &$f_fieldname );
 
 	my $values = ( ref $value eq "ARRAY" ? $value : [ $value ] );
 

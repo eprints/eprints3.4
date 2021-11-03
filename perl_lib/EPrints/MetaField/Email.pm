@@ -62,7 +62,7 @@ sub validate
 
         for my $value ( @{$values} )
         {
-		push @probs, $session->html_phrase( "validate:bad_email", fieldname =>  &$f_fieldname ) if defined $value && $value !~ m/^[a-zA-Z0-9.!#$%&’*+i\/=\?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+		push @probs, $session->html_phrase( "validate:bad_email", fieldname =>  &$f_fieldname ) if defined $value && !EPrints::Utils::validate_email( $value );
 	}
 
 	return @probs;

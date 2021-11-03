@@ -2650,31 +2650,6 @@ sub phrase
 
 =begin InternalDoc
 
-=item $boolean = $repository->has_phrase( $phraseid )
-
-Checks to see if a phrase exists with particular phrase ID but does
-not generate a warning in the logs if it does not.
-
-=end InternalDoc
-
-=cut
-######################################################################
-
-sub has_phrase
-{
-        my( $self, $phraseid ) = @_;
-
-        my $r = $self->{lang}->_get_phrase( $phraseid, $self );
-
-        return defined $r;
-}
-
-
-######################################################################
-=pod
-
-=begin InternalDoc
-
 =item $language = $repository->get_lang
 
 Return the EPrints::Language object for this sessions current 

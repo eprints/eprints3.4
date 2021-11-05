@@ -70,7 +70,7 @@ $EPrints::Utils::REGEXP_HOSTNAME = '^'.$EPrints::Utils::REGEXP_HOSTNAME_MIDDLE.'
 $EPrints::Utils::REGEXP_HOSTNAME_OR_HASH= '^('.$EPrints::Utils::REGEXP_HOSTNAME_MIDDLE.'|#)$';
 $EPrints::Utils::REGEXP_HOSTNAME_OR_UNSET= '^$|'.$EPrints::Utils::REGEXP_HOSTNAME;
 $EPrints::Utils::REGEXP_EMAIL = '^[^@]+@'.$EPrints::Utils::REGEXP_HOSTNAME_MIDDLE.'$';
-$EPrints::Utils::REGEXP_VARNAME = '^[a-z][_a-z0-9]*$';
+$EPrints::Utils::REGEXP_VARNAME = '^[a-zA-Z][_a-zA-Z0-9]*$';
 $EPrints::Utils::REGEXP_USERNAME = '^[a-zA-Z][_\-\.@A-Za-z0-9]*$';
 $EPrints::Utils::REGEXP_PASSWORD = '^[^\s]{5,}$';
 $EPrints::Utils::REGEXP_NUMBER = '^[0-9]+$';
@@ -848,7 +848,7 @@ sub get_regexp_type
 	return "a hostname or unset" if $regexp eq $EPrints::Utils::REGEXP_HOSTNAME_OR_UNSET;
 	return "a hostname or #" if $regexp eq $EPrints::Utils::REGEXP_HOSTNAME_OR_HASH;
 	return "an email address" if $regexp eq $EPrints::Utils::REGEXP_EMAIL;
-	return "a valid variable name (lowercase letters, numbers and underscores only)" if $regexp eq $EPrints::Utils::REGEXP_VARNAME;
+	return "a valid variable name (letters, numbers and underscores only)" if $regexp eq $EPrints::Utils::REGEXP_VARNAME;
 	return "a valid username (letters, numbers and certain special characters [-_.@] only)" if $regexp eq $EPrints::Utils::REGEXP_USERNAME;
 	return "a valid password (at least 5 characters with no spaces)" if $regexp eq $EPrints::Utils::REGEXP_PASSWORD;
 	return "a number" if $regexp eq $EPrints::Utils::REGEXP_NUMBER;

@@ -694,6 +694,7 @@ sub config_core
 
 	my $eg_hostname = $repoid;
 	$eg_hostname =~ s/_/-/g;
+	$eg_hostname =~ tr/[A-Z]/[a-z]/;
 print <<END;
 
 Please enter the fully qualified hostname of the repository. 

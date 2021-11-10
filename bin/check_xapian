@@ -463,11 +463,12 @@ for ( my $i = 0; $i < $listcount; $i++ )
 				if ( $year ne "" )
 				{
 					$delve_command = $delve_location.' -1 -r '.$xapian_id.' -d '.$path.' | grep -ae "^_\?year:" | sed "s/_\?year://g"';
+					$delve_command = $delve_location.' -1 -r '.$xapian_id.' -d '.$path.' | grep -ae "^_\?date:" | sed "s/_\?date://g"' if $facets == 0;
 	        	                @delve_results = `$delve_command`;
         	        	        if ( defined($delve_results[0]) )
                         		{
                                 	        $delve_results[0] =~ s/\n//;
-                                       		my $year = substr( $eprint->get_value('date'), 0, 4 );
+						$year = $eprint->get_value('date') if $facets == 0;
         		                        $year_correct = 1 if $delve_results[0] eq $year;
 					}
 				}
@@ -487,7 +488,7 @@ for ( my $i = 0; $i < $listcount; $i++ )
 		$errfacets .= "status " unless $status_correct;
 		$errfacets .= "year " unless $year_correct;
 		$errfacets .= "type " unless $type_correct;
-		print "$progress Found EPrint ID ".$eprint->id." in position $position but ".$errfacets."is/are not correct." if $found && "$errfacets" ne "";
+		print "$progress Found EPrint ID ".$eprint->id." in position $position but ".$errfacets."is/are not correct.\n" if $found && "$errfacets" ne "";
                 print "$progress Found EPrint ID ".$eprint->id." in position $position.\n" if $found && "$errfacets" eq "" && !$quiet;
         }
         if ( ( !$found || $errfacets ne "" ) && $reindex )

@@ -2179,6 +2179,12 @@ sub characters
 
 	return if !$state->{in_value};
 
+	if ( $state->{depth} == 2 && !$self->property( "multiple" ) ) 
+	{
+		$self->{repository}->log( "Import Error: Field '".$self->{dataset}->id.".".$self->{name}."' is not a multiple field." );	
+		return;
+	}
+
 	my $value = $epdata->{$self->name};
 	if( $state->{depth} == 2 ) # <foo><item>XXX
 	{

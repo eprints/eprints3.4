@@ -529,7 +529,8 @@ sub get_basic_input_ids
 					$session, 
 					$basename."_".$alias, 
 					$staff, 
-					$obj );
+					$obj,
+					1 );
 	}
 
 	return( @ids );

@@ -242,8 +242,9 @@ sub get_basic_input_elements
 
 sub get_basic_input_ids
 {
-	my( $self, $session, $basename, $staff, $obj ) = @_;
+	my( $self, $session, $basename, $staff, $obj, $from_compound ) = @_;
 
+	return( $basename ) if $from_compound;
 	return( $basename."_day", $basename."_month", $basename."_year" );
 }
 

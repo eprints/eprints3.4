@@ -103,17 +103,17 @@ sub input_text_fh
         $url->query_form( %params );
 
         my $dom_doc;
+        my $dom_crossref;
         eval {
             $dom_doc = EPrints::XML::parse_url( $url );
+            $dom_crossref = ($dom_doc->findnodes( "doi_records/doi_record/crossref" ))[0];
         };
-
-        my $dom_crossref = ($dom_doc->findnodes( "doi_records/doi_record/crossref" ))[0];
 
         if( $@ || !defined $dom_crossref)
         {
             $plugin->handler->message( "warning", $plugin->html_phrase( "invalid_doi",
                 doi => $plugin->{session}->make_text( $doi ),
-                msg => $plugin->{session}->make_text( "No or unrecognised response" )
+                status => $plugin->{session}->make_text( "No or unrecognised response" )
             ));
             next;
         }
@@ -124,7 +124,7 @@ sub input_text_fh
         {
             $plugin->handler->message( "warning", $plugin->html_phrase( "invalid_doi",
                 doi => $plugin->{session}->make_text( $doi ),
-                msg => $plugin->{session}->make_text( "error with DOI" )
+                status => $plugin->{session}->make_text( "error with DOI" )
             ));
             next;
         }

@@ -102,19 +102,19 @@ sub input_text_fh
         $url->query_form( %params );
 
         my $dom_doc;
+        my $dom_top;
+        my $dom_query_result;
         eval {
             $dom_doc = EPrints::XML::parse_url( $url );
+            $dom_top = $dom_doc->getDocumentElement;
+            $dom_query_result = ($dom_top->getElementsByTagName( "query_result" ))[0];
         };
-
-        my $dom_top = $dom_doc->getDocumentElement;
-
-        my $dom_query_result = ($dom_top->getElementsByTagName( "query_result" ))[0];
 
         if( $@ || !defined $dom_query_result)
         {
             $plugin->handler->message( "warning", $plugin->html_phrase( "invalid_doi",
                 doi => $plugin->{session}->make_text( $doi ),
-                msg => $plugin->{session}->make_text( "No or unrecognised response" )
+                status => $plugin->{session}->make_text( "No or unrecognised response" )
             ));
             next;
         }
@@ -125,11 +125,9 @@ sub input_text_fh
 
         if( defined($status) && ($status eq "unresolved" || $status eq "malformed") )
         {
-            my $msg = ($dom_query->getElementsByTagName( "msg" ))[0];
-            $msg = EPrints::Utils::tree_to_utf8( $msg );
             $plugin->handler->message( "warning", $plugin->html_phrase( "invalid_doi",
                 doi => $plugin->{session}->make_text( $doi ),
-                msg => $plugin->{session}->make_text( $msg )
+                status => $plugin->{session}->make_text( $status )
             ));
             next;
         }

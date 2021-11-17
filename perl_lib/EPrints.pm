@@ -148,10 +148,13 @@ sub abort
 {
 	my( $errmsg ) = pop @_; # last parameter
 
+	use POSIX qw( strftime );
+	my $timestamp = POSIX::strftime( '%Y-%m-%dT%H:%M:%SZ', gmtime(time()));
+
 	print STDERR <<END;
 
 ------------------------------------------------------------------
----------------- EPrints System Error ----------------------------
+----------- EPrints System Error $timestamp ------------
 ------------------------------------------------------------------
 $errmsg
 ------------------------------------------------------------------
@@ -525,6 +528,9 @@ sub abort
 {
 	my( $errmsg ) = (pop @_);
 
+	use POSIX qw( strftime );
+	my $timestamp POSIX::strftime( "%Y-%m-%dT%H:%M:%SZ", gmtime(time()));
+
 	my $r = EPrints->request;
 	$r->status( 500 );
 	my $htmlerrmsg = $errmsg;
@@ -547,7 +553,7 @@ END
 
 	print STDERR <<END;
 ------------------------------------------------------------------
----------------- EPrints System Error ----------------------------
+----------- EPrints System Error $timestamp ------------
 ------------------------------------------------------------------
 $errmsg
 ------------------------------------------------------------------
@@ -645,6 +651,9 @@ sub abort
 {
 	my( $errmsg ) = (pop @_);
 
+	use POSIX qw( strftime );
+	my $timestamp = POSIX::strftime( "%Y-%m-%dT%H:%M:%SZ", gmtime(time()));
+
 	my $r = EPrints->request;
 	$r->status( 500 );
 	my $htmlerrmsg = $errmsg;
@@ -667,7 +676,7 @@ END
 
 	print STDERR <<END;
 ------------------------------------------------------------------
----------------- EPrints System Error ----------------------------
+----------- EPrints System Error $timestamp ------------
 ------------------------------------------------------------------
 $errmsg
 ------------------------------------------------------------------

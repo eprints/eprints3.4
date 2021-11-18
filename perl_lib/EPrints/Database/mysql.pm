@@ -141,9 +141,12 @@ sub create
 	
         $rc &&= $dbh->do( "CREATE DATABASE IF NOT EXISTS ".$dbh->quote_identifier( $dbname )." DEFAULT CHARACTER SET ".$dbh->quote( $self->get_default_charset ) );
 
-        $rc &&= $dbh->do( "CREATE USER ".$dbh->quote_identifier( $dbuser )."\@".$dbh->quote("localhost")." IDENTIFIED BY ".$dbh->quote( $dbpass ) );
+        my( $current_user ) = $dbh->selectrow_array( "SELECT CURRENT_USER();" );
+        my @local_user_host = split( '@', $current_user );
 
-        $rc &&= $dbh->do( "GRANT ALL PRIVILEGES ON ".$dbh->quote_identifier( $dbname ).".* TO ".$dbh->quote_identifier( $dbuser )."\@".$dbh->quote("localhost") );
+        $rc &&= $dbh->do( "CREATE USER ".$dbh->quote_identifier( $dbuser )."\@".$dbh->quote( $local_user_host[1] )." IDENTIFIED BY ".$dbh->quote( $dbpass ) );
+
+        $rc &&= $dbh->do( "GRANT ALL PRIVILEGES ON ".$dbh->quote_identifier( $dbname ).".* TO ".$dbh->quote_identifier( $dbuser )."\@".$dbh->quote( $local_user_host[1] ) );
 
 	$dbh->disconnect;
 

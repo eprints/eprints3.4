@@ -1240,6 +1240,7 @@ sub group_by_n_chars
 
 		# lose everything not a letter or number
 		$v =~ s/\P{Alnum}+//g;
+		next if $v eq "";
 	
 		my $start = uc substr( $v, 0, $n );
 		$start = "?" if( $start eq "" );	
@@ -1642,7 +1643,7 @@ sub render_subj_menu
 		$f->appendChild(
 			$repo->render_subjects(
 				$subjects_to_show,
-				$field->get_property( "top" ),
+				defined $menu->{top} ? $menu->{top} : $field->get_property( "top" ),
 				undef,
 				($has_submenu?3:2),
 				$sizes ) );

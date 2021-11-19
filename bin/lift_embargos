@@ -124,7 +124,7 @@ my $searchexp = new EPrints::Search(
 		session=>$session, 
 		dataset=>$ds );
 
-my $date = sprintf("-%04d-%02d-%02d", EPrints::Time::utc_datetime() );
+my $date = '-' . EPrints::Time::iso_date();
 $searchexp->add_field( $ds->get_field( "date_embargo" ), $date );
 
 my $list = $searchexp->perform_search;

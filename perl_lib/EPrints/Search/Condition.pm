@@ -653,7 +653,7 @@ sub process_distinctby
 		EPrints->abort( "Can't perform process_distinctby on virtual field" )
 			if $_->is_virtual;
 		EPrints->abort( "Can only perform process_distinctby on multiple fields with the same field type" )
-			if ref($_) ne ref($fields->[0]);
+			if ref($_) ne ref($fields->[0]) && !(  $_->isa(ref($fields->[0])) || $fields->[0]->isa(ref($_)) ); # Allow if field is sub/super class
 	}
 
 	my $sql = join(' UNION ',

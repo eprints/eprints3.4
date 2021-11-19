@@ -49,10 +49,12 @@ sub logic
 	my $table = $prefix . $self->table;
 
 	my @sql_and = ();
+	my $empty = "''";
+	$empty = "0" if grep { $_ eq $self->{field}->get_property( "type" ) } ( 'date', 'int', 'time' );
 	foreach my $col_name ( $self->{field}->get_sql_names )
 	{
 		push @sql_and,
-			$db->quote_identifier( $table, $col_name )." != ''";
+			$db->quote_identifier( $table, $col_name )." != $empty";
 	}
 	return "( ".join( " OR ", @sql_and ).")";
 }

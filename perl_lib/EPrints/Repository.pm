@@ -206,7 +206,7 @@ sub new
 			else
 			{
 				EPrints::abort(
-					"No tables in the MySQL database! ".
+					"No tables in the database! ".
 					"Did you run create_tables?" );
 			}
 			$self->{database}->disconnect();

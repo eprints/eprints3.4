@@ -939,6 +939,15 @@ sub debug_xml
 	print STDERR "<\n";
 }
 
+sub remove_invalid_chars
+{
+	my( $value ) = @_;
+
+	$value =~ s/[\x00-\x08\x0B\x0C\x0E-\x19]//g;	
+
+	return $value;
+}
+
 sub is_empty
 {
 	my( $node ) = @_;

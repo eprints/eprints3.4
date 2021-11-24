@@ -102,7 +102,7 @@ sub convert_dataobj
 			foreach my $creator ( @{$creators} )
 			{	
 				next if !defined $creator;
-				push @dcdata, [ "creator", EPrints::Utils::make_name_string( $creator ) ];
+				push @dcdata, [ "creator", EPrints::XML::remove_invalid_chars( EPrints::Utils::make_name_string( $creator ) ) ];
 			}
 		}
 	}
@@ -115,7 +115,7 @@ sub convert_dataobj
 			my $subject = EPrints::DataObj::Subject->new( $plugin->{session}, $subjectid );
 			# avoid problems with bad subjects
 				next unless( defined $subject ); 
-			push @dcdata, [ "subject", EPrints::Utils::tree_to_utf8( $subject->render_description() ) ];
+			push @dcdata, [ "subject", EPrints::XML::remove_invalid_chars( EPrints::Utils::tree_to_utf8( $subject->render_description() ) ) ];
 		}
 	}
 
@@ -129,7 +129,7 @@ sub convert_dataobj
 		{
 			foreach my $editor ( @{$editors} )
 			{
-				push @dcdata, [ "contributor", EPrints::Utils::make_name_string( $editor ) ];
+				push @dcdata, [ "contributor", EPrints::XML::remove_invalid_chars( EPrints::Utils::make_name_string( $editor ) ) ];
 			}
 		}
 	}
@@ -172,7 +172,7 @@ sub convert_dataobj
 
 	# The citation for this eprint
 	push @dcdata, [ "identifier",
-		EPrints::Utils::tree_to_utf8( $eprint->render_citation( 'default', %params ) ) ];
+		EPrints::XML::remove_invalid_chars( EPrints::Utils::tree_to_utf8( $eprint->render_citation( 'default', %params ) ) ) ];
 
 	# Most commonly a DOI or journal link
 	push @dcdata, $plugin->simple_value( $eprint, official_url => "relation" );
@@ -216,18 +216,18 @@ sub simple_value
 		$langs = [$langs] if ref($values) ne "ARRAY";
 		foreach my $i (0..$#$values)
 		{
-			push @dcdata, [ $term, $values->[$i], { 'xml:lang' => $langs->[$i] } ];
+			push @dcdata, [ $term, EPrints::XML::remove_invalid_chars( $values->[$i] ), { 'xml:lang' => $langs->[$i] } ];
 		}
 	}
 	elsif( $field->property( "multiple" ) )
 	{
 		push @dcdata, map { 
-			[ $term, $_ ]
+			[ $term, EPrints::XML::remove_invalid_chars( $_ ) ]
 		} @{ $field->get_value( $eprint ) };
 	}
 	else
 	{
-		push @dcdata, [ $term, $field->get_value( $eprint ) ];
+		push @dcdata, [ $term, EPrints::XML::remove_invalid_chars( $field->get_value( $eprint ) ) ];
 	}
 
 	return @dcdata;

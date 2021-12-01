@@ -239,7 +239,13 @@ sub eprint_to_uketd_dc
 		
 		# The URL of the abstract page is the dcterms isreferencedby
 		push @etddata, [ "isReferencedBy", $eprint->get_url(), "dcterms" ];
-	
+
+		# The DOI of the item if it exists
+		if ( EPrints::Utils::is_set( $eprint->get_value( "id_number" ) ) )
+		{
+			my @doi = EPrints::Extras::render_possible_doi( $session, 'id_number', $eprint->get_value( "id_number" ) )->childNodes;
+			push @etddata, [ "identifier", $doi[0]->toString, "dc", "dcterms:DOI" ] if EPrints::Utils::is_set( $doi[0] );
+		}	
 	
 		my @documents = $eprint->get_all_documents();
 		my $mimetypes = $session->config( "oai", "mime_types" );

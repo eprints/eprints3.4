@@ -103,7 +103,7 @@ $c->{validate_field} = sub
 		}
 
 		# Unless duplicate usernames are explicitly permitted do not allow username to be changed to that of an existing user
-		if ( $field->get_name eq "username" && $field->dataset->id eq "user" && !$repository->config( "allow_duplicate_usernames" ) )
+		if ( $field->get_name eq "username" && $field->dataset->id eq "user" && defined $repository->param( 'dataobj' ) && !$repository->config( "allow_duplicate_usernames" ) )
 		{
                       	my $user_with_username = EPrints::DataObj::User::user_with_username( $repository, $v );
 			my $current_user = $field->dataset->dataobj( $repository->param( 'dataobj' ) );

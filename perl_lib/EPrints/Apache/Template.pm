@@ -7,7 +7,6 @@
 #
 ######################################################################
 
-
 =pod
 
 =for Pod2Wiki
@@ -87,7 +86,7 @@ The C<render_action_link> from L<EPrints::Plugin::Screen::SetLang>.
 
 =back
 
-=over 4
+=head1 METHODS
 
 =cut
 
@@ -97,12 +96,16 @@ use EPrints::Apache::AnApache; # exports apache constants
 
 use strict;
 
-
-
 ######################################################################
-#
-# EPrints::Apache::Template::handler( $r )
-#
+=pod
+
+=over 4
+
+=item $rc = EPrints::Apache::Template::handler( $r )
+
+Handler for applying site layout templates.
+
+=cut
 ######################################################################
 
 sub handler
@@ -168,21 +171,12 @@ sub handler
 	return OK;
 }
 
-
-
-
-
-
-
-
 1;
 
 ######################################################################
 =pod
 
 =back
-
-=cut
 
 =head1 SEE ALSO
 

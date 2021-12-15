@@ -4,6 +4,22 @@
 #
 ######################################################################
 
+=pod
+
+=for Pod2Wiki
+
+=head1 NAME
+
+EPrints::Apache::Sword
+
+=head1 DESCRIPTION
+
+Authenticates requests to EPrints' SWORD API
+
+=head1 METHODS
+
+=cut
+
 package EPrints::Apache::Sword;
 
 use strict;
@@ -11,6 +27,17 @@ use warnings;
 
 use MIME::Base64;
 
+######################################################################
+=pod
+
+=over 4
+
+=item $response = EPrints::Apache::Sword::authenticate( $session, $request )
+
+Authenticate SWORD request and return suitable response.
+
+=cut
+######################################################################
 
 sub authenticate
 {
@@ -141,7 +168,13 @@ sub authenticate
 
 1;
 
+=back
 
+=head1 SEE ALSO
+
+https://en.wikipedia.org/wiki/SWORD_(protocol)
+
+=head1 COPYRIGHT
 
 =for COPYRIGHT BEGIN
 

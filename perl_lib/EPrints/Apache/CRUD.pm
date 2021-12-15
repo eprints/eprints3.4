@@ -1,8 +1,19 @@
+######################################################################
+#
+# EPrints::Apache::CRUD
+#
+######################################################################
+#
+#
+######################################################################
+
+=pod
+
 =for Pod2Wiki {{Version|since=3.3.0}}
 
 =head1 NAME
 
-EPrints::Apache::CRUD - Create, read, update and delete via HTTP
+B<EPrints::Apache::CRUD> - Create, read, update and delete via HTTP
 
 =head1 SYNOPSIS
 
@@ -172,8 +183,6 @@ If you have the I<upsert> privilege objects will be created on demand, otherwise
 
 =head1 METHODS
 
-=over 4
-
 =cut
 
 package EPrints::Apache::CRUD;
@@ -300,99 +309,149 @@ sub new
 	return $self;
 }
 
+######################################################################
+=pod
+
+=over 4
+
 =item $repo = $crud->repository()
 
 Returns the current repository.
 
 =cut
+######################################################################
 
 sub repository { $_[0]->{repository} }
+
+######################################################################
+=pod
 
 =item $r = $crud->request()
 
 Returns the current L<Apache2::RequestUtil>.
 
 =cut
+######################################################################
 
 sub request { $_[0]->{request} }
+
+######################################################################
+=pod
 
 =item $method = $crud->method()
 
 Returns the HTTP method.
 
 =cut
+######################################################################
 
 sub method { $_[0]->{method} }
+
+######################################################################
+=pod
 
 =item $scope = $crud->scope()
 
 Returns the scope of the action being performed.
 
 =cut
+######################################################################
 
 sub scope { $_[0]->{scope} }
+
+######################################################################
+=pod
 
 =item $dataset = $crud->dataset()
 
 Returns the current dataset (if any).
 
 =cut
+######################################################################
 
 sub dataset { $_[0]->{dataset} }
+
+######################################################################
+=pod
 
 =item $dataobj = $crud->dataobj()
 
 Returns the current dataobj (if any).
 
 =cut
+######################################################################
 
 sub dataobj { $_[0]->{dataobj} }
+
+######################################################################
+=pod
 
 =item $field = $crud->field()
 
 Returns the current field (if available);
 
 =cut
+######################################################################
 
 sub field { $_[0]->{field} } 
+
+######################################################################
+=pod
 
 =item $headers = $crud->headers()
 
 Get the processed headers.
 
 =cut
+######################################################################
 
 sub headers { $_[0]->{headers} }
+
+######################################################################
+=pod
 
 =item @verbs = $crud->options()
 
 Returns the available HTTP verbs for the current request.
 
 =cut
+######################################################################
 
 sub options { @{$_[0]->{options}} }
+
+######################################################################
+=pod
 
 =item $plugin = $crud->plugin()
 
 Returns the current plugin (if available).
 
 =cut
+######################################################################
 
 sub plugin { $_[0]->{plugin} }
+
+######################################################################
+=pod
 
 =item $bool = $crud->is_write()
 
 Returns true if the request is not a read-only method.
 
 =cut
+######################################################################
 
 sub is_write { $_[0]->method !~ /^GET|HEAD|OPTIONS$/ }
+
+######################################################################
+=pod
 
 =item $accept_type = $crud->accept_type()
 
 Returns the EPrints type for the current request.
 
 =cut
+######################################################################
 
 sub accept_type
 {
@@ -415,11 +474,15 @@ sub accept_type
 	return $accept_type;
 }
 
+######################################################################
+=pod
+
 =item $rc = $crud->check_packaging()
 
 Check the Packaging header is ok, if given.
 
 =cut
+######################################################################
 
 sub check_packaging
 {
@@ -439,6 +502,9 @@ sub check_packaging
 	return OK;
 }
 
+######################################################################
+=pod
+
 =item $dataobj = $crud->resolve_relations( $dataobj [, @relations ] )
 
 Resolve the relation path from $dataobj and return the resulting dataobj.
@@ -446,6 +512,7 @@ Resolve the relation path from $dataobj and return the resulting dataobj.
 Returns undef if there is no such related object.
 
 =cut
+######################################################################
 
 sub resolve_relations
 {
@@ -538,7 +605,16 @@ sub _priv
 	return $priv;
 }
 
-# authentication
+######################################################################
+=pod
+
+=item $rc = $crud->authen
+
+Returns HTTP code based of whether CRUD request can be authenticated.
+
+=cut
+######################################################################
+
 sub authen
 {
 	my( $self ) = @_;
@@ -588,7 +664,16 @@ sub authen
 	return EPrints::Apache::Auth::authen( $r );
 }
 
-# authorisation
+######################################################################
+=pod
+
+=item $rc = $crud->authz
+
+Returns HTTP code based of whether CRUD request can be authorized.
+
+=cut
+######################################################################
+
 sub authz
 {
 	my( $self ) = @_;
@@ -633,14 +718,6 @@ sub authz
 	return HTTP_FORBIDDEN;
 }
 
-=item $list = $crud->parse_input( $plugin, $f [, %params ] )
-
-Parse the content submitted by the user using the given $plugin.  $f is called by epdata_to_dataobj to convert epdata to a dataobj.  %params are passed to the plugin's input_fh method.
-
-Returns undef on error.
-
-=cut
-
 sub _read_content
 {
 	my( $self ) = @_;
@@ -673,6 +750,18 @@ sub _read_content
 
 	return $tmpfile;
 }
+
+######################################################################
+=pod
+
+=item $list = $crud->parse_input( $plugin, $f [, %params ] )
+
+Parse the content submitted by the user using the given $plugin.  $f is called by epdata_to_dataobj to convert epdata to a dataobj.  %params are passed to the plugin's input_fh method.
+
+Returns undef on error.
+
+=cut
+######################################################################
 
 sub parse_input
 {
@@ -725,6 +814,18 @@ sub parse_input
 	return $list;
 }
 
+######################################################################
+=pod
+
+=item $dataobj = $crud->create_dataobj( $owner, $epdata )
+
+Creates data object as user $owner with metadata from $epdata
+
+Returns an L<EPrints::DataObj>
+
+=cut
+######################################################################
+
 sub create_dataobj
 {
 	my( $self, $owner, $epdata ) = @_;
@@ -747,11 +848,15 @@ sub create_dataobj
 	return $dataset->create_dataobj( $epdata );
 }
 
+######################################################################
+=pod
+
 =item @plugins = $crud->import_plugins( [ %params ] )
 
 Returns all matching import plugins against %params ordered by descending 'q' score.
 
 =cut
+######################################################################
 
 sub import_plugins
 {
@@ -777,11 +882,15 @@ sub import_plugins
 		} @plugins;
 }
 
+######################################################################
+=pod
+
 =item @plugins = $crud->export_plugins( [ %params ] )
 
 Returns all matching export plugins against %params ordered by descending 'q' score.
 
 =cut
+######################################################################
 
 sub export_plugins
 {
@@ -807,11 +916,15 @@ sub export_plugins
 		} @plugins;
 }
 
+######################################################################
+=pod
+
 =item $plugin = $crud->content_negotiate_best_plugin()
 
 Work out the best plugin to export/update an object based on the client-headers.
 
 =cut
+######################################################################
 
 sub content_negotiate_best_plugin
 {
@@ -967,7 +1080,17 @@ sub content_negotiate_best_plugin
 	return $match;
 }
 
-# http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1
+######################################################################
+=pod
+
+=item EPrints::Apache::CRUD( $media_range )
+
+Takes the $media_range string and returns array of acceptable MIME types.
+See L<http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1>
+for more detail.
+
+=cut
+
 sub parse_media_range
 {
 	my( $media_range ) = @_;
@@ -992,6 +1115,18 @@ sub parse_media_range
 
 	return map { [ delete $_->{mime_type}, undef, %$_ ] } @accept;
 }
+
+######################################################################
+=pod
+
+=item $rc = $crud->handler
+
+Handler of CRUD requests.
+
+Returns HTTP response code.
+
+=cut
+######################################################################
 
 sub handler
 {
@@ -1049,6 +1184,9 @@ sub handler
 	return HTTP_METHOD_NOT_ALLOWED;
 }
 
+######################################################################
+=pod
+
 =item $rc = $crud->DELETE()
 
 Handle DELETE requests.
@@ -1074,6 +1212,7 @@ Successfully removed the object.
 =back
 
 =cut
+######################################################################
 
 sub DELETE
 {
@@ -1120,6 +1259,9 @@ sub DELETE
 	return HTTP_NO_CONTENT;
 }
 
+######################################################################
+=pod
+
 =item $rc = $crud->GET( [ $owner ] )
 
 Handle GET requests.
@@ -1153,6 +1295,7 @@ Object outputted successfully.
 =back
 
 =cut
+######################################################################
 
 sub GET
 {
@@ -1323,6 +1466,9 @@ sub GET
 	return OK;
 }
 
+######################################################################
+=pod
+
 =item $rc = $crud->POST( [ $owner ] )
 
 Handle POST requests.
@@ -1344,6 +1490,7 @@ Object(s) successfully created.
 =back
 
 =cut
+######################################################################
 
 sub POST 
 {
@@ -1451,6 +1598,9 @@ $r->err_headers_out->{Location} = $items[0]->uri . '/contents';
 	}
 }
 
+######################################################################
+=pod
+
 =item $rc = $crud->PUT( [ $owner ] )
 
 Handle PUT requests.
@@ -1480,6 +1630,7 @@ Object was successfully updated.
 =back
 
 =cut
+######################################################################
 
 # PUT /id/eprint/23
 sub PUT
@@ -1624,6 +1775,9 @@ sub PUT
 	return HTTP_NO_CONTENT;
 }
 
+######################################################################
+=pod
+
 =item $rc = $crud->PUT_contents( [ $owner ] )
 
 Equivalent to C<DELETE /id/.../contents> then C<POST /id/.../contents>.
@@ -1631,6 +1785,7 @@ Equivalent to C<DELETE /id/.../contents> then C<POST /id/.../contents>.
 See L</DELETE> and L</POST>.
 
 =cut
+######################################################################
 
 sub PUT_contents
 {
@@ -1676,6 +1831,18 @@ sub PUT_contents
 
 	return HTTP_NO_CONTENT;
 }
+
+######################################################################
+=pod
+
+=item $crud->metadata_relevant( $file )
+
+Test and if suitable use $file as metadata source to updatie
+the associated L<EPrints::DataObj::EPrint>.
+
+=cut
+
+######################################################################
 
 sub metadata_relevant
 {
@@ -1751,6 +1918,17 @@ sub metadata_relevant
 	$eprint->update( $epdata );
 	$eprint->commit;
 }
+
+######################################################################
+=pod
+
+=item $crud->servicedocument
+
+Gennerate response containing CRUD service document.
+
+=cut
+
+######################################################################
 
 sub servicedocument
 {
@@ -1862,7 +2040,19 @@ sub servicedocument
 	);
 }
 
-### Utility methods below
+######################################################################
+=pod
+
+=item $rc = $crud->on_behalf_of( $user )
+
+Submit CRUD request on behalf od another user.
+
+Returns HTTPS response code based on wehther request on behalf of is 
+permitted.
+
+=cut
+
+######################################################################
 
 sub on_behalf_of
 {
@@ -1887,18 +2077,49 @@ sub on_behalf_of
 	return( OK, $owner );
 }
 
+######################################################################
+=pod
+
+=item $boolean = EPrints::Apache::Crud::is_true( $header )
+
+Tests if $header attribute is true.
+
+=cut
+
+######################################################################
+
 sub is_true
 {
 	return defined($_[0]) && lc($_[0]) eq "true";
 }
+
+######################################################################
+=pod
+
+=item $boolean = EPrints::Apache::Crud::is_false( $header )
+
+Tests if $header attribute is false.
+
+=cut
+
+######################################################################
 
 sub is_false
 {
 	return defined($_[0]) && lc($_[0]) eq "false";
 }
 
-##check the filesize is set correctly in the given epdata obj and the md5 check sum matching
-##The check only happens when file is using "_content" 
+######################################################################
+=pod
+
+=item $boolean = $crud->is_file_ok( $epdata )
+
+Tests if files with $epdata were uploaded with corruption.
+
+=cut
+
+######################################################################
+
 sub is_file_ok
 {
 	my( $self, $epdata ) = @_;
@@ -1941,7 +2162,16 @@ sub is_file_ok
 	return $file_checking_succ;
 }
 
+######################################################################
+=pod
 
+=item $boolean = $crud->process_headers
+
+Process headers of CRUD request
+
+=cut
+
+######################################################################
 
 sub process_headers
 {
@@ -2050,6 +2280,17 @@ sub process_headers
 	return OK;
 }
 
+######################################################################
+=pod
+
+=item $boolean = $crud->( %opts )
+
+Generate SWORD error documents based on provided %opts.
+
+=cut
+
+######################################################################
+
 sub sword_error
 {
 	my( $self, %opts ) = @_;
@@ -2070,7 +2311,17 @@ sub sword_error
 	);
 }
 
-# input_fh() failed
+######################################################################
+=pod
+
+=item $boolean = $crud->plugin_error( $plugin, $messages )
+
+Generate error message for import $plugin used with $messages provided.
+
+=cut
+
+######################################################################
+
 sub plugin_error
 {
 	my( $self, $plugin, $messages ) = @_;
@@ -2092,7 +2343,18 @@ sub plugin_error
 	);
 }
 
-# other helper functions:
+######################################################################
+=pod
+
+=item $error_document = EPrints::Apache::Crud::generate_error_document( $repo, %opts )
+
+Return error document for L<EPrints::Repository> $repo using options 
+from %opts.
+
+=cut
+
+######################################################################
+
 sub generate_error_document
 {
 	my ( $repo, %opts ) = @_;
@@ -2120,6 +2382,20 @@ sub generate_error_document
 	return "<?xml version='1.0' encoding='UTF-8'?>\n" .
 		$xml->to_string( $error, indent => 1 );
 }
+
+######################################################################
+=pod
+
+=item $rc = $crud->send_response( $status, $content_type, $content )
+
+Output response to CRUD request with HTTP status code $status,
+content type $content_type.
+
+Returns HTTP response code OK.
+
+=cut
+
+######################################################################
 
 sub send_response
 {

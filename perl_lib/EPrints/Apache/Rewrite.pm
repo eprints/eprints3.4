@@ -7,8 +7,9 @@
 #
 ######################################################################
 
-
 =pod
+
+=for Pod2Wiki
 
 =head1 NAME
 
@@ -30,7 +31,7 @@ This should only ever be called from within the mod_perl system.
 
 This also causes some pages to be regenerated on demand, if they are stale.
 
-=over 4
+=head1 METHODS
 
 =cut
 
@@ -41,6 +42,18 @@ use EPrints::Apache::AnApache; # exports apache constants
 use Data::Dumper;
 
 use strict;
+
+######################################################################
+=pod
+
+=over 4
+
+=item $rc = EPrints::Apache::Rewrite::handler( $r )
+
+Handler for managing EPrints rewrite requests.
+
+=cut
+######################################################################
   
 sub handler 
 {
@@ -954,7 +967,7 @@ sub content_negotiate_best_plugin
 
 1;
 
-
+=back
 
 =head1 COPYRIGHT
 

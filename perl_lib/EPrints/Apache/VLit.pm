@@ -7,8 +7,9 @@
 #
 ######################################################################
 
-
 =pod
+
+=for Pod2Wiki
 
 =head1 NAME
 
@@ -21,8 +22,6 @@ subsets of the whole to be served.
 
 This is an experimental feature. It may be turned off in the 
 configuration if you object to it for some reason.
-
-=over 4
 
 =cut
 
@@ -37,12 +36,16 @@ use strict;
 
 my $TMPDIR = "/tmp/partial";
 
-
-
 ######################################################################
-#
-# EPrints::Apache::VLit::handler( $r )
-#
+=pod
+
+=over 4
+
+=item $rc = EPrints::Apache::VLit::handler( $r )
+
+Handler for managing EPrints VLit requests.
+
+=cut
 ######################################################################
 
 sub handler
@@ -111,13 +114,15 @@ sub handler
 	return OK;
 }
 
-
-
-
 ######################################################################
-#
-# EPrints::Apache::VLit::send_http_error( $code, $message )
-#
+=pod
+
+=item EPrints::Apache::VLit::send_http_error( $code, $message )
+
+Generates and prints VLit error message page with HTTP error $code and 
+$message provided.
+
+=cut
 ######################################################################
 
 sub send_http_error
@@ -139,11 +144,14 @@ sub send_http_error
 END
 }
 
-
 ######################################################################
-#
-# EPrints::Apache::VLit::send_http_header( $type )
-#
+=pod
+
+=item EPrints::Apache::VLit::send_http_header( $type )
+
+Generates HTTP header part of VLit response with content type $type.
+
+=cut
 ######################################################################
 
 sub send_http_header
@@ -160,11 +168,15 @@ sub send_http_header
 }
 
 
-
 ######################################################################
-#
-# EPrints::Apache::VLit::ls_charrange( $filename, $param, $locspec, $r, $baseurl, $args )
-#
+=pod
+
+=item EPrints::Apache::VLit::ls_charrange( $filename, $param, $locspec, $r, $baseurl, $args )
+
+Generate VLit response for a specific character range in a particular
+file.
+
+=cut 
 ######################################################################
 
 sub ls_charrange
@@ -402,11 +414,14 @@ END
 	}
 }
 
-
 ######################################################################
-#
-# EPrints::Apache::VLit::ls_area( $file, $param, $resspec, $r, $baseurl, $args )
-#
+=pod
+
+=item EPrints::Apache::VLit::ls_area( $file, $param, $resspec, $r, $baseurl, $args )
+
+Generate VLit response for a specific page area in a particular file.
+
+=cut
 ######################################################################
 
 sub ls_area
@@ -558,13 +573,14 @@ END
 	print `$cmd`;
 }
 
-
-
-
 ######################################################################
-#
-# EPrints::Apache::VLit::cache_file( $resspec, $param )
-#
+=pod
+
+=item EPrints::Apache::VLit::cache_file( $resspec, $param )
+
+Cache file for VLit request.
+
+=cut
 ######################################################################
 
 sub cache_file
@@ -588,13 +604,11 @@ sub cache_file
 
 1;
 
-######################################################################
-=pod
-
 =back
 
-=cut
+=head1 SEE ALSO
 
+https://wiki.eprints.org/w/VLit
 
 =head1 COPYRIGHT
 

@@ -10,6 +10,8 @@
 
 =pod
 
+=for Pod2Wiki
+
 =head1 NAME
 
 B<EPrints::Apache::AnApache> - Utility methods for talking to mod_perl
@@ -20,8 +22,6 @@ This module provides a number of utility methods for interacting with the
 request object.
 
 =head1 METHODS
-
-=over 4
 
 =cut
 
@@ -53,6 +53,8 @@ use strict;
 ######################################################################
 =pod
 
+=over 4
+
 =item EPrints::Apache::AnApache::send_http_header( $request )
 
 Send the HTTP header, if needed.
@@ -69,6 +71,9 @@ sub send_http_header
 	# do nothing!
 }
 
+######################################################################
+=pod
+
 =item EPrints::Apache::AnApache::header_out( $request, $header, $value )
 
 Set a value in the HTTP headers of the response. $request is the
@@ -76,6 +81,7 @@ apache request object, $header is the name of the header and
 $value is the value to give that header.
 
 =cut
+######################################################################
 
 sub header_out
 {
@@ -84,11 +90,15 @@ sub header_out
 	$request->headers_out->{$header} = $value;
 }
 
+######################################################################
+=pod
+
 =item $value = EPrints::Apache::AnApache::header_in( $request, $header )
 
 Return the specified HTTP header from the current request.
 
 =cut
+######################################################################
 
 sub header_in
 {
@@ -97,11 +107,15 @@ sub header_in
 	return $request->headers_in->{$header};
 }
 
+######################################################################
+=pod
+
 =item $request = EPrints::Apache::AnApache::get_request
 
 Return the current Apache request object.
 
 =cut
+######################################################################
 
 sub get_request
 {
@@ -115,7 +129,7 @@ sub get_request
 
 Return the value of the named cookie, or undef if it is not set.
 
-This avoids using L<CGI>, so does not consume the POST data.
+This avoids using CGI, so does not consume the POST data.
 
 =cut
 ######################################################################
@@ -140,12 +154,16 @@ sub cookie
 	return undef;
 }
 
+######################################################################
+=pod
+
 =item EPrints::Apache::AnApache::upload_doc_file( $session, $document, $paramid );
 
 Collect a file named $paramid uploaded via HTTP and add it to the 
 specified $document.
 
 =cut
+######################################################################
 
 sub upload_doc_file
 {
@@ -163,12 +181,16 @@ sub upload_doc_file
 	);	
 }
 
+######################################################################
+=pod
+
 =item EPrints::Apache::AnApache::upload_doc_archive( $session, $document, $paramid, $archive_format );
 
 Collect an archive file (.ZIP, .tar.gz, etc.) uploaded via HTTP and 
 unpack it then add it to the specified document.
 
 =cut
+######################################################################
 
 sub upload_doc_archive
 {
@@ -205,6 +227,9 @@ sub send_status_line
 	$request->status( $code );
 }
 
+######################################################################
+=pod
+
 =item $rc = EPrints::Apache::AnApache::ranges( $r, $maxlength, $chunks )
 
 Populates the byte-ranges in $chunks requested by the client.
@@ -214,6 +239,7 @@ $maxlength is the length, in bytes, of the resource.
 Returns the appropriate byte-range result code or OK if no "Range" header is set.
 
 =cut
+######################################################################
 
 sub ranges
 {
@@ -278,18 +304,20 @@ sub ranges
 
 1;
 
+=back
+
 =head1 COPYRIGHT
 
-=for COPYRIGHT BEGIN
+=begin COPYRIGHT
 
 Copyright 2021 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/
 
-=for COPYRIGHT END
+=end COPYRIGHT
 
-=for LICENSE BEGIN
+=begin LICENSE
 
 This file is part of EPrints 3.4 L<http://www.eprints.org/>.
 
@@ -306,5 +334,5 @@ You should have received a copy of the GNU Lesser General Public
 License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
-=for LICENSE END
+=end LICENSE
 

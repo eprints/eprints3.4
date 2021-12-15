@@ -9,6 +9,8 @@
 
 =pod
 
+=for Pod2Wiki
+
 =head1 NAME
 
 EPrints::Apache::LogHandler - Main handler for Apache log events
@@ -44,8 +46,6 @@ The document id as a fragment of the referent: C<#docid>.
 =back
 
 =head1 METHODS
-
-=over 4
 
 =cut
 
@@ -99,7 +99,33 @@ our @USERAGENT_ROBOTS = map { qr/$_/i } qw{
 our %ROBOTS_CACHE; # key=IP, value=time (or -time if not a robot)
 our $TIMEOUT = 3600; # 1 hour
 
-sub handler {} # deprecated
+######################################################################
+=pod
+
+=over 4
+
+=item EPrints:Apache::LogHandler::handler
+
+Empty (as deprecated)  handler method.
+
+=cut
+######################################################################
+
+sub handler {}
+
+######################################################################
+=pod
+
+=item EPrints:Apache::LogHandler::is_robot( $r, $ip )
+
+Test if request $r is a robot based on I<User-Agent> or if $ip is
+listed as a robot.
+
+Returns boolean dependent or whether request has determined to be a 
+robot.
+
+=cut
+######################################################################
 
 sub is_robot
 {
@@ -132,11 +158,15 @@ sub is_robot
 	return $is_robot;
 }
 
+######################################################################
+=pod
+
 =item $handler->document( $r )
 
 A request on a document.
 
 =cut
+######################################################################
 
 sub document
 {
@@ -179,11 +209,15 @@ sub document
 	return _create_access( $r, $epdata );
 }
 
+######################################################################
+=pod
+
 =item $handler->eprint( $r )
 
 A request on an eprint abstract page.
 
 =cut
+######################################################################
 
 sub eprint
 {

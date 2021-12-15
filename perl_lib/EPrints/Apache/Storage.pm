@@ -7,9 +7,9 @@
 #
 ######################################################################
 
-package EPrints::Apache::Storage;
+=pod
 
-# This handler serves document files and thumbnails
+=for Pod2Wiki
 
 =head1 NAME
 
@@ -77,13 +77,29 @@ If differs from the B<hash> value of the file object returns "304 Not Modified".
 
 =back
 
+=head1 METHODS
+
 =cut
+
+package EPrints::Apache::Storage;
 
 use EPrints::Const qw( :http );
 use APR::Date ();
 use APR::Base64 ();
 
 use strict;
+
+######################################################################
+=pod
+
+=over 4
+
+=item $rc = EPrints::Apache::Storage::handler( $r )
+
+Handler for serving document files and thumbnails.
+
+=cut
+######################################################################
 
 sub handler
 {
@@ -289,6 +305,8 @@ sub handler
 }
 
 1;
+
+=back
 
 =head1 COPYRIGHT
 

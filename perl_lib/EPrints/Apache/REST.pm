@@ -1,9 +1,3 @@
-=head1 NAME
-
-EPrints::Apache::REST
-
-=cut
-
 ######################################################################
 #
 # EPrints::Apache::REST
@@ -13,12 +7,40 @@ EPrints::Apache::REST
 #
 ######################################################################
 
+=pod
+
+=for Pod2Wiki
+
+=head1 NAME
+
+EPrints::Apache::REST - Representational state transfer
+
+=head1 DESCRIPTION
+
+REST API for EPrints
+
+=head1 METHODS
+
+=cut
+
 package EPrints::Apache::REST;
 
 use EPrints::Apache::AnApache; # exports apache constants
 
 use strict;
 use warnings;
+
+######################################################################
+=pod
+
+=over 4
+
+=item $rc = EPrints::Apache::REST::handler( $r )
+
+Handler for EPrints' REST API
+
+=cut
+######################################################################
 
 sub handler
 {
@@ -48,6 +70,18 @@ sub handler
 	return serve_top_level( $repository, @path );
 }
 
+
+######################################################################
+=pod
+
+=item $rc = EPrints::Apache::REST::redir_add_slash( $repository )
+
+Redirect to the current request for the $repository with an added 
+slash '/' at the end of the path.
+
+=cut
+######################################################################
+
 sub redir_add_slash
 {
 	my( $repository ) = @_;
@@ -55,7 +89,17 @@ sub redir_add_slash
 	return $repository->redirect( $repository->get_uri."/" );
 }
 
-## SERVE FUNCTIONS
+
+######################################################################
+=pod
+
+=item $rc = EPrints::Apache::Login::serve_top_level( $repository, @path )
+
+Serve top level list of datasets (i.e. eprint, user and subject) or 
+pass onto B<EPrints::Apache::Login::serve_datasets>. dependent of @path.
+
+=cut
+######################################################################
 
 sub serve_top_level
 {
@@ -95,6 +139,20 @@ sub serve_top_level
 
 	return serve_dataset( $repository, $dataset, @path );
 }
+
+
+######################################################################
+=pod
+
+=item $rc = EPrints::Apache::REST::serve_dataset( $repository, $dataset, @path )
+
+Serve listing of data objects for a particular dataset, pass onto
+B<EPrints::Apache::Login::serve_dataobj>, B<EPrints::Apache::Login::get_dataobj_xml>
+or B<EPrints::Apache::Login::put_dataobj_xml>,or return an appropriate
+HTTP error code.
+
+=cut
+######################################################################
 
 sub serve_dataset
 {
@@ -173,6 +231,17 @@ sub serve_dataset
 	return serve_dataobj( $repository, $object, $object, @path );
 }
 
+######################################################################
+=pod
+
+=item $rc = EPrints::Apache::REST::serve_dataobj( $repository, $object, $rights_object, @path )
+
+Servee HTML, XML or text version of data object from GET or PUT request,
+pass onto B<EPrints::Apache::REST::serve_field> or otherwise return an
+appropriate HTTP error code.
+
+=cut
+######################################################################
 
 sub serve_dataobj
 {
@@ -271,6 +340,18 @@ sub serve_dataobj
 	return serve_field( $repository, $object, $rights_object, $field, $v, @path );
 }
 
+######################################################################
+=pod
+
+=item $rc = EPrints::Apache::REST::serve_field( $repository, $object, $rights_object, $field, $value, @path )
+
+Servee HTML, XML or text version of data object from GET requests
+passsingel field requests onto B<EPrints::Apache::REST::serve_field_single> 
+or otherwise return an appropriate HTTP error code.
+
+=cut
+######################################################################
+
 sub serve_field
 {
 	my( $repository, $object, $rights_object, $field, $value, @path ) = @_;
@@ -364,6 +445,18 @@ sub serve_field
 	return serve_field_single( $repository, $object, $rights_object, $field, $value->[$i], @path );
 }
 
+######################################################################
+=pod
+
+=item $rc = EPrints::Apache::REST::serve_field_single( $repository, $object, $rights_object, $field, $value, @path )
+
+Servee single field representation by passing onto B<EPrints::Apache::REST::serve_subobject>,
+B<EPrints::Apache::REST::serve_compound> or B<EPrints::Apache::REST::serve_name>
+base on type of field.
+
+=cut
+######################################################################
+
 sub serve_field_single
 {
 	my( $repository, $object, $rights_object, $field, $value, @path ) = @_;
@@ -385,6 +478,16 @@ sub serve_field_single
 	return 500;
 }
 
+######################################################################
+=pod
+
+=item $rc = EPrints::Apache::REST::serve_suboject( $repository, $object, $rights_object, $field, $value, @path )
+
+Serves sub-object by passing onto B<EPrints::Apache::REST::serve_dataobj>.
+
+=cut
+######################################################################
+
 sub serve_subobject
 {
 	my( $repository, $object, $rights_object, $field, $value, @path ) = @_;
@@ -394,6 +497,16 @@ sub serve_subobject
 	return serve_dataobj( $repository, $value, $rights_object, @path );
 }
 
+######################################################################
+=pod
+
+=item $rc = EPrints::Apache::REST::serve_compound( $repository, $object, $rights_object, $field, $value, @path )
+
+Serves compound field by iterating over sub-field, calling 
+B<EPrints::Apache::REST::serve_field_single> where appropriate.
+
+=cut
+######################################################################
 
 sub serve_compound
 {
@@ -467,6 +580,17 @@ sub serve_compound
 	return 404;
 }
 
+######################################################################
+=pod
+
+=item $rc = EPrints::Apache::REST::serve_compound( $repository, $object, $rights_object, $field, $value, @path )
+
+Serves name field.
+
+=cut
+######################################################################
+
+
 sub serve_name
 {
 	my( $repository, $object, $rights_object, $field, $value, @path ) = @_;
@@ -505,7 +629,15 @@ END
 # END OF serve_
 
 
+######################################################################
+=pod
 
+=item $rc = EPrints::Apache::REST::render_html( $html, $title )
+
+Renders HTML for REST request.
+
+=cut
+######################################################################
 
 sub render_html
 {
@@ -540,6 +672,16 @@ $html
 END
 }
 
+######################################################################
+=pod
+
+=item $rc = EPrints::Apache::REST::send_html( $repository, $html, $title )
+
+Sends HTML response for REST request.
+
+=cut
+######################################################################
+
 sub send_html
 {
 	my( $repository, $html, $title ) = @_;
@@ -551,6 +693,16 @@ sub send_html
 
 	return DONE;
 }
+
+######################################################################
+=pod
+
+=item $rc = EPrints::Apache::REST::send_html( $repository, $xmldata )
+
+Sends XML response for REST request.
+
+=cut
+######################################################################
 
 sub send_xml
 {
@@ -572,6 +724,16 @@ sub send_xml
 	return DONE;
 }
 
+######################################################################
+=pod
+
+=item $rc = EPrints::Apache::REST::send_html( $repository, $content )
+
+Sends plaintext response for REST request.
+
+=cut
+######################################################################
+
 sub send_plaintext
 {
 	my( $repository, $content ) = @_;
@@ -585,6 +747,20 @@ sub send_plaintext
 
 	return DONE;
 }
+
+######################################################################
+=pod
+
+=item $allowed = EPrints::Apache::REST::allowed_methods( $repository, @methods )
+
+Checks if method for eequest is contained with the @methods array of
+allowed methods.  Setting and sending HTTP response headers and code
+as appropriate.
+
+Returns boolean depending on whether the request method is allowed.
+
+=cut
+######################################################################
 
 sub allowed_methods
 {
@@ -613,6 +789,19 @@ sub allowed_methods
 
 	return 0;
 }
+
+######################################################################
+=pod
+
+=item $allowed = EPrints::Apache::REST::allowed_methods( $priv $repository, $rights_object )
+
+Checks is privilege $priv is permitted for the current user and sets
+HTTP response code as appropriate.
+
+Returns boolean depending on whether current user has permitted privilege.
+
+=cut
+######################################################################
 
 sub allow_priv
 {
@@ -659,9 +848,15 @@ sub allow_priv
 	return 1;
 }
 
+######################################################################
+=pod
 
+=item $rc = EPrints::Apache::REST::get_dataobj_xml( $repository, $object, $rights_object )
 
-# end of GET and PUT methods
+Returns XML ot REST request to get a data object.
+
+=cut
+######################################################################
 
 sub get_dataobj_xml
 {
@@ -672,6 +867,15 @@ sub get_dataobj_xml
 	return send_xml( $repository, $object->export( "XML" ) );
 }
 
+######################################################################
+=pod
+
+=item $rc = EPrints::Apache::REST::put_dataobj_xml( $repository, $object, $rights_object )
+
+Returns XML to REST request to (non-implemented) put data object.
+
+=cut
+######################################################################
 
 sub put_dataobj_xml
 {
@@ -682,6 +886,16 @@ sub put_dataobj_xml
 	my $put = $repository->xml->create_element( "put", result=>"not-implemented" );
 	return send_xml( $repository, EPrints::XML::to_string( $put ) );
 }
+
+######################################################################
+=pod
+
+=item $rc = EPrints::Apache::REST::get_field_text( $repository, $object, $rights_object, $field )
+
+Returns text to to REST request to get field.
+
+=cut
+######################################################################
 
 sub get_field_txt
 {
@@ -694,6 +908,16 @@ sub get_field_txt
 	return send_plaintext( $repository, $v );
 }
 
+######################################################################
+=pod
+
+=item $rc = EPrints::Apache::REST::get_field_xml( $repository, $object, $rights_object, $field )
+
+Returns XML for REST request for a field.
+
+=cut
+######################################################################
+
 sub get_field_xml
 {
 	my( $repository, $object, $rights_object, $field ) = @_;
@@ -705,6 +929,16 @@ sub get_field_xml
 	my $xml_str = EPrints::XML::to_string( $xml_dom );
 	return send_xml( $repository, $xml_str."\n" );
 }
+
+######################################################################
+=pod
+
+=item $rc = EPrints::Apache::REST::put_field_xml( $repository, $object, $rights_object, $field )
+
+Returns XML for REST request to put a field.
+
+=cut
+######################################################################
 
 sub put_field_xml
 {
@@ -750,6 +984,16 @@ sub put_field_xml
 	return send_xml( $repository, EPrints::XML::to_string( $put ) );
 }
 
+######################################################################
+=pod
+
+=item $rc = EPrints::Apache::REST::put_field_txt( $repository, $object, $rights_object, $field )
+
+Returns text for REST request to put a field.
+
+=cut
+######################################################################
+
 sub put_field_txt
 {
 	my( $repository, $object, $rights_object, $field ) = @_;
@@ -771,6 +1015,7 @@ sub put_field_txt
 
 1;
 
+=back
 
 =head1 COPYRIGHT
 

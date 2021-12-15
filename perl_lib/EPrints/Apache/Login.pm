@@ -1,9 +1,3 @@
-=head1 NAME
-
-EPrints::Apache::Login
-
-=cut
-
 ######################################################################
 #
 # EPrints::Apache::Login
@@ -13,12 +7,40 @@ EPrints::Apache::Login
 #
 ######################################################################
 
+=pod
+
+=for Pod2Wiki
+
+=head1 NAME
+
+EPrints::Apache::Login
+
+=head1 DESCRIPTION
+
+EPrints Login handler.
+
+=head1 METHODS
+
+=cut
+
 package EPrints::Apache::Login;
 
 use strict;
 
 use EPrints;
 use EPrints::Apache::AnApache;
+
+######################################################################
+=pod
+
+=over 4
+
+=item $rc = EPrints::Apache::Login::handler( $r )
+
+Handler for managing EPrints login requests.
+
+=cut
+######################################################################
 
 sub handler
 {
@@ -49,6 +71,8 @@ sub handler
 }
 
 1;
+
+=back
 
 =head1 COPYRIGHT
 

@@ -10,6 +10,8 @@
 
 =pod
 
+=for Pod2Wiki
+
 =head1 NAME
 
 B<EPrints::Apache::Auth> - Password authentication & authorisation checking 
@@ -20,7 +22,7 @@ for EPrints.
 This module handles the authentication and authorisation of users
 viewing private sections of an EPrints website.
 
-=over 4
+=head1 METHODS
 
 =cut
 ######################################################################
@@ -32,6 +34,21 @@ use strict;
 use EPrints::Apache::AnApache; # exports apache constants
 use URI;
 use MIME::Base64;
+
+######################################################################
+=pod
+
+=over 4
+
+=item $rc = EPrints::Apache::Auth::authen( $r, [ $realm ] )
+
+Perform authentication on request $r.  If using auth_basic then include
+$realm as well.
+
+Returns an HTTP response code.
+
+=cut
+######################################################################
 
 sub authen
 {
@@ -114,6 +131,19 @@ sub _use_auth_basic
 	return $rc;
 }
 
+######################################################################
+=pod
+
+=item $rc = EPrints::Apache::Auth::authen_doc( $r, [ $realm ] )
+
+Perform authentication on request $r for a document.  If using 
+auth_basic then include $realm as well.
+
+Returns an HTTP response code.
+
+=cut
+######################################################################
+
 sub authen_doc
 {
 	my( $r, $realm ) = @_;
@@ -132,9 +162,22 @@ sub authen_doc
 	return $rc ? OK : authen( $r, $realm );
 }
 
+######################################################################
+=pod
+
+=item $rc = EPrints::Apache::Auth::auth_cookie( $r, $repository )
+
+Perform authentication by cookie on request $r for repository $repository.  
+Redirect as appropriate.
+
+Returns an HTTP response code.
+
+=cut
+######################################################################
+
 sub auth_cookie
 {
-	my( $r, $repository, $redir ) = @_;
+	my( $r, $repository ) = @_;
 
 	my $user = $repository->current_user;
 
@@ -196,6 +239,18 @@ sub auth_cookie
 	return OK;
 }
 
+######################################################################
+=pod
+
+=item $rc = EPrints::Apache::Auth::auth_basic( $r, $repository, $realm )
+
+Perform authentication by basic authentication on request $r for 
+repository $repository.
+
+Returns an HTTP response code.
+
+=cut
+######################################################################
 
 sub auth_basic
 {
@@ -238,12 +293,36 @@ sub auth_basic
 	return OK;
 }
 
+######################################################################
+=pod
+
+=item $rc = EPrints::Apache::Auth::authz( $r )
+
+Perform authorization of request $r.
+
+Returns an HTTP response code (always 200 OK).
+
+=cut
+######################################################################
+
 sub authz
 {
 	my( $r ) = @_;
 
 	return OK;
 }
+
+######################################################################
+=pod
+
+=item $rc = EPrints::Apache::Auth::authz( $r )
+
+Perform authorization of request $r for a document.
+
+Returns an HTTP response code
+
+=cut
+######################################################################
 
 sub authz_doc
 {
@@ -264,9 +343,6 @@ sub authz_doc
 =pod
 
 =back
-
-=cut
-
 
 =head1 COPYRIGHT
 

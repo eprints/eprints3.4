@@ -1,9 +1,3 @@
-=head1 NAME
-
-EPrints::Apache::RobotsTxt
-
-=cut
-
 ######################################################################
 #
 # EPrints::Apache::RobotsTxt
@@ -13,12 +7,41 @@ EPrints::Apache::RobotsTxt
 #
 ######################################################################
 
+=pod
+
+=for Pod2Wiki
+
+=head1 NAME
+
+EPrints::Apache::RobotsTxt
+
+=head1 DESCRIPTION
+
+Generate a dynamic output for request of /robots.txt
+
+=head1 METHODS
+
+=cut
+
 package EPrints::Apache::RobotsTxt;
 
 use EPrints::Apache::AnApache; # exports apache constants
 
 use strict;
 use warnings;
+
+######################################################################
+=pod
+
+=over 4
+
+=item $rc = EPrints::Apache::RobotsTxt::handler( $r )
+
+Handler for managing EPrints requests for dynamically generated
+robots.txt.
+
+=cut
+######################################################################
 
 sub handler
 {
@@ -73,6 +96,8 @@ END
 
 
 1;
+
+=back
 
 =head1 COPYRIGHT
 

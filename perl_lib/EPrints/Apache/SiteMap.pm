@@ -1,9 +1,3 @@
-=head1 NAME
-
-EPrints::Apache::SiteMap
-
-=cut
-
 ######################################################################
 #
 # EPrints::Apache::SiteMap
@@ -13,6 +7,33 @@ EPrints::Apache::SiteMap
 #
 ######################################################################
 
+=pod
+
+=for Pod2Wiki
+
+=head1 NAME
+
+EPrints::Apache::SiteMap
+
+=head1 DESCRIPTION
+
+This handler has been heavily modified in order to support a static
+sitemap.xml file in addition to the semantic web crawling extensions
+provided by EPrints. The modified handler inserts the semantic web
+crawling extensions into the existing sitemap.xml if it exists, or
+creates a new document if it doesn't. The original handler is now in
+the _insert_semantic_web_extensions below.
+
+If the static sitemap XML is a sitemapindex, this handler inserts a
+new <sitemap> element into the index, which directs crawlers to a
+"sitemap-sc.xml" URL that contains the semantic web sitemap generated
+by _insert_semantic_web_extensions. This handler also implements the
+sitemap-sc.xml URL.
+
+=head1 METHODS
+
+=cut
+
 package EPrints::Apache::SiteMap;
 
 use EPrints::Apache::AnApache; # exports apache constants
@@ -20,20 +41,20 @@ use EPrints::Apache::AnApache; # exports apache constants
 use strict;
 use warnings;
 
-#
-# This handler has been heavily modified in order to support a static
-# sitemap.xml file in addition to the semantic web crawling extensions
-# provided by EPrints. The modified handler inserts the semantic web
-# crawling extensions into the existing sitemap.xml if it exists, or
-# creates a new document if it doesn't. The original handler is now in
-# the _insert_semantic_web_extensions below.
-#
-# If the static sitemap XML is a sitemapindex, this handler inserts a
-# new <sitemap> element into the index, which directs crawlers to a
-# "sitemap-sc.xml" URL that contains the semantic web sitemap generated
-# by _insert_semantic_web_extensions. This handler also implements the
-# sitemap-sc.xml URL.
-#
+######################################################################
+=pod
+
+=over 4
+
+=item $rc = EPrints::Apache::SiteMap::handler( $r )
+
+Handler for managing EPrints requests for dynamically generated
+sitemap.xml or sitemap-sc.xml (or returning static version if that
+exists).
+
+=cut
+######################################################################
+
 sub handler
 {
 	my( $r ) = @_;
@@ -166,8 +187,9 @@ sub _create_data
 	return $node;
 }
 
-
 1;
+
+=back
 
 =head1 COPYRIGHT
 

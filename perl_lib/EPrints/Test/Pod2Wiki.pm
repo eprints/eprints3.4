@@ -125,16 +125,17 @@ sub new
 ######################################################################
 =pod 
 
-=item $ok = $pod->update_page( $package_name )
+=item $ok = $pod->update_page( $package_name, $selfcat )
 
-Update the MediaWiki page for $package_name.
+Update the MediaWiki page for $package_name.  If $selfcat then add to
+its own category.
 
 =cut
 ######################################################################
 
 sub update_page
 {
-	my( $self, $package_name ) = @_;
+	my( $self, $package_name, $selfcat ) = @_;
 
 	_flush_seen(); # see method
 	local $self->{_out} = [];
@@ -145,6 +146,7 @@ sub update_page
 	local $self->{_p2w_methods} = 0;
 	local $self->{_wiki} = {};
 	local $self->{_package_name} = $package_name;
+	local $self->{_selfcat} = $selfcat;
 
 	# locate the source file
 	my $file = $self->_p2w_locate_package( $package_name );
@@ -247,7 +249,7 @@ EOC
 
 	my $selfcat = $package_name;
 	$selfcat =~ s#::#/#g;
-	undef $selfcat if $selfcat !~ m#/#;
+	undef $selfcat if $selfcat !~ m#/# || !$self->{_selfcat};
 
 	return (
 		"<!-- ${PREFIX}_preamble_ \n$blurb -->",
@@ -257,7 +259,7 @@ EOC
 		"{{API:Source|file=$file|package_name=$package_name}}",
 		"[[Category:API|$sort_key]]",
 		($parent ? "[[Category:API:$parent|$sort_key]]" : ()),
-#		($selfcat ? "[[Category:API:$selfcat|$sort_key]]" : ()),
+		($selfcat ? "[[Category:API:$selfcat|$sort_key]]" : ()),
 		"<div>",
 		"<!-- $END_PREFIX -->\n\n\n",
 	);

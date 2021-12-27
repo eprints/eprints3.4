@@ -1612,6 +1612,28 @@ sub dataset($$)
 	return $ds;
 }
 
+
+######################################################################
+=pod
+
+=item $dataset = $repository->exists_dataset( $setname )
+
+Return a boolean depending on whether L<EPrints::DataSet> with 
+C<$setname> exists.
+
+=cut
+######################################################################
+
+sub exists_dataset
+{
+    my( $self, $setname ) = @_;
+
+    my $ds = $self->{datasets}->{$setname};
+
+    return defined $ds;
+}
+
+
 ######################################################################
 # 
 # $repository_config->_load_core_modules

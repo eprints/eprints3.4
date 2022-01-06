@@ -99,7 +99,6 @@ $c->add_trigger( EP_TRIGGER_INDEX_FIELDS, sub {
 			next if !EPrints::Utils::is_set( $value ) || ref($value) ne ""; 
 			$tg->index_text( $value );
 			$tg->increase_termpos();
-			next if length($value) > 200; # Xapian term length limit-ish
 			if( $field->isa( "EPrints::MetaField::Text" ) || $field->isa( "EPrints::MetaField::Name" ) )
 			{
 				$tg->index_text( $value, 2, $prefix );
@@ -107,7 +106,11 @@ $c->add_trigger( EP_TRIGGER_INDEX_FIELDS, sub {
 			}
 			else
 			{
-				$doc->add_term( $prefix . $value );
+				# Don't try to add really long terms. (Need to check the number of bytes rather than just characters).
+				use bytes;
+				$doc->add_term( $prefix . $value ) if length($prefix.$value) <= 245;
+				no bytes;
+
 			}
 		}
 		foreach my $langid (@{$repo->config( "languages" )})

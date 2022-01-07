@@ -44,7 +44,7 @@ $c->{disable_userinfo} = 0;
 $c->{allow_user_removal_request} = 1;
 
 # domain for the login and lang. cookies to be set in.
-$c->{cookie_domain} = $c->{host};
+$c->{cookie_domain} = defined $c->{host} ? $c->{host} : $c->{securehost};
 
 ######################################################################
 #

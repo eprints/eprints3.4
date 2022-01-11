@@ -445,59 +445,6 @@ sub get_dataset_id
 ######################################################################
 =pod
 
-=item $xhtml = EPrints::DataObj::EPM::render_controller( $repo, $field, $value, under, undef, $epm )
-
-Returns and XHTML DOM object rendering for the action link of the EPM
-using the screen plugin with name supplied by C<$value>.
-
-=cut
-######################################################################
-
-sub render_controller
-{
-	my( $repo, $field, $value, undef, undef, $epm ) = @_;
-
-	$value = "EPMC" if !defined $value;
-
-	my $plugin = $repo->plugin( "Screen::$value" );
-	return $repo->xml->create_document_fragment if !defined $plugin;
-
-	return $plugin->render_action_link;
-}
-
-
-######################################################################
-=pod
-
-=item $xhtml = EPrints::DataObj::EPM::render_icon( $repo, $field, $value, under, undef, $epm )
-
-Returns and XHTML DOM object rendering for the icon of the EPM using 
-the image with the filename supplied by C<$value>.
-
-=cut
-######################################################################
-
-sub render_icon
-{
-	my( $repo, $field, $value, undef, undef, $epm ) = @_;
-
-	$value = "images/epm/unknown.png" if !EPrints::Utils::is_set( $value );
-
-	my $url = $value =~ /^https?:/ ?
-		$value :
-		$repo->current_url( host => 1, path => "static", $value );
-
-	return $repo->xml->create_element( "img",
-		width => "70px",
-		src => $url,
-		alt => $epm->value( "title" ) . " icon",
-	);
-}
-
-
-######################################################################
-=pod
-
 =item EPrints::DataObj::EPM->map( $repo, $f, $ctx )
 
 Apply a function C<$f> over all installed EPMs with and only context

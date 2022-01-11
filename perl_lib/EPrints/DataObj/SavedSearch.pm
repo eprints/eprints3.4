@@ -9,28 +9,78 @@
 
 =pod
 
+=for Pod2Wiki
+
 =head1 NAME
 
 B<EPrints::DataObj::SavedSearch> - Single saved search.
 
 =head1 DESCRIPTION
 
-A saved search is a sub class of EPrints::DataObj.
+A saved search is a sub class of L<EPrints::DataObj::SubObject>.
 
 Each one belongs to one and only one user, although one user may own
 multiple saved searches.
 
+=head1 CORE METADATA FIELDS
+
 =over 4
 
-=cut
+=item id (counter)
 
-######################################################################
-#
-# INSTANCE VARIABLES:
-#
-#  From DataObj.
-#
-######################################################################
+The ID of the saved search,
+
+=item name (text)
+
+A name assigned to the saved search.
+
+=item spec (search)
+
+A serialization of the search specification.
+
+=item frequency (set)
+
+How often to send saves search email updates.
+
+=item mailempty (boolean)
+
+Whether to send saved search  email updates if there are no results.
+
+=item additional_recipients (text)
+
+Additional email addresses to send updates about saved search results.
+
+=item public (boolean)
+
+If the saved search results should be publicly accessible.
+
+=back
+
+=head1 REFERENCES AND RELATED OBJECTS
+
+=over 4
+
+=item userid (itemref)
+
+The ID of the user to whom created this saved search.
+
+=back
+
+=head1 INSTANCE VARIABLES
+
+Also see L<EPrints::DataObj|<EPrints::DataObj#INSTANCE_VARIABLES>.
+
+=over 4
+
+=item $self->{user}
+
+The user who owns this saved search.
+
+=back
+
+=head1 METHODS
+
+=cut
 
 package EPrints::DataObj::SavedSearch;
 
@@ -44,9 +94,52 @@ use strict;
 ######################################################################
 =pod
 
+=head2 Constructor Methods
+
+=cut
+######################################################################
+
+######################################################################
+=pod
+
+=over 4
+
+=item $saved_search = EPrints::DataObj::SavedSearch->create( $session, $userid )
+
+Creates a new saved search, belonging to user with ID C<$userid>.
+
+=cut
+######################################################################
+
+sub create
+{
+    my( $class, $session, $userid ) = @_;
+
+    return EPrints::DataObj::SavedSearch->create_from_data(
+        $session,
+        { userid=>$userid },
+        $session->dataset( "saved_search" ) );
+}
+
+
+######################################################################
+=pod
+
+=back
+
+=head2 Class Methods
+
+=cut
+######################################################################
+
+######################################################################
+=pod
+
+=over 4
+
 =item $field_config = EPrints::DataObj::SavedSearch->get_system_field_info
 
-Return an array describing the system metadata of the saved search.
+Returns an array describing the system metadata of the saved search 
 dataset.
 
 =cut
@@ -83,21 +176,13 @@ sub get_system_field_info
 	);
 }
 
-sub get_dataset
-{
-	my( $self ) = @_;
-
-	return $self->is_set( "public" ) && $self->value( "public" ) eq "TRUE" ?
-			$self->{session}->dataset( "public_saved_search" ) :
-			$self->{session}->dataset( "saved_search" );
-}
-
 ######################################################################
 =pod
 
 =item $dataset = EPrints::DataObj::SavedSearch->get_dataset_id
 
-Returns the id of the L<EPrints::DataSet> object to which this record belongs.
+Returns the ID of the L<EPrints::DataSet> object to which this record 
+belongs.
 
 =cut
 ######################################################################
@@ -107,36 +192,51 @@ sub get_dataset_id
 	return "saved_search";
 }
 
-######################################################################
-# =pod
-# 
-# =item $saved_search = EPrints::DataObj::SavedSearch->create( $session, $userid )
-# 
-# Create a new saved search. entry in the database, belonging to user
-# with id $userid.
-# 
-# =cut
-######################################################################
-
-sub create
-{
-	my( $class, $session, $userid ) = @_;
-
-	return EPrints::DataObj::SavedSearch->create_from_data( 
-		$session, 
-		{ userid=>$userid },
-		$session->dataset( "saved_search" ) );
-}
 
 ######################################################################
 =pod
 
-=item $success = $saved_search->commit( [$force] )
+=back
 
-Write this object to the database.
+=head2 Object Methods
 
-If $force isn't true then it only actually modifies the database
+=cut
+######################################################################
+
+######################################################################
+=pod
+
+=over 4
+
+=item $dataset = $saved_search->get_dataset
+
+Get the dataset that this saved search covers.
+
+=cut
+######################################################################
+
+sub get_dataset
+{
+    my( $self ) = @_;
+
+    return $self->is_set( "public" ) && $self->value( "public" ) eq "TRUE" ?
+            $self->{session}->dataset( "public_saved_search" ) :
+            $self->{session}->dataset( "saved_search" );
+}
+
+
+######################################################################
+=pod
+
+=item $success = $saved_search->commit( [ $force ] )
+
+Writes this object to the database.
+
+If C<$force> is not true then it only actually modifies the database
 if one or more fields have been changed.
+
+Returns C<true> if commit was successfully. Otherwise, returns 
+C<false>.
 
 =cut
 ######################################################################
@@ -164,7 +264,7 @@ sub commit
 
 =item $user = $saved_search->get_user
 
-Return the EPrints::DataObj::User which owns this saved search.
+Returns the C<EPrints::DataObj::User> which owns this saved search.
 
 =cut
 ######################################################################
@@ -196,7 +296,7 @@ sub get_user
 
 =item $searchexp = $saved_search->make_searchexp
 
-Return a EPrints::Search describing how to find the eprints
+Returns an L<EPrints::Search> describing how to find the data objects
 which are in the scope of this saved search.
 
 =cut
@@ -220,9 +320,9 @@ sub make_searchexp
 
 =item $saved_search->send_out_alert
 
-Send out an email for this subcription. If there are no matching new
-items then an email is only sent if the saved search has mailempty
-set to true.
+Sends out an email for this subscription. If there are no matching new
+data objects then an email is only sent if the saved search has 
+C<mailempty> set to C<true>.
 
 =cut
 ######################################################################
@@ -382,13 +482,96 @@ sub send_out_alert
 ######################################################################
 =pod
 
+=item $boolean = $saved_search->has_owner( $possible_owner )
+
+Returns C<true> if C<$possible_owner> is the same as the owner of this
+saved search. Otherwise, returns C<false>.
+
+=cut
+######################################################################
+
+sub has_owner
+{
+    my( $self, $possible_owner ) = @_;
+
+    if( $possible_owner->get_value( "userid" ) == $self->get_value( "userid" ) )
+    {
+        return 1;
+    }
+
+    return 0;
+}
+
+
+######################################################################
+=pod
+
+=item $parent = $saved_search->parent
+
+Returns the parent data object for this saved search. I.e. the user 
+who owns this saved search.  This is similar to L</get_user> but is 
+not as fault tolerant and does set instance variable: 
+
+ $self->{user}
+
+=cut
+######################################################################
+
+sub parent
+{
+    my( $self ) = @_;
+
+    return $self->{session}->user( $self->value( "userid" ) );
+}
+
+
+######################################################################
+=pod
+
+=item $url = $saved_search->get_url( [ $staff ] )
+
+Gets the URL for this saved search.  Currently C<$staff> will not 
+effect the URL but in future this may return a specialised URL for 
+staff only.
+
+=cut
+######################################################################
+
+sub get_url
+{
+    my( $self, $staff ) = @_;
+
+    my $searchexp = $self->{session}->plugin( "Search" )->thaw( $self->value( "spec" ) );
+    return undef if !defined $searchexp;
+
+    return $searchexp->search_url;
+}
+
+
+######################################################################
+=pod
+
+=back
+
+=head2 Utility Methods
+
+=cut
+######################################################################
+
+######################################################################
+=pod
+
+=over 4
+
 =item EPrints::DataObj::SavedSearch::process_set( $session, $frequency );
 
-Static method. Calls send_out_alert on every saved search 
-with a frequency matching $frequency.
+Static method. 
 
-Also saves a file logging that the alerts for this frequency
-was sent out at the current time.
+Calls C<send_out_alert> on every saved search with a frequency 
+matching C<$frequency>.
+
+Also saves a file logging that the alerts for this frequency was sent 
+out at the current time.
 
 =cut
 ######################################################################
@@ -449,8 +632,10 @@ END
 
 =item $timestamp = EPrints::DataObj::SavedSearch::get_last_timestamp( $session, $frequency );
 
-Static method. Return the timestamp of the last time this frequency 
-of alert was sent.
+Static method.
+
+Return sthe timestamp of the last time this C<$frequency> of alert was 
+sent.
 
 =cut
 ######################################################################
@@ -492,65 +677,30 @@ sub get_last_timestamp
 }
 
 
+1;
+
 ######################################################################
-=pod
-
-=item $boolean = $user->has_owner( $possible_owner )
-
-True if the users are the same record.
-
-=cut
-######################################################################
-
-sub has_owner
-{
-	my( $self, $possible_owner ) = @_;
-
-	if( $possible_owner->get_value( "userid" ) == $self->get_value( "userid" ) )
-	{
-		return 1;
-	}
-
-	return 0;
-}
-
-sub parent
-{
-	my( $self ) = @_;
-
-	return $self->{session}->user( $self->value( "userid" ) );
-}
-
-sub get_url
-{
-	my( $self, $staff ) = @_;
-
-	my $searchexp = $self->{session}->plugin( "Search" )->thaw( $self->value( "spec" ) );
-	return undef if !defined $searchexp;
-
-	return $searchexp->search_url;
-}
-
 =pod
 
 =back
 
-=cut
+=head1 SEE ALSO
 
-1;
+L<EPrints::DataObj::SubObject>, L<EPrints::DataObj> and 
+L<EPrints::DataSet>.
 
 =head1 COPYRIGHT
 
-=for COPYRIGHT BEGIN
+=begin COPYRIGHT
 
-Copyright 2021 University of Southampton.
+Copyright 2022 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/
 
-=for COPYRIGHT END
+=end COPYRIGHT
 
-=for LICENSE BEGIN
+=begin LICENSE
 
 This file is part of EPrints 3.4 L<http://www.eprints.org/>.
 
@@ -567,5 +717,5 @@ You should have received a copy of the GNU Lesser General Public
 License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
-=for LICENSE END
+=end LICENSE
 

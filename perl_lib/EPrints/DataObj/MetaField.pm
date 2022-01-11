@@ -7,6 +7,9 @@
 #
 ######################################################################
 
+=pod
+
+=for Pod2Wiki
 
 =head1 NAME
 
@@ -14,13 +17,181 @@ B<EPrints::DataObj::MetaField> - metadata fields
 
 =head1 DESCRIPTION
 
-This is an internal class that shouldn't be used outside L<EPrints::Database>.
+This is an internal class that should not be used outside 
+L<EPrints::Database>.
 
-=head1 METHODS
-
-=head2 Class Methods
+=head1 CORE METADATA FIELDS
 
 =over 4
+
+=item metafieldid (counter)
+
+The unique identifer for the metafield.
+
+=item mfdatasetid (set)
+
+The dataset two which this metafield belongs.
+
+=item name (text)
+
+The name of this metafield.
+
+=item type (set)
+
+The type of this metafield.
+
+=item provenance (set)
+
+The provenance of this metafield.
+
+=item phrase_name (multilang, multiple)
+
+The phrase name(s)(labels) potentially in multiple languages for 
+this metafield.
+
+=item phrase_help (multilang, multiple)
+
+The phrase help text(s) potentially in multiple languages for
+this metafield.
+
+=item required (boolean)
+
+Whether this metafield is required for the dataset.
+
+=item multiple (boolean)
+
+Whether this metafield can have multiple values for a data object.
+
+=item allow_null (boolean)
+
+Whether this metafield can have a null value.
+
+=item export_as_xml (boolean)
+
+Whether this metafield can be exported in XML.
+
+=item volatile (boolean)
+
+Whether this metafield stores a volatile data.
+
+=item min_resolution (set)
+
+The minimum time resolution (second, minute, hour, day, month or 
+year) for this metafield if it is a timestamp/datestamp.
+
+=item sql_index (boolean)
+
+Whether an SQL index should be created for this metafield.
+
+=item render_input (text)
+
+A different or bespoke function to render the input field for
+this metafield.
+
+=item render_value (text)
+
+A different or bespoke function to render the value for this 
+metafield.
+
+=item input_ordered (boolean)
+
+Whether the input for this metafield is ordered.
+
+=item maxlength (int)
+
+The maximum length for this metafield if it is a text or
+subclass of a text field.
+
+=item browse_link (boolean)
+
+The link to a browse view for this metafield if it is a subject
+metafield.
+
+=item top (text)
+
+The top subject in the subject tree that should be used as 
+options for this subject metafield.
+
+=item datasetid (text)
+
+The dataset ID for this metafield, if it is a search, subobject,
+dataobjref, fields, itemref or file field.
+
+=item set_name (text)
+
+The name of the file that contains the options for this namedset
+metafield.
+
+=item options (text)
+
+The commas separated list of options for this set metafield.
+
+=item render_order (set)
+
+The order to render a name if this metafield is for a name.
+
+=item hide_honourific (boolean)
+
+Whether to hide the honourfic sub-field if this is a name 
+metafield.
+
+=item hide_lineage (boolean)
+
+Whether to hide the lineage sub-field if this is a name
+metafield.
+
+=item family_first (boolean)
+
+Whether to render the family name sub-field before the given
+name if this is a name metafield.
+
+=item input_style (set)
+
+A particular style for displaying the input form element for
+this metafield.
+
+=item input_rows (int)
+
+The number of input rows for this metafield.
+
+=item input_cols (int)
+
+The number of input columns for this metafield.
+
+=item input_boxes (int)
+
+The number of input boxes for this metafield.
+
+=item sql_counter (text)
+
+The name to give to the sql counter for this counter 
+metafield.  Typically the same as the metafield's name.
+
+=item default_value (text)
+
+The default value for this metafield.
+
+=back
+
+=head1 REFERENCES AND RELATED OBJECTS
+
+=over 4
+
+=item parent (itemref)
+
+The parent metafield this metafield belongs to, if it is a sub-field.
+
+=item fields (subobject, multiple)
+
+Sub-fields of this metafield.
+
+=back
+
+=head1 INSTANCE VARIABLES
+
+See L<EPrints::DataObj|EPrints::DataObj#INSTANCE_VARIABLES>.
+
+=head1 METHODS
 
 =cut
 
@@ -32,113 +203,26 @@ use Data::Dumper;
 
 use strict;
 
-=item $thing = EPrints::DataObj::MetaField->get_system_field_info
 
-Core fields.
+######################################################################
+=pod
+
+=head2 Utility Methods
 
 =cut
+######################################################################
 
-sub get_system_field_info
-{
-	my( $class ) = @_;
+######################################################################
+=pod
 
-	return
-	( 
-		{ name=>"metafieldid", type=>"counter", sql_counter => "metafieldid", },
+=over 4
 
-		{ name=>"mfdatasetid", type=>"set", required=>1, input_rows=>1,
-			options => [],
-			input_tags => \&dataset_ids,
-			render_option => \&render_dataset_id,
-		},
+=item @ids = EPrints::DataObj::MetaField::dataset_ids( $repo )
 
-		{ name=>"parent", type=>"itemref", datasetid=>"metafield", },
+Returns array of all dataset IDs for non-virtual datasets in C<$repo>.
 
-		{ name=>"fields", type=>"subobject", datasetid=>"metafield", multiple=>1, dataobj_fieldname=>"parent", dataset_fieldname=>"" },
-
-		{ name=>"name", type=>"text", required=>1, input_cols=>10 },
-
-		{ name=>"type", type=>"set", required=>1,
-			input_style => "long",
-			options => [&_get_field_types],
-		},
-
-		{ name=>"provenance", type=>"set", required=>1,
-			options => [qw( core config user )],
-		},
-
-		&_get_property_fields,
-
-		{ name=>"phrase_name", type=>"multilang", multiple=> 1, required=>0,
-			fields => [
-				{ sub_name=>"text", type=>"text", }
-		]},
-
-		{ name=>"phrase_help", type=>"multilang", multiple => 1, required=>0,
-			fields => [
-				{ sub_name=>"text", type=>"longtext", }
-		]},
-	);
-}
-
-sub _get_property_sub_fields
-{
-	return
-		map { $_->{sub_name} = delete $_->{name}; $_ }
-		grep { $_->{name} ne "multiple" }
-		&_get_property_fields;
-}
-
-sub _get_property_fields
-{
-	return (
-		{ name=>"required", type=>"boolean", fromform=>\&boolean_fromform, toform=>\&boolean_toform, input_style => "menu", },
-		{ name=>"multiple", type=>"boolean", fromform=>\&boolean_fromform, toform=>\&boolean_toform, input_style => "menu", },
-		{ name=>"allow_null", type=>"boolean", fromform=>\&boolean_fromform, toform=>\&boolean_toform, input_style => "menu", },
-		{ name=>"export_as_xml", type=>"boolean", fromform=>\&boolean_fromform, toform=>\&boolean_toform, input_style => "menu", },
-		{ name=>"volatile", type=>"boolean", fromform=>\&boolean_fromform, toform=>\&boolean_toform, input_style => "menu", },
-
-		{ name=>"min_resolution", type=>"set",
-			options => [qw( year month day hour minute second )],
-		},
-
-		{ name=>"sql_index", type=>"boolean", fromform=>\&boolean_fromform, toform=>\&boolean_toform, input_style => "menu", },
-
-		{ name=>"render_input", type=>"text" },
-		{ name=>"render_value", type=>"text" },
-
-		{ name=>"input_ordered", type=>"boolean", fromform=>\&boolean_fromform, toform=>\&boolean_toform, input_style => "menu", },
-
-		{ name=>"maxlength", type=>"int", input_cols => 5, },
-
-		{ name=>"browse_link", type=>"text", input_cols=>10, },
-		{ name=>"top", type=>"text", input_cols=>10, },
-
-		{ name=>"datasetid", type=>"text", input_cols=>10, },
-
-		{ name=>"set_name", type=>"text", input_cols=>10, },
-		{ name=>"options", type=>"text", },
-
-		{ name=>"render_order", type=>"set", input_rows=>1,
-			options => [qw( fg gf )]
-		},
-		{ name=>"hide_honourific", type=>"boolean", fromform=>\&boolean_fromform, toform=>\&boolean_toform, input_style => "menu", input_rows=>1, },
-		{ name=>"hide_lineage", type=>"boolean", fromform=>\&boolean_fromform, toform=>\&boolean_toform, input_style => "menu", input_rows=>1, },
-		{ name=>"family_first", type=>"boolean", fromform=>\&boolean_fromform, toform=>\&boolean_toform, input_style => "menu", input_rows=>1, },
-
-		{ name=>"input_style", type=>"set",
-			options => [qw( menu radio long medium short )],
-		},
-		{ name=>"input_rows", type=>"int", input_cols=>3, },
-		{ name=>"input_cols", type=>"int", input_cols=>3, },
-		{ name=>"input_boxes", type=>"int", input_cols=>3, },
-
-		{ name=>"sql_counter", type=>"text", sql_index=>0 },
-		{ name=>"default_value", type=>"text", sql_index=>0 },
-	);
-}
-
-# Utility methods
+=cut
+######################################################################
 
 sub dataset_ids
 {
@@ -151,12 +235,35 @@ sub dataset_ids
 	return @ids;
 }
 
+
+######################################################################
+=pod
+
+=item $dataset_label = EPrints::DataObj::MetaField::render_dataset_id( $repo, $id )
+
+Returns XHTML DOM rendering of phrase for dataset with C<$id>.
+
+=cut
+######################################################################
+
 sub render_dataset_id
 {
 	my( $repo, $id ) = @_;
 
 	return $repo->html_phrase( "datasetname_$id" );
 }
+
+
+######################################################################
+=pod
+
+=item $options = EPrints::DataObj::MetaField::options_fromform( $value )
+
+Returns an array reference of options from the comma-separated 
+C<$value> provided.
+
+=cut
+######################################################################
 
 sub options_fromform
 {
@@ -165,12 +272,36 @@ sub options_fromform
 	return [grep { length($_) } split /\s*,\s*/, $value];
 }
 
+
+######################################################################
+=pod
+
+=item $options_str = EPrints::DataObj::MetaField::options_toform( $value )
+
+Returns a comma-separated string of options from the array reference
+C<$value> provided.
+
+=cut
+######################################################################
+
 sub options_toform
 {
 	my( $value ) = @_;
 
 	return join ',', @{ref($value) eq "ARRAY" ? $value : []};
 }
+
+
+######################################################################
+=pod
+
+=item $boolean = EPrints::DataObj::MetaField::boolean_fromform( $value )
+
+Returns C<true> or C<false>, (literally C<1> or C<0>) depending on the
+C<$value> representation of a boolean in a form. 
+
+=cut
+######################################################################
 
 sub boolean_fromform
 {
@@ -180,6 +311,18 @@ sub boolean_fromform
 
 	return defined $value && $value eq "TRUE" ? 1 : 0;
 }
+
+
+######################################################################
+=pod
+
+=item $boolean_str = EPrints::DataObj::MetaField::boolean_toform( $value )
+
+Returns a string representation of a boolean (C<"TRUE">, C<"FALSE"> or
+C<undef>) depending on the to form C<$value> provided.
+
+=cut
+######################################################################
 
 sub boolean_toform
 {
@@ -230,85 +373,29 @@ sub _get_field_types
 	);
 }
 
-=item $str = $mf->dump
-
-Dump the fields configuration as used in cfg.d.
-
-=cut
-
-sub dump
-{
-	my( $self ) = @_;
-
-	my $dd = Data::Dumper->new( [$self->perl_struct] );
-	$dd->Terse( 1 );
-	$dd->Sortkeys( 1 );
-
-	return "\t" . $dd->Dump;
-}
-
-sub _update_cfg_d
-{
-	my( $self, $repo, $dataset ) = @_;
-
-	my @data;
-
-	foreach my $field ($dataset->fields)
-	{
-		next if $field->property( "sub_name" );
-		next if $field->property( "provenance" ) ne "user";
-		my $mf = EPrints::DataObj::MetaField->new_from_field(
-			$repo,
-			$field,
-			$self->{dataset}
-		);
-		push @data, $mf->perl_struct;
-	}
-
-	my $fn = $self->config_filename( $dataset );
-
-	if( !scalar @data )
-	{
-		return scalar unlink( $fn );
-	}
-
-	open(my $fh, ">", $fn) or EPrints->abort( "Error opening $fn: $!" );
-
-	my $var = '$c->{fields}->{' . $dataset->base_id . '}';
-
-	print $fh "# This file is automatically generated\n\n";
-	print $fh "$var = [] if !defined $var;\n";
-	print $fh "push \@{$var}, \n\t";
-	for(@data)
-	{
-		my $dd = Data::Dumper->new( [$_] );
-		$dd->Terse( 1 );
-		$dd->Sortkeys( 1 );
-
-		print $fh $dd->Dump() . ",";
-	}
-	print $fh ";\n";
-
-	close($fh);
-}
 
 ######################################################################
-
 =back
 
 =head2 Constructor Methods
 
-=over 4
-
 =cut
-
 ######################################################################
 
-=item $mf = EPrints::DataObj::MetaField->new_from_field( $repo, $field )
+######################################################################
+=pod
 
-Returns a new MetaField object based on $field.
+=over 4
+
+=item $metafield = EPrints::DataObj::MetaField->new_from_field( $repo, $field, [ $dataset ] )
+
+Returns a new metafield data object based on C<$field>.
+
+C<$dataset> is determined from dataset ID of class (i.e. C<metafield>)
+if unset.
 
 =cut
+######################################################################
 
 sub new_from_field
 {
@@ -346,40 +433,170 @@ sub new_from_field
 	return $self;
 }
 
+
 ######################################################################
+=pod
+
+=back
 
 =head2 Class Methods
 
 =cut
+######################################################################
 
 ######################################################################
+=pod
+
+=over 4
+
+=item $thing = EPrints::DataObj::MetaField->get_system_field_info
+
+Returns an array describing the system metadata fields of the
+metafield dataset.
+
+=cut
+######################################################################
+
+sub get_system_field_info
+{
+    my( $class ) = @_;
+
+    return
+    (
+        { name=>"metafieldid", type=>"counter", sql_counter => "metafieldid", },
+
+        { name=>"mfdatasetid", type=>"set", required=>1, input_rows=>1,
+            options => [],
+            input_tags => \&dataset_ids,
+            render_option => \&render_dataset_id,
+        },
+
+        { name=>"parent", type=>"itemref", datasetid=>"metafield", },
+
+        { name=>"fields", type=>"subobject", datasetid=>"metafield", multiple=>1, dataobj_fieldname=>"parent", dataset_fieldname=>"" },
+
+        { name=>"name", type=>"text", required=>1, input_cols=>10 },
+
+        { name=>"type", type=>"set", required=>1,
+            input_style => "long",
+            options => [&_get_field_types],
+        },
+
+        { name=>"provenance", type=>"set", required=>1,
+            options => [qw( core config user )],
+        },
+
+        &_get_property_fields,
+
+        { name=>"phrase_name", type=>"multilang", multiple=> 1, required=>0,
+            fields => [
+                { sub_name=>"text", type=>"text", }
+        ]},
+
+        { name=>"phrase_help", type=>"multilang", multiple => 1, required=>0,
+            fields => [
+                { sub_name=>"text", type=>"longtext", }
+        ]},
+    );
+}
+
+sub _get_property_sub_fields
+{
+    return
+        map { $_->{sub_name} = delete $_->{name}; $_ }
+        grep { $_->{name} ne "multiple" }
+        &_get_property_fields;
+}
+
+sub _get_property_fields
+{
+    return (
+        { name=>"required", type=>"boolean", fromform=>\&boolean_fromform, toform=>\&boolean_toform, input_style => "menu", },
+        { name=>"multiple", type=>"boolean", fromform=>\&boolean_fromform, toform=>\&boolean_toform, input_style => "menu", },
+        { name=>"allow_null", type=>"boolean", fromform=>\&boolean_fromform, toform=>\&boolean_toform, input_style => "menu", },
+        { name=>"export_as_xml", type=>"boolean", fromform=>\&boolean_fromform, toform=>\&boolean_toform, input_style => "menu", },
+        { name=>"volatile", type=>"boolean", fromform=>\&boolean_fromform, toform=>\&boolean_toform, input_style => "menu", },
+
+        { name=>"min_resolution", type=>"set",
+            options => [qw( year month day hour minute second )],
+        },
+
+        { name=>"sql_index", type=>"boolean", fromform=>\&boolean_fromform, toform=>\&boolean_toform, input_style => "menu", },
+
+        { name=>"render_input", type=>"text" },
+        { name=>"render_value", type=>"text" },
+
+        { name=>"input_ordered", type=>"boolean", fromform=>\&boolean_fromform, toform=>\&boolean_toform, input_style => "menu", },
+
+        { name=>"maxlength", type=>"int", input_cols => 5, },
+
+        { name=>"browse_link", type=>"text", input_cols=>10, },
+        { name=>"top", type=>"text", input_cols=>10, },
+
+        { name=>"datasetid", type=>"text", input_cols=>10, },
+
+        { name=>"set_name", type=>"text", input_cols=>10, },
+        { name=>"options", type=>"text", },
+        { name=>"render_order", type=>"set", input_rows=>1,
+            options => [qw( fg gf )]
+        },
+        { name=>"hide_honourific", type=>"boolean", fromform=>\&boolean_fromform, toform=>\&boolean_toform, input_style => "menu", input_rows=>1, },
+        { name=>"hide_lineage", type=>"boolean", fromform=>\&boolean_fromform, toform=>\&boolean_toform, input_style => "menu", input_rows=>1, },
+        { name=>"family_first", type=>"boolean", fromform=>\&boolean_fromform, toform=>\&boolean_toform, input_style => "menu", input_rows=>1, },
+
+        { name=>"input_style", type=>"set",
+            options => [qw( menu radio long medium short )],
+        },
+        { name=>"input_rows", type=>"int", input_cols=>3, },
+        { name=>"input_cols", type=>"int", input_cols=>3, },
+        { name=>"input_boxes", type=>"int", input_cols=>3, },
+
+        { name=>"sql_counter", type=>"text", sql_index=>0 },
+        { name=>"default_value", type=>"text", sql_index=>0 },
+    );
+}
 
 ######################################################################
 =pod
 
 =item $dataset = EPrints::DataObj::MetaField->get_dataset_id
 
-Returns the id of the L<EPrints::DataSet> object to which this record belongs.
+Returns the ID of the L<EPrints::DataSet> object to which this record 
+belongs.
 
 =cut
 ######################################################################
 
-sub get_dataset_id()
+sub get_dataset_id
 {
 	return "metafield";
 }
 
-sub get_parent_dataset_id { "metafield" }
-sub get_parent_id { shift->value( "parent" ) }
 
 ######################################################################
+=pod
 
-=item $defaults = EPrints::DataObj::MetaField->get_defaults( $repo, $data )
+=item $dataset = EPrints::DataObj::MetaField->get_parent_dataset_id
 
-Return default values for this object based on the starting data.
+Returns the ID of the L<EPrints::DataSet> object to which this 
+record's parent belongs.
 
 =cut
+######################################################################
 
+sub get_parent_dataset_id { "metafield" }
+
+
+######################################################################
+=pod
+
+=item $defaults = EPrints::DataObj::MetaField->get_defaults( $repo, $data, [ $dataset ] )
+
+Returns default values for this object based on the starting C<$data>.
+
+Get C<$dataset> from class if not defined.
+
+=cut
 ######################################################################
 
 sub get_defaults
@@ -396,50 +613,103 @@ sub get_defaults
 	return $data;
 }
 
-=item $defaults = $mf->get_property_defaults( $repo, $type )
-
-Gets the property defaults for metafield $type.
-
-=cut
-
-sub get_property_defaults
-{
-	my( $self, $type ) = @_;
-
-	my $repo = $self->{session};
-
-	my $field_defaults = $repo->get_field_defaults( $type );
-	return $field_defaults if defined $field_defaults;
-
-	my $class = $type;
-	$class =~ s/[^a-zA-Z0-9_]//g; # don't let badness into eval()
-	$class = "EPrints::MetaField::\u$class";
-	eval "use $class;";
-	if( $@ )
-	{
-		return undef;
-	}
-
-	my $prototype = bless {
-			repository => $repo
-		}, $class;
-
-	return { $prototype->get_property_defaults };
-}
 
 ######################################################################
+=pod
+
+=back
 
 =head2 Object Methods
 
 =cut
-
 ######################################################################
 
-=item $ok = $mf->remove
+######################################################################
+=pod
+
+=over 4
+
+=item $defaults = $metafield->get_property_defaults( $repo, $type )
+
+Gets the property defaults for metafield C<$type>.
+
+=cut
+######################################################################
+
+sub get_property_defaults
+{
+    my( $self, $type ) = @_;
+
+    my $repo = $self->{session};
+
+    my $field_defaults = $repo->get_field_defaults( $type );
+    return $field_defaults if defined $field_defaults;
+
+    my $class = $type;
+    $class =~ s/[^a-zA-Z0-9_]//g; # don't let badness into eval()
+    $class = "EPrints::MetaField::\u$class";
+    eval "use $class;";
+    if( $@ )
+    {
+        return undef;
+    }
+
+    my $prototype = bless {
+            repository => $repo
+        }, $class;
+
+    return { $prototype->get_property_defaults };
+}
+
+
+######################################################################
+=pod
+
+=item $str = $metafield->dump
+
+Dump the fields configuration as used in C<cfg.d>.
+
+=cut
+######################################################################
+
+sub dump
+{
+    my( $self ) = @_;
+
+    my $dd = Data::Dumper->new( [$self->perl_struct] );
+    $dd->Terse( 1 );
+    $dd->Sortkeys( 1 );
+
+    return "\t" . $dd->Dump;
+}
+
+
+######################################################################
+=pod
+
+=item $parent = $metafield->get_parent_id
+
+Returns the parent ID for this metafield.
+
+Alias for:
+
+ $metafield->value( "parent" );
+
+=cut
+######################################################################
+
+sub get_parent_id { shift->value( "parent" ) }
+
+
+######################################################################
+=pod
+
+=item $ok = $metafield->remove
 
 Remove the field and any sub-fields from the database.
 
 =cut
+######################################################################
 
 sub remove
 {
@@ -455,11 +725,16 @@ sub remove
 	return $self->SUPER::remove;
 }
 
-=item $path = $mf->config_path()
+
+######################################################################
+=pod
+
+=item $path = $metafield->config_path
 
 Returns the root directory of the repository configuration path.
 
 =cut
+######################################################################
 
 sub config_path
 {
@@ -468,11 +743,17 @@ sub config_path
 	return $self->{session}->config( "config_path" );
 }
 
-=item $filename = $mf->config_filename( $dataset )
 
-Returns the location of the cfg.d config file.
+######################################################################
+=pod
+
+=item $filename = $metafield->config_filename( $dataset )
+
+Returns the location of the cfg.d config file for the provided
+C<$dataset>.
 
 =cut
+######################################################################
 
 sub config_filename
 {
@@ -481,11 +762,16 @@ sub config_filename
 	return $self->config_path . "/cfg.d/zz_webcfg_" . $dataset->base_id . "_fields.pl";
 }
 
-=item $filename = $mf->phrases_filename( $langid )
 
-Returns the location of the XML phrases file for $lang.
+######################################################################
+=pod
+
+=item $filename = $metafield->phrases_filename( $langid )
+
+Returns the location of the XML phrases file for provided C<$lang>.
 
 =cut
+######################################################################
 
 sub phrases_filename
 {
@@ -494,11 +780,17 @@ sub phrases_filename
 	return $self->config_path."/lang/$langid/phrases/zz_webcfg.xml";
 }
 
-=item $filename = $mf->workflow_filename( $dataset )
 
-Returns the location of the workflow file for $datasetid.
+######################################################################
+=pod
+
+=item $filename = $metafield->workflow_filename( $dataset )
+
+Returns the location of the workflow file for the provided 
+C<$dataset>.
 
 =cut
+######################################################################
 
 sub workflow_filename
 {
@@ -507,11 +799,16 @@ sub workflow_filename
 	return $self->config_path . "/workflows/".$dataset->base_id."/default.xml";
 }
 
-=item $ok = $mf->add_to_phrases()
 
-Add the phrases defined by this field to the system.
+######################################################################
+=pod
+
+=item $ok = $metafield->add_to_phrases
+
+Adds the phrases defined by this metafield to the system.
 
 =cut
+######################################################################
 
 sub add_to_phrases
 {
@@ -644,11 +941,17 @@ sub add_to_phrases
 	return $ok;
 }
 
-=item $ok = $mf->add_to_dataset()
 
-Add this field to the dataset.
+######################################################################
+=item $ok = $metafield->add_to_dataset
+
+Add this metafield to the dataset specified by its C<mfdatasetid> 
+value.
+
+Returns boolean dependent on success adding to the dataset.
 
 =cut
+######################################################################
 
 sub add_to_dataset
 {
@@ -665,11 +968,19 @@ sub add_to_dataset
 	return $self->_update_cfg_d( $repo, $dataset );
 }
 
-=item $ok = $mf->remove_from_dataset()
 
-Remove this field from the dataset.
+######################################################################
+=pod
+
+=item $ok = $metafield->remove_from_dataset
+
+Remove this metafield from the dataset specified by its C<mfdatasetid>
+value.
+
+Returns boolean dependent on success removing from the dataset.
 
 =cut
+######################################################################
 
 sub remove_from_dataset
 {
@@ -686,11 +997,18 @@ sub remove_from_dataset
 	return $self->_update_cfg_d( $repo, $dataset );
 }
 
-=item $ok = $mf->add_to_database()
 
-Add this field to the database.
+######################################################################
+=pod
+
+=item $ok = $metafield->add_to_database
+
+Add this metafield to the database.
+
+Returns boolean dependent on success adding to the database.
 
 =cut
+######################################################################
 
 sub add_to_database
 {
@@ -704,11 +1022,18 @@ sub add_to_database
 	return $repo->get_database->add_field( $dataset, $field );
 }
 
-=item $ok = $mf->remove_from_database
+
+######################################################################
+=pod
+
+=item $ok = $metafield->remove_from_database
 
 Remove this field from the database.
 
+Returns boolean dependent on success removing from the database.
+
 =cut
+######################################################################
 
 sub remove_from_database
 {
@@ -723,11 +1048,18 @@ sub remove_from_database
 	return $repo->get_database->remove_field( $dataset, $field );
 }
 
-=item $ok = $mf->add_to_workflow()
 
-Add this field to the workflow in the "Misc." section.
+######################################################################
+=pod
+
+=item $ok = $metafield->add_to_workflow
+
+Add this metafield to the workflow in the C<Misc.> section.
+
+Returns boolean dependent on success adding to the workflow.
 
 =cut
+######################################################################
 
 sub add_to_workflow
 {
@@ -827,11 +1159,19 @@ sub add_to_workflow
 	return $ok;
 }
 
-=item $ok = $mf->remove_from_workflow()
 
-Remove all occurrences of this field from the workflow. Will remove the "local" stage if it is empty.
+######################################################################
+=pod
+
+=item $ok = $metafield->remove_from_workflow
+
+Remove all occurrences of this field from the workflow. Will remove 
+the C<local> stage if it is empty.
+
+Returns boolean dependent on success removing from the workflow.
 
 =cut
+######################################################################
 
 sub remove_from_workflow
 {
@@ -919,13 +1259,22 @@ sub remove_from_workflow
 	return $ok;
 }
 
-=item $data = $field->perl_struct( $prefix )
 
-Returns the Perl data structure representation of this field, as you would find defined in the configuration or DataObj classes.
+######################################################################
+=pod
 
-If $prefix is defined returns the perl struct for the fields property, where $prefix is the fieldname of the parent field.
+=item $data = $metafield->perl_struct( $prefix )
+
+Returns the Perl data structure representation of this field, as you 
+would find defined in the configuration or L<EPrints::DataObj> 
+classes.
+
+If C<$prefix> is defined returns the Perl data structure for the 
+fields property, where C<$prefix> is the fieldname of the parent 
+field.
 
 =cut
+######################################################################
 
 sub perl_struct
 {
@@ -1013,11 +1362,16 @@ sub _opt_to_phrase
 	return $name;
 }
 
-=item $field = $mf->make_field_object();
 
-Make and return a new field object based on this metafield.
+######################################################################
+=pod
+
+=item $field = $metafield->make_field_object
+
+Makes and returns a new field object based on this metafield.
 
 =cut
+######################################################################
 
 sub make_field_object
 {
@@ -1042,11 +1396,17 @@ sub make_field_object
 	return $field;
 }
 
-=item $ok = $mf->add_to_repository
+######################################################################
+=pod
+
+=item $ok = $metafield->add_to_repository
 
 Adds this field to the repository.
 
+Returns boolean dependent on success adding to the repository.
+
 =cut
+######################################################################
 
 sub add_to_repository
 {
@@ -1064,11 +1424,18 @@ sub add_to_repository
 	return $rc;
 }
 
+
+######################################################################
+=pod
+
 =item $ok = $mf->remove_from_repository
 
 Remove this field from the repository.
 
+Returns boolean dependent on success removing from the repository.
+
 =cut
+######################################################################
 
 sub remove_from_repository
 {
@@ -1086,11 +1453,17 @@ sub remove_from_repository
 	return $rc;
 }
 
-=item $problems = $mf->validate( $repository )
 
-Return any problems associated with this metafield.
+######################################################################
+=pod
+
+=item $problems = $metafield->validate( $repository )
+
+Returns any problems associated with this metafield as an array 
+reference.
 
 =cut
+######################################################################
 
 sub validate
 {
@@ -1167,9 +1540,17 @@ sub _validate_epdata
 	return @problems;
 }
 
-=item $xhtml = $mf->render_citation( $type, %params )
+
+######################################################################
+=pod
+
+=item $xhtml = $metafield->render_citation( [ $type, %params ] )
+
+Returns a XHTML DOM rendering of the metafield using citation 
+C<$type> (of C<default> if not provided) an specified C<%params>.
 
 =cut
+######################################################################
 
 sub render_citation
 {
@@ -1188,9 +1569,56 @@ sub render_citation
 	return $self->SUPER::render_citation( $type, %params );
 }
 
+sub _update_cfg_d
+{
+    my( $self, $repo, $dataset ) = @_;
+
+    my @data;
+
+    foreach my $field ($dataset->fields)
+    {
+        next if $field->property( "sub_name" );
+        next if $field->property( "provenance" ) ne "user";
+        my $mf = EPrints::DataObj::MetaField->new_from_field(
+            $repo,
+            $field,
+            $self->{dataset}
+        );
+        push @data, $mf->perl_struct;
+    }
+
+    my $fn = $self->config_filename( $dataset );
+
+    if( !scalar @data )
+    {
+        return scalar unlink( $fn );
+    }
+
+    open(my $fh, ">", $fn) or EPrints->abort( "Error opening $fn: $!" );
+
+    my $var = '$c->{fields}->{' . $dataset->base_id . '}';
+
+    print $fh "# This file is automatically generated\n\n";
+    print $fh "$var = [] if !defined $var;\n";
+    print $fh "push \@{$var}, \n\t";
+    for(@data)
+    {
+        my $dd = Data::Dumper->new( [$_] );
+        $dd->Terse( 1 );
+        $dd->Sortkeys( 1 );
+
+        print $fh $dd->Dump() . ",";
+    }
+    print $fh ";\n";
+
+    close($fh);
+}
+
+
 1;
 
-__END__
+######################################################################
+=pod
 
 =back
 
@@ -1198,21 +1626,18 @@ __END__
 
 L<EPrints::DataObj> and L<EPrints::DataSet>.
 
-=cut
-
-
 =head1 COPYRIGHT
 
-=for COPYRIGHT BEGIN
+=begin COPYRIGHT
 
-Copyright 2021 University of Southampton.
+Copyright 2022 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/
 
-=for COPYRIGHT END
+=end COPYRIGHT
 
-=for LICENSE BEGIN
+=begin LICENSE
 
 This file is part of EPrints 3.4 L<http://www.eprints.org/>.
 
@@ -1229,5 +1654,4 @@ You should have received a copy of the GNU Lesser General Public
 License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
-=for LICENSE END
-
+=end LICENSE

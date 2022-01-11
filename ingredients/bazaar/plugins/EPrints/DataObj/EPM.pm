@@ -1,31 +1,108 @@
+######################################################################
+#
+# EPrints::DataObj::EPrint
+#
+######################################################################
+#
+#
+######################################################################
+
+
 =pod
 
 =for Pod2Wiki
 
 =head1 NAME
 
-B<EPrints::DataObj::EPM> - Class representing an EPrints Package
+B<EPrints::DataObj::EPM> - An EPrints Package Manager (EPM) package.
 
 =head1 DESCRIPTION
 
-=head1 SYSTEM METADATA
+This class represents an EPrint Package Manager (EPM) package that 
+can be stored in XML format as a .epm file or are hosted on EPM 
+repositories such as L<http://bazaar.eprints.org>.
+
+The EPM data object is now hosted in the bazaar ingredient found at:
+
+ ingredients/bazaar/plugins/EPrints/DataObj/EPM.pm
+
+=head1 CORE METADATA FIELDS
 
 =over 4
+
+=item epmid (id)
+
+The text ID of the EPM package 
+
+=item eprintid (int)
+
+The ID number of the EPrint record from the EPM repository.
+
+E.g. L<http://bazaar.eprints.org/>.
+
+=item uri (url)
+
+The URI of the EPM package from the EPM repository it is hosted. 
+
+E.g. L<http://bazaar.eprints.org/id/epm/reports>
+
+=item version (text)
+
+The version (e.g. 1.0.0) of the EPM package.
+
+=item controller (text)
+
+=item creators (compound, multiple)
+
+Creators of the EPM package including both their full name and email 
+address.
+
+=item datestamp (time)
+
+The date and time this version of this EPM package was published.
+
+=item title (longtext)
+
+The title of this EPM package.
+
+=item description (longtext)
+
+The description of this EPM package and its purpose.
+
+=item requirements (longtext)
+
+A description of the requirements for this EPM package.
+
+=item home_page (url)
+
+A URL for the home page of the EPM package. Maybe a page including 
+documentation on how to use the EPM package.
+
+=item icon (url)
+
+A URL for the icon for the EPM package.
 
 =back
 
-=head1 METHODS
+=head1 REFERENCES AND RELATED OBJECTS
 
 =over 4
 
+=item documents (subobject, multiple)
+
+The documents for this EPM package. Effectively a manifest of files
+required to install the EPM om a repository.
+
+=back
+
+=head1 INSTANCE VARIABLES
+
+See L<EPrints::DataObj|EPrints::DataObj#INSTANCE_VARIABLES>.
+
+=head1 METHODS
+
 =cut
 
-######################################################################
-#
-# INSTANCE VARIABLES:
-#
-#  From EPrints::DataObj
-#
 ######################################################################
 
 package EPrints::DataObj::EPM;
@@ -37,12 +114,236 @@ use strict;
 
 our $MAX_SIZE = 2097152;
 
+
 ######################################################################
 =pod
 
+=head2 Constructor Methods
+
+=cut
+######################################################################
+
+######################################################################
+=pod
+
+=over 4
+
+=item $epm = EPrints::DataObj::EPM->new( $repo, $id )
+
+Returns a new object representing the installed EPM package C<$id>.
+
+=cut
+######################################################################
+
+sub new
+{
+    my( $class, $repo, $id ) = @_;
+
+    my $filepath = $repo->config( "base_path" ) . "/lib/epm/$id/$id.epmi";
+    if( open(my $fh, "<", $filepath) )
+    {
+        my $dataobj = $class->new_from_file( $repo, $fh );
+        close($fh);
+
+        return $dataobj;
+    }
+
+    return;
+}
+
+
+######################################################################
+=pod
+
+=item $epm = EPrints::DataObj::EPM->new_from_data( $repo, $epdata, $dataset )
+
+Returns a new object representing the EPM package based on the 
+C<$epdata> and C<$dataset>.
+
+=cut
+######################################################################
+
+sub new_from_data
+{
+    my( $class, $repo, $epdata, $dataset ) = @_;
+
+    my $uri = delete $epdata->{_id};
+
+    my $self = $class->SUPER::new_from_data( $repo, $epdata, $dataset );
+    return undef if !defined $self;
+
+    $self->_upgrade;
+
+    $self->set_value( "uri", $uri );
+
+    return $self;
+}
+
+
+######################################################################
+=pod
+
+=item $epm = EPrints::DataObj::EPM->new_from_data( $repo, $xml )
+
+Returns a new object representing the EPM package based on the 
+C<$xml> provided.
+
+=cut
+######################################################################
+
+sub new_from_xml
+{
+    my( $class, $repo, $xml ) = @_;
+
+    my $doc = $repo->xml->parse_string( $xml );
+
+    my $epdata = $repo->dataset( "epm" )->dataobj_class->xml_to_epdata(
+        $repo, $doc->documentElement
+    );
+
+    return $repo->dataset( "epm" )->make_dataobj( $epdata );
+}
+
+
+######################################################################
+=pod
+
+=item $epm = EPrints::DataObj::EPM->new_from_data( $repo, $fh )
+
+Returns a new object representing the EPM package based on the XML 
+from the file handle C<$fh> provided.
+
+=cut
+######################################################################
+
+sub new_from_file
+{
+    my( $class, $repo, $fh ) = @_;
+
+    my $epdata = {};
+    EPrints::XML::event_parse( $fh, EPrints::DataObj::SAX::Handler->new(
+        $class,
+        $epdata = {},
+        { dataset => $repo->dataset( "epm" ) }
+    ) );
+    return if !keys %$epdata;
+    return $class->new_from_data( $repo, $epdata );
+
+    return;
+}
+
+
+######################################################################
+=pod
+
+=item $epm = EPrint::DataObj::EPM->new_from_manifest( $repo, $epdata, [ @manifest ] )
+
+Makes and returns a new EPM object based on the C<$epdata> and a 
+manifest of installable files.
+
+=cut
+######################################################################
+
+sub new_from_manifest
+{
+    my( $class, $repo, $epdata, @manifest ) = @_;
+
+    my $self = $class->SUPER::new_from_data( $repo, $epdata );
+
+    my $base_path = $self->repository->config( "base_path" ) . "/lib";
+
+    my $install = $repo->dataset( "document" )->make_dataobj({
+        _parent => $self,
+        content => "install",
+        format => "other",
+        files => [],
+    });
+    $self->set_value( "documents", [ $install ]);
+
+    foreach my $filename (@manifest)
+    {
+        my $filepath = "$base_path/$filename";
+        use bytes;
+        open(my $fh, "<", $filepath) or die "Error opening $filepath: $!";
+        sysread($fh, my $data, -s $fh);
+        close($fh);
+        my $md5 = Digest::MD5::md5_hex( $data );
+
+        $repo->run_trigger( EPrints::Const::EP_TRIGGER_MEDIA_INFO,
+            filename => $filename,
+            filepath => $filepath,
+            epdata => my $media_info = {},
+        );
+
+        my $copy = { pluginid => "Storage::EPM", sourceid => $filepath };
+
+        my $file = $repo->dataset( "file" )->make_dataobj({
+            _parent => $install,
+            filename => $filename,
+            filesize => length($data),
+#           data => MIME::Base64::encode_base64( $data ),
+            hash => $md5,
+            hash_type => "MD5",
+            mime_type => $media_info->{mime_type},
+            copies => [$copy],
+        });
+        $install->set_value( "files", [
+            @{$install->value( "files")},
+            $file,
+        ]);
+        $install->set_main( $file );
+
+        if( $filename =~ m#^static/(images/epm/.*)# )
+        {
+            $self->set_value( "icon", $1 );
+            my $icon = $repo->dataset( "document" )->make_dataobj({
+                _parent => $self,
+                content => "coverimage",
+                main => $filename,
+                files => [],
+                format => "image",
+            });
+            $icon->set_value( "files", [
+                $repo->dataset( "file" )->make_dataobj({
+                    _parent => $icon,
+                    filename => $filename,
+                    filesize => length($data),
+#                   data => MIME::Base64::encode_base64( $data ),
+                    hash => $md5,
+                    hash_type => "MD5",
+                    mime_type => $media_info->{mime_type},
+                    copies => [$copy],
+                })
+            ]);
+            $self->set_value( "documents", [
+                @{$self->value( "documents" )},
+                $icon,
+            ]);
+        }
+    }
+
+    return $self;
+}
+
+
+######################################################################
+=pod
+
+=back
+
+=head2 Class Methods
+
+=cut
+######################################################################
+
+######################################################################
+=pod
+
+=over 4
+
 =item $metadata = EPrints::DataObj::EPM->get_system_field_info
 
-Return an array describing the system metadata of the EPrint dataset.
+Returns an array describing the system metadata of the epm dataset.
 
 =cut
 ######################################################################
@@ -123,6 +424,35 @@ sub get_system_field_info
 	);
 }
 
+
+######################################################################
+=pod
+
+=item $dataset = EPrints::DataObj::EPM->get_dataset_id
+
+Returns the ID of the L<EPrints::DataSet> object to which this record
+belongs.
+
+=cut
+######################################################################
+
+sub get_dataset_id
+{
+    return "epm";
+}
+
+
+######################################################################
+=pod
+
+=item $xhtml = EPrints::DataObj::EPM::render_controller( $repo, $field, $value, under, undef, $epm )
+
+Returns and XHTML DOM object rendering for the action link of the EPM
+using the screen plugin with name supplied by C<$value>.
+
+=cut
+######################################################################
+
 sub render_controller
 {
 	my( $repo, $field, $value, undef, undef, $epm ) = @_;
@@ -134,6 +464,18 @@ sub render_controller
 
 	return $plugin->render_action_link;
 }
+
+
+######################################################################
+=pod
+
+=item $xhtml = EPrints::DataObj::EPM::render_icon( $repo, $field, $value, under, undef, $epm )
+
+Returns and XHTML DOM object rendering for the icon of the EPM using 
+the image with the filename supplied by C<$value>.
+
+=cut
+######################################################################
 
 sub render_icon
 {
@@ -152,93 +494,23 @@ sub render_icon
 	);
 }
 
-sub get_dataset_id
-{
-	return "epm";
-}
 
-sub url_stem { "" }
+######################################################################
+=pod
 
-# mostly for errors generated by us
-sub html_phrase
-{
-	my( $self, $phraseid, @pins ) = @_;
+=item EPrints::DataObj::EPM->map( $repo, $f, $ctx )
 
-	return $self->repository->html_phrase( "epm:$phraseid", @pins );
-}
-
-# convert epdata to objects in documents/documents.files
-sub _upgrade
-{
-	my( $self ) = @_;
-
-	my $repo = $self->repository;
-
-	my $document_dataset = $repo->dataset( "document" );
-	my $file_dataset = $repo->dataset( "file" );
-
-	my $libpath = $repo->config( "base_path" ) . "/lib";
-
-	# can't retrieve documents if they weren't included
-	return if !$self->is_set( "documents" );
-
-	foreach my $doc (@{$self->value( "documents" )})
-	{
-		if( !UNIVERSAL::isa( $doc, "EPrints::DataObj" ) )
-		{
-			$doc = $document_dataset->make_dataobj({
-				_parent => $self,
-				pos => "lib", # horrible - better ideas for get_url?
-				%$doc,
-			});
-		}
-		# can't retrieve files if they weren't included
-		next if !EPrints::Utils::is_set( $doc->{data}->{files} );
-		foreach my $file (@{$doc->value( "files" )})
-		{
-			if( !UNIVERSAL::isa( $file, "EPrints::DataObj" ) )
-			{
-				my $content = delete $file->{_content};
-				$file = $file_dataset->make_dataobj({
-					_parent => $doc,
-					datasetid => "document",
-					%$file,
-				});
-				# get the file from the included temp file
-				if( defined $content )
-				{
-					if( !UNIVERSAL::isa( $content, "File::Temp" ) )
-					{
-						EPrints->abort( "Expected File::Temp in file content but got: $content" );
-					}
-					$file->set_value( "copies", [{
-							pluginid => "Storage::EPM",
-							sourceid => $content,
-					}]);
-				}
-				# get the file from the installed location
-				elsif( -f "$libpath/".$file->value( "filename" ) )
-				{
-					$file->set_value( "copies", [{
-							pluginid => "Storage::EPM",
-					}]);
-				}
-			}
-		}
-	}
-}
-
-=item EPrints::DataObj::EPM->map( $repo, sub { ... }, $ctx )
-
-Apply a function over all installed EPMs.
+Apply a function C<$f> over all installed EPMs with and only context
+C<$ctx>, which is not currently implemented.
 
 	sub {
-		my( $repo, $dataset, $epm [, $ctx ] ) = @_;
+		my( $repo, $dataset, $epm, [ $ctx ] ) = @_;
 	}
 
 This loads the EPM index files only.
 
 =cut
+######################################################################
 
 sub map
 {
@@ -257,165 +529,28 @@ sub map
 	closedir($dh);
 }
 
-=item $epm = EPrints::DataObj::EPM->new( $repo, $id )
 
-Returns a new object representing the installed package $id.
+######################################################################
+=pod
 
-=cut
+=back
 
-sub new
-{
-	my( $class, $repo, $id ) = @_;
-
-	my $filepath = $repo->config( "base_path" ) . "/lib/epm/$id/$id.epmi";
-	if( open(my $fh, "<", $filepath) )
-	{
-		my $dataobj = $class->new_from_file( $repo, $fh );
-		close($fh);
-
-		return $dataobj;
-	}
-
-	return;
-}
-
-sub new_from_data
-{
-	my( $class, $repo, $epdata, $dataset ) = @_;
-
-	my $uri = delete $epdata->{_id};
-
-	my $self = $class->SUPER::new_from_data( $repo, $epdata, $dataset );
-	return undef if !defined $self;
-
-	$self->_upgrade;
-
-	$self->set_value( "uri", $uri );
-
-	return $self;
-}
-
-sub new_from_xml
-{
-	my( $class, $repo, $xml ) = @_;
-
-	my $doc = $repo->xml->parse_string( $xml );
-
-	my $epdata = $repo->dataset( "epm" )->dataobj_class->xml_to_epdata(
-		$repo, $doc->documentElement
-	);
-
-	return $repo->dataset( "epm" )->make_dataobj( $epdata );
-}
-
-sub new_from_file
-{
-	my( $class, $repo, $fh ) = @_;
-
-	my $epdata = {};
-	EPrints::XML::event_parse( $fh, EPrints::DataObj::SAX::Handler->new(
-		$class,
-		$epdata = {},
-		{ dataset => $repo->dataset( "epm" ) }
-	) );
-	return if !keys %$epdata;
-	return $class->new_from_data( $repo, $epdata );
-
-	return;
-}
-
-=item $epm = EPrint::DataObj::EPM->new_from_manifest( $repo, $epdata [, @manifest ] )
-
-Makes and returns a new EPM object based on a manifest of installable files.
+=head2 Object Methods
 
 =cut
+######################################################################
 
-sub new_from_manifest
-{
-	my( $class, $repo, $epdata, @manifest ) = @_;
+######################################################################
+=pod
 
-	my $self = $class->SUPER::new_from_data( $repo, $epdata );
-
-	my $base_path = $self->repository->config( "base_path" ) . "/lib";
-
-	my $install = $repo->dataset( "document" )->make_dataobj({
-		_parent => $self,
-		content => "install",
-		format => "other",
-		files => [],
-	});
-	$self->set_value( "documents", [ $install ]);
-
-	foreach my $filename (@manifest)
-	{
-		my $filepath = "$base_path/$filename";
-		use bytes;
-		open(my $fh, "<", $filepath) or die "Error opening $filepath: $!";
-		sysread($fh, my $data, -s $fh);
-		close($fh);
-		my $md5 = Digest::MD5::md5_hex( $data );
-
-		$repo->run_trigger( EPrints::Const::EP_TRIGGER_MEDIA_INFO,
-			filename => $filename,
-			filepath => $filepath,
-			epdata => my $media_info = {},
-		);
-
-		my $copy = { pluginid => "Storage::EPM", sourceid => $filepath };
-
-		my $file = $repo->dataset( "file" )->make_dataobj({
-			_parent => $install,
-			filename => $filename,
-			filesize => length($data),
-#			data => MIME::Base64::encode_base64( $data ),
-			hash => $md5,
-			hash_type => "MD5",
-			mime_type => $media_info->{mime_type},
-			copies => [$copy],
-		});
-		$install->set_value( "files", [
-			@{$install->value( "files")},
-			$file,
-		]);
-		$install->set_main( $file );
-
-		if( $filename =~ m#^static/(images/epm/.*)# )
-		{
-			$self->set_value( "icon", $1 );
-			my $icon = $repo->dataset( "document" )->make_dataobj({
-				_parent => $self,
-				content => "coverimage",
-				main => $filename,
-				files => [],
-				format => "image",
-			});
-			$icon->set_value( "files", [
-				$repo->dataset( "file" )->make_dataobj({
-					_parent => $icon,
-					filename => $filename,
-					filesize => length($data),
-#					data => MIME::Base64::encode_base64( $data ),
-					hash => $md5,
-					hash_type => "MD5",
-					mime_type => $media_info->{mime_type},
-					copies => [$copy],
-				})
-			]);
-			$self->set_value( "documents", [
-				@{$self->value( "documents" )},
-				$icon,
-			]);
-		}
-	}
-
-	return $self;
-}
+=over 4
 
 =item $epm->commit
 
 Commit any changes to the installed .epm, .epmi files.
 
 =cut
+######################################################################
 
 sub commit
 {
@@ -438,11 +573,16 @@ sub commit
 	}
 }
 
+
+######################################################################
+=pod
+
 =item $epm->rebuild
 
 Reload all of the installed files (regenerating hashes if necessary).
 
 =cut
+######################################################################
 
 sub rebuild
 {
@@ -463,11 +603,16 @@ sub rebuild
 	}
 }
 
+
+######################################################################
+=pod
+
 =item $v = $epm->version
 
 Returns a stringified version suitable for string gt/lt matching.
 
 =cut
+######################################################################
 
 sub version
 {
@@ -481,11 +626,16 @@ sub version
 	return $v;
 }
 
+
+######################################################################
+=pod
+
 =item $bool = $epm->is_enabled
 
-Returns true if the $epm is enabled for the current repository.
+Returns C<true> if the EPM is enabled for the current repository.
 
 =cut
+######################################################################
 
 sub is_enabled
 {
@@ -494,11 +644,16 @@ sub is_enabled
 	return -f $self->_is_enabled_filepath;
 }
 
+
+######################################################################
+=pod
+
 =item @repoids = $epm->repositories
 
-Returns a list of repository ids this $epm is enabled in.
+Returns a list of repository IDs in which this EPM is enabled.
 
 =cut
+######################################################################
 
 sub repositories
 {
@@ -515,11 +670,16 @@ sub repositories
 	return @repoids;
 }
 
-=item $filename = $epm->package_filename()
+
+######################################################################
+=pod
+
+=item $filename = $epm->package_filename
 
 Returns the complete package filename.
 
 =cut
+######################################################################
 
 sub package_filename
 {
@@ -528,11 +688,16 @@ sub package_filename
 	return $self->id . '-' . $self->value( "version" ) . '.epm';
 }
 
+
+######################################################################
+=pod
+
 =item $dir = $epm->epm_dir
 
-Path to the epm directory for this $epm.
+Path to the epm directory for this EPM.
 
 =cut
+######################################################################
 
 sub epm_dir
 {
@@ -541,11 +706,16 @@ sub epm_dir
 	return $self->repository->config( "base_path" ) . "/lib/epm/" . $self->id;
 }
 
-=item @files = $epm->installed_files()
+
+######################################################################
+=pod
+
+=item @files = $epm->installed_files
 
 Returns a list of installed files as L<EPrints::DataObj::File>.
 
 =cut
+######################################################################
 
 sub installed_files
 {
@@ -563,11 +733,17 @@ sub installed_files
 	return @{$install->value( "files" )};
 }
 
-=item @files = $epm->repository_files()
 
-Returns the list of configuration files used to enable/configure an $epm.
+######################################################################
+=pod
+
+=item @files = $epm->repository_files
+
+Returns the list of configuration files used to enable/configure this
+EPM.
 
 =cut
+######################################################################
 
 sub repository_files
 {
@@ -578,11 +754,17 @@ sub repository_files
 		} $self->installed_files;
 }
 
+
+######################################################################
+=pod
+
 =item $screen = $epm->control_screen( %params )
 
-Returns the control screen for this $epm. %params are passed to the plugin constructor.
+Returns the control screen for this EPM. C<%params> are passed to the 
+plugin constructor.
 
 =cut
+######################################################################
 
 sub control_screen
 {
@@ -600,11 +782,17 @@ sub control_screen
 	return $controller;
 }
 
-=item $epm->serialise( $fh, [ FILES ] )
 
-Serialises this EPM to the open file handle $fh. If FILES is true file contents are included.
+######################################################################
+=pod
+
+=item $epm->serialise( $fh, [ $files ] )
+
+Serialises this EPM to the open file handle C<$fh>. If C<$files> is 
+true file contents are included.
 
 =cut
+######################################################################
 
 sub serialise
 {
@@ -621,12 +809,55 @@ sub serialise
 	);
 }
 
-=item $ok = $epm->install( HANDLER [, FORCE ] )
 
-Install the EPM into the system. HANDLER is a L<EPrints::CLIProcessor> or
-L<EPrints::ScreenProcessor>, used for reporting errors.
+######################################################################
+=pod
+
+=item $url_stem = $epm->url_stem
+
+Returns the URL stem for this EPM. Always just an empty string.
 
 =cut
+######################################################################
+
+sub url_stem { "" }
+
+
+######################################################################
+=pod
+
+=item $xhtml_phrase = $epm->html_phrase( $phraseid, [ @pins ] )
+
+Returns and XHTML DOM oject of the HTML phrase for and EPM with the
+C<$phraseid> using the C<@pins> provided if required.
+
+=cut
+######################################################################
+
+sub html_phrase
+{
+    my( $self, $phraseid, @pins ) = @_;
+
+    return $self->repository->html_phrase( "epm:$phraseid", @pins );
+}
+
+
+######################################################################
+=pod
+
+=item $ok = $epm->install( $handler, [ $force ] )
+
+Install the EPM into the system. C<$handler> is a 
+L<EPrints::CLIProcessor> or L<EPrints::ScreenProcessor>, used for 
+reporting errors.  
+
+C<$force> ignores checking the hashes of the files to make sure they 
+have not been changed.
+
+Returns boolean dependent on whether install was successful.
+
+=cut
+######################################################################
 
 sub install
 {
@@ -716,12 +947,22 @@ sub install
 	return 1;
 }
 
-=item $ok = $epm->uninstall( HANDLER [, FORCE ] )
+######################################################################
+=pod
 
-Remove the EPM from the system. HANDLER is a L<EPrints::CLIProcessor> or
-L<EPrints::ScreenProcessor>, used for reporting errors.
+=item $ok = $epm->uninstall( $handler, [ $force ] )
+
+Remove the EPM from the system. C<$handler> is a 
+L<EPrints::CLIProcessor> or L<EPrints::ScreenProcessor>, used for 
+reporting errors.
+
+C<$force> ignores checking the hashes of the files to make sure they
+have not been changed.
+
+Returns boolean dependent on whether uninstall was successful.
 
 =cut
+######################################################################
 
 sub uninstall
 {
@@ -791,11 +1032,20 @@ sub _is_enabled_filepath
 	return $self->{session}->config( "archiveroot" ) . "/cfg/epm/" . $self->id;
 }
 
-=item $ok = $epm->disable_unchanged()
 
-Remove unchanged files from the repository directory. This allows a new version of the EPM to be installed/enabled.
+######################################################################
+=pod
+
+=item $ok = $epm->disable_unchanged
+
+Remove unchanged files from the repository directory. This allows a 
+new version of the EPM to be installed/enabled.
+
+Returns boolean dependent on whether disabling unchanged was 
+successful.
 
 =cut
+######################################################################
 
 sub disable_unchanged
 {
@@ -833,11 +1083,19 @@ sub disable_unchanged
 	return 1;
 }
 
+
+######################################################################
+=pod
+
 =item $ok = $epm->enable( $handler )
 
-Enables the $epm for the current repository.
+Enables the EPM for the current repository using C<$handler> to manage
+messaging for the enabling process.
+
+Returns boolean dependent on whether enabling was successful.
 
 =cut
+######################################################################
 
 sub enable
 {
@@ -928,6 +1186,20 @@ sub enable
 	return 1;
 }
 
+
+######################################################################
+=pod
+
+=item $ok = $epm->enable( $handler )
+
+Enables the EPM for the current repository using C<$handler> to manage
+messaging for the disabling process.
+
+Returns boolean dependent on whether disabling was successful.
+
+=cut
+######################################################################
+
 sub disable
 {
 	my( $self, $handler ) = @_;
@@ -960,17 +1232,16 @@ sub disable
 	return 1;
 }
 
-=back
 
-=head2 Utility Methods
+######################################################################
+=pod
 
-=over 4
+=item $conf = $epm->current_counters
 
-=cut
-
-=item $conf = $epm->current_counters()
+Get SQL counters for current data objects.
 
 =cut
+######################################################################
 
 sub current_counters
 {
@@ -979,9 +1250,16 @@ sub current_counters
 	return [$self->{session}->get_sql_counter_ids];
 }
 
-=item $conf = $epm->current_datasets()
+
+######################################################################
+=pod
+
+=item $conf = $epm->current_datasets
+
+Get dataset for current data objects.
 
 =cut
+######################################################################
 
 sub current_datasets
 {
@@ -1005,9 +1283,17 @@ sub current_datasets
 	return $data;
 }
 
-=item $ok = $epm->update_counters( $conf )
+######################################################################
+=pod
+
+=item $ok = $epm->update_counters( $before )
+
+Update the SQL counters. Removing any counters listed in C<$before> 
+that are not used any more. (C<$before> should be retrieved before 
+enabling by using L</current_counters>.)
 
 =cut
+######################################################################
 
 sub update_counters
 {
@@ -1033,11 +1319,19 @@ sub update_counters
 	}
 }
 
-=item $ok = $epm->update_datasets( $conf )
 
-Update the datasets following any configuration changes made by the extension on being enabled. $conf should be retrieved before enabling by using L</current_datasets>.
+######################################################################
+=pod
+
+=item $ok = $epm->update_datasets( $before )
+
+Update the datasets following any configuration changes made by the 
+extension on being enabled. Removing any datasets listed in C<$before>
+that are not used any more. C<$before> should be retrieved before 
+enabling by using L</current_datasets>.
 
 =cut
+######################################################################
 
 sub update_datasets
 {
@@ -1093,18 +1387,27 @@ sub update_datasets
 	return 1;
 }
 
-=item $ok = $epm->publish( $handler, $base_url, %opts )
 
-Publish this EPM to a remote system using SWORD.
+######################################################################
+=pod
 
-$base_url is the URL of the SWORD endpoint or a page containing a SWORD <link>.
+=item $ok = $epm->publish( $handler, $url, %opts )
+
+Publish this EPM to a remote system using SWORD, using C<$handler> to 
+manage messaging for the publishing process.
+
+C<$url> is the URL of the SWORD endpoint or a page containing 
+a SWORD link.
 
 Options:
 
-	username - username for Basic auth
-	password - password for Basic auth
+ username - username for Basic auth
+ password - password for Basic auth
+
+Returns a boolean dependent on whether the publishing was successful.
 
 =cut
+######################################################################
 
 sub publish
 {
@@ -1160,6 +1463,18 @@ sub publish
 	return $r->header( 'Location' );
 }
 
+
+######################################################################
+=pod
+
+=item $ok = $epm->is_set( $fieldid )
+
+Returns a boolean dependent on whether a value is set for the field 
+with C<$fieldid> for this EPM.
+
+=cut
+######################################################################
+
 sub is_set
 {
 	my( $self, $fieldid ) = @_;
@@ -1171,18 +1486,156 @@ sub is_set
 	return EPrints::Utils::is_set( $self->{data}->{$fieldid} );
 }
 
+# convert epdata to objects in documents/documents.files
+sub _upgrade
+{
+    my( $self ) = @_;
+
+    my $repo = $self->repository;
+
+    my $document_dataset = $repo->dataset( "document" );
+    my $file_dataset = $repo->dataset( "file" );
+
+    my $libpath = $repo->config( "base_path" ) . "/lib";
+
+    # can't retrieve documents if they weren't included
+    return if !$self->is_set( "documents" );
+
+    foreach my $doc (@{$self->value( "documents" )})
+    {
+        if( !UNIVERSAL::isa( $doc, "EPrints::DataObj" ) )
+        {
+            $doc = $document_dataset->make_dataobj({
+                _parent => $self,
+                pos => "lib", # horrible - better ideas for get_url?
+                %$doc,
+            });
+        }
+        # can't retrieve files if they weren't included
+        next if !EPrints::Utils::is_set( $doc->{data}->{files} );
+        foreach my $file (@{$doc->value( "files" )})
+        {
+            if( !UNIVERSAL::isa( $file, "EPrints::DataObj" ) )
+            {
+                my $content = delete $file->{_content};
+                $file = $file_dataset->make_dataobj({
+                    _parent => $doc,
+                    datasetid => "document",
+                    %$file,
+                });
+                # get the file from the included temp file
+                if( defined $content )
+                {
+                    if( !UNIVERSAL::isa( $content, "File::Temp" ) )
+                    {
+                        EPrints->abort( "Expected File::Temp in file content but got: $content" );
+                    }
+                    $file->set_value( "copies", [{
+                            pluginid => "Storage::EPM",
+                            sourceid => $content,
+                    }]);
+                }
+                # get the file from the installed location
+                elsif( -f "$libpath/".$file->value( "filename" ) )
+                {
+                    $file->set_value( "copies", [{
+                            pluginid => "Storage::EPM",
+                    }]);
+                }
+            }
+        }
+    }
+}
+
+
+######################################################################
+=pod
+
+=back
+
+=head2 Utility Methods
+
+=cut
+######################################################################
+
+######################################################################
+=pod
+
+=over 4
+
+=item $xhtml = EPrints::DataObj::EPM::render_controller( $repo, $field, $value, under, undef, $epm )
+
+Returns and XHTML DOM object rendering for the action link of the EPM
+using the screen plugin with name supplied by C<$value>.
+
+=cut
+######################################################################
+
+sub render_controller
+{
+    my( $repo, $field, $value, undef, undef, $epm ) = @_;
+
+    $value = "EPMC" if !defined $value;
+
+    my $plugin = $repo->plugin( "Screen::$value" );
+    return $repo->xml->create_document_fragment if !defined $plugin;
+
+    return $plugin->render_action_link;
+}
+
+
+######################################################################
+=pod
+
+=item $xhtml = EPrints::DataObj::EPM::render_icon( $repo, $field, $value, under, undef, $epm )
+
+Returns and XHTML DOM object rendering for the icon of the EPM using
+the image with the filename supplied by C<$value>.
+
+=cut
+######################################################################
+
+sub render_icon
+{
+    my( $repo, $field, $value, undef, undef, $epm ) = @_;
+
+    $value = "images/epm/unknown.png" if !EPrints::Utils::is_set( $value );
+
+    my $url = $value =~ /^https?:/ ?
+        $value :
+        $repo->current_url( host => 1, path => "static", $value );
+
+    return $repo->xml->create_element( "img",
+        width => "70px",
+        src => $url,
+        alt => $epm->value( "title" ) . " icon",
+    );
+}
+
+
+1;
+
+######################################################################
+=pod
+
+=back
+
+=head1 SEE ALSO
+
+L<EPrints::DataObj> and L<EPrints::DataSet>
+
 =head1 COPYRIGHT
 
-=for COPYRIGHT BEGIN
+=begin COPYRIGHT
 
-Copyright 2021 University of Southampton.
+Copyright 2022 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/
 
-=for COPYRIGHT END
+=end COPYRIGHT
 
-=for LICENSE BEGIN
+=begin LICENSE
 
 This file is part of EPrints 3.4 L<http://www.eprints.org/>.
 
@@ -1199,5 +1652,5 @@ You should have received a copy of the GNU Lesser General Public
 License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
-=for LICENSE END
+=end LICENSE
 

@@ -8,15 +8,83 @@
 ######################################################################
 
 
+=pod
+
+=for Pod2Wiki
+
 =head1 NAME
 
-B<EPrints::DataObj::Request> - Log document requests and responses (for request document button)
+B<EPrints::DataObj::Request> - User requests.
 
-=head1 METHODS
+=head1 DESCRIPTION
+
+This class stores user requests and their responses for requesting a 
+copy of a document.
+
+=head1 CORE METADATA FIELDS
 
 =over 4
 
+=item requestid (counter)
+
+The unique identifier for this request
+
+=item docid (text)
+
+The ID for any document this request may relate.
+
+=item datestamp (timestamp)
+
+The datestamp this request was created.
+
+=item email (email)
+
+The email address to which this request is sent.
+
+=item requester_email (email)
+
+The email address of the requester.
+
+=item reason (longtext)
+
+The reason the request was made.
+
+=item expiry_date (time)
+
+The time at which this request will expires.
+
+=item code (text)
+
+The code for this request, which can be used to created private URLS.
+
+=item captcha (recaptcha)
+
+The ReCAPTCHA field for the form for this request.
+
+=back
+
+=head1 REFERENCES AND RELATED OBJECTS
+
+=over 4
+
+=item eprintid (itemref)
+
+The ID of the eprint data object associated with this request.
+
+=item userid (itemref)
+
+The ID of the user to whom this request is assigned.
+
+=back
+
+=head1 INSTANCES VARIABLES
+
+See L<EPrints::DataObj|EPrints::DataObj#INSTANCE_VARIABLES>.
+
+=head1 METHODS
+
 =cut
+######################################################################
 
 package EPrints::DataObj::Request;
 
@@ -27,11 +95,27 @@ use Time::Local 'timegm_nocheck';
 
 use strict;
 
-=item $thing = EPrints::DataObj::DocRequest->get_system_field_info
 
-Core fields contained in a document request.
+######################################################################
+=pod
+
+=head2 Class Methods
 
 =cut
+######################################################################
+
+######################################################################
+=pod
+
+=over 4
+
+=item $fields = EPrints::DataObj::Request->get_system_field_info
+
+Returns an array describing the system metadata of the request
+dataset.
+
+=cut
+######################################################################
 
 sub get_system_field_info
 {
@@ -67,21 +151,12 @@ sub get_system_field_info
 }
 
 ######################################################################
-
-=back
-
-=head2 Class Methods
-
-=cut
-
-######################################################################
-
-######################################################################
 =pod
 
 =item $dataset = EPrints::DataObj::Request->get_dataset_id
 
-Returns the id of the L<EPrints::DataSet> object to which this record belongs.
+Returns the ID of the L<EPrints::DataSet> object to which this record 
+belongs.
 
 =cut
 ######################################################################
@@ -91,12 +166,15 @@ sub get_dataset_id
 	return "request";
 }
 
-######################################################################
 
-=head2 Object Methods
+######################################################################
+=pod
+
+=item $request = EPrints::DataObj::Request->new_from_code( $session, $code )
+
+Returns request that matches provided C<$code>.
 
 =cut
-
 ######################################################################
 
 sub new_from_code
@@ -110,6 +188,29 @@ sub new_from_code
                         { meta_fields => [ 'code' ], value => "$code", match => 'EX' },
                 ])->item( 0 );
 }
+
+
+######################################################################
+=pod
+
+=back
+
+=head2 Object Methods
+
+=cut
+######################################################################
+
+######################################################################
+=pod
+
+=over 4
+
+=item $boolean = $request->has_expired
+
+Returns a boolean depending on whether this request has expired.
+
+=cut
+######################################################################
 
 sub has_expired
 {
@@ -128,7 +229,8 @@ sub has_expired
 
 1;
 
-__END__
+######################################################################
+=pod
 
 =back
 
@@ -136,21 +238,18 @@ __END__
 
 L<EPrints::DataObj> and L<EPrints::DataSet>.
 
-=cut
-
-
 =head1 COPYRIGHT
 
-=for COPYRIGHT BEGIN
+=begin COPYRIGHT
 
-Copyright 2021 University of Southampton.
+Copyright 2022 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/
 
-=for COPYRIGHT END
+=end COPYRIGHT
 
-=for LICENSE BEGIN
+=begin LICENSE
 
 This file is part of EPrints 3.4 L<http://www.eprints.org/>.
 
@@ -167,5 +266,5 @@ You should have received a copy of the GNU Lesser General Public
 License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
-=for LICENSE END
+=end LICENSE
 

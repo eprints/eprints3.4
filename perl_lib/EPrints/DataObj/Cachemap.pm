@@ -7,20 +7,69 @@
 #
 ######################################################################
 
+=pod
+
+=for Pod2Wiki
 
 =head1 NAME
 
-B<EPrints::DataObj::Cachemap> - cache tables
+B<EPrints::DataObj::Cachemap> - Cache tables
 
 =head1 DESCRIPTION
 
-This is an internal class that shouldn't be used outside L<EPrints::Database>.
+This is an internal class that shouldn't be used outside 
+L<EPrints::Database>.
 
-=head1 METHODS
+=head1 CORE METADATA FIELDS
 
 =over 4
 
+=item cachemapid (int)
+
+The unique numerical ID of this cachemap object.
+
+=item created (int)
+
+The time the cachemap record was created in seconds since start of 
+last epoch.
+
+=item lastused (int)
+
+The time the cachemap record was last used in seconds since start of
+last epoch.
+
+=item searchexap (longtext)
+
+A serialisation of the search carried out that is stored in this
+cachemap record.
+
+=item oneshot (boolean)
+
+DEPRECATED. A boolean to record whether the cache is for single use
+where it will be created, used and immediately deleted.  Such as 
+type of caching is no longer required.
+
+=back
+
+=head1 REFERENCES AND RELATED OBJECTS
+
+=over 4
+
+=item userid (itemref)
+
+Reference to the userid of the user who caused the cachemap record
+to be created, if this is known.
+
+=back
+
+=head1 INSTANCE VARIABLES
+
+See L<EPrints::DataObj|EPrints::DataObj#INSTANCE_VARIABLES>.
+
+=head1 METHODS
+
 =cut
+######################################################################
 
 package EPrints::DataObj::Cachemap;
 
@@ -29,6 +78,37 @@ package EPrints::DataObj::Cachemap;
 use EPrints;
 
 use strict;
+
+
+######################################################################
+=pod
+
+=head2 Constructor Methods
+
+=cut
+######################################################################
+
+######################################################################
+=pod
+
+=over 4
+
+=item EPrints::DataObj::Cachemap->create_from_data( $session, $data, $dataset )
+
+Creates a new cachemap data object in the database.
+
+C<$dataset> is the dataset it will belong to.
+
+C<$data> is the data structured as with L<EPrints::DataObj#new_from_data>.
+
+This will create sub-objects as well.
+
+Call this via:
+
+ $dataset->create_object( $session, $data )
+
+=cut
+######################################################################
 
 sub create_from_data
 {
@@ -50,11 +130,29 @@ sub create_from_data
 	return $class->SUPER::create_from_data( $session, $data, $dataset );
 }
 
-=item $thing = EPrints::DataObj::Access->get_system_field_info
 
-Core fields.
+######################################################################
+=pod
+
+=back
+
+=head2 Class Methods
 
 =cut
+######################################################################
+
+######################################################################
+=pod
+
+=over 4
+
+=item $fields = EPrints::DataObj::Access->get_system_field_info
+
+Returns an array describing the system metadata of the cachemap
+dataset.
+
+=cut
+######################################################################
 
 sub get_system_field_info
 {
@@ -77,22 +175,16 @@ sub get_system_field_info
 	);
 }
 
-######################################################################
-
-=back
-
-=head2 Class Methods
-
-=cut
-
-######################################################################
 
 ######################################################################
 =pod
 
+=over 4
+
 =item $dataset = EPrints::DataObj::Cachemap->get_dataset_id
 
-Returns the id of the L<EPrints::DataSet> object to which this record belongs.
+Returns the ID of the L<EPrints::DataSet> object to which this record 
+belongs.
 
 =cut
 ######################################################################
@@ -102,20 +194,21 @@ sub get_dataset_id
 	return "cachemap";
 }
 
+
 ######################################################################
+=pod
 
 =item $defaults = EPrints::DataObj::Cachemap->get_defaults( $session, $data )
 
-Return default values for this object based on the starting data.
+Return default values for this object based on the starting C<$data>.
 
 =cut
-
 ######################################################################
 
 sub get_defaults
 {
 	my( $class, $session, $data, $dataset ) = @_;
-	
+ 	
 	$class->SUPER::get_defaults( $session, $data, $dataset );
 
 	$data->{created} = time();
@@ -123,11 +216,18 @@ sub get_defaults
 	return $data;
 }
 
-=item $dropped = EPrints::DataObj::Cachemap->cleanup( $repository )
 
-Clean up old caches. Returns the number of caches dropped.
+######################################################################
+=pod
+
+=item $dropped = EPrints::DataObj::Cachemap->cleanup( $repo )
+
+Clean up old caches for specified C<$repo>. 
+
+Returns the number of caches dropped.
 
 =cut
+######################################################################
 
 sub cleanup
 {
@@ -176,19 +276,31 @@ sub cleanup
 	return $dropped;
 }
 
+
 ######################################################################
+=pod
+
+=back
 
 =head2 Object Methods
 
 =cut
-
 ######################################################################
 
-=item $foo = $thing->remove()
+######################################################################
+=pod
 
-Remove this record from the data set (see L<EPrints::Database>).
+=over 4
+
+=item $rc = $cachemap->remove
+
+Remove this record from the data set and the cache table from the 
+database.
+
+Returns a code based of success of removing record / cache table.
 
 =cut
+######################################################################
 
 sub remove
 {
@@ -210,6 +322,17 @@ sub remove
 	return $rc;
 }
 
+
+######################################################################
+=pod
+
+=item $sql_name = $cachemap->get_sql_table_name
+
+Returns the name of the cache table for this cachemap record.
+
+=cut
+######################################################################
+
 sub get_sql_table_name
 {
 	my( $self ) = @_;
@@ -217,11 +340,18 @@ sub get_sql_table_name
 	return "cache" . $self->get_id;
 }
 
+######################################################################
+=pod
+
 =item $ok = $cachemap->create_sql_table( $dataset )
 
-Create the cachemap database table that can store ids from $dataset.
+Create the cachemap database table that can store IDs for the 
+specified C<$dataset>.
+
+Returns code based on the success of creating cache table.
 
 =cut
+######################################################################
 
 sub create_sql_table
 {
@@ -241,7 +371,8 @@ sub create_sql_table
 
 1;
 
-__END__
+######################################################################
+=pod
 
 =back
 
@@ -249,21 +380,18 @@ __END__
 
 L<EPrints::DataObj> and L<EPrints::DataSet>.
 
-=cut
-
-
 =head1 COPYRIGHT
 
-=for COPYRIGHT BEGIN
+=begin COPYRIGHT
 
-Copyright 2021 University of Southampton.
+Copyright 2022 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/
 
-=for COPYRIGHT END
+=end COPYRIGHT
 
-=for LICENSE BEGIN
+=begin LICENSE
 
 This file is part of EPrints 3.4 L<http://www.eprints.org/>.
 
@@ -280,5 +408,5 @@ You should have received a copy of the GNU Lesser General Public
 License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
-=for LICENSE END
+=end LICENSE
 

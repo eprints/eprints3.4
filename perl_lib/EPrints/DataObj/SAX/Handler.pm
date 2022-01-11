@@ -1,12 +1,11 @@
 ######################################################################
 #
-# EPrints::DataObj::Message
+# EPrints::DataObj::SAX::Handler
 #
 ######################################################################
 #
 #
 ######################################################################
-
 
 =pod
 
@@ -14,66 +13,24 @@
 
 =head1 NAME
 
-B<EPrints::DataObj::Message> - user system message
+B<EPrints::DataObj::SAX::Handler> - SAX handler for EPrints data 
+objects.
 
 =head1 DESCRIPTION
 
-This is an internal class that should not be used outside 
-L<EPrints::Database>.
-
-=head1 CORE METADATA FIELDS
-
-=over 4
-
-=item messageid (counter)
-
-Unique identifier for this message.
-
-=item datestamp (timestamp)
-
-The time when this message was created.
-
-=item type (set)
-
-The type of message.
-
-=item message (longtext)
-
-The contemts of this message.
-
-=back
-
-=head1 REFERENCES AND RELATED OBJECTS
-
-=over 4
-
-=item userid (itemref)
-
-The user for the whom this message is intended.
-
-=back
-
-=head1 INSTANCE VARIABLES
-
-See L<EPrints::DataObj|EPrints::DataObj#INSTANCE_VARIABLES>.
+This class provides a SAX handler for parsing EPrints data objects.
 
 =head1 METHODS
 
 =cut
 
-package EPrints::DataObj::Message;
-
-@ISA = ( 'EPrints::DataObj' );
-
-use EPrints;
-
-use strict;
+package EPrints::DataObj::SAX::Handler;
 
 
 ######################################################################
 =pod
 
-=head2 Class Methods
+=head2 Constructor Methods
 
 =cut
 ######################################################################
@@ -83,60 +40,90 @@ use strict;
 
 =over 4
 
-=item $fields = EPrints::DataObj::Message->get_system_field_info
+=item EPrints::DataObj::SAX::Handler->new
 
-Returns an array describing the system metadata fields of the message
-dataset.
+Create new SAX Handler.
 
 =cut
 ######################################################################
 
-sub get_system_field_info
+sub new
 {
-	my( $class ) = @_;
+    my( $class, @self ) = @_;
 
-	return
-	( 
-		{ name=>"messageid", type=>"counter", required=>1, can_clone=>0,
-			sql_counter=>"messageid" },
+    return bless \@self, $class;
+}
 
-		{ name=>"datestamp", type=>"timestamp", required=>1, text_index=>0 },
+sub AUTOLOAD {}
 
-		{ name=>"userid", type=>"itemref", datasetid=>"user", required=>1, text_index=>0 },
 
-		{ name=>"type", type=>"set", required=>1, text_index=>0,
-			options => [qw/ message warning error /] },
+######################################################################
+=pod
 
-		{ name=>"message", type=>"longtext", required=>1, text_index=>0 },
+=back
 
-	);
+=head2 Object Methods
+
+=back
+######################################################################
+
+######################################################################
+=pod
+
+=over 4
+
+=item $sax_handler->start_element( $data )
+
+Use C<$data> to start a new element.
+
+=cut
+######################################################################
+
+sub start_element
+{
+    my( $self, $data ) = @_;
+    $self->[0]->start_element( $data, @$self[1..$#$self] );
 }
 
 ######################################################################
 =pod
 
-=item $dataset = EPrints::DataObj::Message->get_dataset_id
+=item $sax_handler->end_element( $data )
 
-Returns the id of the L<EPrints::DataSet> object to which this record 
-belongs.
+Use C<$data> to end an element.
 
 =cut
 ######################################################################
 
-sub get_dataset_id
+sub end_element
 {
-	return "message";
+    my( $self, $data ) = @_;
+    $self->[0]->end_element( $data, @$self[1..$#$self] );
+}
+
+
+######################################################################
+=pod
+
+=item $sax_handler->characters( $data )
+
+Use C<$data> to add characters to element.
+
+=cut
+######################################################################
+
+sub characters
+{
+    my( $self, $data ) = @_;
+    $self->[0]->characters( $data, @$self[1..$#$self] );
 }
 
 1;
 
 ######################################################################
+=pod
 
 =back
-
-=head1 SEE ALSO
-
-L<EPrints::DataObj> and L<EPrints::DataSet>.
 
 =head1 COPYRIGHT
 
@@ -167,4 +154,3 @@ License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
 =end LICENSE
-

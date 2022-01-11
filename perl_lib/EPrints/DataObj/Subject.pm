@@ -14,18 +14,47 @@
 
 =head1 NAME
 
-B<EPrints::DataObj::Subject> - Class and methods relating to the subejcts tree.
+B<EPrints::DataObj::Subject> - Subjects within a hierarchical tree.
 
 =head1 DESCRIPTION
 
-This class represents a single node in the subejcts tree. It also
+This class represents a single node in the subjects tree. It also
 contains a number of methods for handling the entire tree.
 
-EPrints::DataObj::Subject is a subclass of EPrints::DataObj
+=head1 CORE METADATA FIELDS
 
 =over 4
 
+=item subjectid (id) 
+
+=item rev_number (int)
+
+=item name (multilang)
+
+=item depositable (boolean)
+
+=item sortvalue (multilang)
+
+=back
+
+=head1 REFERENCES AND RELATED OBJECTS
+
+=over 4
+
+=item parents (id)
+
+=item ancestors (id)
+
+=back
+
+=head1 INSTANCE VARIABLES
+
+See L<EPrints::DataObj|EPrints::DataObj#INSTANCE_VARIABLES>.
+
+=head1 METHODS
+
 =cut
+######################################################################
 
 package EPrints::DataObj::Subject;
 
@@ -38,12 +67,195 @@ use strict;
 # Root subject specifier
 $EPrints::DataObj::Subject::root_subject = "ROOT";
 
+
 ######################################################################
 =pod
 
-=item $thing = EPrints::DataObj::Subject->get_system_field_info
+=head2 Constructor Methods
 
-Return an array describing the system metadata of the Subject dataset.
+=cut
+######################################################################
+
+######################################################################
+=pod
+
+=over 4
+
+=item $subject = EPrints::DataObj::Subject->new( $session, $subjectid )
+
+Create a new subject object with the ID C<$subjectid>. The values
+for the subject are loaded from the database.
+
+=cut
+######################################################################
+
+sub new
+{
+    my( $class, $session, $subjectid ) = @_;
+
+    if( $session->{subjects_cached} )
+    {
+        return $session->{subject_cache}->{$subjectid};
+    }
+
+    unless( defined $subjectid )
+    {
+        $session->get_repository->log( '[warning] Can\'t create Subject without an ID' );
+        return undef;
+    }
+
+    if( $subjectid eq $EPrints::DataObj::Subject::root_subject )
+    {
+        my $data = {
+            subjectid => $EPrints::DataObj::Subject::root_subject,
+            name => [],
+            parents => [],
+            ancestors => [ $EPrints::DataObj::Subject::root_subject ],
+            depositable => "FALSE"
+        };
+        my $name;
+        foreach my $langid ( @{$session->config( "languages" )} )
+        {
+            my $top_level_name = EPrints::XML::to_string(
+                $session->get_repository->get_language( $langid )->phrase(
+                            "lib/subject:top_level",
+                            {},
+                            $session ) );
+
+            push @{$data->{name}}, {
+                lang => $langid,
+                name => $top_level_name };
+        }
+
+        return EPrints::DataObj::Subject->new_from_data( $session, $data );
+    }
+
+    return $session->get_database->get_single(
+            $session->dataset( "subject" ),
+            $subjectid );
+
+}
+
+
+######################################################################
+=pod
+
+=item $subject = EPrints::DataObj::Subject->new_from_data( $session, $data )
+
+Construct a new subject object from a hash reference containing
+the relevant fields. Generally this method is only used to construct
+new Subjects coming out of the database.
+
+=cut
+######################################################################
+
+sub new_from_data
+{
+    my( $class, $session, $known ) = @_;
+
+    return $class->SUPER::new_from_data(
+            $session,
+            $known,
+            $session->dataset( "subject" ) );
+}
+
+
+######################################################################
+=pod
+
+=item $subject = EPrints::DataObj::Subject::create( $session, $id, $name, $parents, $depositable )
+
+Creates a new subject in the database. C<$id> is the ID of the 
+subject, C<$name> is a multilang data structure with the name of the 
+subject in one or more languages. E.g.
+
+ { en=>"Trousers", en-us=>"Pants" }
+
+C<$parents> is a reference to an array containing the ID of one or more 
+other subjects (don't make loops!). If C<$depositable> is C<true> then 
+data objects (typically eprints) may belong to this subject.
+
+=cut
+######################################################################
+
+sub create
+{
+    my( $session, $id, $name, $parents, $depositable ) = @_;
+
+    my $actual_parents = $parents;
+    $actual_parents = [ $EPrints::DataObj::Subject::root_subject ] if( !defined $parents );
+
+    my $data =
+        { "subjectid"=>$id,
+          "name"=>$name,
+          "parents"=>$actual_parents,
+          "ancestors"=>[],
+          "depositable"=>($depositable ? "TRUE" : "FALSE" ) };
+
+    return EPrints::DataObj::Subject->create_from_data(
+        $session,
+        $data,
+        $session->dataset( "subject" ) );
+}
+
+
+######################################################################
+=pod
+
+=item $dataobj = EPrints::DataObj::Subject->create_from_data( $session, $data, $dataset )
+
+Returns C<undef> if a bad (or no) C<subjectid> is specified in
+C<$data>.
+
+Otherwise calls the parent method in L<EPrints::DataObj>.
+
+=cut
+######################################################################
+
+sub create_from_data
+{
+    my( $class, $session, $data, $dataset ) = @_;
+
+    my $id = $data->{subjectid};
+    unless( valid_id( $id ) )
+    {
+        EPrints::abort( <<END );
+Error. Can't create new subject.
+The value '$id' is not a valid subject identifier.
+Subject id's may not contain whitespace.
+END
+    }
+
+    my $subject = $class->SUPER::create_from_data( $session, $data, $dataset );
+
+    return unless( defined $subject );
+
+    # regenerate ancestors field
+    $subject->commit;
+
+    return $subject;
+}
+
+
+######################################################################
+=pod
+
+=back 
+
+=head2 Class Methods
+
+=cut
+######################################################################
+
+######################################################################
+=pod
+
+=over 4
+
+=item $fields = EPrints::DataObj::Subject->get_system_field_info
+
+Returns an array describing the system metadata of the subject 
+dataset.
 
 =cut
 ######################################################################
@@ -101,97 +313,41 @@ sub get_system_field_info
 ######################################################################
 =pod
 
-=item $subject = EPrints::DataObj::Subject->new( $session, $subjectid )
+=item $dataset = EPrints::DataObj::Subject->get_dataset_id
 
-Create a new subject object given the id of the subject. The values
-for the subject are loaded from the database.
+Returns the id of the L<EPrints::DataSet> object to which this record 
+belongs.
 
 =cut
 ######################################################################
 
-sub new
+sub get_dataset_id
 {
-	my( $class, $session, $subjectid ) = @_;
-
-	if( $session->{subjects_cached} )
-	{
-		return $session->{subject_cache}->{$subjectid};
-	}
-
-	unless( defined $subjectid )
-	{
-		$session->get_repository->log( '[warning] Can\'t create Subject without an ID' );
-		return undef;
-	}
-
-	if( $subjectid eq $EPrints::DataObj::Subject::root_subject )
-	{
-		my $data = {
-			subjectid => $EPrints::DataObj::Subject::root_subject,
-			name => [],
-			parents => [],
-			ancestors => [ $EPrints::DataObj::Subject::root_subject ],
-			depositable => "FALSE" 
-		};
-		my $name;
-		foreach my $langid ( @{$session->config( "languages" )} )
-		{
- 			my $top_level_name = EPrints::XML::to_string( 
-				$session->get_repository->get_language( $langid )->phrase( 
-							"lib/subject:top_level", 
-							{}, 
-							$session ) );
-
-			push @{$data->{name}}, { 
-				lang => $langid,
-				name => $top_level_name };
-		}
-
-		return EPrints::DataObj::Subject->new_from_data( $session, $data );
-	}
-
-	return $session->get_database->get_single( 
-			$session->dataset( "subject" ), 
-			$subjectid );
-
+    return "subject";
 }
-
 
 
 ######################################################################
 =pod
 
-=item $subject = EPrints::DataObj::Subject->new_from_data( $session, $data )
+=back
 
-Construct a new subject object from a hash reference containing
-the relevant fields. Generally this method is only used to construct
-new Subjects coming out of the database.
+=head2 Object Methods
 
 =cut
 ######################################################################
 
-sub new_from_data
-{
-	my( $class, $session, $known ) = @_;
-
-	return $class->SUPER::new_from_data(
-			$session,
-			$known,
-			$session->dataset( "subject" ) );
-}
-
-
-
-
 ######################################################################
 =pod
 
-=item $success = $subject->commit( [$force] )
+=over 4
+
+=item $success = $subject->commit( [ $force ] )
 
 Commit this subject to the database, but only if any fields have 
 changed since we loaded it.
 
-If $force is set then always commit, even if there appear to be no
+If C<$force> is set then always commit, even if there appear to be no
 changes.
 
 =cut
@@ -269,184 +425,80 @@ sub remove
 		$self->{data}->{subjectid} );
 }
 
-######################################################################
-=pod
-
-=item $dataset = EPrints::DataObj::Subject->get_dataset_id
-
-Returns the id of the L<EPrints::DataSet> object to which this record belongs.
-
-=cut
-######################################################################
-
-sub get_dataset_id
-{
-	return "subject";
-}
-
 
 ######################################################################
 =pod
 
-=item EPrints::DataObj::Subject::remove_all( $session )
-
-Static function.
-
-Remove all subjects from the database. Use with care!
-
-=cut
-######################################################################
-
-sub remove_all
-{
-	my( $session ) = @_;
-
-	my $ds = $session->dataset( "subject" );
-	my @subjects = $session->get_database->get_all( $ds );
-	foreach( @subjects )
-	{
-		my $id = $_->get_value( "subjectid" );
-		$session->get_database->remove( $ds, $id );
-	}
-	return;
-}
-
-	
-######################################################################
-=pod
- 
-=item $subject = EPrints::DataObj::Subject::create( $session, $id, $name, $parents, $depositable )
- 
-Creates a new subject in the database. $id is the ID of the subject,
-$name is a multilang data structure with the name of the subject in
-one or more languages. eg. { en=>"Trousers", en-us=>"Pants}. $parents
-is a reference to an array containing the ID's of one or more other
-subjects (don't make loops!). If $depositable is true then eprints may
-belong to this subject.
- 
-=cut
-######################################################################
-
-sub create
-{
-	my( $session, $id, $name, $parents, $depositable ) = @_;
-
-	my $actual_parents = $parents;
-	$actual_parents = [ $EPrints::DataObj::Subject::root_subject ] if( !defined $parents );
-
-	my $data = 
-		{ "subjectid"=>$id,
-		  "name"=>$name,
-		  "parents"=>$actual_parents,
-		  "ancestors"=>[],
-		  "depositable"=>($depositable ? "TRUE" : "FALSE" ) };
-
-	return EPrints::DataObj::Subject->create_from_data( 
-		$session, 
-		$data,
-		$session->dataset( "subject" ) );
-}
-
-######################################################################
-=pod
- 
-=item $dataobj = EPrints::DataObj::Subject->create_from_data( $session, $data, $dataset )
- 
-Returns undef if a bad (or no) subjectid is specified.
- 
-Otherwise calls the parent method in EPrints::DataObj.
-
-=cut
-######################################################################
-
-sub create_from_data
-{
-	my( $class, $session, $data, $dataset ) = @_;
-                           
-	my $id = $data->{subjectid};                                                                                       
-	unless( valid_id( $id ) )
-	{
-		EPrints::abort( <<END );
-Error. Can't create new subject. 
-The value '$id' is not a valid subject identifier.
-Subject id's may not contain whitespace.
-END
-	}
-
-	my $subject = $class->SUPER::create_from_data( $session, $data, $dataset );
-
-	return unless( defined $subject );
-	
-	# regenerate ancestors field
-	$subject->commit;
-
-	return $subject;
-}
-
-######################################################################
-=pod
- 
 =item @subject_ids = $subject->_get_ancestors
 
-Get the ancestors of a given subject.
+Returns and array of all the ancestor subjects of this subject.
 
 =cut
 ######################################################################
 
 sub _get_ancestors
 {
-	my( $self, $seen ) = @_;
+    my( $self, $seen ) = @_;
 
-	return () if exists $seen->{$self->{data}->{subjectid}};
-	$seen->{$self->{data}->{subjectid}} = undef;
+    return () if exists $seen->{$self->{data}->{subjectid}};
+    $seen->{$self->{data}->{subjectid}} = undef;
 
-	my @ancestors = ($self->{data}->{subjectid});
+    my @ancestors = ($self->{data}->{subjectid});
 
-	foreach my $parent ( $self->get_parents() )
-	{
-		push @ancestors, $parent->_get_ancestors( $seen );
-	}
+    foreach my $parent ( $self->get_parents() )
+    {
+        push @ancestors, $parent->_get_ancestors( $seen );
+    }
 
-	return @ancestors;
+    return @ancestors;
 }
+
 
 ######################################################################
 =pod
 
-=item $subject = $subject->top()
+=item $subject = $subject->top
 
-Returns the subject that is at the top of this subject's tree (which may be this subject).
+Returns the subject that is at the top of this subject's tree, which 
+may be the subject itself.
 
-Returns undef if the subject is not part of a tree.
+Returns C<undef> if the subject is not part of a tree.
 
 =cut
 ######################################################################
 
 sub top
 {
-	my( $self ) = @_;
+    my( $self ) = @_;
 
-	foreach my $id ($self->id, @{$self->value( "ancestors" )})
-	{
-		my $subject = $self->{dataset}->dataobj( $id );
-		next if !defined $subject;
-		foreach my $parentid (@{$subject->value( "parents" )})
-		{
-			return $subject
-				if $parentid eq $EPrints::DataObj::Subject::root_subject;
-		}
-	}
+    foreach my $id ($self->id, @{$self->value( "ancestors" )})
+    {
+        my $subject = $self->{dataset}->dataobj( $id );
+        next if !defined $subject;
+        foreach my $parentid (@{$subject->value( "parents" )})
+        {
+            return $subject
+                if $parentid eq $EPrints::DataObj::Subject::root_subject;
+        }
+    }
 
-	return undef;
+    return undef;
 }
+
 
 ######################################################################
 =pod
 
 =item $child_subject = $subject->create_child( $id, $name, $depositable )
 
-Similar to EPrints::DataObj::Subject::create, but this creates the new subject
-as a child of the current subject.
+Similar to L</create> but this creates a new subject as a child of 
+the current subject.
+
+C<$id> is the ID for the new child subject. C<$name> is the label for 
+this new subject and C<$depositable> is a boolean indicating whether 
+this new subject is depositable.
+
+Returns the new child subject.
 
 =cut
 ######################################################################
@@ -469,8 +521,8 @@ sub create_child
 
 =item @children = $subject->get_children
 
-Return a list of EPrints::DataObj::Subject objects which are direct children
-of the current subject.
+Returns a list of subject data objects which are direct children of 
+the current subject.
 
 =cut
 ######################################################################
@@ -500,15 +552,13 @@ sub get_children
 }
 
 
-
-
 ######################################################################
 =pod
 
 =item @parents = $subject->get_parents
 
-Return a list of EPrints::DataObj::Subject objects which are direct parents
-of the current subject.
+Returns a list of subject data objects which are direct parents of the 
+current subject.
 
 =cut
 ######################################################################
@@ -529,13 +579,14 @@ sub get_parents
 ######################################################################
 =pod
 
-=item $boolean = $subject->can_post( [$user] )
+=item $boolean = $subject->can_post( [ $user ] )
 
-Determines whether the given user can post in this subject.
+Determines whether the given C<$user> if specified can post in this 
+subject.
 
 Currently there is no way to configure subjects for certain users,
-so this just returns the true or false depending on the "depositable"
-flag.
+so this just returns the C<true> or C<false> depending on the 
+C<depositable> flag.
 
 =cut
 ######################################################################
@@ -555,13 +606,14 @@ sub can_post
 
 =item $xhtml = $subject->render_with_path( $session, $topsubjid )
 
-Return the name of this subject including it's path from $topsubjid.
+Returns the XHTML DOM rendering name of this subject including it's 
+path from C<$topsubjid>.
 
-$topsubjid must be an ancestor of this subject.
+C<$topsubjid> must be an ancestor of this subject.
 
-eg. 
+E.g.
 
-Library of Congress > B Somthing > BC Somthing more Detailed
+ Library of Congress > B Somthing > BC Somthing more Detailed
 
 =cut
 ######################################################################
@@ -649,6 +701,7 @@ sub get_paths
 	return @paths;
 }
 
+
 ######################################################################
 =pod
 
@@ -706,6 +759,7 @@ sub get_subjects
 	return $self->_get_subjects2( $postableonly, !$showtoplevel, $nestids, $subjectmap, $rmap, "", !$nonestlabel );
 }
 
+
 ######################################################################
 =pod 
 
@@ -755,124 +809,15 @@ sub _get_subjects2
 	return $subpairs;
 }
 
-# cjg CACHE this per, er, session?
-# commiting a subject should erase the cache
-
-######################################################################
-=pod
-
-=item ( $subject_map, $reverse_map ) = EPrints::DataObj::Subject::get_all( $session )
-
-Get all the subjects for the current archvive of $session.
-
-$subject_map is a reference to a hash. The keys of the hash are
-the id's of the subjects. The values of the hash are the 
-EPrint::Subject object relating to that id.
-
-$reverse_map is a reference to a hash. Each key is the id of a
-subject. Each value is a reference to an array. The array contains
-a EPrints::DataObj::Subject objects, one for each child of the subject 
-with the id. The array is sorted by the labels for the subjects,
-in the current language.
-
-=cut
-######################################################################
-
-sub get_all
-{
-	my( $session ) = @_;
-	
-	if( $session->{subjects_cached} )
-	{
-		return ( $session->{subject_cache}, $session->{subject_child_map} );
-	}
-
-	my( %subjectmap ); # map subject ids to subject objects
-	my( %rmap ); # map parents to children
-
-	# callback method for result map
-	my $f = sub {
-		my( undef, undef, $subject ) = @_;
-		my $subjectid = $subject->get_id;
-		$subjectmap{$subjectid} = $subject;
-		$rmap{$subjectid} = [] if !exists $rmap{$subjectid};
-		foreach my $pid ( @{$subject->get_value( "parents" )} )
-		{
-			$rmap{$pid} = [] if !exists $rmap{$pid};
-			push @{$rmap{$pid}}, $subject;
-		}
-	};
-	
-	my $ds = $session->dataset( "subject" );
-
-	# Retrieve all of the subjects
-	my $results = $ds->search( custom_order => "sortvalue_sortvalue/name_name" ); # EPrints Services/tmb 2010-07-30 order by derived sort value
-	
-	$results->map($f);
-
-	# Plus the virtual root subject
-	&$f( $session, $ds, EPrints::DataObj::Subject->new( $session, $EPrints::DataObj::Subject::root_subject ) );
-
-	return( \%subjectmap, \%rmap );
-}
-
-######################################################################
-=pod
-
-=item  @eprints  = $subject->posted_eprints( $dataset )
-
-Deprecated. This method is no longer used by eprints, and may be 
-removed in a later release.
- 
-Return all the eprints which are in this subject (or below it in
-the tree, its children etc.) It searches all fields of type subject.
- 
-$dataset is the dataset to return eprints from.
-
-=cut 
-######################################################################
-
-sub posted_eprints
-{
-	my( $self, $dataset ) = @_;
-
-	EPrints->deprecated();
-
-	my $searchexp = new EPrints::Search(
-		session => $self->{session},
-		dataset => $dataset,
-		satisfy_all => 0 );
-
-	my $n = 0;
-	my $field;
-	foreach $field ( $dataset->get_fields() )
-	{
-		next unless( $field->is_type( "subject" ) );
-		$n += 1;
-		$searchexp->add_field(
-			$field,
-			$self->get_value( "subjectid" ) );
-	}
-
-	if( $n == 0 )
-	{
-		# no actual subject fields
-		return();
-	}
-
-	my $list = $searchexp->perform_search;
-	my @data = $list->get_records;
-
-	return @data;
-}
 
 ######################################################################
 =pod
 
 =item $count = $subject->count_eprints( $dataset )
 
-Return the number of eprints in the dataset which are in this subject
-or one of its decendants. Search all fields of type subject.
+Returns the number of data objects in the dataset (typically eprints),
+which are in this subject or one of its decendants. Searches all 
+fields of type subject.
 
 =cut
 ######################################################################
@@ -911,50 +856,20 @@ sub count_eprints
 
 }
 
-######################################################################
-=pod
-
-=item $boolean = EPrints::DataObj::Subject::valid_id( $id )
-
-Return true if the string is an acceptable identifier for a subject.
-
-This does not check all possible illegal values, yet.
-
-=cut
-######################################################################
-
-sub valid_id
-{
-	my( $id ) = @_;
-
-	return 0 if( $id =~ m/\s/ ); # no whitespace
-
-	return 1;
-}
-
-
-# Subjects don't have a URL.
-#
-# sub get_url
-# {
-# }
-
-# Subjects don't have a type.
-#
-# sub get_type
-# {
-# }
 
 ######################################################################
 =pod
 
-=item $subj->render_description()
+=item $subject->render_description
 
-undocumented
+Returns a rendering describing the subject.
+
+This is an alias for:
+
+ $subject->render_value( "name" )
 
 =cut
 ######################################################################
-#
 
 sub render_description
 {
@@ -964,14 +879,199 @@ sub render_description
 }
 
 
-#deprecated
+######################################################################
+=pod
+
+=back
+
+=head2 Utility Methods
+
+=cut
+######################################################################
 
 ######################################################################
 =pod
 
-=item $subj->render()
+=over 4
 
-undocumented
+=item EPrints::DataObj::Subject::remove_all( $session )
+
+Remove all subjects from the database. Use with care!
+
+=cut
+######################################################################
+
+sub remove_all
+{
+    my( $session ) = @_;
+
+    my $ds = $session->dataset( "subject" );
+    my @subjects = $session->get_database->get_all( $ds );
+    foreach( @subjects )
+    {
+        my $id = $_->get_value( "subjectid" );
+        $session->get_database->remove( $ds, $id );
+    }
+    return;
+}
+
+
+######################################################################
+=pod
+
+=item ( $subject_map, $reverse_map ) = EPrints::DataObj::Subject::get_all( $session )
+
+Get all the subjects for the current archvive of $session.
+
+$subject_map is a reference to a hash. The keys of the hash are
+the id's of the subjects. The values of the hash are the
+EPrint::Subject object relating to that id.
+
+$reverse_map is a reference to a hash. Each key is the id of a
+subject. Each value is a reference to an array. The array contains
+a EPrints::DataObj::Subject objects, one for each child of the subject
+with the id. The array is sorted by the labels for the subjects,
+in the current language.
+
+=cut
+######################################################################
+
+sub get_all
+{
+    my( $session ) = @_;
+
+    if( $session->{subjects_cached} )
+    {
+        return ( $session->{subject_cache}, $session->{subject_child_map} );
+    }
+
+    my( %subjectmap ); # map subject ids to subject objects
+    my( %rmap ); # map parents to children
+
+    # callback method for result map
+    my $f = sub {
+        my( undef, undef, $subject ) = @_;
+        my $subjectid = $subject->get_id;
+        $subjectmap{$subjectid} = $subject;
+        $rmap{$subjectid} = [] if !exists $rmap{$subjectid};
+        foreach my $pid ( @{$subject->get_value( "parents" )} )
+        {
+            $rmap{$pid} = [] if !exists $rmap{$pid};
+            push @{$rmap{$pid}}, $subject;
+        }
+    };
+
+    my $ds = $session->dataset( "subject" );
+
+    # Retrieve all of the subjects
+    my $results = $ds->search( custom_order => "sortvalue_sortvalue/name_name" ); # EPrints Services/tmb 2010-07-30 order by derived sort value
+
+    $results->map($f);
+
+    # Plus the virtual root subject
+    &$f( $session, $ds, EPrints::DataObj::Subject->new( $session, $EPrints::DataObj::Subject::root_subject ) );
+
+    return( \%subjectmap, \%rmap );
+}
+
+
+######################################################################
+=pod
+
+=item $boolean = EPrints::DataObj::Subject::valid_id( $id )
+
+Returns C<true> if the string C<$id> is an acceptable identifier for a 
+subject.
+
+This does not check all possible illegal values, just that it has no 
+whitespace.
+
+=cut
+######################################################################
+
+sub valid_id
+{
+    my( $id ) = @_;
+
+    return 0 if( $id =~ m/\s/ ); # no whitespace
+
+    return 1;
+}
+
+
+######################################################################
+=pod
+
+=back
+
+=head2 Deprecated Methods
+
+=cut
+######################################################################
+
+######################################################################
+=pod
+
+=over 4
+
+=item @eprints = $subject->posted_eprints( $dataset )
+
+DEPRECATED
+
+This method is no longer used by EPrints, and may be
+removed in a later release.
+
+Returns all the data objects in the C<$dataset>, (typically, C<eprint>
+or its virtual datasets, such as C<archive>, C<buffer> and C<inbox>,
+which are in this subject (or below it in the tree, its children,
+etc.). It searches all fields of type C<subject>.
+
+=cut
+######################################################################
+
+sub posted_eprints
+{
+    my( $self, $dataset ) = @_;
+
+    EPrints->deprecated();
+
+    my $searchexp = new EPrints::Search(
+        session => $self->{session},
+        dataset => $dataset,
+        satisfy_all => 0 );
+
+    my $n = 0;
+    my $field;
+    foreach $field ( $dataset->get_fields() )
+    {
+        next unless( $field->is_type( "subject" ) );
+        $n += 1;
+        $searchexp->add_field(
+            $field,
+            $self->get_value( "subjectid" ) );
+    }
+
+    if( $n == 0 )
+    {
+        # no actual subject fields
+        return();
+    }
+
+    my $list = $searchexp->perform_search;
+    my @data = $list->get_records;
+
+    return @data;
+}
+
+
+######################################################################
+=pod
+
+=item $subj->render
+
+DEPRECATED
+
+Subjects cannot be rendered. Use L</render_description> instead.
 
 =cut
 ######################################################################
@@ -988,21 +1088,22 @@ sub render
 
 =back
 
-=cut
+=head1 SEE ALSO
 
+L<EPrints::DataObj> and L<EPrints::DataSet>.
 
 =head1 COPYRIGHT
 
-=for COPYRIGHT BEGIN
+=begin COPYRIGHT
 
-Copyright 2021 University of Southampton.
+Copyright 2022 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/
 
-=for COPYRIGHT END
+=end COPYRIGHT
 
-=for LICENSE BEGIN
+=begin LICENSE
 
 This file is part of EPrints 3.4 L<http://www.eprints.org/>.
 
@@ -1019,5 +1120,5 @@ You should have received a copy of the GNU Lesser General Public
 License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
-=for LICENSE END
+=end LICENSE
 

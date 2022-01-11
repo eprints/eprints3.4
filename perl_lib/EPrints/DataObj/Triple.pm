@@ -8,41 +8,72 @@
 ######################################################################
 
 
+=pod
+
+=for Pod2Wiki
+
 =head1 NAME
 
 B<EPrints::DataObj::Triple> - RDF Triple
 
 =head1 DESCRIPTION
 
-Inherits from L<EPrints::DataObj>.
+Provides a subject-predicate-object representation of a piece of 
+metadata.
 
-=head1 CORE FIELDS
+=head1 CORE METADATA FIELDS
 
 =over 4
 
-=item tripleid
+=item tripleid (counter)
 
-Unique id for the triple.
+Unique ID for the triple.
 
-=item primary_resource
+=item primary_resource (id)
 
-The local URI of the EPrint that this data comes from.
+The local URI of the data object from which this data comes.
 
-=item secondary_resource
+=item secondary_resource (id)
 
-The URI of the other resource, if any, this data belongs to. Eg. the event/ext-foo
+The URI of the other resource, if any, to which this triple refers.
+E.g. the event/ext-foo
 
-=item subject, predicate, object, type, lang
+=item subject (longtext)
 
-The parts of the triple.
+The subject part of the triple.
+
+=item predicate (longtext)
+
+The predicate part of the triple.
+
+=item object (longtext)
+
+The object part of the triple.
+
+=item type (longtext)
+
+The XSD datatype for the object if it is not a value rather than a
+resource.
+
+=item lang (longtext)
+
+The XSD language for the object if it is not a value rather than a
+resource.
 
 =back
 
+=head1 REFERENCES AND RELATED OBJECTS
+
+None.
+
+=head1 INSTANCE VARIABLES
+
+See L<EPrints::DataObj|EPrints::DataObj#INSTANCE_VARIABLES>.
+
 =head1 METHODS
 
-=over 4
-
 =cut
+######################################################################
 
 package EPrints::DataObj::Triple;
 
@@ -52,50 +83,55 @@ use EPrints;
 
 use strict;
 
+
+######################################################################
+=pod
+
+=head2 Class Methods
+
+=cut
+######################################################################
+
+######################################################################
+=pod
+
+=over 4
+
 =item $thing = EPrints::DataObj::Triple->get_system_field_info
 
 Core fields contained in a Web access.
 
 =cut
+######################################################################
 
 sub get_system_field_info
 {
-	my( $class ) = @_;
+    my( $class ) = @_;
 
-	return
-	( 
-		{ name=>"tripleid", type=>"counter", required=>1, can_clone=>0,
-			sql_counter=>"tripleid" },
+    return
+    (
+        { name=>"tripleid", type=>"counter", required=>1, can_clone=>0,
+            sql_counter=>"tripleid" },
 
-		{ name=>"primary_resource", type=>"id", required=>1, text_index=>0, sql_index=>1 },
-		{ name=>"secondary_resource", type=>"id", required=>0, text_index=>0, sql_index=>1 },
+        { name=>"primary_resource", type=>"id", required=>1, text_index=>0, sql_index=>1 },
+        { name=>"secondary_resource", type=>"id", required=>0, text_index=>0, sql_index=>1 },
 
-		{ name=>"subject",   type=>"longtext", required=>1, text_index=>0, },
-		{ name=>"predicate", type=>"longtext", required=>1, text_index=>0, },
-		{ name=>"object",    type=>"longtext", required=>1, text_index=>0, },
-		{ name=>"type",      type=>"longtext", required=>1, text_index=>0, },
-		{ name=>"lang",      type=>"longtext", required=>1, text_index=>0, },
-	);
+        { name=>"subject",   type=>"longtext", required=>1, text_index=>0, },
+        { name=>"predicate", type=>"longtext", required=>1, text_index=>0, },
+        { name=>"object",    type=>"longtext", required=>1, text_index=>0, },
+        { name=>"type",      type=>"longtext", required=>1, text_index=>0, },
+        { name=>"lang",      type=>"longtext", required=>1, text_index=>0, },
+    );
 }
 
-######################################################################
-
-=back
-
-=head2 Class Methods
-
-=over 4
-
-=cut
-
-######################################################################
 
 ######################################################################
 =pod
 
 =item $dataset = EPrints::DataObj::Triple->get_dataset_id
 
-Returns the id of the L<EPrints::DataSet> object to which this record belongs.
+Returns the ID of the L<EPrints::DataSet> object to which this record 
+belongs.
 
 =cut
 ######################################################################
@@ -105,24 +141,12 @@ sub get_dataset_id
 	return "triple";
 }
 
-######################################################################
-
-=head2 Object Methods
-
-=cut
-
-######################################################################
-
-=item $dataobj->get_referent_id()
-
-Return the fully qualified referent id.
-
-=cut
-
 
 1;
 
-__END__
+
+######################################################################
+=pod
 
 =back
 
@@ -130,21 +154,18 @@ __END__
 
 L<EPrints::DataObj> and L<EPrints::DataSet>.
 
-=cut
-
-
 =head1 COPYRIGHT
 
-=for COPYRIGHT BEGIN
+=begin COPYRIGHT
 
-Copyright 2021 University of Southampton.
+Copyright 2022 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/
 
-=for COPYRIGHT END
+=end COPYRIGHT
 
-=for LICENSE BEGIN
+=begin LICENSE
 
 This file is part of EPrints 3.4 L<http://www.eprints.org/>.
 
@@ -161,5 +182,5 @@ You should have received a copy of the GNU Lesser General Public
 License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
-=for LICENSE END
+=end LICENSE
 

@@ -1,9 +1,49 @@
+######################################################################
+#
+# EPrints::DataObj::RichDataObj
+#
+######################################################################
+#
+#
+######################################################################
+
+
+=pod
+
+=for Pod2Wiki
+
+=head1 NAME
+
+B<EPrints::DataObj::RichDataObj> - A richer version of a data object
+
+=head1 DESCRIPTION
+
+UNDER DEVELOPMENT
+
+Designed to extend L<EPrints::DataObj> in a number of generically 
+useful ways, (e.g. add revision history). B<Not currently used by any
+data object classes>.
+
+Not designed to be instantiated directly.
+
+=head1 CORE METADATA FIELDS
+
+None.
+
+=head1 REFERENCES AND RELATED OBJECTS
+
+None.
+
+=head1 INSTANCE VARIABLES
+
+See L<EPrints::DataObj|EPrints::DataObj#INSTANCE_VARIABLES>.
+
+=head1 METHODS
+
+=cut
+######################################################################
+
 package EPrints::DataObj::RichDataObj;
-
-# designed to extend DataObj in a number of generically useful ways
-# eg add revision history
-
-# not designed to be instantiated directly
 
 use EPrints;
 use EPrints::DataObj;
@@ -12,9 +52,57 @@ use EPrints::DataObj;
 
 use strict;
 
+
+######################################################################
+=pod
+
+=head2 Class Methods
+
+=cut
+######################################################################
+
+######################################################################
+=pod
+
+=over 4 
+
+=item $dataset = EPrints::DataObj::RichDataObj->get_dataset_id
+
+Returns the ID of the L<EPrints::DataSet> object to which this record
+belongs.
+
+=cut
+######################################################################
+
 sub get_dataset_id { "rich" }
 
+
+######################################################################
+=pod
+
+=item $indexable = EPrints::DataObj::RichDataObj->indexable
+
+Always returns C<true>, as a rich data objects.
+
+=cut
+######################################################################
+
 sub indexable { return 1; }
+
+
+######################################################################
+=pod
+
+=item $indexable = EPrints::DataObj::RichDataObj->get_system_field_info
+
+Returns an array describing the system metadata of the rich data 
+object dataset.
+
+In fact, there are no fields for the rich data object dataset, as it 
+is an abstract dataset.
+
+=cut
+######################################################################
 
 sub get_system_field_info
 {
@@ -25,6 +113,17 @@ sub get_system_field_info
   );
 }
 
+
+######################################################################
+=pod
+
+=item $richdataobj = EPrints::DataObj::RichDataObj->create_obj( $session, $data )
+
+Creates and returns rich data object based on data C<$data>.
+
+=cut
+######################################################################
+
 sub create_obj
 {
   my( $class, $session, $data ) = @_;
@@ -34,6 +133,17 @@ sub create_obj
   return $obj;
 }
 
+
+######################################################################
+=pod
+
+=item EPrints::DataObj::RichDataObj->delete_obj( $session )
+
+Deletes rich data object.
+
+=cut
+######################################################################
+
 sub delete_obj
 {
   my( $self, $session ) = @_;
@@ -41,7 +151,31 @@ sub delete_obj
   $self->delete;
 }
 
-# needed as well as the version in DataObj
+
+######################################################################
+=cut
+
+=back
+
+=head2 Object Methods
+
+=cut
+######################################################################
+
+######################################################################
+=pod
+
+=over 4
+
+=item $path = $richdataobj->local_path
+
+Returns local path for rich data object.
+
+Needed as well as l<EPrints::DataObj#local_path>.
+
+=cut
+######################################################################
+
 sub local_path
 {
   my( $self ) = @_;
@@ -54,7 +188,19 @@ sub local_path
   return $lp;
 }
 
-# commit handler to maintain the rev_number - can this not be handled higher up?
+
+######################################################################
+=pod
+
+=item $richdataobj->commit( [ $force ] )
+
+Commit handler to maintain the C<rev_number>.
+
+Set C<$force> to C<true> toforce commit, even if there is no changes.
+
+=cut
+######################################################################
+
 sub commit
 {
   my( $self, $force ) = @_;
@@ -73,6 +219,17 @@ sub commit
   return $self->SUPER::commit( $force );
 }
 
+
+######################################################################
+=pod
+
+=item $richdataobj->get_control_url
+
+Returns the control URL for this rich data object.
+
+=cut
+######################################################################
+
 sub get_control_url
 {
   my( $self ) = @_;
@@ -81,7 +238,28 @@ sub get_control_url
   return $self->{session}->get_repository->get_conf( "perl_url" )."/users/home?screen=Workflow::View&dataset=${i}&dataobj=".$self->get_value( "${i}id" );
 }
 
-# utility routine for updating the revision history on a dataobj
+######################################################################
+=pod
+
+=back
+
+=head2 Utility Methods
+
+=cut
+######################################################################
+
+######################################################################
+=pod
+
+=over 4
+
+=item EPrints::DataObj::RichDataObj::history_update_trigger( $session, $obj )
+
+Utility method for updating the revision history on the rich data 
+object.
+
+=cut
+######################################################################
 
 sub history_update_trigger
 {
@@ -116,18 +294,27 @@ sub history_update_trigger
 
 1;
 
+######################################################################
+=pod
+
+=back
+
+=head1 SEE ALSO
+
+L<EPrints::DataObj> and L<EPrints::DataSet>.
+
 =head1 COPYRIGHT
 
-=for COPYRIGHT BEGIN
+=begin COPYRIGHT
 
-Copyright 2021 University of Southampton.
+Copyright 2022 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/
 
-=for COPYRIGHT END
+=end COPYRIGHT
 
-=for LICENSE BEGIN
+=begin LICENSE
 
 This file is part of EPrints 3.4 L<http://www.eprints.org/>.
 
@@ -144,5 +331,5 @@ You should have received a copy of the GNU Lesser General Public
 License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
-=for LICENSE END
+=end LICENSE
 

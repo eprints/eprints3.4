@@ -1,9 +1,3 @@
-=head1 NAME
-
-EPrints::DataObj::Import::XML
-
-=cut
-
 ######################################################################
 #
 # EPrints::DataObj::Import::XML
@@ -13,9 +7,25 @@ EPrints::DataObj::Import::XML
 #
 ######################################################################
 
-package EPrints::DataObj::Import::XML;
+=pod
 
-# This is a utility module for importing existing eprints from an XML file
+=for Pod2Wiki
+
+=head1 NAME
+
+B<EPrints::DataObj::Import::XML> - XML import.
+
+=head1 DESCRIPTION
+
+This is a utility module for importing existing eprints from an XML 
+file. It inherits from L<EPrints::Plugin::Import::XML>.
+
+=head1 METHODS
+
+=cut
+######################################################################
+
+package EPrints::DataObj::Import::XML;
 
 use EPrints;
 
@@ -24,6 +34,27 @@ use strict;
 use EPrints::Plugin::Import::XML;
 
 our @ISA = qw( EPrints::Plugin::Import::XML );
+
+
+######################################################################
+=pod
+
+=head2 Constructor Methods
+
+=cut
+######################################################################
+
+######################################################################
+=pod
+
+=over 4
+
+=item $xml_import = EPrints::DataObj::Import::XML->new( %params )
+
+Create a new XML import data object using the C<%params> provided.
+
+=cut
+######################################################################
 
 sub new
 {
@@ -37,6 +68,56 @@ sub new
 	return $self;
 }
 
+
+######################################################################
+=pod
+
+=back
+
+=head2 Class Methods
+
+=cut
+######################################################################
+
+######################################################################
+=pod
+
+=item EPrints::DataObj::Import::XML->warn
+
+Suppress warnings, in particular that various imported fields do not
+exist in our repository.
+
+=cut
+######################################################################
+
+sub warning {}
+
+
+######################################################################
+=pod
+
+=back
+
+=head2 Object Methods
+
+=cut
+######################################################################
+
+######################################################################
+=pod
+
+=over 4
+
+=item $dataobj = $xml_import->epdata_to_dataobj( $dataset, $epdata )
+
+Create new data object for C<$dataset> parsing the XML data in 
+C<$epdata>.
+
+Returns the newly create data object.
+
+=cut
+######################################################################
+
 sub epdata_to_dataobj
 {
 	my( $self, $dataset, $epdata ) = @_;
@@ -49,27 +130,30 @@ sub epdata_to_dataobj
 	return $dataobj;
 }
 
-# suppress warnings, in particular that various imported fields don't exist
-# in our repository
-sub warning {}
 
 1;
 
-__END__
+######################################################################
+=pod
 
+=back
+
+=head1 SEE ALSO
+
+L<EPrints::Plugin::Import::XML>.
 
 =head1 COPYRIGHT
 
-=for COPYRIGHT BEGIN
+=begin COPYRIGHT
 
-Copyright 2021 University of Southampton.
+Copyright 2022 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/
 
-=for COPYRIGHT END
+=end COPYRIGHT
 
-=for LICENSE BEGIN
+=begin LICENSE
 
 This file is part of EPrints 3.4 L<http://www.eprints.org/>.
 
@@ -86,5 +170,5 @@ You should have received a copy of the GNU Lesser General Public
 License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
-=for LICENSE END
+=end LICENSE
 

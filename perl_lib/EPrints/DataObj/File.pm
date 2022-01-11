@@ -17,71 +17,79 @@ B<EPrints::DataObj::File> - a stored file
 
 =head1 DESCRIPTION
 
-This class contains the technical metadata associated with a file. A file is a sequence of bytes stored in the storage layer (a "stored object"). Utility methods for storing and retrieving the stored object from the storage layer are made available.
+This class contains the technical metadata associated with a file. A 
+file is a sequence of bytes stored in the storage layer (a "stored 
+object"). Utility methods for storing and retrieving the stored object 
+from the storage layer are made available.
 
-Revision numbers on File work slightly differently to other objects. A File is only revised when it's stored object is changed and not when changes to it's metadata are made.
+Revision numbers on File work slightly differently to other objects. 
+A File is only revised when it's stored object is changed and not when 
+changes to it's metadata are made.
 
 This class is a subclass of L<EPrints::DataObj::SubObject>.
 
-=head1 CORE FIELDS
+=head1 CORE METADATA FIELDS
 
 =over 4
 
-=item fileid
+=item fileid (counter)
 
 Unique identifier for this file.
 
-=item rev_number (int)
-
-The number of the current revision of this file.
-
-=item datasetid
+=item datasetid (id)
 
 Id of the dataset of the parent object.
 
-=item objectid
+=item objectid (int)
 
 Id of the parent object.
 
-=item filename
+=item filename (id)
 
 Name of the file (may contain directory separators).
 
-=item mime_type
+=item mime_type (id)
 
 MIME type of the file (e.g. "image/png").
 
-=item hash
+=item hash (id)
 
 Check sum of the file.
 
-=item hash_type
+=item hash_type (id)
 
 Name of check sum algorithm used (e.g. "MD5").
 
-=item filesize
+=item filesize (bigint)
 
 Size of the file in bytes.
 
-=item mtime
+=item mtime (timestamp)
 
 Last modification time of the file.
 
-=item url
+=item url (url)
 
 Virtual field for storing the file's URL.
 
-=item data
+=item data (base64)
 
 Virtual field for storing the file's content.
 
 =back
 
+=head1 REFERENCES AND RELATED OBJECTS
+
+None.
+
+=head1 INSTANCES VARIABLES
+
+See L<EPrints::DataObj|EPrints::DataObj#INSTANCE_VARIABLES>.
+
 =head1 METHODS
 
-=over 4
-
 =cut
+######################################################################
 
 package EPrints::DataObj::File;
 
@@ -94,20 +102,27 @@ use MIME::Base64 ();
 use strict;
 
 ######################################################################
+=pod
 
 =head2 Constructor Methods
 
 =cut
+######################################################################
 
 ######################################################################
+=pod
+
+=over 4
 
 =item $dataobj = EPrints::DataObj::File->new_from_filename( $session, $dataobj, $filename )
 
-Convenience method to get an existing File object for $filename stored in $dataobj.
+Convenience method to return an existing file object for C<$filename> 
+stored in C<$dataobj>.
 
-Returns undef if no such record exists.
+Returns C<undef> if no such record exists.
 
 =cut
+######################################################################
 
 sub new_from_filename
 {
@@ -139,16 +154,21 @@ sub new_from_filename
 	return $results->item( 0 );
 }
 
-=item $dataobj = EPrints::DataObj::File->create_from_data( $session, $data [, $dataset ] )
 
-Create a new File record using $data.
+######################################################################
+=pod
+
+=item $dataobj = EPrints::DataObj::File->create_from_data( $session, $data, $dataset )
+
+Returns a new file record using C<$data> and the file C<$dataset>.
 
 Private data elements:
 
-	_content - content to pass to L</set_file>.
-	_filepath - path to source file used for improved mime-type detection
+ _content - content to pass to L</set_file>.
+ _filepath - path to source file used for improved mime-type detection
 
 =cut
+######################################################################
 
 sub create_from_data
 {
@@ -233,19 +253,29 @@ sub create_from_data
 	return $self;
 }
 
+
 ######################################################################
+=pod
+
+=back
 
 =head2 Class Methods
 
 =cut
-
 ######################################################################
 
-=item $thing = EPrints::DataObj::File->get_system_field_info
+######################################################################
+=pod
 
-Core fields.
+=over 4
+
+=item $fields = EPrints::DataObj::File->get_system_field_info
+
+Returns an array describing the system metadata fields of the file 
+dataset.
 
 =cut
+######################################################################
 
 sub get_system_field_info
 {
@@ -291,12 +321,14 @@ sub get_system_field_info
 	);
 }
 
+
 ######################################################################
 =pod
 
 =item $dataset = EPrints::DataObj::File->get_dataset_id
 
-Returns the id of the L<EPrints::DataSet> object to which this record belongs.
+Returns the ID of the L<EPrints::DataSet> object to which this record 
+belongs.
 
 =cut
 ######################################################################
@@ -306,21 +338,30 @@ sub get_dataset_id
 	return "file";
 }
 
+
 ######################################################################
+=pod
+
+=back
 
 =head2 Object Methods
 
-=over 4
-
 =cut
+######################################################################
 
 ######################################################################
+=pod
+
+=over 4
 
 =item $new_file = $file->clone( $parent )
 
-Clone the $file object (including contained files) and return the new object.
+Clone the file object (including contained files) and return the new 
+object. Uses C<$parent> to set the C<objectid> of the cloned file data
+object, in case this needs to be different to the original.
 
 =cut
+######################################################################
 
 sub clone
 {
@@ -351,11 +392,18 @@ sub clone
 	return $new_file;
 }
 
+
+######################################################################
+=pod
+
 =item $success = $file->remove
 
-Delete the stored file.
+Delete the file data object and the file it stores.
+
+Returns boolean depending on the success of removing this file.
 
 =cut
+######################################################################
 
 sub remove
 {
@@ -366,9 +414,16 @@ sub remove
 	$self->get_session->get_storage->delete( $self );
 }
 
+
+######################################################################
+=pod
+
 =item $file->update( $epdata )
 
+Updates the metadata for the file with C<$epdata>.
+
 =cut
+######################################################################
 
 sub update
 {
@@ -385,13 +440,20 @@ sub update
 		) if defined $content;
 }
 
-=item $filename = $file->get_local_copy()
 
-Return the name of a local copy of the file (may be a L<File::Temp> object).
+######################################################################
+=pod
 
-Will retrieve and cache the remote object if necessary.
+=item $filename = $file->get_local_copy
+
+Returns the name of a local copy of the file (may be a L<File::Temp> 
+object).
+
+Uses L<EPrints::Storage#get_local_copy> which in turn calls the 
+configured local storage plugin.
 
 =cut
+######################################################################
 
 sub get_local_copy
 {
@@ -400,6 +462,21 @@ sub get_local_copy
 	return $self->get_session->get_storage->get_local_copy( $self );
 }
 
+
+######################################################################
+=pod
+
+=item $filename = $file->get_remote_copy
+
+Returns the name of a remote copy of the file (may be a L<File::Temp>
+object).
+
+Uses L<EPrints::Storage#get_local_copy> which in turn calls the
+configured remote storage plugin.
+
+=cut
+######################################################################
+
 sub get_remote_copy
 {
 	my( $self ) = @_;
@@ -407,13 +484,20 @@ sub get_remote_copy
 	return $self->get_session->get_storage->get_remote_copy( $self );
 }
 
+######################################################################
+=pod
+
 =item $success = $file->add_file( $filepath, $filename [, $preserve_path ] )
 
-Read and store the contents of $filepath at $filename.
+Reads and stores the contents of C<$filepath> at C<$filename>.
 
-If $preserve_path is untrue will strip any leading path in $filename.
+If C<$preserve_path> is not C<true> will strip any leading path in 
+C<$filename>.
+
+Returns a boolean depending on the success of adding the file.
 
 =cut
+######################################################################
 
 sub add_file
 {
@@ -429,15 +513,22 @@ sub add_file
 	return $rc;
 }
 
+
+######################################################################
+=pod
+
 =item $bytes = $file->upload( $filehandle, $filename, $filesize [, $preserve_path ] )
 
-Read and store the data from $filehandle at $filename at the next revision number.
+Reads and stores the data from C<$filehandle> at C<$filename> at the 
+next revision number.
 
-If $preserve_path is untrue will strip any leading path in $filename.
+If C<$preserve_path> is not C<true> will strip any leading path in 
+C<$filename>.
 
 Returns the number of bytes read from $filehandle or undef on failure.
 
 =cut
+######################################################################
 
 sub upload
 {
@@ -458,13 +549,19 @@ sub upload
 	return $filesize;
 }
 
-=item $success = $stored->write_copy( $filename )
 
-Write a copy of this file to $filename.
+######################################################################
+=pod
 
-Returns true if the written file contains the same number of bytes as the stored file.
+=item $success = $file->write_copy( $filename )
+
+Write a copy of this file to C<$filename>.
+
+Returns C<true> if the written file contains the same number of bytes 
+as the stored file.
 
 =cut
+######################################################################
 
 sub write_copy
 {
@@ -479,11 +576,19 @@ sub write_copy
 	return $rc;
 }
 
-=item $success = $stored->write_copy_fh( $filehandle )
 
-Write a copy of this file to $filehandle.
+######################################################################
+=pod
+
+=item $success = $file->write_copy_fh( $filehandle )
+
+Write a copy of this file to C<$filehandle>.
+
+Returns boolean depending on success of writing copy of file to the
+file handle.
 
 =cut
+######################################################################
 
 sub write_copy_fh
 {
@@ -494,11 +599,16 @@ sub write_copy_fh
 	});
 }
 
-=item $md5 = $stored->generate_md5
+
+######################################################################
+=pod
+
+=item $md5 = $file->generate_md5
 
 Calculates and returns the MD5 for this file.
 
 =cut
+######################################################################
 
 sub generate_md5
 {
@@ -513,6 +623,18 @@ sub generate_md5
 	return $md5->hexdigest;
 }
 
+
+######################################################################
+=pod
+
+=item $md5 = $file->update_md5
+
+Generates MD5 and sets C<hash> and C<has_type> (as C<MD5>) for this 
+file data object.
+
+=cut
+######################################################################
+
 sub update_md5
 {
 	my( $self ) = @_;
@@ -523,13 +645,19 @@ sub update_md5
 	$self->set_value( "hash_type", "MD5" );
 }
 
-=item $digest = $file->generate_sha( [ ALGORITHM ] )
+######################################################################
+=pod
 
-Generate a SHA for this file, see L<Digest::SHA> for a list of supported algorithms. Defaults to "256" (SHA-256).
+=item $digest = $file->generate_sha( [ $alg ] )
+
+Generates a SHA for this file, see L<Digest::SHA> for a list of 
+supported algorithms. Defaults to C<256> (SHA-256) if C<$alg> is not
+set.
 
 Returns the hex-encoded digest.
 
 =cut
+######################################################################
 
 sub generate_sha
 {
@@ -546,6 +674,18 @@ sub generate_sha
 	return $sha->hexdigest;
 }
 
+######################################################################
+=pod
+
+=item $md5 = $file->update_sha
+
+Generates a SHA for this file, see L<Digest::SHA> for a list of
+supported algorithms. Defaults to C<256> (SHA-256) if C<$alg> is not
+set. Then sets the C<hash> and c<has_type> for this file data object.
+
+=cut
+######################################################################
+
 sub update_sha
 {
 	my( $self, $alg ) = @_;
@@ -557,6 +697,18 @@ sub update_sha
 	$self->set_value( "hash", $digest );
 	$self->set_value( "hash_type", "SHA-$alg" );
 }
+
+
+######################################################################
+=pod
+
+=item $file->to_sax( %opts )
+
+Generate SAX output for file data object and assign to C<Output> of
+C<Handler> specified in C<%opts>.
+
+=cut
+######################################################################
 
 sub to_sax
 {
@@ -655,11 +807,17 @@ sub to_sax
 	});
 }
 
-=item $stored->add_plugin_copy( $plugin, $sourceid )
 
-Add a copy of this file stored using $plugin identified by $sourceid.
+######################################################################
+=pod
+
+=item $file->add_plugin_copy( $plugin, $sourceid )
+
+Add a copy of this file stored using C<$plugin> identified by 
+C<$sourceid>.
 
 =cut
+######################################################################
 
 sub add_plugin_copy
 {
@@ -680,11 +838,16 @@ sub add_plugin_copy
 	$self->set_value( "copies", $copies );
 }
 
-=item $stored->remove_plugin_copy( $plugin )
 
-Remove the copy of this file stored using $plugin.
+######################################################################
+=pod
+
+=item $file->remove_plugin_copy( $plugin )
+
+Remove the copy of this file stored using C<$plugin>.
 
 =cut
+######################################################################
 
 sub remove_plugin_copy
 {
@@ -695,15 +858,20 @@ sub remove_plugin_copy
 	$self->set_value( "copies", $copies );
 }
 
-=item $success = $stored->get_file( CALLBACK [, $offset, $n ] )
+
+######################################################################
+=pod
+
+=item $success = $file->get_file( $f, [ $offset, $n ] )
 
 Get the contents of the stored file.
 
-$offset is the position in bytes to start reading from, defaults to 0.
+C<$offset> is the position in bytes to start reading from, defaults to 
+0.
 
-$n is the number of bytes to read, defaults to C<filesize>.
+C<$n> is the number of bytes to read, defaults to C<filesize>.
 
-CALLBACK is:
+C<$f> is:
 
 	sub {
 		my( $buffer ) = @_;
@@ -711,7 +879,10 @@ CALLBACK is:
 		return 1;
 	}
 
+Returns boolean dependent on whether file was successfully retrieved.
+
 =cut
+######################################################################
 
 sub get_file
 {
@@ -723,31 +894,26 @@ sub get_file
 	return $self->{session}->get_storage->retrieve( $self, $offset, $n, $f );
 }
 
-=item $content_length = $stored->set_file( CONTENT, $content_length )
 
-Write $content_length bytes from CONTENT to the file object. Updates C<filesize> and C<hash> (you must call L</commit>).
+######################################################################
+=pod
 
-Returns $content_length or undef on failure.
+=item $content_length = $file->set_file( $content, $clen )
 
-CONTENT may be one of:
+Write C<$clen> bytes from C<$content> to the file object. Updates 
+C<filesize> and C<hash>. You must then call L</commit>) to save these 
+changes.
 
-=over 4
+Returns an integer for the content length or C<undef> on failure.
 
-=item CODEREF
+C<$content> may be one of:
 
-Will be called until it returns empty string ("").
-
-=item SCALARREF
-
-A scalar reference to a string of octets that will be written as-is.
-
-=item GLOB
-
-Will be treated as a file handle and read with sysread().
-
-=back
+ CODEREF - Will be called until it returns empty string ("").
+ SCALARREF - A scalar reference to a string of octets that will be written as-is.
+ GLOB - Will be treated as a file handle and read with sysread().
 
 =cut
+######################################################################
 
 sub set_file
 {
@@ -825,15 +991,24 @@ sub set_file
 	return $rlen;
 }
 
-=item $content_length = $file->set_file_chunk( CONTENT, $content_length, $offset, $total )
 
-Write a chunk of data to the content, overwriting or appending to the existing content. See L</set_file> for CONTENT and $content_length. C<filesize> is updated if $offset + $content_length is greater than the current C<filesize>.
+######################################################################
+=pod
 
-$offset is the starting point (in bytes) to write. $total is the total file size, used to determine where to store the content.
+=item $content_length = $file->set_file_chunk( $content, $clen, $offset, $total )
 
-Returns the number of bytes written or undef on failure.
+Write a chunk of data to the content, overwriting or appending to the 
+existing content. See L</set_file> for C<$content> and C<$clen>. 
+C<filesize> is updated if C<$offset + $content_length> is greater than 
+the current C<filesize>.
+
+C<$offset> is the starting point (in bytes) to write. C<$total> is the 
+total size of the file, used to determine where to store the content.
+
+Returns the number of bytes written or C<undef> on failure.
 
 =cut
+######################################################################
 
 sub set_file_chunk
 {
@@ -893,6 +1068,18 @@ sub set_file_chunk
 	return $rlen;
 }
 
+
+######################################################################
+=pod
+
+=item $file->start_element( $data, $epdata, $state )
+
+Consumes a SAX event.  See <EPrints::DataObj#start_element> for more
+information.
+
+=cut
+######################################################################
+
 sub start_element
 {
 	my( $self, $data, $epdata, $state ) = @_;
@@ -914,6 +1101,17 @@ sub start_element
 	}
 }
 
+
+######################################################################
+=pod
+
+=item $file->end_element( $data, $epdata, $state )
+
+Ends element from L</start_element>.
+
+=cut
+######################################################################
+
 sub end_element
 {
 	my( $self, $data, $epdata, $state ) = @_;
@@ -930,6 +1128,17 @@ sub end_element
 
 	$self->SUPER::end_element( $data, $epdata, $state );
 }
+
+
+######################################################################
+=pod
+
+=item $file->characters( $data, $epdata, $state )
+
+Consumes characters within L</start_element>.
+
+=cut
+######################################################################
 
 sub characters
 {
@@ -951,6 +1160,18 @@ sub characters
 	}
 }
 
+
+######################################################################
+=pod
+
+=item EPrints::DataObj::File->render_filesize( $repo, $field, $value )
+
+Returns an XHTML DOM fragment, which is either empty if C<$value> is
+not set or a human-readable rendering of this file size.
+
+=cut
+######################################################################
+
 sub render_filesize
 {
 	my( $repo, $field, $value ) = @_;
@@ -959,6 +1180,20 @@ sub render_filesize
 	return $repo->make_text( EPrints::Utils::human_filesize( $value ) );
 }
 
+
+######################################################################
+=pod
+
+=item $file->get_url
+
+Returns the URL from which this file can be downloaded.  
+
+Calls L<EPrints::DataObj::Document#get_url> on the parent object for
+this file with the C<filename> as a parameter.
+
+=cut
+######################################################################
+
 sub get_url
 {
 	my( $self ) = @_;
@@ -966,6 +1201,17 @@ sub get_url
 	my $doc = $self->parent or return;
 	return $doc->get_url( $self->value( "filename" ) );
 }
+
+
+######################################################################
+=pod
+
+=item $file->path
+
+Returns the filesystem path for this file.
+
+=cut
+######################################################################
 
 sub path
 {
@@ -979,7 +1225,9 @@ sub path
 
 1;
 
-__END__
+
+######################################################################
+=pod
 
 =back
 
@@ -987,21 +1235,18 @@ __END__
 
 L<EPrints::DataObj> and L<EPrints::DataSet>.
 
-=cut
-
-
 =head1 COPYRIGHT
 
-=for COPYRIGHT BEGIN
+=begin COPYRIGHT
 
-Copyright 2021 University of Southampton.
+Copyright 2022 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/
 
-=for COPYRIGHT END
+=end COPYRIGHT
 
-=for LICENSE BEGIN
+=begin LICENSE
 
 This file is part of EPrints 3.4 L<http://www.eprints.org/>.
 
@@ -1018,5 +1263,4 @@ You should have received a copy of the GNU Lesser General Public
 License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
-=for LICENSE END
-
+=end LICENSE

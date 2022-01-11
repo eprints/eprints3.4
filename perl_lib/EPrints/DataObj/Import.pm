@@ -7,6 +7,9 @@
 #
 ######################################################################
 
+=pod
+
+=for Pod2Wiki
 
 =head1 NAME
 
@@ -14,61 +17,58 @@ B<EPrints::DataObj::Import> - bulk imports logging
 
 =head1 DESCRIPTION
 
-Inherits from L<EPrints::DataObj>.
+This class represents a mass import of record's (i.e. eprint data 
+objects) into a repository.
 
-=head1 INSTANCE VARIABLES
-
-=over 4
-
-=item $obj->{ "data" }
-
-=item $obj->{ "dataset" }
-
-=item $obj->{ "session" }
-
-=back
-
-=head1 CORE FIELDS
+=head1 CORE METADATA FIELDS
 
 =over 4
 
-=item importid
+=item importid (counter)
 
-Unique id for the import.
+Unique ID for the import.
 
-=item datestamp
+=item datestamp (timestamp)
 
 Time import record was created.
 
-=item userid
-
-Id of the user responsible for causing the import.
-
-=item source_repository
+=item source_repository (text)
 
 Source entity from which this import came.
 
-=item url
+=item url (longtext)
 
 Location of the imported content (e.g. the file name).
 
-=item description
+=item description (longtext)
 
 Human-readable description of the import.
 
-=item last_run
+=item last_run (time)
 
 Time the import was last started.
 
-=item last_success
+=item last_success (time)
 
 Time the import was last successfully completed.
 
 =back
 
-=head1 METHODS
+=head1 REFERENCES AND RELATED OBJECTS
 
 =over 4
+
+=item userid (itemref)
+
+ID of the user responsible for causing the import.
+
+=back
+
+=head1 INSTANCE VARIABLES
+
+See L<EPrints::DataObj|EPrints::DataObj#INSTANCE_VARIABLES>.
+
+=head1 METHODS
 
 =cut
 
@@ -80,11 +80,26 @@ use EPrints;
 
 use strict;
 
-=item $thing = EPrints::DataObj::Import->get_system_field_info
 
-Core fields contained in a Web import.
+######################################################################
+=pod
+
+=head2 Class Methods
 
 =cut
+######################################################################
+
+######################################################################
+=pod
+
+=over 4
+
+=item $fields = EPrints::DataObj::Import->get_system_field_info
+
+Returns an array describing the system metadata of the import dataset.
+
+=cut
+######################################################################
 
 sub get_system_field_info
 {
@@ -113,19 +128,12 @@ sub get_system_field_info
 }
 
 ######################################################################
-
-=back
-
-=head2 Class Methods
-
-=cut
-
-######################################################################
 =pod
 
 =item $dataset = EPrints::DataObj::Import->get_dataset_id
 
-Returns the id of the L<EPrints::DataSet> object to which this record belongs.
+Returns the ID of the L<EPrints::DataSet> object to which this record 
+belongs.
 
 =cut
 ######################################################################
@@ -135,19 +143,29 @@ sub get_dataset_id
 	return "import";
 }
 
+
 ######################################################################
+=pod
+
+=back 
 
 =head2 Object Methods
 
 =cut
+######################################################################
 
 ######################################################################
+=pod
+
+=over
 
 =item $list = $import->run( $processor )
 
-Run this bulk import. Returns a list of EPrints created. $processor is used for reporting errors.
+Run this bulk import. Returns a list of created eprint data objects. 
+C<$processor> is used for reporting errors.
 
 =cut
+######################################################################
 
 sub run
 {
@@ -197,11 +215,19 @@ sub run
 	return $list;
 }
 
+
+######################################################################
+=pod
+
 =item $import->map( $fn, $info )
 
-Maps the function $fn onto every eprint in this import.
+Maps the function C<$fn> onto every eprint in this import.
+
+C<$info> provides additonal information that may need to be processed
+by the function C<$fn>.
 
 =cut
+######################################################################
 
 sub map
 {
@@ -214,11 +240,16 @@ sub map
 	$list->dispose;
 }
 
-=item $import->clear()
+
+######################################################################
+=pod
+
+=item $import->clear
 
 Clear the contents of this bulk import.
 
 =cut
+######################################################################
 
 sub clear
 {
@@ -231,11 +262,16 @@ sub clear
 	});
 }
 
-=item $list = $import->get_list()
+
+######################################################################
+=pod
+
+=item $list = $import->get_list
 
 Returns a list of the items in this import.
 
 =cut
+######################################################################
 
 sub get_list
 {
@@ -257,11 +293,17 @@ sub get_list
 	return $list;
 }
 
+
+######################################################################
+=pod
+
 =item $eprint = $import->get_from_source( $sourceid )
 
-Get the $eprint that is from this import set and identified by $sourceid.
+Get the eprint that is from this import set and identified by 
+C<$sourceid>.
 
 =cut
+######################################################################
 
 sub get_from_source
 {
@@ -284,36 +326,21 @@ sub get_from_source
 	return $results->item( 0 );
 }
 
+
+######################################################################
+=pod
+
 =item $dataobj = $import->epdata_to_dataobj( $dataset, $epdata )
 
-Convert $epdata to a $dataobj. If an existing object exists in this import that has the same identifier that object will be used instead of creating a new object.
+Convert C<$epdata> to an eprint data object. If an existing object 
+exists in this import that has the same identifier that object will be 
+used instead of creating a new object.
 
-Also calls "set_eprint_import_automatic_fields" on the object before writing it to the database.
+Also calls C<set_eprint_import_automatic_fields> on the object before 
+writing it to the database.
 
 =cut
-
-# hack to make import work with oversized field values
-sub _cleanup_data
-{
-	my( $self, $field, $value ) = @_;
-
-	if( EPrints::Utils::is_set($value) && $field->isa( "EPrints::MetaField::Text" ) )
-	{
-		if( $field->get_property( "multiple" ) )
-		{
-			for(@$value)
-			{
-				$_ = substr($_,0,$field->get_property( "maxlength" ));
-			}
-		}
-		else
-		{
-			$value = substr($value,0,$field->get_property( "maxlength"));
-		}
-	}
-
-	return $value;
-}
+######################################################################
 
 sub epdata_to_dataobj
 {
@@ -367,7 +394,33 @@ sub epdata_to_dataobj
 	return $dataobj;
 }
 
+sub _cleanup_data
+{
+    my( $self, $field, $value ) = @_;
+
+    if( EPrints::Utils::is_set($value) && $field->isa( "EPrints::MetaField::Text" ) )
+    {
+        if( $field->get_property( "multiple" ) )
+        {
+            for(@$value)
+            {
+                $_ = substr($_,0,$field->get_property( "maxlength" ));
+            }
+        }
+        else
+        {
+            $value = substr($value,0,$field->get_property( "maxlength"));
+        }
+    }
+
+    return $value;
+}
+
+
 1;
+
+######################################################################
+=pod
 
 =back
 
@@ -375,21 +428,18 @@ sub epdata_to_dataobj
 
 L<EPrints::DataObj> and L<EPrints::DataSet>.
 
-=cut
-
-
 =head1 COPYRIGHT
 
-=for COPYRIGHT BEGIN
+=begin COPYRIGHT
 
-Copyright 2021 University of Southampton.
+Copyright 2022 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/
 
-=for COPYRIGHT END
+=end COPYRIGHT
 
-=for LICENSE BEGIN
+=begin LICENSE
 
 This file is part of EPrints 3.4 L<http://www.eprints.org/>.
 
@@ -406,5 +456,5 @@ You should have received a copy of the GNU Lesser General Public
 License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
-=for LICENSE END
+=end LICENSE
 

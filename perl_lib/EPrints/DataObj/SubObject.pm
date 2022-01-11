@@ -8,21 +8,39 @@
 ######################################################################
 
 
+=pod
+
+=for Pod2Wiki
+
 =head1 NAME
 
 B<EPrints::DataObj::SubObject> - virtual class to support sub-objects
 
 =head1 DESCRIPTION
 
-This virtual class provides some utility methods to objects that are sub-objects of other data objects.
+This virtual class provides some utility methods to objects that are 
+sub-objects of other data objects.
 
-It expects to find "datasetid" and "objectid" fields to identify the parent object with.
+It expects to find C<datasetid> and C<objectid> fields to identify 
+the parent object.
+
+=head1 CORE METADATA FIELDS
+
+None.
+
+=head1 REFERENCES AND RELATED OBJECTS
+
+None.
+
+=head1 INSTANCE VARIABLES
+
+See L<EPrints::DataObj|EPrints::DataObj#INSTANCE_VARIABLES>.
 
 =head1 METHODS
 
-=over 4
-
 =cut
+
+######################################################################
 
 package EPrints::DataObj::SubObject;
 
@@ -30,11 +48,31 @@ package EPrints::DataObj::SubObject;
 
 use strict;
 
-=item $dataobj = EPrints::DataObj::File->new_from_data( $session, $data [, $dataset ] )
 
-Looks for a special B<_parent> element in $data and uses it to set the parent object, if defined.
+######################################################################
+=pod
+
+=head2 Constructor Methods
 
 =cut
+######################################################################
+
+######################################################################
+=pod
+
+=over 4
+
+=item $dataobj = EPrints::DataObj::SubObject->new_from_data( $session, $data, [ $dataset ] )
+
+Constructs and returns a new sub-object from the C<$data> provided.
+
+Looks for a special C<_parent> element in C<$data> and uses it to set 
+the parent object, if defined.
+
+C<$dataset> is determined from the class if not provided.
+
+=cut
+######################################################################
 
 sub new_from_data
 {
@@ -52,11 +90,22 @@ sub new_from_data
 	return $self;
 }
 
-=item $dataobj = EPrints::DataObj::File->create_from_data( $session, $data [, $dataset ] )
 
-Looks for a special B<_parent> element in $data and uses it to create default values for B<datasetid> and B<objectid> if parent is available and those fields exist on the object.
+######################################################################
+=pod
+
+=item $dataobj = EPrints::DataObj::SubObject->create_from_data( $session, $data, [ $dataset ] )
+
+Creates and returns a new sub-object from the C<$data> provided.
+
+Looks for a special B<_parent> element in $data and uses it to create 
+default values for B<datasetid> and B<objectid> if parent is available 
+and those fields exist on the object.
+
+C<$dataset> is determined from the class if not provided.
 
 =cut
+######################################################################
 
 sub create_from_data
 {
@@ -78,13 +127,37 @@ sub create_from_data
 	return $class->SUPER::create_from_data( $session, $data, $dataset );
 }
 
-=item $dataobj = $dataobj->get_parent( [ $datasetid [, $objectid ] ] )
 
-Get and cache the parent data object. If $datasetid and/or $objectid are specified will use these values rather than the stored values.
+######################################################################
+=pod
 
-Subsequent calls to get_parent will return the cached object, regardless of $datasetid and $objectid.
+=back
+
+=head2 Object Methods
 
 =cut
+######################################################################
+
+######################################################################
+=pod
+
+=over 4
+
+=item $parent = $dataobj->get_parent( [ $datasetid, $objectid ] )
+
+Gets and caches the parent data object. If C<$datasetid> and/or 
+C<$objectid> are specified uses these values rather than the stored 
+values.
+
+Subsequent calls to C<get_parent> will return the cached object, 
+regardless of C<$datasetid> and C<$objectid>.
+
+Has alias:
+
+ $dataobj->parent
+
+=cut
+######################################################################
 
 sub parent { shift->get_parent( @_ ) }
 sub get_parent
@@ -106,6 +179,17 @@ sub get_parent
 	return $parent;
 }
 
+
+######################################################################
+=pod
+
+=item $parent = $dataobj->set_parent( $parent )
+
+Sets C<_parent> attribute to the provide C<$parent> data object.
+
+=cut
+######################################################################
+
 sub set_parent
 {
 	my( $self, $parent ) = @_;
@@ -113,11 +197,17 @@ sub set_parent
 	$self->{_parent} = $parent;
 }
 
-=item $id = $dataobj->get_parent_dataset_id()
 
-Returns the id of the dataset that the parent object belongs to.
+######################################################################
+=pod
+
+=item $id = $dataobj->get_parent_dataset_id
+
+Returns the ID of the dataset two which the parent data object 
+belongs.
 
 =cut
+######################################################################
 
 sub get_parent_dataset_id
 {
@@ -126,11 +216,16 @@ sub get_parent_dataset_id
 	return $self->get_value( "datasetid" );
 }
 
-=item $id = $dataobj->get_parent_id()
 
-Returns the id of the parent data object.
+######################################################################
+=pod
+
+=item $id = $dataobj->get_parent_id
+
+Returns the ID of the parent data object.
 
 =cut
+######################################################################
 
 sub get_parent_id
 {
@@ -139,11 +234,20 @@ sub get_parent_id
 	return $self->get_value( "objectid" );
 }
 
-=item $r = $dataobj->permit( $priv [, $user ] )
 
-Checks parent objects for permission for $priv in addition to this object.
+######################################################################
+=pod
+
+=item $r = $dataobj->permit( $priv, [ $user ] )
+
+Checks parent data object for as well as this data object gives 
+permission for C<$priv>. If C<$user> specified then permissions must
+also be applicable to that user.
+
+Returns C<true> if permitted, otherwise returns C<false>
 
 =cut
+######################################################################
 
 sub permit
 {
@@ -172,6 +276,21 @@ sub permit
 	return $r;
 }
 
+
+######################################################################
+=pod
+
+=item $dataobj->has_owner( $user )
+
+Check whether the C<$user> provided is the owner of this sub-object,
+which is determined by checking the owner of the parent data object.
+
+Returns C<true> if parent data object exists and has C<$user> as the 
+owner. Otherwise, returns C<false>.
+
+=cut
+######################################################################
+
 sub has_owner
 {
 	my( $self, $user ) = @_;
@@ -184,18 +303,28 @@ sub has_owner
 
 1;
 
+
+######################################################################
+=pod
+
+=back
+
+=head1 SEE ALSO
+
+L<EPrints::DataObj> and L<EPrints::DataSet>.
+
 =head1 COPYRIGHT
 
-=for COPYRIGHT BEGIN
+=begin COPYRIGHT
 
-Copyright 2021 University of Southampton.
+Copyright 2022 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/
 
-=for COPYRIGHT END
+=end COPYRIGHT
 
-=for LICENSE BEGIN
+=begin LICENSE
 
 This file is part of EPrints 3.4 L<http://www.eprints.org/>.
 
@@ -212,5 +341,4 @@ You should have received a copy of the GNU Lesser General Public
 License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
-=for LICENSE END
-
+=end LICENSE

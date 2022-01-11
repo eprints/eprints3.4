@@ -1,70 +1,207 @@
-package EPrints::DataObj::EventQueue;
+######################################################################
+#
+# EPrints::DataObj::EventQueue
+#
+######################################################################
+#
+#
+######################################################################
+
+
+=pod
 
 =for Pod2Wiki
 
 =head1 NAME
 
-EPrints::DataObj::EventQueue - scheduler/indexer event queue
+B<EPrints::DataObj::EventQueue> - Scheduler/indexer event queue.
 
-=head1 FIELDS
+=head1 DESCRIPTION
+
+Individual tasks for the EPrints event queue that can then be actioned
+by the EPrints indexer in the background.
+
+=head1 CORE METADATA FIELDS
 
 =over 4
 
-=item eventqueueid
+=item eventqueueid (uuid)
 
-Either a UUID or a hash of the event (if created with L</create_unique>).
+Either a UUID or a hash of the event (if created with 
+L</create_unique>).
 
-=item cleanup
+=item cleanup (boolean)
 
-If set to true removes this event once it has finished. Defaults to true.
+If set to C<true> removes this event once it has finished. Defaults to 
+C<true>.
 
-=item priority
+=item priority (int)
 
 The priority for this event.
 
-=item start_time
+=item start_time (time)
 
 The event should not be executed before this time.
 
-=item end_time
+=item end_time (time)
 
 The event was last touched at this time.
 
-=item status
+=item status (set)
 
-The status of this event.
+The status of this event. Can be C<waiting>, C<inprogress>, C<success>
+or C<failed>. Defaults to C<failed>.
 
-=item userid
-
-The user (if any) that was responsible for creating this event.
-
-=item description
+=item description (longtext)
 
 A human-readable description of this event (or error).
 
-=item pluginid
+=item pluginid (id)
 
 The L<EPrints::Plugin::Event> plugin id to call to execute this event.
 
-=item action
+=item action (id)
 
 The name of the action to execute on the plugin (i.e. method name).
 
-=item params
+=item params (storable)
 
 Parameters to pass to the action (a text serialisation).
 
 =back
 
-=head1 METHODS
+=head1 REFERENCES AND RELATED OBJECTS
 
 =over 4
 
+=item userid (itemref)
+
+The user (if any) that was responsible for creating this event.
+
+=head1 INSTANCE VARIABLES
+
+See L<EPrints::DataObj|EPrints::DataObj#INSTANCE_VARIABLES>.
+
+=back
+
+=head1 METHODS
+
 =cut
+
+package EPrints::DataObj::EventQueue;
 
 @ISA = qw( EPrints::DataObj );
 
 use strict;
+
+######################################################################
+=pod
+
+=head2 Constructor Methods
+
+=cut
+######################################################################
+
+######################################################################
+=pod
+
+=over 4
+
+=item $event = EPrints::DataObj::EventQueue->create_unique( $session, $data, [ $dataset ] )
+
+Returns a unique event queue task using the C<$data> provided. Setting
+the C<eventqueueid> to a MD5 hash of the C<pluginid>, C<action> and
+(if given) C<params>.
+
+Returns C<undef> if such an event already exists.
+
+If C<$dataset> is not provided generate from dataset ID of the class.
+
+=cut
+######################################################################
+
+sub create_unique
+{
+    my( $class, $session, $data, $dataset ) = @_;
+
+    $dataset ||= $session->dataset( $class->get_dataset_id );
+
+    my $md5 = Digest::MD5->new;
+    $md5->add( $data->{pluginid} );
+    $md5->add( $data->{action} );
+    $md5->add( EPrints::MetaField::Storable->freeze( $session, $data->{params} ) )
+        if EPrints::Utils::is_set( $data->{params} );
+    $data->{eventqueueid} = $md5->hexdigest;
+
+    # No need to create a new event queue task if one already exists with the same params but if failed set to waiting.
+    my $task = $dataset->dataobj( $data->{eventqueueid} );
+    if ( defined $task )
+    {
+        if ( $task->get_value( "status" ) eq "failed" )
+        {
+            $task->set_value( "status", "waiting" );
+            $task->commit;
+            $session->log( "[".EPrints::Time::get_iso_timestamp()."] Resetting failed event ".$data->{eventqueueid}." to waiting." );
+        }
+        return $task;
+    }
+
+    return $class->create_from_data( $session, $data, $dataset );
+}
+
+
+######################################################################
+=pod
+
+=item $event = EPrints::DataObj::EventQueue->new_from_hash( $session, $data, [ $dataset ] )
+
+Returns the event that corresponds to the MD5 hash of the C<$data>
+provided, (C<pluginid>, C<action> and C<params>).  Returns C<undef>
+if no event queue task exists with a matching MD5 hash.
+
+If C<$dataset> is not provided generate from dataset ID of the class.
+
+=cut
+######################################################################
+
+sub new_from_hash
+{
+    my( $class, $session, $data, $dataset ) = @_;
+
+    $dataset ||= $session->dataset( $class->get_dataset_id );
+
+    my $md5 = Digest::MD5->new;
+    $md5->add( $data->{pluginid} );
+    $md5->add( $data->{action} );
+    $md5->add( EPrints::MetaField::Storable->freeze( $session, $data->{params} ) )
+        if EPrints::Utils::is_set( $data->{params} );
+    my $eventqueueid = $md5->hexdigest;
+
+    return $dataset->dataobj( $eventqueueid );
+}
+
+######################################################################
+=pod
+
+=back
+
+=head2 Class Methods
+
+=cut
+######################################################################
+
+######################################################################
+=pod
+
+=over 4
+
+=item $metadata = EPrints::DataObj::EPrint->get_system_field_info
+
+Returns an array describing the system metadata of the event queue 
+dataset.
+
+=cut
+######################################################################
 
 sub get_system_field_info
 {
@@ -83,85 +220,53 @@ sub get_system_field_info
 	);
 }
 
+
+######################################################################
+=pod
+
+=item $dataset = EPrints::DataObj::EPrint->get_dataset_id
+
+Returns the ID of the L<EPrints::DataSet> object to which this record
+belongs.
+
+=cut
+######################################################################
+
 sub get_dataset_id { "event_queue" }
 
-=item $event = EPrints::DataObj::EventQueue->create_unique( $repo, $data [, $dataset ] )
 
-Creates a unique event by setting the C<eventqueueid> to a hash of the C<pluginid>, C<action> and (if given) C<params>.
 
-Returns undef if such an event already exists.
+######################################################################
+=pod
 
-=cut
+=back
 
-sub create_unique
-{
-	my( $class, $session, $data, $dataset ) = @_;
-
-	$dataset ||= $session->dataset( $class->get_dataset_id );
-
-	my $md5 = Digest::MD5->new;
-	$md5->add( $data->{pluginid} );
-	$md5->add( $data->{action} );
-	$md5->add( EPrints::MetaField::Storable->freeze( $session, $data->{params} ) )
-		if EPrints::Utils::is_set( $data->{params} );
-	$data->{eventqueueid} = $md5->hexdigest;
-
-	# No need to create a new event queue task if one already exists with the same params but if failed set to waiting.
-	my $task = $dataset->dataobj( $data->{eventqueueid} );
-	if ( defined $task )
-	{
-		if ( $task->get_value( "status" ) eq "failed" )
-		{
-			$task->set_value( "status", "waiting" );
-			$task->commit;
-			$session->log( "[".EPrints::Time::get_iso_timestamp()."] Resetting failed event ".$data->{eventqueueid}." to waiting." );
-		}
-		return $task;
-	}
-
-	return $class->create_from_data( $session, $data, $dataset );
-}
-
-=begin InternalDoc
-
-=item $event = EPrints::DataObj::EventQueue->new_from_hash( $repo, $epdata [, $dataset ] )
-
-Returns the event that corresponds to the hash of the data provided in $epdata.
-
-=end InternalDoc
+=head2 Object Methods
 
 =cut
+######################################################################
 
-sub new_from_hash
-{
-	my( $class, $session, $data, $dataset ) = @_;
+######################################################################
+=pod
 
-	$dataset ||= $session->dataset( $class->get_dataset_id );
-
-	my $md5 = Digest::MD5->new;
-	$md5->add( $data->{pluginid} );
-	$md5->add( $data->{action} );
-	$md5->add( EPrints::MetaField::Storable->freeze( $session, $data->{params} ) )
-		if EPrints::Utils::is_set( $data->{params} );
-	my $eventqueueid = $md5->hexdigest;
-	
-	return $dataset->dataobj( $eventqueueid );
-}
+=over 4
 
 =item $ok = $event->execute()
 
-Execute the action this event describes.
+Execute the action this event queue task describes.
 
-The return from the L<EPrints::Plugin::Event> plugin action is treated as:
+The response from the L<EPrints::Plugin::Event> plugin action is 
+treated as follows:
 
-	undef - equivalent to HTTP_OK
-	HTTP_OK - action succeeded, event is removed if cleanup is TRUE
-	HTTP_RESET_CONTENT - action succeeded, event is set 'waiting'
-	HTTP_NOT_FOUND - action failed, event is removed if cleanup is TRUE
-	HTTP_LOCKED - action failed, event is re-scheduled for 10 minutes time
-	HTTP_INTERNAL_SERVER_ERROR - action failed, event is 'failed' and kept
+ undef - equivalent to HTTP_OK
+ HTTP_OK - action succeeded, event is removed if cleanup is TRUE
+ HTTP_RESET_CONTENT - action succeeded, event is set 'waiting'
+ HTTP_NOT_FOUND - action failed, event is removed if cleanup is TRUE
+ HTTP_LOCKED - action failed, event is re-scheduled for 10 minutes time
+ HTTP_INTERNAL_SERVER_ERROR - action failed, event is 'failed' and kept
 
 =cut
+######################################################################
 
 sub execute
 {
@@ -312,11 +417,17 @@ sub _execute
 	return defined($rc) ? $rc : EPrints::Const::HTTP_OK;
 }
 
-=item $event->message( $type, $xhtml )
+######################################################################
+=pod
 
-Utility method to log a message for this event.
+=item $event->message( $type, $message )
+
+Utility method to log the C<$message> for this event.
+
+C<$type> is required by this method but not currently used.
 
 =cut
+######################################################################
 
 sub message
 {
@@ -335,18 +446,27 @@ sub message
 
 1;
 
+######################################################################
+=pod
+
+=back
+
+=head1 SEE ALSO
+
+L<EPrints::DataObj> and L<EPrints::DataSet>.
+
 =head1 COPYRIGHT
 
-=for COPYRIGHT BEGIN
+=begin COPYRIGHT
 
-Copyright 2021 University of Southampton.
+Copyright 2022 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/
 
-=for COPYRIGHT END
+=end COPYRIGHT
 
-=for LICENSE BEGIN
+=begin LICENSE
 
 This file is part of EPrints 3.4 L<http://www.eprints.org/>.
 
@@ -363,5 +483,5 @@ You should have received a copy of the GNU Lesser General Public
 License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
-=for LICENSE END
+=end LICENSE
 

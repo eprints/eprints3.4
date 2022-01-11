@@ -10,9 +10,12 @@
 
 =pod
 
+=for Pod2Wiki
+
 =head1 NAME
 
-B<EPrints::DataObj::History> - An element in the history of the arcvhive.
+B<EPrints::DataObj::History> - An element in the history of the 
+archive.
 
 =head1 DESCRIPTION
 
@@ -20,26 +23,30 @@ This class describes a single item in the history dataset. A history
 object describes a single action taken on a single item in another
 dataset.
 
+This class inherits from L<EPrints::DataObj::SubObject>, which in 
+turn inherits from L<EPrints::DataObj>.
+
 Changes to document are considered part of changes to the eprint it
 belongs to.
 
-=head1 METADATA
+=head1 CORE METADATA FIELDS
 
 =over 4
 
-=item historyid (int)
+=item historyid (counter)
 
-The unique numerical ID of this history event. 
+The unique numerical ID of this history event.
 
-=item userid (itemref)
+=item actor (text)
 
-The id of the user who caused this event. A value of zero or undefined
-indicates that there was no user responsible (ie. a script did it). 
+A text representation of the actor reponsible for the action for
+this history event.  This may be the name of a script or application
+or a user's name.
 
-=item datasetid (text)
+=item datasetid (id)
 
-The name of the dataset to which the modified item belongs. "eprint"
-is used for eprints, rather than the inbox, buffer etc.
+The name of the dataset to which the modified item belongs. C<eprint>
+is used for eprints, rather than the C<inbox>, C<buffer> etc.
 
 =item objectid (int)
 
@@ -50,25 +57,38 @@ The numerical ID of the object in the dataset.
 The revision of the object. This is the revision number after the
 action occured. Not all actions increase the revision number.
 
-=item timestamp (time)
+=item timestamp (timestamp)
 
 The moment at which this thing happened.
 
 =item action (set)
 
 The type of event. Provisionally, this is a subset of the new list
-of privilages.
+of privileges.
 
 =item details (longtext)
 
-If this is a "rejection" then the details contain the message sent
+If this is a C<rejection> then the details contain the message sent
 to the user. 
 
 =back
 
-=head1 METHODS
+=head1 REFERENCES AND RELATED OBJECTS
 
 =over 4
+
+=item userid (itemref)
+
+The ID of the user who caused this event. A value of zero or undefined
+indicates that there was no user responsible (ie. a script did it).
+
+=back
+
+=head1 INSTANCE VARIABLES
+
+See L<EPrints::DataObj|EPrints::DataObj#INSTANCE_VARIABLES>.
+
+=head1 METHODS
 
 =cut
 
@@ -83,12 +103,61 @@ use strict;
 # Override this with 'max_history_width' in a configuration file
 our $DEFAULT_MAX_WIDTH = 120;
 
+
 ######################################################################
 =pod
 
+=head2 Constructor Methods
+
+=cut
+######################################################################
+
+######################################################################
+=pod
+
+=over 4
+
+=item EPrints::DataObj::History::create( $session, $data );
+
+Create a new history data object from this C<$data>. Unlike other
+create methods this one does not return the new object as it is never
+needed, and would increase the load when modifying other data objects.
+
+Also, this does not queue the fields for indexing.
+
+=cut
+######################################################################
+
+sub create
+{
+    my( $session, $data ) = @_;
+
+    return EPrints::DataObj::History->create_from_data(
+        $session,
+        $data,
+        $session->dataset( "history" ) );
+}
+
+
+######################################################################
+=pod
+
+=back
+
+=head2 Class Methods
+
+=cut
+######################################################################
+
+######################################################################
+=pod
+
+=over 4
+
 =item $field_info = EPrints::DataObj::History->get_system_field_info
 
-Return the metadata field configuration for this object.
+Returns an array describing the system metadata of the history
+dataset.
 
 =cut
 ######################################################################
@@ -142,13 +211,13 @@ render_single_value => \&EPrints::Extras::render_preformatted_field },
 }
 
 
-
 ######################################################################
 =pod
 
 =item $dataset = EPrints::DataObj::History->get_dataset_id
 
-Returns the id of the L<EPrints::DataSet> object to which this record belongs.
+Returns the ID of the L<EPrints::DataSet> object to which this record 
+belongs.
 
 =cut
 ######################################################################
@@ -159,13 +228,25 @@ sub get_dataset_id
 }
 
 
+######################################################################
+=pod
+
+=back
+
+=head2 Object Methods
+
+=cut
+######################################################################
 
 ######################################################################
 =pod
 
+=over 4
+
 =item $history->commit 
 
-Not meaningful. History can't be altered.
+History cannot be altered. So if somehow this is called it just logs a
+warning message.
 
 =cut
 ######################################################################
@@ -186,7 +267,8 @@ sub commit
 
 =item $history->remove
 
-Not meaningful. History can't be altered.
+History cannot be removed. So if somehow this is called it just logs a
+warning message.
 
 =cut
 ######################################################################
@@ -200,36 +282,14 @@ sub remove
 	return 0;
 }
 
-######################################################################
-# =pod
-# 
-# =item EPrints::DataObj::History::create( $session, $data );
-# 
-# Create a new history object from this data. Unlike other create
-# methods this one does not return the new object as it's never 
-# needed, and would increase the load of modifying items.
-# 
-# Also, this does not queue the fields for indexing.
-# 
-# =cut
-######################################################################
-
-sub create
-{
-	my( $session, $data ) = @_;
-
-	return EPrints::DataObj::History->create_from_data( 
-		$session, 
-		$data,
-		$session->dataset( "history" ) );
-}
 
 ######################################################################
 =pod
 
-=item $defaults = EPrints::DataObj::History->get_defaults( $session, $data )
+=item $defaults = EPrints::DataObj::History->get_defaults( $session, $data, [ $dataset ] )
 
-Return default values for this object based on the starting data.
+Returns default values for this history data object based on the 
+starting C<$data> and for ths C<$dataset> if specified.
 
 =cut
 ######################################################################
@@ -259,12 +319,15 @@ sub get_defaults
 }
 
 ######################################################################
-#
-# $xhtml = $history->render_citation( $style, $url )
-#
-# This overrides the normal citation rendering and just does a full
-# render of the event.
-#
+=pod
+
+$xhtml = $history->render_citation( $style, $url )
+
+This overrides the normal citation rendering and just does a full
+render of the history event, ignoring any C<$style> or C<$url>
+provided.
+
+=cut
 ######################################################################
 
 sub render_citation
@@ -274,12 +337,13 @@ sub render_citation
 	return $self->render;
 }
 
+
 ######################################################################
 =pod
 
 =item $xhtml = $history->render
 
-Render this change as XHTML DOM.
+Return a rendering of this history event as XHTML DOM.
 
 =cut
 ######################################################################
@@ -343,12 +407,13 @@ sub render
 	return $self->{session}->html_phrase( "lib/history:record", %pins );
 }
 
+
 ######################################################################
 =pod
 
 =item $object = $history->get_dataobj
 
-Returns the object to which this history event relates.
+Returns the data object to which this history event relates.
 
 =cut
 ######################################################################
@@ -362,12 +427,14 @@ sub get_dataobj
 	return $ds->get_object( $self->{session}, $self->get_value( "objectid" ) );
 }
 
+
 ######################################################################
 =pod
 
 =item $user = $history->get_user
 
-Returns the user object of the user who caused this event.
+Returns the user data object of the user who caused this history 
+event.
 
 =cut
 ######################################################################
@@ -394,13 +461,19 @@ sub get_user
 	return $self->{user};
 }
 
-=item $history = $history->get_previous()
 
-Returns the previous event for the object parent of this event.
+######################################################################
+=pod
 
-Returns undef if no such event exists.
+=item $history = $history->get_previous
+
+Returns the previous history event for this history event's data 
+object.
+
+Returns C<undef> if no such history event exists.
 
 =cut
+######################################################################
 
 sub get_previous
 {
@@ -431,20 +504,15 @@ sub get_previous
 	return $self->{_previous} = $results->item( 0 );
 }
 
-######################################################################
-#
-# methods to render various types of history event
-#
-######################################################################
-
-
 
 ######################################################################
-#
-# $xhtml = $history->render_removal_request
-#
-# Render a removal request history event. 
-#
+=pod
+
+=item $xhtml = $history->render_removal_request
+
+Returns a XHTML DOM rendering of a removal request history event. 
+
+=cut
 ######################################################################
 
 sub render_removal_request
@@ -456,12 +524,16 @@ sub render_removal_request
 	return $div;
 }
 
+
 ######################################################################
-#
-# $xhtml = $history->render_with_details
-#
-# Render a MAIL_OWNER history event. 
-#
+=pod
+
+=item $xhtml = $history->render_with_details
+
+Returns a XHTML DOM rendering of a C<mail_owner> (i.e. email was sent
+to the owner of the data object) history event. 
+
+=cut
 ######################################################################
 
 sub render_with_details
@@ -473,12 +545,15 @@ sub render_with_details
 	return $div;
 }
 
+
 ######################################################################
-#
-# $xhtml = $history->render_create( $action )
-#
-# Render a CREATE history event. 
-#
+=pod
+
+=item $xhtml = $history->render_create( $action )
+
+Returns a XHTML DOM rendering of a C<create> history event. 
+
+=cut
 ######################################################################
 
 sub render_create
@@ -505,12 +580,15 @@ sub render_create
 	return $div;
 }
 
+
 ######################################################################
-#
-# $xhtml = $history->render_modify( $action )
-#
-# Render a MODIFY history event. 
-#
+=pod
+
+=item $xhtml = $history->render_modify( $action )
+
+Returns a XHTML DOM rendering of a C<modify> history event.
+
+=cut
 ######################################################################
 
 sub render_modify
@@ -662,16 +740,58 @@ sub render_modify
 }
 
 
+######################################################################
+=pod
+
+=item $history->set_dataobj_xml( $dataobj )
+
+Stores the XML serialisation for C<$dataobj> to a file.
+
+=cut
+######################################################################
+
+sub set_dataobj_xml
+{
+    my( $self, $dataobj ) = @_;
+
+    use bytes;
+
+    my $xml = $dataobj->to_xml( hide_volatile => 1, revision_generation => 1 );
+
+    my $data = "<?xml version='1.0' encoding='utf-8' ?>\n";
+    $data .= $self->{session}->xml->to_string( $xml, indent => 1 );
+    # $data will be bytes due to "use bytes" above
+
+    $self->{session}->xml->dispose( $xml );
+
+    $self->add_stored_file( "dataobj.xml", \$data, length($data) );
+}
+
 
 ######################################################################
-#
-# $boolean = EPrints::DataObj::History::empty_tree( $domtree )
-#
-# return true if there is no text in the tree other than
-# whitespace,
-#
-# Will maybe be moved to XML or Utils
-#
+=pod
+
+=back
+
+=head2 Utility Methods
+
+=cut
+######################################################################
+
+######################################################################
+=pod
+
+=over 4
+
+=item $boolean = EPrints::DataObj::History::empty_tree( $domtree )
+
+Returns C<true> if there is no text in the XHTML C<$domtree> other 
+than whitespace. Otherwise, returns C<false>.
+
+This method is liable to being moveded to L<EPrints::XML>> or 
+L<EPrints::Utils>.
+
+=cut
 ######################################################################
 
 sub empty_tree
@@ -706,12 +826,17 @@ sub empty_tree
 	return 1;
 }
 
+
 ######################################################################
-#
-# $xhtml = EPrints::DataObj::History::render_xml_diffs( $tree1, $tree2, $indent, $width )
-#
-# Render the diffs between tree1 and tree2 as XHTML
-#
+=pod
+
+=item ( $f1, $f2 ) = EPrints::DataObj::History::render_xml_diffs( $tree1, $tree2, $indent, $width )
+
+Returns two XHTML DOM trees.  The first for the older version,
+highlighting lines that are changed or removed and the second for 
+the newer version, highlighting libes that are changed or added.
+
+=cut
 ######################################################################
 
 sub render_xml_diffs
@@ -940,17 +1065,19 @@ sub render_xml_diffs
 }
 
 	
-
 ######################################################################
-#
-# ($xhtml, [$xhtml_padding]) = EPrints::DataObj::History::render_domtree( $session, $tree, $indent, $make_padded, $width )
-#
-# Render the given tree as XHTML (showing the actual XML structure).
-#
-# If make_padded is true then also generate another element, which is 
-# empty but the same height to be used in the other column to keep
-# things level.
-#
+=pod
+
+=item ($xhtml, [$xhtml_padding]) = EPrints::DataObj::History::render_domtree( $session, $tree, $indent, $make_padded, $width )
+
+Returns a rendering of the given tree as XHTML (showing the actual XML 
+structure).
+
+If C<$make_padded> is C<true> then also generate another element, 
+which is empty but the same height to be used in the other column to 
+keep things level.
+
+=cut
 ######################################################################
 
 sub render_xml
@@ -1028,12 +1155,16 @@ sub render_xml
 	return( $session->make_text( "eh?:".ref($domtree) ), $session->make_doc_fragment );
 }
 
+
 ######################################################################
-#
-# $boolean = EPrints::DataObj::History::diff( $tree1, $tree2 )
-#
-# Return true if the XML trees are not the same, otherwise false.
-#
+=pod
+
+=item $boolean = EPrints::DataObj::History::diff( $tree1, $tree2 )
+
+Returns C<true> if the XML trees C<$tree1> and C<$tree2> are not the 
+same, otherwise returns C<false>.
+
+=cut
 ######################################################################
 
 sub diff
@@ -1094,57 +1225,19 @@ sub diff
 	return 0;
 }
 
-######################################################################
-#
-# @lines = EPrints::DataObj::History::_mktext( $session, $text, $offset, $endw, $width )
-#
-# Return the $text string broken into lines which are $width long, or
-# less.
-#
-# Inserts a 90 degree arrow at the end of each broken line to indicate
-# that it has been broken.
-#
-######################################################################
-
-sub _mktext
-{
-	my( $session, $text, $offset, $endw, $width ) = @_;
-
-	return () unless length( $text );
-
-	my $lb = chr(8626);
-	my @bits = split(/[\r\n]/, $text );
-	my @b2 = ();
-	
-	foreach my $t2 ( @bits )
-	{
-		while( $offset+length( $t2 ) > $width )
-		{
-			my $cut = $width-1-$offset;
-			push @b2, substr( $t2, 0, $cut ).$lb;
-			$t2 = substr( $t2, $cut );
-			$offset = 0;
-		}
-		if( $offset+$endw+length( $t2 ) > $width )
-		{
-			push @b2, $t2.$lb, "";
-		}
-		else
-		{
-			push @b2, $t2;
-		}
-	}
-
-	return @b2;
-}
 
 ######################################################################
-#
-# $boolean = EPrints::DataObj::History::diff( $tree1, $tree2 )
-#
-# Return true if the XML trees are not the same, otherwise false.
-# render $text into wrapped XML DOM.
-#
+=pod
+
+=item @lines = EPrints::DataObj::History::mktext( $session, $text, $offset, $endw, $width )
+
+Returns the C<$text> string broken into an array of lines which are
+C<$width> long or less.
+
+Inserts a 90 degree arrow at the end of each broken line to indicate
+that it has been broken.
+
+=cut
 ######################################################################
 
 sub mktext
@@ -1156,15 +1249,49 @@ sub mktext
 	return $session->make_text( join( "\n", @bits ) );
 }
 
-######################################################################
-#
-# $xhtml = EPrints::DataObj::History::mkpad( $session, $text, $offset, $endw, $width )
-#
-# Return DOM of vertical padding equiv. to the lines that would
-# be needed to render $text.
-#
-######################################################################
+sub _mktext
+{
+    my( $session, $text, $offset, $endw, $width ) = @_;
 
+    return () unless length( $text );
+
+    my $lb = chr(8626);
+    my @bits = split(/[\r\n]/, $text );
+    my @b2 = ();
+
+    foreach my $t2 ( @bits )
+    {
+        while( $offset+length( $t2 ) > $width )
+        {
+            my $cut = $width-1-$offset;
+            push @b2, substr( $t2, 0, $cut ).$lb;
+            $t2 = substr( $t2, $cut );
+            $offset = 0;
+        }
+        if( $offset+$endw+length( $t2 ) > $width )
+        {
+            push @b2, $t2.$lb, "";
+        }
+        else
+        {
+            push @b2, $t2;
+        }
+    }
+
+    return @b2;
+}
+
+
+######################################################################
+=pod
+
+=item $xhtml = EPrints::DataObj::History::mkpad( $session, $text, $offset, $endw, $width )
+
+Return XHTML DOM of vertical padding equivalent to the lines that would 
+be needed to render C<$text>.
+
+=cut
+######################################################################
 
 sub mkpad
 {
@@ -1175,45 +1302,31 @@ sub mkpad
 	return $session->make_text( "\n"x((scalar @bits)-1) );
 }
 
-sub set_dataobj_xml
-{
-	my( $self, $dataobj ) = @_;
 
-	use bytes;
-
-	my $xml = $dataobj->to_xml( hide_volatile => 1, revision_generation => 1 );
-
-	my $data = "<?xml version='1.0' encoding='utf-8' ?>\n";
-	$data .= $self->{session}->xml->to_string( $xml, indent => 1 );
-	# $data will be bytes due to "use bytes" above
-
-	$self->{session}->xml->dispose( $xml );
-
-	$self->add_stored_file( "dataobj.xml", \$data, length($data) );
-}
-
-######################################################################
 1;
+
 ######################################################################
 =pod
 
 =back
 
-=cut
+=head1 SEE ALSO
 
+L<EPrints::DataObj::SubObject>, L<EPrints::DataObj> and 
+L<EPrints::DataSet>.
 
 =head1 COPYRIGHT
 
-=for COPYRIGHT BEGIN
+=begin COPYRIGHT
 
-Copyright 2021 University of Southampton.
+Copyright 2022 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/
 
-=for COPYRIGHT END
+=end COPYRIGHT
 
-=for LICENSE BEGIN
+=begin LICENSE
 
 This file is part of EPrints 3.4 L<http://www.eprints.org/>.
 
@@ -1230,5 +1343,5 @@ You should have received a copy of the GNU Lesser General Public
 License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
-=for LICENSE END
+=end LICENSE
 

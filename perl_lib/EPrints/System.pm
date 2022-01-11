@@ -10,15 +10,50 @@
 
 =pod
 
+=for Pod2Wiki
+
 =head1 NAME
 
-B<EPrints::System> - Wrappers for system calls
+B<EPrints::System> - Wrappers for system calls.
 
-=head1 METHODS
+=head1 DESCRIPTION
+
+When you call a method in this class, it is sent to the appropriate 
+C<EPrints::System> sub-module:
+
+ EPrints::System::darwin
+ EPrints::System::freebsd
+ EPrints::System::linux
+ EPrints::System::MSWin32
+ EPrints::System::openbsd
+ EPrints::System::solaris
+
+By default this will be L<EPrints::System::linux>.
+
+Which module is used is configured by the C<platform> setting in 
+L<EPrints::SystemSettings>
+
+All file and directory names are absolute and joined by the 
+UNIX separator character C</>.
+
+=head1 INSTANCE VARIABLES
 
 =over 4
 
+=item $self->{uid}
+
+The user ID of this EPrints system.
+
+=item $self->{gid}
+
+The group ID of this EPrints system.
+
+=back
+
+=head1 METHODS
+
 =cut
+######################################################################
 
 package EPrints::System;
 
@@ -26,11 +61,26 @@ use strict;
 use File::Copy;
 use Digest::MD5;
 
-=item $sys = EPrints::System->new();
 
-Returns a new EPrints::System object.
+######################################################################
+=pod
+
+=head2 Constructor Methods
 
 =cut
+######################################################################
+
+######################################################################
+=pod
+
+=over 4
+
+=item $sys = EPrints::System->new
+
+Returns a new EPrints System object.
+
+=cut
+######################################################################
 
 sub new
 {
@@ -57,11 +107,28 @@ sub new
 	return $self;
 }
 
-=item $sys->init()
+
+######################################################################
+=pod
+
+=back
+
+=head2 Object Methods 
+
+=cut
+######################################################################
+
+######################################################################
+=pod
+
+=over 4
+
+=item $sys->init
 
 Perform any platform-specific initialisation.
 
 =cut
+######################################################################
 
 sub init
 {
@@ -98,11 +165,16 @@ sub init
 	}
 }
 
-=item $sys->chmod( MODE, @filelist )
 
-Change the access control on files listed in @filelist to MODE.
+######################################################################
+=pod
+
+=item $sys->chmod( $mode, @files )
+
+Change the access control on C<@files> listed to C<$mode>.
 
 =cut
+######################################################################
 
 sub chmod 
 {
@@ -111,12 +183,17 @@ sub chmod
 	return CORE::chmod( $mode, @files );
 } 
 
-=item $sys->chown( $uid, $gid, @filelist )
 
-Change the user and group on files listed in @filelist to $uid and
-$gid. $uid and $gid are as returned by L<getpwnam> (usually numeric).
+######################################################################
+=pod
+
+=item $sys->chown( $uid, $gid, @files )
+
+Change the user and group on C<@files> to C<$uid> and C<$gid>. C<$uid> 
+and C<$gid> are as returned by L</getpwnam> (usually numeric).
 
 =cut
+######################################################################
 
 sub chown 
 {
@@ -125,11 +202,17 @@ sub chown
 	return CORE::chown( $mode, @files );
 }
 
-=item $sys->chown_for_eprints( @filelist )
 
-Change the user and group on files listed in @filelist to the current EPrints user and group.
+######################################################################
+=pod
+
+=item $sys->chown_for_eprints( @files )
+
+Change the user and group on C<@files> to the current EPrints user and 
+group.
 
 =cut
+######################################################################
 
 sub chown_for_eprints
 {
@@ -138,44 +221,65 @@ sub chown_for_eprints
 	$self->chown( $self->{uid}, $self->{gid}, @files );
 }
 
+
+######################################################################
+=pod
+
 =item $gid = $sys->getgrnam( $group )
 
-Return the system group id of the group $group.
+Return the system group ID of the group C<$group>.
 
 =cut
+######################################################################
 
 sub getgrnam 
 {
 	return CORE::getgrnam( $_[1] );
 }
 
+
+######################################################################
+=pod
+
 =item ($user, $crypt, $uid, $gid ) = $sys->getpwnam( $user )
 
-Return the login-name, password crypt, uid and gid for user $user.
+Return the login name, password crypt, UID and GID for user C<$user>.
 
 =cut
+######################################################################
 
 sub getpwnam 
 {
 	return CORE::getpwnam( $_[1] );
 }
 
-=item $sys->current_uid()
 
-Returns the current uid of the user running this process.
+######################################################################
+=pod
+
+=item $sys->current_uid
+
+Returns the current UID of the user running this process.
 
 =cut
+######################################################################
 
 sub current_uid
 {
 	return $>;
 }
 
-=item $sys->test_uid()
 
-Test whether the current user is the same that is configured in L<EPrints::SystemSettings>.
+######################################################################
+=pod
+
+=item $sys->test_uid
+
+Test whether the current user is the same that is configured in 
+L<EPrints::SystemSettings>.
 
 =cut
+######################################################################
 
 sub test_uid
 {
@@ -195,13 +299,18 @@ sub test_uid
 	}
 }
 
-=item $sys->mkdir( $path, MODE )
 
-Create a directory $path (including parent directories as necessary)
-set to mode MODE. If MODE is undefined defaults to dir_perms in
-SystemSettings.
+######################################################################
+=pod
+
+=item $sys->mkdir( $full_path, $perms )
+
+Create a directory C<$full_path> (including parent directories as 
+necessary) set permissions described by C<$perms>. If C<$perms> is 
+undefined defaults to C<dir_perms> in L<EPrints::SystemSettings>.
 
 =cut
+######################################################################
 
 sub mkdir
 {
@@ -240,13 +349,22 @@ sub mkdir
 	return 1;
 }
 
-=item $sys->exec( $repo, $cmd_id, %map )
+######################################################################
+=pod
 
-Executes certain named tasks, which were once (and may be) handled
-by external binaries. This allows a per-platform solution to each
-task. (example is unpacking a .tar.gz file).
+=item $sys->exec( $repository, $cmd_id, %map )
+
+Executes certain named task C<$cmd_id> on C<$repository>, which were 
+once (and may be) handled by external binaries. This allows a 
+per-platform solution to each task. E.g. unpacking a .tar.gz file.
+
+C<%map> includes variable names and values that need to be mapped into
+the task command.
+
+Returns the numerical return code from the executed command.
 
 =cut
+######################################################################
 
 sub exec 
 {
@@ -266,13 +384,17 @@ sub exec
 	return $rc;
 }	
 
-=item $rc = read_exec( $repo, $filename, $cmd_id, %map )
 
-Execute $cmd_id with parameters from %map and write the STDOUT and STDERR to $filename.
+######################################################################
+=pod
 
-Returns the exit status of the called command.
+=item $rc = $sys->read_exec( $repo, $tmp, $cmd_id, %map )
+
+Same as </exec> but write C<STDOUT> and C<STDERR> to the filename
+specified by C<$tmp>.
 
 =cut
+######################################################################
 
 sub read_exec
 {
@@ -283,14 +405,20 @@ sub read_exec
 	return $self->_read_exec( $repo, $tmp, $cmd );
 }
 
-=item $rc = read_perl_script( $repo, $filename, @args )
 
-Executes Perl with @args, including the current EPrints library path. Writes
-output from the script to $filename (errors and stdout).
+######################################################################
+=pod
 
-Returns 0 on success.
+=item $rc = $sys->read_perl_script( $repo, $tmp, @args )
+
+Executes Perl with arguments from C<@args>, including the current 
+EPrints library path. Writes C<STDOUT> and C<STDERR> from the script 
+to file with name C<$tmp>.
+
+Returns C<0> on success.
 
 =cut
+######################################################################
 
 sub read_perl_script
 {
@@ -333,11 +461,17 @@ EOP
 	return 0xffff & $rc;
 }
 
+
+######################################################################
+=pod
+
 =item $sys->free_space( $dir )
 
-Return the amount of free space (in bytes) available at $dir. $dir may contain a drive (C:) on Windows platforms.
+Return the amount of free space (in bytes) available at C<$dir>. 
+C<$dir> may contain a drive (e.g. C<C:>) on Windows platforms.
 
 =cut
+######################################################################
 
 sub free_space
 {
@@ -354,13 +488,18 @@ sub free_space
 	return $free * 1024; # POSIX output mode block is 512 bytes
 }
 
+
+######################################################################
+=pod
+
 =item $bool = $sys->proc_exists( $pid )
 
-Returns true if a process exists for id $pid.
+Returns C<true> if a process exists for ID with C<$pid>.
 
-Returns undef if process identification is unsupported.
+Returns C<undef> if process identification is unsupported.
 
 =cut
+######################################################################
 
 sub proc_exists
 {
@@ -369,27 +508,38 @@ sub proc_exists
 	return `ls /proc/ | grep '^$pid\$' | wc -l`;
 }
 
-=item get_hash_name()
+
+######################################################################
+=pod
+
+=item $filename = $sys->get_hash_name
 
 Returns the last part of the filename of the hashfile for a document.
 (yes, it's a bad function name.)
 
 =cut
+######################################################################
 
 sub get_hash_name
 {
 	return EPrints::Time::get_iso_timestamp().".xsh";
 }
 
-=item $backup = write_config_file( $path, $conf, BACKUP => 1 )
 
-Write a config file containing $conf to the file located at $path.
+######################################################################
+=pod 
 
-If BACKUP is true will backup $path first and return the backed-up filepath.
+=item $backup = write_config_file( $path, $content, [ %opts ] )
 
-If $conf is undefined no file will be written.
+Write a config file containing C<$content> to the file located at 
+C<$path>.
+
+If C<$content> is undefined no file will be written.
+
+C<%opts> not currently used but reserved for future use.
 
 =cut
+######################################################################
 
 sub write_config_file
 {
@@ -445,11 +595,16 @@ sub write_config_file
 	return $rc;
 }
 
-=item $quoted = $sys->quotemeta( $str )
 
-Quote $str so it is safe to be used in a shell call.
+######################################################################
+=pod
+
+=item $quoted = $sys->quotemeta( $path )
+
+Quote C<$path> so it is safe to be used in a shell call.
 
 =cut
+######################################################################
 
 sub quotemeta
 {
@@ -458,11 +613,17 @@ sub quotemeta
 	return CORE::quotemeta($path);
 }
 
-=item $tmpfile = $sys->capture_stderr()
 
-Captures STDERR output to $tmpfile.
+######################################################################
+=pod
+
+=item $tmpfile = $sys->capture_stderr
+
+Captures STDERR output into a temporary file and return a file handle
+to it.
 
 =cut
+######################################################################
 
 sub capture_stderr
 {
@@ -477,11 +638,19 @@ sub capture_stderr
 	return $tmpfile;
 }
 
+
+######################################################################
+=pod
+
 =item $sys->restore_stderr( $tmpfile )
 
-Restores STDERR after capturing.
+Restores C<STDERR> after capturing. 
+
+If C<$tmpfile> is set, reset seek and sysseek to the start of this 
+file. 
 
 =cut
+######################################################################
 
 sub restore_stderr
 {
@@ -492,11 +661,17 @@ sub restore_stderr
 	seek($tmpfile, 0, 0), sysseek($tmpfile, 0, 0) if defined $tmpfile;
 }
 
+
+######################################################################
+=pod
+
 =item $path = $sys->join_path( @parts )
 
-Returns @parts joined together using the current system's path separator.
+Returns C<@parts> joined together using the current system's path 
+separator.
 
 =cut
+######################################################################
 
 sub join_path
 {
@@ -505,13 +680,19 @@ sub join_path
 	return join '/', @parts;
 }
 
+
+######################################################################
+=pod
+
 =item $ext = $sys->file_extension( $filename )
 
-Returns the file extension of $filename including the leading '.' e.g. F<.tar.gz>
+Returns the file extension of $filename including the leading C<.> 
+e.g. C<.tar.gz>.
 
 Returns empty string if there is no file extension.
 
 =cut
+######################################################################
 
 sub file_extension
 {
@@ -525,13 +706,20 @@ sub file_extension
 	return "";
 }
 
+
+######################################################################
+=pod
+
 =item $filepath = $sys->sanitise( $filepath )
 
-Replaces restricted file system characters and control characters in $filepath with '_'.
+Replaces restricted file system characters and control characters in 
+C<$filepath> with C<_>.
 
-Removes path-walking elements ('.', '..') from the front of any path components and removes the leading '/'.
+Removes path-walking elements (C<.> and C<..>) from the front of any 
+path components and removes the leading C</>.
 
 =cut
+######################################################################
 
 sub sanitise
 {
@@ -562,11 +750,17 @@ sub sanitise
 	return $filepath;
 }
 
-=item @paths = $sys->bin_paths()
 
-Get the list of absolute directories to search for system tools (e.g. F<convert>).
+######################################################################
+=pod
+
+=item @paths = $sys->bin_paths
+
+Get the list of absolute directories to search for system tools (e.g. 
+C<convert>).
 
 =cut
+######################################################################
 
 sub bin_paths
 {
@@ -577,20 +771,24 @@ sub bin_paths
 
 1;
 
+
+######################################################################
+=pod
+
 =back
 
 =head1 COPYRIGHT
 
-=for COPYRIGHT BEGIN
+=begin COPYRIGHT
 
-Copyright 2021 University of Southampton.
+Copyright 2022 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/
 
-=for COPYRIGHT END
+=end COPYRIGHT
 
-=for LICENSE BEGIN
+=begin LICENSE
 
 This file is part of EPrints 3.4 L<http://www.eprints.org/>.
 
@@ -607,5 +805,4 @@ You should have received a copy of the GNU Lesser General Public
 License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
-=for LICENSE END
-
+=end LICENSE

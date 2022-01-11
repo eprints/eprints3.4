@@ -1,6 +1,6 @@
 ######################################################################
 #
-# EPrints::System::MSWin32
+# EPrints::System::linux
 #
 ######################################################################
 #
@@ -10,13 +10,27 @@
 
 =pod
 
+=for Pod2Wiki
+
 =head1 NAME
 
-B<EPrints::System::MSWin32> - Functions for the Win32 Platform
+B<EPrints::System::MSWin32> - Wrappers for MS Windows 32 system calls.
 
-=over 4
+=head1 DESCRIPTPION
+
+This class provides MS Windows 32 specific system calls required by 
+EPrints.
+
+This class inherits from L<EPrints::System>.
+
+=head1 INSTANCE VARIABLES
+
+See L<EPrints::System|EPrints::System#INSTANCE_VARIABLES>.
+
+=head1 METHODS
 
 =cut
+######################################################################
 
 package EPrints::System::MSWin32;
 
@@ -30,19 +44,119 @@ use EPrints::Index::Daemon::MSWin32;
 
 use strict;
 
+
+######################################################################
+=pod
+
+=over 4
+
+=item $sys->init
+
+Perform any platform-specific initilisation is not required on MS 
+Windows 32 systems.
+
+=cut
+######################################################################
+
 sub init { }
+
+
+######################################################################
+=pod
+
+=item $sys->chmod( $mode, @files )
+
+Changing the access control for C<@files> is not possible on MS 
+Windows 32 systems.
+
+=cut
+######################################################################
 
 sub chmod { } 
 
+
+######################################################################
+=pod
+
+=item $sys->chown( $uid, $gid, @files )
+
+Changing the user/group ownership on C<@files> is not possible on MS
+Windows 32 systems.
+
+=cut
+######################################################################
+
 sub chown { }
+
+
+######################################################################
+=pod
+
+=item $sys->chown_for_eprints( @files )
+
+Changing the user/group ownership on C<@files> to the current EPrints
+user is not possible on MS Windows 32 systems.
+
+=cut
+######################################################################
 
 sub chown_for_eprints { }
 
+
+######################################################################
+=pod
+
+=item $gid = $sys->getgrnam( $group )
+
+Getting the group name for C<$group> is not possible on MS Windows 32 
+systems.
+
+=cut
+######################################################################
+
 sub getgrnam { }
+
+
+######################################################################
+=pod
+
+=item ($user, $crypt, $uid, $gid ) = $sys->getpwnam( $user )
+
+Getting the login name, password crypt, UID and GID for user C<$user>
+is not possible on MS Windows 32 systems.
+
+=cut
+######################################################################
 
 sub getpwnam { }
 
+
+######################################################################
+=pod
+
+=item $sys->test_uid
+
+Testing whether the current user is the same that is configured in
+L<EPrints::SystemSettings> is not possible on MS Windows 32 systems.
+
+=cut
+######################################################################
+
 sub test_uid { }
+
+
+
+######################################################################
+=pod
+
+=item $sys->free_space( $dir )
+
+Returns the amount of free space (in bytes) available at C<$dir>.
+As this is a MS Windows 32 system C<$dir> may contain a drive 
+(e.g. C<C:>).
+
+=cut
+######################################################################
 
 sub free_space
 {
@@ -62,6 +176,20 @@ sub free_space
 	return $free_space;
 }
 
+
+######################################################################
+=pod
+
+=item $bool = $sys->proc_exists( $pid )
+
+Returns C<true> if a process exists for ID with C<$pid> or access is
+denied to the process, implying it must exist.
+
+Returns C<false> otherwise.
+
+=cut
+######################################################################
+
 sub proc_exists
 {
 	my( $self, $pid ) = @_;
@@ -70,6 +198,19 @@ sub proc_exists
 	return 1 if $^E == 5; # Access is denied
 	return 0;
 }
+
+
+######################################################################
+=pod
+
+=item $sys->mkdir( $full_path, $perms )
+
+Create a directory C<$full_path> (including parent directories as
+necessary) set permissions described by C<$perms>. If C<$perms> is
+undefined defaults to C<dir_perms> in L<EPrints::SystemSettings>.
+
+=cut
+######################################################################
 
 sub mkdir
 {
@@ -100,6 +241,17 @@ sub mkdir
 	return 1;
 }
 
+
+######################################################################
+=pod
+
+=item $quoted = $sys->quotemeta( $path )
+
+Quote C<$path> so it is safe to be used in a shell call.
+
+=cut
+######################################################################
+
 sub quotemeta
 {
 	my( $self, $str ) = @_;
@@ -112,18 +264,28 @@ sub quotemeta
 
 1;
 
+
+######################################################################
+=pod
+
+=back
+
+=head1 SEE ALSO
+
+L<EPrints::System>
+
 =head1 COPYRIGHT
 
-=for COPYRIGHT BEGIN
+=begin COPYRIGHT
 
-Copyright 2021 University of Southampton.
+Copyright 2022 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/
 
-=for COPYRIGHT END
+=end COPYRIGHT
 
-=for LICENSE BEGIN
+=begin LICENSE
 
 This file is part of EPrints 3.4 L<http://www.eprints.org/>.
 
@@ -140,5 +302,5 @@ You should have received a copy of the GNU Lesser General Public
 License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
-=for LICENSE END
+=end LICENSE
 

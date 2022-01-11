@@ -1,8 +1,38 @@
+######################################################################
+#
+# EPrints::System::linux
+#
+######################################################################
+#
+#
+######################################################################
+
+
+=pod
+
+=for Pod2Wiki
+
 =head1 NAME
 
-EPrints::System::linux
+B<EPrints::System::linux> - Wrappers for Linux system calls.
+
+=head1 DESCRIPTPION
+
+This class provides Linux-specific system calls required by EPrints.
+
+This class inherits from L<EPrints::System>.
+
+=head1 INSTANCE VARIABLES
+
+See L<EPrints::System|EPrints::System#INSTANCE_VARIABLES>.
+
+=head1 METHODS
+
+None, as L<EPrints::System> methods were built around a Linux-based
+system.
 
 =cut
+######################################################################
 
 package EPrints::System::linux;
 
@@ -12,18 +42,25 @@ use strict;
 
 1;
 
+######################################################################
+=pod
+
+=head1 SEE ALSO
+
+L<EPrints::System>
+
 =head1 COPYRIGHT
 
-=for COPYRIGHT BEGIN
+=begin COPYRIGHT
 
-Copyright 2021 University of Southampton.
+Copyright 2022 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/
 
-=for COPYRIGHT END
+=end COPYRIGHT
 
-=for LICENSE BEGIN
+=begin LICENSE
 
 This file is part of EPrints 3.4 L<http://www.eprints.org/>.
 
@@ -40,5 +77,4 @@ You should have received a copy of the GNU Lesser General Public
 License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
-=for LICENSE END
-
+=end LICENSE

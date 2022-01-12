@@ -16,26 +16,28 @@
 
 B<EPrints::Database::Oracle> - custom database methods for Oracle DB
 
-=head1 SYNOPSIS
-
-These settings are the default settings for the free Oracle developer version:
-
-	# Oracle driver settings for database.pl
-	$c->{dbdriver} = "Oracle";
-	$c->{dbhost} = "localhost";
-	$c->{dbsid} = "XE;
-	$c->{dbuser} = "HR";
-	$c->{dbpass} = "HR";
-
 =head1 DESCRIPTION
 
 Oracle database wrapper for Oracle DB version 9+.
+
+=head2 Synopsis
+
+These settings are the default settings for the free Oracle developer
+version:
+
+    # Oracle driver settings for database.pl
+    $c->{dbdriver} = "Oracle";
+    $c->{dbhost} = "localhost";
+    $c->{dbsid} = "XE;
+    $c->{dbuser} = "HR";
+    $c->{dbpass} = "HR";
 
 =head2 Setting up Oracle
 
 Enable the HR user in Oracle XE.
 
-Set the ORACLE_HOME and ORACLE_SID environment variables. To add these globally edit /etc/profile.d/oracle.sh (for XE edition):
+Set the C<ORACLE_HOME> and C<ORACLE_SID> environment variables. To 
+add these globally edit C</etc/profile.d/oracle.sh> (for XE edition):
 
 	export ORACLE_HOME="/usr/lib/oracle/xe/app/oracle/product/10.2.0/server"
 	export ORACLE_SID="XE"
@@ -44,54 +46,42 @@ Set the ORACLE_HOME and ORACLE_SID environment variables. To add these globally 
 
 =head2 Oracle-specific Annoyances
 
-Use the GQLPlus wrapper from http://gqlplus.sourceforge.net/ instead of sqlplus.
+Use the GQLPlus wrapper from L<http://gqlplus.sourceforge.net/> instead 
+of sqlplus.
 
-Oracle will uppercase any identifiers that aren't quoted and is case sensitive, hence mixing quoted and unquoted identifiers will lead to problems.
+Oracle will uppercase any identifiers that aren't quoted and is case 
+sensitive, hence mixing quoted and unquoted identifiers will lead to 
+problems.
 
-Oracle does not support LIMIT().
+Oracle does not support C<LIMIT()>.
 
-Oracle does not support AUTO_INCREMENT (MySQL) nor SERIAL (Postgres).
+Oracle does not support C<AUTO_INCREMENT> (MySQL) nor C<SERIAL> 
+(Postgres).
 
-Oracle won't ORDER BY LOBS.
+Oracle won't C<ORDER BY LOBS>.
 
-Oracle requires special means to insert values into CLOB/BLOB.
+Oracle requires special means to insert values into C<CLOB>/C<BLOB>.
 
-Oracle doesn't support "AS" when aliasing.
+Oracle doesn't support C<AS> when aliasing.
 
-When specifying char column lengths use (n char) to define character semantics. Otherwise oracle uses the "nls_length_semantics" setting to determine whether you meant bytes or chars.
+When specifying char column lengths use (n char) to define character 
+semantics. Otherwise oracle uses the C<nls_length_semantics> setting 
+to determine whether you meant bytes or characters.
 
-DBD::Oracle can crash when using PERL_USE_SAFE_PUTENV-compiled Perls, see http://www.eprints.org/tech.php/13984.html
+L<DBD::Oracle> can crash when using C<PERL_USE_SAFE_PUTENV>-compiled 
+Perls, see L<http://www.eprints.org/tech.php/13984.html>.
 
-=head2 TODO
+=head1 CONSTANTS
 
-=over 4
+See L<EPrints::Database|EPrints::Database#CONSTANTS>.
 
-=item epadmin create
+=head1 INSTANCE VARIABLES
 
-=item $name = $db->index_name( $table, @columns )
-
-=back
+See L<EPrints::Database|EPrints::Database#INSTANCE_VARIABLES>.
 
 =head1 METHODS
 
-=over 4
-
 =cut
-
-######################################################################
-#
-# INSTANCE VARIABLES:
-#
-#  $self->{session}
-#     The EPrints::Session which is associated with this database 
-#     connection.
-#
-#  $self->{debug}
-#     If true then SQL is logged.
-#
-#  $self->{dbh}
-#     The handle on the actual database connection.
-#
 ######################################################################
 
 package EPrints::Database::Oracle;
@@ -178,6 +168,19 @@ our %ORACLE_TYPES = (
 
 use strict;
 
+
+######################################################################
+=pod
+
+=over 4
+
+=item $db->connect()
+
+Connects to the database.  Also sets C<LongReadLen> to C<128*1024>.
+
+=cut
+######################################################################
+
 sub connect
 {
 	my( $self ) = @_;
@@ -186,6 +189,27 @@ sub connect
 
 	$self->{dbh}->{LongReadLen} = 128*1024;
 }
+
+######################################################################
+=pod
+
+=item $sth = $db->prepare_select( $sql, [ %options ] )
+
+Prepare a C<SELECT> statement C<$sql> and return a handle to it. After
+preparing a statement use C<execute()> to execute it.
+
+Returns a L<DBI> statement handle.
+
+The C<LIMIT> SQL keyword is not universally supported, to specify this
+use the C<limit> option.
+
+Options:
+
+    limit - limit the number of rows returned
+    offset - return B<limit> number of rows after offset
+
+=cut
+######################################################################
 
 sub prepare_select
 {
@@ -219,6 +243,16 @@ sub prepare_select
 	return $self->prepare( $sql );
 }
 
+######################################################################
+=pod
+
+=item $success = $db->create_archive_tables()
+
+Creates all the SQL tables for all datasets.
+
+=cut
+######################################################################
+
 sub create_archive_tables
 {
 	my( $self ) = @_;
@@ -236,12 +270,13 @@ sub create_archive_tables
 	return $self->SUPER::create_archive_tables();
 }
 
+
 ######################################################################
 =pod
 
 =item $version = $db->get_server_version
 
-Return the database server version.
+Returns the database server version.
 
 =cut
 ######################################################################
@@ -255,28 +290,32 @@ sub get_server_version
 	return $version;
 }
 
+
 ######################################################################
 =pod
 
-=item $real_type = $db->get_column_type( NAME, TYPE, NOT_NULL, [, LENGTH ] )
+=item $real_type = $db->get_column_type( $name, $type, $not_null, [ $length ] )
 
-Returns a column definition for NAME of type TYPE. If NOT_NULL is true the column will be created NOT NULL. For column types that require a length use LENGTH.
+Returns a SQL column definition for C<$name> of type C<$type>. If 
+C<$not_null> is C<true> the column will be set to C<NOT NULL>. For 
+column types that require a length use C<$length>.
 
-TYPE is the SQL type. The types are constants defined by this module, to import them use:
+C<$type> is the SQL type. The types are constants defined by this 
+module, to import them use:
 
   use EPrints::Database qw( :sql_types );
 
 Supported types (n = requires LENGTH argument):
 
-Character data: SQL_VARCHAR(n), SQL_LONGVARCHAR.
+Character data: C<SQL_VARCHAR(n)>, C<SQL_LONGVARCHAR>.
 
-Binary data: SQL_VARBINARY(n), SQL_LONGVARBINARY.
+Binary data: C<SQL_VARBINARY(n)>, C<SQL_LONGVARBINARY>.
 
-Integer data: SQL_TINYINT, SQL_SMALLINT, SQL_INTEGER.
+Integer data: C<SQL_TINYINT>, C<SQL_SMALLINT>, C<SQL_INTEGER>, 
 
-Floating-point data: SQL_REAL, SQL_DOUBLE.
+Floating-point data: C<SQL_REAL>, C<SQL_DOUBLE>.
 
-Time data: SQL_DATE, SQL_TIME.
+Time data: C<SQL_DATE>, C<SQL_TIME>.
 
 =cut
 ######################################################################
@@ -377,7 +416,8 @@ sub get_tables
 
 =item $boolean = $db->has_sequence( $name )
 
-Return true if a sequence of the given name exists in the database.
+Return C<true> if a sequence of the given $<name> exists in the 
+database.
 
 =cut
 ######################################################################
@@ -398,9 +438,13 @@ sub has_sequence
 ######################################################################
 =pod
 
-=item $boolean = $db->has_column( $tablename, $columnname )
+=item $boolean = $db->has_column( $table, $column )
 
-Return true if the a table of the given name has a column named $columnname in the database.
+Return C<true> if the named database C<$table> has the named 
+C<$column>.
+
+Default method from L<EPrints::Database> this is really slow and this 
+is much faster.
 
 =cut
 ######################################################################
@@ -419,6 +463,17 @@ sub has_column
 	return scalar @$rows;
 }
 
+######################################################################
+=pod
+
+=item $boolean = $db->has_table( $table )
+
+Returns boolean dependent on whether the named C<$table> exists in the 
+database.
+
+=cut
+######################################################################
+
 sub has_table
 {
 	my( $self, $table ) = @_;
@@ -431,7 +486,20 @@ sub has_table
 	return scalar @$rows;
 }
 
-# Oracle doesn't support getting the "current" value of a sequence
+
+######################################################################
+=pod
+
+=item $n = $db->counter_current( $counter )
+
+Return the value of the previous counter_next on C<$counter>.
+
+Oracle doesn't support getting the C<current> value of a sequence so
+this method always returns C<undef>.
+
+=cut
+######################################################################
+
 sub counter_current
 {
 	my( $self, $counter ) = @_;
@@ -439,9 +507,15 @@ sub counter_current
 	return undef;
 }
 
-=item $id = $db->quote_identifier( $col [, $col ] )
 
-This method quotes and returns the given database identifier. If more than one name is supplied joins them using the correct database join character (typically '.').
+######################################################################
+=pod
+
+=item $id = $db->quote_identifier( @columns )
+
+This method quotes and returns the given database identifier. If more 
+than one name is supplied joins them using the correct database 
+joining character (typically C<.>).
 
 Oracle restricts identifiers to:
 
@@ -451,9 +525,12 @@ Oracle restricts identifiers to:
  	case insensitive
  	not a reserved word (unless quoted?)
 
-Identifiers longer than 30 chars will be abbreviated to the first 5 chars of the identifier and 25 characters from an MD5 derived from the identifier. This should make name collisions unlikely.
+Identifiers longer than 30 characters will be abbreviated to the first 
+5 characters of the identifier and 25 characters from an MD5 derived 
+from the identifier. This should make name collisions unlikely.
 
 =cut
+######################################################################
 
 sub quote_identifier
 {
@@ -466,12 +543,41 @@ sub quote_identifier
 		} @_[1..$#_]);
 }
 
+
+######################################################################
+=pod
+
+=item $sql = $db->prepare_regexp( $col, $value )
+
+Oracle use the syntax:
+
+ REGEXP_LIKE ($col, $value)
+ 
+For the quoted regexp C<$value> and the quoted column C<$col>.
+
+=cut
+######################################################################
+
 sub prepare_regexp
 {
 	my ($self, $col, $value) = @_;
 
 	return "REGEXP_LIKE ($col, $value)";
 }
+
+
+######################################################################
+=pod
+
+=item $str = $db->quote_binary( $value )
+
+Oracle requires transforms of binary data to work correctly.
+
+This method should be called on data C<$value> containing null bytes
+or back-slashes before being passed on L</quote_value>.
+
+=cut
+######################################################################
 
 sub quote_binary
 {
@@ -482,6 +588,20 @@ sub quote_binary
 	return join('', map { sprintf("%02x",ord($_)) } split //, $value);
 }
 
+
+######################################################################
+=pod
+
+=item $str = $db->quote_ordervalue( $field, $value )
+
+Oracle can't order by C<CLOB>S so need special treatment when creating 
+the ordervalues tables. This method fixes up C<$value> to limit it to 
+1000 characters (4000 bytes) or returns C<undef> if C<$value> is not 
+defined.
+
+=cut
+######################################################################
+
 sub quote_ordervalue
 {
 	my( $self, $field, $value ) = @_;
@@ -490,7 +610,18 @@ sub quote_ordervalue
 	return defined $value ? substr($value,0,1000) : undef;
 }
 
-# unsupported
+######################################################################
+=pod
+
+=item $name = $db->index_name( $table, @cols )
+
+Should return the name of the first index that starts with named 
+columns C<@cols> in the named C<$table>. However, this is not 
+supported by Oracle so always returns C<1>.
+
+=cut
+######################################################################
+
 sub index_name
 {
 	my( $self, $table, @cols ) = @_;
@@ -498,12 +629,35 @@ sub index_name
 	return 1;
 }
 
+######################################################################
+=pod
+
+=item $sql = $db->sql_AS()
+
+Returns the syntactic glue to use when aliasing. Oracle does not 
+require a phrase so just returns a space character.
+
+=cut
+######################################################################
+
 sub sql_AS
 {
 	my( $self ) = @_;
 
 	return " ";
 }
+
+
+######################################################################
+=pod
+
+=item $boolean = $db->retry_error()
+
+Returns a boolean for whether the database error is a retry error.
+Based on whether L<DBI#err> code is C<3113> or C<3114>.
+
+=cut
+######################################################################
 
 sub retry_error
 {
@@ -566,6 +720,15 @@ sub _add_field
 	return $rc;
 }
 
+######################################################################
+=pod
+
+=item $type_info = $db->type_info( $data_type )
+
+See L<DBI/type_info>.  Oracle has is own type information mappings.
+
+=cut
+######################################################################
 sub type_info
 {
 	my( $self, $data_type ) = @_;
@@ -600,21 +763,22 @@ sub drop_table
 
 =back
 
-=cut
+=head1 SEE ALSO
 
+L<EPrints::Database>
 
 =head1 COPYRIGHT
 
-=for COPYRIGHT BEGIN
+=begin COPYRIGHT
 
-Copyright 2021 University of Southampton.
+Copyright 2022 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/
 
-=for COPYRIGHT END
+=end COPYRIGHT
 
-=for LICENSE BEGIN
+=begin LICENSE
 
 This file is part of EPrints 3.4 L<http://www.eprints.org/>.
 
@@ -631,5 +795,5 @@ You should have received a copy of the GNU Lesser General Public
 License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
-=for LICENSE END
+=end LICENSE
 

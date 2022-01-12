@@ -17,23 +17,34 @@ B<EPrints::Database::Pg> - custom database methods for PostgreSQL DB
 
 =head1 DESCRIPTION
 
-=head2 TODO
+PostgreSQL database wrapper.
 
-=over 4
+=head2 Synopsis
 
-=item epadmin create
-
-=item $name = $db->index_name( $table, @columns )
-
-=back
+    $c->{dbdriver} = 'Pg';
+    # $c->{dbhost} = 'localhost';
+    $c->{dbname} = 'myrepo';
+    $c->{dbuser} = 'bob';
+    $c->{dbpass} = 'asecret';
+    $c->{dbschema} = 'eprints';
 
 =head2 PostgreSQL-specific Annoyances
 
-The L<DBD::Pg> SQL_VARCHAR type is mapped to text instead of varchar(n).
+The L<DBD::Pg> C<SQL_VARCHAR> type is mapped to C<TEXT> instead of 
+C<VARCHAR(n)>.
+
+=head1 CONSTANTS
+
+See L<EPrints::Database|EPrints::Database#CONSTANTS>.
+
+=head1 INSTANCE VARIABLES
+
+See L<EPrints::Database|EPrints::Database#INSTANCE_VARIABLES>.
 
 =head1 METHODS
 
 =cut
+######################################################################
 
 package EPrints::Database::Pg;
 
@@ -43,6 +54,19 @@ use DBD::Pg qw( :pg_types );
 @ISA = qw( EPrints::Database );
 
 use strict;
+
+
+######################################################################
+=pod
+
+=over 4
+
+=item $db->connect
+
+Connects to the database.
+
+=cut
+######################################################################
 
 sub connect
 {
@@ -55,6 +79,26 @@ sub connect
 
 	return $rc;
 }
+
+######################################################################
+=pod
+
+=item $type_info = $db->type_info( $data_type )
+
+See L<DBI/type_info>.
+
+Uses C<SMALLINT> with column size 3 for C<SQL_TINYINT>.
+
+Uses C<VARCHAR> with column size 255 for C<SQL_VARCHAR> rather than
+C<TEXT> which is the default for L<DBD:Pg>.
+
+Uses C<TEXT> with column size 2^31 for C<SQL_LONGVARCHAR> and
+C<SQL_CLOB>.
+
+Uses C<BYTEA> with column size 2^31 for C<SQL_LONGVARBINARY>.
+
+=cut
+######################################################################
 
 sub type_info
 {
@@ -98,6 +142,18 @@ sub type_info
 		return $self->SUPER::type_info( $data_type );
 	}
 }
+
+
+######################################################################
+=pod
+
+=item $db = $db->create( $username, $password )
+
+Create and connect to a new database using user account C<$username> 
+and C<$password>.
+
+=cut
+######################################################################
 
 sub create
 {
@@ -144,6 +200,36 @@ sub create
 	return $rc;
 }
 
+
+######################################################################
+=pod
+
+=item $real_type = $db->get_column_type( $name, $type, $not_null, [ $length ] )
+
+Returns a SQL column definition for C<$name> of type C<$type>. If
+C<$not_null> is C<true> the column will be set to C<NOT NULL>. For
+column types that require a length use C<$length>.
+
+C<$type> is the SQL type. The types are constants defined by this
+module, to import them use:
+
+  use EPrints::Database qw( :sql_types );
+
+Supported types (n = requires LENGTH argument):
+
+Character data: C<SQL_VARCHAR(n)>, C<SQL_LONGVARCHAR>.
+
+Binary data: C<SQL_VARBINARY(n)>, C<SQL_LONGVARBINARY>.
+
+Integer data: C<SQL_TINYINT>, C<SQL_SMALLINT>, C<SQL_INTEGER>,
+
+Floating-point data: C<SQL_REAL>, C<SQL_DOUBLE>.
+
+Time data: C<SQL_DATE>, C<SQL_TIME>.
+
+=cut
+######################################################################
+
 sub get_column_type
 {
 	my( $self, $name, $data_type, $not_null, $length, $scale, %opts ) = @_;
@@ -167,8 +253,22 @@ sub _create_table
 	return $self->SUPER::_create_table( @_[1..$#_] );
 }
 
-# column_info() under DBD::Pg returns reserved identifiers in quotes, so
-# instead we'll query the information_schema
+
+######################################################################
+=pod
+
+=item $boolean = $db->has_table( $table )
+
+Returns boolean dependent on whether the named C<$table> exists in the
+database.
+
+For PostGres C<column_info()> under L<DBD::Pg> returns reserved 
+identifiers in quotes, so instead we'll query the 
+C<information_schema>.
+
+=cut
+######################################################################
+
 sub has_table
 {
 	my( $self, $table ) = @_;
@@ -177,6 +277,18 @@ sub has_table
 
 	return $rc;
 }
+
+
+######################################################################
+=pod
+
+=item $boolean = $db->has_column( $table, $column )
+
+Return C<true> if the named database C<$table> has the named
+C<$column>.
+
+=cut
+######################################################################
 
 sub has_column
 {
@@ -187,6 +299,18 @@ sub has_column
 	return $rc;
 }
 
+
+######################################################################
+=pod
+
+=item $boolean = $db->has_sequence( $name )
+
+Return C<true> if a sequence of the given $<name> exists in the
+database.
+
+=cut
+######################################################################
+
 sub has_sequence
 {
 	my( $self, $name ) = @_;
@@ -196,6 +320,17 @@ sub has_sequence
 	return $rc;
 }
 
+
+######################################################################
+=pod
+
+=item @tables = $db->get_tables
+
+Return a list of all the tables in the database.
+
+=cut
+######################################################################
+
 sub get_tables
 {
 	my( $self ) = @_;
@@ -204,6 +339,17 @@ sub get_tables
 
 	return map { @$_ } @$tables;
 }
+
+
+######################################################################
+=pod
+
+=item $n = $db->counter_current( $counter )
+
+Return the value of the previous counter_next on C<$counter>.
+
+=cut
+######################################################################
 
 sub counter_current
 {
@@ -216,6 +362,18 @@ sub counter_current
 	return $id + 0;
 }
 
+
+######################################################################
+=pod
+
+=item $n = $db->counter_next( $counter )
+
+Return the next unused value for the named C<$counter>. Returns
+C<undef> if the C<$counter> doesn't exist.
+
+=cut
+######################################################################
+
 sub counter_next
 {
 	my( $self, $counter ) = @_;
@@ -227,13 +385,40 @@ sub counter_next
 	return $id + 0;
 }
 
-# PostgreSQL's bytea quoting
+
+######################################################################
+=pod
+
+=item $str = $db->quote_binary( $bytes )
+
+PostgreSQL requires transforms of binary data to work correctly.
+
+This sets C<pg_type> to L<DBD::Pg::Pg_BYTEA> for returned C<$bytes>.
+
+=cut
+######################################################################
+
 sub quote_binary
 {
 	my( $self, $bytes ) = @_;
 
 	return [ $bytes, { pg_type => DBD::Pg::PG_BYTEA } ];
 }
+
+
+######################################################################
+=pod
+
+=item $sql = $db->prepare_regexp( $col, $value )
+
+PostgreSQL use the syntax:
+
+ $col ~* $value
+
+For the quoted regexp C<$value> and the quoted column C<$col>.
+
+=cut
+######################################################################
 
 sub prepare_regexp
 {
@@ -265,13 +450,35 @@ sub _cache_from_SELECT
 	$self->drop_sequence( $cache_seq );
 }
 
-# unsupported
+######################################################################
+=pod
+
+=item $name = $db->index_name( $table, @cols )
+
+Should return the name of the first index that starts with named
+columns C<@cols> in the named C<$table>. However, this is not
+supported by PostgreSQL so always returns C<1>.
+
+=cut
+######################################################################
+
 sub index_name
 {
 	my( $self, $table, @cols ) = @_;
 
 	return 1;
 }
+
+######################################################################
+=pod
+
+=item $sql = $db->sql_LIKE()
+
+Returns the syntactic glue to use when making a case-insensitive
+C<ILIKE>.
+
+=cut
+######################################################################
 
 sub sql_LIKE
 {
@@ -282,18 +489,27 @@ sub sql_LIKE
 
 1;
 
+######################################################################
+=pod 
+
+=back
+
+=head1 SEE ALSO
+
+L<EPrints::Database>
+
 =head1 COPYRIGHT
 
-=for COPYRIGHT BEGIN
+=begin COPYRIGHT
 
-Copyright 2021 University of Southampton.
+Copyright 2022 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/
 
-=for COPYRIGHT END
+=end COPYRIGHT
 
-=for LICENSE BEGIN
+=begin LICENSE
 
 This file is part of EPrints 3.4 L<http://www.eprints.org/>.
 
@@ -310,5 +526,5 @@ You should have received a copy of the GNU Lesser General Public
 License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
-=for LICENSE END
+=end LICENSE
 

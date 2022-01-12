@@ -16,21 +16,22 @@
 
 B<EPrints::Database::mysql> - custom database methods for MySQL DB
 
-=head1 SYNOPSIS
-
-	$c->{dbdriver} = 'mysql';
-	# $c->{dbhost} = 'localhost';
-	# $c->{dbport} = '3316';
-	$c->{dbname} = 'myrepo';
-	$c->{dbuser} = 'bob';
-	$c->{dbpass} = 'asecret';
-	# $c->{dbengine} = 'InnoDB';
-
 =head1 DESCRIPTION
 
 MySQL database wrapper.
 
-Foreign keys will be defined if you use a DB engine that supports them (e.g. InnoDB).
+Foreign keys will be defined if you use a DB engine that supports them 
+(e.g. InnoDB).
+
+=head2 Synopsis
+
+    $c->{dbdriver} = 'mysql';
+    # $c->{dbhost} = 'localhost';
+    # $c->{dbport} = '3316';
+    $c->{dbname} = 'myrepo';
+    $c->{dbuser} = 'bob';
+    $c->{dbpass} = 'asecret';
+    # $c->{dbengine} = 'InnoDB';
 
 =head2 MySQL-specific Annoyances
 
@@ -38,27 +39,19 @@ MySQL does not support sequences.
 
 MySQL is (by default) lax about truncation.
 
+=head1 CONSTANTS
+
+See L<EPrints::Database|EPrints::Database#CONSTANTS>.
+
+=head1 INSTANCE VARIABLES
+
+See L<EPrints::Database|EPrints::Database#INSTANCE_VARIABLES>.
+
 =head1 METHODS
 
-=over 4
-
 =cut
+######################################################################
 
-######################################################################
-#
-# INSTANCE VARIABLES:
-#
-#  $self->{session}
-#     The EPrints::Session which is associated with this database 
-#     connection.
-#
-#  $self->{debug}
-#     If true then SQL is logged.
-#
-#  $self->{dbh}
-#     The handle on the actual database connection.
-#
-######################################################################
 
 package EPrints::Database::mysql;
 
@@ -84,9 +77,11 @@ use strict;
 ######################################################################
 =pod
 
+=over 4
+
 =item $version = $db->get_server_version
 
-Return the database server version.
+Returns the database server version.
 
 =cut
 ######################################################################
@@ -100,6 +95,16 @@ sub get_server_version
 	return "MySQL $version";
 }
 
+######################################################################
+=pod
+
+=item $version = $db->mysql_version_from_dbh
+
+Returns the MySQL database server version from handle C<$dbh>.
+
+=cut
+######################################################################
+
 sub mysql_version_from_dbh
 {
 	my( $dbh ) = @_;
@@ -108,6 +113,16 @@ sub mysql_version_from_dbh
 	$version =~ m/^(\d+).(\d+).(\d+)/;
 	return $1*10000+$2*100+$3;
 }
+
+######################################################################
+=pod
+
+=item $version = $db->create( $username, $password )
+
+Creates EPrints database as user with C<$username> and C<$password>.
+
+=cut
+######################################################################
 
 sub create
 {
@@ -162,7 +177,7 @@ sub create
 
 =item $n = $db->create_counters()
 
-Create and initialise the counters.
+Creates and initialises the counters.
 
 =cut
 ######################################################################
@@ -192,7 +207,8 @@ sub create_counters
 
 =item $boolean = $db->has_table( $tablename )
 
-Return true if the a table of the given name exists in the database.
+Returns C<true> if the table with C<$tablename> exists in the 
+database.
 
 =cut
 ######################################################################
@@ -212,9 +228,10 @@ sub has_table
 ######################################################################
 =pod
 
-=item $boolean = $db->has_column( $tablename, $columnname )
+=item $boolean = $db->has_column( $table, $column )
 
-Return true if the a table of the given name has a column named $columnname in the database.
+Returns C<true> if named C<$table> has named C<$column> in the 
+database.
 
 =cut
 ######################################################################
@@ -235,6 +252,16 @@ sub has_column
 
 	return $rc;
 }
+
+######################################################################
+=pod
+
+=item $db->connect()
+
+Connects to the database.
+
+=cut
+######################################################################
 
 sub connect
 {
@@ -258,12 +285,13 @@ sub connect
 	return $rc;
 }
 
+
 ######################################################################
 =pod
 
 =item $success = $db->has_counter( $counter )
 
-Returns true if $counter exists.
+Returns C<true> if C<$counter> exists.
 
 =cut
 ######################################################################
@@ -280,6 +308,17 @@ sub has_counter
 	return defined $sth->fetch;
 }
 
+
+######################################################################
+=pod
+
+=item $success = $db->create_counter( $name )
+
+Create and initialise to zero a new counter with C<$name>.
+
+=cut
+######################################################################
+
 sub create_counter
 {
 	my( $self, $name ) = @_;
@@ -287,12 +326,34 @@ sub create_counter
 	return $self->insert( "counters", ["countername", "counter"], [$name, 0] );
 }
 
+
+######################################################################
+=pod
+
+=item $success = $db->drop_counter( $name )
+
+Destroy the counter named C<$name>.
+
+=cut
+######################################################################
+
 sub drop_counter
 {
 	my( $self, $name ) = @_;
 
 	return $self->delete_from( "counters", ["countername"], [$name] );
 }
+
+
+######################################################################
+=pod
+
+=item $success = $db->remove_counters
+
+Destroy all counters.
+
+=cut
+######################################################################
 
 sub remove_counters
 {
@@ -413,7 +474,29 @@ sub _cache_from_SELECT
 	$self->do( $sql );
 }
 
+
+######################################################################
+=pod
+
+=item $charset = $db->get_default_charset
+
+Return the character set to use.  Always C<utf8>.
+
+=cut
+######################################################################
+
 sub get_default_charset { "utf8" }
+
+
+######################################################################
+=pod
+
+=item $collation = $db->get_default_collation( $lang )
+
+Return the collation to use for language C<$lang>. Always C<utf8_bin>.
+
+=cut
+######################################################################
 
 sub get_default_collation
 {
@@ -422,7 +505,20 @@ sub get_default_collation
 	return "utf8_bin";
 }
 
-# Not supported by DBD::mysql?
+
+######################################################################
+=pod
+
+=item @columns = $db->get_primary_key( $table )
+
+Returns a list of column names that comprise the primary key for
+named named C<$table>.
+
+Returns an empty list if no primary key exists.
+
+=cut
+######################################################################
+
 sub get_primary_key
 {
 	my( $self, $table ) = @_;
@@ -438,6 +534,18 @@ sub get_primary_key
 
 	return @COLS;
 }
+
+
+######################################################################
+=pod
+
+=item $num_keys = $db->get_number_of_keys( $table )
+
+Returns the number of columns which are keys (C<PRI>, C<MUL> or 
+C<UNI>) for named C<$table>.
+
+=cut
+######################################################################
 
 sub get_number_of_keys
 {
@@ -456,6 +564,16 @@ sub get_number_of_keys
 	return $NUM_KEYS;
 }
 
+######################################################################
+=pod
+
+=item $collation = $db->get_column_colation( $table, $column )
+
+Returns the collation for the named C<$column> in the named C<$table>.
+
+=cut
+######################################################################
+
 sub get_column_collation
 {
 	my( $self, $table, $column ) = @_;
@@ -472,7 +590,21 @@ sub get_column_collation
 	return $collation;
 }
 
-# We'll do quote here, because DBD::mysql::quote_identifier is really slow
+
+######################################################################
+=pod
+
+=item $str = $db->quote_identifier( @parts )
+
+Quote a database identifier (e.g. table names). Multiple C<@parts>
+will be joined by dots (C<.>).
+
+We'll do quote here, because L<DBD::mysql#quote_identifier> is really 
+slow.
+
+=cut
+######################################################################
+
 sub quote_identifier
 {
 	my( $self, @parts ) = @_;
@@ -534,12 +666,38 @@ sub _rename_field_ordervalues_lang
 	return $self->do( $sql );
 }
 
+
+######################################################################
+=pod
+
+=item $sql = $db->prepare_regexp( $col, $value )
+
+Oracle use the syntax:
+
+ $col REGEXP $value
+
+For the quoted regexp C<$value> and the quoted column C<$col>.
+
+=cut
+######################################################################
+
 sub prepare_regexp
 {
 	my( $self, $col, $value ) = @_;
 
 	return "$col REGEXP $value";
 }
+
+######################################################################
+=pod
+
+=item $sql = $db->sql_LIKE()
+
+Returns the syntactic glue to use when making a case-insensitive
+C<LIKE> using C<utf8_general_ci> collation.
+
+=cut
+######################################################################
 
 sub sql_LIKE
 {
@@ -548,8 +706,18 @@ sub sql_LIKE
 	return " COLLATE utf8_general_ci LIKE ";
 }
 
-# This is a hacky method to support CI username/email lookups. Should be
-# implemented as an option on searching (bigger change of search mechanisms?).
+
+######################################################################
+=pod
+
+=item $value = $db->ci_lookup( $field, $value )
+
+This is a hacky method to support case-insensitive lookup for
+usernames, emails, etc.  It returns the actual case-sensitive version
+of C<$value> if there is a case-insensitive match for the C<$field>.
+
+=cut
+######################################################################
 
 sub ci_lookup
 {
@@ -574,8 +742,45 @@ sub ci_lookup
 	return defined $real_value ? $real_value : $value;
 }
 
+######################################################################
+=pod
+
+=item $boolean = $db->duplicate_error()
+
+Returns a boolean for whether the database error is a duplicate error.
+Based on whether the L<DBI#err> code is C<1062>.
+
+=cut
+######################################################################
+
 sub duplicate_error { $DBI::err == 1062 }
+
+
+######################################################################
+=pod
+
+=item $boolean = $db->duplicate_error()
+
+Returns a boolean for whether the database error is a retry error.
+Based on whether the L<DBI#err> code is C<2006>.
+
+=cut
+######################################################################
+
 sub retry_error { $DBI::err == 2006 }
+
+
+######################################################################
+=pod
+
+=item $type_info = $db->type_info( $data_type )
+
+See L<DBI/type_info>.
+
+Uses C<LONGTEXT> with column size 2^31 for C<SQL_CLOB>.
+
+=cut
+######################################################################
 
 sub type_info
 {
@@ -595,10 +800,27 @@ sub type_info
 	}
 }
 
-# use MySQL 4.0 compatible "SHOW INDEX"
-# This method gets the entire SHOW INDEX response and builds a look-up table of
-# keys with their *ordered* columns. This ensures even if MySQL is weird and
-# returns out of order results we won't break.
+
+
+######################################################################
+=pod
+
+=item $name = $db->index_name( $table, @cols )
+
+Returns the name of the first index that starts with named columns
+C<@cols> in the named C<$table>.
+
+Returns C<undef> if no index exists.
+
+Uses MySQL 4.0+ compatible C<SHOW INDEX>.
+
+This method gets the entire C<SHOW INDEX> response and builds a 
+look-up table of keys with their C<ordered> columns. This ensures even 
+if MySQL is weird and returns out of order results we won't break.
+
+=cut
+######################################################################
+
 sub index_name
 {
 	my( $self, $table, @cols ) = @_;
@@ -660,19 +882,22 @@ sub _create_table
 
 =cut
 
+=head1 SEE ALSO
+
+L<EPrints::Database>
 
 =head1 COPYRIGHT
 
-=for COPYRIGHT BEGIN
+=begin COPYRIGHT
 
-Copyright 2021 University of Southampton.
+Copyright 2022 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/
 
-=for COPYRIGHT END
+=end COPYRIGHT
 
-=for LICENSE BEGIN
+=begin LICENSE
 
 This file is part of EPrints 3.4 L<http://www.eprints.org/>.
 
@@ -689,5 +914,5 @@ You should have received a copy of the GNU Lesser General Public
 License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
-=for LICENSE END
+=end LICENSE
 

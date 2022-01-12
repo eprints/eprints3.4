@@ -5,7 +5,7 @@ $c->add_trigger( EPrints::Const::EP_TRIGGER_VALIDATE_FIELD, sub
         my( %args ) = @_;
         my( $repo, $field, $user, $value, $problems ) = @args{qw( repository field dataobj value problems )};
 
-	return unless $user->isa( "EPrints::DataObj::User" ) && $field->type eq "secret";
+	return unless defined $user && $user->isa( "EPrints::DataObj::User" ) && $field->type eq "secret";
 
 	my $password;
 	foreach my $key ( keys %{ $repo->{query}->{param} } )

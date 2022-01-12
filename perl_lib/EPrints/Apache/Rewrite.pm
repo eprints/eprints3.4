@@ -765,7 +765,7 @@ if(not $repository->config("use_long_url_format"))
 	}
 	$r->filename( $repository->get_conf( "htdocs_path" )."/".$lang.$localpath );
 
-	if( $uri =~ m! ^$urlpath/view(/|\$.*) !x )
+	if( $uri =~ m! ^$urlpath/view(/|$) !x )
 	{
 		# Allow view pages to have their access restricted to specific users
 		# If login_required_for_views is enabled and if user is not logged in, redir to login page

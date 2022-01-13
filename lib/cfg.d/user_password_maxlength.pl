@@ -1,4 +1,4 @@
-$c->{password_maxlength} = 191;
+$c->{password_maxlength} = 200;
 
 $c->add_trigger( EPrints::Const::EP_TRIGGER_VALIDATE_FIELD, sub
 {

@@ -20,6 +20,9 @@ B<EPrints::DataObj::Access> - Accesses to the Web server
 Accesses to particular abstract/summary pages (views) or publication 
 documents (downloads).
 
+Inherits from L<EPrints::DataObj::SubObject>, which in turn inherits
+from L<EPrints::DataObj>.
+
 =head1 CORE METADATA FIELDS
 
 =over 4
@@ -84,7 +87,7 @@ See L<EPrints::DataObj/INSTANCE_VARIABLES>.
 
 package EPrints::DataObj::Access;
 
-@ISA = ( 'EPrints::DataObj' );
+@ISA = ( 'EPrints::DataObj::SubObject' );
 
 use EPrints;
 
@@ -225,7 +228,7 @@ sub get_requester_id
 
 =head1 SEE ALSO
 
-L<EPrints::DataObj> and L<EPrints::DataSet>.
+L<EPrints::SubObject>, L<EPrints::DataObj> and L<EPrints::DataSet>.
 
 =head1 COPYRIGHT
 

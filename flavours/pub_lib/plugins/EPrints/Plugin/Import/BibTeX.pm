@@ -239,6 +239,10 @@ sub new
 {
 	my( $class, %params ) = @_;
 
+	# Test if TeX::Encode present before allowing advertising import format.
+	eval "use TeX::Encode";
+	$params{advertise} = 0 if $@;
+
 	my $self = $class->SUPER::new( %params );
 
 	$self->{name} = "BibTeX";

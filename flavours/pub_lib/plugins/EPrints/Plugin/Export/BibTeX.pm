@@ -15,7 +15,6 @@ See L<EPrints::Plugin::Import::BibTeX>
 package EPrints::Plugin::Export::BibTeX;
 
 use Encode;
-use TeX::Encode;
 use EPrints::Plugin::Export;
 
 @ISA = ( "EPrints::Plugin::Export" );
@@ -25,6 +24,10 @@ use strict;
 sub new
 {
 	my( $class, %params ) = @_;
+
+	# Test if TeX::Encode present before allowing advertising export format.
+	eval "use TeX::Encode";
+	$params{advertise} = 0 if $@;
 
 	my $self = $class->SUPER::new(%params);
 

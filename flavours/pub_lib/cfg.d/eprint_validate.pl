@@ -47,6 +47,16 @@ $c->{validate_eprint} = sub
 	return( @problems );
 };
 
+# If you want to import legacy data which is excempt from the normal
+# validation methods, then uncomment this function and make it return
+# true for eprints which are not to be validated.
+# $c->{skip_validation} = sub {
+#   my( $eprint ) = @_;
+#
+#   return 0;
+#};
+
+
 =head1 COPYRIGHT
 
 =for COPYRIGHT BEGIN

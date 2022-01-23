@@ -36,13 +36,6 @@ $c->{cookie_auth} = 1;
 # by setting this option:
 $c->{skip_buffer} = 0;
 
-# Supress the public user information page. Useful if you have
-# data protection concerns.
-$c->{disable_userinfo} = 0;
-
-# If 1, users can request the removal of their submissions from the repository
-$c->{allow_user_removal_request} = 1;
-
 # domain for the login and lang. cookies to be set in.
 $c->{cookie_domain} = defined $c->{host} ? $c->{host} : $c->{securehost};
 

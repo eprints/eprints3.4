@@ -14,7 +14,8 @@ $c->{loghandler}->{enable} = 1;
 # process and maybe you want to to...
 # $c->{log_submission_timing} = 1; 
 
-
+# Include timestamps in logged messages
+# $c->{show_timestamps_in_log} = 1;
 
 ######################################################################
 #

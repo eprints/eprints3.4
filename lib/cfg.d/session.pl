@@ -34,15 +34,6 @@ $c->{session_close} = sub
 	my( $repository ) = @_;
 };
 
-######################################################################
-#
-# email_for_doc_request( $repository, $eprint )
-#
-#  Invoked to determine the contact email address for an eprint. Used
-#  by the "request documents" feature
-#
-######################################################################
-
 =head1 COPYRIGHT
 
 =for COPYRIGHT BEGIN

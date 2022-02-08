@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html SYSTEM "entities.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" xmlns:epc="http://eprints.org/ep3/control">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title><epc:pin ref="title" textonly="yes"/> - <epc:phrase ref="archive_name"/></title>
+    <link rel="icon" href="{$config{rel_path}}/favicon.ico" type="image/x-icon"/>
+    <link rel="shortcut icon" href="{$config{rel_path}}/favicon.ico" type="image/x-icon"/>
+    <epc:pin ref="head"/>
+  </head>
+  <body>
+    <epc:pin ref="pagetop"/>
+    <div id="wrapper">
+      <header>
+        <div class="ep_tm_header ep_noprint">
+          <nav aria-label="Main Navigation">
+            <ul role="menu" class="ep_tm_menu">
+              <li>
+                <a href="{$config{rel_path}}/" title="{phrase('template/navigation:home:title')}" role="menuitem">
+                  <epc:phrase ref="template/navigation:home"/>
+                </a>
+              </li>
+              <li>
+                <a href="{$config{rel_path}}/information.html" title="{phrase('template/navigation:about:title')}" role="menuitem">
+                  <epc:phrase ref="template/navigation:about"/>
+                </a>
+              </li>
+              <li>
+                <a href="{$config{rel_path}}/view/" title="{phrase('template/navigation:browse:title')}" role="menuitem" menu="ep_tm_menu_browse" aria-owns="ep_tm_menu_browse">
+                  <epc:phrase ref="template/navigation:browse"/>
+                </a>
+                <ul role="menu" id="ep_tm_menu_browse" style="display:none;">
+                  <li>
+                    <a href="{$config{rel_path}}/view/year/" role="menuitem">
+                      <epc:phrase ref="bin/generate_views:indextitleprefix"/>
+                      <epc:phrase ref="viewname_eprint_year"/>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="{$config{rel_path}}/view/subjects/" role="menuitem">
+                      <epc:phrase ref="bin/generate_views:indextitleprefix"/>
+                      <epc:phrase ref="viewname_eprint_subjects"/>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="{$config{rel_path}}/view/divisions/" role="menuitem">
+                      <epc:phrase ref="bin/generate_views:indextitleprefix"/>
+                      <epc:phrase ref="viewname_eprint_divisions"/>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="{$config{rel_path}}/view/creators/" role="menuitem">
+                      <epc:phrase ref="bin/generate_views:indextitleprefix"/>
+                      <epc:phrase ref="viewname_eprint_creators"/>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </nav>
+        
+          <div class="ep_tm_searchbar">
+            <div>
+              <epc:pin ref="login_status"/>
+            </div>
+            <div>
+              <epc:pin ref="languages"/>
+              <form method="get" accept-charset="utf-8" action="{$config{rel_cgipath}}/search" style="display:inline" role="search" aria-label="Publication simple search">
+                <input class="ep_tm_searchbarbox" size="20" type="text" name="q" aria-labelledby="searchbutton"/>
+                <input class="ep_tm_searchbarbutton" value="{phrase('lib/searchexpression:action_search')}" type="submit" name="_action_search" id="searchbutton"/>
+                <input type="hidden" name="_action_search" value="Search"/>
+                <input type="hidden" name="_order" value="bytitle"/>
+                <input type="hidden" name="basic_srchtype" value="ALL"/>
+                <input type="hidden" name="_satisfyall" value="ALL"/>
+              </form>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div id="main_content">
+        <div class="ep_tm_page_content">
+          <h1 id="page-title" class="ep_tm_pagetitle">
+            <epc:pin ref="title"/>
+          </h1>
+          <epc:pin ref="page"/>
+        </div>
+      </div>
+
+      <footer>
+        <div class="ep_tm_footer ep_noprint">
+          <epc:phrase ref="template:about_eprints"/>
+          <div class="ep_tm_eprints_logo">
+            <a rel="external" href="https://eprints.org/software/">
+              <img alt="EPrints Logo" src="{$config{rel_path}}/images/eprintslogo.png"/><img alt="EPrints Publications Flavour Logo" src="{$config{rel_path}}/images/flavour.png" style="width: 28px"/>
+            </a>
+          </div>
+        </div>
+      </footer>
+    </div> <!-- wrapper -->
+  </body>
+</html>

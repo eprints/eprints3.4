@@ -83,6 +83,10 @@ The ID of the eprint repository to use.
 
 Remove stray files from the website (eg. if something was removed from the static pages).
 
+=item B<--reload>
+
+Will also reload (i.e. "epadmin reload") the repository. This will ensure any template changes are also applied.
+
 =item B<--help>
 
 Print a brief help message and exit.
@@ -119,6 +123,7 @@ my $version = 0;
 my $verbose = 0;
 my $quiet = 0;
 my $prune = 0;
+my $reload = 0;
 my $help = 0;
 my $man = 0;
 
@@ -129,6 +134,7 @@ GetOptions(
 	'man' => \$man,
 	'version' => \$version,
 	'prune' => \$prune,
+	'reload' => \$reload,
 	'verbose+' => \$verbose,
 	'silent' => \$quiet,
 	'quiet' => \$quiet
@@ -243,6 +249,26 @@ if( $strays )
 {
 	print "To prune unrecognised files run with the --prune option.\n" if( $noise >= 1 );
 }
+
+if ( $reload )
+{
+        my $file = $session->config( "variables_path" )."/last_changed.timestamp";
+        unless( open( CHANGEDFILE, ">$file" ) )
+        {
+                EPrints::abort( "Cannot write to file $file" );
+        }
+        print CHANGEDFILE "This file last poked at: ".EPrints::Time::human_time()."\n";
+        close CHANGEDFILE;
+        if( $noise > 0 )
+        {
+                print <<END;
+The repository config will be reloaded, but you should still restart apache as
+soon as possible.
+
+END
+	}
+}
+
 $session->terminate();
 
 exit;

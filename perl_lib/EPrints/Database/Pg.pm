@@ -273,7 +273,9 @@ sub has_table
 {
 	my( $self, $table ) = @_;
 
-	my( $rc ) = $self->{dbh}->selectrow_array( "SELECT 1 FROM information_schema.tables WHERE table_schema='public' AND table_name=?", {}, $table );
+	my $schema = $self->{session}->config( 'dbschema' ) ? $self->{session}->config( 'dbschema' ) : 'public';
+
+	my( $rc ) = $self->{dbh}->selectrow_array( "SELECT 1 FROM information_schema.tables WHERE table_schema=? AND table_name=?", {}, $schema, $table );
 
 	return $rc;
 }
@@ -335,7 +337,9 @@ sub get_tables
 {
 	my( $self ) = @_;
 
-	my $tables = $self->{dbh}->selectall_arrayref( "SELECT table_name FROM information_schema.tables WHERE table_schema='public'" );
+	my $schema = $self->{session}->config( 'dbschema' ) ? $self->{session}->config( 'dbschema' ) : 'public';
+	
+	my $tables = $self->{dbh}->selectall_arrayref( "SELECT table_name FROM information_schema.tables WHERE table_schema=?", $schema);
 
 	return map { @$_ } @$tables;
 }

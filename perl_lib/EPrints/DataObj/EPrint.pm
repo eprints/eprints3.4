@@ -2637,6 +2637,15 @@ sub render_box_list
 		$options{session} = $session;
 		$options{id} = "ep_summary_box_$i";
 		$options{class} = $item->{screen}->{class};
+		# At least set the class to something to give CSS control over
+		# a specific box plugin on an abstract/summary page.
+		unless ( EPrints::Utils::is_set( $options{class} ) )
+        {
+			my $class = lc( ref( $item->{screen} ) );
+			$class =~ s/::/_/g;
+			$class =~ s/eprints_plugin_screen_eprint_/ep_plugin_summary_/;
+			$options{class} = $class;
+        }
 		$options{title} = $item->{screen}->render_title;
 		$options{content} = $item->{screen}->render;
 		$options{collapsed} = $item->{screen}->render_collapsed;

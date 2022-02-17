@@ -209,7 +209,7 @@ sub convert_dataobj
 	}
 	elsif( $type eq "book" || $type eq "book_section" )
 	{
-		$data->{"@"} = $dataobj->get_value( "isbn" ) if $dataobj->exists_and_set( "issn" );
+		$data->{"@"} = $dataobj->get_value( "isbn" ) if $dataobj->exists_and_set( "isbn" );
 	}
 
 	# R DOI

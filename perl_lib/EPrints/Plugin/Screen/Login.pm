@@ -119,6 +119,7 @@ sub action_login
 	if( !defined $user )
 	{
 		$processor->add_message( "error", $repo->html_phrase( "cgi/login:failed" ) );
+		$self->{processor}->{logged_login} = log_login_attempt( $repo, $username, $repo->param( "login_password" ), 'missing' );
 		return;
 	}
 
@@ -205,6 +206,40 @@ sub hidden_bits
 	}
 
 	return @params;
+}
+
+sub log_login_attempt
+{
+	my( $repo, $username, $password, $status ) = @_;
+
+	return 0 unless $repo->config( 'login_monitoring', 'enabled' );
+	my $timestamp = EPrints::Time::get_iso_timestamp();
+	my $date = substr($timestamp,0,4) . substr($timestamp,5,2) . substr($timestamp,8,2);
+	my $logfile = $repo->config('variables_path') . "/login_monitoring-$date.log";
+	my $logfile_exists = -e $logfile;
+	open( my $fh, '>>', $logfile );
+	my $fields = join( ',', @{ $repo->config( 'login_monitoring', 'fields' ) } );
+	print $fh "$fields\n" unless $logfile_exists;
+
+	if ( defined $repo->config( 'login_monitoring', 'function' ) )
+	{
+		my $func = $repo->config( 'login_monitoring', 'function' );
+		return $func->( $fh, $repo, $timestamp, $username, $password, $status );
+	}
+	else {
+		my $password_length = length( $password );
+		my $userid = '';
+		my $securecode = '';
+		if ( $status eq "success" )
+		{
+			$userid = $repo->user_by_username( $username )->id;
+			$securecode = EPrints::Apache::AnApache::cookie( $repo->get_request, EPrints::DataObj::LoginTicket->secure_session_key( $repo ) );
+			$password_length = '';
+		}	
+		print $fh "\"$timestamp\",\"$username\",\"$password_length\",\"".$repo->remote_ip."\",\"".$repo->get_request->headers_in->{ "User-Agent" }."\",\"".$repo->param( "target" )."\",\"$status\",\"$userid\",\"$securecode\"\n";
+		close( $fh );
+	}
+	return 1;
 }
 
 1;

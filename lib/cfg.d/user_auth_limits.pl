@@ -37,6 +37,24 @@ $c->add_trigger( EPrints::Const::EP_TRIGGER_VALIDATE_FIELD, sub
         }
 }, priority => 1000 );
 
+$c->{login_monitoring}->{enabled} = 1;
+$c->{login_monitoring}->{fields} = [ 'timestamp', 'username', 'password_length', 'ip', 'user_agent', 'target', 'status', 'userid', 'securecode' ];
+#$c->{login_monitoring}->{function} = sub {
+#   my ( $fh, $repo, $timestamp, $username, $password, $status ) = @_;
+#   my $password_length = length( $password );
+#   my $userid = '';
+#   my $securecode = '';
+#   if ( $status eq "success" )
+#   {
+#       $userid = $repo->user_by_username( $username )->id;
+#       $securecode = EPrints::Apache::AnApache::cookie( $repo->get_request, EPrints::DataObj::LoginTicket->secure_session_key( $repo ) );
+#       $password_length = '';
+#   }
+#   print $fh "\"$timestamp\",\"$username\",\"$password_length\",\"".$repo->remote_ip."\",\"".$repo->get_request->headers_in->{ "User-Agent" }."\",\"".$repo->param( "target" )."\",\"$status\",\"$userid\",\"$securecode\"\n";
+#   close( $fh );
+#   return 1;
+#};
+
 =head1 COPYRIGHT
 
 =for COPYRIGHT

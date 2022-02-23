@@ -82,27 +82,22 @@ $c->{limit_names_shown} = sub
 		# Render dynamically to allow expanding of the rest of the names
 		if ( $field->{render_dynamic} == 1 )
 		{
-			my $et_al_link = $session->make_element( "a", "id" => $actual_name."_".$id."_et_al", "style" => "cursor: pointer; display: none;", "onClick" => "document.getElementById('".$actual_name."_".$id."_rest').style.display = 'inline'; document.getElementById('".$actual_name."_".$id."_et_al').style.display = 'none';" );
-			$et_al_link->appendChild( $session->make_text( " " ) );
-			$et_al_link->appendChild( $session->html_phrase("limit_names_shown") );
-			$html->appendChild($et_al_link);
+			my $show = $session->html_phrase("limit_names_shown");
+			my $hide = "";
+			$hide = $session->html_phrase( "limit_names_shown_hide" ) if ( $session->get_lang->has_phrase( "limit_names_shown_hide", $session ) );
+			my $et_al_link = $session->make_element( "button", "id" => $actual_name."_".$id."_et_al", "aria-expanded" => "false", "aria-controls" => $actual_name . "_".$id."_rest", "aria-label" => $session->html_phrase("limit_names_shown_label"), "field" => $session->html_phrase( $field->{confid}."_fieldname_".$parent_name ), "type" => "button", "style" => "margin-left: 0.5em; display: none;", "onclick" => "EPJS_limit_names_shown( '${actual_name}_${id}_et_al', '${actual_name}_${id}_rest', '$show', '$hide' );" );
+			my $et_al_span = $session->make_element( "span", "aria-hidden" => "false" );
+			$et_al_link->appendChild( $show );
 			$rest_names_span->appendChild( $rest_names );
-			if ( $session->get_lang->has_phrase( "limit_names_shown_hide", $session ) )
-			{
-				my $hide_link = $session->make_element( "a", "style" => "cursor: pointer;", "onClick" => "document.getElementById('".$actual_name."_".$id."_rest').style.display = 'none'; document.getElementById('".$actual_name."_".$id."_et_al').style.display = 'inline';" );
-				$hide_link->appendChild( $session->html_phrase("limit_names_shown_hide") );
-				$rest_names_span->appendChild( $session->make_text( " " ) );
-				$rest_names_span->appendChild( $hide_link );
-			}
-	        	$html->appendChild( $rest_names_span ); 
-			my $script = $session->make_element( "script", "type" => "text/javascript" );
-			$script->appendChild( $session->make_text( "document.getElementById('".$actual_name."_".$id."_et_al').style.display = 'inline'; document.getElementById('".$actual_name."_".$id."_rest').style.display = 'none';" ) );
+			$html->appendChild( $rest_names_span );
+			$html->appendChild($et_al_link);
+			my $script = $session->make_element( "script" );		
+			$script->appendChild( $session->make_text( "EPJS_limit_names_shown_load( '${actual_name}_${id}_et_al', '${actual_name}_${id}_rest' );" ) );
 			$html->appendChild( $script );
-			
 		}
 		else {
 			$html->appendChild( $session->make_text( " " ) );
-                        $html->appendChild( $session->make_text( $session->html_phrase("limit_names_shown") ) );
+           	$html->appendChild( $session->make_text( $session->html_phrase("limit_names_shown") ) );
 		}
 	}
 

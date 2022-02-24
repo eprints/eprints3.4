@@ -214,9 +214,12 @@ sub log_login_attempt
 
 	return 0 unless $repo->config( 'login_monitoring', 'enabled' );
 	my $timestamp = EPrints::Time::get_iso_timestamp();
-	my $date = substr($timestamp,0,4) . substr($timestamp,5,2) . substr($timestamp,8,2);
-	my $logfile = $repo->config('variables_path') . "/login_monitoring-$date.log";
+	my $year_month = substr($timestamp,0,4) . '/'. substr($timestamp,5,2); 
+	my $day = substr($timestamp,8,2);
+	my $logdir = $repo->config('variables_path') . "/login_attempts/$year_month/";
+	my $logfile = "$logdir$day.csv";
 	my $logfile_exists = -e $logfile;
+	EPrints::Platform::mkdir( $logdir ) unless $logfile_exists;
 	open( my $fh, '>>', $logfile );
 	my $fields = join( ',', @{ $repo->config( 'login_monitoring', 'fields' ) } );
 	print $fh "$fields\n" unless $logfile_exists;

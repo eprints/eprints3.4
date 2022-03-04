@@ -10,5 +10,6 @@
 
 flavours/pub_lib
 ingredients/bazaar
+ingredients/prototypejs
 #ingredients/jquery
 #site_lib

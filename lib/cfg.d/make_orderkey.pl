@@ -63,17 +63,3 @@ $c->{make_sanitised_value_orderkey} = sub
 	my $orderkey = &$c->{make_orderkey_ignore_extras}( $value );
 	return $orderkey;
 };
-
-$c->{make_orderkey_ignore_extras} = sub
-{
-	my ($name) = @_;
-
-	my  @orderkey;
-	# convert to upper case ASCII
-	my $orderkey = uc( unidecode( $name ) );
-	# keep separating dot (of initials from given name)
-	$orderkey =~ s/[\.]/_/g;
-	# ignore anything else than alphanumeric characters, aka non-word characters, except _
-	$orderkey =~ s/[^_A-Z0-9]//g;
-	return $orderkey;
-};

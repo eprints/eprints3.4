@@ -41,6 +41,7 @@ $EPrints::SystemSettings::conf = {
                                    'flavours' => {
                                                    'zero' => [##site_lib has been removed from the flavour path and now a special lib that can overwrite core modules.
                                                        'ingredients/bazaar',
+													   'ingredients/prototypejs',
                                                     ]
                                                 },
                                    'perl_module_isolation' => 0, #after changing this setting, you need to bin/generate_apacheconf --system --replace, then restart apache

@@ -10,9 +10,12 @@
 
 =pod
 
+=for Pod2Wiki
+
 =head1 NAME
 
-B<EPrints::BackCompatibility> - Provide compatibility for older versions of the API.
+B<EPrints::BackCompatibility> - Provide compatibility for older 
+versions of the API.
 
 =head1 DESCRIPTION
 
@@ -20,16 +23,144 @@ A number of EPrints packages have been moved or renamed. This module
 provides stub versions of these packages under there old names so that
 existing code will require few or no changes.
 
-It also sets a flag in PERL to think the packages have been loaded from
+It also sets a flag in Perl to think the packages have been loaded from
 their original locations. This causes calls such as:
 
  use EPrints::Document;
 
 to do nothing as they know the module is already loaded.
 
+=head2 Superseded Classes or Methods
+
+The following classes have been fully superseded or have methods that 
+have been superseded by methods for different classes.
+
 =over 4
 
+=item L<EPrints::Document>
+
+Superseded by L<EPrints::DataObj::Document>.
+
+=item L<EPrints::EPrint>
+
+Superseded by L<EPrints::DataObj::EPrint>.
+
+=item L<EPrints::Subject>
+
+Superseded by L<EPrints::DataObj::Subject>.
+
+=item L<EPrints::Subscription>
+
+Superseded by L<EPrints::DataObj::SavedSearch>.
+
+=item L<EPrints::User>
+
+Superseded by L<EPrints::DataObj::User>.
+
+=item L<EPrints::DataObj::User>
+
+The following methods are deprecated and replaced by other methods in 
+the class:
+
+ can_edit
+ get_owned_eprints
+ get_editable_eprints
+ get_eprints
+
+=item L<EPrints::Utils>
+
+The following methods are deprecated and replaced by other methods in
+the L<EPrints::Email>, L<EPrints::XML::EPC>, L<EPrints::Time> and
+L<EPrints::Platform> (subsequently superseded by L<EPrints::System>):
+
+ send_mail 
+ send_mail_via_smtp 
+ send_mail_via_sendmail 
+ collapse_conditions 
+ render_date 
+ render_short_date 
+ datestring_to_timet 
+ gmt_off 
+ get_month_label 
+ get_month_label_short 
+ get_date 
+ get_date_array 
+ get_datestamp 
+ get_iso_date 
+ get_timestamp 
+ human_time 
+ human_delay 
+ get_iso_timestamp
+ df_dir
+ mkdir
+ join_path
+
+=item L<EPrints::Archive>
+
+Superseded by L<EPrints::Repository>.
+
+=item L<EPrints::SearchExpression>
+
+Superseded by L<EPrints::Search>.
+
+=item L<EPrints::SearchField>
+
+Superseded by L<EPrints::Search::Field>.
+
+=item L<EPrints::SearchCondition>
+
+Superseded by L<EPrints::Search::Condition>.
+
+=item L<EPrints::AnApache>
+
+Superseded by L<EPrints::Apache::AnApache>.
+
+=item L<EPrints::Auth>
+
+Superseded by L<EPrints::Apache::Auth>.
+
+=item L<EPrints::DataSet>
+
+The following methods are deprecated:
+
+ get_page_fields
+ get_type_pages
+ get_type_fields
+ get_required_type_fields
+ is_valid_type
+ get_types
+ get_type_names
+ get_type_name
+ render_type_name
+ load_workflows
+
+=item L<EPrints::Index>
+
+The following methods are superseded by methods in
+L<EPrints::Index::Tokenizer>:
+
+ split_words
+ apply_mapping
+
+=item L<EPrints::Session>
+
+Superseded by L<EPrints::Repository>.
+
+=item L<EPrints::Platform>
+
+Superseded by L<EPrints::System>.
+
+=item L<EPrints::Repository>
+
+The following methods are superseded by methods in other classes:
+
+ render_toolbar
+ freshen_citation
+ get_citation_spec
+ get_citation_type
+
 =cut
+######################################################################
 
 use EPrints;
 
@@ -41,7 +172,6 @@ use strict;
 =back
 
 =cut
-
 ######################################################################
 
 package EPrints::Document;
@@ -505,21 +635,23 @@ sub get_citation_type
 	return $citation->type;
 }
 
-######################################################################
 1;
+
+######################################################################
+=pod
 
 =head1 COPYRIGHT
 
-=for COPYRIGHT BEGIN
+=begin COPYRIGHT
 
-Copyright 2021 University of Southampton.
+Copyright 2022 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/
 
-=for COPYRIGHT END
+=end COPYRIGHT
 
-=for LICENSE BEGIN
+=begin LICENSE
 
 This file is part of EPrints 3.4 L<http://www.eprints.org/>.
 
@@ -536,5 +668,5 @@ You should have received a copy of the GNU Lesser General Public
 License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
-=for LICENSE END
+=end LICENSE
 

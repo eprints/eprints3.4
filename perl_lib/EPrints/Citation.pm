@@ -9,13 +9,22 @@
 
 =pod
 
+=for Pod2Wiki
+
 =head1 NAME
 
-B<EPrints::Citation> - loading and rendering of citation styles
+B<EPrints::Citation> - Loading and rendering of citation styles.
 
 =head1 DESCRIPTION
 
-=head1 SYNOPSIS
+Renders citations for data objects using a paticular style defined
+in it own configuration file.
+
+This is an abstract class used by L<EPrints::Citation::EPC> and 
+L<EPrints::Citation::XSL> whichb use XML EPC and XSL respecively to
+define citation style files.
+
+=head2 SYNOPSIS
 
 	my $citation = $repo->dataset( "eprint" )->citation( "default" );
 
@@ -25,18 +34,26 @@ B<EPrints::Citation> - loading and rendering of citation styles
 
 =head1 METHODS
 
-=item $citation = EPrints::Citation->new( $filename, %opts )
-
-Returns a new EPrints::Citation object read from $filename.
-
-Options:
-	dataset - dataset this citation belongs to
-
-=cut
+=cut 
 
 package EPrints::Citation;
 
 use strict;
+
+######################################################################
+=pod
+
+=over 4
+
+=item $citation = EPrints::Citation->new( $filename, %opts )
+
+Returns a new EPrints::Citation object read from C<$filename>.
+
+Options:
+    dataset - dataset this citation belongs to
+
+=cut
+######################################################################
 
 sub new
 {
@@ -55,13 +72,17 @@ sub new
 	return $self;
 }
 
+######################################################################
+=pod
+
 =item $ok = $citation->freshen()
 
 Attempts to reload the citation source file.
 
-Returns undef if the file could not be loaded.
+Returns C<undef> if the file could not be loaded.
 
 =cut
+######################################################################
 
 sub freshen
 {
@@ -79,33 +100,47 @@ sub freshen
 	return $self->load_source();
 }
 
+######################################################################
+=pod
+
 =item $ok = $citation->load_source()
 
 Reads the source file.
 
 =cut
+######################################################################
 
 sub load_source
 {
 	return undef;
 }
 
+######################################################################
+=pod
+
 =item $frag = $citation->render( $dataobj, %opts )
 
 Renders a L<EPrints::DataObj> using this citation style.
 
 =cut
+######################################################################
 
 sub render
 {
 	my( $self, $dataobj, %opts ) = @_;
 }
 
+######################################################################
+=pod
+
 =item $type = $citation->type()
 
-Returns the type of this citation. Only supported value is "table_row".
+Returns the type of this citation. Only supported value is 
+C<table_row>.
 
 =cut
+######################################################################
+
 
 sub type
 {
@@ -114,11 +149,13 @@ sub type
 
 1;
 
+=back
+
 =head1 COPYRIGHT
 
 =for COPYRIGHT BEGIN
 
-Copyright 2021 University of Southampton.
+Copyright 2022 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/

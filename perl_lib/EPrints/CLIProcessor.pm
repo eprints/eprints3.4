@@ -7,17 +7,22 @@
 #
 ######################################################################
 
+=pod
+
+=for Pod2Wiki
+
 =head1 NAME
 
-EPrints::CLIProcessor - utility module supporting command-line scripts
+B<EPrints::CLIProcessor> - utility module supporting command-line 
+scripts.
 
 =head1 DESCRIPTION
 
-Currently this module is just a 'handler' for import scripts. In future it may do more things to support the CLI (Command-Line Interface) to EPrints.
+Currently this module is just a 'handler' for import scripts. In 
+future it may do more things to support the CLI (Command-Line 
+Interface) to EPrints.
 
 =head1 METHODS
-
-=over 4
 
 =cut
 
@@ -37,12 +42,29 @@ unless( $@ )
 	);
 }
 
+######################################################################
+=pod
+
+=over 4
+
+=item EPrints::CLIProcessor::color( $type )
+
+Returns boolean depending on whether $type is a permitted setting for 
+the L<EPrints::CLIProcessor>.
+
+=cut
+######################################################################
+
 sub color
 {
 	my( $type ) = @_;
 
 	return exists $COLORS{$type} ? Term::ANSIColor::color( $COLORS{$type} ) : "";
 }
+
+
+######################################################################
+=pod
 
 =item $processor = EPrints::CLIProcessor->new( session => $session, %opts )
 
@@ -53,6 +75,7 @@ Create a new processor object. Supported options:
   message - replace L</message>
 
 =cut
+######################################################################
 
 sub new
 {
@@ -65,11 +88,16 @@ sub new
     bless \%self, $class;
 }
 
-=item $processor->add_message( TYPE, MESSAGE )
+######################################################################
+=pod
 
-Add a message for the user. TYPE is 'error', 'warning' or 'message'. MESSAGE is an XHTML fragment.
+=item $processor->add_message( $type, $msg )
+
+Add a message for the user. C<$type> is C<error>, C<warning> or 
+C<message>. C<$msg> is an XHTML fragment.
 
 =cut
+######################################################################
 
 *add_message = \&message;
 sub message
@@ -84,11 +112,15 @@ sub message
 	print STDERR color('reset');
 }
 
+######################################################################
+=pod
+
 =item $dataobj = $processor->epdata_to_dataobj( $epdata, %opts )
 
-Requests the handler create the new object from $epdata.
+Requests the handler create the new object from C<$epdata>.
 
 =cut
+######################################################################
 
 sub epdata_to_dataobj
 {
@@ -99,11 +131,15 @@ sub epdata_to_dataobj
 	return $opts{dataset}->create_dataobj( $epdata );
 }
 
+######################################################################
+=pod
+
 =item $processor->parsed( [ $epdata ] )
 
-Register a parsed event, optionally with $epdata.
+Register a parsed event, optionally with C<$epdata>.
 
 =cut
+######################################################################
 
 sub parsed
 {
@@ -117,11 +153,16 @@ sub parsed
 	}
 }
 
-=item $processor->object( DATASET, DATAOBJ )
+######################################################################
+=pod
 
-Register a new object event in DATASET with new object DATAOBJ.
+=item $processor->object( $dataset, $dataobj )
+
+Register a new object event in C<$dataset> with new object 
+C<$dataobj>.
 
 =cut
+######################################################################
 
 sub object
 {
@@ -144,18 +185,20 @@ sub object
 
 1;
 
+=back
+
 =head1 COPYRIGHT
 
-=for COPYRIGHT BEGIN
+=begin COPYRIGHT
 
-Copyright 2021 University of Southampton.
+Copyright 2022 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/
 
-=for COPYRIGHT END
+=end COPYRIGHT
 
-=for LICENSE BEGIN
+=begin LICENSE
 
 This file is part of EPrints 3.4 L<http://www.eprints.org/>.
 
@@ -172,5 +215,5 @@ You should have received a copy of the GNU Lesser General Public
 License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
-=for LICENSE END
+=end LICENSE
 

@@ -13,22 +13,22 @@
 
 =head1 NAME
 
-B<EPrints::Const> - constants and enumerations
-
-=head1 SYNOPSIS
-
-	# don't import any constants
-	use EPrints::Const qw();
-
-	# import trigger and http constants
-	use EPrints::Const qw( :trigger :http );
-
-	# import only the OK DONE DECLINED constants
-	use EPrints::Const qw( OK DONE DECLINED );
+B<EPrints::Const> - Constants and enumerations.
 
 =head1 DESCRIPTION
 
 This module contains EPrints constants and enumerations.
+
+=head2 SYNOPSIS
+
+    # don't import any constants
+    use EPrints::Const qw();
+
+    # import trigger and http constants
+    use EPrints::Const qw( :trigger :http );
+
+    # import only the OK DONE DECLINED constants
+    use EPrints::Const qw( OK DONE DECLINED );
 
 =head1 CONSTANTS
 
@@ -68,6 +68,8 @@ http://a9.com/-/spec/opensearch/1.1/
 
 =item XML_ENTITY_REFERENCE_NODE
 
+B<XML_ENTITY_REF_NODE> shares the same constant value.
+
 =item XML_ENTITY_NODE
 
 =item XML_PROCESSING_INSTRUCTION_NODE
@@ -86,6 +88,8 @@ http://a9.com/-/spec/opensearch/1.1/
 
 =head2 :http
 
+Also, all HTTP_* constants defined by L<Apache2::Const>.
+
 =over 4
 
 =item DONE
@@ -97,8 +101,6 @@ http://a9.com/-/spec/opensearch/1.1/
 =item OK
 
 =back
-
-And all HTTP_* constants defined by L<Apache2::Const>.
 
 =head2 :trigger
 
@@ -218,6 +220,12 @@ An object was removed and should now be removed from the index engine(s).
 Manipulate parts included in the template. These will be called for every page impression, so don't do anything heavyweight in here.
 
 	pins - hash ref of template pins
+
+=item EP_TRIGGER_LOCAL_SITEMAP_URLS
+
+Manipulate the URLs added to the local sitemaps.
+
+	urlset - the set of all URLs to include in the sitemap.
 
 =head2 :metafield
 
@@ -492,16 +500,16 @@ use strict;
 
 =head1 COPYRIGHT
 
-=for COPYRIGHT BEGIN
+=begin COPYRIGHT
 
-Copyright 2021 University of Southampton.
+Copyright 2022 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/
 
-=for COPYRIGHT END
+=end COPYRIGHT
 
-=for LICENSE BEGIN
+=begin LICENSE
 
 This file is part of EPrints 3.4 L<http://www.eprints.org/>.
 
@@ -518,5 +526,5 @@ You should have received a copy of the GNU Lesser General Public
 License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
-=for LICENSE END
+=end LICENSE
 

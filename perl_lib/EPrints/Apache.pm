@@ -1,19 +1,54 @@
+######################################################################
+#
+# EPrints::Apache
+#
+######################################################################
+#
+#
+######################################################################
+
+=pod
+
+=for Pod2Wiki
+
 =head1 NAME
 
-EPrints::Apache
+B<EPrints::Apache> - Generates Apache configuration for EPrints 
+repository archives.
+
+=head1 DESCRIPTION
+
+Generates Apache configuration in both B<cfg/apache/> and 
+B<cfg/apache_ssl/> for the archives instantiated for this EPrints 
+repository. Determined by the configuration defined in each archive's 
+I<cfg/cfg.d/10_core.pl>.
+
+Additional non-SSL configuration can be added to the archive's 
+B<cfg/apachevhost.conf>. <VirtualHost> for SSL configuration should 
+be defined in an archive's B<ssl/securevhost.conf>.
+
+=head1 METHODS
 
 =cut
 
 package EPrints::Apache;
 
+######################################################################
+=pod
+
+=over 4
+
 =item $conf = EPrints::Apache::apache_conf( $repo )
 
 Generate and return the <VirtualHost> declaration for this repository. 
-Note that Apache v2.4 introduced some new API for access-control which
-deprecates the former "Order allow,deny" directive.
-We detect Apache's version by testing if mod_authz_core.c is available 
-(that module was added in 2.4).
+
+N.B. Apache v2.4 introduced some new API for access-control which
+deprecates the former C<Order allow,deny> directive. Apache's version 
+by testing if I<mod_authz_core.c> is available (that module was added in 
+2.4).
+
 =cut
+######################################################################
 
 sub apache_conf
 {
@@ -162,18 +197,20 @@ EOC
 
 1;
 
+=back
+
 =head1 COPYRIGHT
 
-=for COPYRIGHT BEGIN
+=begin COPYRIGHT
 
-Copyright 2021 University of Southampton.
+Copyright 2022 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/
 
-=for COPYRIGHT END
+=end COPYRIGHT
 
-=for LICENSE BEGIN
+=begin LICENSE
 
 This file is part of EPrints 3.4 L<http://www.eprints.org/>.
 
@@ -190,5 +227,5 @@ You should have received a copy of the GNU Lesser General Public
 License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
-=for LICENSE END
+=end LICENSE
 

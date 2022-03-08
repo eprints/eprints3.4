@@ -13,9 +13,14 @@
 
 =head1 NAME
 
-B<EPrints::Box> - Class to render cute little collapsable/expandable Web 2.0ish boxes.
+B<EPrints::Box> - Class to render cute little collapsable/expandable 
+Web 2.0ish boxes.
 
-=head1 SYNOPSIS
+=head1 DESCRIPTION
+
+This just provides a function to render boxes in the EPrints style.
+
+=head2 SYNOPSIS
 
 	use EPrints;
 
@@ -28,10 +33,7 @@ B<EPrints::Box> - Class to render cute little collapsable/expandable Web 2.0ish 
 		collapsed => 1,
 	); 
 
-
-=head1 DESCRIPTION
-
-This just provides a function to render boxes in the EPrints style.
+=head1 METHODS
 
 =cut
 
@@ -46,35 +48,34 @@ use strict;
 
 =item $box_xhtmldom = EPrints::Box::render( %options )
 
-Render a collapsable/expandable box to which content can be added. The box is in keeping with the eprints style
+Render a collapsable/expandable box to which content can be added. The 
+box is in keeping with the eprints style.
 
 Required Options:
 
-=over 4
+B<C<$options{handle}>> - Current C<$handle>.
 
-$options{handle} - Current $handle
+B<C<$options{id}>> - ID attibute of the box. E.g. <div id="my_box">
 
-$options{id} - ID attibute of the box i.e. <div id="my_box">
+B<C<$options{title}>> - XHTML DOM of the title of the box. N.B. The exact 
+object will be used not a clone of the object.
 
-$options{title} - XHTML DOM of the title of the box. Note the exact object will be used not a clone of the object.
-
-$options{content} - XHTML DOM of the content of the box. Note the exact object will be used not a clone of the object.
-
-=back
+B<C<$options{content}>> - XHTML DOM of the content of the box. N.B. The 
+exact object will be used not a clone of the object.
 
 Optional Options:
 
-=over 4
+B<C<$options{collapsed}>> -Should the box start rolled up. Defaults to 
+C<false>.
 
-%options{collapsed} - Should the box start rolled up. Default to false.
+B<C<$options{content_style}>> - The CSS style to apply to the content box. 
+E.g. C<overflow-y: auto; height: 300px;>
 
-%options{content-style} - the css style to apply to the content box. For example; "overflow-y: auto; height: 300px;"
+B<C<$options{show_icon_url}>> - The URL of the icon to use instead of the 
+B<[+]>
 
-%options{show_icon_url} - the url of the icon to use instead of the [+]
-
-%options{hide_icon_url} - the url of the icon to use instead of the [-]
-
-=back
+B<C<$options{hide_icon_url}>> - The URL of the icon to use instead of the 
+B<[-]>
 
 =cut
 ######################################################################
@@ -157,19 +158,20 @@ sub EPrints::Box::render
 
 1;
 
+=back
 
 =head1 COPYRIGHT
 
-=for COPYRIGHT BEGIN
+=begin COPYRIGHT
 
-Copyright 2021 University of Southampton.
+Copyright 2022 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/
 
-=for COPYRIGHT END
+=end COPYRIGHT
 
-=for LICENSE BEGIN
+=begin LICENSE
 
 This file is part of EPrints 3.4 L<http://www.eprints.org/>.
 
@@ -186,5 +188,5 @@ You should have received a copy of the GNU Lesser General Public
 License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
-=for LICENSE END
+=end LICENSE
 

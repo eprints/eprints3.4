@@ -9,9 +9,21 @@
 
 =pod
 
+=for Pod2Wiki
+
 =head1 NAME
 
-B<EPrints::Citation::EPC> - loading and rendering of citation styles
+B<EPrints::Citation::EPC> - Loading and rendering of EPC XML based 
+citation styles.
+
+=head1 DESCRIPTION
+
+Loads EPC XML citation style files and renders citations for a 
+particular type of data object.
+
+This class inherits from L<EPrints::Citation>.
+
+=head1 METHODS
 
 =cut
 
@@ -22,6 +34,18 @@ use EPrints::Const qw( :namespace );
 @ISA = qw( EPrints::Citation );
 
 use strict;
+
+######################################################################
+=pod
+
+=over 4
+
+=item $citation->load_source
+
+Load EPC citation source from file.
+
+=cut
+######################################################################
 
 sub load_source
 {
@@ -57,11 +81,15 @@ sub load_source
 	return 1;
 }
 
+######################################################################
+=pod
+
 =item $frag = $citation->render( $dataobj, %opts )
 
 Renders a L<EPrints::DataObj> using this citation style.
 
 =cut
+######################################################################
 
 sub render
 {
@@ -150,11 +178,17 @@ sub _render_citation_aux
 
 1;
 
+=back
+
+=head1 SEE ALSO
+
+L<EPrints::Citation>
+
 =head1 COPYRIGHT
 
 =for COPYRIGHT BEGIN
 
-Copyright 2021 University of Southampton.
+Copyright 2022 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/

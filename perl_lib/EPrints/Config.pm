@@ -10,15 +10,18 @@
 
 =pod
 
+=for Pod2Wiki
+
 =head1 NAME
 
-B<EPrints::Config> - software configuration handler
+B<EPrints::Config> - Software configuration handler.
 
 =head1 DESCRIPTION
 
-This module handles loading the main configuration for an instance
-of the eprints software - such as the list of language id's and 
-the top level configurations for repositories - the XML files in /archives/
+This module handles loading the main configuration for an instance of 
+the EPrints repository software. Such as the list of language IDs 
+and the top level configurations for repositories and the XML files
+for the archives.
 
 =head1 METHODS
 
@@ -31,16 +34,20 @@ the top level configurations for repositories - the XML files in /archives/
 Deprecated, use L<EPrints>::abort.
 
 =item EPrints::Config::get_archive_config
+
+Deprecated, use I<get_repository_config>.
+
 =item EPrints::Config::get_archive_ids
+
+Deprecated, use I<get_repository_ids>.
+
 =item EPrints::Config::load_archive_config_module
 
-Deprecated, use *_repository_*.
+Deprecated, use I<get_repository_config_module>.
 
 =back
 
 =head2 Normal Methods
-
-=over 4
 
 =cut
 
@@ -67,6 +74,8 @@ sub ensure_init {}
 
 ######################################################################
 =pod
+
+=over 4
 
 =item EPrints::Config::init()
 
@@ -108,11 +117,15 @@ sub init
 	}
 }
 
+######################################################################
+=pod
+
 =item EPrints::Config::load_system_config()
 
 Load the system configuration files.
 
 =cut
+######################################################################
 
 sub load_system_config
 {
@@ -151,12 +164,16 @@ sub load_system_config
 	}
 }
 
+######################################################################
+=pod
+
 =item $conf = EPrints::Config::system_config()
 
-Returns the system configuration variable. To access a specific configuration
-option use L</get>.
+Returns the system configuration variable. To access a specific 
+configuration option use L</get>.
 
 =cut
+######################################################################
 
 sub system_config
 {
@@ -173,8 +190,8 @@ given id. This hash will include the properties from SystemSettings.
 
 =cut
 ######################################################################
-sub get_archive_config { return get_repository_config( @_ ); }
 
+sub get_archive_config { return get_repository_config( @_ ); }
 sub get_repository_config
 {
 	my( $id ) = @_;
@@ -182,27 +199,22 @@ sub get_repository_config
 	return $ARCHIVES{$id};
 }
 
-
-
-
 ######################################################################
 =pod
 
 =item @ids = EPrints::Config::get_repository_ids()
 
 Return a list of ids of all repositories belonging to this instance of
-the eprints software.
+the EPrints repository software.
 
 =cut
 ######################################################################
-sub get_archive_ids { return get_repository_ids(); }
 
+sub get_archive_ids { return get_repository_ids(); }
 sub get_repository_ids
 {
 	return keys %ARCHIVES;
 }
-
-
 
 ######################################################################
 =pod
@@ -212,12 +224,13 @@ sub get_repository_ids
 Load the full configuration for the specified repository unless the 
 it has already been loaded.
 
-Return a reference to a hash containing the full repository configuration. 
+Return a reference to a hash containing the full repository 
+configuration. 
 
 =cut
 ######################################################################
-sub load_archive_config_module { return load_repository_config_module( @_ ); }
 
+sub load_archive_config_module { return load_repository_config_module( @_ ); }
 sub load_repository_config_module
 {
 	my( $id ) = @_;
@@ -344,14 +357,13 @@ sub load_config_file
 EOP
 }
 
-
 ######################################################################
 =pod
 
 =item $value = EPrints::Config::get( $confitem )
 
-Return the value of a given eprints configuration item. These
-values are obtained from SystemSettings plus a few extras for
+Return the value of a given eprints configuration item. These values 
+are obtained from L<EPrints::SystemSettings> plus a few extras for
 paths.
 
 =cut
@@ -366,26 +378,20 @@ sub get
 
 1;
 
-######################################################################
-=pod
-
 =back
-
-=cut
-
 
 =head1 COPYRIGHT
 
-=for COPYRIGHT BEGIN
+=begin COPYRIGHT
 
-Copyright 2021 University of Southampton.
+Copyright 2022 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/
 
-=for COPYRIGHT END
+=end COPYRIGHT
 
-=for LICENSE BEGIN
+=begin LICENSE
 
 This file is part of EPrints 3.4 L<http://www.eprints.org/>.
 
@@ -402,5 +408,5 @@ You should have received a copy of the GNU Lesser General Public
 License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
-=for LICENSE END
+=end LICENSE
 

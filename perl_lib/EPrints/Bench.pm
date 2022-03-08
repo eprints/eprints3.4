@@ -1,6 +1,25 @@
+######################################################################
+#
+# EPrints::Bench
+#
+######################################################################
+#
+#
+######################################################################
+
+=pod
+
+=for Pod2Wiki
+
 =head1 NAME
 
-EPrints::Bench
+B<EPrints::Bench> - Class for benchmarking EPrints.
+
+=head1 DESCRIPTION
+
+Tools for benchmarking performance of EPrints Repository software.
+
+=head1 METHODS
 
 =cut
 
@@ -14,6 +33,19 @@ our $totals = {};
 
 our $starts = {};
 
+######################################################################
+=pod
+
+=over 4
+
+=item EPrints::Bench::clear()
+
+Empties C<@ids> array and C<$totals> and C<$starts> hash references. 
+(So a new set of benchmarking task can be undertaken).
+
+=cut
+######################################################################
+
 sub clear
 {
 	@ids = ();
@@ -21,12 +53,34 @@ sub clear
 	$starts = {};
 }
 
+######################################################################
+=pod
+
+=item EPrints::Banch::hitime()
+
+Returns an integer representing the number of microseconds since the 
+start of the epoch.
+
+=cut
+######################################################################
+
 sub hitime
 {
 	my( $s,$ms ) = gettimeofday();
 
 	return $s*1000000+$ms;
 }
+
+######################################################################
+=pod
+
+=item EPrints::Bench::enter( $id )
+
+Sets the (microseconds since start of epoch) start time for specified 
+task with C<$id>.
+
+=cut
+######################################################################
 
 sub enter
 {
@@ -41,6 +95,18 @@ sub enter
 	$starts->{$id} = hitime();
 }
 
+######################################################################
+=pod
+
+=item EPrints::Bench::leave( $id )
+
+Sets the total time (in microseconds) for a specified task with C<$id>
+based on the time since that set for same ID by 
+L<EPrints::Bench::enter|EPrints::Bench#enter>.
+
+=cut
+######################################################################
+
 sub leave
 {
 	my( $id ) = @_;
@@ -53,6 +119,17 @@ sub leave
 	$totals->{$id}+=hitime()-$starts->{$id};	
 	delete $starts->{$id};
 }
+
+######################################################################
+=pod
+
+=item EPrints::Bench::totals()
+
+Prints the individual microseconds for each task carried out since 
+benchmarking was started or last cleared.
+
+=cut
+######################################################################
 
 sub totals
 {
@@ -73,18 +150,20 @@ END {
 }
 1;
 
+=back
+
 =head1 COPYRIGHT
 
-=for COPYRIGHT BEGIN
+=begin COPYRIGHT
 
-Copyright 2021 University of Southampton.
+Copyright 2022 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/
 
-=for COPYRIGHT END
+=end COPYRIGHT
 
-=for LICENSE BEGIN
+=begin LICENSE
 
 This file is part of EPrints 3.4 L<http://www.eprints.org/>.
 
@@ -101,5 +180,5 @@ You should have received a copy of the GNU Lesser General Public
 License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
-=for LICENSE END
+=end LICENSE
 

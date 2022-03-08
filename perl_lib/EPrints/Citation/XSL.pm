@@ -9,9 +9,21 @@
 
 =pod
 
+=for Pod2Wiki
+
 =head1 NAME
 
-B<EPrints::Citation::XSL> - loading and rendering of citation styles
+B<EPrints::Citation::XSL> - Loading and rendering of XSL based 
+citation styles.
+
+=head1 DESCRIPTION
+
+Loads XSL citation style files and renders citations for a particular 
+type of data object.
+
+This class inherits from L<EPrints::Citation>.
+
+=head1 METHODS
 
 =cut
 
@@ -22,6 +34,18 @@ use EPrints::Citation;
 
 eval "use XML::LibXSLT 1.70";
 use strict;
+
+######################################################################
+=pod
+
+=over 4
+
+=item $citation->load_source
+
+Load XSL citation source from file.
+
+=cut
+######################################################################
 
 sub load_source
 {
@@ -47,11 +71,15 @@ sub load_source
 	return 1;
 }
 
+######################################################################
+=pod
+
 =item $frag = $citation->render( $dataobj, %opts )
 
 Renders a L<EPrints::DataObj> using this citation style.
 
 =cut
+######################################################################
 
 sub render
 {
@@ -90,6 +118,16 @@ sub render
 	return $self->{repository}->xml->contents_of( $r );
 }
 
+######################################################################
+=pod
+
+=item $citation->error( $type, $message )
+
+Add C<$message> of C<$type> to array of messages for this citation.
+
+=cut
+######################################################################
+
 sub error
 {
 	my( $self, $type, $message ) = @_;
@@ -102,11 +140,17 @@ sub error
 
 1;
 
+=back
+
+=head1 SEE ALSO
+
+L<EPrints::Citation>
+
 =head1 COPYRIGHT
 
 =for COPYRIGHT BEGIN
 
-Copyright 2021 University of Southampton.
+Copyright 2022 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/

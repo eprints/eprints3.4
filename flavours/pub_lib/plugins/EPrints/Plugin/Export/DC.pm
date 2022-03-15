@@ -181,11 +181,6 @@ sub convert_dataobj
 	push @dcdata, $plugin->simple_value( $eprint, id_number => "relation" );
 	# export id_number field as DC.identifier # SHEFFHALLAM-168
 	push @dcdata, $plugin->simple_value( $eprint, id_number => "identifier" );
-	# export id_number field as doi, if it matches the regx # SHEFFHALLAM-176:
-	if ( $eprint->exists_and_set( "id_number" ) && EPrints::DOI->parse( eprint->get_value( "id_number" ), ( test => 1 ) ) )
-	{
-		push @dcdata, $plugin->simple_value( $eprint, id_number => "doi" );
-	}
 	# If no documents, may still have an eprint-level language
 	push @dcdata, $plugin->simple_value( $eprint, language => "language" );
 

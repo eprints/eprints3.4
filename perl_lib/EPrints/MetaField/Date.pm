@@ -529,7 +529,7 @@ sub validate
 		return @probs if $resolution > 6;
 
 		$value = $self->trim_date( $value, $resolution );
-		my @date = split( /[-:]/, $value );
+		my @date = split( /[-: ]/, $value );
 
 		return @probs if scalar( @date ) != $resolution;
 		foreach ( @date )

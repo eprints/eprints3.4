@@ -180,15 +180,24 @@ sub xml_to_epdata
 	{
 		foreach my $author ( $authorlist->getElementsByTagName("Author") )
 		{
-			my $name = {};
-			
-			my $lastname = $author->getElementsByTagName( "LastName" )->item(0);
-			$name->{family} = $plugin->xml_to_text( $lastname ) if defined $lastname;
+			my $collectivename = $author->getElementsByTagName( "CollectiveName" )->item(0);
 
-			my $forename = $author->getElementsByTagName( "ForeName" )->item(0);
-			$name->{given} = $plugin->xml_to_text( $forename ) if defined $forename;
+			if ( defined $collectivename )
+			{
+				push @{ $epdata->{corp_creators} }, $plugin->xml_to_text( $collectivename );
+			}
+			else
+			{
+				my $name = {};
 
-			push @{ $epdata->{creators_name} }, $name;
+				my $lastname = $author->getElementsByTagName( "LastName" )->item(0);
+				$name->{family} = $plugin->xml_to_text( $lastname ) if defined $lastname;
+
+				my $forename = $author->getElementsByTagName( "ForeName" )->item(0);
+				$name->{given} = $plugin->xml_to_text( $forename ) if defined $forename;
+
+				push @{ $epdata->{creators_name} }, $name;
+			}
 		}
 	}
 

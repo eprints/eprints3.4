@@ -69,7 +69,7 @@ Print the full manual page and then exit.
 
 =item B<--path=/path/to/xapian/directory/> 
 
-Specify the directory of the Xapian database if it is not EPRINTS_PATH/archives/ARCHIVE_NAME/var/xapian/.
+Specify the directory of the Xapian database if it is not EPRINTS_PATH/archives/ARCHIVEID/var/xapian/.
 
 =item B<--quiet>
 

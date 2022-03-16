@@ -317,7 +317,7 @@ sub run_citation_link
 
 sub run_embed_video
 {
-        my( $self, $state, $object, $citationid ) = @_;
+        my( $self, $state, $object ) = @_;
 
         if( !$object->[0]->isa( "EPrints::DataObj::Document" ) )
         {
@@ -988,6 +988,100 @@ sub run_render_value_function
 	use strict "refs";
 
 	return [ $xhtml, "XHTML" ];
+}
+
+
+=item {MF,VAR}.dumper()
+Provides XHTML pre element containing the type and serialization of a metafield or variable.  Not useful for data objects, as dumper output will be too long to be rendered.
+=cut
+
+sub run_dumper
+{
+	my( $self, $state, $data ) = @_;
+
+	use Data::Dumper;
+	my $pre = $state->{session}->make_element( "pre" );
+	$pre->appendChild( $state->{session}->make_text( "TYPE: ".ref($data->[0])."\nVALUE: ".Dumper( $data->[0] ) ) );
+	
+	return [ $pre , "XHTML" ];
+}
+
+
+=item OBJ.subproperty( VALUE )
+Extracts the value of a specified subproperty of a compound (non-multiple only) metafield.
+=cut
+
+sub run_subproperty
+{
+	my( $self, $state, $objvar, $value, $pos ) = @_;
+
+	if( !defined $objvar->[0] )
+	{
+		$self->runtime_error( "can't get a property {".$value->[0]."} from undefined value" );
+	}
+	my $ref = ref($objvar->[1]);
+
+	if( $ref !~ m/::/ || ! $objvar->[1]->isa( "EPrints::MetaField::Compound" ) )
+	{
+		$self->runtime_error( "can't get a subproperty from anything except a compound field value, when trying to get ".$value->[0]." from a $ref" );
+	}
+	my $field = $objvar->[1];
+	if( $field->get_property( "multiple" ) )
+	{
+		$self->runtime_error( "can't get a subproperty from a multiple field." );
+	}
+	
+	my $fc = $field->get_property( "fields_cache" );
+	my $sub_field;
+	my @ok = ();
+	foreach my $a_sub_field ( @{$fc} )
+	{
+		push @ok, $a_sub_field->{sub_name};
+		if( $a_sub_field->{sub_name} eq $value->[0] )
+		{
+			$sub_field = $a_sub_field;
+		}
+	}
+	if( !defined $sub_field ) {
+		$self->runtime_error( "unknown sub-field of a compound: ".$value->[0].". OK values: ".join( ", ", @ok )."." );
+	}
+
+	return [
+		$objvar->[0]->{ $value->[0] },
+                 $sub_field ];
+}
+
+
+=item VAR.to_dataobj( DATASET, DATAOBJ_FIELDNAME )
+Returns the data object determined by looking up the value of VAR against the DATAOBJ_FIELDNAME of the DATASET.
+=cut
+
+sub run_to_dataobj
+{
+	my( $self, $state, $objvar, $dataset, $dataobj_fieldname ) = @_;
+
+	if( !defined $objvar || !defined $objvar->[0] ) {
+		return [];
+	}
+	if( !defined $dataset || !defined $dataset->[0] ) {
+                return [];
+        }
+	if( !defined $dataobj_fieldname || !defined $dataobj_fieldname->[0] ) {
+                return [];
+        }
+
+	my $dataobj_fieldvalue = $objvar->[0];
+	my $results = $state->{session}->dataset( $dataset->[0] )->search(	
+		filters => [
+			{
+				meta_fields => [ $dataobj_fieldname->[0] ],
+				value => $dataobj_fieldvalue,
+				match => "EX"
+			}
+	]);
+	my $dataobj = $results->item(0);
+
+	return [$dataobj];
 }
 
 

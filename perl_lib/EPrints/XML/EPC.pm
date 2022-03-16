@@ -60,7 +60,7 @@ sub process
 		return $params{session}->xml->create_document_fragment
 			if $node->hasAttribute( "disabled" ) && $node->getAttribute( "disabled" );
 
-		if( $name=~m/^(if|comment|choose|print|debug|phrase|pin|foreach|set)$/ )
+		if( $name=~m/^(if|comment|choose|print|debug|phrase|pin|foreach|set|list)$/ )
 		{
 			my $fn = "_process_$name";
 			no strict "refs";
@@ -448,7 +448,73 @@ sub _process_choose
 	return $collapsed;
 }
 
+sub _process_list
+{
+        my( $node, %params ) = @_;
 
+        # if there's only 2 items and first & last join are defined then last join is used.
+        my $opts = {};
+        foreach my $atr ( qw/ join suffix prefix first-join last-join / )
+        {
+                if( $node->hasAttribute( $atr ) )
+                {
+                        $opts->{$atr} = $node->getAttribute( $atr );
+                }
+        }
+
+        my @out_nodes = ();
+        foreach my $child ( $node->getChildNodes )
+        {
+                next unless( EPrints::XML::is_dom( $child, "Element" ) );
+                my $name = $child->tagName;
+                $name=~s/^ep://;
+                $name=~s/^epc://;
+                if( ! $name eq "item" )
+                {
+                        EPrints::abort( "In ".$params{in}.": only epc:item is allowed in epc:list.\n".substr( $child->toString, 0, 100 ) );
+                }
+                
+                my $collapsed_item = EPrints::XML::EPC::process_child_nodes( $child, %params );
+                
+                # Add result to the output list IF it's not just whitespace
+                my $text = $params{session}->xml->to_string( $collapsed_item );
+                $text =~ s/\s//g;
+                if( $text ne "" )
+                {
+                        push @out_nodes, $collapsed_item;
+                }
+        }
+
+        my $result = $params{session}->make_doc_fragment;
+        if( scalar @out_nodes > 0 )
+        {
+                # at least one item!
+                if( defined $opts->{prefix} )
+                {
+                        $result->appendChild( $params{session}->make_text( $opts->{prefix} ) );
+                }
+                for( my $pos=0; $pos < scalar @out_nodes; ++$pos )
+                {
+                        my $join;
+                        if( $pos > 0 ) {
+                                $join = $opts->{join};
+                                if( $pos == 1 && defined $opts->{"first-join"} ) { $join = $opts->{"first-join"}; }
+                                if( $pos == ((scalar @out_nodes)-1) && defined $opts->{"last-join"} ) { $join = $opts->{"last-join"}; }
+                        }
+                        if( defined $join )
+                        {
+                                $result->appendChild( $params{session}->make_text( $join ) );
+                        }
+                        $result->appendChild( $out_nodes[$pos] );
+                }
+                if( defined $opts->{suffix} )
+                {
+                        $result->appendChild( $params{session}->make_text( $opts->{suffix} ) );
+                }
+        }
+                                
+        return $result;
+}
 
 
 sub split_script_attribute

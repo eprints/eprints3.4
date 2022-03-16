@@ -76,7 +76,7 @@ sub sql_row_from_value
 	my( $self, $session, $value ) = @_;
 
 	my @parts;
-	@parts = split /[-TZ: ]/, $value if defined $value;
+	@parts = split /[-: TZ]/, $value if defined $value;
 	@parts = @parts[0..2];
 
 	return @parts;
@@ -529,7 +529,7 @@ sub validate
 		return @probs if $resolution > 6;
 
 		$value = $self->trim_date( $value, $resolution );
-		my @date = split( /[-:]/, $value );
+		my @date = split( /[-: TZ]/, $value );
 
 		return @probs if scalar( @date ) != $resolution;
 		foreach ( @date )

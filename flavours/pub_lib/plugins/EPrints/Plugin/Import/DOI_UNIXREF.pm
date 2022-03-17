@@ -234,6 +234,7 @@ sub contributors
 		}
 
 		my $person_name = {};
+		my $orcid = undef;
 		foreach my $part ($contributor->childNodes)
 		{
 			if( $part->nodeName eq "given_name" )

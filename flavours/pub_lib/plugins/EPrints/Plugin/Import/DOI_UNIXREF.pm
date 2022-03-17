@@ -244,18 +244,22 @@ sub contributors
 			{
 				$person_name->{family} = EPrints::Utils::tree_to_utf8($part);
 			}
-		
+			elsif( $part->nodeName eq "ORCID" )
+			{
+				$orcid = EPrints::Utils::tree_to_utf8($part);
+				$orcid =~ s!https?://orcid.org/!!;
+			}
 		}
 
 		if ( exists $person_name->{family} )
 		{
 			if ( $role eq "author" )
 			{
-				push @creators, { name => $person_name };
+				push @creators, { name => $person_name, orcid => $orcid };
 			}
 			elsif ( $role eq "editor" )
 			{
-				push @editors, { name => $person_name };
+				push @editors, { name => $person_name, orcid => $orcid };
 			}
 			else
 			{
@@ -270,7 +274,7 @@ sub contributors
 					"reader" => "http://www.loc.gov/loc.terms/relators/OTH",
 					"translator" => "http://www.loc.gov/loc.terms/relators/TRL",
 				);
-				push @contributors, { name => $person_name, type => $contributor_types{$role} };
+				push @contributors, { name => $person_name, type => $contributor_types{$role} , orcid => $orcid };
 			}
 		}
 		elsif ( $contributor->nodeName eq "organization" && $role eq "author" )

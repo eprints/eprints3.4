@@ -39,7 +39,7 @@ Time of access.
 
 ID of the requesting user-agent. (Typically an IP address).
 
-=item requester_user_agent (text)
+=item requester_user_agent (longtext)
 
 The HTTP user agent string. (Useful for robots spotting).
 
@@ -129,7 +129,7 @@ sub get_system_field_info
 
         { name=>"requester_id", type=>"text", required=>1, text_index=>0, },
 
-        { name=>"requester_user_agent", type=>"text", required=>0, text_index=>0, },
+        { name=>"requester_user_agent", type=>"longtext", required=>0, text_index=>0, },
 
         { name=>"requester_country", type=>"text", required=>0, text_index=>0, },
 

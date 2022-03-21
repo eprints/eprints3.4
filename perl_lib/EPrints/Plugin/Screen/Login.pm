@@ -60,9 +60,11 @@ sub finished
 			);
 		# Create a login ticket and log the user in
 		EPrints::DataObj::LoginTicket->expire_all( $repo );
-		$repo->dataset( "loginticket" )->create_dataobj({
+		my $loginticket = $repo->dataset( "loginticket" )->create_dataobj({
 			userid => $user->id,
-		})->set_cookies();
+		});
+		$loginticket->set_cookies();
+		log_login_attempt( $repo, $user->get_value( 'username' ), '', 'success', $loginticket->get_value( 'securecode' ) );
 	}
 
 	$repo->redirect( "$uri" );
@@ -119,7 +121,7 @@ sub action_login
 	if( !defined $user )
 	{
 		$processor->add_message( "error", $repo->html_phrase( "cgi/login:failed" ) );
-		$self->{processor}->{logged_login} = log_login_attempt( $repo, $username, $repo->param( "login_password" ), 'missing' );
+		log_login_attempt( $repo, $username, $repo->param( "login_password" ), 'missing' );
 		return;
 	}
 
@@ -210,7 +212,7 @@ sub hidden_bits
 
 sub log_login_attempt
 {
-	my( $repo, $username, $password, $status ) = @_;
+	my( $repo, $username, $password, $status, $securecode ) = @_;
 
 	return 0 unless $repo->config( 'login_monitoring', 'enabled' );
 	my $timestamp = EPrints::Time::get_iso_timestamp();
@@ -227,16 +229,14 @@ sub log_login_attempt
 	if ( defined $repo->config( 'login_monitoring', 'function' ) )
 	{
 		my $func = $repo->config( 'login_monitoring', 'function' );
-		return $func->( $fh, $repo, $timestamp, $username, $password, $status );
+		return $func->( $fh, $repo, $timestamp, $username, $password, $status, $securecode );
 	}
 	else {
 		my $password_length = length( $password );
 		my $userid = '';
-		my $securecode = '';
 		if ( $status eq "success" )
 		{
 			$userid = $repo->user_by_username( $username )->id;
-			$securecode = EPrints::Apache::AnApache::cookie( $repo->get_request, EPrints::DataObj::LoginTicket->secure_session_key( $repo ) );
 			$password_length = '';
 		}	
 		print $fh "\"$timestamp\",\"$username\",\"$password_length\",\"".$repo->remote_ip."\",\"".$repo->get_request->headers_in->{ "User-Agent" }."\",\"".$repo->param( "target" )."\",\"$status\",\"$userid\",\"$securecode\"\n";

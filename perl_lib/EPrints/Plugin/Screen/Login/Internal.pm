@@ -115,12 +115,17 @@ sub action_login
 		{
 			my $unlocktime = $repo->make_text( EPrints::Time::human_time( $user->get_value( "unlocktime" ) ) );
 			$processor->add_message( "error", $repo->html_phrase( "cgi/login:locked", unlocktime=>$unlocktime ) );
-			$self->{processor}->{logged_login} = EPrints::Plugin::Screen::Login::log_login_attempt( $repo, $username, $password, 'locked' );
+			EPrints::Plugin::Screen::Login::log_login_attempt( $repo, $username, $password, 'locked' );
+		}
+		elsif( defined $user )
+		{
+			$processor->add_message( "error", $repo->html_phrase( "cgi/login:failed" ) );
+			EPrints::Plugin::Screen::Login::log_login_attempt( $repo, $username, $password, 'invalid' );
 		}
 		else
 		{
 			$processor->add_message( "error", $repo->html_phrase( "cgi/login:failed" ) );
-			$self->{processor}->{logged_login} = EPrints::Plugin::Screen::Login::log_login_attempt( $repo, $username, $password, 'invalid' );
+			EPrints::Plugin::Screen::Login::log_login_attempt( $repo, $username, $password, 'missing' );
 		}
 		return;
 	}
@@ -128,8 +133,6 @@ sub action_login
 	$self->{processor}->{username} = $real_username;
 
 	$self->SUPER::action_login;
-
-	$self->{processor}->{logged_login} = EPrints::Plugin::Screen::Login::log_login_attempt( $repo, $username, $password, 'success' ) unless defined $self->{processor}->{logged_login};
 
 	return $self->finished;
 }

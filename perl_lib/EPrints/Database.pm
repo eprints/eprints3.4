@@ -771,7 +771,7 @@ sub get_column_type
 
 	if( $not_null )
 	{
-		$type .= " NOT NULL";
+		$type .= " NOT NULL DEFAULT ''";
 	}
 
 	return $type;

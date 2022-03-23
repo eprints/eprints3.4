@@ -742,6 +742,7 @@ sub get_column_type
 		$type .= "($length,$scale)";
 	}
 
+	my $default = "";
 	if(
 		$data_type eq SQL_VARCHAR() or
 		$data_type eq SQL_LONGVARCHAR() or
@@ -767,11 +768,41 @@ sub get_column_type
 		{
 			$type .= " COLLATE ".$collate;
 		}
+
+		$default = " DEFAULT ''";
+	}
+	elsif (
+		$data_type eq SQL_VARBINARY() or
+		$data_type eq SQL_LONGVARBINARY()
+	)
+	{
+		$default = " DEFAULT ''";
+	}
+	elsif (
+		$data_type eq SQL_TINYINT() or
+		$data_type eq SQL_SMALLINT() or
+		$data_type eq SQL_INTEGER() or
+		$data_type eq SQL_BIGINT() or
+		$data_type eq SQL_SMALLINT() or
+		$data_type eq SQL_REAL() or
+		$data_type eq SQL_DOUBLE() or
+		$data_type eq SQL_DECIMAL()
+	)
+	{
+		$default = " DEFAULT 0";
+	}
+	elsif ( $data_type eq SQL_DATE )
+	{
+		$default = " DEFAULT '0000-00-00'";
+	}
+	elsif ( $data_type eq SQL_TIME )
+	{
+		$default = " DEFAULT '0000-00-00 00:00:00'";
 	}
 
 	if( $not_null )
 	{
-		$type .= " NOT NULL DEFAULT ''";
+		$type .= " NOT NULL" . $default;
 	}
 
 	return $type;

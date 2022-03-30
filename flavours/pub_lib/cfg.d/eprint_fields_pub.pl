@@ -195,6 +195,7 @@ push @{$c->{fields}->{eprint}},
 			allow_null => 1,
 			type => 'text',
 			sub_name => 'id',
+			export_as_xml => 0,
 		}
 	],
 	input_boxes => 4,

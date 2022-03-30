@@ -244,7 +244,7 @@ sub to_sax_basic
 
 	foreach my $field (@{$self->{fields_cache}})
 	{
-		next if !$field->property( "export_as_xml" );
+		next if !$field->property( "export_as_xml" ) && !$opts{revision_generation};
 
 		my $alias = $field->property( "sub_name" );
 		my $v = $value->{$alias};

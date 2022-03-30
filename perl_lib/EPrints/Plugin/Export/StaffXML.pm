@@ -1,14 +1,14 @@
 =head1 NAME
 
-EPrints::Plugin::Export::XMLFiles
+EPrints::Plugin::Export::XML
 
 =cut
 
-package EPrints::Plugin::Export::XMLFiles;
+package EPrints::Plugin::Export::StaffXML;
 
-use EPrints::Plugin::Export::StaffXML;
+use EPrints::Plugin::Export::XML;
 
-@ISA = ( "EPrints::Plugin::Export::StaffXML" );
+@ISA = ( "EPrints::Plugin::Export::XML" );
 
 use strict;
 
@@ -16,21 +16,15 @@ sub new
 {
 	my( $class, %opts ) = @_;
 
-	my $self = $class->SUPER::new( %opts );
+	my( $self ) = $class->SUPER::new( %opts );
 
-	$self->{name} = "EP3 XML with Files Embeded";
-	$self->{accept} = [ 'list/eprint', 'dataobj/eprint' ];
+	$self->{name} = "EP3 XML (Staff)";
 
-	# this module outputs the files of an eprint with
-	# no regard to the security settings so should be 
-	# not made public without a very good reason.
-	# This should already be set by StaffXML but lets
-	# not risk it.
+	# this module outputs fields that have export_as_xml 
+	# set to 0, which should not appear in public export.
 	$self->{visible} = "staff";
-
-	$self->{suffix} = ".xml";
-	$self->{mimetype} .= '; files="base64"';
-	$self->{qs} = 0.1;
+	
+	$self->{qs} = 0.4;
 
 	return $self;
 }
@@ -39,8 +33,9 @@ sub output_dataobj
 {
 	my( $self, $dataobj, %opts ) = @_;
 
-	return $self->SUPER::output_dataobj( $dataobj, %opts, embed => 1 );
+	return $self->SUPER::output_dataobj( $dataobj, %opts, revision_generation => 1 );
 }
+
 
 1;
 

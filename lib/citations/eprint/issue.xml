@@ -8,7 +8,7 @@
   <div class="ep_search_result">
     <div><epc:print expr="$n" />.</div>
     <div>
-      <epc:print expr="$item.citation('default')" />
+      <epc:print expr="$item.citation($config{citation_default}{eprint}{for_issue})" />
       <div><epc:print expr="item_issues"/></div>
     </div>
   </div>

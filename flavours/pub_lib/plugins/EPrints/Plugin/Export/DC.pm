@@ -171,8 +171,9 @@ sub convert_dataobj
 	}
 
 	# The citation for this eprint
+	my $style = defined $plugin->{session}->config( 'citation_default', 'export' ) ? $plugin->{session}->config( 'citation_default', 'export' ) : 'default';
 	push @dcdata, [ "identifier",
-		EPrints::XML::remove_invalid_chars( EPrints::Utils::tree_to_utf8( $eprint->render_citation( 'default', %params ) ) ) ];
+		EPrints::XML::remove_invalid_chars( EPrints::Utils::tree_to_utf8( $eprint->render_citation( $style, %params ) ) ) ];
 
 	# Most commonly a DOI or journal link
 	push @dcdata, $plugin->simple_value( $eprint, official_url => "relation" );

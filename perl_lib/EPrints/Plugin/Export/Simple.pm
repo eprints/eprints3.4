@@ -121,8 +121,9 @@ sub convert_dataobj
 	}
 
 	# The citation for this eprint
+	my $style = defined $plugin->{session}->config( 'citation_default', 'export' ) ? $plugin->{session}->config( 'citation_default', 'export' ) : 'default';
 	push @epdata, [ "citation",
-		EPrints::Utils::tree_to_utf8( $eprint->render_citation( 'default', %params ) ) ];
+		EPrints::Utils::tree_to_utf8( $eprint->render_citation( $style, %params ) ) ];
 
 	foreach my $doc ( $eprint->get_all_documents )
 	{

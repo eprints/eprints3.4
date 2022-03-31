@@ -7,7 +7,7 @@
 <cite:citation xmlns="http://www.w3.org/1999/xhtml" xmlns:epc="http://eprints.org/ep3/control" xmlns:cite="http://eprints.org/ep3/citation" >
 
   <p style="margin-bottom: 1em">
-    <epc:print expr="$item.citation('default_for_summary_page')" />
+    <epc:print expr="$item.citation($config{citation_default}{eprint}{for_summary_page})" />
   </p>
 
   <epc:if test="$flags{has_multiple_versions}">
@@ -32,7 +32,7 @@
           <div class="ep_summary_page_document">
             <span><epc:print expr="$doc.icon('HoverPreview','noNewWindow','previewRight')}" /></span>
             <span>
-              <epc:print expr="$doc.citation('default')" /><br />
+              <epc:print expr="$doc.citation($config{citation_default}{document}{for_summary_page})" /><br />
               <a href="{$doc.url()}" class="ep_document_link"><epc:phrase ref="summary_page:download"/> (<epc:print expr="$doc.doc_size().human_filesize()" />)</a>
               <epc:if test="$doc.is_public()">
 			  <epc:choose>
@@ -54,7 +54,7 @@
               <ul>
               <epc:foreach expr="$doc.related_objects('http://eprints.org/relation/hasVersion')" iterator="rel">
                 <epc:if test="$rel{relation_type}!='http://eprints.org/relation/isVolatileVersionOf'">
-                  <li><epc:print expr="$rel.citation_link('default_for_summary_page')" /></li>
+                  <li><epc:print expr="$rel.citation_link($config{citation_default}{eprint}{for_summary_page})" /></li>
                 </epc:if>
               </epc:foreach>
               </ul>

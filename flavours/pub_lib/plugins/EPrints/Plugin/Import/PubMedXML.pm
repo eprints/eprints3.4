@@ -201,6 +201,21 @@ sub xml_to_epdata
 		}
 	}
 
+	my $i = 0;
+	my %id_priority = ( 'doi' => 1, 'pubmed' => 2, 'pii' => 3 );
+	my $cur_id_priority = 99;
+	my $articleidlist = $xml->getElementsByTagName( "ArticleIdList" )->item(0);
+	my $article_ids = $articleidlist->getElementsByTagName( "ArticleId" );
+	while ( defined $article_ids->item( $i ) )
+	{
+		my $id = $article_ids->item( $i );
+		if ( defined $id_priority{$id->getAttribute( "IdType" )} && $id_priority{$id->getAttribute( "IdType" )} < $cur_id_priority )
+		{
+			$cur_id_priority = $id_priority{$id->getAttribute( "IdType" )};
+			$epdata->{id_number} = $id->getAttribute( "IdType" ) . ":" . $plugin->xml_to_text( $id );
+		}
+		$i++;
+	}
 
 	unless( defined $epdata->{publication} )
 	{

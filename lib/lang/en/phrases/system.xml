@@ -2685,6 +2685,8 @@ Titles and Help for the System Fields
     <epp:phrase id="document_embargo_info">until</epp:phrase>
     <epp:phrase id="document_fieldname_date_embargo_retained">Retained embargo expiry date</epp:phrase>
     <epp:phrase id="document_fieldhelp_date_embargo_retained">Retains the <epp:phrase ref="document_fieldname_date_embargo"/> after the embargo has been lifted.</epp:phrase>
+    <epp:phrase id="document_fieldname_upload_url">Upload URL</epp:phrase>
+    <epp:phrase id="document_fieldhelp_upload_url">From where the document was uploaded, if it was upload from a URL.</epp:phrase>
     <epp:phrase id="document_fieldname_relation">Relationships</epp:phrase>
     <epp:phrase id="document_fieldhelp_relation">This field describes relationships this document has to other entities. Ideally, use URIs for the target identifier.</epp:phrase>
     <epp:phrase id="document_fieldname_relation_uri">Target identifier</epp:phrase>

@@ -96,6 +96,10 @@ by the C<bin/lift_embargos> script.
 
 A compound field containing a description of the document media - dimensions, codec etc.
 
+=item upload_url (longtext)
+
+If document is uploaed from a URL record this URL for reference purposes.
+
 =back
 
 =head1 REFERENCES AND RELATED OBJECTS 
@@ -315,6 +319,8 @@ sub get_system_field_info
 
 		{ name=>"content", type=>"namedset", required=>0, input_rows=>1,
 			set_name=>"content" },
+
+		{ name=>"upload_url", type=>"longtext", required=>0, export_as_xml => 0 },
 
 		{ name=>"relation", type=>"relation", multiple=>1, },
 
@@ -1216,6 +1222,7 @@ sub upload_url
 	{
 		$url->path( "/" );
 	}
+	$self->set_value( 'upload_url', $url ); 
 
 	my $tmpdir = File::Temp->newdir();
 

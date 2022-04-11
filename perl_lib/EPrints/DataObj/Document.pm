@@ -1458,6 +1458,17 @@ sub validate
 		my $fieldname = $self->{session}->make_element( "span", class=>"ep_problem_field:documents" );
 		push @problems, $self->{session}->html_phrase( "lib/document:no_first", fieldname=>$fieldname );
 	}
+
+	# Test that all files uploaded successfully (i.e. have a non-zero file size).
+	foreach my $filename ( keys %files )
+	{
+		unless ( EPrints::Utils::is_set( $files{$filename} ) && $files{$filename} > 0 )
+		{
+			my $fieldname = $self->{session}->make_element( "span", class=>"ep_problem_field:documents" );
+			my $filename_text = $self->{session}->make_text( $filename );
+			push @problems, $self->{session}->html_phrase( "lib/document:zero_file", fieldname=>$fieldname, filename=>$filename_text );
+		}
+	}
 		
 	# Site-specific checks
 	push @problems, @{ $self->SUPER::validate( $for_archive ) };

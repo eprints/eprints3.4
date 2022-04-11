@@ -34,6 +34,8 @@ sub render_collapsed { return 0; }
 
 sub can_be_viewed { return 1; }
 
+sub can_be_previewed { return 1; }
+
 sub render
 {
 	my( $self ) = @_;

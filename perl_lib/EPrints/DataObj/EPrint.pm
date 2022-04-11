@@ -1692,11 +1692,11 @@ sub render
 		my $content_right = $self->{session}->make_element( "div", class=>$summary_content_classes->{right} );
 		my $content_bottom = $self->{session}->make_element( "div", class=>$summary_content_classes->{bottom} );
 		my $content_after = $self->{session}->make_element( "div", class=>$summary_content_classes->{after} );
-	
-		$content_left->appendChild( render_box_list( $self->{session}, $self, "summary_left" ) );
-		$content_right->appendChild( render_box_list( $self->{session}, $self, "summary_right" ) );
-		$content_bottom->appendChild( render_box_list( $self->{session}, $self, "summary_bottom" ) );
-		$content_top->appendChild( render_box_list( $self->{session}, $self, "summary_top" ) );
+
+		$content_left->appendChild( render_box_list( $self->{session}, $self, "summary_left", $preview ) );
+		$content_right->appendChild( render_box_list( $self->{session}, $self, "summary_right", $preview ) );
+		$content_bottom->appendChild( render_box_list( $self->{session}, $self, "summary_bottom", $preview ) );
+		$content_top->appendChild( render_box_list( $self->{session}, $self, "summary_top", $preview ) );
 
 		$content->appendChild( $content_left );
 		$content->appendChild( $content_right );
@@ -2619,7 +2619,7 @@ from C<$list> against the C<$eprint> specified
 
 sub render_box_list
 {
-	my( $session, $eprint, $list ) = @_;
+	my( $session, $eprint, $list, $preview ) = @_;
 
 	my $processor = EPrints::ScreenProcessor->new(
 		session => $session,
@@ -2631,6 +2631,9 @@ sub render_box_list
 	my $chunk = $session->make_doc_fragment;
 	foreach my $item ( $some_plugin->list_items( $list ) )
 	{
+		# Do not display box if it should not appear in previews;
+		next if !$item->{screen}->can_be_previewed && $preview;
+
 		my $i = $session->get_next_id;
 
 		my %options;

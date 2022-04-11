@@ -1749,7 +1749,7 @@ sub render_navigation_aids
 			$div_contents->appendChild( 
 				$repo->render_subjects( 
 					\@ids, 
-					$field->get_property( "top" ), 
+					defined $menu->{top} ? $menu->{top} : $field->get_property( "top" ),
 					$path_values->[-1], 
 					$mode, 
 					$opts{sizes} ) );
@@ -2252,14 +2252,19 @@ sub fieldlist_sizes
 		{
 			my $subject = $subject_map->{$id};
 			next if !defined $subject; # Hmm, unknown subject
+			my %cur_subj_map;
+			my $top = defined $self->{menus}->[0]->{top} ? $self->{menus}->[0]->{top} : '';
+			my $subj_found = $top eq '';
 			foreach my $ancestor (@{$subject->value( "ancestors" )})
 			{
 				next if $ancestor eq $EPrints::DataObj::Subject::root_subject;
+				$subj_found = 1 if $ancestor eq $top;
 				foreach my $item_id (@{$id_map->{$id}})
 				{
-					$subj_map{$ancestor}->{$item_id} = 1;
+					$cur_subj_map{$ancestor}->{$item_id} = 1;
 				}
 			}
+			%subj_map = ( %subj_map, %cur_subj_map ) if $subj_found;
 		}
 
 		# calculate the totals

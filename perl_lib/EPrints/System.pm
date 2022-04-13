@@ -741,7 +741,7 @@ sub sanitise
 	# There are sample substitutions in the optional_filename_sanitise.pl file in the repo config
 
 	$repo ||= EPrints->new->current_repository;
-	if ( defined $repo && $repo->can_call( "optional_filename_sanitise" ) )
+	if ( defined $repo && ref( $repo ) eq "EPrints::Repository" && $repo->can_call( "optional_filename_sanitise" ) )
 	{
 		$filepath = $repo->call( "optional_filename_sanitise", $repo, $filepath );
 	}

@@ -26,6 +26,8 @@ my %executables = (
 	  'unoconv' => '/usr/bin/unoconv',
 	  'txt2refs' => "$c->{base_path}/tools/txt2refs",
 	  'ffprobe' => '/usr/bin/ffprobe',
+	  'cal' => '/usr/bin/cal',
+	  'ncal' => '/usr/bin/ncal',
 	);
 my @paths = EPrints->system->bin_paths;
 EXECUTABLE: while(my( $name, $path ) = each %executables)

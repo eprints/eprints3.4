@@ -152,9 +152,6 @@ my $mc = $m - (12-$month);
 my $yc = 1;
 while( $mc > 0 ) { push @years, $year+$yc; $mc=$mc-12; $yc++ }
 
-# so we can can call the right cal command in the loop
-my $os = `lsb_release -si`;
-chomp($os);
 
 # process and output one month at a time
 my $start_month = $month;
@@ -166,19 +163,18 @@ for my $_y ( @years )
     $month_count++;
     next if $month_count > $m;
     print "</div><div class='month_row'>" if($r ne "flow" && $col && $col%${r}==0);
-
-    if( $os eq "Ubuntu" )
-    {
-      open(CAL, "ncal -b -h $_mon $_y |"); # cal on Ubuntu adds the highlighting of today, leading to underscores and backslashs in the output
-    }
-    else
-    {
-      open(CAL, "cal $_mon $_y |");
-    }
-
+	my $cal = File::Temp->new;
+	if ( -e $session->config( 'executables', 'ncal' ) )
+	{
+		$session->read_exec( $cal, "ncal", MONTH=>$_mon, YEAR=>$_y );
+	}
+	else
+	{
+		$session->read_exec( $cal, "cal", MONTH=>$_mon, YEAR=>$_y );
+	}
     print "<div class='month'>\n";
     my $line_num = 1;
-    while(<CAL>)
+    while( <$cal> )
     {
       s/([0-9A-Za-z ]+)/<div class='month_label'>$1<\/div>/ if $line_num == 1;
       s/([0-9A-Za-z ]{2,3})/&fn($_y, $_mon, $1)/ge if(!/$_y/);

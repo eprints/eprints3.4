@@ -32,6 +32,8 @@ my %invocations = (
 	 'unoconv' => '$(unoconv) -f $(FORMAT) $(SOURCE)',
 	 'txt2refs' => '$(perl) $(txt2refs) $(SOURCE) $(TARGET)',
 	 'ffprobe' => '$(ffprobe) -show_streams $(SOURCE)',
+	 'cal' => '$(cal) $(MONTH) $(YEAR)',
+	 'ncal' => '$(ncal) -b -h $(MONTH) $(YEAR)',
 );
 while(my( $name, $invo ) = each %invocations)
 {

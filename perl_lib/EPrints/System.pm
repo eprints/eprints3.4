@@ -723,7 +723,7 @@ path components and removes the leading C</>.
 
 sub sanitise
 {
-	my( $self, $filepath ) = @_;
+	my( $self, $filepath, $repo ) = @_;
 
 	$filepath = Encode::decode_utf8( $filepath )
 		if !utf8::is_utf8( $filepath );
@@ -740,7 +740,7 @@ sub sanitise
 	# It is useful for replacing characters which are encoded for HTTP
 	# There are sample substitutions in the optional_filename_sanitise.pl file in the repo config
 
-	my $repo = EPrints->new->current_repository;
+	$repo ||= EPrints->new->current_repository;
 	if ( defined $repo && $repo->can_call( "optional_filename_sanitise" ) )
 	{
 		$filepath = $repo->call( "optional_filename_sanitise", $repo, $filepath );

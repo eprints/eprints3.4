@@ -58,9 +58,23 @@ sub from
 		return;
 	}
 
-	$self->{processor}->{skip_buffer} = $self->{session}->config( "skip_buffer" ) || 0;	
+	$self->{processor}->{skip_buffer} = $self->can_skip_buffer;	
 
 	$self->EPrints::Plugin::Screen::from;
+}
+
+sub can_skip_buffer 
+{
+	my( $self ) = @_;
+
+	return $self->{session}->config( "skip_buffer" ) if $self->{session}->config( "skip_buffer" );
+
+	if ( defined $self->{session}->config( "skip_buffer_owners" ) )
+	{
+		my $userid = $self->{processor}->{eprint}->get_value( 'userid' );
+		return 1 if grep( /^$userid$/, @{$self->{session}->config( "skip_buffer_owners" )} );
+	}
+	return 0;
 }
 
 sub obtain_lock

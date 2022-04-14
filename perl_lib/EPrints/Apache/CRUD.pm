@@ -1532,7 +1532,8 @@ sub POST
 	if( $self->scope == CRUD_SCOPE_USER_CONTENTS )
 	{
 		$status = $headers->{in_progress} ? "inbox" : "buffer";
-		$status = "archive" if ($repo->config("skip_buffer") and $status eq "buffer");
+		my $ownerid = $owner->id;
+		$status = "archive" if ( $repo->config("skip_buffer") || ( defined $repo->config("skip_buffer_owners") && grep( /^$ownerid$/, @{$repo->config("skip_buffer_owners")} ) ) && $status eq "buffer" );
 	}
 	my $list = $self->parse_input( $plugin, sub {
 			my( $epdata ) = @_;

@@ -36,6 +36,11 @@ $c->{cookie_auth} = 1;
 # by setting this option:
 $c->{skip_buffer} = 0;
 
+# If you have a user that may be posting from a third-party application 
+# or maybe you just want to save the hassle of the review stage for 
+# certain eprint owners, then set their userid in the following arrayref:
+$c->{skip_buffer_owners} = [];
+
 # domain for the login and lang. cookies to be set in.
 $c->{cookie_domain} = defined $c->{host} ? $c->{host} : $c->{securehost};
 

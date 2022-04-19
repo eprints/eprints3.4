@@ -11,7 +11,8 @@
 
 =head1 NAME
 
-B<EPrints::Search::Condition::IsNull> - "IsNull" search condition
+B<EPrints::Search::Condition::IsNotNull> - "IsNotNull" search 
+condition.
 
 =head1 DESCRIPTION
 
@@ -49,12 +50,10 @@ sub logic
 	my $table = $prefix . $self->table;
 
 	my @sql_and = ();
-	my $empty = "''";
-	$empty = "0" if grep { $_ eq $self->{field}->get_property( "type" ) } ( 'date', 'int', 'time' );
 	foreach my $col_name ( $self->{field}->get_sql_names )
 	{
 		push @sql_and,
-			$db->quote_identifier( $table, $col_name )." != $empty";
+			$db->quote_identifier( $table, $col_name )." IS NOT NULL";
 	}
 	return "( ".join( " OR ", @sql_and ).")";
 }

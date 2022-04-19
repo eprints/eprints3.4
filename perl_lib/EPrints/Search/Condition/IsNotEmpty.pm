@@ -1,6 +1,6 @@
 ######################################################################
 #
-# EPrints::Search::Condition::IsNull
+# EPrints::Search::Condition::IsNotEmpty
 #
 ######################################################################
 #
@@ -11,15 +11,20 @@
 
 =head1 NAME
 
-B<EPrints::Search::Condition::IsNull> - "IsNull" search condition
+B<EPrints::Search::Condition::IsNotEmpty> - "IsNotEmpty" search 
+condition.
 
 =head1 DESCRIPTION
 
-Matches items where the field is null.
+Matches items where the field is not empty.  Only really applicable 
+for textual fields.  As != '' is equivalent to != 0 for numeric 
+fields, where 0 may not necessarily imply empty (e.g. 
+item_issues_count = 0, means there are no issues for that item 
+rather than the field really being empty.
 
 =cut
 
-package EPrints::Search::Condition::IsNull;
+package EPrints::Search::Condition::IsNotEmpty;
 
 use EPrints::Search::Condition::Comparison;
 
@@ -31,7 +36,7 @@ sub new
 {
 	my( $class, @params ) = @_;
 
-	return $class->SUPER::new( "is_null", @params );
+	return $class->SUPER::new( "is_not_empty", @params );
 }
 
 sub logic
@@ -51,9 +56,10 @@ sub logic
 	my @sql_and = ();
 	foreach my $col_name ( $self->{field}->get_sql_names )
 	{
-		push @sql_and, $db->quote_identifier( $table, $col_name )." IS NULL";
+		push @sql_and,
+			$db->quote_identifier( $table, $col_name )." != ''";
 	}
-	return "( ".join( " AND ", @sql_and ).")";
+	return "( ".join( " OR ", @sql_and ).")";
 }
 
 1;
@@ -62,7 +68,7 @@ sub logic
 
 =for COPYRIGHT BEGIN
 
-Copyright 2021 University of Southampton.
+Copyright 2022 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/

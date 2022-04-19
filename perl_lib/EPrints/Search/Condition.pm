@@ -74,6 +74,7 @@ use EPrints::Search::Condition::LikeList;
 use EPrints::Search::Condition::InSubject;
 use EPrints::Search::Condition::IsNull;
 use EPrints::Search::Condition::IsNotNull;
+use EPrints::Search::Condition::IsNotEmpty;
 use EPrints::Search::Condition::Comparison;
 use EPrints::Search::Condition::Regexp;
 use EPrints::Search::Condition::SubQuery;
@@ -113,6 +114,7 @@ sub new
 	if( $op eq "in_subject" ) { return EPrints::Search::Condition::InSubject->new( @params ); }
 	if( $op eq "is_null" ) { return EPrints::Search::Condition::IsNull->new( @params ); }
 	if( $op eq "is_not_null" ) { return EPrints::Search::Condition::IsNotNull->new( @params ); }
+	if( $op eq "is_not_empty" ) { return EPrints::Search::Condition::IsNotEmpty->new( @params ); }
 	if( $op eq "grep" ) { return EPrints::Search::Condition::Grep->new( @params ); }
 	if( $op eq "regexp" ) { return EPrints::Search::Condition::Regexp->new( @params ); }
 	if( $op eq "like" ) { return EPrints::Search::Condition::Like->new( @params ); }

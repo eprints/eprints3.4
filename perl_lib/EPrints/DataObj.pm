@@ -2526,7 +2526,7 @@ sub tidy
 		my $set = 0;
 		foreach my $item ( @{$value_arrayref} )
 		{
-			if( !EPrints::Utils::is_set( $item ) )
+			if( !EPrints::Utils::is_row_set( $item, $field ) )
 			{
 				$set = 1;
 				next;

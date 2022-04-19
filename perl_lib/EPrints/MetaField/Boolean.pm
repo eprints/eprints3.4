@@ -316,6 +316,17 @@ sub unspecified_phrase
         return $session->html_phrase( "lib/metafield:unspecified_selection" );
 }
 
+sub is_set 
+{
+	my ( $self, $value )  = @_;
+		
+	if ( defined $value && $value eq "FALSE" )
+	{
+		return $self->property( "input_style" ) eq "radio" || $self->property( "input_style" ) eq "menu";
+	}
+	return EPrints::Utils::is_set( $value );
+}
+
 ######################################################################
 1;
 

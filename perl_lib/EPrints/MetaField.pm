@@ -2680,6 +2680,13 @@ sub basename
   return $basename;
 }
 
+sub is_set
+{
+       my ( $self, $value )  = @_;
+
+       return EPrints::Utils::is_set( $value );
+}
+
 
 ######################################################################
 

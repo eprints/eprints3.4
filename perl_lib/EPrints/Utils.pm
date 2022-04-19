@@ -274,6 +274,21 @@ sub is_set
 	return( 1 );
 }
 
+sub is_row_set
+{
+	my( $r, $field ) = @_;
+
+	return is_set( $r ) unless defined $r and ref($r) eq "HASH";
+
+	my $subfields = $field->get_property( "fields_cache" );
+	foreach( @$subfields )
+   	{
+		my $fieldname = $_->get_property( "sub_name" );
+		return 1 if $_->is_set( $r->{$fieldname} );
+	}
+	return 0 ;
+}
+
 # widths smaller than about 3 may totally break, but that's
 # a stupid thing to do, anyway.
 

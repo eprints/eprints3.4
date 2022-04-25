@@ -202,6 +202,7 @@ sub new
 		next if $p_id eq "repository";
 		if( !exists $field_defaults->{$p_id} )
 		{
+			next if $p_id eq "fields" && !( grep $_ eq $self->{type}, qw/ compound multipart / ); # Don't worry about fields not being set if not compound or multipart
 			use Data::Dumper;
 			$self->{repository}->log( "Field '".$self->{dataset}->id.".".$self->{name}."' has invalid parameter:\n$p_id => ".Dumper( $self->{$p_id} ) );
 		}

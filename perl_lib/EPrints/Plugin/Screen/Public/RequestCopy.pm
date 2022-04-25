@@ -62,7 +62,8 @@ sub properties_from
 		$self->{processor}->{contact_email} = $self->{session}->get_repository->call( 
 			"email_for_doc_request", 
 			$self->{session}, 
-			$self->{processor}->{eprint} );
+			$self->{processor}->{eprint},
+			$self->{processor}->{document} );
 	}
 	if( !defined $self->{processor}->{contact_email} )
 	{

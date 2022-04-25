@@ -7,7 +7,7 @@
 # requests for restricted documents can be handled within EPrints.
 $c->{email_for_doc_request} = sub 
 {
-	my ( $repository, $eprint ) = @_;
+	my ( $repository, $eprint, $document ) = @_;
 
 	# Uncomment the line below to turn off this feature
 	#return undef;

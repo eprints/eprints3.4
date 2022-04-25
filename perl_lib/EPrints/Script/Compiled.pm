@@ -683,7 +683,7 @@ sub run_control_url
 
 sub run_contact_email
 {
-	my( $self, $state, $eprint ) = @_;
+	my( $self, $state, $eprint, $doc ) = @_;
 
 	if( !defined $eprint->[0] || ref($eprint->[0]) ne "EPrints::DataObj::EPrint" )
 	{
@@ -696,7 +696,9 @@ sub run_contact_email
 		return [ undef, "STRING" ];
 	}
 
-	return [ $state->{session}->get_repository->call( "email_for_doc_request", $state->{session}, $eprint->[0] ), "STRING" ]; 
+	my $document = defined $doc && defined $doc->[0] ? $doc->[0] : undef;
+
+	return [ $state->{session}->get_repository->call( "email_for_doc_request", $state->{session}, $eprint->[0], $document ), "STRING" ]; 
 }
 
 sub run_uri

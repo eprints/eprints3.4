@@ -1217,6 +1217,14 @@ sub _template_to_text
 		$parent->replaceChild( $done_phrase, $phrase );
 	}
 
+	my @comments = $template->getElementsByTagName("comment");
+	
+	foreach my $comment ( @comments )
+	{
+		my $parent = $comment->getParentNode;
+		$parent->removeChild( $comment )
+	}
+		
 	$self->_divide_attributes( $template, $divide );
 
 	my @r = split( "$divide", $self->xhtml->to_xhtml( $template ) );

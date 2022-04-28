@@ -6002,9 +6002,51 @@ sub in_export_fieldlist
 }
 
 
-1;
+######################################################################
+=pod
 
+=begin InternalDoc
 
+=item $Boolean = $repository->aut_last_modified( $type )
+
+Return an integer (seconds since start of last epoch) for the last 
+modified file that contributes to one of EPrints auto files for either
+style or javascript.
+
+=end InternalDoc
+
+=cut
+######################################################################
+
+sub auto_last_modified
+{
+
+	my ( $self, $type ) = @_;
+
+	my $style_path = "/static/$type/auto/";
+	
+	my $last_modified_time = EPrints::Utils::last_modified_time_in_dir( $self->config( "lib_path" ).$style_path );
+
+    my $flavour = $self->config( "flavour" );
+    my $lib_order = $self->config('flavours')->{$flavour};
+    foreach ( @$lib_order )
+    {
+        my $dir = $self->config( "base_path" )."/$_".$style_path;
+        if( ! -e $dir )
+        {
+            next;
+        }
+		my $new_last_modified_time = EPrints::Utils::last_modified_time_in_dir( $dir );
+		$last_modified_time = ( $new_last_modified_time > $last_modified_time ) ? $new_last_modified_time : $last_modified_time;
+    }
+
+	my $new_last_modified_time = EPrints::Utils::last_modified_time_in_dir( $self->config( "config_path" ).$style_path );
+	$last_modified_time = ( $new_last_modified_time > $last_modified_time ) ? $new_last_modified_time : $last_modified_time;
+	
+	return $last_modified_time;
+}
+
+1;		
 
 =head1 COPYRIGHT
 

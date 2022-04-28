@@ -1540,6 +1540,26 @@ sub validate_email
 	return defined $email && $email =~ m/^[a-zA-Z0-9.!#$%&’*+i\/=\?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 }
 
+# EPrints::Utils::last_modified_time_in_dir ( $dir );
+# Get seconds since start of last epoch for last modified file in a particular directory (non-recursive).
+sub last_modified_time_in_dir
+{
+	my ( $dir ) = @_;
+
+	opendir my $dh, $dir or return 0; 
+	my $last_modified_time = 0;
+	while ( defined( my $file = readdir($dh) ) ) {
+		my $path = File::Spec->catfile( $dir, $file );
+		next if -d $path; # skip directories
+		my $modified_time = (stat($path))[9];
+		if ( $modified_time > $last_modified_time )
+		{
+			$last_modified_time = $modified_time;
+		}
+	}
+	return $last_modified_time;
+}
+
 1;
 
 =head1 COPYRIGHT

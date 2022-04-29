@@ -6018,14 +6018,14 @@ style or javascript.
 =cut
 ######################################################################
 
-sub auto_last_modified
+sub auto_most_recent
 {
 
 	my ( $self, $type ) = @_;
 
 	my $style_path = "/static/$type/auto/";
 	
-	my $last_modified_time = EPrints::Utils::last_modified_time_in_dir( $self->config( "lib_path" ).$style_path );
+	my $most_recent_time = EPrints::Utils::most_recent_time_in_dir( $self->config( "lib_path" ).$style_path );
 
     my $flavour = $self->config( "flavour" );
     my $lib_order = $self->config('flavours')->{$flavour};
@@ -6036,14 +6036,14 @@ sub auto_last_modified
         {
             next;
         }
-		my $new_last_modified_time = EPrints::Utils::last_modified_time_in_dir( $dir );
-		$last_modified_time = ( $new_last_modified_time > $last_modified_time ) ? $new_last_modified_time : $last_modified_time;
+		my $new_most_recent_time = EPrints::Utils::most_recent_time_in_dir( $dir );
+		$most_recent_time = $new_most_recent_time if $new_most_recent_time < $most_recent_time;
     }
 
-	my $new_last_modified_time = EPrints::Utils::last_modified_time_in_dir( $self->config( "config_path" ).$style_path );
-	$last_modified_time = ( $new_last_modified_time > $last_modified_time ) ? $new_last_modified_time : $last_modified_time;
-	
-	return $last_modified_time;
+	my $new_most_recent_time = EPrints::Utils::most_recent_time_in_dir( $self->config( "config_path" ).$style_path );
+	$most_recent_time = $new_most_recent_time if $new_most_recent_time < $most_recent_time;
+
+	return $most_recent_time;
 }
 
 1;		

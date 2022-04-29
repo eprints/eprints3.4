@@ -1541,23 +1541,21 @@ sub validate_email
 }
 
 # EPrints::Utils::last_modified_time_in_dir ( $dir );
-# Get seconds since start of last epoch for last modified file in a particular directory (non-recursive).
-sub last_modified_time_in_dir
+# Get decimal value in days relative to the start time of the process for file most recently modified (non-recursive).
+sub most_recent_time_in_dir
 {
 	my ( $dir ) = @_;
 
-	opendir my $dh, $dir or return 0; 
-	my $last_modified_time = 0;
+	opendir my $dh, $dir or return 1000000000; # I.e. an impossibly large number of days.
+	my $most_recent_modified_time = 1000000000; # Initially an impossibly large number of days.
 	while ( defined( my $file = readdir($dh) ) ) {
-		my $path = File::Spec->catfile( $dir, $file );
-		next if -d $path; # skip directories
-		my $modified_time = (stat($path))[9];
-		if ( $modified_time > $last_modified_time )
+		my $modified_time = -M "$dir/$file";
+		if ( $modified_time < $most_recent_modified_time )
 		{
-			$last_modified_time = $modified_time;
+			$most_recent_modified_time = $modified_time;
 		}
 	}
-	return $last_modified_time;
+	return $most_recent_modified_time;
 }
 
 1;

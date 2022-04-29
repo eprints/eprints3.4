@@ -6007,43 +6007,31 @@ sub in_export_fieldlist
 
 =begin InternalDoc
 
-=item $Boolean = $repository->aut_last_modified( $type )
+=item $timestamp = $repository->auto_timestamp( $type )
 
-Return an integer (seconds since start of last epoch) for the last 
-modified file that contributes to one of EPrints auto files for either
-style or javascript.
+Return an integer (seconds since start of last epoch) for the 
+modification time of the generated auto with C<$type> file from 
+L<EPrints::Update::Static::update_auto>
 
 =end InternalDoc
 
 =cut
 ######################################################################
 
-sub auto_most_recent
+sub auto_timestamp
 {
 
 	my ( $self, $type ) = @_;
 
-	my $style_path = "/static/$type/auto/";
-	
-	my $most_recent_time = EPrints::Utils::most_recent_time_in_dir( $self->config( "lib_path" ).$style_path );
-
-    my $flavour = $self->config( "flavour" );
-    my $lib_order = $self->config('flavours')->{$flavour};
-    foreach ( @$lib_order )
-    {
-        my $dir = $self->config( "base_path" )."/$_".$style_path;
-        if( ! -e $dir )
-        {
-            next;
-        }
-		my $new_most_recent_time = EPrints::Utils::most_recent_time_in_dir( $dir );
-		$most_recent_time = $new_most_recent_time if $new_most_recent_time < $most_recent_time;
-    }
-
-	my $new_most_recent_time = EPrints::Utils::most_recent_time_in_dir( $self->config( "config_path" ).$style_path );
-	$most_recent_time = $new_most_recent_time if $new_most_recent_time < $most_recent_time;
-
-	return $most_recent_time;
+	my $auto_ts_file = $self->get_conf( "variables_path" )."/auto-$type.timestamp";
+	if ( -s $auto_ts_file ) 
+	{
+		open( my $fh, '<', $auto_ts_file ) or return 0;
+		my $ts = <$fh>;
+		close( $fh );
+		return $ts;
+	}
+	return 0;
 }
 
 1;		

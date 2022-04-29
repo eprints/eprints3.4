@@ -290,6 +290,11 @@ sub update_auto
 
 	close($fh);
 
+	my $target_ts = $repo->get_conf( "variables_path" ) . "/auto-$ext.timestamp";
+	open(my $fh_ts, ">:raw", $target_ts ) or EPrints::abort( "Can't write to $target_ts: $!" );
+	print $fh_ts $target_time;
+	close($fh);
+
 	return $target;
 }
 

@@ -1540,24 +1540,6 @@ sub validate_email
 	return defined $email && $email =~ m/^[a-zA-Z0-9.!#$%&’*+i\/=\?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 }
 
-# EPrints::Utils::last_modified_time_in_dir ( $dir );
-# Get decimal value in days relative to the start time of the process for file most recently modified (non-recursive).
-sub most_recent_time_in_dir
-{
-	my ( $dir ) = @_;
-
-	opendir my $dh, $dir or return 1000000000; # I.e. an impossibly large number of days.
-	my $most_recent_modified_time = 1000000000; # Initially an impossibly large number of days.
-	while ( defined( my $file = readdir($dh) ) ) {
-		my $modified_time = -M "$dir/$file";
-		if ( $modified_time < $most_recent_modified_time )
-		{
-			$most_recent_modified_time = $modified_time;
-		}
-	}
-	return $most_recent_modified_time;
-}
-
 1;
 
 =head1 COPYRIGHT

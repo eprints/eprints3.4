@@ -920,18 +920,25 @@ sub tree2
 		{
 			my( $key, $children, %nopts ) = @$node;
 	
-			my $subjectid = ( ref($key) ? $key->get_id : $key );
-			$subjectid =~ s/[^a-zA-Z0-9_-]/_/g;
+			my %dt_attrs;
+			my %dd_attrs;
+			if ( ref($key) eq "EPrints::DataObj::Subject" ) 
+			{
+				my $subjectid = $key->get_id;
+				$subjectid =~ s/[^a-zA-Z0-9_-]/_/g;
+				$dt_attrs{id} = "ep_subj_title_" . $subjectid;
+				$dd_attrs{id} = "ep_subj_desc_" . $subjectid;
+			}
 
 			$dl->appendChild( $xml->create_data_element( "dt",
 				$opts{render_value}( @$node ),
 				class => ($nopts{show} ? "$opts{class} $opts{class}_open" : $opts{class}),
-				id => "ep_subj_title_".$subjectid,
+				%dt_attrs,
 			) );
 			$dl->appendChild( $xml->create_data_element( "dd",
 				$self->tree2( $children, %opts ),
 				class => ($nopts{show} ? "" : "ep_no_js"),
-				id => "ep_subj_desc_".$subjectid,
+				%dd_attrs,
 			) );
 		}
 		else

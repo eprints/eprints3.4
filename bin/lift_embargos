@@ -65,6 +65,11 @@ Explain in detail what is going on. May be repeated for greater effect.
 
 Don't perform an actual changes.
 
+=item B<--retain>
+
+Don't unset date_embargo and embargo reason just set security to public.  
+Only use after reviewing how date_embargos field is used within the archive.
+
 =item B<--version>
 
 Output version information and exit.
@@ -85,6 +90,7 @@ my $quiet = 0;
 my $help = 0;
 my $man = 0;
 my $dryrun = 0;
+my $retain = 0;
 
 Getopt::Long::Configure("permute");
 
@@ -96,6 +102,7 @@ GetOptions(
 	'silent' => \$quiet,
 	'quiet' => \$quiet,
 	'dry-run' => \$dryrun,
+	'retain' => \$retain,
 ) || pod2usage( 2 );
 EPrints::Utils::cmd_version( "lift_embargos" ) if $version;
 pod2usage( 1 ) if $help;
@@ -127,6 +134,17 @@ my $searchexp = new EPrints::Search(
 my $date = '-' . EPrints::Time::iso_date();
 $searchexp->add_field( $ds->get_field( "date_embargo" ), $date );
 
+if ( $retain )
+{
+	my $sec_field = $ds->get_field( "security" );
+	my @not_public = ();
+	foreach my $sec_opt ( $sec_field->get_unsorted_values ) 
+	{
+		push @not_public, $sec_opt unless $sec_opt eq "public";
+	}
+	$searchexp->add_field( $sec_field, join( ' ', @not_public ), "IN", "ANY" );
+}
+
 my $list = $searchexp->perform_search;
 
 # For matching documents, remove embargo date value,
@@ -147,8 +165,11 @@ $list->map( sub {
 	if( !$dryrun )
 	{
 		$doc->set_value( "security", "public" );
-		$doc->set_value( "date_embargo", undef );
-		$doc->set_value( "embargo_reason", undef );
+		unless ( $retain )
+		{
+			$doc->set_value( "date_embargo", undef );
+			$doc->set_value( "embargo_reason", undef );
+		}
 		$doc->commit( 1 ); # pass force through to parent eprint
 		$eprint->generate_static;
 
@@ -159,6 +180,14 @@ $list->map( sub {
 		}
 	}
 } );
+
+unless ( $dryrun )
+{	
+	my $lift_embargos_ts = $session->get_conf( "variables_path" ) . "/lift_embargos.timestamp";
+	open(my $fh_ts, ">:raw", $lift_embargos_ts) or EPrints::abort( "Can't write to $lift_embargos_ts: $!" );
+	print $fh_ts EPrints::Time::human_time();
+	close($fh_ts);
+}
 
 $session->terminate();
 

@@ -14,7 +14,7 @@
 <epc:if test="main"><br/><span class="document_filename"><epc:print expr="main"/></span></epc:if>
 <epc:if test="content"> - <epc:print expr="content" /></epc:if>
 <epc:if test="security != 'public'">
-  <br /><epc:phrase ref="document_security_info" /> <epc:print expr="security"/><epc:if test="date_embargo"> <epc:phrase ref="document_embargo_info" /> <epc:print expr="date_embargo"/>.</epc:if> </epc:if>
+  <br /><epc:phrase ref="document_security_info" /> <epc:print expr="security"/><epc:if test="date_embargo and date_embargo gt today()"> <epc:phrase ref="document_embargo_info" /> <epc:print expr="date_embargo"/>.</epc:if> </epc:if>
 <epc:if test="license">
   <br /><epc:phrase ref="document_license_restriction_info" /> <epc:phrase ref="document_fieldname_license" /> <epc:phrase ref="licenses_description_{license.as_string()}" />.
 </epc:if>

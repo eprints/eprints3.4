@@ -67,8 +67,8 @@ Don't perform an actual changes.
 
 =item B<--retain>
 
-Don't unset date_embargo and embargo reason just set security to public.  
-Only use after reviewing how date_embargos field is used within the archive.
+Don't unset C<date_embargo> and C<embargo_reason> just set C<security> to I<public>.  
+Only use after reviewing how C<date_embargo> field is used within the archive.
 
 =item B<--version>
 

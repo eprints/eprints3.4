@@ -3270,6 +3270,7 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="Plugin/InputForm/Component/Upload:really_next">Wait! You have selected a file to upload but not actually uploaded it. Do you wish to continue without uploading the file?</epp:phrase>
 
     <epp:phrase id="Plugin/InputForm/Component/Documents:document_problem">In <epc:pin name="document" /> document: <epc:pin name="problem" /></epp:phrase>
+    <epp:phrase id="Plugin/InputForm/Component/Documents:upload_failed" ref="Plugin/InputForm/Component/Upload:upload_failed"/>
 
     <!-- Subject component -->
     <epp:phrase id="Plugin/InputForm/Component/Field/Subject:selections">Current selections:</epp:phrase>
@@ -3831,14 +3832,12 @@ PY = 2006 and OG = (Cambridge)<br />
 
 <epp:phrase id="event_queue_fieldname_eventqueueid">Id</epp:phrase>
 <epp:phrase id="event_queue_fieldname_status">Status</epp:phrase>
-<epp:phrase id="event_queue_fieldhelp_status"/>
 <epp:phrase id="event_queue_fieldopt_status_success">Success</epp:phrase>
 <epp:phrase id="event_queue_fieldopt_status_inprogress">In Progress</epp:phrase>
 <epp:phrase id="event_queue_fieldopt_status_waiting">Waiting</epp:phrase>
 <epp:phrase id="event_queue_fieldopt_status_failed">Failed</epp:phrase>
 <epp:phrase id="event_queue_fieldname_priority">Priority</epp:phrase>
 <epp:phrase id="event_queue_fieldname_start_time">Start Time</epp:phrase>
-<epp:phrase id="event_queue_fieldhelp_start_time"/>
 <epp:phrase id="event_queue_fieldname_end_time">Completed</epp:phrase>
 <epp:phrase id="event_queue_fieldname_hash">Event Hash</epp:phrase>
 <epp:phrase id="event_queue_fieldname_action">Action</epp:phrase>

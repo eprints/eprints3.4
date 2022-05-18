@@ -1,14 +1,14 @@
 $c->{flavour_id} = "pub";
 $c->{flavour_name} = "Publication";
-$c->{flavour_version} = "1.3";
+$c->{flavour_version} = "1.4";
 
-$c->{version_alias} = "Banana Bread Rainbow";
+$c->{version_alias} = "Amaretti Biscuit Haboob";
 
 =head1 COPYRIGHT
 
 =for COPYRIGHT BEGIN
 
-Copyright 2021 University of Southampton.
+Copyright 2022 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/

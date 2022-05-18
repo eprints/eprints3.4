@@ -47,7 +47,7 @@ EPrints can be contacted in the real world at
 
 =head1 COPYRIGHT
 
-Copyright 2000-2021 University of Southampton.
+Copyright 2000-2022 University of Southampton.
 
 EPrints is free software: you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published

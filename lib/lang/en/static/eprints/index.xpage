@@ -119,7 +119,7 @@
 
 <div style="text-align: center; margin-top: 2em;">
   <img src="{$config{rel_path}}/images/ecslogo.jpg" border="0" alt="School of Electronics and Computer Science, University of Southampton" align="top"/>
-  <p>EPrints is Copyright &#169; University of Southampton, 2000-2021.</p>
+  <p>EPrints is Copyright &#169; University of Southampton, 2000-2022.</p>
 </div>
 
 </xpage:body>

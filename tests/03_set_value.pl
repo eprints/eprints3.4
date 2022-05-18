@@ -69,7 +69,7 @@ is( $tf->get_value( $eprint )->[0], "1234-12-31 23:59:59", "set multiple time va
 
 =for COPYRIGHT BEGIN
 
-Copyright 2021 University of Southampton.
+Copyright 2022 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/

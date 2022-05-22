@@ -542,7 +542,7 @@ sub validate
 			return @probs if $date[2] < 1 || $date[2] > 31;
 			return @probs if $date[2] == 31 && grep( /^$date[1]$/, ( '02', '04', '06', '09', '11' ) );
 			return @probs if $date[2] == 30 && $date[1] == 2;
-			return @probs if $date[2] == 29 && $date[1] == 2 && ( $date[0] % 4 != 0 || ( $date[0] % 100 == 0 && $date[0] % 1000 != 0 ) );
+			return @probs if $date[2] == 29 && $date[1] == 2 && ( $date[0] % 4 != 0 || ( $date[0] % 100 == 0 && $date[0] % 400 != 0 ) );
 			return @probs if $resolution > 3 && ( $date[3] < 0 || $date[3] > 23 );
 			return @probs if $resolution > 4 && ( $date[4] < 0 || $date[4] > 59 );
 			return @probs if $resolution == 6 && ( $date[5] < 0 || $date[5] > 59 );

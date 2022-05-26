@@ -908,7 +908,8 @@ sub action_download_full_file {
 	$session->send_http_header( content_type=>"text/html" );
 	EPrints::Apache::AnApache::header_out(
 			$self->{session}->get_request,
-			"Content-Disposition: attachment; filename=".$filename."html;"
+			"Content-Disposition", 
+			"attachment; filename=".$filename."html;"
 			);
 	print join( "", @output )."\n";
 	exit;

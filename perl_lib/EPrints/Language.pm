@@ -261,7 +261,7 @@ sub phrase
 			$self->{id},
 			(caller(1))[2,1] ) );
 		my $frag = $session->make_doc_fragment;
-		$frag->appendChild( $session->make_text( '["'.$phraseid.'" not defined' ) );
+		$frag->appendChild( $session->make_text( "['".$phraseid."' not defined" ) );
 		if( scalar(keys %$inserts) )
 		{
 			my $dl = $session->make_element( "dl", class => "ep_undefined_phrase"  );

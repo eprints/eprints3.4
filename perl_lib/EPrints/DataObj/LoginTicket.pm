@@ -320,7 +320,7 @@ sub session_key
 	my ($class, $repo) = @_;
 
 	my $host = $repo->config('host');
-	$host ||= $repo->config('securehost')
+	$host ||= $repo->config('securehost');
 	return join ':', $SESSION_KEY, $host;
 }
 

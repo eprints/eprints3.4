@@ -60,7 +60,10 @@ foreach my $ds_id ( sort keys %counts )
 }
 
 # version
-print "version: " . EPrints->human_version . " " . $repo->config( "vendor_short" ) . "\n";
+my $version = EPrints->human_version;
+$version .= "-" . $repo->config( "version_extra" ) if $repo->config( "version_extra" );
+$version .= " " . $repo->config( "vendor_short" );
+print "version: $version\n";
 foreach my $key ( qw / version_description version_long version_alias vendor_long vendor_short flavour_id flavour_version flavour_name / )
 {
 	print $key . ": " . $repo->config( $key ) . "\n";

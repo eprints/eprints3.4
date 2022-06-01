@@ -775,7 +775,7 @@ sub url_stem { "" }
 
 =item $xhtml_phrase = $epm->html_phrase( $phraseid, [ @pins ] )
 
-Returns and XHTML DOM oject of the HTML phrase for and EPM with the
+Returns and XHTML DOM object of the HTML phrase for and EPM with the
 C<$phraseid> using the C<@pins> provided if required.
 
 =cut

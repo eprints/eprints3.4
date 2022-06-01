@@ -853,7 +853,7 @@ sub allow_priv
 
 =item $rc = EPrints::Apache::REST::get_dataobj_xml( $repository, $object, $rights_object )
 
-Returns XML ot REST request to get a data object.
+Returns XML or REST request to get a data object.
 
 =cut
 ######################################################################

@@ -27,7 +27,7 @@ sub new ($$$$$$$$$$;$$) {
         ($iNo, $sNm, $iType, $iPrev, $iNext, $iDir, $raTime1st, $raTime2nd,
          $iStart, $iSize, $sData, $raChild);
   }
-  elsif($iType == OLE::Storage_Lite::PpsType_Dir()) { #DIRECTRY
+  elsif($iType == OLE::Storage_Lite::PpsType_Dir()) { #DIRECTORY
     return OLE::Storage_Lite::PPS::Dir->_new
         ($iNo, $sNm, $iType, $iPrev, $iNext, $iDir, $raTime1st, $raTime2nd,
          $iStart, $iSize, $sData, $raChild);
@@ -268,7 +268,7 @@ sub save($$;$$) {
 
   #3.Make Small Data string (write SBD)
   my $sSmWk = $oThis->_makeSmallData(\@aList, $rhInfo);
-  $oThis->{Data} = $sSmWk;  #Small Datas become RootEntry Data
+  $oThis->{Data} = $sSmWk;  #Small Data become RootEntry Data
 
   #4. Write BB
   my $iBBlk = $iSBDcnt;
@@ -277,7 +277,7 @@ sub save($$;$$) {
   #5. Write PPS
   $oThis->_savePps(\@aList, $rhInfo);
 
-  #6. Write BD and BDList and Adding Header informations
+  #6. Write BD and BDList and Adding Header information
   $oThis->_saveBbd($iSBDcnt, $iBBcnt, $iPPScnt,  $rhInfo);
 
   #7.Close File
@@ -496,7 +496,7 @@ sub _savePpsSetPnt2($$$)
       push @$raList, $aThis->[$iPos];
       $aThis->[$iPos]->{No} = $#$raList;
 
-#1.3.2 Devide a array into Previous,Next
+#1.3.2 Divide a array into Previous,Next
       $aThis->[$iPos]->{NextPps} = _savePpsSetPnt2(
             \@aNext, $raList, $rhInfo);
       $aThis->[$iPos]->{DirPps} = _savePpsSetPnt2($aThis->[$iPos]->{Child}, $raList, $rhInfo);
@@ -532,7 +532,7 @@ sub _savePpsSetPnt2s($$$)
       push @$raList, $aThis->[$iPos];
       $aThis->[$iPos]->{No} = $#$raList;
       my @aWk = @$aThis;
-#1.3.2 Devide a array into Previous,Next
+#1.3.2 Divide a array into Previous,Next
       my @aPrev = splice(@aWk, 0, $iPos);
       my @aNext = splice(@aWk, 1, $iCnt - $iPos -1);
       $aThis->[$iPos]->{PrevPps} = _savePpsSetPnt2(
@@ -571,7 +571,7 @@ sub _savePpsSetPnt($$$)
       push @$raList, $aThis->[$iPos];
       $aThis->[$iPos]->{No} = $#$raList;
       my @aWk = @$aThis;
-#1.3.2 Devide a array into Previous,Next
+#1.3.2 Divide a array into Previous,Next
       my @aPrev = splice(@aWk, 0, $iPos);
       my @aNext = splice(@aWk, 1, $iCnt - $iPos -1);
       $aThis->[$iPos]->{PrevPps} = _savePpsSetPnt(
@@ -610,7 +610,7 @@ sub _savePpsSetPnt1($$$)
       push @$raList, $aThis->[$iPos];
       $aThis->[$iPos]->{No} = $#$raList;
       my @aWk = @$aThis;
-#1.3.2 Devide a array into Previous,Next
+#1.3.2 Divide a array into Previous,Next
       my @aPrev = splice(@aWk, 0, $iPos);
       my @aNext = splice(@aWk, 1, $iCnt - $iPos -1);
       $aThis->[$iPos]->{PrevPps} = _savePpsSetPnt(
@@ -1516,11 +1516,11 @@ Dir pps (as No).
 
 =item Time1st
 
-Timestamp 1st in array ref as similar fomat of localtime.
+Timestamp 1st in array ref as similar format of localtime.
 
 =item Time2nd
 
-Timestamp 2nd in array ref as similar fomat of localtime.
+Timestamp 2nd in array ref as similar format of localtime.
 
 =item StartBlock
 
@@ -1619,7 +1619,7 @@ C<$sData> is data of the PPS.
 
     $oRoot = OLE::Storage_Lite::PPS::File->newFile($sName, $sFile);
 
-This function makes to use file handle for geting and storing data.
+This function makes to use file handle for getting and storing data.
 
 C<$sName> is name of the PPS.
 

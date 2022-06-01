@@ -205,7 +205,7 @@ sub get_uri {
     my $self    = shift;
     my $prefix  = shift;
 
-    warn "Prefix must not be undef in get_uri(). The emtpy prefix must be ''" unless defined $prefix;
+    warn "Prefix must not be undef in get_uri(). The empty prefix must be ''" unless defined $prefix;
 
     return $self->[NSMAP]->[-1]->[DEFAULT] if $prefix eq '';
     return $self->[NSMAP]->[-1]->[PREFIX_MAP]->{$prefix} if exists $self->[NSMAP]->[-1]->[PREFIX_MAP]->{$prefix};

@@ -284,7 +284,7 @@ BibTeX::Parser::Entry - Contains a single entry of a BibTeX document.
 
 =head1 SYNOPSIS
 
-This class ist a wrapper for a single BibTeX entry. It is usually created
+This class is a wrapper for a single BibTeX entry. It is usually created
 by a BibTeX::Parser.
 
     use BibTeX::Parser::Entry;

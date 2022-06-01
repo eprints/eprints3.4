@@ -223,7 +223,7 @@ sub run
 
 Maps the function C<$fn> onto every eprint in this import.
 
-C<$info> provides additonal information that may need to be processed
+C<$info> provides additional information that may need to be processed
 by the function C<$fn>.
 
 =cut

@@ -26,7 +26,7 @@ L<EPrints::Database>.
 
 =item metafieldid (counter)
 
-The unique identifer for the metafield.
+The unique identifier for the metafield.
 
 =item mfdatasetid (set)
 

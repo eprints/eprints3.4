@@ -170,7 +170,7 @@ purely for internal repository use. General information like your name, URL,
 address and e-mail address are public, so it's inadvisable to put down a
 home address. (Usually a postal address isn't required.) Information about
 your operating system is purely to help the repository administrators help
-you if you encouter problems. </p>
+you if you encounter problems. </p>
 
 <p>Enter the relevant information in the form. Those boxes where the field
 name (on the left of the box) has an asterisk are required fields that you
@@ -509,7 +509,7 @@ the HTML contains a link to node1.html then node1.html will be copied. If
 the link points to http://somewebsite.edu/bar.html, then that URL will not
 be copied. </p>
 
-<p>Only files at the same depth or deeper in the Web site file hierachy
+<p>Only files at the same depth or deeper in the Web site file hierarchy
 are retrieved. For example, if a link points to /index.html or
 ../index.html, the file will not be copied. </p>
 

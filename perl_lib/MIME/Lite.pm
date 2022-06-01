@@ -1361,7 +1361,7 @@ sub fields {
 	### Create parallel array to @fields, called @ranked.
 	### It contains fields tagged with numbers like 2003, where the
 	### 3 is the original 0-based position, and 2000 indicates that
-	### we wanted ths type of field to go second.
+	### we wanted this type of field to go second.
 	my @ranked = map {
 	    [
 	     ($_ + 1000*($rank{lc($fields[$_][0])} || (2+$#order))),
@@ -3182,7 +3182,7 @@ L<Mail::Address|Mail::Address>, L<MIME::Base64|MIME::Base64>,
 L<MIME::QuotedPrint|MIME::QuotedPrint>.
 
 If they aren't present then some functionality won't work, and other features
-wont be as efficient or up to date as they could be. Nevertheless they are optional
+won't be as efficient or up to date as they could be. Nevertheless they are optional
 extras.
 
 =head1 BUNDLED GOODIES
@@ -3217,7 +3217,7 @@ of not using Test::More that I can see.
 
 Bug fixes / Patches / Contribution are welcome, however I probably won't apply them
 unless they also have an associated test. This means that if I dont have the time to
-write the test the patch wont get applied, so please, include tests for any patches
+write the test the patch won't get applied, so please, include tests for any patches
 you provide.
 
 =head1 VERSION

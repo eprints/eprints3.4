@@ -49,8 +49,8 @@ sub process
 	{
 		EPrints::abort( "no node passed to epc process" );
 	}
-# cjg - Potential bug if: <ifset a><ifset b></></> and ifset a is disposed
-# then ifset: b is processed it will crash.
+# cjg - Potential bug if: <if set a><if set b></></> and if set a is disposed
+# then if set b is processed it will crash.
 	
 	if( EPrints::XML::is_dom( $node, "Element" ) )
 	{

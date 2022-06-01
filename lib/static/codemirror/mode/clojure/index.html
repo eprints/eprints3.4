@@ -43,7 +43,7 @@
     (print (if (board [x y]) "[X]" " . "))))
 
 (defn display-grids 
-  "Prints a squence of boards on *out*, representing several steps."
+  "Prints a sequence of boards on *out*, representing several steps."
   [grids w h]
   (doseq [board grids]
     (print-board board w h)

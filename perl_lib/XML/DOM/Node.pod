@@ -347,7 +347,7 @@ Return Value: the index or -1 if the node is not found.
 
 =item getChildAtIndex (index)
 
-Returns the child node at the specifed index or undef.
+Returns the child node at the specified index or undef.
 
 =item addText (text)
 

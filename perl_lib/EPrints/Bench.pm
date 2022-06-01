@@ -56,7 +56,7 @@ sub clear
 ######################################################################
 =pod
 
-=item EPrints::Banch::hitime()
+=item EPrints::Bench::hitime()
 
 Returns an integer representing the number of microseconds since the 
 start of the epoch.

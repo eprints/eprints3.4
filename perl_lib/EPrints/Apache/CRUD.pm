@@ -2048,7 +2048,7 @@ sub servicedocument
 
 Submit CRUD request on behalf od another user.
 
-Returns HTTPS response code based on wehther request on behalf of is 
+Returns HTTPS response code based on whether request on behalf of is 
 permitted.
 
 =cut

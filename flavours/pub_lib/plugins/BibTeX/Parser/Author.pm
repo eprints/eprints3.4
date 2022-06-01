@@ -313,7 +313,7 @@ BibTeX::Author - Contains a single author for a BibTeX document.
 
 =head1 SYNOPSIS
 
-This class ist a wrapper for a single BibTeX author. It is usually created
+This class is a wrapper for a single BibTeX author. It is usually created
 by a BibTeX::Parser.
 
     use BibTeX::Parser::Author;

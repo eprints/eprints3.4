@@ -484,7 +484,7 @@ C<use constant> works for scalars and arrays, not hashes.
 
 =item *
 
-These constants are global ot the package in which they're declared;
+These constants are global or the package in which they're declared;
 cannot be lexically scoped.
 
 =item *

@@ -9,7 +9,7 @@
 
 =head1 NAME
 
-B<upgrade> - Upgrade the stucture of the database to be compatible with
+B<upgrade> - Upgrade the structure of the database to be compatible with
 a newer version of eprints.
 
 If upgrading requires more than one step then the system will perform

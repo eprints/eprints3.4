@@ -39,7 +39,7 @@ The unique numerical ID of this history event.
 
 =item actor (text)
 
-A text representation of the actor reponsible for the action for
+A text representation of the actor responsible for the action for
 this history event.  This may be the name of a script or application
 or a user's name.
 
@@ -289,7 +289,7 @@ sub remove
 =item $defaults = EPrints::DataObj::History->get_defaults( $session, $data, [ $dataset ] )
 
 Returns default values for this history data object based on the 
-starting C<$data> and for ths C<$dataset> if specified.
+starting C<$data> and for the C<$dataset> if specified.
 
 =cut
 ######################################################################

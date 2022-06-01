@@ -1107,7 +1107,7 @@ $dataobj->get_value_raw( $fieldname )
 
 Get a the raw value of a metadata field with C<$fieldname> from data 
 object's C<data> hash reference rather than using C<get_value> on 
-L<EPrints::MetaField>. If C<$fieldname> is undefiend generate an 
+L<EPrints::MetaField>. If C<$fieldname> is undefined generate an 
 C<EPrints::abort>.  
 
 =cut

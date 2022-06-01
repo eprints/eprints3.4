@@ -60,7 +60,7 @@ If this is set then just output the single, specified item or items.
 
 =item B<--arg key=value>
 
-Add an argument to the export plugin. May be repeated. Effects depend on te export plugin.
+Add an argument to the export plugin. May be repeated. Effects depend on the export plugin.
 
 =item B<--help>
 

@@ -74,7 +74,8 @@ sub init
 		return 1 if !$@;
 	}
 
-	print STDERR "*** DEPRECATION WARNING ***\nIn future versions, EPrints will be standardising to only support the LibXML library for providing XML functionality.  Please ensure LibXML is installed before upgrading EPrints.\n";
+	print STDERR "*** DEPRECATION WARNING ***
+In future versions, EPrints will be standardising to only support the LibXML library for providing XML functionality.  Please ensure LibXML is installed before upgrading EPrints.\n";
 
 	if( !$disable_gdome )
 	{

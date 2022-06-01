@@ -96,7 +96,7 @@ sub process
 }
 
 #
-# Started working on this, targetted clients don't need it, never finished.
+# Started working on this, targeted clients don't need it, never finished.
 #
 
 # sub proppatch
@@ -218,7 +218,7 @@ sub copy_file
 {
     my ($self, $r, $handler, $source, $destination, $overwrite) = @_;
 
-    # If the destination already exists and it's a directory, we can't proceeed
+    # If the destination already exists and it's a directory, we can't proceed
     if($handler->test('d', $destination))
     {
         return HTTP_NO_CONTENT; # litmus/spec requires this...

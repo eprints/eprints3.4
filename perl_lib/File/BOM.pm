@@ -234,7 +234,7 @@ If the file doesn't contain a BOM, $default_mode is used instead. Hence:
 Opens my_file.txt for reading in an appropriate encoding found from the BOM in
 that file, or as a UTF-8 file if none is found.
 
-In the absense of a $default_mode argument, the following 2 calls should be equivalent:
+In the absence of a $default_mode argument, the following 2 calls should be equivalent:
 
     open_bom(FH, 'no_bom.txt');
 

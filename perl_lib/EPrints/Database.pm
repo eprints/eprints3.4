@@ -2890,7 +2890,7 @@ sub get_ids_by_field_values
 
 =item @events = $db->dequeue_events( $n )
 
-Attempt to dequeue upto C<$n> events. May return between C<0> and 
+Attempt to dequeue up to C<$n> events. May return between C<0> and 
 C<$n> events depending on parallel processes and how many events are 
 remaining in the queue.
 

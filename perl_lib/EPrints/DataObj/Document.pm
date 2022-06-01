@@ -587,7 +587,7 @@ sub get_baseurl
 
 =item $boolean = $doc->is_public
 
-Returnes C<true> if this document has no security set and is in the 
+Returns C<true> if this document has no security set and is in the 
 live archive. Otherwise, returns C<false>.
 
 =cut

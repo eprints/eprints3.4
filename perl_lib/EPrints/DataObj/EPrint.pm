@@ -2387,7 +2387,7 @@ sub remove_lock
 =item $boolean = $eprint->could_obtain_lock( $user )
 
 Return a boolean depending on whether the specified C<$user> could 
-obtain ane edit lock on this eprint.
+obtain an edit lock on this eprint.
 
 =cut
 ######################################################################

@@ -17,11 +17,11 @@ B<EPrints::Citation> - Loading and rendering of citation styles.
 
 =head1 DESCRIPTION
 
-Renders citations for data objects using a paticular style defined
+Renders citations for data objects using a particular style defined
 in it own configuration file.
 
 This is an abstract class used by L<EPrints::Citation::EPC> and 
-L<EPrints::Citation::XSL> whichb use XML EPC and XSL respecively to
+L<EPrints::Citation::XSL> whichb use XML EPC and XSL respectively to
 define citation style files.
 
 =head2 SYNOPSIS

@@ -2157,7 +2157,7 @@ $.effects.animateClass = function( value, duration, easing, callback ) {
 				} );
 			} );
 
-			// This is guarnteed to be there if you use jQuery.speed()
+			// This is guaranteed to be there if you use jQuery.speed()
 			// it also handles dequeuing the next anim...
 			o.complete.call( animated[ 0 ] );
 		} );
@@ -6334,7 +6334,7 @@ var widgetsControlgroup = $.widget( "ui.controlgroup", {
 			}
 
 			// We assume everything is in the middle to start because we can't determine
-			// first / last elements until all enhancments are done.
+			// first / last elements until all enhancements are done.
 			if ( that[ "_" + widget + "Options" ] ) {
 				options = that[ "_" + widget + "Options" ]( "middle" );
 			} else {
@@ -6502,7 +6502,7 @@ var widgetsControlgroup = $.widget( "ui.controlgroup", {
 
 		if ( children.length ) {
 
-			// We do this last because we need to make sure all enhancment is done
+			// We do this last because we need to make sure all enhancement is done
 			// before determining first and last
 			$.each( [ "first", "last" ], function( index, value ) {
 				var instance = children[ value ]().data( "ui-controlgroup-data" );
@@ -7289,7 +7289,7 @@ function Datepicker() {
 		onChangeMonthYear: null, // Define a callback function when the month or year is changed
 		onClose: null, // Define a callback function when the datepicker is closed
 		numberOfMonths: 1, // Number of months to show at a time
-		showCurrentAtPos: 0, // The position in multipe months at which to show the current month (starting at 0)
+		showCurrentAtPos: 0, // The position in multiple months at which to show the current month (starting at 0)
 		stepMonths: 1, // Number of months to step back/forward
 		stepBigMonths: 12, // Number of months to step back/forward for the big links
 		altField: "", // Selector for an alternate field to store selected dates into
@@ -7999,7 +7999,7 @@ $.extend( Datepicker.prototype, {
 			inst.input.trigger( "focus" );
 		}
 
-		// Deffered render of the years select (to avoid flashes on Firefox)
+		// Deferred render of the years select (to avoid flashes on Firefox)
 		if ( inst.yearshtml ) {
 			origyearshtml = inst.yearshtml;
 			setTimeout( function() {
@@ -10449,7 +10449,7 @@ $.ui.plugin.add( "draggable", "connectToSortable", {
 					sortable._trigger( "out", event, sortable._uiHash( sortable ) );
 					sortable._mouseStop( event, true );
 
-					// Restore sortable behaviors that were modfied
+					// Restore sortable behaviors that were modified
 					// when the draggable entered the sortable area (#9481)
 					sortable.options.revert = sortable.options._revert;
 					sortable.options.helper = sortable.options._helper;
@@ -12207,7 +12207,7 @@ $.widget( "ui.dialog", {
 			that._trigger( "focus" );
 		} );
 
-		// Track the dialog immediately upon openening in case a focus event
+		// Track the dialog immediately upon opening in case a focus event
 		// somehow occurs outside of the dialog before an element inside the
 		// dialog is focused (#10152)
 		this._makeFocusTarget();
@@ -16571,7 +16571,7 @@ var widgetsSortable = $.widget( "ui.sortable", $.ui.mouse, {
 
 		//Various things done here to improve the performance:
 		// 1. we create a setTimeout, that calls refreshPositions
-		// 2. on the instance, we have a counter variable, that get's higher after every append
+		// 2. on the instance, we have a counter variable, that gets higher after every append
 		// 3. on the local scope, we copy the counter variable, and check in the timeout,
 		// if it's still the same
 		// 4. this lets only the last addition to the timeout stack through
@@ -17887,7 +17887,7 @@ $.widget( "ui.tabs", {
 				// tab is already loading
 				tab.hasClass( "ui-tabs-loading" ) ||
 
-				// can't switch durning an animation
+				// can't switch during an animation
 				this.running ||
 
 				// click on active header, but not collapsible

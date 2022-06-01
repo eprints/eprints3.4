@@ -12,7 +12,7 @@ use utf8;
 our %COMMANDS = (
     'LaTeX'     => 'LaTeX',
     'TeX'     => 'TEX',
-    '-'         => '', # hypenation
+    '-'         => '', # hyphenation
     '/'         => '', # italic correction
     'log'       => 'log',
 );

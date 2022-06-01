@@ -52,7 +52,7 @@ use strict;
 
 =item $sys->init
 
-Perform any platform-specific initilisation is not required on MS 
+Perform any platform-specific initialisation is not required on MS 
 Windows 32 systems.
 
 =cut

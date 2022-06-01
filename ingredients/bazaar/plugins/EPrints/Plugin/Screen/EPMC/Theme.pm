@@ -1,6 +1,6 @@
 =head1 NAME
 
-EPrints::Plugin::Screen::EPMC::Theme - update statics on enable/disable
+EPrints::Plugin::Screen::EPMC::Theme - update static files on enable/disable
 
 =head1 DESCRIPTION
 

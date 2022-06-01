@@ -13,7 +13,7 @@
 
 =head1 NAME
 
-B<EPrints::Box> - Class to render cute little collapsable/expandable 
+B<EPrints::Box> - Class to render cute little collapsible/expandable 
 Web 2.0ish boxes.
 
 =head1 DESCRIPTION
@@ -48,14 +48,14 @@ use strict;
 
 =item $box_xhtmldom = EPrints::Box::render( %options )
 
-Render a collapsable/expandable box to which content can be added. The 
+Render a collapsible/expandable box to which content can be added. The 
 box is in keeping with the eprints style.
 
 Required Options:
 
 B<C<$options{handle}>> - Current C<$handle>.
 
-B<C<$options{id}>> - ID attibute of the box. E.g. <div id="my_box">
+B<C<$options{id}>> - ID attribute of the box. E.g. <div id="my_box">
 
 B<C<$options{title}>> - XHTML DOM of the title of the box. N.B. The exact 
 object will be used not a clone of the object.

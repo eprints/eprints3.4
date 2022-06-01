@@ -450,7 +450,7 @@ sub Identify
 		"adminEmail",
 		$repo->config( "adminemail" ) ) );
 
-	# Later this may be either calcualted from the
+	# Later this may be either calculated from the
 	# database, or configurable.
 	$response->appendChild( $repo->xhtml->data_element(
 		"earliestDatestamp",

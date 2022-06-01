@@ -3,7 +3,7 @@
 # view a secured document. 
 
 # Valid return values are
-# "ALLOW" - allow the rquest to view the document
+# "ALLOW" - allow the request to view the document
 # "DENY"  - deny the request to view the document
 # "USER"  - allow the request if the current user is allowed to view
 #            the document. Ask for login if nobody is logged in.

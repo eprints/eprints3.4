@@ -50,7 +50,7 @@ For example the equation
  $x = \frac{-b_+_^-^\root{b^2^-4ac}}{2a}$ 
 
 is the quadratic equation. If you're not a physics academic then that 
-probably dosn't mean much to you, but that's how the physics community 
+probably doesn't mean much to you, but that's how the physics community 
 like to write their equations!
 
 =cut
@@ -123,7 +123,7 @@ sub render_string
 			{
 				my $param = $buffer;
 
-				# strip $ from begining and end.
+				# strip $ from beginning and end.
 				$param =~ s/^\$(.*)\$$/$1/;
 
 				# Mimetex can't handle whitespace. Change it to ~'s.
@@ -139,7 +139,7 @@ sub render_string
 				# URL Encode non a-z 0-9 chars.
 				$param =~ s/[^a-z0-9]/sprintf('%%%02X',ord($&))/ieg;
 	
-				# strip $ from begining and end.
+				# strip $ from beginning and end.
 				$param =~ s/^\$(.*)\$$/$1/; 
 	
 				$url = $session->config( 

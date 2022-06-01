@@ -82,7 +82,7 @@ sub new
 	return $class->SUPER::new(%params);
 }
 
-# Return an array of the ID's of arguemnts this plugin accepts
+# Return an array of the ID's of arguments this plugin accepts
 sub arguments
 {
 	my( $self ) = @_;

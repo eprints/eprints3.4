@@ -282,7 +282,7 @@ sub human_delay
 
 =item $label = EPrints::Time::month_label( $repo, $monthid )
 
-Return a UTF-8 string describing the month, in the current lanugage.
+Return a UTF-8 string describing the month, in the current language.
 
 $monthid is an integer from 1 to 12.
 
@@ -299,7 +299,7 @@ sub month_label
 
 =item $label = EPrints::Time::short_month_label( $repo, $monthid )
 
-Return a UTF-8 string of a short representation in month, in the current lanugage.
+Return a UTF-8 string of a short representation in month, in the current language.
 
 $monthid is an integer from 1 to 12.
 
@@ -317,7 +317,7 @@ sub short_month_label
 
 =item $label = EPrints::Time::dow_label( $repo, $dowid )
 
-Return a UTF-8 string of a short representation of the day of the week, in the current lanugage.
+Return a UTF-8 string of a short representation of the day of the week, in the current language.
 
 $dowid is an integer from 1 to 7.
 

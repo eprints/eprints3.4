@@ -43,13 +43,13 @@ $c->{indexing}->{freetext_always_words} = {
 
 
 
-# Chars which seperate words. Pretty much anything except
+# Chars which separate words. Pretty much anything except
 # A-Z a-z 0-9 and single quote '
 
-# If you want to add other seperator characters then they
+# If you want to add other separator characters then they
 # should be encoded in utf8.
 
-$c->{indexing}->{freetext_seperator_chars} = {
+$c->{indexing}->{freetext_separator_chars} = {
 	'@' => 1, 	'[' => 1, 	'\\' => 1, 	']' => 1,
 	'^' => 1, 	'_' => 1,	' ' => 1, 	'`' => 1,
 	'!' => 1, 	'"' => 1, 	'#' => 1, 	'$' => 1,
@@ -100,9 +100,9 @@ $c->{extract_words} = sub
 
 	my @words =EPrints::Index::split_words( $repository, $buffer );
 
-	# Iterate over every word (bits divided by seperator chars)
+	# Iterate over every word (bits divided by separator chars)
 	# We use hashes rather than arrays at this point to make
-	# sure we only get each word once, not once for each occurance.
+	# sure we only get each word once, not once for each occurrence.
 	my %good = ();
 	my %bad = ();
 	my $word;

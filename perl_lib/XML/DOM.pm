@@ -705,7 +705,7 @@ sub hasChildNodes
     defined ($kids) && @$kids > 0;
 }
 
-# This method is overriden in Document
+# This method is overridden in Document
 sub getOwnerDocument
 {
     $_[0]->[_Doc];
@@ -1122,7 +1122,7 @@ sub isAncestor
 }
 
 #
-# Added for optimization. Overriden in XML::DOM::Text
+# Added for optimization. Overridden in XML::DOM::Text
 #
 sub isTextNode
 {
@@ -1130,7 +1130,7 @@ sub isTextNode
 }
 
 #
-# Added for optimization. Overriden in XML::DOM::DocumentFragment
+# Added for optimization. Overridden in XML::DOM::DocumentFragment
 #
 sub isDocumentFragmentNode
 {
@@ -1138,7 +1138,7 @@ sub isDocumentFragmentNode
 }
 
 #
-# Added for optimization. Overriden in XML::DOM::Element
+# Added for optimization. Overridden in XML::DOM::Element
 #
 sub isElementNode
 {
@@ -4198,7 +4198,7 @@ sub new
     $class->SUPER::new (%args);
 }
 
-# This method needed to be overriden so we can restore some global 
+# This method needed to be overridden so we can restore some global 
 # variables when an exception is thrown
 sub parse
 {

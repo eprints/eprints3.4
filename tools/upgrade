@@ -9,7 +9,7 @@
 
 =head1 NAME
 
-B<upgrade> - Upgrade the stucture of the database to be compatable with
+B<upgrade> - Upgrade the stucture of the database to be compatible with
 a newer version of eprints.
 
 If upgrading requires more than one step then the system will perform
@@ -109,7 +109,7 @@ $|=1;
 my $session = new EPrints::Session( 1, $ARGV[0], $noise, 1 );
 exit( 1 ) unless defined $session;
 
-if( $noise>=1 ) { print "What is the current compatability of the DB?\n"; }
+if( $noise>=1 ) { print "What is the current compatibility of the DB?\n"; }
 my $db = $session->get_database;
 my $dbversion = $db->get_version();
 if( !defined $dbversion )
@@ -122,7 +122,7 @@ if( !defined $dbversion )
 }
 else
 {
-	print "...DB Tables compatable with ".$dbversion."\n"; 
+	print "...DB Tables compatible with ".$dbversion."\n"; 
 }	
 if( $noise>=1 ) 
 { 
@@ -208,7 +208,7 @@ END
 		}
 		close VDUMP;
         	$sth->finish;
-		print "Saved backup of affected fileds to $file\n";
+		print "Saved backup of affected fields to $file\n";
 		print "Altering columns of ".$table_id."\n";
 		foreach my $col_id ( "succeeds","replacedby","commentary" )
 		{
@@ -699,7 +699,7 @@ if( $TARGET eq $dbversion)
 {
 	if( $noise>=1 )
 	{
-		print "Target compatability reached.\n";
+		print "Target compatibility reached.\n";
 	}
 }
 else
@@ -707,7 +707,7 @@ else
 	print <<END;
 **********************************************************************
 WARNING: Target compatibility NOT reached. That probably means 
-something bad happend.
+something bad happened.
 **********************************************************************
 END
 }

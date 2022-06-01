@@ -22,7 +22,7 @@ B<generate_sitemap> I<repository_id>
 
 =head1 DESCRIPTION
 
-This script lists the abstract/summary page URLs for every live publication in the repository as part of a sitemap.  The main sitemap links to individual sitemaps containing a maxiumum of 1000 URLs (live publication items). This is preferred for tools like Google Search Console to save individual files getting too large.  The main sitemap's filename is sitemap.xml and can be found on the root path of the repository (e.g. L<http://eprints.example.org/sitemap.xml)>. sitemap.xml and its child sitemaps (e.g. L<http://eprints.example.org/sitemaps/1.xml>) are presented in XML format using the sitemap schema L<http://www.sitemaps.org/schemas/sitemap/0.9>, setting a weekly change frequency.
+This script lists the abstract/summary page URLs for every live publication in the repository as part of a sitemap.  The main sitemap links to individual sitemaps containing a maximum of 1000 URLs (live publication items). This is preferred for tools like Google Search Console to save individual files getting too large.  The main sitemap's filename is sitemap.xml and can be found on the root path of the repository (e.g. L<http://eprints.example.org/sitemap.xml)>. sitemap.xml and its child sitemaps (e.g. L<http://eprints.example.org/sitemaps/1.xml>) are presented in XML format using the sitemap schema L<http://www.sitemaps.org/schemas/sitemap/0.9>, setting a weekly change frequency.
 
 =head1 ARGUMENTS
 

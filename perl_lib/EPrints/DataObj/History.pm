@@ -55,7 +55,7 @@ The numerical ID of the object in the dataset.
 =item revision (int)
 
 The revision of the object. This is the revision number after the
-action occured. Not all actions increase the revision number.
+action occurred. Not all actions increase the revision number.
 
 =item timestamp (timestamp)
 

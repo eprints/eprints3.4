@@ -23,7 +23,7 @@ B<generate_static> I<repository_id> [B<options>]
 
 =head1 DESCRIPTION
 
-This script creates the static web site for EPrints (or, if you are running in multiple lanugages it generates the websites).
+This script creates the static web site for EPrints (or, if you are running in multiple languages it generates the websites).
 
 It processes every file in B<EPRINTS/archives/ARCHIVE/cfg/static/LANGID/>. For each language processes all the files in /LANGID/ and /generic/ into B<EPRINTS/archives/ARCHIVE/html/LANGID>. If that sounds confusing, don't worry, it's not that bad, just put your webpage outlines in static/en/ and your image files and the like in static/generic/ and run this script and see what happens.
 
@@ -97,7 +97,7 @@ Print the full manual page and then exit.
 
 =item B<--quiet>
 
-Be vewwy vewwy quiet. This option will supress all output unless an error occurs.
+Be vewwy vewwy quiet. This option will suppress all output unless an error occurs.
 
 =item B<--verbose>
 

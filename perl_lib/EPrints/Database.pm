@@ -2744,7 +2744,7 @@ sub _get
 		{
 			my( $id, $pos ) = splice(@values,0,2);
 			my $n = $lookup{ $id };
-			next unless defined $n; # junk data in auxillary tables?
+			next unless defined $n; # junk data in auxiliary tables?
 			$data[$n]->{$fn}->[$pos] = 
 				$multifield->value_from_sql_row( $self->{session}, \@values );
 		}
@@ -3639,7 +3639,7 @@ sub swap_tables
 }
 
 
-# Split a sql type definition into its constituant columns
+# Split a sql type definition into its constituent columns
 sub _split_sql_type
 {
 	my( $sql ) = @_;
@@ -3910,7 +3910,7 @@ sub create_dataset_tables
 		$rv &&= $self->create_table( $main_table, 1, @main_fields );
 	}
 
-	# Create the auxillary tables
+	# Create the auxiliary tables
 	foreach my $field (@aux_fields)
 	{
 		my $table = $dataset->get_sql_sub_table_name( $field );

@@ -45,7 +45,7 @@ $DEFAULT{thesis_type_to_qualname} = {
 	engd => "engd",
 };
 
-# map default thesis_type valies to appropriate
+# map default thesis_type values to appropriate
 # qualificationlevel
 # can be overridden at archive level eg.
 # $c->{plugins}->{"Export::OAI_UKETD_DC"}->{params}->{thesis_type_to_quallevel} = { .. };
@@ -195,7 +195,7 @@ sub eprint_to_uketd_dc
 				push @etddata, [ "creator", EPrints::Utils::make_name_string( $creator ), "dc" ];
 			}
 		}
-		if( $eprint->exists_and_set("subjects")) ##Check for existance before accessing. jy2e08
+		if( $eprint->exists_and_set("subjects")) ##Check for existence before accessing. jy2e08
 		{
 			my $subjectid;
 			foreach $subjectid ( @{$eprint->get_value( "subjects" )} )

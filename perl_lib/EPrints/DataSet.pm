@@ -65,7 +65,7 @@ Some datasets are "virtual" datasets made from others. Examples include
 "inbox", "archive", "buffer" and "deletion" which are all virtual datasets 
 of of the "eprint" dataset. That is to say "inbox" is a subset of "eprint" 
 and by inference contains L<EPrints::DataObj::EPrint>. You can define your 
-own virtual datasets which opperate on existing datasets.
+own virtual datasets which operate on existing datasets.
 
 =head1 CREATING CUSTOM DATASETS
 
@@ -844,7 +844,7 @@ sub get_sql_index_table_name
 
 =item $tablename = $ds->get_sql_grep_table_name
 
-Reutrn the name of the SQL table which contains the strings to
+Return the name of the SQL table which contains the strings to
 be used with LIKE in a final pass of a search.
 
 =end InternalDoc
@@ -865,7 +865,7 @@ sub get_sql_grep_table_name
 
 =item $tablename = $ds->get_sql_rindex_table_name
 
-Reutrn the name of the SQL table which contains the reverse text
+Return the name of the SQL table which contains the reverse text
 indexing information. (Used for deleting freetext indexes when
 removing a record).
 
@@ -1414,7 +1414,7 @@ Short-cut to L</prepare_search>( %options )->execute.
 
 =item "satisfy_all"=>1 
 
-Satify all conditions specified. 0 means satisfy any of the conditions specified. Default is 1
+Satisfy all conditions specified. 0 means satisfy any of the conditions specified. Default is 1
 
 =item "staff"=>1
 

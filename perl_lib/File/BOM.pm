@@ -630,7 +630,7 @@ BOM being applied to the position parameter. Thus:
 
 =head2 Telling
 
-In order to work correctly with seek(), tell() also returns a postion adjusted
+In order to work correctly with seek(), tell() also returns a position adjusted
 by the length of the BOM.
 
 =cut

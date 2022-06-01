@@ -45,7 +45,7 @@ $c->{user_roles}->{admin} = [qw{
 }];
 # Note -- nobody has the very powerful "toolbox" or "rest" roles, by default!
 
-# Use this to set public privilages. 
+# Use this to set public privileges. 
 $c->{public_roles} = [qw{
 	+eprint/archive/rest/get
 	+subject/rest/get

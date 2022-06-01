@@ -199,7 +199,7 @@ sub update_auto_js
 
 =item $auto = update_auto( $target_filename, $extension, $dirs [, $opts ] )
 
-Update a file called $target_filename by concantenating all of the files found in $dirs with the extension $extension (js, css etc. - may be a regexp).
+Update a file called $target_filename by concatenating all of the files found in $dirs with the extension $extension (js, css etc. - may be a regexp).
 
 If more than one file with the same name exists in $dirs then only the last encountered file will be used.
 

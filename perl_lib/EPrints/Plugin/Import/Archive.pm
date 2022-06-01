@@ -18,7 +18,7 @@ sub new
 
 	my $self = $class->SUPER::new(%params);
 
-	$self->{name} = "Base archive inport plugin: This should have been subclassed";
+	$self->{name} = "Base archive import plugin: This should have been subclassed";
 	$self->{visible} = "all";
 
 	return $self;

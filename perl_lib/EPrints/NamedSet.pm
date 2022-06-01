@@ -59,7 +59,7 @@ sub new
 
 Add an option to the named set. 
 
-If the option already exists and is not core or already beloning to this package then a required_by field is added to the file. 
+If the option already exists and is not core or already belonging to this package then a required_by field is added to the file. 
 
 If it already exists, index is ignored.
 

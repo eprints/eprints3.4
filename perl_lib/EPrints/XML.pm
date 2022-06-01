@@ -89,7 +89,7 @@ use strict;
 
 # $xml = new EPrints::XML( $repository )
 #
-# Contructor, should be called by Repository only.
+# Constructor, should be called by Repository only.
 
 sub new($$)
 {
@@ -374,7 +374,7 @@ sub contents_of
 
 =item $string = $xml->text_contents_of( $node )
 
-Returns the concantenated value of all text nodes in $node (or the value of $node if $node is a text node).
+Returns the concatenated value of all text nodes in $node (or the value of $node if $node is a text node).
 
 =cut
 
@@ -774,7 +774,7 @@ END
 
 Neatly indent the DOM tree. 
 
-Note that this should not be done to XHTML as the differenct between
+Note that this should not be done to XHTML as the different between
 white space and no white space does matter sometimes.
 
 This method modifies the tree it is given. Possibly there should be
@@ -1105,7 +1105,7 @@ sub _add_node_to_xml
 			($element->parentNode())->insertAfter($node,$element);
 			return 1;
 		}
-		if ($match_type eq "disbale") {
+		if ($match_type eq "disable") {
 			$element->setAttribute("disabled",1);
 			$element->setAttribute("disabled_by",$id);
 			$node->setAttribute("required_by",$id);

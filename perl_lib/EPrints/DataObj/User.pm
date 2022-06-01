@@ -93,7 +93,7 @@ The email address of this user. Unique within the repository.
 
 =item lang (arclanguage) 
 
-The ID of the prefered language of this user. Only really used in 
+The ID of the preferred language of this user. Only really used in 
 multilingual repositories.
 
 =item editperms (search, multiple)

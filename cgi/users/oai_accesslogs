@@ -219,7 +219,7 @@ sub Identify
 		"adminEmail",
 		$session->config( "adminemail" ) ) );
 
-	# Later this may be either calcualted from the
+	# Later this may be either calculated from the
 	# database, or configurable.
 	$response->appendChild( $session->render_data_element(
 		4,

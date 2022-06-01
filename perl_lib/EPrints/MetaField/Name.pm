@@ -320,7 +320,7 @@ sub get_search_conditions
 		$noskip = 2;
 		if( length $gpart == 1 )
 		{
-			# inital
+			# initial
 			foreach my $l ( @{$list} )
 			{
 				$l .= '['.$gpart.'%';
@@ -351,7 +351,7 @@ sub get_search_conditions
 	return EPrints::Search::Condition->new( 'AND', @freetexts );
 }
 
-# INHERRITS get_search_conditions_not_ex, but it's not called.
+# INHERITS get_search_conditions_not_ex, but it's not called.
 
 sub get_search_group { return 'name'; } 
 

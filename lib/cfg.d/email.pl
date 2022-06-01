@@ -3,7 +3,7 @@
 # set the send_email config option to be a function to use 
 # instead.
 #
-# The function will have to take the following paramaters.
+# The function will have to take the following parameters.
 # $repository, $langid, $name, $address, $subject, $body, $sig, $replyto, $replytoname
 # repository   string   utf8   utf8      utf8      DOM    DOM   string    utf8
 #

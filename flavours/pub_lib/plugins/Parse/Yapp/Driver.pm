@@ -186,7 +186,7 @@ sub _CheckParams {
 	while(($prm,$value)=splice(@$inarray,0,2)) {
         $prm=uc($prm);
 			exists($$checklist{$prm})
-		or	croak("Unknow parameter '$prm'");
+		or	croak("Unknown parameter '$prm'");
 			ref($value) eq $$checklist{$prm}
 		or	croak("Invalid value for parameter '$prm'");
         $prm=unpack('@2A*',$prm);
@@ -429,7 +429,7 @@ sub _Parse {
 			};
 
 #DBG>			$debug & 0x10
-#DBG>		and	print STDERR "**Dicard invalid token ".&$ShowCurToken.".\n";
+#DBG>		and	print STDERR "**Discard invalid token ".&$ShowCurToken.".\n";
 
 			$$token=$$value=undef;
 		};

@@ -57,7 +57,7 @@ dataset. Usually this is the results of a search.
 #     The EPrints::Dataset to which this list belongs.
 #
 #  $self->{ids} 
-#     Ref to arrray. The ids of the items in the list. 
+#     Ref to array. The ids of the items in the list. 
 #     A special case is when this is set to [ "ALL" ] which means it
 #     matches all items in the dataset.
 #

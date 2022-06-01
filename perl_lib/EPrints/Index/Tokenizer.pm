@@ -664,7 +664,7 @@ $EPrints::Index::FREETEXT_ALWAYS_WORDS = {
 # Chars which separate words. Pretty much anything except
 # A-Z a-z 0-9 and single quote '
 
-# If you want to add other seperator characters then they
+# If you want to add other separator characters then they
 # should be encoded in utf8. The Unicode::String man page
 # details some useful methods.
 

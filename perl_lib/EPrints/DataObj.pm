@@ -1255,7 +1255,7 @@ sub _equal
 
 Returns a list of all the values in this record of all the $fields 
 specified by C<$fieldnames>. These should be in the format used by 
-browse views, using C</> to seperate individual field names with an 
+browse views, using C</> to separate individual field names with an 
 optional C<.id> suffix to indicate the ID part rather than the main 
 part. 
 

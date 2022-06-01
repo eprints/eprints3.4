@@ -239,7 +239,7 @@ one phrase file the system checks the next.
 If the phrase contains "pin" elements then $inserts must be a reference
 to a hash. Each "pin" has a "name" attribute. For each pin there must be
 a key in $inserts of the "name". The value is a XHTML DOM object which
-will replace the "pin" when returing this phrase.
+will replace the "pin" when returning this phrase.
 
 =cut
 ######################################################################
@@ -302,7 +302,7 @@ sub phrase
 	{
 		if( !$used->{$_} )
 		{
-			# Should log this, but somtimes it's supposed to happen!
+			# Should log this, but sometimes it's supposed to happen!
 			# $session->get_repository->log( "Unused parameter \"$_\" passed to phrase \"$phraseid\"" );
 			EPrints::XML::dispose( $inserts->{$_} );
 		}

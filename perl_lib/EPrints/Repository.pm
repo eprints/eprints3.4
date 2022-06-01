@@ -615,7 +615,7 @@ sub xhtml($)
 
 =item $eprint = $repository->eprint( $eprint_id );
 
-A convience method to return the L<EPrints::DataObj::EPrint> with 
+A convenience method to return the L<EPrints::DataObj::EPrint> with 
 the given ID, or undef.
 
 Equivent to $repository->dataset("eprint")->dataobj( $eprint_id )
@@ -686,7 +686,7 @@ sub current_user
 
 =item $user = $repository->user( $user_id );
 
-A convience method to return the L<EPrints::DataObj::User> with 
+A convenience method to return the L<EPrints::DataObj::User> with 
 the given ID, or undef.
 
 Equivent to $repository->dataset("user")->dataobj( $user_id )
@@ -1384,7 +1384,7 @@ sub _load_namedsets
 	);
 
     my $flavour = $self->config( "flavour" ); ##get the repository flavour name, e.g. "pub"
-    my @lib_order =  reverse(@{  $self->config('flavours')->{$flavour}   }); ##use this name to retrive the lib list
+    my @lib_order =  reverse(@{  $self->config('flavours')->{$flavour}   }); ##use this name to retrieve the lib list
     foreach (@lib_order)
     {
         unshift @paths, $self->config( "base_path" )."/$_/namedsets";
@@ -1775,7 +1775,7 @@ sub get_plugin_class
 
 =item $confitem = $repository->config( $key, [@subkeys] )
 
-Returns a named configuration setting including those defined in archvies/<archive_id>/cfg/cfg.d/ 
+Returns a named configuration setting including those defined in archives/<archive_id>/cfg/cfg.d/ 
 
 $repository->config( "stuff", "en", "foo" )
 
@@ -2443,7 +2443,7 @@ sub set_field_defaults
 =item ( $returncode, $output) = $repository->test_config
 
 This runs "epadmin test" as an external script to test if the current
-configuraion on disk loads OK. This can be used by the web interface
+configuration on disk loads OK. This can be used by the web interface
 to test if changes to config. files may be saved, or not.
 
 $returncode will be zero if everything seems OK.
@@ -2512,7 +2512,7 @@ Given an repository object and a Apache (mod_perl) request object, this
 method decides what language the session should be.
 
 First it looks at the HTTP cookie "eprints_lang", failing that it
-looks at the prefered language of the request from the HTTP header,
+looks at the preferred language of the request from the HTTP header,
 failing that it looks at the default language for the repository.
 
 The language ID it returns is the highest on the list that the given
@@ -2570,7 +2570,7 @@ sub get_session_language
 	}
 
 	print STDERR <<END;
-Something odd happend in the language selection code... 
+Something odd happened in the language selection code... 
 Did you make a default language which is not in the list of languages?
 END
 	return undef;
@@ -2741,7 +2741,7 @@ sub get_langid
 
 =item $value = EPrints::Repository::best_language( $repository, $lang, %values )
 
-$repository is the current repository. $lang is the prefered language.
+$repository is the current repository. $lang is the preferred language.
 
 %values contains keys which are language ids, and values which is
 text or phrases in those languages, all translations of the same 
@@ -2985,7 +2985,7 @@ sub get_full_url
 
 =item $noise_level = $repository->get_noise
 
-Return the noise level for the current session. See the explaination
+Return the noise level for the current session. See the explanation
 under EPrints::Repository->new()
 
 =end InternalDoc
@@ -4022,7 +4022,7 @@ sub _render_buttons_aux
 				class => "ep_form_".$btype."_button",
 				value => $buttons{$button_id} ) );
 
-		# Some space between butons.
+		# Some space between buttons.
 		$div->appendChild( $self->make_text( " " ) );
 	}
 
@@ -4382,7 +4382,7 @@ sub render_input_form
 		# It should be a small white on pixel PNG.
 		# (a transparent GIF would be slightly better, but
 		# GNU has a problem with GIF).
-		# The style stops it rendering on modern broswers.
+		# The style stops it rendering on modern browsers.
 		# under lynx it looks bad. Lynx does not
 		# submit when a user hits return so it's 
 		# not needed anyway.
@@ -4470,7 +4470,7 @@ sub _render_input_form_field
 
 		# Field name should have a star next to it if it is required
 		# special case for booleans - even if they're required it
-		# dosn't make much sense to highlight them.	
+		# doesn't make much sense to highlight them.	
 
 		my $label = $self->make_element( "span", id=>$field->get_name . "_label" ); 
 		my $labeltext = $field->render_name( $self );
@@ -4564,7 +4564,7 @@ sub render_message
 # $xhtml = $repository->render_tabs( %params )
 #
 # Render javascript tabs to switch between views. The views must be
-# rendered seperately. 
+# rendered separately. 
 
 # %params contains the following options:
 # id_prefix: the prefix of the id attributes.
@@ -5026,7 +5026,7 @@ sub send_http_header
 # $repository->read_params
 # 
 # If we're online but have not yet read the CGI parameters then this
-# will cause sesssion to read (and consume) them.
+# will cause session to read (and consume) them.
 
 # If we're coming from cookie login page then grab the CGI params
 # from an apache note set in Login.pm
@@ -5471,7 +5471,7 @@ Return either a list of all the plugins available to this repository or
 return a list of available plugins which can accept the given 
 restrictions.
 
-Restictions:
+Restrictions:
  vary depending on the type of the plugin.
 
 =end InternalDoc
@@ -5935,7 +5935,7 @@ sub flavour_has
 
 =item $Boolean = $repository->get_csrf_token("")
 
-return a string containg the CSRF token.
+return a string containing the CSRF token.
 
 =end InternalDoc
 

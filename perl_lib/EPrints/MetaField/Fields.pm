@@ -99,7 +99,7 @@ sub get_property_defaults
 	my( $self ) = @_;
 	my %defaults = $self->SUPER::get_property_defaults;
 	$defaults{datasetid} = $EPrints::MetaField::REQUIRED;
-	delete $defaults{options}; # inherrited but unwanted
+	delete $defaults{options}; # inherited but unwanted
 	return %defaults;
 }
 

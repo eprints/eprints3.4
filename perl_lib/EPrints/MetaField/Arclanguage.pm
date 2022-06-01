@@ -62,7 +62,7 @@ sub get_property_defaults
 {
 	my( $self ) = @_;
 	my %defaults = $self->SUPER::get_property_defaults;
-	delete $defaults{options}; # inherrited but unwanted
+	delete $defaults{options}; # inherited but unwanted
 	return %defaults;
 }
 

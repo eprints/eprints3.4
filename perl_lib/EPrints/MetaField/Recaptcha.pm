@@ -69,7 +69,7 @@ sub render_input_field_actual
 		'data-sitekey' => $public_key,
 	) );
 
-	# No-Script, for users with javascript diabled
+	# No-Script, for users with javascript disabled
 	$url = URI->new( "https://www.google.com/recaptcha/api/fallback" );
 	$url->query_form( k => $public_key );
 

@@ -253,7 +253,7 @@ sub get_search_conditions
 	);
 }
 
-# INHERRITS get_search_conditions_not_ex, but it's not called.
+# INHERITS get_search_conditions_not_ex, but it's not called.
 
 sub get_unsorted_values
 {

@@ -22,7 +22,7 @@ B<check_xapian> I<repository_id> [B<options>]
 
 =head1 DESCRIPTION
 
-This script checks that eprint items have successfully been indexed by Xapian.  It does this my using "/usr/bin/quest" to search the Xapian database filesystem for the title of the particular item.  This requires the 'xapian-tools' package to be installed.  If the title does not contain any special characters or quote marks it will attempt to search for the title within quote marks.  If this is not the case or this returns no matching results, it will search for all the terms in the title in an attempt to find a result.  The script will print a success message to the standard output if a result with the correct EPrint ID is returned othewise it will print a failure message to the standard error.  A summary message will be printed before the script exits totalling the number of items found not to be indexed.
+This script checks that eprint items have successfully been indexed by Xapian.  It does this my using "/usr/bin/quest" to search the Xapian database filesystem for the title of the particular item.  This requires the 'xapian-tools' package to be installed.  If the title does not contain any special characters or quote marks it will attempt to search for the title within quote marks.  If this is not the case or this returns no matching results, it will search for all the terms in the title in an attempt to find a result.  The script will print a success message to the standard output if a result with the correct EPrint ID is returned otherwise it will print a failure message to the standard error.  A summary message will be printed before the script exits totalling the number of items found not to be indexed.
 
 
 =head1 ARGUMENTS
@@ -53,7 +53,7 @@ Check search results using the facets matching protocol rather than the standard
 
 =item B<--days=n>
 
-Check eprint items last modified in the last n days rathar than the last 2 days.
+Check eprint items last modified in the last n days rather than the last 2 days.
 
 =item B<--results=n>
 
@@ -73,7 +73,7 @@ Specify the directory of the Xapian database if it is not EPRINTS_PATH/archives/
 
 =item B<--quiet>
 
-This option will supress all output unless an error occurs.
+This option will suppress all output unless an error occurs.
 
 =item B<--random>
 
@@ -85,7 +85,7 @@ If a item is not found then schedule it for reindexing.
 
 =item B<--sample=n>
 
-Used in conjuction with --random to specify the sample size of items to check. By default sample size is 100.
+Used in conjunction with --random to specify the sample size of items to check. By default sample size is 100.
 
 =item B<--status=archive,deletion>
 
@@ -93,7 +93,7 @@ Used to specify the status of eprint (inbox, buffer, archive, deletion) to be ch
 
 =item B<--user=admin>
 
-Used in conjuction with --reindex to specify the username of the user who should be set as the creator for indexing tasks.  If not set the first admin or local_admin user created will be used.
+Used in conjunction with --reindex to specify the username of the user who should be set as the creator for indexing tasks.  If not set the first admin or local_admin user created will be used.
 
 =item B<--verbose>
 

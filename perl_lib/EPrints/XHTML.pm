@@ -102,7 +102,7 @@ use strict;
 
 # $xhtml = new EPrints::XHTML( $repository )
 #
-# Contructor, should be called by Repository only.
+# Constructor, should be called by Repository only.
 
 sub new($$)
 {

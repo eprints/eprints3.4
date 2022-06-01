@@ -17,7 +17,7 @@ B<EPrints::MetaField::Subobject> - Sub Object an object.
 
 This is an abstract field which represents an item, or list of items,
 in another dataset, but which are a sub part of the object to which
-this field belongs, and have no indepentent status.
+this field belongs, and have no independent status.
 
 For example: Documents are part of EPrints.
 

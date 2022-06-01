@@ -1,6 +1,6 @@
 ######################################################################
 #
-# refering to http://threader.ecs.soton.ac.uk/lists/eprints_tech/1215.html, http://threader.ecs.soton.ac.uk/lists/eprints_tech/21544/attachment/default
+# referring to http://threader.ecs.soton.ac.uk/lists/eprints_tech/1215.html, http://threader.ecs.soton.ac.uk/lists/eprints_tech/21544/attachment/default
 # as well as http://threader.ecs.soton.ac.uk/lists/eprints_tech/18088.html, i.e.
 # https://wiki.eprints.org/w/Category:EPrints_Metadata_Fields#Ordering.2C_Indexing_and_Searching
 # following functions

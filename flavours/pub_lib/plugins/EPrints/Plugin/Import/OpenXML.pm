@@ -12,7 +12,7 @@ use EPrints::Plugin::Import;
 
 use strict;
 
-# adpated from Import::DSpace:
+# adapted from Import::DSpace:
 our $GRAMMAR = {
                 'dcterms:created' => [ 'date' ],
                 'dc:publisher' => [ 'publisher' ],

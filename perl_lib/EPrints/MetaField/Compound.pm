@@ -50,7 +50,7 @@ sub new
 		}
 		my $field = EPrints::MetaField->new( 
 			show_in_html => 0, # don't show the inner field separately
-		# these properties can be overriden
+		# these properties can be overridden
 			export_as_xml => $properties{ "export_as_xml" },
 			import => $properties{ "import" },
 		# inner field's properties

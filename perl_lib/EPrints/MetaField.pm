@@ -63,7 +63,7 @@ documentation and will not be duplicated here.
 
 =item provenance => "core" or "config"
 
-Indiciates where the field was initialised from. "core" fields are defined in L<DataObj> classes while "config" fields are defined in cfg.d files.
+Indicates where the field was initialised from. "core" fields are defined in L<DataObj> classes while "config" fields are defined in cfg.d files.
 
 =item replace_core => 0
 

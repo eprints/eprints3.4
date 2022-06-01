@@ -613,7 +613,7 @@ C<$topsubjid> must be an ancestor of this subject.
 
 E.g.
 
- Library of Congress > B Somthing > BC Somthing more Detailed
+ Library of Congress > B Something > BC Something more Detailed
 
 =cut
 ######################################################################
@@ -717,7 +717,7 @@ current language), including all the items above it in the tree, but
 only as high as this subject.
 
 The subjects which are returned are this item and all its children, 
-and childrens children etc. The order is it returns 
+and children's children etc. The order is it returns 
 this subject, then the first child of this subject, then children of 
 that (recursively), then the second child of this subject etc.
 
@@ -727,7 +727,7 @@ subjects which have the "depositable" flag set to true.
 If $show_top_level is not true then the pair representing the current
 subject is not included at the start of the list.
 
-If $nest_ids is true then each then the ids retured are nested so
+If $nest_ids is true then each then the ids returned are nested so
 that the ids of the children of this subject are prefixed with this 
 subjects id and a colon, and their children are prefixed by their 
 nested id and a colon. eg. L:LC:LC003 rather than just "LC003"
@@ -816,7 +816,7 @@ sub _get_subjects2
 =item $count = $subject->count_eprints( $dataset )
 
 Returns the number of data objects in the dataset (typically eprints),
-which are in this subject or one of its decendants. Searches all 
+which are in this subject or one of its descendants. Searches all 
 fields of type subject.
 
 =cut

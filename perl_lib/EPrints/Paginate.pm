@@ -316,7 +316,7 @@ sub paginate_list
 			}
 			else
 			{
-				$pins{controls}->appendChild( $session->html_phrase( "lib/searchexpression:seperator" ) );
+				$pins{controls}->appendChild( $session->html_phrase( "lib/searchexpression:separator" ) );
 			}
 			my $cspan = $session->make_element( 'span', class=>"ep_search_control" );
 			$cspan->appendChild( $control );

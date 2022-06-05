@@ -809,6 +809,7 @@ sub tabs
 	for(0..$#$labels)
 	{
 		my $label = defined($aliases) ? $aliases->{$_} : $_;
+		$label =~ s/[^a-zA-Z0-9_-]/_/g;
 		my $width = int( 100 / @$labels );
 		$width += 100 % @$labels if $_ == 0;
 		my $tab = $ul->appendChild( $xml->create_element( "li",

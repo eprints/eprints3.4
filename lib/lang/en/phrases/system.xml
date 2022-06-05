@@ -4243,6 +4243,7 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="Plugin/Screen/Admin/EPM/Developer:action_publish">Publish</epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/EPM/Developer:create_form"><h2 id="epmid_label">Create a new EPM</h2>
 <span id="epmid_help">To create a blank EPM entire a new id in the input and click <epc:phrase ref="Plugin/Screen/Admin/EPM/Developer:action_create" />. EPM ids may only contain the characters A-Za-z0-9_.</span><br /><epc:pin name="form" /></epp:phrase>
+    <epp:phrase id="Plugin/Screen/Admin/EPM/Developer:error:bad_epmid"><strong><epc:pin name="epmid"/></strong> is not a valid ID for an EPM. EPM IDs may only contain the characters: <code>A-Za-z0-9_</code></epp:phrase>
 
     <epp:phrase id="Plugin/Screen/Admin/EPM/Edit:title">Edit</epp:phrase>
 

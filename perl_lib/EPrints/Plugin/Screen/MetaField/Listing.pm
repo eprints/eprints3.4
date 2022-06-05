@@ -110,18 +110,25 @@ sub action_edit_field
 
 	if( !$confirm )
 	{
-		my $form = $repo->render_input_form(
+		my $confirm_form = $repo->render_input_form(
 			fields => [],
-			buttons => { edit_field => $self->phrase( "confirm" ), cancel => $self->phrase( "cancel" ), _order => [qw( edit_field cancel )] },
+			hidden_fields => { screen => "Admin::Config::Edit::Perl", configfile => "cfg.d/zz_webcfg_".$dataset->id."_fields.pl" },
+			buttons => { '' => $self->phrase( "confirm" ) },
 		);
+		my $cancel_form = $repo->render_input_form(
+                        fields => [],
+                        hidden_fields => { screen => "MetaField::Listing", dataset => $dataset->id },
+                        buttons => { cancel => $self->phrase( "cancel" ) },
+                );
 		$self->{processor}->add_message( "warning",
 			$self->html_phrase( "confirm_edit",
 				dataset => $repo->make_text( $dataset->id ),
 				field => $repo->make_text( $field->name ),
-				confirm_button => $form,
+				confirm_button => $confirm_form,
+				cancel_button => $cancel_form,
 			) );
-		$form->appendChild( $self->render_hidden_bits );
-		$form->appendChild( $self->render_hidden_field( "confirm", 1 ) );
+		$confirm_form->appendChild( $self->render_hidden_bits );
+		$confirm_form->appendChild( $self->render_hidden_field( "confirm", 1 ) );
 		return;
 	}
 
@@ -174,18 +181,25 @@ sub action_remove_field
 
 	if( !$confirm )
 	{
-		my $form = $repo->render_input_form(
-			fields => [],
-			buttons => { remove_field => $self->phrase( "confirm" ), cancel => $self->phrase( "cancel" ), _order => [qw( remove_field cancel )] },
-		);
+		my $confirm_form = $repo->render_input_form(
+                        fields => [],
+                        hidden_fields => { screen => "Admin::Config::Edit::Perl", configfile => "cfg.d/zz_webcfg_".$dataset->id."_fields.pl" },
+                        buttons => { '' => $self->phrase( "confirm" ) },
+                );
+                my $cancel_form = $repo->render_input_form(
+                        fields => [],
+                        hidden_fields => { screen => "MetaField::Listing", dataset => $dataset->id },
+                        buttons => { cancel => $self->phrase( "cancel" ) },
+                );
 		$self->{processor}->add_message( "warning",
 			$self->html_phrase( "confirm_remove",
 				dataset => $repo->make_text( $dataset->base_id ),
 				field => $repo->make_text( $field->name ),
-				confirm_button => $form,
+				confirm_button => $confirm_form,
+				cancel_button => $cancel_form,
 			) );
-		$form->appendChild( $self->render_hidden_bits );
-		$form->appendChild( $repo->render_hidden_field( "confirm", 1 ) );
+		$confirm_form->appendChild( $self->render_hidden_bits );
+		$confirm_form->appendChild( $repo->render_hidden_field( "confirm", 1 ) );
 
 		return;
 	}

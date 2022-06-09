@@ -1189,9 +1189,9 @@ sub set_value_raw
 		delete( $self->{changed}->{$fieldname} );
 		my $non_volatile_change = 0;
 		# Check if there are still any volatile changes.
-		for my $fn ( keys $self->{changed} )
+		for my $changed_fieldname ( keys $self->{changed} )
 		{
-			my $field = $self->{dataset}->get_field( $fn );
+			my $field = $self->{dataset}->get_field( $changed_fieldname );
 			if( !$field->property( "volatile" ) )
 			{
 				$non_volatile_change = 1;

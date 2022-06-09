@@ -1183,6 +1183,23 @@ sub set_value_raw
 			}
 		}
 	}
+	elsif ( _equal( $self->{changed}->{$fieldname}, $value ) )
+	{
+		# In case something changes this again back to what it was before.
+		delete( $self->{changed}->{$fieldname} );
+		my $non_volatile_change = 0;
+		# Check if there are still any volatile changes.
+		for my $fn ( keys $self->{changed} )
+		{
+			my $field = $self->{dataset}->get_field( $fn );
+			if( !$field->property( "volatile" ) )
+			{
+				$non_volatile_change = 1;
+				last;
+			}
+		}
+		$self->{non_volatile_change} = $non_volatile_change;
+	}
 
 	$self->{data}->{$fieldname} = $value;
 }

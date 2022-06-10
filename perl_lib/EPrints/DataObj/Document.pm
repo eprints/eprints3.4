@@ -1350,7 +1350,7 @@ sub commit
 		if( defined $eprint && !$eprint->under_construction )
 		{
 			$eprint->set_value( "fileinfo", $eprint->fileinfo );
-			$eprint->commit( $force );
+			$eprint->commit( 2 ); # 2 == Generate new revision for eprint even if it has not changed.
 		}
 	}
 	

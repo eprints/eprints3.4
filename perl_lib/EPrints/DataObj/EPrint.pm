@@ -1103,7 +1103,8 @@ sub commit
 	if( !$self->under_construction )
 	{
 		$self->remove_static;
-		if( $self->{non_volatile_change} )
+		# Create new revision if a non-volatile change to eprint or sub-object (e.g. document).
+		if( $self->{non_volatile_change} || $force == 2 ) 
 		{
 			$self->save_revision;
 		}

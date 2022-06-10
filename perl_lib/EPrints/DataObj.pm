@@ -2132,6 +2132,7 @@ sub to_sax
 			next unless $self->in_export_fieldlist( $field );
 			next if !$field->property( "export_as_xml" );
 		}
+		next if $field->name eq "edit_lock";
 
 		$field->to_sax(
 			$field->get_value( $self ),

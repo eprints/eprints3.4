@@ -1449,6 +1449,10 @@ sub GET
 			);
 		}
 		$r->content_type( $plugin->param( "mimetype" ) );
+		if( $plugin->param( 'include_bom' ) )
+		{
+			print $plugin->byte_order_mark;
+		}
 		$plugin->initialise_fh( \*STDOUT );
 		my $output = $plugin->output_dataobj( $dataobj,
 			%args,

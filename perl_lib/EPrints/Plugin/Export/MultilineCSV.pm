@@ -95,6 +95,16 @@ sub csv
 	return join( ",", @r )."\r\n";
 }
 
+# If you open the exported CSV file directly into MicroSoft 
+# Excel without using the import wizard, it is likely non-
+# standard characters will be rendered incorrectly if the
+# byte order mark is not set.
+sub byte_order_mark
+{
+    return chr(0xfeff);
+}
+
+
 1;
 
 =head1 COPYRIGHT

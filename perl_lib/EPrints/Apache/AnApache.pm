@@ -230,6 +230,27 @@ sub send_status_line
 ######################################################################
 =pod
 
+=item EPrints::Apache::AnApache::send_hidden_status_line( $request, $code )
+
+Send a hidden HTTP status to the client with $code.
+
+This is intended for where EPrints already displays a useful error 
+message but a 200 HTTP status code is otherwise logged.
+
+=cut
+######################################################################
+
+sub send_hidden_status_line
+{
+        my( $request, $code ) = @_;
+
+        $request->status( $code );
+	$request->custom_response( $code, "" );
+}
+
+######################################################################
+=pod
+
 =item $rc = EPrints::Apache::AnApache::ranges( $r, $maxlength, $chunks )
 
 Populates the byte-ranges in $chunks requested by the client.

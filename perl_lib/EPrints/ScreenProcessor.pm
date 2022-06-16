@@ -325,6 +325,7 @@ sub process
 			$self->add_message( "error", $self->{session}->html_phrase( 
         	                "Plugin/Screen:csrf_detected" ) );
                 	$self->{screenid} = "Error";
+			EPrints::Apache::AnApache::send_hidden_status_line( $self->{"session"}->request, 403 );
 		}
 	}
 
@@ -341,12 +342,14 @@ sub process
 	{
 		$self->screen->register_error;
 		$self->{screenid} = "Error";
+		EPrints::Apache::AnApache::send_hidden_status_line( $self->{"session"}->request, 403 );
 	}
 	elsif( !$self->screen->obtain_edit_lock )
 	{
 		$self->add_message( "error", $self->{session}->html_phrase( 
 			"Plugin/Screen:item_locked" ) );
 		$self->{screenid} = "Error";
+		EPrints::Apache::AnApache::send_hidden_status_line( $self->{"session"}->request, 423 );
 	}
 	else
 	{
@@ -398,12 +401,14 @@ sub process
 			"Plugin/Screen:screen_not_allowed",
 			screen=>$self->{session}->make_text( $self->{screenid} ) ) );
 		$self->{screenid} = "Error";
+		EPrints::Apache::AnApache::send_hidden_status_line( $self->{"session"}->request, 403 );
 	}
 	elsif( !$self->screen->obtain_view_lock )
 	{
 		$self->add_message( "error", $self->{session}->html_phrase( 
 			"Plugin/Screen:item_locked" ) );
 		$self->{screenid} = "Error";
+		EPrints::Apache::AnApache::send_hidden_status_line( $self->{"session"}->request, 423 );
 	}
 
 	# XHTML or special format?
@@ -505,6 +510,7 @@ sub screen
 					"Plugin/Screen:unknown_screen",
 					screen=>$self->{session}->make_text( $screen ) ) );
 			$self->{screenid} = "Error";
+			EPrints::Apache::AnApache::send_hidden_status_line( $self->{"session"}->request, 400 );
 			return $self->screen;
 		}
 	}
@@ -525,6 +531,7 @@ sub render_messages
 		my $db = $self->{session}->get_database;
 		@old_messages = $db->get_user_messages( $cuser->get_id, clear => 1 );
 	}
+	$self->check_messages_for_status( \@old_messages );
 	foreach my $message ( @old_messages, @{$self->{messages}} )
 	{
 		if( !defined $message->{content} )
@@ -541,6 +548,19 @@ sub render_messages
 	return $chunk;
 }
 
+sub check_messages_for_status
+{
+	my ( $self, $old_messages ) = @_;
+	foreach my $message ( @$old_messages )
+	{
+		next unless $message->{type} eq "error";
+		my $code = 400;
+		$code =  403 if $message->{content} =~ / not perform/i;
+		$code = 423 if $message->{content} =~ / locked/i;	
+		EPrints::Apache::AnApache::send_hidden_status_line( $self->{"session"}->request, $code );
+		last;
+	}
+}
 
 sub action_not_allowed
 {

@@ -1197,6 +1197,58 @@ sub _update
 ######################################################################
 =pod
 
+=item  $success = $db->_update_quoted( $tablename, $keycols, $keyvals, $columns, @qvalues )
+
+Updates C<$columns> in C<$tablename> with C<@qvalues> where C<$keycols>
+equals C<$keyvals> and returns the number of rows affected.
+
+Will not quote C<$keyvals> or C<@qvalues> before use - use this method
+with care!
+
+This method is internal.
+
+=cut
+######################################################################
+
+sub _update_quoted
+{
+	my( $self, $table, $keynames, $keyvalues, $columns, @values ) = @_;
+
+	my $rc = 1;
+
+	my $prefix = "UPDATE ".$self->quote_identifier($table)." SET ";
+	my @where;
+	for(my $i = 0; $i < @$keynames; ++$i)
+	{
+		push @where,
+			$self->quote_identifier($keynames->[$i]).
+			"=".
+			$keyvalues->[$i];
+	}
+	my $postfix = "WHERE ".join(" AND ", @where);
+
+	foreach my $row (@values)
+	{
+		my $sql = $prefix;
+		for(my $i = 0; $i < @$columns; ++$i)
+		{
+			$sql .= ", " unless $i == 0;
+			$sql .= $self->quote_identifier($columns->[$i])."=".$row->[$i];
+		}
+		$sql .= " $postfix";
+
+		my $sth = $self->prepare($sql);
+		$rc &&= $self->execute($sth, $sql);
+		$sth->finish;
+	}
+
+	return $rc;
+}
+
+
+######################################################################
+=pod
+
 =item $success = $db->insert( $table, $columns, @values )
 
 Inserts C<@values> into the table C<$table>. If C<$columns> is defined 

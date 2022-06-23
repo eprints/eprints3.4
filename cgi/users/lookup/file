@@ -42,6 +42,7 @@ if( $mode eq "prefix" )
 		@{$lookup_lc_names};
 }
 
+binmode(STDOUT,":utf8");
 print <<END;
 <?xml version="1.0" encoding="UTF-8" ?>
 

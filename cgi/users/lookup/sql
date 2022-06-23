@@ -28,6 +28,7 @@ $Q_string_frag = $session->get_database->quote_value( $Q_string_frag );
 
 my $sql = "SELECT $Q_xml from $Q_table WHERE $Q_value ".$session->get_database->sql_LIKE()." $Q_string_frag";
 
+binmode(STDOUT,":utf8");
 print <<END;
 <?xml version="1.0" encoding="UTF-8" ?>
 

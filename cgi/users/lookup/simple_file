@@ -32,6 +32,7 @@ if( $mode eq "prefix" )
 }
 close DATA;
 
+binmode(STDOUT,":utf8");
 print <<END;
 <?xml version="1.0" encoding="UTF-8" ?>
 

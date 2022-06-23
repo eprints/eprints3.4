@@ -15,6 +15,7 @@ $sql = "SELECT url,name,value from $table WHERE name ".$database->sql_LIKE()." '
 
 my $doc = $session->make_element( 'ul' );
 
+binmode(STDOUT,":utf8");
 print <<END;
 <?xml version="1.0" encoding="UTF-8" ?>
 

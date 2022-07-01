@@ -742,32 +742,33 @@ sub _add_http_paths
 	my $config = $self->{config};
 
 	if( $config->{securehost} )
-        {
-                $config->{secureport} ||= 443;
-        }
+	{
+		$config->{secureport} ||= 443;
+	}
 
 	# Ensure base_url and perl_url are still defined up front in case 20_baseurls.pl goes missing.
 	unless ( $config->{base_url} )
 	{
 		my $uri = URI->new( "http://" );
-	        if( EPrints::Utils::is_set( $config->{securehost} ) )
-        	{
-                	$uri->scheme( "https" );
-	                $uri->host( $config->{securehost} );
-        	        $uri->port( $config->{secureport} );
-                	$uri = $uri->canonical;
-	                $uri->path( $config->{https_root} );
-        	}
-        	else
-        	{
-                	$uri->scheme( "http" );
-	                $uri->host( $config->{host} );
-        	        $uri->port( $config->{port} );
-                	$uri = $uri->canonical;
-                	$uri->path( $config->{http_root} );
-        	}
+		if( EPrints::Utils::is_set( $config->{securehost} ) )
+		{
+			$uri->scheme( "https" );
+			$uri->host( $config->{securehost} );
+			$uri->port( $config->{secureport} );
+			$uri = $uri->canonical;
+			$uri->path( $config->{https_root} );
+		}
+		else
+		{
+			$uri->scheme( "http" );
+			$uri->host( $config->{host} );
+			$uri->port( $config->{port} );
+			$uri = $uri->canonical;
+			$uri->path( $config->{http_root} );
+		}
+		$config->{base_url} = $uri;
 	}
-        $config->{"perl_url"} ||= $config->{"base_url"} . "/cgi";
+	$config->{"perl_url"} ||= $config->{"base_url"} . "/cgi";
 
 	# Backwards-compatibility: http is fairly simple, https may go wrong
 	if( !defined($config->{"http_root"}) )

@@ -1311,6 +1311,7 @@ sub commit
 
 	my $dataset = $self->{session}->get_repository->get_dataset( "document" );
 
+	my $security = $self->get_value( "security" );
 	my $security_changed = $self->{changed}->{security} if defined $self->{changed}->{security};
 
 	$self->update_triggers(); # might cause a new revision
@@ -1355,7 +1356,7 @@ sub commit
 	}
 	
 	# Make sure full text is reindexed to add/remove documents whose access restrictions have changed.
-	if ( defined $security_changed && $security_changed eq "public" || $self->get_value( "security" ) eq "public" )
+	if ( defined $security_changed && $security_changed eq "public" || defined $security && $security eq "public" )
 	{
 		$self->get_parent->queue_fulltext;
 	}

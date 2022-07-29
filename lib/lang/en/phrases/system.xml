@@ -3564,6 +3564,8 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="saved_search_fieldopt_frequency_weekly">Once per Week</epp:phrase>
     <epp:phrase id="saved_search_fieldopt_frequency_monthly">Once per Month</epp:phrase>
     <epp:phrase id="saved_search_fieldname_userid">User ID of Owner</epp:phrase>
+    <epp:phrase id="saved_search_fieldname_additional_recipients">Additional recipients</epp:phrase>
+    <epp:phrase id="saved_search_fieldhelp_additional_recipients">Comma-separated list of email addresses for additional recipients who should also receive this saved search's results.</epp:phrase>
     <epp:phrase id="saved_search_fieldname_mailempty">Mail empty results</epp:phrase>
     <epp:phrase id="saved_search_fieldhelp_mailempty">If there are no new items matching your saved search, since it was last mailed, do you still want to be mailed?</epp:phrase>
     <epp:phrase id="saved_search_radio_mailempty_true">Yes, mail me empty alerts.</epp:phrase>

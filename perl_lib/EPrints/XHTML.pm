@@ -809,12 +809,13 @@ sub tabs
 	for(0..$#$labels)
 	{
 		my $label = defined($aliases) ? $aliases->{$_} : $_;
-		$label =~ s/[^a-zA-Z0-9_-]/_/g;
+		my $sanit_label = $label;
+		$sanit_label =~ s/[^a-zA-Z0-9_-]/_/g;
 		my $width = int( 100 / @$labels );
 		$width += 100 % @$labels if $_ == 0;
 		my $tab = $ul->appendChild( $xml->create_element( "li",
 			($current == $_ ? (class => "ep_tab_selected") : ()),
-			id => $basename."_tab_".$label,
+			id => $basename."_tab_".$sanit_label,
 			role => "tab",
 			style => "width: $width\%",
 		) );

@@ -516,6 +516,7 @@ sub validate
         };
 
 	my @probs = $self->SUPER::validate( $session, $value, $object );
+	my @orig_probs = @probs;
 
 	push @probs, $session->html_phrase( "validate:invalid_date", fieldname => &$f_fieldname );
 
@@ -525,7 +526,7 @@ sub validate
 	{
 		my $resolution = $self->get_resolution( $value );
 
-		return () if $resolution == 0;
+		return @orig_probs if $resolution == 0;
 		return @probs if $resolution > 6;
 
 		$value = $self->trim_date( $value, $resolution );
@@ -548,7 +549,7 @@ sub validate
 			return @probs if $resolution == 6 && ( $date[5] < 0 || $date[5] > 59 );
 		}
 	}
-        return ();
+	return @orig_probs;
 }
 
 

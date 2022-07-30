@@ -844,7 +844,7 @@ sub tabs
 		if( defined $panel )
 		{
 			my $inner_panel = $xml->create_element( "div", 
-				id => $basename."_panel_".$label,
+				id => $basename."_panel_".$sanit_label,
 			);
 			if( $_ != $current )
 			{

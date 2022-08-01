@@ -1069,6 +1069,8 @@ sub commit
 {
 	my( $self, $force ) = @_;
 
+	$force ||= 0;
+
 	# recalculate issues number
 	if( exists $self->{changed}->{item_issues_status} )
 	{

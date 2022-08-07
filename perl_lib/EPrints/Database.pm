@@ -769,14 +769,7 @@ sub get_column_type
 			$type .= " COLLATE ".$collate;
 		}
 
-		$default = " DEFAULT ''";
-	}
-	elsif (
-		$data_type eq SQL_VARBINARY() or
-		$data_type eq SQL_LONGVARBINARY()
-	)
-	{
-		$default = " DEFAULT ''";
+		$default = " DEFAULT ''" if $data_type eq SQL_VARCHAR();
 	}
 	elsif (
 		$data_type eq SQL_TINYINT() or

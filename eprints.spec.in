@@ -1,4 +1,4 @@
-{!?_epname: %define _epname @PACKAGE@}
+%{!?_epname: %define _epname @PACKAGE@}
 %{!?_epversion: %define _epversion @VERSION@}
 %{!?_eprelease: %define _eprelease 1}
 %{!?_epuser: %define _epuser @INSTALL_USER@}

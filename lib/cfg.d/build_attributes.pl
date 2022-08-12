@@ -80,7 +80,7 @@ $c->{build_node_attributes} = sub
                                 # Any extra attributes in the config should be added here	
                                 while( my( $config_key, $config_value ) = each %$config_attribute )
                                 {
-					$config_value = resolve_value( $config_value );
+					$config_value = resolve_value( $repo, $config_value );
                                         push @new_attrs, ( $config_key, $config_value ) if !( $config_key =~ m/^_{1}/ );
                                 }
                         }

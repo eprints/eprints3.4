@@ -11,41 +11,39 @@
 #       1. Look for the attribute value in config i.e. $c
 #       2. Apply any changes to that specific value i.e. either replace or add to it
 #       3. If there are multiple attribute values it will cycle through them and repeat the above
-#       4. Finally it will add any extra attributes that are found within the config hash
 #
 # Examples:
 # - A class addition, useful for adding framework css classes
-#       $c->{config_class}->{"ep_something"} = { _class => "new-class", _action => "add" };
+#	push @{$c->{config_attrs}->{class}->{"ep_search_controls"}}, ({ class => "framework-class", _change_action => "replace" });
 #
 # - A change to the elements id attribute, useful for overwriting layered css
-#       $c->{config_id}->{"ep_phraseedit_addbar"} = { _id => "my_new_id", _change_action => "replace" };
+#	push @{$c->{config_attrs}->{id}->{"ep_id_for_elem"}}, ({ id => "new_id", _change_action => "replace" });
 #
 # - Adding a new data attribute, useful for addding in accessibility attributes
-#       $c->{config_class}->{"ep_inaccessibile"} = { data-accessibility => "value" };
+#	push @{$c->{config_attrs}->{id}->{"ep_id_for_elem"}}, ({ "data_info" => "data-info" });
 #
 # - Creating a classname based on user account type
-#	$c->{config_class}->{"ep_page_thing"} = { _class => sub {
-#                                        my $repo = shift @_;
+#	push @{$c->{config_attrs}->{class}->{"ep_page_thing"}}, ({ _class => sub {
+#		my $repo = shift @_;
 #
-#                                        if ( defined $repo->current_user && $repo->current_user->is_staff )
-#                                        {
-#                                                return "staff-member-class";
-#                                        }
-#                                        else
-#                                        {
-#                                                return "non-staff-class";
-#                                        }
-#                                },
-#                                _change_action => "replace" };
+#		if ( defined $repo->current_user && $repo->current_user->is_staff )
+#		{
+#			return "staff-member-class";
+#		}
+#		else
+#		{
+#			return "non-staff-class";
+#		}
+#		}, _change_action => "replace" });
 #
 ######################################################################
 
 =pod
 $c->{build_node_attributes} = sub
 {
-        my ($repo, $name, $node, @attrs) = @_;
+	my ($repo, $name, $node, @attrs) = @_;
 
-        my @new_attrs = ();
+	my %attrs_in = @attrs;
 
 	sub resolve_value {
 		my ( $repo, $val ) = @_;
@@ -53,47 +51,41 @@ $c->{build_node_attributes} = sub
 		return( 0 ) if( !defined $val );
 
 		ref( $val ) eq "CODE" ? return $val->( $repo ) : return $val;
+        }
+	
+	for my $key_in ( keys %attrs_in )
+	{
+		my $value_in = $attrs_in{$key_in};
+		if ( defined $value_in && $value_in ne "" )
+		{
+			for my $value_in_single ( split(" ", $value_in) )
+			{
+				my $attrs_config = $repo->config( "config_attrs", "$key_in", $value_in_single );
+				if ( defined $attrs_config )
+				{
+					for ( @$attrs_config )
+					{				
+						my %attr_config = %$_;
+						for my $key_config ( keys %attr_config )
+						{
+							my $value_config = resolve_value( $repo, $attr_config{$key_config} );
+							if ( exists $attrs_in{$key_config} && $attr_config{_change_action} eq "add" )
+							{
+								$attrs_in{$key_config} = $attrs_in{$key_config}." ".$value_config;
+							}
+							else
+							{
+								$attrs_in{$key_config} = $value_config;
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
-        while(my( $key, $value ) = splice(@attrs,0,2))
-        {
-		if ( defined $value && $value ne "" )
-		{
-                        my $build_value = "";
-                        for my $core_value ( split(" ", $value) )
-                        {
-                                my $config_attribute = $repo->config( "config_$key", $core_value );
-                                if ( defined $config_attribute->{"_$key"} )
-                                {
-					my $resolved_value = resolve_value( $repo, $config_attribute->{"_$key"} );
-                                        if ( $config_attribute->{_change_action} eq "replace" )
-                                        {
-                                                $core_value = $resolved_value;
-                                        }
-                                        elsif ( $config_attribute->{_change_action} eq "add" )
-                                        {
-                                                $core_value = $core_value." ".$resolved_value;
-                                        }
-                                }
-                                $build_value = $build_value." ".$core_value;
-
-                                # Any extra attributes in the config should be added here	
-                                while( my( $config_key, $config_value ) = each %$config_attribute )
-                                {
-					$config_value = resolve_value( $repo, $config_value );
-                                        push @new_attrs, ( $config_key, $config_value ) if !( $config_key =~ m/^_{1}/ );
-                                }
-                        }
-                        $build_value =~ s/^\s{1}//;
-			push @new_attrs, ( $key, $build_value );
-		}
-		else
-		{
-			push @new_attrs, ( $key, $value );
-		}
-        }
-
-        return @new_attrs;
+	@attrs = %attrs_in;
+	return @attrs;
 };
 =cut
 

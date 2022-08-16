@@ -67,6 +67,8 @@ $c->{build_node_attributes} = sub
 						my %attr_config = %$_;
 						for my $key_config ( keys %attr_config )
 						{
+							next if ( $key_config =~ m/^_{1}/ );
+
 							my $value_config = resolve_value( $repo, $attr_config{$key_config} );
 							if ( exists $attrs_in{$key_config} && EPrints::Utils::is_set( $attr_config{_change_action} ) && $attr_config{_change_action} eq "add" )
 							{

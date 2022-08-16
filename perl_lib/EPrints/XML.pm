@@ -180,9 +180,9 @@ sub create_element
 	my $repo = $self->{repository};
 	my $node = $self->{doc}->createElement( $name );
 
-        if ( defined $repo && $repo->can_call( "build_node_attributes" ) ){
-                @attrs = $repo->call( "build_node_attributes", $repo, $name, $node, @attrs );
-        }
+	if ( defined $repo && $repo->can_call( "build_node_attributes" ) ){
+		@attrs = $repo->call( "build_node_attributes", $repo, $name, $node, @attrs );
+	}
 
 	while(my( $key, $value ) = splice(@attrs,0,2))
 	{

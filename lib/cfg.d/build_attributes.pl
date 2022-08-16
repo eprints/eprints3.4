@@ -38,7 +38,6 @@
 #
 ######################################################################
 
-=pod
 $c->{build_node_attributes} = sub
 {
 	my ($repo, $name, $node, @attrs) = @_;
@@ -56,7 +55,7 @@ $c->{build_node_attributes} = sub
 	for my $key_in ( keys %attrs_in )
 	{
 		my $value_in = $attrs_in{$key_in};
-		if ( defined $value_in && $value_in ne "" )
+		if ( EPrints::Utils::is_set( $value_in ) )
 		{
 			for my $value_in_single ( split(" ", $value_in) )
 			{
@@ -64,12 +63,12 @@ $c->{build_node_attributes} = sub
 				if ( defined $attrs_config )
 				{
 					for ( @$attrs_config )
-					{				
+					{
 						my %attr_config = %$_;
 						for my $key_config ( keys %attr_config )
 						{
 							my $value_config = resolve_value( $repo, $attr_config{$key_config} );
-							if ( exists $attrs_in{$key_config} && $attr_config{_change_action} eq "add" )
+							if ( exists $attrs_in{$key_config} && EPrints::Utils::is_set( $attr_config{_change_action} ) && $attr_config{_change_action} eq "add" )
 							{
 								$attrs_in{$key_config} = $attrs_in{$key_config}." ".$value_config;
 							}
@@ -87,7 +86,6 @@ $c->{build_node_attributes} = sub
 	@attrs = %attrs_in;
 	return @attrs;
 };
-=cut
 
 =head1 COPYRIGHT
 

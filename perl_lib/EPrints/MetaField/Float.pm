@@ -84,6 +84,30 @@ sub render_xml_schema_type
 	return $session->make_doc_fragment;
 }
 
+sub get_search_conditions_not_ex
+{
+	my( $self, $session, $dataset, $search_value, $match, $merge, $search_mode ) = @_;
+
+	my $number = '[0-9]+\.?[0-9]*';
+	if( $search_value =~ m/^$number$/ )
+	{
+		my @r = ();
+		push @r, EPrints::Search::Condition->new(
+			'>=',
+			$dataset,
+			$self,
+			$search_value - 0.00001);
+		push @r, EPrints::Search::Condition->new(
+			'<=',
+			$dataset,
+			$self,
+			$search_value + 0.00001);
+		return EPrints::Search::Condition->new( "AND", @r );
+	}
+
+	return $self->SUPER::get_search_conditions_not_ex( $session, $dataset, $search_value, $match, $merge, $search_mode );
+}
+
 ######################################################################
 1;
 

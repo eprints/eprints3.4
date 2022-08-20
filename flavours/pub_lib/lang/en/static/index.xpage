@@ -47,8 +47,8 @@
   <dt id="search-repository"><a href="{$config{rel_cgipath}}/search/advanced">Search Repository</a></dt>
   <dd>Search the repository using a full range of fields. Use the search field at the top of the page for a quick search.</dd>
     
-  <dt id="browse-repository"><a href="{$config{rel_path}}/view/subjects/">Browse Repository</a></dt>
-  <dd>Browse the items in the repository by subject.</dd>
+  <dt id="browse-repository"><a href="{$config{rel_path}}/view/">Browse Repository</a></dt>
+  <dd>Browse the items in the repository by <a href="{$config{rel_path}}/view/year/">year</a>, <a href="{$config{rel_path}}/view/subjects/">subject</a>, <a href="{$config{rel_path}}/view/divisions/">division</a> or <a href="{$config{rel_path}}/view/creators/">author</a>.</dd>
  
   <dt id="about-this-repository"><a href="{$config{rel_path}}/information.html">About this Repository</a></dt>
   <dd>More information about this site.</dd>

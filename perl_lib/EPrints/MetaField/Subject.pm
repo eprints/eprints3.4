@@ -241,6 +241,18 @@ sub render_single_value
 sub render_value
 {
 	my( $self, $session, $value, $alllangs, $nolink, $object ) = @_;
+
+	if( defined $self->{render_value} )
+	{
+		return $self->call_property( "render_value",
+			$session,
+			$self,
+			$value,
+			$alllangs,
+			$nolink,
+			$object );
+	}
+
     unless( EPrints::Utils::is_set( $value ) )
     {
         if( $self->{render_quiet} )

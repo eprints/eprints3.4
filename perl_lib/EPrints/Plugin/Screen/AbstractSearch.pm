@@ -760,10 +760,10 @@ sub render_search_fields
 		my $label;
 		my $field;
 		my $ft = $sf->{"field"}->get_type();
-		if ( $ft eq "namedset" )
+		if ( ( $ft eq "set" || $ft eq "namedset" ) && $sf->{"field"}->{search_input_style} eq "checkbox" )
 		{
 			$label = EPrints::Utils::tree_to_utf8( $sf->render_name );
-			$field = $sf->render( legend => $label );
+			$field = $sf->render( legend => $label . ':' );
 		}
 		else {
 			$label = $self->{session}->make_element( "span", id=>$sf->get_form_prefix."_label" );

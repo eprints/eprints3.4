@@ -75,7 +75,8 @@ my $searchexp = new EPrints::Search(
 	search_fields => $search_fields,
 	custom_order => "-datestamp",
 	dataset => $ds,
-	limit => ($indexOffset+$number_to_get-1) );
+	limit => ($indexOffset+$number_to_get-1),
+	filters => $filters );
 my $title;
 if( $show_conditions )
 {

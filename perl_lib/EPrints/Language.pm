@@ -389,6 +389,32 @@ sub has_phrase
 	return( defined $phrase && !$fb );
 }
 
+######################################################################
+=pod
+
+=item $boolean = $language->has_non_empty_phrase( $phraseid )
+
+Return 1 if the phraseid is defined for this language and is not an 
+empty string. Return 0 if it is an empty string, only available as a 
+fallback or unavailable.
+
+=cut
+######################################################################
+
+sub has_non_empty_phrase
+{
+	my( $self, $phraseid ) = @_;
+
+	my( $phrase , $fb ) = $self->_get_phrase( $phraseid );
+
+	my $text = "";
+	if ( defined $phrase )
+	{
+		$text = EPrints::Utils::tree_to_utf8( $phrase );
+	}
+
+	return( $text && !$fb );
+}
 
 ######################################################################
 # 

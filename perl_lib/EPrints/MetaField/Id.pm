@@ -94,7 +94,7 @@ sub get_index_codes_basic
 {
 	my( $self, $session, $value ) = @_;
 
-	return( [], [], [] ) if !EPrints::Utils::is_set( $value );
+	return( [], [], [] ) if !EPrints::Utils::is_set( $value ) || length( $value ) > 128;
 
 	return( [ $value ], [], [] );
 }

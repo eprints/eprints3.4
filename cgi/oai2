@@ -264,8 +264,8 @@ sub get_eprint_by_identifier
 	my $searchexp = $dataset->prepare_search;
 
 	$searchexp->add_field(
-		$dataset->field( "eprint_status" ),
-		"archive deletion",
+		$dataset->field( "datestamp" ),
+		"1970-01-01-",
 		"EQ",
 		"ANY"
 	);
@@ -411,8 +411,8 @@ sub Identify
 		limit => 1,
 	);
 	$searchexp->add_field(
-		$dataset->field( "eprint_status" ),
-		"archive deletion",
+		$dataset->field( "datestamp" ),
+		"1970-01-01-",
 		"EQ",
 		"ANY"
 	);
@@ -776,8 +776,8 @@ sub _list
 	$filters = [] unless defined $filters;
 
 	push @$filters, {
-		meta_fields => [qw( eprint_status )],
-		value => "archive deletion",
+		meta_fields => [qw( datestamp )],
+		value => "1970-01-01-",
 		match => "EQ",
 		merge => "ANY",
 	};

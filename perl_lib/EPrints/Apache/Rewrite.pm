@@ -560,8 +560,15 @@ sub handler
                         			$r->handler('perl-script');
                         			$r->set_handlers(PerlResponseHandler => [ 'EPrints::Apache::Template' ] );
 
-                        			# log abstract hits
-                        			$r->pool->cleanup_register(\&EPrints::Apache::LogHandler::eprint, $r);
+									if ( $eprint->get_value( 'eprint_status' ) eq "deletion" )
+									{
+										 EPrints::Apache::AnApache::send_status_line( $r, 410, "Gone" );	
+									}
+									else 
+									{
+										# log abstract hits
+										$r->pool->cleanup_register(\&EPrints::Apache::LogHandler::eprint, $r);
+									}
                     			}
                 		}
             			return OK; ## /id/eprint/XX
@@ -747,8 +754,15 @@ if(not $repository->config("use_long_url_format"))
 				$r->handler('perl-script');
 				$r->set_handlers(PerlResponseHandler => [ 'EPrints::Apache::Template' ] );
 
-				# log abstract hits
-				$r->pool->cleanup_register(\&EPrints::Apache::LogHandler::eprint, $r);
+				if ( $eprint->get_value( 'eprint_status' ) eq "deletion" )
+				{
+					EPrints::Apache::AnApache::send_status_line( $r, 410, "Gone" );
+				}
+				else 
+				{
+					# log abstract hits
+					$r->pool->cleanup_register(\&EPrints::Apache::LogHandler::eprint, $r);
+				}
 			}
 		}
 

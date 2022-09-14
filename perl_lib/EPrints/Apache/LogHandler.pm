@@ -202,6 +202,7 @@ sub document
 	my $epdata = _generic( $r, { _parent => $doc } );
 
 	$epdata->{requester_id} = $ip;
+	$epdata->{requester_userid} = ( defined $doc->repository->current_user ) ? $doc->repository->current_user->id : undef;
 	$epdata->{service_type_id} = "?fulltext=yes";
 	$epdata->{referent_id} = $doc->value( "eprintid" );
 	$epdata->{referent_docid} = $doc->id;
@@ -243,6 +244,8 @@ sub eprint
 	my $epdata = _generic( $r, { _parent => $eprint } );
 
 	$epdata->{requester_id} = $ip;
+	$epdata->{requester_userid} = ( defined $eprint->repository->current_user ) ? $eprint->repository->current_user->id : undef;
+
 	$epdata->{service_type_id} = "?abstract=yes";
 	$epdata->{referent_id} = $eprint->id;
 

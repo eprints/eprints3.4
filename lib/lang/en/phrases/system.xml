@@ -3873,6 +3873,7 @@ PY = 2006 and OG = (Cambridge)<br />
 <epp:phrase id="access_fieldname_referring_entity_id">Referer URL</epp:phrase>
 <epp:phrase id="access_fieldname_requester_country">Requester's country</epp:phrase>
 <epp:phrase id="access_fieldname_requester_id">Requester's IP address</epp:phrase>
+<epp:phrase id="access_fieldname_requester_userid">Requester's user ID</epp:phrase>
 <epp:phrase id="access_fieldname_requester_institution">Requester's organisation</epp:phrase>
 <epp:phrase id="access_fieldname_requester_user_agent">Requester's user agent</epp:phrase>
 <epp:phrase id="access_fieldname_service_type_id">View or download</epp:phrase>

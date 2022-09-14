@@ -75,7 +75,13 @@ ID of the document requested (if relevant).
 
 =head1 REFERENCES AND RELATED OBJECTS
 
-None.
+=over 4
+
+=item requester_userid (itemref)
+
+ID of the user if the object is requested by someone logged in.
+
+=back
 
 =head1 INSTANCE VARIABLES
 
@@ -128,6 +134,8 @@ sub get_system_field_info
         { name=>"datestamp", type=>"timestamp", required=>1, },
 
         { name=>"requester_id", type=>"text", required=>1, text_index=>0, },
+		
+        { name=>"requester_userid", type=>"itemref", datasetid=>"user", required=>0 },
 
         { name=>"requester_user_agent", type=>"longtext", required=>0, text_index=>0, },
 

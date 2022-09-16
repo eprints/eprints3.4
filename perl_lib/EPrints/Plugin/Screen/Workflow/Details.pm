@@ -178,7 +178,8 @@ sub render
 
 	my $table = $session->make_element( "table",
 			border => "0",
-			cellpadding => "3" );
+			cellpadding => "3",
+			class => "ep_view_details" );
 	$page->appendChild( $table );
 
 	foreach my $stage_id ($self->workflow->get_stage_ids, "")
@@ -214,7 +215,7 @@ sub render
 			my $title = $stage->render_title();
 			my $table_inner = $session->make_element( "div", class=>"ep_title_row_inner" );
 			my $tr_inner = $session->make_element( "div" );
-			my $td_inner_1 = $session->make_element( "div" );
+			my $td_inner_1 = $session->make_element( "div", class=>"ep_title" );
 			$th->appendChild( $table_inner );
 			$table_inner->appendChild( $tr_inner );
 			$tr_inner->appendChild( $td_inner_1 );

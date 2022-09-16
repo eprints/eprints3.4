@@ -23,7 +23,7 @@
 #	push @{$c->{config_attrs}->{id}->{"ep_id_for_elem"}}, ({ "data_info" => "data-info" });
 #
 # - Creating a classname based on user account type
-#	push @{$c->{config_attrs}->{class}->{"ep_page_thing"}}, ({ _class => sub {
+#	push @{$c->{config_attrs}->{class}->{"ep_page_thing"}}, ({ class => sub {
 #		my $repo = shift @_;
 #
 #		if ( defined $repo->current_user && $repo->current_user->is_staff )

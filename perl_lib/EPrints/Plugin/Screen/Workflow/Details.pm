@@ -179,7 +179,7 @@ sub render
 	my $table = $session->make_element( "table",
 			border => "0",
 			cellpadding => "3",
-			class => "ep_view_details" );
+			class => "ep_view_details_table" );
 	$page->appendChild( $table );
 
 	foreach my $stage_id ($self->workflow->get_stage_ids, "")

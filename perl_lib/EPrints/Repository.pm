@@ -3405,9 +3405,9 @@ sub render_row
 
 	my( $tr, $th, $td );
 
-	$tr = $repository->make_element( "tr" );
+	$tr = $repository->make_element( "tr", class=>"ep_table_row" );
 
-	$th = $repository->make_element( "th", valign=>"top", class=>"ep_row" ); 
+	$th = $repository->make_element( "th", valign=>"top", class=>"ep_row ep_table_header" ); 
 	if( !defined $key )
 	{
 		$th->appendChild( $repository->render_nbsp );
@@ -3421,7 +3421,7 @@ sub render_row
 
 	foreach my $value ( @values )
 	{
-		$td = $repository->make_element( "td", valign=>"top", class=>"ep_row" ); 
+		$td = $repository->make_element( "td", valign=>"top", class=>"ep_row ep_table_data" ); 
 		$td->appendChild( $value );
 		$tr->appendChild( $td );
 	}

@@ -55,7 +55,7 @@ sub render
 		$html->appendChild( $intro_div_outer );
 	}
 
-	my $table = $xml->create_element( "table" );
+	my $table = $xml->create_element( "table", id => "ep_datasets_table" );
 	$html->appendChild( $table );
 
 	foreach my $dataset (@datasets)

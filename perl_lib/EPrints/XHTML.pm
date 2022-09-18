@@ -839,7 +839,7 @@ sub tabs
 			$labels->[$_],
 			href => $href,
 			onclick => "return ep_showTab('$basename','$label',".($expensive{$_}?1:0).");",
-			class => "ep_workflow_views_link",
+			class => "ep_tab_link",
 		) );
 
 		if( defined $panel )

@@ -74,7 +74,8 @@ sub render_action_link
 	my $repo = $self->{session};
 
 	my $link = $repo->xml->create_element( "a",
-		href => $repo->config( "http_cgiroot" ) . "/register"
+		href => $repo->config( "http_cgiroot" ) . "/register",
+		class => "ep_tm_key_tools_item_link"
 	);
 	$link->appendChild( $self->render_title );
 

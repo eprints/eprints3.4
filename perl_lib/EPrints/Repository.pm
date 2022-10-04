@@ -3375,12 +3375,13 @@ it needs to point to a different frame or window.
 
 sub render_link
 {
-	my( $self, $uri, $target ) = @_;
+	my( $self, $uri, $target, %opts ) = @_;
 
 	return $self->make_element(
 		"a",
 		href=>$uri,
-		target=>$target );
+		target=>$target,
+		%opts );
 }
 
 ######################################################################

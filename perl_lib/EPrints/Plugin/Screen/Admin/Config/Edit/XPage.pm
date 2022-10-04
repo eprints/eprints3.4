@@ -51,7 +51,7 @@ sub action_edit {} # dummy action for key_tools
 
 sub render_action_link
 {
-	my( $self ) = @_;
+	my( $self, %opts ) = @_;
 
 	my $conffile = $self->{processor}->{conffile};
 
@@ -61,7 +61,8 @@ sub render_action_link
 		configfile => $conffile,
 	);
 
-	my $link = $self->{session}->render_link( $uri );
+	$opts{class} = "ep_tm_key_tools_item_link" if not defined $opts{class};
+	my $link = $self->{session}->render_link( $uri, undef, %opts );
 	$link->appendChild( $self->{session}->html_phrase( "lib/session:edit_page" ) );
 
 	return $link;

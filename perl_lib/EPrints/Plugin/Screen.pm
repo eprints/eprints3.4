@@ -387,7 +387,8 @@ sub render_action_link
 		screen => substr($self->{id},8),
 	);
 
-	my $link = $self->{session}->render_link( $uri );
+	$opts{class} = "ep_tm_key_tools_item_link" if not defined $opts{class}; 
+	my $link = $self->{session}->render_link( $uri, undef, %opts );
 	$link->appendChild( $self->render_title );
 
 	return $link;

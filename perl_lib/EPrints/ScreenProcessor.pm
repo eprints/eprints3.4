@@ -248,7 +248,7 @@ sub render_item_list
 	{
 		my $screen = $opt->{screen};
 
-		my $li = $xml->create_element( "li" );
+		my $li = $xml->create_element( "li", class => "ep_tm_key_tools_item" );
 
 		my $li_class = "";
                 $li_class = $self->{session}->config( 'item_list_class' ) if defined $self->{session}->config( 'item_list_class' );

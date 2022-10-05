@@ -420,7 +420,7 @@ sub render_name
 
 	if( defined $self->{title_xhtml} )
 	{
-		return $self->{title_xhtml};
+		return EPrints::XML::clone_node( $self->{title_xhtml}, 1 );
 	}
 	my $phrasename = $self->{confid}."_fieldname_".$self->{name};
 
@@ -474,7 +474,7 @@ sub render_help
 
 	if( defined $self->{help_xhtml} )
 	{
-		return $self->{help_xhtml};
+		return EPrints::XML::clone_node( $self->{help_xhtml}, 1 );
 	}
 	my $phrasename = $self->{confid}."_fieldhelp_".$self->{name};
 

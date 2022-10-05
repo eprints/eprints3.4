@@ -104,7 +104,7 @@ sub send_mail
 	if( !defined $p{from_email} ) 
 	{
 		$p{from_name} = $p{session}->phrase( "archive_name" );
-		$p{from_email} = $repository->get_conf( "adminemail" );
+		$p{from_email} = $repository->get_conf( "senderemail" ) ? $repository->get_conf( "senderemail" ) : $repository->get_conf( "adminemail" );
 	}
 	
 	# If a name contains a comma we must quote it, because comma is the

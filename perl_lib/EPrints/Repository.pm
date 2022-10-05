@@ -5574,7 +5574,7 @@ sub mail_administrator
 		langid => $langid,
 		to_email => $self->get_conf( "adminemail" ),
 		to_name => $self->phrase( "lib/session:archive_admin" ),	
-		from_email => $self->get_conf( "adminemail" ),
+		from_email => $self->get_conf( "senderemail" ) ? $self->get_conf( "senderemail" ) : $self->get_conf( "adminemail" ),
 		from_name => $self->phrase( "lib/session:archive_admin" ),	
 		subject =>  EPrints::Utils::tree_to_utf8(
 			$self->html_phrase( $subjectid ) ),

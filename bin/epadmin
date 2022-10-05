@@ -889,9 +889,10 @@ END
 			$config{adminemail}, 
 		],
 		[qw/
-			$c->{adminemail} 
+			$c->{adminemail}
 		/]
 	);
+	print AEMAIL "\n# To set a different address for sending email from the repository.\n#\$c->{senderemail} = '$config{adminemail}';";
 	close AEMAIL;
 	print "Wrote $aemailfile\n";
 

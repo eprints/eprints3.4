@@ -160,7 +160,7 @@ sub get_system_field_info
 		{ name=>"name", type=>"text" },
 
 		{ name => "spec", type => "search", datasetid => "eprint",
-			default_value=>"" },
+			default_value=>"", text_index => 0 },
 
 		{ name=>"frequency", type=>"set", required=>1,
 			options=>["never","daily","weekly","monthly"],

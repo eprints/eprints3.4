@@ -804,6 +804,12 @@ sub _list
 			custom_order => "eprintid",
 			limit => ($PAGESIZE+1) );
 
+	my $fullsearchexp = $ds->prepare_search(
+            allow_blank => 1,
+            filters => [
+                @{$filters},
+            ] );	
+
 	if( defined $args->{offset} )
 	{
 		my $offset = sprintf("%d..", $args->{offset});
@@ -823,6 +829,7 @@ sub _list
 	if( defined $date_range )
 	{
 		$searchexp->add_field( $DATESTAMP_FIELD, $date_range );
+		$fullsearchexp->add_field( $DATESTAMP_FIELD, $date_range );
 	}
 
 	if( defined $args->{set} )
@@ -865,6 +872,7 @@ END
 		}
 		$value = $fields[0]->get_value_from_id( $repo, $value );
 		$searchexp->add_field( \@fields, $value, $match );
+		$fullsearchexp->add_field( \@fields, $value, $match );
 	}
 	
 	if( !defined $searchexp )
@@ -877,6 +885,7 @@ END
 	}
 	
 	my $list = $searchexp->perform_search();
+    my $fulllist = $fullsearchexp->perform_search();
 	my @records = $list->slice( 0, $PAGESIZE );
 
 	if( @records == 0 )
@@ -927,7 +936,9 @@ END
 		$response->appendChild( $repo->xhtml->data_element(
 			"resumptionToken",
 			serialise_resumptiontoken( $repo, \%token ),
-			expirationDate => EPrints::Time::get_iso_timestamp( time + 86400 )
+			expirationDate => EPrints::Time::get_iso_timestamp( time + 86400 ),
+			completeListSize => $fulllist->count,
+			cursor => $args->{offset} ? $args->{offset} : 0,
 			) );
 	}
 

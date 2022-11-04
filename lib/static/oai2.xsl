@@ -41,7 +41,6 @@ If not, see http://www.gnu.org/licenses/
   Not Done
     The 'about' section of 'record'
     The 'compession' part of 'identify'
-    The optional attributes of 'resumptionToken'
     The optional 'setDescription' container of 'set'
 
   All the links just link to oai_dc versions of records.
@@ -532,13 +531,19 @@ p.intro {
 <!-- oai resumptionToken -->
 
 <xsl:template match="oai:resumptionToken">
-   <p>There are more results.</p>
-   <table class="values">
-     <tr><td class="key">resumptionToken:</td>
-     <td class="value"><xsl:value-of select="."/>
-<xsl:text> </xsl:text>
-<a class="link" href="?verb={/oai:OAI-PMH/oai:request/@verb}&amp;resumptionToken={.}">Resume</a></td></tr>
-   </table>
+  <p>There are more results.</p>
+  <table class="values">
+    <xsl:if test="@expirationDate">
+      <tr><td class="key">expirationDate</td><td class="value"><xsl:value-of select="@expirationDate"/></td></tr>
+    </xsl:if>
+    <xsl:if test="@completeListSize">
+      <tr><td class="key">completeListSize</td><td class="value"><xsl:value-of select="@completeListSize"/></td></tr>
+    </xsl:if>
+    <xsl:if test="@cursor">
+      <tr><td class="key">cursor</td><td class="value"><xsl:value-of select="@cursor"/></td></tr>
+    </xsl:if>
+    <tr><td class="key">resumptionToken:</td><td class="value"><xsl:value-of select="."/><xsl:text> </xsl:text><a class="link" href="?verb={/oai:OAI-PMH/oai:request/@verb}&amp;resumptionToken={.}">Resume</a></td></tr>
+  </table>
 </xsl:template>
 
 <!-- unknown metadata format -->

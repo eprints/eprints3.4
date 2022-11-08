@@ -105,9 +105,11 @@ sub _parse_url
 {
 	my( $url, $no_expand ) = @_;
 
-	my $doc = $PARSER->parse_file( "$url" );
+	return $PARSER->parse_file( "$url" ) if substr( $url, 0, 6 ) ne "https:";
 
-	return $doc;
+	use LWP::Simple qw(get);
+	my $string = get( $url );
+    	return $PARSER->parse_string( $string );
 }
 
 =item $doc = parse_xml( $filename [, $basepath [, $no_expand]] )

@@ -43,7 +43,7 @@ case "$1" in
 	echo "##                                                                  ##";
 	echo "######################################################################";
 	echo "##                                                                  ##";
-	echo "## For installation advice and known isses please check:            ##";
+	echo "## For installation advice and known issues please check:           ##";
 	echo "##   https://wiki.eprints.org/w/Installing_EPrints_on_Debian/Ubuntu ##";
 	echo "##                                                                  ##";
 	echo "## Getting Started:                                                 ##";

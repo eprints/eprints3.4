@@ -421,6 +421,10 @@ sub handler
 					##redirect to /id/eprint/234/3/test.pdf
 					# It's a document....           
 					my $pos = $2; 
+					$uri = URI::Escape::uri_escape_utf8(
+						$uri,
+						"^A-Za-z0-9\-\._~\/" # don't escape /
+					);
 					return redir( $r, "$urlpath/id/eprint/$eprintid/$pos$uri$args" );
 			}   
 			else

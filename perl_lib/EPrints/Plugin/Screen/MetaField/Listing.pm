@@ -418,7 +418,7 @@ sub render
 	{
 		$html->appendChild( $self->html_phrase( "datasets" ) );
 
-		$table = $repo->make_element( "table", border=>"0" );
+		$table = $repo->make_element( "table", class=>"ep_table ep_no_border" );
 		$html->appendChild( $table );
 
 		foreach my $datasetid (sort $repo->get_dataset_ids)
@@ -485,7 +485,7 @@ sub render_fields
 	my $div = $repo->make_element( "div", class => "ep_block" );
 	$frag->appendChild( $div );
 
-	my $table = $repo->make_element( "table", border=>"0" );
+	my $table = $repo->make_element( "table", class=>"ep_table ep_no_border" );
 	$div->appendChild( $table );
 
 	$results->map(sub {
@@ -519,7 +519,7 @@ sub render_dataset
 	$html->appendChild( $h2 );
 	$h2->appendChild( $self->html_phrase( "repository" ) );
 
-	$table = $repo->make_element( "table", border=>"0" );
+	$table = $repo->make_element( "table", class=>"ep_table ep_no_border" );
 	$html->appendChild( $table );
 
 	foreach my $rfield (sort { $a->{name} cmp $b->{name} } $dataset->fields)

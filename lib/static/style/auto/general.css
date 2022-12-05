@@ -154,7 +154,7 @@ th.ep_title_row {
 	display: table-row;
 }
 
-.ep_table {
+div.ep_table {
 	display: table;
 }
 
@@ -165,4 +165,8 @@ th.ep_title_row {
 .ep_table > div > div, .ep_table_row > div, .ep_table_cell {
 	display: table-cell;
 	padding: 0.3em;
+}
+
+.ep_no_border {
+	border: 0;
 }

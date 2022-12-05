@@ -51,7 +51,7 @@ sub render
 
 	# Write the results to a table
 	
-	$table = $session->make_element( "table", border=>"0" );
+	$table = $session->make_element( "table", class=>"ep_table ep_no_border" );
 	$html->appendChild( $session->html_phrase( "cgi/users/status:cache_tables" ) );
 	$html->appendChild( $table );
 
@@ -96,7 +96,7 @@ sub render
 
 	$html->appendChild( $session->html_phrase( "cgi/users/status:dataset_tables" ) );
 
-	my $dataset_table = $session->make_element( "table", border=>"0" );
+	my $dataset_table = $session->make_element( "table", class=>"ep_table ep_no_border" );
 	$html->appendChild( $dataset_table );
 
 	foreach my $datasetid (sort { $a cmp $b } $session->get_repository->get_sql_dataset_ids())
@@ -117,7 +117,7 @@ sub render
 				$session->html_phrase( "datasethelp_$datasetid" ),
 		) );
 
-		$table = $session->make_element( "table", border=>"0" );
+		$table = $session->make_element( "table", class=>"ep_table ep_no_border" );
 
 		foreach my $aux_type (qw( index rindex index_grep ))
 		{
@@ -193,7 +193,7 @@ sub render
 
 	$html->appendChild( $session->html_phrase( "cgi/users/status:misc_tables" ) );
 
-	$table = $session->make_element( "table", border=>"0" );
+	$table = $session->make_element( "table", class=>"ep_table ep_no_border" );
 	$html->appendChild( $table );
 
 	foreach my $table_name (sort { $a cmp $b } keys %all_tables)

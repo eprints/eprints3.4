@@ -152,7 +152,7 @@ sub render
 
 	$html->appendChild( $self->render_common_action_buttons );
 
-	$table = $session->make_element( "table", border=>"0" );
+	$table = $session->make_element( "table", class=>"ep_table ep_no_border" );
 	$html->appendChild( $table );
 	
 	$table->appendChild( $session->render_row( 
@@ -195,7 +195,7 @@ sub render
 			$session->html_phrase( "cgi/users/status:xml_version" ),
 			$session->make_text( EPrints::XML::version() ) ) );
 	
-	$table = $session->make_element( "table", border=>"0" );
+	$table = $session->make_element( "table", class=>"ep_table ep_no_border" );
 	$html->appendChild( $session->html_phrase( "cgi/users/status:usertitle" ) );
 	$html->appendChild( $table );
 	
@@ -213,7 +213,7 @@ sub render
 			$session->html_phrase( "cgi/users/status:users" ),
 			$session->make_text( $total_users ) ) );
 	
-	$table = $session->make_element( "table", border=>"0" );
+	$table = $session->make_element( "table", class=>"ep_table ep_no_border" );
 	$html->appendChild( $session->html_phrase( "cgi/users/status:articles" ) );
 	$html->appendChild( $table );
 	
@@ -228,7 +228,7 @@ sub render
 	
 	unless( $EPrints::SystemSettings::conf->{disable_df} )
 	{
-		$table = $session->make_element( "table", border=>"0" );
+		$table = $session->make_element( "table", class=>"ep_table ep_no_border" );
 		$html->appendChild( $session->html_phrase( "cgi/users/status:diskspace" ) );
 		$html->appendChild( $table );
 	
@@ -273,7 +273,7 @@ sub render
 	}
 	
 	
-	$table = $session->make_element( "table", border=>"0" );
+	$table = $session->make_element( "table", class=>"ep_table ep_no_border" );
 	$html->appendChild( $session->html_phrase( "cgi/users/status:saved_searches" ) );
 	$html->appendChild( $table );
 	

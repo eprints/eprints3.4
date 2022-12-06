@@ -80,7 +80,7 @@ $c->{limit_names_shown} = sub
 	if ( $rest_names->hasChildNodes )
 	{
 		# Render dynamically to allow expanding of the rest of the names
-		if ( $field->{render_dynamic} == 1 )
+		if ( defined $field->{render_dynamic} && $field->{render_dynamic} == 1 )
 		{
 			my $show = $session->html_phrase("limit_names_shown");
 			my $hide = "";

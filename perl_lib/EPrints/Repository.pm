@@ -813,9 +813,9 @@ sub _add_http_paths
 	);
 
 	# old-style configuration names
-	$config->{"urlpath"} ||= $config->{"base_url"};
+	$config->{"urlpath"} ||= $config->{"http_root"};
 	$config->{"frontpage"} ||= $config->{"base_url"} . "/";
-	$config->{"userhome"} ||= $config->{"perl_url"} . "/users/home";
+	$config->{"userhome"} ||= $config->{"http_cgiroot"} . "/users/home";
 }
  
 ######################################################################

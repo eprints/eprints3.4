@@ -85,7 +85,7 @@ $c->{limit_names_shown} = sub
 			my $show = $session->html_phrase("limit_names_shown");
 			my $hide = "";
 			$hide = $session->html_phrase( "limit_names_shown_hide" ) if ( $session->get_lang->has_phrase( "limit_names_shown_hide", $session ) );
-			my $et_al_link = $session->make_element( "button", "id" => $actual_name."_".$id."_et_al", "aria-expanded" => "false", "aria-controls" => $actual_name . "_".$id."_rest", "aria-label" => $session->html_phrase("limit_names_shown_label"), "field" => $session->html_phrase( $field->{confid}."_fieldname_".$parent_name ), "type" => "button", "style" => "margin-left: 0.5em; display: none;", "onclick" => "EPJS_limit_names_shown( '${actual_name}_${id}_et_al', '${actual_name}_${id}_rest', '$show', '$hide' );" );
+			my $et_al_link = $session->make_element( "button", "id" => $actual_name."_".$id."_et_al", "aria-expanded" => "false", "aria-controls" => $actual_name . "_".$id."_rest", "aria-label" => $session->html_phrase("limit_names_shown_label", "field" => $session->html_phrase( $field->{confid}."_fieldname_".$parent_name ) ), "type" => "button", "style" => "margin-left: 0.5em; display: none;", "onclick" => "EPJS_limit_names_shown( '${actual_name}_${id}_et_al', '${actual_name}_${id}_rest', '$show', '$hide' );" );
 			my $et_al_span = $session->make_element( "span", "aria-hidden" => "false" );
 			$et_al_link->appendChild( $show );
 			$rest_names_span->appendChild( $rest_names );

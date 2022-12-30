@@ -73,6 +73,11 @@ Generate only pages for the language with this ID.
 
 Set citations to recached before generating view(s).
 
+=item B<--prune>
+
+Prunes cached directories for disabled/removed browse views and cached browse view 
+files older than C<max_list_age> for listings or C<max_menu_age> for menus.
+
 =item B<--help>
 
 Print a brief help message and exit.
@@ -113,6 +118,7 @@ my $quiet = 0;
 my $help = 0;
 my $man = 0;
 my $refreshcitations = 0;
+my $prune = 0;
 my $generate_opt;
 my @view_opts;
 my $lang_opt;
@@ -127,6 +133,7 @@ GetOptions(
 	'silent' => \$quiet,
 	'quiet' => \$quiet,
 	'refreshcitations' => \$refreshcitations,
+	'prune' => \$prune,
 	'generate=s' => \$generate_opt,
 	'view=s' => \@view_opts,
 	'lang=s' => \$lang_opt,
@@ -236,9 +243,54 @@ LANGUAGE: foreach my $langid ( @{$repository->get_conf( "languages" )} )
 		print "Wrote: $target\n" if( $noise > 1 );
 	}
 
+	if ( $prune )
+	{
+		# Remove defunct views
+		use File::Path 'rmtree';
+		my @view_dirs = `ls -d $dir/*/`;
+		my @view_ids;
+		my %max_menu_age;
+		my %max_list_age;
+		foreach my $view ( @$views )
+		{
+			push @view_ids, $view->{id};
+			$max_menu_age{$view->{id}} = $view->{max_menu_age} || 24*60*60;
+			$max_list_age{$view->{id}} = $view->{max_list_age} || 24*60*60;
+		}
 
-	# TODO: remove any pages we didn't create.0l
-	
+		# Remove view menu and listing pages past expiry
+		foreach my $view_dir ( @view_dirs )
+		{
+			chomp( $view_dir );
+			$view_dir =~ /\/([^\/]+)\/$/;
+
+			my $view_id = $1;
+			unless ( grep { /^$view_id$/ } @view_ids )
+			{
+				rmtree( $view_dir );
+				print "Deleted view: $view_dir\n" if( $noise > 1 );
+			}
+			elsif ( !@view_opts || grep { /^$view_id$/ } @view_opts )
+			{	
+				my @view_filepaths = `ls $view_dir*`;
+				my $menu_last_mod = time() - $max_menu_age{$view_id};
+				my $list_last_mod = time() - $max_list_age{$view_id};
+				foreach my $filepath ( @view_filepaths )
+				{
+					chomp( $filepath );		
+					$filepath =~ /\/([^\/]+)$/;
+					my $filename = $1;
+					my $modtime = (stat($filepath))[9];
+					next unless $modtime;
+					if ( ( $filename =~ /^index\./ && $modtime < $menu_last_mod ) || ( $filename !~ /^index\./ && $modtime < $list_last_mod ) )
+					{
+						unlink $filepath;
+						print "Deleted view page: $filepath\n" if( $noise > 1 );
+					}
+				}
+			}
+		}
+	}
 
 	print "done\n" if( $noise > 1 );
 }

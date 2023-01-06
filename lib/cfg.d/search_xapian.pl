@@ -1,3 +1,6 @@
+# Do not index the full text from documents if they are not publicly downloadable
+$c->{xapian_index_restricted_fulltext} = 0;
+
 if( EPrints::Utils::require_if_exists( "Search::Xapian" ) )
 {
 my $FLUSH_LIMIT = 1000;
@@ -133,11 +136,13 @@ $c->add_trigger( EP_TRIGGER_INDEX_FIELDS, sub {
 	{
 		my $convert = $repo->plugin( "Convert" );
 		my $tempdir = File::Temp->newdir();
+		my $index_restricted_fulltext = $repo->config( "xapian_index_restricted_fulltext" ) || 0;
 		DOC: foreach my $doc ($dataobj->get_all_documents)
 		{
 			my $type = "text/plain";
 			my %types = $convert->can_convert( $doc, $type );
 			next DOC if !exists $types{$type};
+			next DOC unless $doc->get_value( 'security' ) eq "public" || $index_restricted_fulltext;
 			my $plugin = $types{$type}->{plugin};
 			FILE: foreach my $fn ($plugin->export( $tempdir, $doc, $type ))
 			{

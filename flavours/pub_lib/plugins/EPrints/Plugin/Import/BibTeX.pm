@@ -360,7 +360,8 @@ sub convert_input
 	if( $type eq "PHDTHESIS" )
 	{
 		$epdata->{type} = "thesis";
-		$epdata->{thesis_type} = "phd";
+		$epdata->{thesis_type} = "doctoral";
+		$epdata->{thesis_name} = "phd";
 	}
 	if( $type eq "UNPUBLISHED" )
 	{

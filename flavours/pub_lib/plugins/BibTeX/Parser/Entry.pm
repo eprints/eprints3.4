@@ -48,7 +48,7 @@ sub error {
 		$self->{_error} = shift;
 		$self->parse_ok(0);
 	}
-	return $self->parse_ok ? undef : $self->{_error};
+	return defined $self->{_error} ? $self->{_error} : undef;
 }
 
 

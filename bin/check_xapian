@@ -137,16 +137,16 @@ my $user_opt;
 Getopt::Long::Configure("permute");
 
 GetOptions(
-        'help|?' => \$help,
-        'man' => \$man,
-        'version' => \$version,
-        'verbose+' => \$verbose,
-        'silent' => \$quiet,
-        'quiet' => \$quiet,
-        'all' => \$all,
+	'help|?' => \$help,
+	'man' => \$man,
+	'version' => \$version,
+	'verbose+' => \$verbose,
+	'silent' => \$quiet,
+	'quiet' => \$quiet,
+	'all' => \$all,
 	'idlist=s' => \$idlist_opt,
 	'random' => \$random,
-        'reindex' => \$reindex,
+	'reindex' => \$reindex,
 	'facets' => \$facets,
 	'path=s' => \$path_opt,
 	'days=s' => \$days_opt,
@@ -168,20 +168,20 @@ my $repoid = $ARGV[0];
 my $session = EPrints::Session->new( 1 , $repoid, $noise );
 if( !defined $session )
 {
-        print STDERR "Failed to load repository: $repoid\n";
-        exit 1;
+	print STDERR "Failed to load repository: $repoid\n";
+	exit 1;
 }
 
 my $path = $session->config( "base_path" ).'/archives/'.$ARGV[0].'/var/xapian/';
 if ( defined $path_opt )
 {
-        $path = $path_opt;
+	$path = $path_opt;
 }
 
 unless ( -e $path."/record.DB" || -e $path."/iamglass" )
 {
-        print STDERR "\nError: No Xapian database directory at '$path'.\n\n";
-        exit 1;
+	print STDERR "\nError: No Xapian database directory at '$path'.\n\n";
+	exit 1;
 }
 
 my $quest_location = `/usr/bin/which quest`;
@@ -193,14 +193,14 @@ $delve_location =~ s/\n//g;
 
 if ( "$quest_location" eq "" )
 {
-        print STDERR "\nError: Failed to find 'quest' command line tool.\n\n";
-        exit 1;
+	print STDERR "\nError: Failed to find 'quest' command line tool.\n\n";
+	exit 1;
 }
 
 if ( "$delve_location" eq "" )
 {
-        print STDERR "\nError: Failed to find 'delve' command line tool.\n\n";
-        exit 1;
+	print STDERR "\nError: Failed to find 'delve' command line tool.\n\n";
+	exit 1;
 }
 
 my $period = "";
@@ -214,30 +214,30 @@ if ( defined $days_opt )
 	else
 	{
 		print STDERR "\nError: $days_opt is not a positive integer for --days.\n\n";
-        	exit 1;
+		exit 1;
 	}
 }
 my $numresults = 1000;
 if ( defined $results_opt )
 {
-        if ( $results_opt =~ m/[1-9][0-9]*/ )
-        {
-                $numresults = int($results_opt);
-        }
-        else
-        {
-                print STDERR "\nError: $results_opt is not a positive integer for --results.\n\n";
-                exit 1;
-        }
+	if ( $results_opt =~ m/[1-9][0-9]*/ )
+	{
+		$numresults = int($results_opt);
+	}
+	else
+	{
+		print STDERR "\nError: $results_opt is not a positive integer for --results.\n\n";
+		exit 1;
+	}
 }
 my $idlist = "";
 if ( defined $idlist_opt )
 {
 	if ( $idlist_opt !~ /[0-9,]+/ )
-        {
-                print STDERR "\nError: List of IDs is invalid.\n\n";
-                exit 1;
-        }
+	{
+		print STDERR "\nError: List of IDs is invalid.\n\n";
+		exit 1;
+	}
 	$idlist = $idlist_opt;
 }
 
@@ -248,17 +248,17 @@ if ( defined $sample_opt )
 	unless ( $random || $idlist )
 	{
 		print STDERR "\nError: --sample can only be used with --random or --idlist\n\n";
-                exit 1;
+		exit 1;
 	}
-        if ( $sample_opt =~ m/[1-9][0-9]*/ )
-        {
-                $sample = int($sample_opt);
-        }
-        else
-        {
-                print STDERR "\nError: $sample_opt is not a positive integer.\n\n";
-                exit 1;
-        }
+	if ( $sample_opt =~ m/[1-9][0-9]*/ )
+	{
+		$sample = int($sample_opt);
+	}
+	else
+	{
+		print STDERR "\nError: $sample_opt is not a positive integer.\n\n";
+		exit 1;
+	}
 }
 
 my $status = undef;
@@ -268,23 +268,24 @@ if ( defined $status_opt )
 	my @statuses = split( ',', $status_opt ); 
 	for my $a_status ( @statuses )
 	{
-	        unless ( grep ( /^$a_status$/, ( 'inbox', 'buffer', 'archive', 'deletion' ) ) )
-        	{
-                	$status_error = 1;
+		unless ( grep ( /^$a_status$/, ( 'inbox', 'buffer', 'archive', 'deletion' ) ) )
+		{
+			$status_error = 1;
        		}
 	}
-        if ( $status_error )
-        {
-                print STDERR "\nError: $status_opt is not a valid status or list of statuses.\n\n";
-                exit 1;
-        }
+	if ( $status_error )
+	{
+		print STDERR "\nError: $status_opt is not a valid status or list of statuses.\n\n";
+		exit 1;
+	}
 	$status = join( " ", @statuses );
 }
 
 my $inc_rows = 2;
-$inc_rows = 1 if $facets;
+$inc_rows = 3 if $facets && -e $path."/record.DB";
+$inc_rows = 4 if $facets && -e $path."/iamglass"; 
+my $id_pos = $inc_rows - 1;
 my $no_result_lines = 3;
-$no_result_lines = 4 if $facets;
 
 print "\nRunning $0 at ".localtime()."\n\n" unless $quiet;
 
@@ -300,7 +301,7 @@ if ( $reindex )
 		unless ( defined $user )
 		{	
 			print STDERR "\nError: No user found for username '$user_opt'.\n\n";
-	        	exit 1;
+			exit 1;
 		}
 	}
 	else 
@@ -310,7 +311,7 @@ if ( $reindex )
 		if ($admins->count() == 0)
 		{	
 			print STDERR "\nError: No admin user found to set as creator of indexing task.\n\n";
-	                exit 1;
+			exit 1;
 		}
 		$user = $admins->item(0);
 	}
@@ -363,7 +364,7 @@ if ( @ids )
 		for ( my $i = 0; $i < $sample; $i++ )
 		{  
 			my $rand = int(rand($ids_size));
-			while ( $ids[$rand] ~~ @chosen )
+			while ( grep $_ eq $ids[$rand], @chosen )
 			{
 				$rand = int(rand($ids_size));
 			}
@@ -379,14 +380,23 @@ if ( @ids )
 
 unless ( defined $list )
 {
-	my $searchexp = new EPrints::Search( session=>$session, dataset=>$ds, custom_order=>"-lastmod" );
-	$searchexp->add_field( fields => [ $ds->get_field( "eprint_status" ) ], value => $status, match => 'IN', describe => 0 ) if defined $status;	
-	$list = $searchexp->perform_search;
+	if ( defined $status )
+	{
+		my $searchexp = new EPrints::Search( session=>$session, dataset=>$ds, custom_order=>"-lastmod" );
+		$searchexp->add_field( fields => [ $ds->get_field( "eprint_status" ) ], value => $status, match => 'IN', describe => 0 ) if defined $status;	
+		$list = $searchexp->perform_search;
+	}
+	else
+	{
+		$list = $ds->search;
+	}
 }
 
 my $counter = 0;
 my $unfound = 0;
 my $status_wrong = 0;
+my $no_eprint = 0;
+my $no_title = 0;
 
 my $listcount = $list->count;
 
@@ -397,57 +407,71 @@ for ( my $i = 0; $i < $listcount; $i++ )
 	my $progress = $i+1;
 	$progress .= "/$listcount:";
 	my $eprint = $list->item( $i );
+	unless ( defined $eprint )
+	{
+		print "$progress No EPrint exists in position $i of results list.\n";
+		$no_eprint++;
+		$counter++;
+        next;
+	}
+	next unless defined $eprint;
 	my $found = 0;
 	my $status_correct = 0;
 	my $year_correct = 0;
 	my $type_correct = 0;
 	my $errfacets = "";
-        my $title = $eprint->value('title');
+	my $title = $eprint->value('title');
 	unless (ref($title) eq "")
 	{
 		$title = $title->[0]{'text'};
 	}
-	$title = "" unless defined $title;
-        my $sanitized_title = $title;
-        $sanitized_title =~ s/[^\w0-9,\;\:\.\?!%£\$&\(\)\[\]\@ -]/ /g;
-        my @results = ();
-        if ( $sanitized_title eq $title )
-        {
-                my $command = $quest_location.' -m '.$numresults.' -d '.$path.' \'"'.$sanitized_title.'"\'';
+    unless ( defined $title )
+    {
+		print "$progress No title for EPrint ID ".$eprint->id.".\n";
+		$no_title++;
+		$counter++;
+		next;
+	}
+	# Remove leading and trailing double-quotes marks so as not to confuse with part of query
+	$title =~ s/^\"//g;
+	$title =~ s/\"$//g;
+	# Escape double quote marks and backticks.
+	$title =~ s/\"/\\"/g;
+	$title =~ s/\`/\\`/g;	
+	# Ignore $ symbols (replace with spaces).
+	$title =~ s/\$/ /g;
+	my @results = ();
+	my $command = $quest_location.' -f default -m '.$numresults.' -d '.$path.' "\"'.$title.'\""';
+	print "$command\n" if $verbose;
+	@results = `$command`;
+	if ( scalar @results <= $no_result_lines )
+	{
+		my $command = $quest_location.' -f default -m '.$numresults.' -d '.$path.' "'.$title.'"';
 		print "$command\n" if $verbose;
-                @results = `$command`;
-        }
-        if ( scalar @results < 3 )
-        {
-                $sanitized_title =~ s/ -([^ ])/ $1/g;
-                my $command = $quest_location.' -m '.$numresults.' -d '.$path.' "'.$sanitized_title.'"';
-		print "$command\n" if $verbose;
-                @results = `$command`;
-        }
-        if ( scalar @results <= $no_result_lines )
-        {
-                print "$progress No results from EPrint ID ".$eprint->id.". ";
-        }
-        else {
-                my $position = 0;
+		@results = `$command`;
+	}
+	if ( scalar @results <= $no_result_lines )
+	{
+		print "$progress No results from EPrint ID ".$eprint->id.". ";
+	}
+    else {
+		my $position = 0;
 		my $line = 0;
 		while ($results[$line] !~ m/MSet:/ && $line < scalar @results)
 		{
 			$line++;
 		}
-                for ( my $l = $line; $l < scalar @results; $l = $l + $inc_rows )
-                {
+		for ( my $l = $line; $l < scalar @results; $l = $l + $inc_rows )
+		{
 			next if $facets && $results[$l] !~ m/id/;
 			$results[$l] =~ s/[^\x0A-\x7F]//g;
 			$results[$l] =~ s/id$//g;
 			next unless $results[$l] =~ m/^[1-9][0-9]*$/;
 			$position++;
-                        if ( int($results[$l]) == $eprint->id )
-                        {
-                                $found = 1;
-				my $xapian_id = $results[$l-1];
-				$xapian_id = $results[$l-2] if $facets && -e $path."/record.DB";
-				$xapian_id = $results[$l-3] if $facets && -e $path."/iamglass";
+			if ( int($results[$l]) == $eprint->id )
+			{
+				$found = 1;
+				my $xapian_id = $results[$l-$id_pos];
 				$xapian_id =~ s/^([0-9]+).*$/$1/;	
 				$xapian_id =~ s/\n//;
 				my $delve_command = $delve_location.' -1 -r '.$xapian_id.' -d '.$path.' | grep -ae "^_\?eprint_status:" | sed "s/_\?eprint_status://g"';
@@ -464,74 +488,77 @@ for ( my $i = 0; $i < $listcount; $i++ )
 				{
 					$delve_command = $delve_location.' -1 -r '.$xapian_id.' -d '.$path.' | grep -ae "^_\?year:" | sed "s/_\?year://g"';
 					$delve_command = $delve_location.' -1 -r '.$xapian_id.' -d '.$path.' | grep -ae "^_\?date:" | sed "s/_\?date://g"' if $facets == 0;
-	        	                @delve_results = `$delve_command`;
-        	        	        if ( defined($delve_results[0]) )
-                        		{
-                                	        $delve_results[0] =~ s/\n//;
-						$year = $eprint->get_value('date') if $facets == 0;
-        		                        $year_correct = 1 if $delve_results[0] eq $year;
+					@delve_results = `$delve_command`;
+					if ( defined($delve_results[0]) )
+					{
+						$delve_results[0] =~ s/\n//;
+						my $year = substr( $eprint->get_value('date'), 0, 4 );
+						$year_correct = 1 if $delve_results[0] eq $year;
+					}
+					else 
+					{
+						$year_correct = 1;
 					}
 				}
-                                $delve_command = $delve_location.' -1 -r '.$xapian_id.' -d '.$path.' | grep -ae "^_\?type:" | sed "s/_\?type://g"';
-                                @delve_results = `$delve_command`;
-                                if ( defined($delve_results[0]) )
-                                {
-                                        $delve_results[0] =~ s/\n//;
-                                        $type_correct = 1 if $delve_results[0] eq $eprint->get_value( 'type' );
+				$delve_command = $delve_location.' -1 -r '.$xapian_id.' -d '.$path.' | grep -ae "^_\?type:" | sed "s/_\?type://g"';
+				@delve_results = `$delve_command`;
+				if ( defined($delve_results[0]) )
+				{
+					$delve_results[0] =~ s/\n//;
+					$type_correct = 1 if $delve_results[0] eq $eprint->get_value( 'type' );
 					
-                                }
-
-                                last;
-                        }
-                }
-                print "$progress No matching results from EPrint ID ".$eprint->id."." unless $found;
+				}
+				last;
+			}
+		}
+		print "$progress No matching results from EPrint ID ".$eprint->id."." unless $found;
 		$errfacets .= "status " unless $status_correct;
 		$errfacets .= "year " unless $year_correct;
 		$errfacets .= "type " unless $type_correct;
 		print "$progress Found EPrint ID ".$eprint->id." in position $position but ".$errfacets."is/are not correct.\n" if $found && "$errfacets" ne "";
-                print "$progress Found EPrint ID ".$eprint->id." in position $position.\n" if $found && "$errfacets" eq "" && !$quiet;
-        }
-        if ( ( !$found || $errfacets ne "" ) && $reindex )
-        {
-                print " Will reindex.\n";
-                EPrints::DataObj::EventQueue->create_unique( $session, {
-                        pluginid => "Event::Indexer",
-                        action => "index_all",
-                        params => [$eprint->internal_uri],
-                        userid => $user->id,
-                });
-                my @documents = $eprint->get_all_documents;
-                foreach my $document ( @documents )
-                {
-                        EPrints::DataObj::EventQueue->create_unique( $session, {
-                                pluginid => "Event::Indexer",
-                                action => "removed",
-                                params => ['document', $document->id ],
-                                userid => $user->id,
-                        });
-                }
-                if ( scalar @documents > 0 )
-                {
-                        EPrints::DataObj::EventQueue->create_unique( $session, {
-                                pluginid => "Event::Indexer",
-                                action => "index",
-                                params => [$eprint->internal_uri, 'documents'],
-                                userid => $user->id,
-                        });
-                }
-        }
-        print "\n" if !$reindex && ( !$found || !$status_correct );
+		print "$progress Found EPrint ID ".$eprint->id." in position $position.\n" if $found && "$errfacets" eq "" && !$quiet;
+	}
+	if ( ( !$found || $errfacets ne "" ) && $reindex )
+	{
+		print " Will reindex.\n";
+		EPrints::DataObj::EventQueue->create_unique( $session, {
+			pluginid => "Event::Indexer",
+			action => "index_all",
+			params => [$eprint->internal_uri],
+			userid => $user->id,
+		});
+		my @documents = $eprint->get_all_documents;
+		foreach my $document ( @documents )
+		{
+			EPrints::DataObj::EventQueue->create_unique( $session, {
+				pluginid => "Event::Indexer",
+				action => "removed",
+				params => ['document', $document->id ],
+				userid => $user->id,
+			});
+		}
+		if ( scalar @documents > 0 )
+		{
+			EPrints::DataObj::EventQueue->create_unique( $session, {
+				pluginid => "Event::Indexer",
+				action => "index",
+				params => [$eprint->internal_uri, 'documents'],
+				userid => $user->id,
+			});
+		}
+	}
+	print "\n" if !$reindex && ( !$found || !$status_correct );
 	$unfound++ unless $found;
 	$status_wrong++ if $errfacets ne "" && $found;
-        $counter++;
+	$counter++;
 }
+print "\n$no_eprint/$counter IDs had no equivalent EPrints so could not be searched in Xapian index." if $no_eprint && !$quiet;
+print "\n$no_title/$counter EPrints had no title so could not be searched in Xapian index." if $no_title && !$quiet;
 print "\n$unfound/$counter EPrints were found not to be indexed by Xapian$period.\n" unless $quiet;
 print "$status_wrong/$counter EPrints were found to be indexed by Xapian$period but whose status, year or type were not set correctly.\n" unless $quiet;
 
 $session->terminate();
 exit;
-
-
 
 
 =head1 COPYRIGHT

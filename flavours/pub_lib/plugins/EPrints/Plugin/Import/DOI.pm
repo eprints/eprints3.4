@@ -28,7 +28,7 @@ sub new
 
 	# http://www.crossref.org/openurl - original url, valid up to feb 2017
 	# https://doi.crossref.org/openurl - current preferred url, but below code does not support https
-	$self->{ base_url } = "http://doi.crossref.org/openurl";
+	$self->{ base_url } = "https://doi.crossref.org/openurl";
 
 	return $self;
 }

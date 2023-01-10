@@ -227,7 +227,7 @@ sub new_from_request
 
 	my $ticket;
 
-	if( $repo->config( 'securehost' ) )
+	if( $repo->get_secure )
 	{
 		my $securecode = EPrints::Apache::AnApache::cookie(
 			$r,
@@ -239,7 +239,7 @@ sub new_from_request
 			])->item( 0 );
 		}
 	}
-	else
+	elsif( !$repo->config( 'securehost' ) )
 	{
 		my $code = EPrints::Apache::AnApache::cookie(
 			$r,

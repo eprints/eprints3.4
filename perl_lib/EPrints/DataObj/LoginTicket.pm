@@ -227,7 +227,7 @@ sub new_from_request
 
 	my $ticket;
 
-	if( $repo->get_secure )
+	if( $repo->config( 'securehost' ) )
 	{
 		my $securecode = EPrints::Apache::AnApache::cookie(
 			$r,
@@ -429,13 +429,16 @@ sub set_cookies
 
 	my $repo = $self->{session};
 
-	$repo->get_request->err_headers_out->add(
-		'Set-Cookie' => $self->generate_cookie
-	);
 	if( $repo->config( "securehost" ) )
 	{
 		$repo->get_request->err_headers_out->add(
 			'Set-Cookie' => $self->generate_secure_cookie
+		);
+	}
+	else
+	{
+		$repo->get_request->err_headers_out->add(
+			'Set-Cookie' => $self->generate_cookie
 		);
 	}
 }

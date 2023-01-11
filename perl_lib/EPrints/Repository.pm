@@ -434,44 +434,54 @@ client. This will not return the IP of any Proxy/load balancer in-between.
 
 sub remote_ip
 {
-        my( $self ) = @_;
+	my( $self ) = @_;
 
-        # need an HTTP request...
-        return if $self->{offline};
+	# need an HTTP request...
+	return if $self->{offline};
 
-        my $r = $self->get_request;
+	my $r = $self->get_request;
 
-        return if !$r;
+	return if !$r;
 
-        # Proxy has set the "X-Forwarded-For" HTTP header?
-        my $ip = $r->headers_in->{"X-Forwarded-For"};
+	# Proxy has set the "X-Forwarded-For" HTTP header?
+	my $ip = $r->headers_in->{"X-Forwarded-For"};
 
-        # Sanitise and clean up $ip from XFF, if any.
-        if( EPrints::Utils::is_set( $ip ) )
-        {
-                # sanitise: remove lead commas and all whitespace
-                $ip =~ s/^\s*,+|\s+//g;
-                # slice: take only first address from the list
-                $ip =~ s/,.*//;
-        }
+	# Sanitise and clean up $ip from XFF, if any.
+	if( EPrints::Utils::is_set( $ip ) )
+	{
+		# sanitise: remove lead commas and all whitespace
+		$ip =~ s/^\s*,+|\s+//g;
+		# slice: take only first address from the list
+		$ip =~ s/,.*//;
+		if ( EPrints::Utils::is_set( $self->config( 'ignore_x_forwarded_for_private_ip_prefixes' ) ) )
+		{
+			for my $ip_regex ( @{ $self->config( 'ignore_x_forwarded_for_private_ip_prefixes' ) } )
+			{
+				if ( $ip =~ m/^$ip_regex/ )
+				{
+					$ip = undef;
+					last;
+				}
+			}
+		}
+	}
 
-        # Apache v2.4+ (http://httpd.apache.org/docs/trunk/developer/new_api_2_4.html)
-        if( !EPrints::Utils::is_set( $ip ) && $r->can( "useragent_ip" ) )
-        {
-                $ip = $r->useragent_ip;
-        }
+	# Apache v2.4+ (http://httpd.apache.org/docs/trunk/developer/new_api_2_4.html)
+	if( !EPrints::Utils::is_set( $ip ) && $r->can( "useragent_ip" ) )
+	{
+		$ip = $r->useragent_ip;
+	}
 
-        # Apache v2.0-2.2
-        if( !EPrints::Utils::is_set( $ip ) && $r->connection->can( "client_ip" ) )
-        {
-                $ip = $r->connection->client_ip;
-        }
-
+	# Apache v2.0-2.2
+	if( !EPrints::Utils::is_set( $ip ) && $r->connection->can( "client_ip" ) )
+	{
+		$ip = $r->connection->client_ip;
+	}
 	if( !EPrints::Utils::is_set( $ip ) && $r->connection->can( "remote_ip" ) )
 	{
 		$ip = $r->connection->remote_ip;
 	}
-        return $ip;
+	return $ip;
 }
 
 ######################################################################

@@ -47,15 +47,25 @@ sub _parse_next {
         return 0 if $self->{fh}->eof;
         local $_ = $self->{buffer};
 
+        my $emptyCiteKeyRemoved = 0;
+
         until (/@/m) {
             my $line = $self->{fh}->getline;
             return 0 unless defined $line;
+
+            # Remove empty CiteKey
+            if ($line =~ m/{\s*,/){
+                $line =~ s/{\s*,/{/;
+                $emptyCiteKeyRemoved = 1;
+            }
+
             $_ .= $line;
         }
 
         my $current_entry = new BibTeX::Parser::Entry;
         if (/@($re_name)/cgo) {
 	    my $type = uc $1;
+
             $current_entry->type( $type );
             my $start_pos = pos($_) - length($type) - 1;
 
@@ -79,7 +89,6 @@ sub _parse_next {
 		$pre = '';
 	    }
             $current_entry->pre($pre);
-
 
             # Remember raw bibtex code
             my $raw = substr($_, $start_pos);
@@ -108,6 +117,7 @@ sub _parse_next {
                 /\G\{./cgo;
                 _slurp_close_bracket;
             } else {    # normal entry
+                $current_entry->error("Malformed entry (key contains no characters, skipping key)") if $emptyCiteKeyRemoved;
                 $current_entry->parse_ok(1);
 
 				# parse key
@@ -125,7 +135,6 @@ sub _parse_next {
                     return $current_entry;
 
                 } else {
-
                     $current_entry->error("Malformed entry (key contains illegal characters) at " . substr($_, pos($_) || 0, 20)  . ", ignoring");
                     _slurp_close_bracket;
 					return $current_entry;

@@ -271,11 +271,9 @@ sub input_text_fh
 	
 	while(my $entry = $parser->next)
 	{
-		if( !$entry->parse_ok )
-		{
-			$plugin->warning( "Error parsing: " . $entry->error );
-			next;
-		}
+
+		$plugin->warning( "Error parsing: " . $entry->error ) if defined $entry->error;
+		next if !$entry->parse_ok;
 
 		my $epdata = $plugin->convert_input( $entry );
 		next unless defined $epdata;

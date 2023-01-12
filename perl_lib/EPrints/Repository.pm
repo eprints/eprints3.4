@@ -6031,6 +6031,8 @@ sub in_export_fieldlist
 
 =item $timestamp = $repository->auto_timestamp( $type )
 
+B<DEPRECATED>
+
 Return an integer (seconds since start of last epoch) for the 
 modification time of the generated auto with C<$type> file from 
 L<EPrints::Update::Static::update_auto>
@@ -6042,18 +6044,14 @@ L<EPrints::Update::Static::update_auto>
 
 sub auto_timestamp
 {
-
 	my ( $self, $type ) = @_;
-
-	my $auto_ts_file = $self->get_conf( "variables_path" )."/auto-$type.timestamp";
-	if ( -s $auto_ts_file ) 
-	{
-		open( my $fh, '<', $auto_ts_file ) or return 0;
-		my $ts = <$fh>;
-		close( $fh );
-		return $ts;
-	}
-	return 0;
+	
+	my $lang = $self->get_langid;
+	my $auto_file = $self->config( "htdocs_path" ) . "/" . $self->get_langid . "/";
+	$auto_file .= "style/auto.css" $type eq "css";
+	$auto_file .= "style/auto.css" $type eq "js";
+	
+	return (stat($auto_file))[9];	
 }
 
 1;		

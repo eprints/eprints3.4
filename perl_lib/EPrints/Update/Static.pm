@@ -254,6 +254,23 @@ sub update_auto
 			$map{$fn} = "$dir/$fn";
 		}
 		closedir($dh);
+
+	}
+
+	unless ( $out_of_date )
+	{
+		my $flavours_dir = $repo->config( 'base_path' ) . "/flavours";
+		opendir(my $dh, $flavours_dir) or next;
+		foreach my $fn (readdir($dh))
+		{
+			next unless $fn =~ /_lib$/;
+			if ( (stat("$flavours_dir/$fn/inc"))[9] > $target_time )
+			{
+				$out_of_date = 1;
+				last;
+			}
+		}
+		$out_of_date = 1 if !$out_of_date && (stat($repo->config( 'base_path' )."/perl_lib/EPrints/SystemSettings.pm"))[9] > $target_time;
 	}
 
 	return $target unless $out_of_date;
@@ -289,11 +306,6 @@ sub update_auto
 	print $fh Encode::encode_utf8($opts->{postfix}) if defined $opts->{postfix};
 
 	close($fh);
-
-	my $target_ts = $repo->get_conf( "variables_path" ) . "/auto-$ext.timestamp";
-	open(my $fh_ts, ">:raw", $target_ts ) or EPrints::abort( "Can't write to $target_ts: $!" );
-	print $fh_ts $target_time;
-	close($fh_ts);
 
 	return $target;
 }

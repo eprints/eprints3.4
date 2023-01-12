@@ -5,6 +5,15 @@ $c->add_trigger( EP_TRIGGER_DYNAMIC_TEMPLATE, sub {
 	my $repo = $params{repository};
 	my $pins = $params{pins};
 	my $xhtml = $repo->xhtml;
+	my $lang = $repo->get_langid;
+
+	EPrints::Update::Static::update_auto_js( $repo, $repo->config( "htdocs_path" )."/$lang/", [$repo->get_static_dirs( $lang )] );
+	my $auto_js = $repo->config( "htdocs_path" )."/$lang/javascript/auto.js";
+	my $auto_js_timestamp = (stat($auto_js))[9];
+	
+	EPrints::Update::Static::update_auto_css( $repo, $repo->config( "htdocs_path" )."/$lang/", [$repo->get_static_dirs( $lang )] );
+	my $auto_css = $repo->config( "htdocs_path" )."/$lang/style/auto.css";
+	my $auto_css_timestamp = (stat($auto_css))[9];
 
 	my $head = $repo->xml->create_document_fragment;
 
@@ -39,11 +48,11 @@ EOJ
 	$head->appendChild( $repo->xml->create_element( "link",
 			rel => "stylesheet",
 			type => "text/css",
-			href => $repo->current_url( path => "static", "style/auto-".EPrints->human_version.".css" ) . "?".$repo->auto_timestamp( 'css' ),
+			href => $repo->current_url( path => "static", "style/auto-".EPrints->human_version.".css" ) . "?".$auto_css_timestamp
 		) );
 	$head->appendChild( $repo->xml->create_text_node( "\n    " ) );
 	$head->appendChild( $repo->make_javascript( undef,
-		src => $repo->current_url( path => "static", "javascript/auto-".EPrints->human_version.".js" ) . "?".$repo->auto_timestamp( 'js' ),
+		src => $repo->current_url( path => "static", "javascript/auto-".EPrints->human_version.".js" ) . "?".$auto_js_timestamp
 	) );
 	$head->appendChild( $repo->xml->create_text_node( "\n    " ) );
 

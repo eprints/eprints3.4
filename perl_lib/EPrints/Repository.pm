@@ -6048,8 +6048,8 @@ sub auto_timestamp
 	
 	my $lang = $self->get_langid;
 	my $auto_file = $self->config( "htdocs_path" ) . "/" . $self->get_langid . "/";
-	$auto_file .= "style/auto.css" $type eq "css";
-	$auto_file .= "style/auto.css" $type eq "js";
+	$auto_file .= "style/auto.css" if $type eq "css";
+	$auto_file .= "javascript/auto.js" if $type eq "js";
 	
 	return (stat($auto_file))[9];	
 }

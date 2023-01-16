@@ -101,6 +101,7 @@ sub get_basic_input_elements
 		id => $basename,
 		size => $size,
 		maxlength => $maxlength,
+		autocomplete => "off",
 		'aria-labelledby' => $self->get_labelledby( $basename ),
 		'aria-describedby' => $self->get_describedby( $basename, $one_field_component ) );
 
@@ -116,8 +117,9 @@ sub get_basic_input_elements
 		id => $basename."_confirm",
 		size => $size,
 		maxlength => $maxlength,
+		autocomplete => "off",
 		'aria-labelledby' => $self->get_labelledby( $basename ),
-                'aria-describedby' => $self->get_describedby( $basename, $one_field_component ) );
+		'aria-describedby' => $self->get_describedby( $basename, $one_field_component ) );
 
 	my $label1 = $session->make_element( "div", style=>"margin-right: 4px;" );
 	$label1->appendChild( $session->html_phrase(

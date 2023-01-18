@@ -736,6 +736,20 @@ sub render_search_form
 	return( $form );
 }
 
+sub render_hidden_bits
+{
+    my( $self ) = @_;
+
+    my $chunk = $self->{session}->make_doc_fragment;
+	if ( $self->repository->param( 'search_offset' ) )
+	{
+    	$chunk->appendChild( $self->{session}->render_hidden_field( "search_offset", $self->repository->param( 'search_offset' ) ) );
+	}
+    $chunk->appendChild( $self->SUPER::render_hidden_bits );
+
+    return $chunk;
+}
+
 sub render_preamble
 {
 	my( $self ) = @_;

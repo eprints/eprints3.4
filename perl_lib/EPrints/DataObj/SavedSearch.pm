@@ -475,6 +475,10 @@ sub send_out_alert
 
 		EPrints::XML::dispose( $mail );
 	}
+	elsif ( $self->{session}->get_noise >= 2 )
+	{
+		print STDERR "Not sending out alert #".$self->get_id." to ".$user->get_value( "email" )." because saved search states not to send email if no results are found.\n"; 
+	}
 	$list->dispose;
 }
 

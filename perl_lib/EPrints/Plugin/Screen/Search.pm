@@ -515,7 +515,7 @@ sub from
 	$sconf->{order_methods} = {} if !defined $sconf->{order_methods};
 	if( $searchexp->param( "result_order" ) )
 	{
-		$sconf->{order_methods}->{"byrelevance"} = "";
+		$sconf->{order_methods}->{"byrelevance"} = $sconf->{default_order} ? "byrelevance" : "";
 	}
 
 	# have we been asked to reorder?

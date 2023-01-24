@@ -1541,13 +1541,22 @@ sub generate_static
 		next if( $status ne "archive" && $status ne "deletion" );
 
 		my( $page, $title, $links, $template ) = $self->render;
+
+		my $link = $self->{session}->make_element(
+			"link",
+			rel=>"canonical",
+			href=>$self->url_stem
+		);
+		$links = $self->{session}->make_doc_fragment() if( !defined $links );
+		$links->appendChild( $link );
+		$links->appendChild( $self->{session}->make_text( "\n" ) );
+
 		my @plugins = $self->{session}->plugin_list( 
 					type=>"Export",
 					can_accept=>"dataobj/".$self->{dataset}->confid, 
 					is_advertised => 1,
 					is_visible=>"all" );
 		if( scalar @plugins > 0 ) {
-			$links = $self->{session}->make_doc_fragment() if( !defined $links );
 			foreach my $plugin_id ( @plugins ) 
 			{
 				$plugin_id =~ m/^[^:]+::(.*)$/;

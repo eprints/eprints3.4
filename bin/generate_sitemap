@@ -82,7 +82,8 @@ for ( my $i = 1; $i <= $n; $i++ )
 	my $sitemap = $xml->create_element( "sitemap" );
 	my $loc = $xml->create_element( "loc" );
 	my $url_path = $repo->config("base_url");
-        $loc->appendChild( $xml->create_text_node( $url_path . "/sitemaps/$i.xml" ) );
+	$url_path =~ s/http:/https:/ if EPrints::Utils::is_set( $repo->config("securehost") );
+	$loc->appendChild( $xml->create_text_node( $url_path . "/sitemaps/$i.xml" ) );
 	$sitemap->appendChild( $loc );
 	$sitemapindex->appendChild( $sitemap );
 }
@@ -98,7 +99,9 @@ sub add_url
 	my ( $urlset, $xml ) = @{$opts};
 
 	my $loc = $xml->create_element( "loc" );
-	$loc->appendChild( $xml->create_text_node( $eprint->url_stem ) );
+	my $url_stem = $eprint->url_stem;
+	$url_stem  =~ s/http:/https:/ if EPrints::Utils::is_set( $repo->config("securehost") );
+	$loc->appendChild( $xml->create_text_node( $url_stem ) );
 
 	my $changefreq = $xml->create_element( "changefreq" );
 	$changefreq->appendChild( $xml->create_text_node( "weekly" ) );

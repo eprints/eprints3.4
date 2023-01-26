@@ -1703,8 +1703,12 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
     <epp:phrase id="lib/session:error_title">Error</epp:phrase>
     <epp:phrase id="lib/session:no_login">You are somehow accessing a page which requires you to be logged in, without actually being logged in. This probably indicates a server misconfiguration.</epp:phrase>
     <epp:phrase id="lib/session:no_priv">You do not have the required privilege to use this function.</epp:phrase>
-    <epp:phrase id="lib/session:show_help"><epc:pin name="link"><img alt="+" title="Show help" src="{$config{rel_path}}/style/images/help.png" border="0"/></epc:pin></epp:phrase>
-    <epp:phrase id="lib/session:hide_help"><epc:pin name="link"><img alt="-" title="Hide help" src="{$config{rel_path}}/style/images/minus.png" border="0"/></epc:pin></epp:phrase>
+    <epp:phrase id="lib/session:hide_help_title">Hide help</epp:phrase>
+    <epp:phrase id="lib/session:hide_help_alt">-</epp:phrase>
+    <epp:phrase id="lib/session:hide_help_src">/style/images/minus.png</epp:phrase>
+    <epp:phrase id="lib/session:show_help_title">Show help</epp:phrase>
+    <epp:phrase id="lib/session:show_help_alt">+</epp:phrase>
+    <epp:phrase id="lib/session:show_help_src">/style/images/help.png</epp:phrase>
 
     <epp:phrase id="lib/session:edit_page">Edit page</epp:phrase>
     <epp:phrase id="lib/session:edit_phrases">Edit page phrases</epp:phrase>

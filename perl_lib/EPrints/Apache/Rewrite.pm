@@ -411,7 +411,7 @@ sub handler
 
 	if ($repository->config("use_long_url_format"))
 	{
-		# /XX/ redirect to /id/eprint/XX
+		# /XX/ redirect to /id/eprint/XX/
 		if( $uri =~ s! ^$urlpath/(0*)([1-9][0-9]*)\b !!x )  # ignore leading 0s
 		{   
 			my $eprintid = $2;
@@ -425,12 +425,12 @@ sub handler
 						$uri,
 						"^A-Za-z0-9\-\._~\/" # don't escape /
 					);
-					return redir( $r, "$urlpath/id/eprint/$eprintid/$pos$uri$args" );
+					return redir_permanent( $r, "$urlpath/id/eprint/$eprintid/$pos$uri$args" );
 			}   
 			else
 			{   
-				my $url = "/id/eprint/".$eprintid;
-				return redir_see_other( $r, $url );
+				my $url = "/id/eprint/".$eprintid."/";
+				return redir_permanent( $r, $url );
 			}   
 			return OK; 
 		}   
@@ -468,7 +468,7 @@ sub handler
 				# redirect to canonical path - /XX/
 				if( !length($uri) )
 				{
-					return redir( $r, "$urlpath/id/eprint/$eprintid/$args" );
+					return redir_see_other( $r, "$urlpath/id/eprint/$eprintid/$args" );
 				}
 				elsif( length($1) ) ##remove leading 0s
 				{

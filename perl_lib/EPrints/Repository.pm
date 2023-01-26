@@ -3527,12 +3527,20 @@ sub render_row_with_help
 	my $td2 = $self->make_element( "div", class=>"ep_multi_help ep_only_js_table_cell ep_toggle ep_table_cell" );
 	my $show_help = $self->make_element( "div", class=>"ep_sr_show_help ep_only_js", id=>$parts{help_prefix}."_show" );
 	my $helplink = $self->make_element( "a", onclick => "EPJS_blur(event); EPJS_toggleSlide('$parts{help_prefix}',false,'block');EPJS_toggle('$parts{help_prefix}_hide',false,'block');EPJS_toggle('$parts{help_prefix}_show',true,'block');return false", href=>"#" );
-	$show_help->appendChild( $self->html_phrase( "lib/session:show_help",link=>$helplink ) );
+	$helplink->appendChild( $self->make_element( "img", 
+		alt => $self->html_phrase( "lib/session:show_help_alt" ), 
+		title=> $self->html_phrase( "lib/session:show_help_title" ), 
+		src => $self->html_phrase( "lib/session:show_help_src" ) ) );
+	$show_help->appendChild( $helplink );
 	$td2->appendChild( $show_help );
 
 	my $hide_help = $self->make_element( "div", class=>"ep_sr_hide_help ep_hide", id=>$parts{help_prefix}."_hide" );
 	my $helplink2 = $self->make_element( "a", onclick => "EPJS_blur(event); EPJS_toggleSlide('$parts{help_prefix}',false,'block');EPJS_toggle('$parts{help_prefix}_hide',false,'block');EPJS_toggle('$parts{help_prefix}_show',true,'block');return false", href=>"#" );
-	$hide_help->appendChild( $self->html_phrase( "lib/session:hide_help",link=>$helplink2 ) );
+        $helplink2->appendChild( $self->make_element( "img", 
+		alt => $self->html_phrase( "lib/session:hide_help_alt" ), 
+		title=> $self->html_phrase( "lib/session:hide_help_title" ), 
+		src => $self->html_phrase( "lib/session:hide_help_src" ) ) );
+	$hide_help->appendChild( $helplink2 );
 	$td2->appendChild( $hide_help );
 	$tr->appendChild( $td2 );
 

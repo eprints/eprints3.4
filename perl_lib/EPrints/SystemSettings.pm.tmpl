@@ -50,8 +50,15 @@ $EPrints::SystemSettings::conf = {
                                                     ]
                                                 },
                                    'perl_module_isolation' => 0, #after changing this setting, you need to bin/generate_apacheconf --system --replace, then restart apache
- 
-                              
+								   'indexer_daemon' => {
+								   						 'loglevel' => 1,
+														 'rollcount' => 5,
+														 'maxwait' => 8, # 8 seconds
+														 'interval' => 30, # 30 seconds
+														 'respawn' => 86400, # 1 day
+														 'timeout' => 600, # 10 minutes
+														 'interrupt' => 0, # break out of any loops
+													   },
                                 };
 
 ## load the flavour inc files into the system settings' 'flavour' key.

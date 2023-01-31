@@ -1,0 +1,209 @@
+#!/usr/bin/perl -w
+
+use FindBin;
+use lib "$FindBin::Bin/../perl_lib";
+
+######################################################################
+#
+#
+######################################################################
+
+=pod
+
+=for Pod2Wiki
+
+=head1 NAME
+
+B<run_staged_tasks> - Generates sitemap.xml in standard location for use in Google Search Console and similar tools
+
+=head1 SYNOPSIS
+
+B<run_staged_tasks> I<repository_id> [B<options>]
+
+=head1 DESCRIPTION
+
+=head1 ARGUMENTS
+
+=over 8
+
+=item B<repository_id>
+
+The ID of the EPrints repository to use.
+
+=back
+
+=head1 OPTIONS
+
+=over 8
+
+=item B<--action=s>
+
+Only run staged tasks for a particular event action.  Sensibly to run in combination with --plugin to ensure only the tasks you expect are run.
+
+=item B<--help>
+
+Print a brief help message and exit.
+
+=item B<--man>
+
+Print the full manual page and then exit.
+
+=item B<--action=s>
+
+Only run staged tasks for a particular event plugin.
+
+=item B<--quiet>
+
+This option will suppress all output unless an error occurs.
+
+=item B<--verbose>
+
+Explain in detail what is going on.
+
+=item B<--version>
+
+Output version information and exit.
+
+=back
+
+=cut
+
+use EPrints;
+
+use strict;
+use warnings;
+
+use Getopt::Long;
+use Pod::Usage;
+use Data::Dumper;
+
+my $version = 0;
+my $verbose = 0;
+my $quiet = 0;
+my $help = 0;
+my $man = 0;
+my $plugin_opt;
+my $action_opt;
+
+Getopt::Long::Configure("permute");
+
+GetOptions(
+    'help|?' => \$help,
+    'man' => \$man,
+    'version' => \$version,
+    'verbose+' => \$verbose,
+    'silent' => \$quiet,
+    'quiet' => \$quiet,
+    'plugin=s' => \$plugin_opt,
+    'action=s' => \$action_opt,
+) || pod2usage( 2 );
+EPrints::Utils::cmd_version( "run_staged_tasks" ) if $version;
+pod2usage( 1 ) if $help;
+pod2usage( -exitstatus => 0, -verbose => 2 ) if $man;
+pod2usage( 2 ) if( scalar @ARGV != 1 );
+
+my $repoid = shift @ARGV;
+pod2usage( 1 ) unless defined $repoid;
+
+
+# Are we already running staged tasks
+my $pid;
+my $nopidfile = 0;
+my $pidfile = EPrints::Config::get("var_path") . "/staged_tasks.pid";
+open( PID, "<", $pidfile) or $nopidfile = 1;
+if( !$nopidfile )
+{
+
+        while(defined($pid = <PID>))
+        {
+                chomp($pid);
+                last if $pid+0 > 0;
+        }
+        close( PID );
+}
+if( $nopidfile || !EPrints::Platform::proc_exists( $pid ) )
+{
+        # Not running - so write new pid to file
+        open( PID, ">", $pidfile) or die "Error writing pid file $pidfile: $!";
+        print PID ( $$ );
+        close( PID );
+
+        my $session = new EPrints::Session( 1, $repoid ) or die("Cannot create Session object");
+
+        # Prepare log file
+        my $filename = EPrints::Config::get("var_path") . "/staged_tasks.log";
+        open(my $fh, '>>', $filename) or die "Could not open file '$filename' $!";
+
+        # Get indexer events
+        my $ds = $session->get_repository->get_dataset("event_queue");
+        my $search_exp = $ds->prepare_search();
+
+        #get events which failed
+        $search_exp->add_field(
+                fields => [ $ds->field( 'status' ) ],
+                value => 'staged',
+                match => "EQ",
+        );
+
+	if ( $plugin_opt ) 
+        {
+                $search_exp->add_field(
+                        fields => [ $ds->field( 'pluginid' ) ],
+                        value => $plugin_opt,
+                        match => "EQ",
+                );
+        }
+
+	if ( $action_opt ) 
+	{
+	        $search_exp->add_field(
+        	        fields => [ $ds->field( 'action' ) ],
+                	value => $action_opt,
+	                match => "EQ",
+	        );
+	}
+
+    my $list = $search_exp->perform_search;
+
+	print "Found " . $list->count . " staged task(s) that meet stated criteria.\n" if $verbose;
+
+	# Loop through staged tasks in the indexer
+	my $success = 0;
+	$list->map( sub{
+		my($session, $dataset, $event) = @_;
+
+		my $staged_task = $event->value( "pluginid" )."->".$event->value( "action" )." with parameters: [ '" . join( "', '", @{ $event->value( "params" ) } ) . "' ]";
+
+		print "Running staged task: $staged_task\n" if $verbose;
+		my $rc = $event->_execute;
+		if ( $rc != EPrints::Const::HTTP_OK )
+		{
+			if ( $rc == EPrints::Const::HTTP_INTERNAL_SERVER_ERROR )
+			{
+				$event->set_value( 'status', 'failed' );
+				$event->commit;
+			}
+			elsif ( $rc == EPrints::Const::HTTP_NOT_FOUND )
+			{
+				$event->remove;
+			}
+		}
+		else
+		{
+			$event->remove;
+			$success++;
+			print "Completed staged task: $staged_task\n" if $verbose;
+		}
+	} );
+
+	print $list->count . " staged task(s) that meet stated criteria have been executed of which $success succeeded.\n" if $verbose;
+
+	$session->terminate;
+	
+	unlink($pidfile);
+}
+else
+{
+	print "Could not run as already running as a separate process.  See $pidfile\n";
+	exit(1);
+}

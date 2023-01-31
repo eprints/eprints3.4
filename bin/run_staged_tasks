@@ -14,13 +14,17 @@ use lib "$FindBin::Bin/../perl_lib";
 
 =head1 NAME
 
-B<run_staged_tasks> - Generates sitemap.xml in standard location for use in Google Search Console and similar tools
+B<run_staged_tasks> - Runs staged tasks from the event queue
 
 =head1 SYNOPSIS
 
 B<run_staged_tasks> I<repository_id> [B<options>]
 
 =head1 DESCRIPTION
+
+Sometimes tasks in the event queue can take a long time to run and will fail because they expire after the indexer timeout (default: 10 minutes).  Although increasing the indexer timeout may help with this issue, it can be difficult to determine a suitable timeout that will allow tasks time to complete, whilst not causing too much lag between tasks being added to the event queue and being processed.
+
+New Event plugins can be created or existing ones extended to set newly created tasks as 'staged'.  Rather than these tasks being executed by the indexer will just be logged in the event queue.  This script can then used to execute these 'staged' tasks with an infinite timeout.  This script can be run as a cron job and will not run if it is already running, save running the same tasks simultaneously.  The script can be restricted by the Event plugin and/or its actions, so only certain staged tasks are executed.
 
 =head1 ARGUMENTS
 
@@ -48,7 +52,7 @@ Print a brief help message and exit.
 
 Print the full manual page and then exit.
 
-=item B<--action=s>
+=item B<--plugin=s>
 
 Only run staged tasks for a particular event plugin.
 

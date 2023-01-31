@@ -56,18 +56,28 @@ sub new
 		$class = "${class}::MSWin32";
 	}
 
-#	$opts{logfile} = EPrints::Index::logfile();
+#	$opts{logfile} = EPrints::Index::logfile();	
 	$opts{pidfile} ||= EPrints::Index::pidfile();
 	$opts{tickfile} ||= EPrints::Index::tickfile();
 	$opts{suicidefile} ||= EPrints::Index::suicidefile();
-	$opts{loglevel} = 1 unless defined $opts{loglevel};
-	$opts{rollcount} = 5 unless defined $opts{rollcount};
+
+	# Get options for SystemSettings if not already set
+	my $settings = $EPrints::SystemSettings::conf->{indexer_daemon};
+	foreach my $setting ( keys %$settings )
+	{
+		$opts{$setting} ||= $settings->{$setting};
+	}
+	
+	# Get options for hardcoded defaults if still not already set
+	$opts{loglevel} ||= 1;
+	$opts{rollcount} ||= 5;
 	$opts{maxwait} ||= 8; # 8 seconds
 	$opts{interval} ||= 30; # 30 seconds
 	$opts{respawn} ||= 86400; # 1 day
 	$opts{timeout} ||= 600; # 10 minutes
+	$opts{interrupt} ||= 0; # break out of any loops
+
 	$opts{nextrespawn} = time() + $opts{respawn};
-	$opts{interrupt} = 0; # break out of any loops
 
 	my $self = bless \%opts, $class;
 

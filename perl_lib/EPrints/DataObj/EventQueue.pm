@@ -146,12 +146,15 @@ sub create_unique
         return $task;
     }
 
-    # Some event queue plugins created 'staged' tasks that are logged by the indexer but executed by an external script, (e.g. video transcoding).
+    # Some event queue plugins create 'staged' tasks that are logged by the indexer but executed by an external script, (e.g. video transcoding).
     my $plugin = $session->plugin( $data->{pluginid} );
-    if ( defined $plugin && $plugin->{staged} )
+    if ( defined $plugin )
     {
-        $data->{status} = "staged";
-		$data->{cleanup} = "FALSE";
+        if ( $plugin->{staged} || ( $plugin->can( 'is_staged_task' ) && $plugin->is_staged_task( $data ) ) )
+        {
+            $data->{status} = "staged";
+            $data->{cleanup} = "FALSE";
+        }
     }
 
     return $class->create_from_data( $session, $data, $dataset );

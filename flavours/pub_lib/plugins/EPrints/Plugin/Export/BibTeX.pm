@@ -199,7 +199,17 @@ sub convert_dataobj
 	}
 
 	# note	
-	$data->{bibtex}->{note}	= $dataobj->get_value( "note" ) if $dataobj->exists_and_set( "note" );
+        if( $dataobj->exists_and_set( "note" ) )
+        {
+                if( $data->{bibtex}->{note} )
+                {
+                        $data->{bibtex}->{note} .= "\n\n".$dataobj->get_value( "note" );
+                }
+                else
+                {
+                        $data->{bibtex}->{note} = $dataobj->get_value( "note" );
+                }
+	}
 
 	# number
 	if( $type eq "monograph" )

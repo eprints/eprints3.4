@@ -28,7 +28,7 @@ Requires: perl(XML::LibXML) >= 1.63 perl(XML::LibXSLT)
 Requires: perl(XML::SAX) perl(Digest::SHA) perl(IO::Socket::SSL)
 Requires: perl(MIME::Lite) perl(Apache::DBI)
 Requires: perl(JSON) perl(Text::Unidecode) perl(IO::String)
-Requires: tetex-latex wget gzip tar ImageMagick unzip elinks
+Requires: tetex-latex wget gzip tar ImageMagick unzip python3-html2text
 Requires: poppler-utils
 Requires: chkconfig
 # Some modules are dynamically loaded by eprints, which confuses AutoReq

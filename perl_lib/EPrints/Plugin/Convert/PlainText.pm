@@ -23,9 +23,9 @@ use strict;
 %EPrints::Plugin::Convert::PlainText::APPS = qw(
 pdf		pdftotext
 doc		doc2txt
-htm		elinks
-html		elinks
-xml		elinks
+htm		html2text
+html	html2text
+xml		html2text
 ps		ps2ascii
 txt		_special
 );

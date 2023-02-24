@@ -265,6 +265,7 @@ sub build_email
 
 	if( defined $p{replyto_email} )
 	{
+		$p{replyto_name} =~ s/<[^>]*>|^\s+|\s+$|//g; # Tidy up particularly unnamed users
 		$mimemsg->attr( "Reply-to" => encode_mime_header( "$p{replyto_name}" )." <$p{replyto_email}>" );
 	}
 	$mimemsg->replace( "X-Mailer" => "EPrints http://eprints.org/" );

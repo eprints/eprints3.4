@@ -271,6 +271,8 @@ sub from
 			 $self->{processor}->{sconf}->{order_methods}->{$self->{processor}->{sconf}->{default_order}};
 	}
 
+	$self->{processor}->{search}->{show_hidden} = defined $self->{session}->param( "showhidden" );
+
 	# do actions
 	$self->SUPER::from;
 
@@ -731,6 +733,11 @@ sub render_search_form
 
 	$table->appendChild( $self->render_order_field );
 
+    if ( $self->{processor}->{sconf}->{staff} )
+    {
+        $table->appendChild( $self->render_show_hidden );
+    }
+
 	$form->appendChild( $self->render_controls );
 
 	return( $form );
@@ -832,6 +839,27 @@ sub render_anyall_field
 	);
 }
 
+sub render_show_hidden
+{
+    my( $self ) = @_;
+
+    my $checkbox = $self->{session}->render_noenter_input_field(
+        type => "checkbox",
+        checked => undef,
+        name => "showhidden",
+        value => "TRUE",
+        'aria-labelledby' => "showhidden_label",
+    	'aria-describedby' => "showhidden_help"
+    );
+
+    return $self->{session}->render_row_with_help(
+            label => $self->{session}->html_phrase( "lib/searchexpression:showhidden" ),
+            help => $self->{session}->html_phrase( "lib/searchexpression:showhidden_help" ),
+			help_prefix => "showhidden",
+            field => $checkbox
+    );
+}
+
 sub render_controls
 {
 	my( $self ) = @_;
@@ -846,8 +874,6 @@ sub render_controls
  	);
 	return $div;
 }
-
-
 
 sub render_order_field
 {

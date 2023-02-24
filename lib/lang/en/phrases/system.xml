@@ -1555,6 +1555,8 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
     <epp:phrase id="lib/searchexpression:all">all of these conditions</epp:phrase>
     <epp:phrase id="lib/searchexpression:must_fulfill">Retrieved records must fulfill</epp:phrase>
     <epp:phrase id="lib/searchexpression:order_results"><span id="order_label">Order the results</span></epp:phrase>
+    <epp:phrase id="lib/searchexpression:showhidden">Show hidden results</epp:phrase>
+    <epp:phrase id="lib/searchexpression:showhidden_help">Show all results, irrelevant of their metadata visibility.</epp:phrase>
     <epp:phrase id="lib/searchexpression:action_search">Search</epp:phrase>
     <epp:phrase id="lib/searchexpression:action_filter">Filter</epp:phrase>
     <epp:phrase id="lib/searchexpression:action_reset">Reset the form</epp:phrase>

@@ -271,7 +271,7 @@ sub from
 			 $self->{processor}->{sconf}->{order_methods}->{$self->{processor}->{sconf}->{default_order}};
 	}
 
-	$self->{processor}->{search}->{show_hidden} = defined $self->{session}->param( "showhidden" );
+	$self->{processor}->{search}->{show_hidden} = defined $self->{session}->param( "showhidden" ) && $self->search_dataset->has_field( "metadata_visibility" );
 
 	# do actions
 	$self->SUPER::from;

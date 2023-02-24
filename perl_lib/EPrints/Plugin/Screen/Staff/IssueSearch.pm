@@ -124,6 +124,13 @@ sub render_anyall_field
 	return $self->{session}->make_doc_fragment;
 }
 
+# Suppress the anyall field - not useful.
+sub render_show_hidden
+{
+    my( $self ) = @_;
+
+    return $self->{session}->make_doc_fragment;
+}
 
 
 1;

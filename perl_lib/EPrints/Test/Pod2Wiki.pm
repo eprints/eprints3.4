@@ -249,6 +249,7 @@ EOC
 
 	my $selfcat = $package_name;
 	$selfcat =~ s#::#/#g;
+	undef $parent if $parent eq $selfcat;
 	undef $selfcat if $selfcat !~ m#/# || !$self->{_selfcat};
 
 	return (

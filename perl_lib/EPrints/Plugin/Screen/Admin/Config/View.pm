@@ -87,7 +87,7 @@ sub render
 	my $doc_link = $self->{session}->render_link("http://eprints.org/d/?keyword=${1}ConfigFile&filename=".$self->{processor}->{configfile});
 	$page->appendChild( $self->{session}->html_phrase( "Plugin/Screen/Admin/Config/View:documentation", link=>$doc_link ));
 
-	if( $edit_screen->can_be_viewed )
+	if( defined $edit_screen && $edit_screen->can_be_viewed )
 	{
 		my $edit_config_button = $edit_screen->render_action_button( {
 			screen => $edit_screen,
@@ -99,6 +99,13 @@ sub render
 		my $buttons = $self->{session}->make_element( "div" );
 		$buttons->appendChild( $edit_config_button );
 		$page->appendChild( $edit_config_button );
+	}
+	elsif ( $self->{session}->get_repository->get_conf( "plugins", $edit_screen_id, "params", "disable" ) )
+	{
+		my $content = $self->{session}->html_phrase( "Plugin/Screen/Admin/Config/View:enable_plugin",
+			plugin => $self->{session}->make_text( $edit_screen_id ),
+		);
+		$page->appendChild( $self->{session}->render_message( "warning", $content ) );
 	}
 	else
 	{

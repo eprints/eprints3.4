@@ -111,7 +111,7 @@ if( !defined $dataset )
 my @filters;
 
 # legacy
-if( $dataset->base_id eq "eprint" )
+if( $dataset->base_id eq "eprint" && ( $searchid ne "staff" || !$repo->param( "showhidden" ) ) )
 {
 	push @filters,
 		{ meta_fields => ["metadata_visibility"], value => "show" };

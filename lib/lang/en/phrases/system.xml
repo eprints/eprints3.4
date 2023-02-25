@@ -13,10 +13,19 @@ EPrints.
 To override a system phrase add the phrase to a file in:
 /archives/[repoid]/cfg/lang/[langid]/phrases/
 
--->
+<!-- tmp: all comments with leading 'tmp:' should be removed finally! -->
+<!--
+What's modified?
 
+I mainly
+- added some internal references to emphasize the connection
+- introduced some abbreviations in case of multiple usage
+- added some <code> tags to point out the usage
+- added some alternative texts where missing -->
+<!-- tmp: above comments should be removed finally! -->
 
 <epp:phrases xmlns="http://www.w3.org/1999/xhtml" xmlns:epp="http://eprints.org/ep3/phrase" xmlns:epc="http://eprints.org/ep3/control">
+<!-- tmp: Do you noticed that not all aforementioned URLs are still valid? -->
 
 <!-- Plugin/Screen/BatchEdit -->
 
@@ -303,11 +312,7 @@ The list of dc relations used by the relation field.
     <epp:phrase id="document_relation_typename_http://purl.org/dc/terms/isFormatOf">Is Format Of</epp:phrase>
     <epp:phrase id="document_relation_typename_http://purl.org/dc/terms/hasFormat">Has Format</epp:phrase>
 
-
-
 <!-- deposit agreement -->
-
-
     <epp:phrase id="deposit_agreement_text">
 <p><strong>For work being deposited by its own author:</strong>
 In self-archiving this collection of files and associated bibliographic
@@ -322,11 +327,11 @@ copyright on the title page of their work.)</p>
 <p><strong>For work being deposited by someone other than its
 author:</strong> I hereby declare that the collection of files and
 associated bibliographic metadata that I am archiving at
-<epc:phrase ref="archive_name" />) is in the public domain. If this is
+<epc:phrase ref="archive_name" /> is in the public domain. If this is
 not the case, I accept full responsibility for any breach of copyright
 that distributing these files or metadata may entail.</p>
 
-<p>Clicking on the deposit button indicates your agreement to these
+<p>Clicking on the <em><epc:phrase ref="priv:action/eprint/deposit" /></em> button indicates your agreement to these
 terms.</p>
     </epp:phrase>
 
@@ -349,31 +354,25 @@ terms.</p>
 
 
 <!-- dynamic phrases -->
-
-
     <epp:phrase id="dynamic:logged_in">Logged in as <epc:pin name="user"/> <epc:phrase ref="Plugin/Screen:tool_divide" />
        <epc:pin name="tools" /> <epc:phrase ref="Plugin/Screen:tool_divide" /> <a href="{$config{rel_cgipath}}/logout">Logout</a>
     </epp:phrase>
-    <epp:phrase id="dynamic:not_logged_in"><a href="{$config{userhome}}">Login</a> <epc:phrase ref="Plugin/Screen:tool_divide" /> <a href="{$config{rel_cgipath}}/register">Create Account</a></epp:phrase>
-
+    <epp:phrase id="dynamic:not_logged_in"><a href="{$config{userhome}}">Login</a> <epc:phrase ref="Plugin/Screen:tool_divide" /> <a href="register">Create Account</a></epp:phrase>
 
 
 <!-- locally defined fields -->
 
+    <!-- tmp: introduction of abbreviation -->
+    <epp:phrase id="eprint_fieldname_title:hints">The title should not end with a full stop, but may end with a question mark. There is no way to make italic text, please enter it normally.
+If it has a subtitle, it should be preceded with a colon [:]. Use capitals only for the first word and for proper nouns.
+<br/>Example: <span class="ep_form_example">A brief history of time</span>
+<br/>Example: <span class="ep_form_example">Life: an unauthorised biography</span>
+<br/>Example: <span class="ep_form_example">Mathematics for engineers and scientists. 5th edition</span>
+<br/>Example: <span class="ep_form_example">Ecosystems of the world. Vol. 26. Estuaries of the world</span>
+</epp:phrase>
     <epp:phrase id="eprint_fieldname_title">Title</epp:phrase>
-    <epp:phrase id="eprint_fieldhelp_title">The title of the item. The title should not end with a full stop, but may end with a question mark. There is no way to make italic text, please enter it normally. If you have a subtitle, it should be preceded with a colon [:]. Use capitals only for the first word and for proper nouns.
-<br/>Example: <span class="ep_form_example">A brief history of time</span>
-<br/>Example: <span class="ep_form_example">Life: an unauthorised biography</span>
-<br/>Example: <span class="ep_form_example">Mathematics for engineers and scientists. 5th edition</span>
-<br/>Example: <span class="ep_form_example">Ecosystems of the world. Vol. 26. Estuaries of the world</span>
-</epp:phrase>
-    <epp:phrase id="eprint_fieldhelp_title.book">The title of the book, usually found on the title page. The title should not end with a full stop, but may end with a question mark. There is no way to make italic text, please enter it normally. If it has a subtitle, it should be preceded with a colon [:]. Use capitals only for the first word and for proper nouns.
-<br/>Example: <span class="ep_form_example">A brief history of time</span>
-<br/>Example: <span class="ep_form_example">Life: an unauthorised biography</span>
-<br/>Example: <span class="ep_form_example">Mathematics for engineers and scientists. 5th edition</span>
-<br/>Example: <span class="ep_form_example">Ecosystems of the world. Vol. 26. Estuaries of the world</span>
-</epp:phrase>
-
+    <epp:phrase id="eprint_fieldhelp_title">The title of the item. <epc:phrase ref="eprint_fieldname_title:hints"/></epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_title.book">The title of the book, usually found on the title page. <epc:phrase ref="eprint_fieldname_title:hints"/></epp:phrase>
 
     <epp:phrase id="eprint_fieldname_abstract">Abstract</epp:phrase>
     <epp:phrase id="eprint_fieldhelp_abstract">A summary of the items content. If the item has a formal abstract then that is what should be entered here. No complicated text formatting is possible.</epp:phrase>
@@ -382,7 +381,7 @@ terms.</p>
     <epp:phrase id="eprint_fieldhelp_keywords">Natural language terms to describe the content of the item.</epp:phrase>
 
     <epp:phrase id="eprint_fieldname_contributors">Contributors</epp:phrase>
-    <epp:phrase id="eprint_fieldhelp_contributors">Enter contributors' names along with type of contribution. If there are more than four contributors, click on the [More&#160;input&#160;rows] button.</epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_contributors">Enter contributors' names along with type of contribution. If there are more than four contributors, click on the <em><epc:phrase ref="lib/metafield:more_spaces"/></em> button.</epp:phrase>
     <epp:phrase id="eprint_fieldname_contributors_type">Contribution</epp:phrase>
     <epp:phrase id="eprint_fieldname_contributors_id">Email</epp:phrase>
     <epp:phrase id="eprint_fieldhelp_contributors_name"/>
@@ -393,18 +392,23 @@ terms.</p>
 
     <epp:phrase id="eprint_fieldname_creators">Creators</epp:phrase>
     <epp:phrase id="eprint_fieldname_editors">Editors</epp:phrase>
-    <epp:phrase id="eprint_fieldhelp_editors"/>
-    <epp:phrase id="eprint_fieldhelp_editors_name"/>
+<!-- tmp: new location after moving upward -->
+    <epp:phrase id="eprint_fieldhelp_editors">Specify the responsible person for publication.</epp:phrase>
+    <epp:phrase id="eprint_fieldname_editors_name">Editors</epp:phrase>
+    <epp:phrase id="eprint_fieldhelp_editors_name">Please enter the names of the editors.<br/>This field is required if no creators are listed.</epp:phrase>
+    <epp:phrase id="eprint_fieldname_editors_id">Email</epp:phrase>
     <epp:phrase id="eprint_fieldhelp_editors_id"/>
     <epp:phrase id="eprint_fieldhelp_editors_name_family"/>
     <epp:phrase id="eprint_fieldhelp_editors_name_given"/>
-
+<!-- tmp: new location after moving upward -->
+    <epp:phrase id="eprint_fieldname_editors_name_cite">(ed.)</epp:phrase>
+    <epp:phrase id="eprint_fieldname_editors_names_cite">(eds.)</epp:phrase>
     <epp:phrase id="eprint_fieldname_corp_creators">Corporate Creators</epp:phrase>
     <epp:phrase id="eprint_fieldhelp_corp_creators">Companies that are considered authors of this item.</epp:phrase>
 
     <epp:phrase id="eprint_fieldname_creators_name">Creators</epp:phrase>
     <epp:phrase id="eprint_fieldname_creators_id">Email</epp:phrase>
-    <epp:phrase id="eprint_fieldhelp_creators">Enter in the format given on the first page or title page. If there are more than four authors, click on the [More&#160;input&#160;rows] button.
+    <epp:phrase id="eprint_fieldhelp_creators">Enter in the format given on the first page or title page. If there are more than four authors, click on the <em><epc:phrase ref="lib/metafield:more_spaces"/></em> button.
 <br/>Example: [<span class="ep_form_example">Smith</span>] [<span class="ep_form_example">J.P.</span>] [<span class="ep_form_example">j.smith@soton.ac.uk</span>]
 <br/>Example: [<span class="ep_form_example">Chance-Collins</span>] [<span class="ep_form_example">Chris</span>] [<span class="ep_form_example">chris@bar.com</span>]
 <br/>Example: [<span class="ep_form_example">Fu</span>] [<span class="ep_form_example">Yan-Li</span>] []
@@ -421,7 +425,7 @@ terms.</p>
 </epp:phrase>
 
     <epp:phrase id="eprint_fieldname_pagerange">Page Range</epp:phrase>
-    <epp:phrase id="eprint_fieldhelp_pagerange">Numerals only. The sequence of pages of the item. Do not enter pp.
+    <epp:phrase id="eprint_fieldhelp_pagerange">Numerals only. The sequence of pages of the item. Do not enter <code>pp</code>.
 <br/>Example:  <span class="ep_form_example">21</span> to <span class="ep_form_example">34</span>
 </epp:phrase>
 
@@ -499,7 +503,6 @@ terms.</p>
 
     <epp:phrase id="eprint_fieldname_official_url">Official URL</epp:phrase>
     <epp:phrase id="eprint_fieldhelp_official_url">The canonical URL for this item. Some journals require you to provide a link to their version.
-<!-- fnord -->
 <br/>Example: <span class="ep_form_example">http://www.stuffjournal.com/2003/3/</span>
 </epp:phrase>
 
@@ -512,7 +515,7 @@ terms.</p>
     <epp:phrase id="eprint_fieldopt_related_url_type_pub">Publisher</epp:phrase>
     <epp:phrase id="eprint_fieldopt_related_url_type_org">Organisation</epp:phrase>
     <epp:phrase id="eprint_fieldopt_related_url_type_author">Author</epp:phrase>
-
+<!-- tmp: moved upward
     <epp:phrase id="eprint_fieldhelp_editors">Specify the responsible person for publication.</epp:phrase>
     <epp:phrase id="eprint_fieldname_editors_name">Editors</epp:phrase>
     <epp:phrase id="eprint_fieldhelp_editors_name">Please enter the names of the editors.<br/>
@@ -520,11 +523,11 @@ This field is required if no creators are listed.
 </epp:phrase>
     <epp:phrase id="eprint_fieldname_editors_name_cite">(ed.)</epp:phrase>
     <epp:phrase id="eprint_fieldname_editors_names_cite">(eds.)</epp:phrase>
-
-    <epp:phrase id="eprint_typename_thesis_cite">thesis</epp:phrase>
-
     <epp:phrase id="eprint_fieldname_editors_id">Email</epp:phrase>
-
+     moved upward -->
+<!-- tmp: moved downward
+    <epp:phrase id="eprint_typename_thesis_cite">thesis</epp:phrase>
+     moved downward -->
     <epp:phrase id="eprint_fieldname_date">Date</epp:phrase>
     <epp:phrase id="eprint_fieldhelp_date">The date this EPrint was completed, submitted to a publisher, published or submitted for a Ph.D.</epp:phrase>
 
@@ -568,7 +571,7 @@ This field is required if no creators are listed.
     <epp:phrase id="eprint_fieldhelp_refereed">Please indicate whether this version of the work been refereed below.</epp:phrase>
     <epp:phrase id="eprint_radio_refereed_true">Yes, this version has been refereed.</epp:phrase>
     <epp:phrase id="eprint_radio_refereed_false">No, this version has not been refereed.</epp:phrase>
-    <epp:phrase id="eprint_radio_refereed"><label><epc:pin name="true"/><epp:phrase ref="eprint_radio_refereed_true"/></label><br/><label><epc:pin name="false"/><epp:phrase ref="eprint_radio_refereed_false"/></label></epp:phrase>
+    <epp:phrase id="eprint_radio_refereed"><label><epc:pin name="true"/><epc:phrase ref="eprint_radio_refereed_true"/></label><br/><label><epc:pin name="false"/><epc:phrase ref="eprint_radio_refereed_false"/></label></epp:phrase>
 
     <epp:phrase id="eprint_fieldname_referencetext">References</epp:phrase>
     <epp:phrase id="eprint_fieldhelp_referencetext">You are strongly encouraged to paste in the reference list of your item into the box below. It may be used to link your item to those it cites and to those that cite it.</epp:phrase>
@@ -664,7 +667,7 @@ This field is required if no creators are listed.
     <epp:phrase id="eprint_fieldname_conductors">Conductors</epp:phrase>
     <epp:phrase id="eprint_fieldhelp_conductors">The conductors of the performance/composition</epp:phrase>
     <epp:phrase id="eprint_fieldname_conductors_id">Email</epp:phrase>
-    <epp:phrase id="eprint_fieldhelp_conductors_id">Email of the conductors</epp:phrase>    
+    <epp:phrase id="eprint_fieldhelp_conductors_id">Email of the conductors</epp:phrase>
     <epp:phrase id="eprint_fieldname_conductors_name">Name</epp:phrase>
     <epp:phrase id="eprint_fieldhelp_conductors_name">The name of the conductors</epp:phrase>
 
@@ -674,7 +677,7 @@ This field is required if no creators are listed.
     <epp:phrase id="eprint_fieldname_lyricists">Lyricists</epp:phrase>
     <epp:phrase id="eprint_fieldhelp_lyricists">The lyricists of the composition</epp:phrase>
     <epp:phrase id="eprint_fieldname_lyricists_id">Email</epp:phrase>
-    <epp:phrase id="eprint_fieldhelp_lyricists_id">Email of the lyricists</epp:phrase>    
+    <epp:phrase id="eprint_fieldhelp_lyricists_id">Email of the lyricists</epp:phrase>
     <epp:phrase id="eprint_fieldname_lyricists_name">Name</epp:phrase>
     <epp:phrase id="eprint_fieldhelp_lyricists_name">Name of the lyricists</epp:phrase>
 
@@ -744,6 +747,8 @@ This field is required if no creators are listed.
     <epp:phrase id="eprint_optdetails_type_monograph">A monograph. This may be a technical report, project report, documentation, manual, working paper or discussion paper.</epp:phrase>
 
     <epp:phrase id="eprint_typename_thesis">Thesis</epp:phrase>
+<!-- tmp: new location after moving downward -->
+    <epp:phrase id="eprint_typename_thesis_cite">thesis</epp:phrase>
     <epp:phrase id="eprint_optdetails_type_thesis">A thesis or dissertation.</epp:phrase>
 
     <epp:phrase id="eprint_typename_patent">Patent</epp:phrase>
@@ -803,7 +808,6 @@ This field is required if no creators are listed.
 
 <epp:phrase id="mail_bounce_reason">No reason was given.</epp:phrase>
 
-
 <epp:phrase id="mail_bounce_body">
 <div style="font-size: 11pt">Item Return</div>
 <p>Unfortunately your item <b><epc:pin name="title"/></b> could not be accepted into <epc:phrase ref="archive_name" /> as-is.</p>
@@ -812,11 +816,7 @@ This field is required if no creators are listed.
 </epp:phrase>
 
 
-
-
-<epp:phrase id="mail_delete_reason">
-No reason was given.
-</epp:phrase>
+<epp:phrase id="mail_delete_reason">No reason was given.</epp:phrase>
 
 <epp:phrase id="mail_delete_body">
 <div style="font-size: 11pt">Item Deletion</div>
@@ -929,9 +929,9 @@ Phrases related to the Manage Metadata Fields tool.
 
 <p>To make use of your new field (e.g. by adding it to the abstract page) look at <a href="http://eprints.org/d/?keyword=HOW_TO:_Add_a_New_Field">HOW TO: Add a New Field</a>.</p>
 
-<p>If you don't want to add a new field now click <em>Save for Later</em>.</p>
+<p>If you don't want to add a new field now click <em><epc:phrase ref="priv:action/metafield/save" /></em>.</p>
     </epp:phrase>
-    <epp:phrase id="Plugin/Screen/MetaField/Commit:add_to_phrases_failed">Failed to add this field's phrase, you should check that your phrases directory is writable.</epp:phrase>
+    <epp:phrase id="Plugin/Screen/MetaField/Commit:add_to_phrases_failed">Failed to add this field's phrase, you should check that your <code>phrases</code> directory is writable.</epp:phrase>
     <epp:phrase id="Plugin/Screen/MetaField/Commit:add_to_workflow_failed">Failed to add this field to the workflow, you should check that your workflow directory is writable.</epp:phrase>
     <epp:phrase id="Plugin/Screen/MetaField/Destroy:title" ref="Plugin/Screen/Workflow/Destroy:title" />
     <epp:phrase id="Plugin/Screen/MetaField/Destroy:sure_delete" ref="Plugin/Screen/Workflow/Destroy:sure_delete" />
@@ -967,8 +967,8 @@ Phrases related to the Manage Metadata Fields tool.
     <epp:phrase id="Plugin/Screen/MetaField/Listing:confirm">Confirm</epp:phrase>
     <epp:phrase id="Plugin/Screen/MetaField/Listing:bad_name">The name of a field must contain only the letters a-z and underscore (requested name was "<epc:pin name="name" />")</epp:phrase>
     <epp:phrase id="Plugin/Screen/MetaField/Listing:invalid_field">The field "<epc:pin name="field" />" you are attempting to modify doesn't appear to be configured for the dataset "<epc:pin name="dataset"/>" (perhaps it's a system field?).</epp:phrase>
-    <epp:phrase id="Plugin/Screen/MetaField/Listing:confirm_edit">You are about to edit the configuration and database settings for the <em><epc:pin name="field"/></em> field in the <em><epc:pin name="dataset"/></em> dataset. <b>You may permanently lose any data stored in <em><epc:pin name="field"/></em>!</b> If you are sure you want to continue click on the confirm button. <epc:pin name="confirm_button"/> <epc:pin name="cancel_button"/></epp:phrase>
-    <epp:phrase id="Plugin/Screen/MetaField/Listing:confirm_remove">You cannot automatically remove the live field <em><epc:pin name="field"/></em> from <em><epc:pin name="dataset"/></em> dataset.  However, You can remove it by editing the configuration file. <b>Doing so may permanently lose any data stored in <em><epc:pin name="field"/></em>!</b> If you are sure this is what you want to continue click on the confirm button. <epc:pin name="confirm_button"/> <epc:pin name="cancel_button"/></epp:phrase>
+    <epp:phrase id="Plugin/Screen/MetaField/Listing:confirm_edit">You are about to edit the configuration and database settings for the <em><epc:pin name="field"/></em> field in the <em><epc:pin name="dataset"/></em> dataset. <b>You may permanently lose any data stored in <em><epc:pin name="field"/></em>!</b> If you are sure you want to continue click on the <em><epc:phrase ref="Plugin/Screen/MetaField/Listing:confirm"/></em> button. <epc:pin name="confirm_button"/> <epc:pin name="cancel_button"/></epp:phrase>
+    <epp:phrase id="Plugin/Screen/MetaField/Listing:confirm_remove">You cannot automatically remove the live field <em><epc:pin name="field"/></em> from <em><epc:pin name="dataset"/></em> dataset.  However, You can remove it by editing the configuration file. <b>Doing so may permanently lose any data stored in <em><epc:pin name="field"/></em>!</b> If you are sure this is what you want to continue click on the <em><epc:phrase ref="Plugin/Screen/MetaField/Listing:confirm"/></em> button. <epc:pin name="confirm_button"/> <epc:pin name="cancel_button"/></epp:phrase>
     <epp:phrase id="Plugin/Screen/MetaField/Commit:metafield_committed">Added the configuration and database settings for the <em><epc:pin name="field"/></em> field in the <em><epc:pin name="dataset"/></em> dataset.</epp:phrase>
     <epp:phrase id="Plugin/Screen/MetaField/Listing:removed_field">Removed the configuration and database settings for the <em><epc:pin name="field"/></em> field in the <em><epc:pin name="dataset"/></em> dataset.</epp:phrase>
     <epp:phrase id="Plugin/Screen/MetaField/Listing:renamed_field">Renamed old field <em><epc:pin name="field"/></em> in the configuration and database settings to <em><epc:pin name="newid"/></em> in the <em><epc:pin name="dataset"/></em> dataset.</epp:phrase>
@@ -1013,7 +1013,7 @@ Phrases related to the Manage Metadata Fields tool.
 <epp:phrase id="metafield_optdetails_type_float">A floating-point number (0.2, 1.11, 3.14159265).</epp:phrase>
 <epp:phrase id="metafield_fieldopt_type_id">id</epp:phrase>
 <epp:phrase id="metafield_fieldopt_fields_type_id">id</epp:phrase>
-<epp:phrase id="metafield_optdetails_type_id">[Deprecated] Use Itemref.</epp:phrase>
+<epp:phrase id="metafield_optdetails_type_id">[Deprecated] Use <em>Itemref</em>.</epp:phrase>
 <epp:phrase id="metafield_fieldopt_type_int">int</epp:phrase>
 <epp:phrase id="metafield_fieldopt_fields_type_int">int</epp:phrase>
 <epp:phrase id="metafield_optdetails_type_int">An integer (1, 5, 10).</epp:phrase>
@@ -1034,7 +1034,7 @@ Phrases related to the Manage Metadata Fields tool.
 <epp:phrase id="metafield_optdetails_type_name">The name of a person, consisting of honorific, given, family and lineage parts.</epp:phrase>
 <epp:phrase id="metafield_fieldopt_type_namedset">namedset</epp:phrase>
 <epp:phrase id="metafield_fieldopt_fields_type_namedset">namedset</epp:phrase>
-<epp:phrase id="metafield_optdetails_type_namedset">A Set that takes its values from a namedset file.</epp:phrase>
+<epp:phrase id="metafield_optdetails_type_namedset">A set that takes its values from a <code>/cfg/namedset</code> file.</epp:phrase>
 <epp:phrase id="metafield_fieldopt_type_pagerange">pagerange</epp:phrase>
 <epp:phrase id="metafield_fieldopt_fields_type_pagerange">pagerange</epp:phrase>
 <epp:phrase id="metafield_optdetails_type_pagerange">A page range (4-10, 201-3)</epp:phrase>
@@ -1160,7 +1160,7 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
 <epp:phrase id="metafield_fieldhelp_input_rows">Input rows to show (lines of text, or options visible).</epp:phrase>
 <epp:phrase id="metafield_fieldname_input_cols">Input Columns</epp:phrase>
 <epp:phrase id="metafield_fieldname_fields_input_cols">Input Cols</epp:phrase>
-<epp:phrase id="metafield_fieldhelp_input_cols">Input columns to show (columns of text). To restrict the maximum number of characters entered for text fields use the <em>maxlength</em> property.</epp:phrase>
+<epp:phrase id="metafield_fieldhelp_input_cols">Input columns to show (columns of text). To restrict the maximum number of characters entered for text fields use the <em><epc:phrase ref="metafield_fieldname_fields_maxlength"/></em> property.</epp:phrase>
 <epp:phrase id="metafield_fieldname_input_boxes">Initial Input Rows</epp:phrase>
 <epp:phrase id="metafield_fieldname_fields_input_boxes">Input Boxes</epp:phrase>
 <epp:phrase id="metafield_fieldhelp_input_boxes">Starting number of input rows to show (if field is multiple). As users add values more rows will be shown.</epp:phrase>
@@ -1357,11 +1357,12 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
     <epp:phrase id="lib/document:action_separator"> | </epp:phrase>
 
 <!-- EPrint -->
-
+    <!-- tmp: introduction of abbreviation -->
+    <epp:phrase id="lib/eprint:diskenlargement"><p>The usual way to add disk space is to symlink a directory on a new drive into the repository <code>documents</code> directory.</p></epp:phrase>
     <epp:phrase id="lib/eprint:disklow_sub">Warning: Low on disk space</epp:phrase>
-    <epp:phrase id="lib/eprint:disklow"><p>The amount of disk space available for new EPrints has dropped below the repository threshold. New disk space will be needed soon.</p><p>If you get sick of this message, lower the "diskspace_warn_threshold" in the configuration file. If you do this then don't forget to put it back after you add more disk space.</p><p>The usual way to add disk space is to symlink a directory on a new drive into the repository "documents" directory.</p></epp:phrase>
+    <epp:phrase id="lib/eprint:disklow"><p>The amount of disk space available for new EPrints has dropped below the repository threshold. New disk space will be needed soon.</p><p>If you get sick of this message, lower the "diskspace_warn_threshold" in the configuration file. If you do this then don't forget to put it back after you add more disk space.</p><epc:phrase ref="lib/eprint:diskenlargement"/></epp:phrase>
     <epp:phrase id="lib/eprint:diskout_sub">ERROR: Out of Disk Space</epp:phrase>
-    <epp:phrase id="lib/eprint:diskout"><p>There are no available partitions with enough disk space to create new items. This needs sorting out urgently.</p><p>NO NEW ITEMS WILL BE ADDED UNTIL YOU FIX THIS.</p><p>To add more capacity, symlink a directory on a new drive into the repository "documents" directory.</p></epp:phrase>
+    <epp:phrase id="lib/eprint:diskout"><p>There are no available partitions with enough disk space to create new items. This needs sorting out urgently.</p><p>NO NEW ITEMS WILL BE ADDED UNTIL YOU FIX THIS.</p><epc:phrase ref="lib/eprint:diskenlargement"/></epp:phrase>
     <epp:phrase id="lib/eprint:no_type">You haven't selected a type for this item.</epp:phrase>
     <epp:phrase id="lib/eprint:invalid_type">This item doesn't seem to have a valid type.</epp:phrase>
     <epp:phrase id="lib/eprint:duplicate_field_value"><epc:pin name="fieldname"/> "<epc:pin name="value"/>" already exists and is owned by someone else, please choose another.</epp:phrase>
@@ -1378,7 +1379,7 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
     <epp:phrase id="lib/eprint:replaced_version"><p>There is an alternative version of the item you are trying to access:<br/><epc:pin name="citation"/></p></epp:phrase>
     <epp:phrase id="lib/eprint:curr_disp"><strong>[Currently Displayed]</strong></epp:phrase>
     <epp:phrase id="lib/eprint:not_locked">Not currently locked.</epp:phrase>
-    <epp:phrase id="lib/eprint:locked">Locked by <epc:pin name='locked_by' /> until <epc:pin name='locked_until' /></epp:phrase>
+    <epp:phrase id="lib/eprint:locked">Locked by <epc:pin name="locked_by" /> until <epc:pin name="locked_until" /></epp:phrase>
 
 <!-- History -->
 
@@ -1446,7 +1447,8 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
     <epp:phrase id="lib/metafield:given_names">Given Name / Initials</epp:phrase>
     <epp:phrase id="lib/metafield:lineage">Lineage</epp:phrase>
     <epp:phrase id="lib/metafield:honourific">Title</epp:phrase>
-    <epp:phrase id="lib/metafield:more_spaces">More input rows</epp:phrase>
+<!-- tmp: &nbsp; is needed? No way to achieve the same behaviour by an appropriate CSS, e.g. word-wrap? -->
+    <epp:phrase id="lib/metafield:more_spaces">More&nbsp;input&nbsp;rows</epp:phrase>
     <epp:phrase id="lib/metafield:more_langs">More Languages</epp:phrase>
     <epp:phrase id="lib/metafield:unspecified">UNSPECIFIED</epp:phrase>
     <epp:phrase id="lib/metafield:unspecified_selection">UNSPECIFIED</epp:phrase>
@@ -1478,6 +1480,7 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
     <epp:phrase id="lib/metafield:join_subobject"><br /></epp:phrase>
     <epp:phrase id="lib/metafield:join_int">, </epp:phrase>
     <epp:phrase id="lib/metafield:join_id">, </epp:phrase>
+    <epp:phrase id="lib/metafield:join_day"/>
     <epp:phrase id="lib/metafield:join_year">, </epp:phrase>
     <epp:phrase id="lib/metafield:join_longtext">, </epp:phrase>
     <epp:phrase id="lib/metafield:join_date">, </epp:phrase>
@@ -1485,6 +1488,7 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
     <epp:phrase id="lib/metafield:join_name"> and </epp:phrase>
     <epp:phrase id="lib/metafield:join_set">, </epp:phrase>
     <epp:phrase id="lib/metafield:join_text">, </epp:phrase>
+    <epp:phrase id="lib/metafield:join_textid">, </epp:phrase>
     <epp:phrase id="lib/metafield:join_secret">, </epp:phrase>
     <epp:phrase id="lib/metafield:join_url">, </epp:phrase>
     <epp:phrase id="lib/metafield:join_email">, </epp:phrase>
@@ -1497,6 +1501,7 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
     <epp:phrase id="lib/metafield:join_namedset">, </epp:phrase>
     <epp:phrase id="lib/metafield:join_itemref">, </epp:phrase>
 
+    <epp:phrase id="lib/metafield/pages"> p.</epp:phrase>
     <epp:phrase id="lib/metafield/itemref:lookup">Lookup</epp:phrase>
     <epp:phrase id="lib/metafield/itemref:not_found"><i><epc:pin name="objtype"/> <epc:pin name="id"/> not found.</i></epp:phrase>
     <epp:phrase id="lib/metafield/secret:show_value">[hidden]</epp:phrase>
@@ -1544,6 +1549,10 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
     <epp:phrase id="lib/metafield/pagerange:range">pp. <epc:pin name="from"/>-<epc:pin name="to"/></epp:phrase>
     <!-- 000x392 -->
     <epp:phrase id="lib/metafield/pagerange:other"><epc:pin name="pagerange"/></epp:phrase>
+    <epp:phrase id="lib/metafield/boolean:default_radio_list">
+        <label><epc:pin name="true"/> true</label><br/>
+        <label><epc:pin name="false"/> false</label><br/>
+    </epp:phrase>
 
 <!-- Search (used to be SearchExpression) -->
 
@@ -1607,8 +1616,10 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
 
     <epp:phrase id="lib/searchfield:help_search" ref="lib/searchfield:help_text"/>
     <epp:phrase id="lib/searchfield:help_subobject" ref="lib/searchfield:help_text"/>
+    <!-- tmp: introduction of abbreviation -->
+    <epp:phrase id="lib/searchfield:int_example">e.g. `23', or a range of numbers, e.g. `9-21', `17-' or `-93'</epp:phrase>
     <epp:phrase id="lib/searchfield:year_err">A year search must be specified as a single year, e.g. `2000', or a range of years, e.g. `1990-2000', `1990-' or `-2000'</epp:phrase>
-    <epp:phrase id="lib/searchfield:int_err">A numerical search must be specified as a single integer number, e.g. `23', or a range of numbers, e.g. `9-21', `17-' or `-93'</epp:phrase>
+    <epp:phrase id="lib/searchfield:int_err">A numerical search must be specified as a single integer number, <epc:phrase ref="lib/searchfield:int_example"/></epp:phrase>
     <epp:phrase id="lib/searchfield:date_err">A date search must be specified as a single date or a range.</epp:phrase>
     <epp:phrase id="lib/searchfield:no_words">Search field contains no indexable words: "<epc:pin name="words"/>". The system ignores very small or common words.</epp:phrase>
     <epp:phrase id="lib/searchfield:help_time">Enter a date or date range.
@@ -1617,11 +1628,7 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
 "<span class="ep_form_example">-1980-11</span>"
 </epp:phrase>
     <epp:phrase id="lib/searchfield:help_timestamp" ref="lib/searchfield:help_time" />
-    <epp:phrase id="lib/searchfield:help_date">Enter a date or date range.
-<br/>Examples:  "<span class="ep_form_example">1985-</span>",
-"<span class="ep_form_example">2001-05-17-2002-05-16</span>",
-"<span class="ep_form_example">-1980-11</span>"
-</epp:phrase>
+    <epp:phrase id="lib/searchfield:help_date" ref="lib/searchfield:help_time" />
     <epp:phrase id="lib/searchfield:help_boolean">Select a value.</epp:phrase>
     <epp:phrase id="lib/searchfield:help_email">Enter some text to search for.</epp:phrase>
     <epp:phrase id="lib/searchfield:help_datatype">Select one or more values from the list. Default is (Any).</epp:phrase>
@@ -1639,10 +1646,10 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
     <epp:phrase id="lib/searchfield:help_fulltext">Enter a term or terms to search for.</epp:phrase>
     <epp:phrase id="lib/searchfield:help_url">Enter some text to search for.</epp:phrase>
     <epp:phrase id="lib/searchfield:help_year">Enter a single year (e.g. 1999), or a range of years, e.g. `1990-2000', `1990-' or -2000'.</epp:phrase>
-    <epp:phrase id="lib/searchfield:help_int">Enter a single number (e.g. 93), or a range of numbers, e.g. `17-23', `17-' or -23'.</epp:phrase>
+    <epp:phrase id="lib/searchfield:help_int">Enter a single number <epc:phrase ref="lib/searchfield:int_example"/>.</epp:phrase>
     <epp:phrase id="lib/searchfield:help_float">Enter a single number (e.g. 3.14159), or a range of numbers, e.g. `4.8-15', `16-' or -23.42'.</epp:phrase>
-    <epp:phrase id="lib/searchfield:help_itemref">Select a single record ID number (e.g. 93), or a range of numbers, e.g. `17-23', `17-' or -23'.</epp:phrase>
-    <epp:phrase id="lib/searchfield:help_counter">Enter a single ID (e.g. 93), or a range of IDs, e.g. `17-23' or `17-'. </epp:phrase>
+    <epp:phrase id="lib/searchfield:help_itemref">Select a single record ID number <epc:phrase ref="lib/searchfield:int_example"/>.</epp:phrase>
+    <epp:phrase id="lib/searchfield:help_counter">Enter a single ID <epc:phrase ref="lib/searchfield:int_example"/>. </epp:phrase>
     <epp:phrase id="lib/searchfield:help_storable" />
     <epp:phrase id="lib/searchfield:help_base64" />
     <epp:phrase id="lib/searchfield:bool_nopref">No Preference</epp:phrase>
@@ -1690,7 +1697,7 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
     <epp:phrase id="lib/searchfield:desc_ignored"> (Ignoring: <epc:pin name="list"/>)</epp:phrase>
 
     <epp:phrase id="searchfield_name_q">Item</epp:phrase>
-    <epp:phrase id="lib/searchfield:n_more_values">... (<epc:pin name='n' /> not shown)</epp:phrase>
+    <epp:phrase id="lib/searchfield:n_more_values">... (<epc:pin name="n" /> not shown)</epp:phrase>
 
 <!-- Session -->
 
@@ -1736,7 +1743,7 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
 
 <!-- SubmissionForm -->
 
-    <epp:phrase id="lib/submissionform:use_auth_area">Use the user area to deposit new items</epp:phrase>
+    <epp:phrase id="lib/submissionform:use_auth_area">Use the <a href='{$config{base_url}}{$config{userhome}}?screen=Items'>user area</a> to deposit new items</epp:phrase>
     <epp:phrase id="lib/submissionform:verify">Verify: <epc:pin name="citation"/></epp:phrase>
     <epp:phrase id="lib/submissionform:invalid_eprint">ID <epc:pin name="eprintid"/> is not a valid item ID!</epp:phrase>
     <epp:phrase id="lib/submissionform:current_docs"><p>Here are the documents currently attached to this item, and how many files you have uploaded for each.</p></epp:phrase>
@@ -1776,7 +1783,7 @@ Enter a URL to capture a file from: <epc:pin name="url"/><br/>
 <epc:pin name="url_form"/>
     </epp:phrase>
     <epp:phrase id="lib/submissionform:fix_probs">Before you deposit this entry into the repository, the following problems need to be corrected:</epp:phrase>
-    <epp:phrase id="lib/submissionform:please_verify"><p><strong>You have not finished yet!</strong></p><p>Please verify that all of the details about your deposit are correct, and that all necessary files have been correctly uploaded including any figures.</p><p>When you are satisfied click the <strong>Deposit Item Now</strong> button at the foot of this page.</p></epp:phrase>
+    <epp:phrase id="lib/submissionform:please_verify"><p><strong>You have not finished yet!</strong></p><p>Please verify that all of the details about your deposit are correct, and that all necessary files have been correctly uploaded including any figures.</p><p>When you are satisfied click the <em><epc:phrase ref="priv:action/eprint/deposit" /></em> button at the foot of this page.</p></epp:phrase>
     <epp:phrase id="lib/submissionform:thanks"><p>Thank you.</p><p>Your submission will now be held for review. Provided there are no problems it should appear in the repository within the next few days.</p><p><a href="{$config{userhome}}">Click here to go to the user page</a></p></epp:phrase>
     <epp:phrase id="lib/submissionform:filled_wrong">The form doesn't seem to be filled out correctly:</epp:phrase>
     <epp:phrase id="lib/submissionform:please_complete">Please complete the form before continuing.</epp:phrase>
@@ -1924,7 +1931,7 @@ User Area CGI Scripts
     <epp:phrase id="cgi/users/change_email:no_email"><p>You did not actually supply a new email address.</p></epp:phrase>
     <epp:phrase id="cgi/users/change_email:mail_sent"><p>An email has been sent to <b><epc:pin name="email"/></b> containing the code required to confirm this new email address.</p><p>This code is only valid for <epc:pin name="maxdelta" />.</p></epp:phrase>
     <epp:phrase id="cgi/users/change_email:changeemail">Email Change Request</epp:phrase>
-    <epp:phrase id="cgi/users/change_email:email_exists"><p>A user with the email address <code><epc:pin name="email"/></code> already exists.</p><p>If this is your email address, you should just <a href="../reset_password">reset your password</a>.</p></epp:phrase>
+    <epp:phrase id="cgi/users/change_email:email_exists"><p>A user with the email address <code><epc:pin name="email"/></code> already exists.</p><p>If this is your email address, you should just <a href="reset_password">reset your password</a>.</p></epp:phrase>
 
 <!-- status -->
 
@@ -2021,7 +2028,7 @@ User Area CGI Scripts
     <epp:phrase id="Plugin/Screen/Admin/Reload:action:reload_config:title">Reload Configuration</epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/Reload:action:reload_config:description">Cause the repository to re-read its configuration files. Use with caution!</epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/Reload:reloaded">Repository configuration reloaded!</epp:phrase>
-    <epp:phrase id="Plugin/Screen/Admin/Reload:reload_write_failed">Repository configuration not reloaded: Could not write to lastchanged.timestamp file.</epp:phrase>
+    <epp:phrase id="Plugin/Screen/Admin/Reload:reload_write_failed">Repository configuration not reloaded: Could not write to <code>lastchanged.timestamp</code> file.</epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/Reload:reload_bad_config"><div>Repository configuration not reloaded. Errors in configuration files.</div><pre><epc:pin name="output" /></pre></epp:phrase>
 
 
@@ -2033,7 +2040,7 @@ User Area CGI Scripts
     <epp:phrase id="Plugin/Screen/Admin/Config/View:enable_plugin">The <code><epc:pin name="plugin"/></code> plugin has been deliberately disabled to prevent editing of this configuration file.</epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/Config/View:enable_editing">To enable configuration file editing add the <code><epc:pin name="privilege"/></code> privilege to your user role.</epp:phrase>
 
-    <epp:phrase id="Plugin/Screen/Admin/Config/View/GENERIC:page_title">View config file: <epc:pin name="file" /></epp:phrase>
+    <epp:phrase id="Plugin/Screen/Admin/Config/View/GENERIC:page_title"><epc:phrase ref="Plugin/Screen/Admin/Config/View/GENERIC:title"/>: <epc:pin name="file"/> </epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/Config/View/Apache:page_title" ref="Plugin/Screen/Admin/Config/View/GENERIC:page_title"/>
     <epp:phrase id="Plugin/Screen/Admin/Config/View/Autocomplete:page_title" ref="Plugin/Screen/Admin/Config/View/GENERIC:page_title"/>
     <epp:phrase id="Plugin/Screen/Admin/Config/View/Citation:page_title" ref="Plugin/Screen/Admin/Config/View/GENERIC:page_title"/>
@@ -2097,7 +2104,7 @@ User Area CGI Scripts
     <epp:phrase id="Plugin/Screen/Admin/Config/Edit/XPage:intro"/>
 
     <epp:phrase id="Plugin/Screen/Admin/Config/Edit:did_not_install">Did not install modified configuration file.</epp:phrase>
-    <epp:phrase id="Plugin/Screen/Admin/Config/Edit:broken">You are viewing a version of this configuration file which has been edited via the web interface, but not successfully installed. To revert to the last (probably OK) version, use the Revert button below.</epp:phrase>
+    <epp:phrase id="Plugin/Screen/Admin/Config/Edit:broken">You are viewing a version of this configuration file which has been edited via the web interface, but not successfully installed. To revert to the last (probably OK) version, use the <em><epc:phrase ref="Plugin/Screen/Admin/Config/Edit:revert_config_button"/></em> button below.</epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/Config/Edit:reverted">This file has been reverted to the last successfully installed version</epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/Config/Edit:save_config_button">Save changes</epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/Config/Edit:revert_config_button">Revert to previous</epp:phrase>
@@ -2137,7 +2144,7 @@ User Area CGI Scripts
         <p>Note: you must have cookies enabled.</p>
       </div>
     </epp:phrase>
-    <epp:phrase id="cgi/login:reset_link">If you have forgotten your password, you may <a href="{$config{rel_cgipath}}/reset_password">reset</a> it.</epp:phrase>
+    <epp:phrase id="cgi/login:reset_link">If you have forgotten your password, you may <a href="reset_password">reset</a> it.</epp:phrase>
     <epp:phrase id="cgi/login:until_close">until the browser closes</epp:phrase>
     <epp:phrase id="cgi/login:forever">forever (until I log out)</epp:phrase>
     <epp:phrase id="cgi/login:bind">yes (more secure)</epp:phrase>
@@ -2188,7 +2195,7 @@ Staff CGI Scripts
     <epp:phrase id="cgi/users/edit_eprint:stage_linking">Succession/Commentary</epp:phrase>
     <epp:phrase id="cgi/users/edit_eprint:stage_files">Files</epp:phrase>
     <epp:phrase id="cgi/users/edit_eprint:cant_find_it">Can't retrieve item with the ID "<epc:pin name="id"/>"</epp:phrase>
-    <epp:phrase id="cgi/users/edit_eprint:cant_edit">This item (id <epc:pin name="id"/>) does not match the scope of the items you are allowed to edit. If you need assistance please contact the repository administrator.</epp:phrase>
+    <epp:phrase id="cgi/users/edit_eprint:cant_edit">This item (id <epc:pin name="id"/>) does not match the scope of the items you are allowed to edit. If you need assistance please contact the <a href="mailto:{$config{adminemail}}">repository administrator</a>.</epp:phrase>
     <epp:phrase id="cgi/users/edit_eprint:cant_remove">Problem removing item with the ID "<epc:pin name="id"/>"</epp:phrase>
     <epp:phrase id="cgi/users/edit_eprint:cant_clone">Problem cloning item with the ID "<epc:pin name="id"/>"</epp:phrase>
     <epp:phrase id="cgi/users/edit_eprint:reject_form_intro"><p>Please enter in the box below the reason for returning this item, and any possible fix. This will be emailed to the relevant author.</p></epp:phrase>
@@ -2348,6 +2355,8 @@ Public CGI Scripts
     <epp:phrase id="register_fieldname_lang" ref="user_fieldname_lang"/>
     <epp:phrase id="register_fieldhelp_lang" ref="user_fieldhelp_lang"/>
 
+    <epp:phrase id="register_fieldname_email" ref="request_fieldname_requester_email"/>
+    <epp:phrase id="register_fieldhelp_email" ref="request_fieldhelp_requester_email"/>
 
     <epp:phrase id="register_fieldname_username">Select a username</epp:phrase>
     <epp:phrase id="register_fieldhelp_username">A username must begin with a letter and only contain letters and numerals.</epp:phrase>
@@ -2355,7 +2364,7 @@ Public CGI Scripts
     <epp:phrase id="register_fieldname_newpassword">Select a password</epp:phrase>
     <epp:phrase id="register_fieldhelp_newpassword">A combination of uppercase and lowercase letters and numerals.</epp:phrase>
 
-    <!-- You may wish to override this phrase in the repository phrase file with something like "By pushing the Register button you agree to...". -->
+    <!-- You may wish to override this phrase in the repository phrase file with something like "By pushing the <em>Register</em> button you agree to...". -->
     <epp:phrase id="cgi/register:register_agreement"/>
 
 
@@ -2439,7 +2448,7 @@ Views
     <epp:phrase id="bin/generate_views:browsetitle">Browse Items</epp:phrase>
     <epp:phrase id="bin/generate_views:browseintro"><div class="ep_view_browse_intro">Items may be browsed by the following:</div></epp:phrase>
     <epp:phrase id="bin/generate_views:timestamp"><div class="ep_view_timestamp">This list was generated on <strong><epc:pin name="time"/></strong>.</div></epp:phrase>
-    <epp:phrase id="bin/generate_views:max_items">The number of items (<epc:pin name="n" />) for this view has exceeded system limits (<epc:pin name="max" />). The system administrator either needs to increase "max_items" or apply additional filters to this view.</epp:phrase>
+    <epp:phrase id="bin/generate_views:max_items">The number of items (<epc:pin name="n" />) for this view has exceeded system limits (<epc:pin name="max" />). The system administrator either needs to increase <code>max_items</code> or apply additional filters to this view.</epp:phrase>
     <epp:phrase id="Update/Views:group_by"><div class="ep_view_group_by">Group by: <epc:pin name="groups" /></div></epp:phrase>
     <epp:phrase id="Update/Views:current_group"><span class="ep_view_group_by_current"><epc:pin name="group" /></span></epp:phrase>
 	<epp:phrase id="Update/Views:group_separator"> | </epp:phrase>
@@ -2636,7 +2645,7 @@ Titles and Help for the System Fields
     <epp:phrase id="user_fieldhelp_mailempty">If there are no items under review, within your scope, should the repository still send you an empty email?</epp:phrase>
     <epp:phrase id="user_radio_mailempty_true">Yes, mail me when there is nothing under review within my scope.</epp:phrase>
     <epp:phrase id="user_radio_mailempty_false">No. Only mail me when there is something under review within my scope.</epp:phrase>
-    <epp:phrase id="user_radio_mailempty"><label><epc:pin name="true"/><epp:phrase ref="user_radio_mailempty_true"/></label><br/><label><epc:pin name="false"/><epp:phrase ref="user_radio_mailempty_false"/></label></epp:phrase>
+    <epp:phrase id="user_radio_mailempty"><label><epc:pin name="true"/><epc:phrase ref="user_radio_mailempty_true"/></label><br/><label><epc:pin name="false"/><epc:phrase ref="user_radio_mailempty_false"/></label></epp:phrase>
     <epp:phrase id="user_fieldname_latitude">Latitude</epp:phrase>
     <epp:phrase id="user_fieldname_longitude">Longitude</epp:phrase>
     <epp:phrase id="user_fieldhelp_latitude">The Latitude associated with this user. Southern latitudes should be expressed as a negative.</epp:phrase>
@@ -2692,7 +2701,7 @@ Titles and Help for the System Fields
     <epp:phrase id="document_fieldhelp_date_embargo">The date that a publisher- or sponsor-imposed embargo expires. On and after this date, this document will be made publicly accessible.</epp:phrase>
     <epp:phrase id="document_embargo_info">until</epp:phrase>
     <epp:phrase id="document_fieldname_date_embargo_retained">Retained embargo expiry date</epp:phrase>
-    <epp:phrase id="document_fieldhelp_date_embargo_retained">Retains the <epp:phrase ref="document_fieldname_date_embargo"/> after the embargo has been lifted.</epp:phrase>
+    <epp:phrase id="document_fieldhelp_date_embargo_retained">Retains the <epc:phrase ref="document_fieldname_date_embargo"/> after the embargo has been lifted.</epp:phrase>
     <epp:phrase id="document_fieldname_upload_url">Upload URL</epp:phrase>
     <epp:phrase id="document_fieldhelp_upload_url">From where the document was uploaded, if it was upload from a URL.</epp:phrase>
     <epp:phrase id="document_fieldname_relation">Relationships</epp:phrase>
@@ -2711,16 +2720,18 @@ Titles and Help for the System Fields
 
     <epp:phrase id="subject_fieldname_name">Subject Name</epp:phrase>
     <epp:phrase id="subject_fieldname_rev_number">Revision</epp:phrase>
+    <epp:phrase id="subject_fieldhelp_rev_number"/>
     <epp:phrase id="subject_fieldhelp_name">This is the "screen" name of the subject, the one that the users will see.</epp:phrase>
     <epp:phrase id="subject_fieldhelp_name_name" ref="subject_fieldhelp_name"/>
     <epp:phrase id="subject_fieldname_ancestors">Ancestors</epp:phrase>
     <epp:phrase id="subject_fieldhelp_ancestors">Subjects which this subject is part of (including itself).</epp:phrase>
     <epp:phrase id="subject_fieldname_parents">Subject Parents Subject(s)</epp:phrase>
+    <epp:phrase id="subject_fieldhelp_parents"/>
     <epp:phrase id="subject_fieldname_depositable">Depositable</epp:phrase>
     <epp:phrase id="subject_fieldhelp_depositable">Can users add items to this subject?</epp:phrase>
     <epp:phrase id="subject_radio_depositable_true">Yes, users can add items to this subject.</epp:phrase>
     <epp:phrase id="subject_radio_depositable_false">No. Which is why in this case it should probably have some children.</epp:phrase>
-    <epp:phrase id="subject_radio_depositable"><label><epc:pin name="true"/><epp:phrase ref="subject_radio_depositable_true"/></label><br/><label><epc:pin name="false"/><epp:phrase ref="subject_radio_depositable_false"/></label></epp:phrase>
+    <epp:phrase id="subject_radio_depositable"><label><epc:pin name="true"/><epc:phrase ref="subject_radio_depositable_true"/></label><br/><label><epc:pin name="false"/><epc:phrase ref="subject_radio_depositable_false"/></label></epp:phrase>
     <epp:phrase id="subject_fieldname_subjectid">Subject ID String</epp:phrase>
     <epp:phrase id="subject_fieldhelp_subjectid">This is the internal key for this subject. It is used in the database and to generate the "views" filenames. It should contain only a-z, 0-9 and hyphen "-" and underscore "_".</epp:phrase>
     <epp:phrase id="subject_fieldname_sortvalue">Sort Value</epp:phrase>
@@ -2762,25 +2773,15 @@ Titles and Help for the System Fields
     <epp:phrase id="Plugin/Screen:message_message">Message</epp:phrase>
     <epp:phrase id="Plugin/Screen:message_error">Error</epp:phrase>
     <epp:phrase id="Plugin/Screen:message_warning">Warning</epp:phrase>
-    <epp:phrase id="Plugin/Screen:no_render_subclass">Error. $screen->render should be sub-classed for <epc:pin name="screen"/>.</epp:phrase>
+    <epp:phrase id="Plugin/Screen:no_render_subclass">Error. <code>$screen->render</code> should be sub-classed for <epc:pin name="screen"/>.</epp:phrase>
     <epp:phrase id="Plugin/Screen:item_locked">This item is temporarily locked. Please go back and try again in a few minutes.</epp:phrase>
     <epp:phrase id="Plugin/Screen:csrf_detected">Cross-Site Request Forgery (CSRF) was detected whilst processing your last request and therefore its action was not authorised.</epp:phrase>
 
     <epp:phrase id="Plugin/Screen/Items:title">Manage deposits</epp:phrase>
     <epp:phrase id="Plugin/Screen/Items:remove_column_confirm">Really remove this column from the display?</epp:phrase>
     <epp:phrase id="Plugin/Screen/Items:help_title">Help</epp:phrase>
-    <epp:phrase id="Plugin/Screen/Items:help">
-<p>This page shows items which you have not yet deposited, or which are still under review.</p>
-<p>To start depositing an item use the "New Item" button, and follow the instructions.</p>
-<p>If you stop before completing the deposit, or a deposit is returned for corrections, it will appear in the list as in the "User Workarea".</p>
-
-<p style='margin-bottom: 1px;'>Click on an icon to the right of an item to:</p>
-<div class='ep_icontable'>
-  <div><div><img src="{$config{rel_path}}/style/images/action_view.png" alt=""/></div><div>View Item in Detail, including additional actions</div></div>
-  <div><div><img src="{$config{rel_path}}/style/images/action_edit.png" alt=""/></div><div>Edit Item</div></div>
-  <div><div><img src="{$config{rel_path}}/style/images/action_reject.png" alt=""/></div><div>Destroy Item</div></div>
-  <div><div><img src="{$config{rel_path}}/style/images/action_deposit.png" alt=""/></div><div>Deposit Item</div></div>
-</div>
+    <!-- tmp: introduction of abbreviation -->
+    <epp:phrase id="Plugin/Screen/Items:table">
 <p>To reorder the list of items, click on the title of the column to sort by. Clicking a second time will reverse the order.</p>
 <p>You may modify the columns displayed. Add a new column using the menu at the bottom of the page.</p>
 
@@ -2790,8 +2791,22 @@ Titles and Help for the System Fields
 <div><div style='padding: 4px;'><img title="Move Right" src="{$config{rel_path}}/style/images/right.png" alt="&gt;" /></div><div>Move column right</div></div>
 </div>
 </epp:phrase>
+    <epp:phrase id="Plugin/Screen/Items:help">
+<p>This page shows items which you have not yet deposited, which are still under review, which reside in the live archive, or which are already retired, depending on the active filter selection.</p>
+<p>To start depositing an item use the <em><epc:phrase ref="Plugin/Screen/NewEPrint:action:create:title" /></em> button, and follow the instructions.</p>
+<p>If you stop before completing the deposit, or a deposit is returned for corrections, it will appear in the list as in the "User Workarea".</p>
+
+<p style='margin-bottom: 1px;'>Click on an icon to the right of an item to:</p>
+<div class='ep_icontable'>
+  <div><div><img src="{$config{rel_path}}/style/images/action_view.png" alt="View Item"/></div><div>View Item in Detail, including additional actions</div></div>
+  <div><div><img src="{$config{rel_path}}/style/images/action_edit.png" alt="Edit Item"/></div><div>Edit Item</div></div>
+  <div><div><img src="{$config{rel_path}}/style/images/action_reject.png" alt="Destroy Item"/></div><div>Destroy Item</div></div>
+  <div><div><img src="{$config{rel_path}}/style/images/action_deposit.png" alt="Deposit Item"/></div><div>Deposit Item</div></div>
+</div>
+<epc:phrase ref="Plugin/Screen/Items:table"/></epp:phrase>
     <epp:phrase id="Plugin/Screen/Items:add">Add</epp:phrase>
     <epp:phrase id="Plugin/Screen/Items:add_label">Add Column</epp:phrase>
+    <epp:phrase id="Plugin/Screen/Review:add">Add selected column</epp:phrase>
     <epp:phrase id="Plugin/Screen/Review:title">Review</epp:phrase>
     <epp:phrase id="Plugin/Screen/Review:list_desc">Items under review</epp:phrase>
     <epp:phrase id="Plugin/Screen/Review:help_title">Help</epp:phrase>
@@ -2799,22 +2814,14 @@ Titles and Help for the System Fields
 <p>This page shows items awaiting review.</p>
 <p style='margin-bottom: 1px;'>Click on an icon to the right of an item to:</p>
 <div class='ep_icontable'>
-  <div><div><img src="{$config{rel_path}}/style/images/action_view.png" alt=""/></div><div>View Item in Detail, including additional actions</div></div>
-  <div><div><img src="{$config{rel_path}}/style/images/action_edit.png" alt=""/></div><div>Edit Item</div></div>
-  <div><div><img src="{$config{rel_path}}/style/images/action_approve.png" alt=""/></div><div>Move Item to Repository</div></div>
-  <div><div><img src="{$config{rel_path}}/style/images/action_bounce.png" alt=""/></div><div>Return Item to Depositor (and notify depositing user)</div></div>
-  <div><div><img src="{$config{rel_path}}/style/images/action_reject.png" alt=""/></div><div>Destroy Item (with notification to depositing user)</div></div>
+  <div><div><img src="{$config{rel_path}}/style/images/action_view.png" alt="View Item"/></div><div>View Item in Detail, including additional actions</div></div>
+  <div><div><img src="{$config{rel_path}}/style/images/action_edit.png" alt="Edit Item"/></div><div>Edit Item</div></div>
+  <div><div><img src="{$config{rel_path}}/style/images/action_approve.png" alt="Move to Repository"/></div><div>Move Item to Repository</div></div>
+  <div><div><img src="{$config{rel_path}}/style/images/action_bounce.png" alt="Return to Depositor"/></div><div>Return Item to Depositor (and notify depositing user)</div></div>
+  <div><div><img src="{$config{rel_path}}/style/images/action_reject.png" alt="Destroy Item"/></div><div>Destroy Item (with notification to depositing user)</div></div>
 </div>
 <p>Items that have previously been in the live archive cannot be destroyed unless you have the additional <em>eprint/remove_once_archived</em> permission.</p>
-<p>To reorder the list of items, click on the title of the column to sort by. Clicking a second time will reverse the order.</p>
-<p>You may modify the columns displayed. Add a new column using the menu at the bottom of the page.</p>
-
-<div class='ep_icontable'>
-<div><div style='padding: 4px;'><img title="Move Left" src="{$config{rel_path}}/style/images/left.png" alt="&lt;" /></div><div>Move column left</div></div>
-<div><div style='padding: 4px;'><img title="Remove Column" src="{$config{rel_path}}/style/images/delete.png" alt="X" /></div><div>Remove column</div></div>
-<div><div style='padding: 4px;'><img title="Move Right" src="{$config{rel_path}}/style/images/right.png" alt="&gt;" /></div><div>Move column right</div></div>
-</div>
-</epp:phrase>
+<epc:phrase ref="Plugin/Screen/Items:table"/></epp:phrase>
     <epp:phrase id="Plugin/Screen/Review:remove_column_confirm">Really remove this column from the display?</epp:phrase>
     <epp:phrase id="Plugin/Screen/Review:ep_review_filters_title">Filters</epp:phrase>
 
@@ -2863,16 +2870,16 @@ Titles and Help for the System Fields
 
     <epp:phrase id="Plugin/Screen/EPrint:deposit">Deposit</epp:phrase>
     <epp:phrase id="Plugin/Screen/EPrint/Deposit:action:save:description"><p>Before depositing this item you must resolve the problems identified.</p></epp:phrase>
-    <epp:phrase id="Plugin/Screen/EPrint/Deposit:action:move_buffer:description"><p>As an editor of this item you can move it into review without first resolving the problems identified otherwise click <epc:phrase ref="lib/submissionform:action_save" /> to fix these problems later.</p></epp:phrase>
-    <epp:phrase id="Plugin/Screen/EPrint/Deposit:action:move_archive:description"><p>As an editor of this item you can move it into the archive without first resolving the problems identified otherwise click <epc:phrase ref="lib/submissionform:action_save" /> to fix these problems later.</p></epp:phrase>
+    <epp:phrase id="Plugin/Screen/EPrint/Deposit:action:move_buffer:description"><p>As an editor of this item you can move it into review without first resolving the problems identified otherwise click <em><epc:phrase ref="priv:action/metafield/save" /></em> to fix these problems later.</p></epp:phrase>
+    <epp:phrase id="Plugin/Screen/EPrint/Deposit:action:move_archive:description"><p>As an editor of this item you can move it into the archive without first resolving the problems identified otherwise click <em><epc:phrase ref="priv:action/metafield/save" /></em> to fix these problems later.</p></epp:phrase>
         <epp:phrase id="Plugin/Screen/EPrint:owner_denied">Although you are the owner of this item you may not view this screen: <epc:pin name="screen"/>. This may be because you have deposited the item and you may no longer make changes to it.</epp:phrase>
 
-    <epp:phrase id="Plugin/Screen/EPrint:locked_to_you">This item is temporarily locked to allow your modifications only. The lock may be released via a button in the Actions tab.</epp:phrase>
-    <epp:phrase id="Plugin/Screen/EPrint:locked_to_other">This item is temporarily locked to allow modifications by <epc:pin name='name' /> only.</epp:phrase>
+    <epp:phrase id="Plugin/Screen/EPrint:locked_to_you">This item is temporarily locked to allow your modifications only. The lock may be released via a button in the <epc:phrase ref="Plugin/Screen/EPrint/Actions:title"/> tab.</epp:phrase>
+    <epp:phrase id="Plugin/Screen/EPrint:locked_to_other">This item is temporarily locked to allow modifications by <epc:pin name="name" /> only.</epp:phrase>
 
     <epp:phrase id="Plugin/Screen/EPrint/TakeLock:action:take:title">Take Edit Lock</epp:phrase>
     <epp:phrase id="Plugin/Screen/EPrint/TakeLock:action:take:description">Take the edit lock from the user currently editing this record.</epp:phrase>
-    <epp:phrase id="Plugin/Screen/EPrint/TakeLock:lock_taken">Sorry, but your edit lock on <epc:pin name='item' /> has been overridden by an editor. Try editing this record again later.</epp:phrase>
+    <epp:phrase id="Plugin/Screen/EPrint/TakeLock:lock_taken">Sorry, but your edit lock on <epc:pin name="item" /> has been overridden by an editor. Try editing this record again later.</epp:phrase>
     <epp:phrase id="Plugin/Screen/EPrint/TakeLock:item_taken">You have taken over the edit lock for this item.</epp:phrase>
 
     <epp:phrase id="Plugin/Screen/EPrint/ReleaseLock:action:release:title">Release Edit Lock</epp:phrase>
@@ -2882,9 +2889,9 @@ Titles and Help for the System Fields
     <epp:phrase id="Plugin/Screen/EPrint/ShowLock:title">Item Locked</epp:phrase>
     <epp:phrase id="Plugin/Screen/EPrint/ShowLock:item_locked">
       <p>This item is currently being modified by another user, and will remain locked for a few minutes after they stop editing, unless they choose to release it sooner.</p>
-      <p>This item has been locked since <epc:pin name='locked_since' />.</p>
-      <p>This item will be locked until at least <epc:pin name='locked_until' /> (<epc:pin name='locked_remaining' /> seconds)</p>
-      <p>Locked by: <epc:pin name='locked_by' /></p>
+      <p>This item has been locked since <epc:pin name="locked_since" />.</p>
+      <p>This item will be locked until at least <epc:pin name="locked_until" /> (<epc:pin name="locked_remaining" /> seconds)</p>
+      <p>Locked by: <epc:pin name="locked_by" /></p>
     </epp:phrase>
 
     <epp:phrase id="Plugin/Screen/FirstTool:no_tools">Sorry, you are not able to use any tools</epp:phrase>
@@ -3093,7 +3100,7 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="Plugin/Screen/EPrint/View/Editor:title">Editor View of Item</epp:phrase>
     <epp:phrase id="Plugin/Screen/EPrint/View/Other:title">Registered User View of Item</epp:phrase>
     <epp:phrase id="Plugin/Screen/EPrint/View:failed">Failed</epp:phrase>
-    <epp:phrase id="Plugin/Screen/EPrint/View:no_subclass">render_status should have been subclassed.</epp:phrase>
+    <epp:phrase id="Plugin/Screen/EPrint/View:no_subclass"><code>render_status</code> should have been subclassed.</epp:phrase>
 
     <epp:phrase id="Plugin/Screen/EPrint/NewVersion:action:new_version:title">New version</epp:phrase>
     <epp:phrase id="Plugin/Screen/EPrint/NewVersion:action:new_version:description">Use this to submit a new version of this item. It will create an exact copy which you can then make changes to. This item and the new version will be linked. This item will be hidden from search result pages, once the new version is made public.</epp:phrase>
@@ -3207,17 +3214,18 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="Plugin/Screen/Staff/HistorySearch:description">Search for actions that have occurred on items in this repository.</epp:phrase>
 
 
-    <epp:phrase id="sys:ep_form_required"><img src="{$config{rel_path}}/style/images/required.png" border="0" class="ep_required" alt="Required" style="display: inline"/>&#160;<epc:pin name="label"/></epp:phrase>
+    <epp:phrase id="sys:ep_form_required"><img src="{$config{rel_path}}/style/images/required.png" border="0" class="ep_required" alt="Required" style="display: inline"/>&nbsp;<epc:pin name="label"/></epp:phrase>
 
 
 
     <!-- Upload component -->
 
     <epp:phrase id="Plugin/InputForm/Component/Upload:title">Add a new document</epp:phrase>
-        <epp:phrase id="Plugin/InputForm/Component/Upload:help"><p style="margin-top: 0px">To upload a document to this repository, click the Browse button below to select the file and the Upload button to upload it to the archive. You may then add additional files to the document (such as images for HTML files) or upload more files to create additional documents.</p><p style="margin-bottom: 0px">You may wish to use the <a href="https://sherpa.ac.uk/romeo/" target="_blank">SHERPA RoMEO</a> tool to verify publisher policies before depositing.</p></epp:phrase>
+        <epp:phrase id="Plugin/InputForm/Component/Upload:help"><p style="margin-top: 0px">To upload a document to this repository, click the <em><epc:phrase ref="template/navigation:browse"/></em> button below to select the file and the <em><epc:phrase ref="metapage_title_files"/></em> button to upload it to the archive. You may then add additional files to the document (such as images for HTML files) or upload more files to create additional documents.</p><p style="margin-bottom: 0px">You may wish to use the <a href="https://sherpa.ac.uk/romeo/" target="_blank">SHERPA RoMEO</a> tool to verify publisher policies before depositing.</p></epp:phrase>
     <epp:phrase id="Plugin/InputForm/Component/Documents:convert_document">Convert Document Format</epp:phrase>
     <epp:phrase id="Plugin/InputForm/Component/Documents:convert_document_button">Convert</epp:phrase>
-    <epp:phrase id="Plugin/InputForm/Component/Documents:convert_document_help">To convert this document to another format select the format you wish to convert it to and click 'Convert'. The conversion will create a <b>new</b> document - your old document will not be lost.</epp:phrase>
+    <epp:phrase id="Plugin/InputForm/Component/Documents:convert_document_help">To convert this document to another format select the format you wish to convert it to and click <em><epc:phrase ref="Plugin/InputForm/Component/Documents:convert_document_button"/></em>. The conversion will create a <b>new</b> document - your old document will not be lost.</epp:phrase>
+    <epp:phrase id="Plugin/InputForm/Component/Documents:conversion_failed">Requested conversion of document failed!</epp:phrase>
     <epp:phrase id="Plugin/InputForm/Component/Upload:from_file">File</epp:phrase>
     <epp:phrase id="Plugin/InputForm/Component/Upload:from_zip">Zip File</epp:phrase>
     <epp:phrase id="Plugin/InputForm/Component/Upload:from_targz">.tar.gz File</epp:phrase>
@@ -3273,7 +3281,7 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="Plugin/InputForm/Component/Documents:unlink_document">Remove relation</epp:phrase>
     <epp:phrase id="Plugin/InputForm/Component/Documents:unlink_document_confirm">Remove the relation to parent document: are you sure?</epp:phrase>
     <epp:phrase id="Plugin/InputForm/Component/Documents:add_files"><epc:pin name="link">Click to add supplementary files to this document</epc:pin></epp:phrase>
-    <epp:phrase id="Plugin/InputForm/Component/Documents:really_add">Wait! Are you really sure you want to add another file to this document? Only do this if the file is directly required by the document. For example an image required by an HTML document. If you are sure you want to then click OK. Most of the time you want to click Cancel then use the New Document field above.</epp:phrase>
+    <epp:phrase id="Plugin/InputForm/Component/Documents:really_add">Wait! Are you really sure you want to add another file to this document? Only do this if the file is directly required by the document. For example an image required by an HTML document. If you are sure you want to then click <em>OK</em>. Most of the time you want to click <em>Cancel</em> then use the <em>New Document</em> field above.</epp:phrase>
     <epp:phrase id="Plugin/InputForm/Component/Upload:really_next">Wait! You have selected a file to upload but not actually uploaded it. Do you wish to continue without uploading the file?</epp:phrase>
 
     <epp:phrase id="Plugin/InputForm/Component/Documents:document_problem">In <epc:pin name="document" /> document: <epc:pin name="problem" /></epp:phrase>
@@ -3321,10 +3329,10 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="Plugin/Import/XML:expected_file">&lt;<epc:pin name="type"/>&gt; where &lt;file&gt; was expected inside &lt;<epc:pin name="fieldname"/>&gt;</epp:phrase>
     <epp:phrase id="Plugin/Import/XML:expected_item">&lt;<epc:pin name="type"/>&gt; where &lt;item&gt; was expected inside &lt;<epc:pin name="fieldname"/>&gt;</epp:phrase>
     <epp:phrase id="Plugin/Import/XML:expected">Expected <epc:pin name="elements"/></epp:phrase>
-    <epp:phrase id="Plugin/Import/XML:file_import_disabled">File imports are currently disabled, failed to import: <epc:pin name="filename" />. To enable file imports set "enable_file_imports" to 1 in SystemSettings (this is a security risk and should be disabled when your import is done).</epp:phrase>
-    <epp:phrase id="Plugin/Import/DefaultXML:no_subclass">xml_to_epdata should be overridden.</epp:phrase>
+    <epp:phrase id="Plugin/Import/XML:file_import_disabled">File imports are currently disabled, failed to import: <epc:pin name="filename" />. To enable file imports set <code>enable_file_imports</code> to 1 in SystemSettings (this is a security risk and should be disabled when your import is done).</epp:phrase>
+    <epp:phrase id="Plugin/Import/DefaultXML:no_subclass"><code>xml_to_epdata</code> should be overridden.</epp:phrase>
     <epp:phrase id="Plugin/Import/DefaultXML:unexpected_xml">Expected only text, found: <epc:pin name="xml" /></epp:phrase>
-    <epp:phrase id="Plugin/Import/DefaultXML:file_imports_disabled">Attempt to import eprint with document data expressed as a local filename. This is a security hole in normal use, and is disabled. It *is* useful when bulk importing and may be enabled by setting enable_file_imports.</epp:phrase>
+    <epp:phrase id="Plugin/Import/DefaultXML:file_imports_disabled">Attempt to import eprint with document data expressed as a local filename. This is a security hole in normal use, and is disabled. It *is* useful when bulk importing and may be enabled by setting <code>enable_file_imports</code>.</epp:phrase>
     <epp:phrase id="Plugin/Import/DefaultXML:file_not_exists">Could not locate file for import: <epc:pin name="href" />.</epp:phrase>
     <epp:phrase id="Plugin/Import/DOI:invalid_doi">Unrecognised or invalid doi: <epc:pin name="doi" />.<br />Remote service status: <code><epc:pin name="status"/></code></epp:phrase>
     <epp:phrase id="Plugin/Import/DOI:duplicate_doi"><strong>Duplicate DOI: <epc:pin name="doi" /></strong>.<br />This DOI already exists in the repository: <br /><epc:pin name="msg"/></epp:phrase>
@@ -3565,7 +3573,7 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="saved_search_fieldname_spec">Saved search conditions</epp:phrase>
     <epp:phrase id="saved_search_fieldhelp_spec">New or changed items matching this search will be mailed to you.</epp:phrase>
     <epp:phrase id="saved_search_fieldname_frequency">Frequency of saved search email</epp:phrase>
-    <epp:phrase id="saved_search_fieldhelp_frequency">How often do you want to be sent this alert? A setting of "never" disables this alert.</epp:phrase>
+    <epp:phrase id="saved_search_fieldhelp_frequency">How often do you want to be sent this alert? A setting of '<epc:phrase ref="saved_search_fieldopt_frequency_never"/>' disables this alert.</epp:phrase>
     <epp:phrase id="saved_search_fieldopt_frequency_never">Never</epp:phrase>
     <epp:phrase id="saved_search_fieldopt_frequency_daily">Once per Day</epp:phrase>
     <epp:phrase id="saved_search_fieldopt_frequency_weekly">Once per Week</epp:phrase>
@@ -3577,12 +3585,12 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="saved_search_fieldhelp_mailempty">If there are no new items matching your saved search, since it was last mailed, do you still want to be mailed?</epp:phrase>
     <epp:phrase id="saved_search_radio_mailempty_true">Yes, mail me empty alerts.</epp:phrase>
     <epp:phrase id="saved_search_radio_mailempty_false">No. Only mail me alerts with content.</epp:phrase>
-    <epp:phrase id="saved_search_radio_mailempty"><label><epc:pin name="true"/><epp:phrase ref="saved_search_radio_mailempty_true"/></label><br/><label><epc:pin name="false"/><epp:phrase ref="saved_search_radio_mailempty_false"/></label></epp:phrase>
-    <epp:phrase id="saved_search_fieldname_public">Make search public?</epp:phrase>
+    <epp:phrase id="saved_search_radio_mailempty"><label><epc:pin name="true"/><epc:phrase ref="saved_search_radio_mailempty_true"/></label><br/><label><epc:pin name="false"/><epc:phrase ref="saved_search_radio_mailempty_false"/></label></epp:phrase>
+    <epp:phrase id="saved_search_fieldname_public">Make search public</epp:phrase>
     <epp:phrase id="saved_search_fieldhelp_public">Do you want to be able to link directly to this search via a public URL?</epp:phrase>
     <epp:phrase id="saved_search_radio_public_true">Yes, make this search available to anyone.</epp:phrase>
     <epp:phrase id="saved_search_radio_public_false">No, only I will have access to this search.</epp:phrase>
-    <epp:phrase id="saved_search_radio_public"><label><epc:pin name="true"/><epp:phrase ref="saved_search_radio_public_true"/></label><br/><label><epc:pin name="false"/><epp:phrase ref="saved_search_radio_public_false"/></label></epp:phrase>
+    <epp:phrase id="saved_search_radio_public"><label><epc:pin name="true"/><epc:phrase ref="saved_search_radio_public_true"/></label><br/><label><epc:pin name="false"/><epc:phrase ref="saved_search_radio_public_false"/></label></epp:phrase>
 
 
 <!-- Web-viewable version of email -->
@@ -3644,7 +3652,7 @@ PY = 2006 and OG = (Cambridge)<br />
 <epp:phrase id="request_fieldhelp_expiry_date"/>
 
 <epp:phrase id="request_fieldname_captcha">CAPTCHA</epp:phrase>
-<epp:phrase id="request_fieldhelp_captcha">To prevent robots from filling in this form you must verify this CAPTCHA.</epp:phrase>
+<epp:phrase id="request_fieldhelp_captcha" ref="user_fieldhelp_captcha"/>
 <epp:phrase id="request_fieldname_datestamp">Date</epp:phrase>
 <epp:phrase id="request_fieldhelp_datestamp">Date and time of this request.</epp:phrase>
 <epp:phrase id="request_fieldname_docid">Document ID</epp:phrase>
@@ -3711,7 +3719,7 @@ PY = 2006 and OG = (Cambridge)<br />
 <epp:phrase id="Plugin/Screen/Admin/TestEmail:no_email"><p>Please supply at least one email address.</p></epp:phrase>
 <epp:phrase id="Plugin/Screen/Admin/TestEmail:mail_failed"><p>The system is currently unable to send email to <em><epc:pin name="requester" /></em>. Please check the email is correct and try again later. If this problem persists, please contact the <a href="mailto:{$config{adminemail}}">administrator</a> with details.</p></epp:phrase>
 
-<epp:phrase id="Plugin/Screen/Admin/Phrases:intro"><div>This tool writes modified phrases to zz_webcfg.xml. Click the phrase text to edit it. JavaScript required.</div></epp:phrase>
+<epp:phrase id="Plugin/Screen/Admin/Phrases:intro"><div>This tool writes modified phrases to <code>zz_webcfg.xml</code>. Click the phrase text to edit it. JavaScript required.</div></epp:phrase>
 <epp:phrase id="Plugin/Screen/Admin/Phrases:new_phrase">Add New Phrase</epp:phrase>
 <epp:phrase id="Plugin/Screen/Admin/Phrases:save">Save</epp:phrase>
 <epp:phrase id="Plugin/Screen/Admin/Phrases:cancel">Cancel Edit</epp:phrase>
@@ -3921,7 +3929,7 @@ PY = 2006 and OG = (Cambridge)<br />
 <epp:phrase id="triple_fieldhelp_type"/>
 
 <!-- Upload Progress -->
-<epp:phrase id="upload_progress_fieldname_expires">Expires at</epp:phrase>
+<epp:phrase id="upload_progress_fieldname_expires" ref="loginticket_fieldname_expires"/>
 <epp:phrase id="upload_progress_fieldhelp_expires"/>
 <epp:phrase id="upload_progress_fieldname_progressid">Progress ID</epp:phrase>
 <epp:phrase id="upload_progress_fieldhelp_progressid"/>
@@ -3955,7 +3963,7 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="user_fieldhelp_hideemail">This option allows or prevents a users email being shown on their public summary page.</epp:phrase>
     <epp:phrase id="user_radio_hideemail_false">Make email visible to all.</epp:phrase>
     <epp:phrase id="user_radio_hideemail_true">Hide email to all except repository administrators.</epp:phrase>
-    <epp:phrase id="user_radio_hideemail"><label><epc:pin name="false"/><epp:phrase ref="user_radio_hideemail_false"/></label><br/><label><epc:pin name="true"/><epp:phrase ref="user_radio_hideemail_true"/></label></epp:phrase>
+    <epp:phrase id="user_radio_hideemail"><label><epc:pin name="false"/><epc:phrase ref="user_radio_hideemail_false"/></label><br/><label><epc:pin name="true"/><epc:phrase ref="user_radio_hideemail_true"/></label></epp:phrase>
 
 
     <epp:phrase id="user_fieldname_dept">Department</epp:phrase>
@@ -4128,7 +4136,7 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="template/navigation:home">Home</epp:phrase>
     <epp:phrase id="template/navigation:about">About</epp:phrase>
     <epp:phrase id="template/navigation:browse">Browse</epp:phrase>
-    <epp:phrase id="template:about_eprints"><span><epc:phrase ref="archive_name" /> is powered by <em>EPrints 3.4</em> which is developed by the <a href="https://www.ecs.soton.ac.uk/">School of Electronics and Computer Science</a> at the University of Southampton. <a href="{$config{rel_path}}/eprints/">About EPrints</a> | <a href="{$config{rel_path}}/accessibility/">Accessibility</a></span></epp:phrase>
+    <epp:phrase id="template:about_eprints"><span><epc:phrase ref="archive_name" /> is powered by <em><a href="http://eprints.org/software/">EPrints 3.4</a></em> which is developed by the <a href="https://www.ecs.soton.ac.uk/">School of Electronics and Computer Science</a> at the University of Southampton. <a href="{$config{rel_path}}/eprints/">About EPrints</a> | <a href="{$config{rel_path}}/accessibility/">Accessibility</a></span></epp:phrase>
     <epp:phrase id="template/navigation:about:title">Get some detailed repository information!</epp:phrase>
     <epp:phrase id="template/navigation:browse:title">Browse the items using prepared lists!</epp:phrase>
     <epp:phrase id="template/navigation:home:title">Go to start page!</epp:phrase>
@@ -4182,7 +4190,7 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="Plugin/Screen/Register/Internal:title">Register</epp:phrase>
     <epp:phrase id="Plugin/Screen/Register/OpenID:title">Register with OpenID</epp:phrase>
 
-    <epp:phrase id="Plugin/Screen/Login/OpenID:invalid_openid">Invalid or unsupported OpenID: must be a secure (https) Web address.</epp:phrase>
+    <epp:phrase id="Plugin/Screen/Login/OpenID:invalid_openid">Invalid or unsupported OpenID: must be a secure (http<em>s</em>) Web address.</epp:phrase>
     <epp:phrase id="Plugin/Screen/Login/OpenID:bad_response">There was a problem talking to the OpenID service: <epc:pin name="error"/></epp:phrase>
 
     <epp:phrase id="Plugin/Screen/Login/OpenID:failed">OpenID authentication failed (perhaps your OpenID service doesn't support 2.0?)</epp:phrase>
@@ -4197,7 +4205,7 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="Plugin/Screen/EPrint/Document/Unpack:action_unpack">Single</epp:phrase>
     <epp:phrase id="Plugin/Screen/EPrint/Document/Unpack:action_explode">Multiple</epp:phrase>
     <epp:phrase id="Plugin/Screen/EPrint/Document/Convert:title" ref="Plugin/InputForm/Component/Documents:convert_document"/>
-    <epp:phrase id="Plugin/Screen/EPrint/Document/Convert:help">To convert this document to another format select the format to convert to and click Convert.</epp:phrase>
+    <epp:phrase id="Plugin/Screen/EPrint/Document/Convert:help">To convert this document to another format select the format to convert to and click <em><epc:phrase ref="Plugin/InputForm/Component/Documents:convert_document_button"/></em>.</epp:phrase>
     <epp:phrase id="Plugin/Screen/EPrint/Document/Convert:action_convert" ref="Plugin/InputForm/Component/Documents:convert_document_button"/>
     <epp:phrase id="Plugin/Screen/EPrint/Document/Extract:title">Extract data</epp:phrase>
     <epp:phrase id="Plugin/Screen/EPrint/Document/Extract:help">Attempt to extract the following information from this document:</epp:phrase>
@@ -4244,7 +4252,7 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="Plugin/Screen/Admin/EPM/Available:error:corrupted">Corrupted or unrecognised package format</epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/EPM/Available:installed">Installed <epc:pin name="epm" /></epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/EPM/Available:upload_form"><h2>Upload and Install</h2>
-<div class="ep_block"><span id="epm_upload_label">Select a file from your local system and click <epc:phrase ref="Plugin/Screen/Admin/EPM/Available:action_install" />.</span><br /><epc:pin name="form" /></div></epp:phrase>
+<div class="ep_block"><span id="epm_upload_label">Select a file from your local system and click <em><epc:phrase ref="Plugin/Screen/Admin/EPM/Available:action_install" /></em>.</span><br /><epc:pin name="form" /></div></epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/EPM/Available:source_error">An error occurred while talking to the EPM source <em><epc:pin name="name" /> (<epc:pin name="base_url" />)</em>: <epc:pin name="error" /></epp:phrase>
 
     <epp:phrase id="Plugin/Screen/Admin/EPM/Developer:title">Developer Tools</epp:phrase>
@@ -4253,7 +4261,7 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="Plugin/Screen/Admin/EPM/Developer:action_create">Create</epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/EPM/Developer:action_publish">Publish</epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/EPM/Developer:create_form"><h2 id="epmid_label">Create a new EPM</h2>
-<span id="epmid_help">To create a blank EPM entire a new id in the input and click <epc:phrase ref="Plugin/Screen/Admin/EPM/Developer:action_create" />. EPM ids may only contain the characters A-Za-z0-9_.</span><br /><epc:pin name="form" /></epp:phrase>
+<span id="epmid_help">To create a blank EPM entire a new id in the input and click <em><epc:phrase ref="Plugin/Screen/Admin/EPM/Developer:action_create" /></em>. EPM ids may only contain the characters A-Za-z0-9_.</span><br /><epc:pin name="form" /></epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/EPM/Developer:error:bad_epmid"><strong><epc:pin name="epmid"/></strong> is not a valid ID for an EPM. EPM IDs may only contain the characters: <code>A-Za-z0-9_</code></epp:phrase>
 
     <epp:phrase id="Plugin/Screen/Admin/EPM/Edit:title">Edit</epp:phrase>
@@ -4327,40 +4335,40 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="document_typename_application/vnd.openxmlformats-officedocument.presentationml.presentation">Microsoft PowerPoint (OpenXML)</epp:phrase>
 	<epp:phrase id="document_typename_application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">Microsoft Excel (OpenXML)</epp:phrase>
 	<epp:phrase id="document_typename_application/vnd.openxmlformats-officedocument.wordprocessingml.document">Microsoft Word (OpenXML)</epp:phrase>
-	<epp:phrase id="document_typename_image/jpeg">Image (JPEG)</epp:phrase>
-    <epp:phrase id="document_typename_image/jpg">Image (JPEG)</epp:phrase>
-    <epp:phrase id="document_typename_image/png">Image (PNG)</epp:phrase>
-    <epp:phrase id="document_typename_image/gif">Image (GIF)</epp:phrase>
-    <epp:phrase id="document_typename_image/bmp">Image (BMP)</epp:phrase>
-    <epp:phrase id="document_typename_image/tiff">Image (TIFF)</epp:phrase>
-    <epp:phrase id="document_typename_video/mpeg">Video (MPEG)</epp:phrase>
-    <epp:phrase id="document_typename_video/quicktime">Video (QuickTime)</epp:phrase>
-    <epp:phrase id="document_typename_video/x-msvideo">Video (AVI)</epp:phrase>
-    <epp:phrase id="document_typename_video/x-ms-wmv">Video (WMV)</epp:phrase>
-    <epp:phrase id="document_typename_video/x-m4v">Video (MP4)</epp:phrase>
-    <epp:phrase id="document_typename_video/mp4">Video (MP4)</epp:phrase>
-    <epp:phrase id="document_typename_video/x-flv">Video (Flash)</epp:phrase>
-    <epp:phrase id="document_typename_video/mp2t">Video (AVCHD)</epp:phrase>
+	<epp:phrase id="document_typename_image/jpeg"><epc:phrase ref="document_typename_image"/> (JPEG)</epp:phrase>
+    <epp:phrase id="document_typename_image/jpg"><epc:phrase ref="document_typename_image"/> (JPEG)</epp:phrase>
+    <epp:phrase id="document_typename_image/png"><epc:phrase ref="document_typename_image"/> (PNG)</epp:phrase>
+    <epp:phrase id="document_typename_image/gif"><epc:phrase ref="document_typename_image"/> (GIF)</epp:phrase>
+    <epp:phrase id="document_typename_image/bmp"><epc:phrase ref="document_typename_image"/> (BMP)</epp:phrase>
+    <epp:phrase id="document_typename_image/tiff"><epc:phrase ref="document_typename_image"/> (TIFF)</epp:phrase>
+    <epp:phrase id="document_typename_video/mpeg"><epc:phrase ref="document_typename_video"/> (MPEG)</epp:phrase>
+    <epp:phrase id="document_typename_video/quicktime"><epc:phrase ref="document_typename_video"/> (QuickTime)</epp:phrase>
+    <epp:phrase id="document_typename_video/x-msvideo"><epc:phrase ref="document_typename_video"/> (AVI)</epp:phrase>
+    <epp:phrase id="document_typename_video/x-ms-wmv"><epc:phrase ref="document_typename_video"/> (WMV)</epp:phrase>
+    <epp:phrase id="document_typename_video/x-m4v"><epc:phrase ref="document_typename_video"/> (MP4)</epp:phrase>
+    <epp:phrase id="document_typename_video/mp4"><epc:phrase ref="document_typename_video"/> (MP4)</epp:phrase>
+    <epp:phrase id="document_typename_video/x-flv"><epc:phrase ref="document_typename_video"/> (Flash)</epp:phrase>
+    <epp:phrase id="document_typename_video/mp2t"><epc:phrase ref="document_typename_video"/> (AVCHD)</epp:phrase>
     <epp:phrase id="document_typename_text/xml">XML</epp:phrase>
     <epp:phrase id="document_typename_application/rdf+xml">RDF/XML</epp:phrase>
     <epp:phrase id="document_typename_text/n3">N3</epp:phrase>
-    <epp:phrase id="document_typename_application/bzip2">Archive (BZ2)</epp:phrase>
-    <epp:phrase id="document_typename_application/x-gzip">Archive (TGZ)</epp:phrase>
-    <epp:phrase id="document_typename_application/x-compressed">Archive (TGZ)</epp:phrase>
-    <epp:phrase id="document_typename_application/zip">Archive (ZIP)</epp:phrase>
+    <epp:phrase id="document_typename_application/bzip2"><epc:phrase ref="document_typename_archive"/> (BZ2)</epp:phrase>
+    <epp:phrase id="document_typename_application/x-gzip"><epc:phrase ref="document_typename_archive"/> (TGZ)</epp:phrase>
+    <epp:phrase id="document_typename_application/x-compressed"><epc:phrase ref="document_typename_archive"/> (TGZ)</epp:phrase>
+    <epp:phrase id="document_typename_application/zip"><epc:phrase ref="document_typename_archive"/> (ZIP)</epp:phrase>
     <epp:phrase id="document_typename_application/rtf">Rich Text (RTF)</epp:phrase>
     <epp:phrase id="document_typename_application/octet-stream">Arbitrary Binary Data</epp:phrase>
-    <epp:phrase id="document_typename_audio/x-wav">Audio (WAV)</epp:phrase>
-    <epp:phrase id="document_typename_audio/mpeg">Audio (MP3)</epp:phrase>
-    <epp:phrase id="document_typename_audio/ogg">Audio (OGG)</epp:phrase>
-    <epp:phrase id="document_typename_audio/flac">Audio (FLAC)</epp:phrase>
-    <epp:phrase id="document_typename_audio/x-ms-wma">Audio (WMA)</epp:phrase>
+    <epp:phrase id="document_typename_audio/x-wav"><epc:phrase ref="document_typename_audio"/> (WAV)</epp:phrase>
+    <epp:phrase id="document_typename_audio/mpeg"><epc:phrase ref="document_typename_audio"/> (MP3)</epp:phrase>
+    <epp:phrase id="document_typename_audio/ogg"><epc:phrase ref="document_typename_audio"/> (OGG)</epp:phrase>
+    <epp:phrase id="document_typename_audio/flac"><epc:phrase ref="document_typename_audio"/> (FLAC)</epp:phrase>
+    <epp:phrase id="document_typename_audio/x-ms-wma"><epc:phrase ref="document_typename_audio"/> (WMA)</epp:phrase>
     <epp:phrase id="document_typename_thumbnail_small">Thumbnail (Small)</epp:phrase>
     <epp:phrase id="document_typename_thumbnail_medium">Thumbnail (Medium)</epp:phrase>
     <epp:phrase id="document_typename_thumbnail_preview">Thumbnail (Preview)</epp:phrase>
 
     <epp:phrase id="Plugin/InputForm/Component/Upload:error:fields">
-    <p>You must update your workflow file located in archives/[archiveid]/cfg/workflows/eprint/default.xml by replacing:</p>
+    <p>You must update your workflow file located in <code>archives/[archiveid]/cfg/workflows/eprint/default.xml</code> by replacing:</p>
     <p><pre>&lt;component type="Upload"&gt;</pre></p>
     <p>With:</p>
     <p><pre>&lt;component type="Upload" /&gt;
@@ -4375,7 +4383,7 @@ PY = 2006 and OG = (Cambridge)<br />
 
     <epp:phrase id="lib/metafield:join_image"><br /></epp:phrase>
 
-    <epp:phrase id="summary_page:actions"><h2 id="actions">Actions (login required)</h2></epp:phrase>
+    <epp:phrase id="summary_page:actions"><h2 id="actions"><epc:phrase ref="Plugin/Screen/EPrint/Actions:title"/> (login required)</h2></epp:phrase>
     <epp:phrase id="summary_page:download">Download</epp:phrase>
 
     <epp:phrase id="limit_names_shown">et al.</epp:phrase>

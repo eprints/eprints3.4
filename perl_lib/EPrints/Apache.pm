@@ -121,7 +121,11 @@ EOC
 			$conf .= "  # Include any legacy directives\n";
 			$conf .= "  Include $apachevhost\n\n";
 		}
-
+		if ( my $limitrequestbody = $repo->config("max_upload_filesize") )
+		{
+			$conf .= '  # Set by $c->{max_upload_filesize}' . "\n";
+			$conf .= "  LimitRequestBody $limitrequestbody\n\n";
+		}
 		$conf .= <<EOC;
 
   # Note that PerlTransHandler can't go inside
@@ -149,6 +153,13 @@ sub apache_secure_conf
 	my $id = $repo->get_id;
 	my $https_root = $repo->config( "https_root" );
 
+	$lrb_conf = "\n";
+	if ( my $limitrequestbody = $repo->config("max_upload_filesize") )
+    {
+		$lrb_conf = '  # Set by $c->{max_upload_filesize}' . "\n";
+		$lrb_conf .= "  LimitRequestBody $limitrequestbody\n\n";
+	}
+
 	return <<EOC
 #
 # secure.conf include file for $id
@@ -156,7 +167,7 @@ sub apache_secure_conf
 # Any changes made here will be lost if you run generate_apacheconf
 # with the --replace option
 #
-
+$lrb_conf
   <Location "$https_root">
     PerlSetVar EPrints_ArchiveID $id
     PerlSetVar EPrints_Secure yes

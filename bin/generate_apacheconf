@@ -324,6 +324,7 @@ foreach my $repository ( values %reps )
 
 	my $apache_conf = "$inc_path/$id.conf";
 	my $apache_ssl_conf = "$inc_ssl_path/$id.conf";
+	my $uploadmethod_file_max_size = $repository->get_conf( "base_path" ) . "/archives/$id/cfg/static/javascript/auto/99_uploadmethod_file_max_size.js";
 
 	my $oldfile = $repository->get_conf( "config_path" )."/apache.conf";
 
@@ -375,6 +376,9 @@ foreach my $repository ( values %reps )
 			}
 		}
 	}
+
+	my $js = "max_size = " . $repository->get_conf( 'max_upload_filesize' ) . ";";
+	EPrints->system->write_config_file( $uploadmethod_file_max_size, $js );
 }
 
 if( $first_run )

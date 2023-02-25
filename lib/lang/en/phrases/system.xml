@@ -13,7 +13,9 @@ EPrints.
 To override a system phrase add the phrase to a file in:
 /archives/[repoid]/cfg/lang/[langid]/phrases/
 
-<!-- tmp: all comments with leading 'tmp:' should be removed finally! -->
+-->
+
+<!-- tmp all comments with leading tmp should be removed finally -->
 <!--
 What's modified?
 

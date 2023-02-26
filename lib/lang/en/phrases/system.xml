@@ -359,7 +359,7 @@ terms.</p>
     <epp:phrase id="dynamic:logged_in">Logged in as <epc:pin name="user"/> <epc:phrase ref="Plugin/Screen:tool_divide" />
        <epc:pin name="tools" /> <epc:phrase ref="Plugin/Screen:tool_divide" /> <a href="{$config{rel_cgipath}}/logout">Logout</a>
     </epp:phrase>
-    <epp:phrase id="dynamic:not_logged_in"><a href="{$config{userhome}}">Login</a> <epc:phrase ref="Plugin/Screen:tool_divide" /> <a href="register">Create Account</a></epp:phrase>
+    <epp:phrase id="dynamic:not_logged_in"><a href="{$config{userhome}}">Login</a> <epc:phrase ref="Plugin/Screen:tool_divide" /> <a href="{$config{rel_cgipath}}/register">Create Account</a></epp:phrase>
 
 
 <!-- locally defined fields -->
@@ -1745,7 +1745,7 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
 
 <!-- SubmissionForm -->
 
-    <epp:phrase id="lib/submissionform:use_auth_area">Use the <a href='{$config{base_url}}{$config{userhome}}?screen=Items'>user area</a> to deposit new items</epp:phrase>
+    <epp:phrase id="lib/submissionform:use_auth_area">Use the <a href="{$config{userhome}}?screen=Items">user area</a> to deposit new items</epp:phrase>
     <epp:phrase id="lib/submissionform:verify">Verify: <epc:pin name="citation"/></epp:phrase>
     <epp:phrase id="lib/submissionform:invalid_eprint">ID <epc:pin name="eprintid"/> is not a valid item ID!</epp:phrase>
     <epp:phrase id="lib/submissionform:current_docs"><p>Here are the documents currently attached to this item, and how many files you have uploaded for each.</p></epp:phrase>
@@ -1933,7 +1933,7 @@ User Area CGI Scripts
     <epp:phrase id="cgi/users/change_email:no_email"><p>You did not actually supply a new email address.</p></epp:phrase>
     <epp:phrase id="cgi/users/change_email:mail_sent"><p>An email has been sent to <b><epc:pin name="email"/></b> containing the code required to confirm this new email address.</p><p>This code is only valid for <epc:pin name="maxdelta" />.</p></epp:phrase>
     <epp:phrase id="cgi/users/change_email:changeemail">Email Change Request</epp:phrase>
-    <epp:phrase id="cgi/users/change_email:email_exists"><p>A user with the email address <code><epc:pin name="email"/></code> already exists.</p><p>If this is your email address, you should just <a href="reset_password">reset your password</a>.</p></epp:phrase>
+    <epp:phrase id="cgi/users/change_email:email_exists"><p>A user with the email address <code><epc:pin name="email"/></code> already exists.</p><p>If this is your email address, you should just <a href="{$config{rel_cgipath}}/reset_password">reset your password</a>.</p></epp:phrase>
 
 <!-- status -->
 
@@ -2146,7 +2146,7 @@ User Area CGI Scripts
         <p>Note: you must have cookies enabled.</p>
       </div>
     </epp:phrase>
-    <epp:phrase id="cgi/login:reset_link">If you have forgotten your password, you may <a href="reset_password">reset</a> it.</epp:phrase>
+    <epp:phrase id="cgi/login:reset_link">If you have forgotten your password, you may <a href="{$config{rel_cgipath}}/reset_password">reset</a> it.</epp:phrase>
     <epp:phrase id="cgi/login:until_close">until the browser closes</epp:phrase>
     <epp:phrase id="cgi/login:forever">forever (until I log out)</epp:phrase>
     <epp:phrase id="cgi/login:bind">yes (more secure)</epp:phrase>

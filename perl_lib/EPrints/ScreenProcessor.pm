@@ -441,6 +441,7 @@ sub process
 	$page->appendChild( $content );
     
 	my $template = $self->{template};
+	$template = $self->screen->{template} if defined $self->screen->{template};
 	$template = "default_internal" if not defined $template;
 
 	my $page_id = $self->{screenid};

@@ -78,8 +78,11 @@ $c->{email_for_doc_request} = sub
 #}
 
 
-# The expiry for a document request (in days)
+# The expiry for the download link for accepted document request (in days)
 # $c->{expiry_for_doc_request} = 7;
+
+# The expiry for document requests if they are not responded (in days)
+# $c->{expiry_for_unresponded_doc_request} = 90;
 
 # Use a pin-based security model for contact authors responding to
 # copy requests?

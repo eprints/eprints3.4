@@ -195,7 +195,7 @@ sub action_confirm
 	}
 	else
 	{
-		# Send rejection notice
+		# Send rejection notice and expire request
 		$result = EPrints::Email::send_mail(
 			session => $session,
 			langid => $session->get_langid,
@@ -204,6 +204,8 @@ sub action_confirm
 			message => $mail,
 			sig => $session->html_phrase( "mail_sig" ),
 		);
+		$self->{processor}->{request}->set_value( "expiry_date", EPrints::Time::get_iso_timestamp( time ) );
+		$self->{processor}->{request}->commit;
 	}
 	
 	# Log response event
@@ -277,6 +279,20 @@ sub render
 	# Requested document has been made OA in the meantime
 	$action = "oa" if $self->{processor}->{document}->is_public;
 
+	my $requested = $self->{processor}->{request}->get_value( "datestamp" );
+
+	# Requests expiry after 90 (or specified) number of days. Otherwise, they expiry after permitted access period or immediately if rejected.
+	my $unresponded_expiry = $session->config( "expiry_for_unresponded_doc_request" );
+	$unresponded_expiry = 90 if( !defined $unresponded_expiry || $unresponded_expiry !~ /^\d+$/ );
+	$unresponded_expiry = EPrints::Time::datetime_local( $requested ) + $unresponded_expiry*3600*24;
+	my $expiry_date = $self->{processor}->{request}->get_value( "expiry_date" );
+	my $expiry = $expiry_date ? EPrints::Time::datetime_local( split( /[- :]/, $expiry_date ) ) : 0;
+	if ( time > $unresponded_expiry || ( $expiry && time > $expiry ) )
+	{
+		$page->appendChild( $session->html_phrase( "request/respond_page:expired" ) );
+		return $page;
+	}
+
 	if ( EPrints::Utils::is_set( $self->{processor}->{request}->get_value( "code" ) ) )
 	{
 		$page->appendChild( $session->html_phrase( "request/respond_page:already_approved" ) );
@@ -304,27 +320,30 @@ sub render
 
 	# Only display the 'Make this document OA' form if the user
 	# has privilege to edit this document
-	if( $action eq "accept"
-		 && $self->allow( 'eprint/archive/edit', $self->{processor}->{eprint} ) )
+	if( !EPrints::Utils::is_set( $self->{processor}->{request}->get_value( "code" ) ) )
 	{
-		my $p = $session->make_element( "p" );
-		$form->appendChild( $p );
-		my $label = $session->make_element( "label" );
-		my $cb = $session->make_element( "input", type => "checkbox", name => "oa" );
-		$label->appendChild( $cb );
-		$label->appendChild( $session->make_text( " " ));
-		$label->appendChild( $session->html_phrase(
-			"request/respond_page:fieldname_oa" ) );
-		$p->appendChild( $label );
+		if( $action eq "accept"
+			 && $self->allow( 'eprint/archive/edit', $self->{processor}->{eprint} ) )
+		{
+			my $p = $session->make_element( "p" );
+			$form->appendChild( $p );
+			my $label = $session->make_element( "label" );
+			my $cb = $session->make_element( "input", type => "checkbox", name => "oa" );
+			$label->appendChild( $cb );
+			$label->appendChild( $session->make_text( " " ));
+			$label->appendChild( $session->html_phrase(
+				"request/respond_page:fieldname_oa" ) );
+			$p->appendChild( $label );
+		}
+
+		$form->appendChild( $session->render_hidden_field( "screen", $self->{processor}->{screenid} ) );
+		$form->appendChild( $session->render_hidden_field( "requestid", $self->{processor}->{request}->get_id ) );
+		$form->appendChild( $session->render_hidden_field( "pin", $self->{processor}->{requestpin} ) );
+		$form->appendChild( $session->render_hidden_field( "action", $action ) );
+
+		$form->appendChild( $session->make_element( "br" ) );
+		$form->appendChild( $session->render_action_buttons( confirm => $session->phrase( "request/respond_page:action_respond" ) ) );
 	}
-
-	$form->appendChild( $session->render_hidden_field( "screen", $self->{processor}->{screenid} ) );
-	$form->appendChild( $session->render_hidden_field( "requestid", $self->{processor}->{request}->get_id ) );
-	$form->appendChild( $session->render_hidden_field( "pin", $self->{processor}->{requestpin} ) );
-	$form->appendChild( $session->render_hidden_field( "action", $action ) );
-
-	$form->appendChild( $session->make_element( "br" ) );
-	$form->appendChild( $session->render_action_buttons( confirm => $session->phrase( "request/respond_page:action_respond" ) ) );
 
 	return $page;
 

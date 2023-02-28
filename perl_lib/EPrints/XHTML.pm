@@ -661,10 +661,10 @@ sub page
 		if( $type eq "print" )
 		{
 			my ( $pin, $pinid ) = split /:/, $rest, 2;
-			my $frag;
+			my $frag = $repo->xml->create_document_fragment; 
 			if ( $pin eq "pin" )
 			{
-				$frag = $repo->xml->create_text_node( $map->{$pinid} );
+				$frag = $repo->xml->create_text_node( $map->{$pinid} ) if defined $pinid && defined $map->{$pinid};
 			}
 			else 
 			{

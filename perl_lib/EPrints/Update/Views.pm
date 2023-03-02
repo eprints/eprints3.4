@@ -2252,19 +2252,14 @@ sub fieldlist_sizes
 		{
 			my $subject = $subject_map->{$id};
 			next if !defined $subject; # Hmm, unknown subject
-			my %cur_subj_map;
-			my $top = defined $self->{menus}->[0]->{top} ? $self->{menus}->[0]->{top} : '';
-			my $subj_found = $top eq '';
 			foreach my $ancestor (@{$subject->value( "ancestors" )})
 			{
 				next if $ancestor eq $EPrints::DataObj::Subject::root_subject;
-				$subj_found = 1 if $ancestor eq $top;
 				foreach my $item_id (@{$id_map->{$id}})
 				{
-					$cur_subj_map{$ancestor}->{$item_id} = 1;
+					$subj_map{$ancestor}->{$item_id} = 1;
 				}
 			}
-			%subj_map = ( %subj_map, %cur_subj_map ) if $subj_found;
 		}
 
 		# calculate the totals

@@ -1408,7 +1408,7 @@ sub create_sections_menu
 	my $menu_fields = $menus_fields->[$menu_level];
 
 	my $showvalues = get_showvalues_for_menu( $repo, $view, $sizes, $values, $menu_fields );
-	my $menu = $view->{menus}->[$menu_level-1];
+	my $menu = $view->{menus}->[$menu_level];
 
 	my $grouping_fn = $menu->{grouping_function};
 	$grouping_fn = \&group_by_first_character if( !defined $grouping_fn );

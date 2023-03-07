@@ -552,6 +552,7 @@ sub serialise
 		my $bit = $_;
 		$bit="" unless defined( $bit );
 		$bit =~ s/[\\\|]/\\$&/g; 
+		$bit =~ s/\\\\/\\/g; # Avoid double-escaping
 		push @escapedparts,$bit;
 	}
 	return join( "|" , @escapedparts );

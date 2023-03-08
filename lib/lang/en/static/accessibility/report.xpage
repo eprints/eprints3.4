@@ -28,7 +28,7 @@
 
 <h2 id="introduction">Introduction</h2>
 <p>This report is intended to present the results of the testing of <epc:phrase ref="archive_name"/> to assess its accessibility compliance.  This has been undertaken with the use of the <a href="https://wave.webaim.org/extension/" rel="external">Chrome Extension</a> of the <a href="https://wave.webaim.org/" rel="external">WAVE web accessibility evaluation tool</a>.  To emulate user-generated content EPrints' testdata/bin/import_test_data script has been used to import 100 publications to populate various pages under test.  In addition to this one empty (unedited) publication was added and a Saved Search for "Habits" was created.</p>
-<p>Where there are known issues, the comments section should describe the reasons and where appropriate how these issues are likely be addressed.  For more details on planned future accessiibility improvements, please see <a href="roadmap.html">our accessibility roadmap</a>.</p>
+<p>Where there are known issues, the comments section should describe the reasons and where appropriate how these issues are likely be addressed.  For more details on planned future accessibility improvements, please see <a href="roadmap.html">our accessibility roadmap</a>.</p>
 
 <h2 id="test-results">Test Results</h2>
 <p><em>Test last run on <b><epc:phrase ref="accessibility_report_last_tested_date"/></b></em></p>

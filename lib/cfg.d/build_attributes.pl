@@ -19,7 +19,7 @@
 # - A change to the elements id attribute, useful for overwriting layered css
 #	push @{$c->{config_attrs}->{id}->{"ep_id_for_elem"}}, ({ id => "new_id", _change_action => "replace" });
 #
-# - Adding a new data attribute, useful for addding in accessibility attributes
+# - Adding a new data attribute, useful for adding in accessibility attributes
 #	push @{$c->{config_attrs}->{id}->{"ep_id_for_elem"}}, ({ "data_info" => "data-info" });
 #
 # - Creating a classname based on user account type

@@ -61,7 +61,16 @@ sub from
 		{
 			$self->workflow->update_from_form( $self->{processor}, undef, 1 );
 		}
-		$self->workflow->{item}->commit;
+
+		my $button_id = $self->{processor}->{internal};
+
+		if(( $button_id !~ /_morespaces$/ ) &&
+		   ( $button_id !~ /_up_[0-9]+$/ ) &&
+		   ( $button_id !~ /_down_[0-9]+$/ ))
+		{
+			$self->workflow->{item}->commit;
+		}
+
 		$self->uncache_workflow;
 		return;
 	}

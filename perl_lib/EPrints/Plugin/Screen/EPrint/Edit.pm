@@ -295,12 +295,12 @@ sub render
 
 	if( $action_buttons eq "top" || $action_buttons eq "both" )
 	{
-		$form->appendChild( $self->render_buttons );
+		$form->appendChild( $self->render_buttons( "top" ) );
 	}
 	$form->appendChild( $self->workflow->render );
 	if( $action_buttons eq "bottom" || $action_buttons eq "both" )
 	{
-		$form->appendChild( $self->render_buttons );
+		$form->appendChild( $self->render_buttons( "bottom" ) );
 	}
 	
 	return $form;
@@ -309,11 +309,18 @@ sub render
 
 sub render_buttons
 {
-	my( $self ) = @_;
+	my( $self, $position ) = @_;
 
 	my $session = $self->{session};
 
-	my %buttons = ( _order=>[], _class=>"ep_form_button_bar" );
+	my $class = "ep_form_button_bar";
+
+	if( defined( $position ))
+	{
+		$class .= " ep_form_button_bar_$position";
+	}
+
+	my %buttons = ( _order=>[], _class=> $class );
 
 	if( defined $self->workflow->get_prev_stage_id )
 	{

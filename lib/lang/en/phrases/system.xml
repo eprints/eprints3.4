@@ -2477,7 +2477,7 @@ Views
 </epp:phrase>
 
 <!--**********************************************************************
-General phrases, used alot
+General phrases, used a lot
 ***********************************************************************-->
 
     <epp:phrase id="general:userhome_link"><p><a href="{$config{userhome}}">Go to the <epc:phrase ref="archive_name" /> User Area Homepage</a></p></epp:phrase>

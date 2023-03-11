@@ -72,7 +72,7 @@ sub push_context {
 #-------------------------------------------------------------------#
 
 #-------------------------------------------------------------------#
-# pop_context() - remove the topmost context fromt the stack
+# pop_context() - remove the topmost context from the stack
 #-------------------------------------------------------------------#
 sub pop_context {
     my $self = shift;

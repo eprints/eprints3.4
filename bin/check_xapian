@@ -24,7 +24,6 @@ B<check_xapian> I<repository_id> [B<options>]
 
 This script checks that eprint items have successfully been indexed by Xapian.  It does this my using "/usr/bin/quest" to search the Xapian database filesystem for the title of the particular item.  This requires the 'xapian-tools' package to be installed.  If the title does not contain any special characters or quote marks it will attempt to search for the title within quote marks.  If this is not the case or this returns no matching results, it will search for all the terms in the title in an attempt to find a result.  The script will print a success message to the standard output if a result with the correct EPrint ID is returned otherwise it will print a failure message to the standard error.  A summary message will be printed before the script exits totalling the number of items found not to be indexed.
 
-
 =head1 ARGUMENTS
 
 =over 8
@@ -271,7 +270,7 @@ if ( defined $status_opt )
 		unless ( grep ( /^$a_status$/, ( 'inbox', 'buffer', 'archive', 'deletion' ) ) )
 		{
 			$status_error = 1;
-       		}
+		}
 	}
 	if ( $status_error )
 	{
@@ -282,10 +281,10 @@ if ( defined $status_opt )
 }
 
 my $inc_rows = 2;
-$inc_rows = 3 if $facets && -e $path."/record.DB";
-$inc_rows = 4 if $facets && -e $path."/iamglass"; 
+$inc_rows = 1 if $facets;
 my $id_pos = $inc_rows - 1;
 my $no_result_lines = 3;
+$no_result_lines = 4 if $facets;
 
 print "\nRunning $0 at ".localtime()."\n\n" unless $quiet;
 
@@ -383,7 +382,7 @@ unless ( defined $list )
 	if ( defined $status )
 	{
 		my $searchexp = new EPrints::Search( session=>$session, dataset=>$ds, custom_order=>"-lastmod" );
-		$searchexp->add_field( fields => [ $ds->get_field( "eprint_status" ) ], value => $status, match => 'IN', describe => 0 ) if defined $status;	
+		$searchexp->add_field( fields => [ $ds->get_field( "eprint_status" ) ], value => $status, match => 'IN', describe => 0 ) if defined $status;
 		$list = $searchexp->perform_search;
 	}
 	else
@@ -412,7 +411,7 @@ for ( my $i = 0; $i < $listcount; $i++ )
 		print "$progress No EPrint exists in position $i of results list.\n";
 		$no_eprint++;
 		$counter++;
-        next;
+		next;
 	}
 	next unless defined $eprint;
 	my $found = 0;
@@ -425,8 +424,8 @@ for ( my $i = 0; $i < $listcount; $i++ )
 	{
 		$title = $title->[0]{'text'};
 	}
-    unless ( defined $title )
-    {
+	unless ( defined $title )
+	{
 		print "$progress No title for EPrint ID ".$eprint->id.".\n";
 		$no_title++;
 		$counter++;
@@ -437,7 +436,7 @@ for ( my $i = 0; $i < $listcount; $i++ )
 	$title =~ s/\"$//g;
 	# Escape double quote marks and backticks.
 	$title =~ s/\"/\\"/g;
-	$title =~ s/\`/\\`/g;	
+	$title =~ s/\`/\\`/g;
 	# Ignore $ symbols (replace with spaces).
 	$title =~ s/\$/ /g;
 	my @results = ();
@@ -454,7 +453,8 @@ for ( my $i = 0; $i < $listcount; $i++ )
 	{
 		print "$progress No results from EPrint ID ".$eprint->id.". ";
 	}
-    else {
+	else
+	{
 		my $position = 0;
 		my $line = 0;
 		while ($results[$line] !~ m/MSet:/ && $line < scalar @results)
@@ -475,14 +475,13 @@ for ( my $i = 0; $i < $listcount; $i++ )
 				$xapian_id =~ s/^([0-9]+).*$/$1/;	
 				$xapian_id =~ s/\n//;
 				my $delve_command = $delve_location.' -1 -r '.$xapian_id.' -d '.$path.' | grep -ae "^_\?eprint_status:" | sed "s/_\?eprint_status://g"';
-
 				my @delve_results = `$delve_command`;	
 				if ( defined($delve_results[0]) )
 				{
 					$delve_results[0] =~ s/\n//;
 					$status_correct = 1 if $delve_results[0] eq $eprint->get_value( "eprint_status" );
 				}
-				my $year = substr( $eprint->get_value('date'), 0, 4 );
+				my $year = defined $eprint->get_value('date') ? substr( $eprint->get_value('date'), 0, 4 ) : "";
 				$year_correct = 1 if $year eq "";
 				if ( $year ne "" )
 				{
@@ -495,7 +494,7 @@ for ( my $i = 0; $i < $listcount; $i++ )
 						my $year = substr( $eprint->get_value('date'), 0, 4 );
 						$year_correct = 1 if $delve_results[0] eq $year;
 					}
-					else 
+					else
 					{
 						$year_correct = 1;
 					}
@@ -505,8 +504,7 @@ for ( my $i = 0; $i < $listcount; $i++ )
 				if ( defined($delve_results[0]) )
 				{
 					$delve_results[0] =~ s/\n//;
-					$type_correct = 1 if $delve_results[0] eq $eprint->get_value( 'type' );
-					
+					$type_correct = 1 if !defined $eprint->get_value( 'type' ) || $delve_results[0] eq lc $eprint->get_value( 'type' );
 				}
 				last;
 			}

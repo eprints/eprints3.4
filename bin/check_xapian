@@ -281,10 +281,8 @@ if ( defined $status_opt )
 }
 
 my $inc_rows = 2;
-$inc_rows = 1 if $facets;
 my $id_pos = $inc_rows - 1;
 my $no_result_lines = 3;
-$no_result_lines = 4 if $facets;
 
 print "\nRunning $0 at ".localtime()."\n\n" unless $quiet;
 
@@ -442,12 +440,12 @@ for ( my $i = 0; $i < $listcount; $i++ )
 	my @results = ();
 	my $command = $quest_location.' -f default -m '.$numresults.' -d '.$path.' "\"'.$title.'\""';
 	print "$command\n" if $verbose;
-	@results = `$command`;
+	@results = `$command | grep -va 12345678`;
 	if ( scalar @results <= $no_result_lines )
 	{
 		my $command = $quest_location.' -f default -m '.$numresults.' -d '.$path.' "'.$title.'"';
 		print "$command\n" if $verbose;
-		@results = `$command`;
+		@results = `$command | grep -va 12345678`;
 	}
 	if ( scalar @results <= $no_result_lines )
 	{
@@ -491,8 +489,9 @@ for ( my $i = 0; $i < $listcount; $i++ )
 					if ( defined($delve_results[0]) )
 					{
 						$delve_results[0] =~ s/\n//;
-						my $year = substr( $eprint->get_value('date'), 0, 4 );
-						$year_correct = 1 if $delve_results[0] eq $year;
+						my $date = $eprint->get_value('date');
+						$date = substr( $date, 0, 4 ) if $facets;
+						$year_correct = 1 if $delve_results[0] eq $date;
 					}
 					else
 					{
@@ -501,10 +500,11 @@ for ( my $i = 0; $i < $listcount; $i++ )
 				}
 				$delve_command = $delve_location.' -1 -r '.$xapian_id.' -d '.$path.' | grep -ae "^_\?type:" | sed "s/_\?type://g"';
 				@delve_results = `$delve_command`;
+				$type_correct = 1 if !defined $eprint->get_value( 'type' );
 				if ( defined($delve_results[0]) )
 				{
 					$delve_results[0] =~ s/\n//;
-					$type_correct = 1 if !defined $eprint->get_value( 'type' ) || $delve_results[0] eq lc $eprint->get_value( 'type' );
+					$type_correct = 1 if !defined $eprint->get_value( 'type' ) || lc $delve_results[0] eq lc $eprint->get_value( 'type' );
 				}
 				last;
 			}
@@ -513,7 +513,7 @@ for ( my $i = 0; $i < $listcount; $i++ )
 		$errfacets .= "status " unless $status_correct;
 		$errfacets .= "year " unless $year_correct;
 		$errfacets .= "type " unless $type_correct;
-		print "$progress Found EPrint ID ".$eprint->id." in position $position but ".$errfacets."is/are not correct.\n" if $found && "$errfacets" ne "";
+		print "$progress Found EPrint ID ".$eprint->id." in position $position but ".$errfacets."is/are not correct." if $found && "$errfacets" ne "";
 		print "$progress Found EPrint ID ".$eprint->id." in position $position.\n" if $found && "$errfacets" eq "" && !$quiet;
 	}
 	if ( ( !$found || $errfacets ne "" ) && $reindex )

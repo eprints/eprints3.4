@@ -172,6 +172,7 @@ if( !defined $session )
 }
 
 my $path = $session->config( "base_path" ).'/archives/'.$ARGV[0].'/var/xapian/';
+$path = $session->config( "base_path" ).'/archives/'.$ARGV[0].'/var/xapian.facet/' if $facets;
 if ( defined $path_opt )
 {
 	$path = $path_opt;

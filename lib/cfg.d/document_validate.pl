@@ -42,8 +42,10 @@ $c->{validate_document} = sub
 	}
 
 	# security can't be "public" if date embargo set
-	if( $document->value( "security" ) eq "public" &&
-		EPrints::Utils::is_set( $document->value( "date_embargo" ) ) )
+	if( !$repository->config( "retain_embargo_dates" ) && 
+	    $document->value( "security" ) eq "public" &&
+		EPrints::Utils::is_set( $document->value( "date_embargo" ) )
+		)
 	{
 		my $fieldname = $xml->create_element( "span", class=>"ep_problem_field:documents" );
 		push @problems, $repository->html_phrase( 
@@ -56,13 +58,15 @@ $c->{validate_document} = sub
 	{
 		my $value = $document->value( "date_embargo" );
 		my ($year, $month, $day) = split( '-', $value );
+		my ($thisyear, $thismonth, $thisday) = EPrints::Time::get_date_array();
+
 		if ( !EPrints::Utils::is_set( $month ) || !EPrints::Utils::is_set( $day ) )
 		{
 			my $fieldname = $xml->create_element( "span", class=>"ep_problem_field:documents" );
                         push @problems, $repository->html_phrase( "validate:embargo_incomplete_date", fieldname=>$fieldname );
 		}
-		else {
-			my ($thisyear, $thismonth, $thisday) = EPrints::Time::get_date_array();
+		elsif ( !$repository->config( "retain_embargo_dates" ) )
+		{
 			if( $year < $thisyear || ( $year == $thisyear && $month < $thismonth ) ||
 				( $year == $thisyear && $month == $thismonth && $day <= $thisday ) )
 			{
@@ -71,6 +75,14 @@ $c->{validate_document} = sub
 					$repository->html_phrase( "validate:embargo_invalid_date",
 					fieldname=>$fieldname );
 			}
+		}
+		elsif ( $document->value( "security" ) eq "public" && ( $year > $thisyear || ( $year == $thisyear && $month > $thismonth ) || 
+			( $year == $thisyear && $month == $thismonth && $day > $thisday ) ) )
+		{
+			my $fieldname = $xml->create_element( "span", class=>"ep_problem_field:documents" );
+			push @problems, $repository->html_phrase(
+				"validate:embargo_check_security",
+				fieldname=>$fieldname );
 		}
 	}
 

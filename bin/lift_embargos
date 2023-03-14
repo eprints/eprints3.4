@@ -124,6 +124,8 @@ if( !defined $session )
 	exit 1;
 }
 
+$retain = $session->config( "retain_embargo_dates" ) if $session->config( "retain_embargo_dates" );
+
 my $ds = $session->dataset( "document" );
 
 # Search for expired embargoes

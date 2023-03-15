@@ -1710,9 +1710,9 @@ sub render
 		$content_bottom->appendChild( render_box_list( $self->{session}, $self, "summary_bottom", $preview ) );
 		$content_top->appendChild( render_box_list( $self->{session}, $self, "summary_top", $preview ) );
 
+		$content->appendChild( $content_top );
 		$content->appendChild( $content_left );
 		$content->appendChild( $content_right );
-		$content->appendChild( $content_top );
 		$content->appendChild( $content_main );
 		$content_main->appendChild( $dom );
 		$content->appendChild( $content_bottom );

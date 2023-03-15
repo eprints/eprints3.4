@@ -13,11 +13,11 @@
 
 =head1 NAME
 
-EPrints::Apache::RobotsTxt
+B<EPrints::Apache::RobotsTxt> - Generates a dynamic robots.txt.
 
 =head1 DESCRIPTION
 
-Generate a dynamic output for request of /robots.txt
+Generate a dynamic output for request of F</robots.txt>
 
 =head1 METHODS
 
@@ -38,7 +38,7 @@ use warnings;
 =item $rc = EPrints::Apache::RobotsTxt::handler( $r )
 
 Handler for managing EPrints requests for dynamically generated
-robots.txt.
+F<robots.txt>.
 
 =cut
 ######################################################################
@@ -97,20 +97,23 @@ END
 
 1;
 
+######################################################################
+=pod
+
 =back
 
 =head1 COPYRIGHT
 
-=for COPYRIGHT BEGIN
+=befin COPYRIGHT
 
-Copyright 2022 University of Southampton.
+Copyright 2023 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/
 
-=for COPYRIGHT END
+=end COPYRIGHT
 
-=for LICENSE BEGIN
+=begin LICENSE
 
 This file is part of EPrints 3.4 L<http://www.eprints.org/>.
 
@@ -127,5 +130,5 @@ You should have received a copy of the GNU Lesser General Public
 License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
-=for LICENSE END
+=end LICENSE
 

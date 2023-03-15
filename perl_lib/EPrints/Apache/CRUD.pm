@@ -26,9 +26,13 @@ B<EPrints::Apache::CRUD> - Create, read, update and delete via HTTP
 
 =head1 DESCRIPTION
 
-The CRUD (Create/Read/Update/Delete) module provides the Web API for manipulating content on the server. The API is an AtomPub implementation that exposes Import and Export plugins via simple URLs and HTTP content type negotiation.
+The CRUD (Create/Read/Update/Delete) module provides the Web API for 
+manipulating content on the server. The API is an AtomPub 
+implementation that exposes Import and Export plugins via simple URLs
+and HTTP content type negotiation.
 
-You should use the <link> entries in the repository's home page to locate the CRUD endpoint, as they may change in the future:
+You should use the <link> entries in the repository's home page to 
+locate the CRUD endpoint, as they may change in the future:
 
 	<link rel="Sword" href="https://myrepo/sword-app/servicedocument" />
 	<link rel="SwordDeposit" href="https://myrepo/id/contents" />
@@ -88,7 +92,7 @@ Get the list of contents (documents) of an eprint in Atom XML:
 
 You can find more examples in the F<tests/84_sword.t> unit test.
 
-=head2 URI layout
+=head2 URI Layout
 
 These URIs are relative to your EPrints HTTP/HTTPs root.
 
@@ -98,78 +102,114 @@ These URIs are relative to your EPrints HTTP/HTTPs root.
 
 Requires authentication.
 
-GET a list of the eprints owned by the user. POST to create a new EPrint object.
+C<GET> a list of the eprints owned by the user. C<POST> to create a new EPrint
+object.
 
 =item /id/[datasetid]/[dataobjid] DELETE,GET,HEAD,OPTIONS,PUT
 
 Requires authentication depending on user's privileges and object visibility.
 
-GET an object's metadata or, for L<File|EPrints::DataObj::File> objects, the file content. PUT to replace the metadata and/or contents (see L</Updating complex objects using PUT>). If the object does not exist will attempt to create it with the given dataobjid (requires 'upsert' privilege).
+C<GET> an object's metadata or, for L<File|EPrints::DataObj::File> objects, the
+file content. C<PUT> to replace the metadata and/or contents (see 
+L</Updating complex objects using PUT>). If the object does not exist will 
+attempt to create it with the given dataobjid (requires C<upsert> privilege).
 
 =item /id/[datasetid]/[dataobjid]/contents DELETE,GET,HEAD,OPTIONS,POST,PUT
 
 Requires authentication depending on user's privileges and object visibility.
 
-GET the logical contents of the object: documents for eprints or files for documents. PUT to replace the existing contents or POST to add to the existing contents.
+C<GET> the logical contents of the object: documents for eprints or files for 
+documents. C<PUT> to replace the existing contents or POST to add to the 
+existing contents.
 
 =back
 
 =head2 HTTP Content Negotiation
 
-GET/HEAD requests are processed using L<Export|EPrints::Plugin::Export> plugins. POST/PUT requests are processed using L<Import|EPrints::Plugin::Import> plugins.
+C<GET>/C<HEAD> requests are processed using L<Export|EPrints::Plugin::Export> 
+plugins. C<POST>/C<PUT> requests are processed using
+L<Import|EPrints::Plugin::Import> plugins.
 
-The plugin used depends on the request's I<Accept> (GET/HEAD) or I<Content-Type> (POST/PUT) header and the type of object being acted on. For example, the following request:
+The plugin used depends on the request's C<Accept> (C<GET>/C<HEAD>) or 
+C<Content-Type> (C<POST>/C<PUT>) header and the type of object being acted on.
+For example, the following request:
 
 	GET /id/eprint/23 HTTP/1.1
 	Accept: application/vnd.eprints.data+xml
 
-Will search for an Export plugin that accepts objects of type B<dataobj/eprint> and can produce output in the MIME type B<application/vnd.eprints.data+xml>. This will most likely be the L<EP3 XML|EPrints::Plugin::Export::XML> plugin.
+Will search for an Export plugin that accepts objects of type C<dataobj/eprint> 
+and can produce output in the MIME type C<application/vnd.eprints.data+xml>. 
+This will most likely be the L<EP3 XML|EPrints::Plugin::Export::XML> plugin.
 
-In addition to the general plugin negotiation behaviour some special cases are supported to improve compatibility with Atom Pub/Web Browser clients:
+In addition to the general plugin negotiation behaviour some special cases are 
+supported to improve compatibility with Atom Pub/Web Browser clients:
 
 =over 4
 
 =item /id/eprint/...
 
-Requesting L<EPrint|EPrints::DataObj::EPrint> objects as text/html will result in a 303 Redirect to the eprint object's abstract page or, if the eprint is not public, its L<View|EPrints::Plugin::Screen::EPrint::View> page.
+Requesting L<EPrint|EPrints::DataObj::EPrint> objects as text/html will result
+in a C<303 Redirect> to the eprint object's abstract page or, if the eprint is 
+not public, its L<View|EPrints::Plugin::Screen::EPrint::View> page.
 
 =item /id/document/.../contents
 
-Requesting the I</contents> of a L<Document|EPrints::DataObj::Document> object will return the content of the document's main file.
+Requesting the C</contents> of a L<Document|EPrints::DataObj::Document> object 
+will return the content of the document's main file.
 
 =item /id/file/...
 
-Requesting a L<File|EPrints::DataObj::File> object with no I<Accept> header (or B<*/*>) will return the file's content.
+Requesting a L<File|EPrints::DataObj::File> object with no C<Accept> header (or 
+C<*/*>) will return the file's content.
 
 =item POST /id/.../contents
 
-When creating new records via POST, content negotiation is performed against the Import plugins.
+When creating new records via POST, content negotiation is performed against 
+the Import plugins.
 
-If no Import plugin supports the I<Content-Type> header the content will be treated as B<application/octet-stream> and stored in a new object. The resulting Atom entry will describe the new object (e.g. the I<eprint> object in which the new I<document> and I<file> objects were created).
+If no Import plugin supports the I<Content-Type> header the content will be 
+treated as C<application/octet-stream> and stored in a new object. The 
+resulting Atom entry will describe the new object (e.g. the C<eprint> object 
+in which the new C<document> and C<file> objects were created).
 
-Otherwise, the result will depend on the Import plugin's output. Import plugins may produce a single object, multiple objects or an object plus content file(s).
+Otherwise, the result will depend on the Import plugin's output. Import 
+plugins may produce a single object, multiple objects or an object plus 
+content file(s).
 
 =item Content-Type header
 
-If no I<Content-Type> header is given the MIME type defaults to B<application/octet-stream> for POSTs and PUTs.
+If no C<Content-Type> header is given the MIME type defaults to 
+C<application/octet-stream> for C<POST>s and C<PUT>s.
 
 =item Content-Disposition header
 
-If the I<Content-Disposition> header is missing or does not contain a I<filename> parameter the filename defaults to F<main.bin> for POSTs and PUTs.
+If the C<Content-Disposition> header is missing or does not contain a 
+C<filename> parameter the filename defaults to F<main.bin> for C<POST>s and 
+C<PUT>s.
 
 =back
 
 =head2 Updating complex objects using PUT
 
-Eprint objects contain zero or more documents, which each contain zero or more files. When you update (PUT) an eprint object the contained documents will only be replaced if the Import plugin defines new documents e.g. the Atom Import plugin will never define new documents so PUTing Atom content will only update the eprint's metadata. PUTing L<EP3 XML|EPrints::Plugin::Export::XML> will replace the documents if you include a <documents> XML element.
+Eprint objects contain zero or more documents, which each contain zero or 
+more files. When you update (C<PUT>) an eprint object the contained documents 
+will only be replaced if the Import plugin defines new documents e.g. the 
+Atom Import plugin will never define new documents so C<PUT>ing Atom content 
+will only update the eprint's metadata. C<PUT>ing 
+L<EP3 XML|EPrints::Plugin::Export::XML> will replace the documents if you 
+include a C<<documents>> XML element.
 
-PUTing to I</contents> will always replace all contents - PUTing to I</eprint/23/contents> is equivalent to I<DELETE /eprint/23/contents> then I<POST /eprint/23/contents>.
+C<PUT>ing to C</contents> will always replace all contents - C<PUT>ing to 
+C</eprint/23/contents> is equivalent to C<DELETE /eprint/23/contents> then 
+C<POST /eprint/23/contents>.
 
 =head2 PUT/DELETE from Javascript
 
 =for MediaWiki {{Available|since=3.3.9}}
 
-Web browsers only allow GET and POST requests. To perform other requests use the 'X-Method' header with POST to specify the actual method you want:
+Web browsers only allow C<GET> and C<POST> requests. To perform other 
+requests use the C<X-Method> header with C<POST> to specify the actual 
+method you want:
 
 	POST /id/eprint/23 HTTP/1.1
 	X-Method: PUT
@@ -179,9 +219,9 @@ Web browsers only allow GET and POST requests. To perform other requests use the
 
 =for MediaWiki {{Available|since=3.3.9}}
 
-If you have the I<upsert> privilege objects will be created on demand, otherwise attempting to PUT to a non-existent object will result in an error.
-
-=head1 METHODS
+If you have the C<upsert> privilege objects will be created on demand, 
+otherwise attempting to C<PUT> to a non-existent object will result in 
+an error.
 
 =cut
 
@@ -195,6 +235,42 @@ use EPrints::Apache::Auth;
 use Apache2::Access;
 
 our $PACKAGING_PREFIX = "sword:";
+
+=pod
+
+=head1 CONSTANTS 
+
+=over 4
+
+=item CRUD_SCOPE_USER_CONTENTS
+
+Restrict the scope of the CRUD request to user submitting content (i.e. F</id/content>).
+
+=item CRUD_SCOPE_DATASET
+
+Restrict the scope of the CRUD request to a dataset (i.e. F</id/FOO...>).
+
+=item CRUD_SCOPE_DATAOBJ
+
+Restrict the scope of the CRUD request to a data object (i.e. F</id/FOO/BAR>).
+
+=item CRUD_SCOPE_FIELD
+
+Restrict the scope of the CRUD request to a field of data object (i.e. F</id/FOO/BAR/BAZ>).
+
+=item CRUD_SCOPE_CONTENTS
+
+Restrict the scope of the CRUD request to the contents of data object (i.e. F</id/FOO/BAR/contents>).
+
+=item CRUD_SCOPE_SERVICEDOCUMENT
+
+Restrict the scope of the CRUD request to the service document.
+
+=back
+
+=head1 METHODS
+
+=cut
 
 use constant {
 	CRUD_SCOPE_USER_CONTENTS => 1,
@@ -211,6 +287,27 @@ my %CONTENTSMAP = (
 	"EPrints::DataObj::EPrint" => "documents",
 	"EPrints::DataObj::Document" => "files",
 	);
+
+######################################################################
+=pod
+
+=head2 Constructor Methods
+
+=cut
+######################################################################
+
+
+######################################################################
+=pod
+
+=over 4
+
+=item $crud = EPrints::Apache::CRUD->new( %params )
+
+Return a new CRUD request using parameters given in C<%params>.
+ 
+=cut
+######################################################################
 
 sub new
 {
@@ -270,7 +367,7 @@ sub new
 		$self{scope} = CRUD_SCOPE_DATAOBJ;
 	}
 
-	# /id/FOO/BAR/xxx
+	# /id/FOO/BAR/BAZ
 	if( defined $self{fieldid} )
 	{
 		if( $self{fieldid} eq "contents" )
@@ -308,6 +405,102 @@ sub new
 
 	return $self;
 }
+
+
+######################################################################
+=pod
+
+=back
+
+=head2 Class Methods
+
+=cut
+######################################################################
+
+
+######################################################################
+=pod
+
+=item $error_document = EPrints::Apache::CRUD::generate_error_document( $repo, %opts )
+
+Return error document for L<EPrints::Repository> C<$repo> using 
+options from C<%opts>.
+
+=cut
+
+######################################################################
+
+sub generate_error_document
+{
+	my ( $repo, %opts ) = @_;
+
+	my $xml = $repo->xml;
+
+	$opts{href} = "http://eprints.org/sword/error/UnknownError"
+		if !defined $opts{href};
+
+	my $error = $xml->create_data_element( "sword:error", [
+		[ "title", "ERROR" ],
+		[ "updated", EPrints::Time::get_iso_timestamp() ],
+		[ "generator", $repo->phrase( "archive_name" ),
+			uri => "http://www.eprints.org/",
+			version => EPrints->human_version,
+		],
+		[ "summary", $opts{summary} ],
+		[ "sword:userAgent", $opts{user_agent} ],
+	],
+		"xmlns" => "http://www.w3.org/2005/Atom",
+		"xmlns:sword" => "http://purl.org/net/sword/",
+		href => $opts{href},
+	);
+
+	return "<?xml version='1.0' encoding='UTF-8'?>\n" .
+		$xml->to_string( $error, indent => 1 );
+}
+
+######################################################################
+=pod
+
+=item $boolean = EPrints::Apache::CRUD::is_true( $header )
+
+Tests if C<$header> attribute is C<true>.
+
+=cut
+
+######################################################################
+
+sub is_true
+{
+	return defined($_[0]) && lc($_[0]) eq "true";
+}
+
+######################################################################
+=pod
+
+=item $boolean = EPrints::Apache::CRUD::is_false( $header )
+
+Tests if C<$header> attribute is C<false>.
+
+=cut
+
+######################################################################
+
+sub is_false
+{
+	return defined($_[0]) && lc($_[0]) eq "false";
+}
+
+
+######################################################################
+=pod
+
+=back
+
+=head2 Object Methods
+
+=cut
+######################################################################
+
 
 ######################################################################
 =pod
@@ -436,7 +629,7 @@ sub plugin { $_[0]->{plugin} }
 
 =item $bool = $crud->is_write()
 
-Returns true if the request is not a read-only method.
+Returns C<true> if the request is not a read-only method.
 
 =cut
 ######################################################################
@@ -507,9 +700,10 @@ sub check_packaging
 
 =item $dataobj = $crud->resolve_relations( $dataobj [, @relations ] )
 
-Resolve the relation path from $dataobj and return the resulting dataobj.
+Resolve the relation path from C<$dataobj> and return the resulting 
+data object.
 
-Returns undef if there is no such related object.
+Returns c<undef> if there is no such related object.
 
 =cut
 ######################################################################
@@ -756,9 +950,13 @@ sub _read_content
 
 =item $list = $crud->parse_input( $plugin, $f [, %params ] )
 
-Parse the content submitted by the user using the given $plugin.  $f is called by epdata_to_dataobj to convert epdata to a dataobj.  %params are passed to the plugin's input_fh method.
+Parse the content submitted by the user using the given C<$plugin>.  
+C<$f> is called by c<epdata_to_dataobj> to convert EPrints data markup 
+to a data object. C<%params> are passed to the plugin's C<input_fh> 
+method.
 
-Returns undef on error.
+Returns C<undef> on error. Otherwise returns an L<EPrints::List> of 
+data objects.
 
 =cut
 ######################################################################
@@ -821,7 +1019,7 @@ sub parse_input
 
 Creates data object as user $owner with metadata from $epdata
 
-Returns an L<EPrints::DataObj>
+Returns an L<EPrints::DataObj>.
 
 =cut
 ######################################################################
@@ -853,7 +1051,8 @@ sub create_dataobj
 
 =item @plugins = $crud->import_plugins( [ %params ] )
 
-Returns all matching import plugins against %params ordered by descending 'q' score.
+Returns all matching import plugins against C<%params> ordered by 
+descending C<q> score.
 
 =cut
 ######################################################################
@@ -887,7 +1086,8 @@ sub import_plugins
 
 =item @plugins = $crud->export_plugins( [ %params ] )
 
-Returns all matching export plugins against %params ordered by descending 'q' score.
+Returns all matching export plugins against C<%params> ordered by 
+descending C<q> score.
 
 =cut
 ######################################################################
@@ -921,7 +1121,8 @@ sub export_plugins
 
 =item $plugin = $crud->content_negotiate_best_plugin()
 
-Work out the best plugin to export/update an object based on the client-headers.
+Work out the best plugin to export/update an object based on the 
+client headers.
 
 =cut
 ######################################################################
@@ -1085,11 +1286,13 @@ sub content_negotiate_best_plugin
 
 =item EPrints::Apache::CRUD( $media_range )
 
-Takes the $media_range string and returns array of acceptable MIME types.
-See L<http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1>
-for more detail.
+Takes the C<$media_range> string and returns array of acceptable MIME 
+types. See 
+L<http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1> for 
+more detail.
 
 =cut
+######################################################################
 
 sub parse_media_range
 {
@@ -1189,13 +1392,13 @@ sub handler
 
 =item $rc = $crud->DELETE()
 
-Handle DELETE requests.
+Handle C<DELETE> requests.
 
 =over 4
 
 =item HTTP_METHOD_NOT_ALLOWED
 
-Can't perform DELETE on F</id/contents>.
+Can't perform C<DELETE> on F</id/contents>.
 
 =item HTTP_NOT_FOUND
 
@@ -1264,21 +1467,22 @@ sub DELETE
 
 =item $rc = $crud->GET( [ $owner ] )
 
-Handle GET requests.
+Handle C<GET> requests.
 
 =over 4
 
 =item HTTP_NO_CONTENT
 
-No sub-objects in I</id/.../contents>.
+No sub-objects in F</id/.../contents>.
 
 =item HTTP_NOT_ACCEPTABLE
 
-More than one sub-object in I</id/.../contents>.
+More than one sub-object in F</id/.../contents>.
 
 =item HTTP_UNSUPPORTED_MEDIA_TYPE
 
-No L<Export|EPrints::Plugin::Export> plugin matches the I<Accept> header/object type.
+No L<Export|EPrints::Plugin::Export> plugin matches the C<Accept> 
+header/object type.
 
 =item HTTP_SEE_OTHER
 
@@ -1475,17 +1679,17 @@ sub GET
 
 =item $rc = $crud->POST( [ $owner ] )
 
-Handle POST requests.
+Handle C<POST> requests.
 
 =over 4
 
 =item HTTP_METHOD_NOT_ALLOWED
 
-Can only POST to I</id/.../contents>.
+Can only POST to F</id/.../contents>.
 
 =item HTTP_BAD_REQUEST
 
-No plugin for the SWORD I<Packaging> header.
+No plugin for the SWORD C<Packaging> header.
 
 =item HTTP_CREATED
 
@@ -1608,21 +1812,22 @@ $r->err_headers_out->{Location} = $items[0]->uri . '/contents';
 
 =item $rc = $crud->PUT( [ $owner ] )
 
-Handle PUT requests.
+Handle C<PUT> requests.
 
 =over 4
 
 =item HTTP_UNSUPPORTED_MEDIA_TYPE
 
-No L<Import|EPrints::Plugin::Import> plugin matched the I<Content-Type> header/object type.
+No L<Import|EPrints::Plugin::Import> plugin matched the 
+C<Content-Type> header/object type.
 
 =item HTTP_RANGE_NOT_SATISFIABLE
 
-I<Range> header is invalid or unsupported for the I<object type>.
+C<Range> header is invalid or unsupported for the object type.
 
 =item HTTP_FORBIDDEN
 
-User does not have permission to create/update the I<object>.
+User does not have permission to create/update the object.
 
 =item HTTP_CREATED
 
@@ -1785,7 +1990,8 @@ sub PUT
 
 =item $rc = $crud->PUT_contents( [ $owner ] )
 
-Equivalent to C<DELETE /id/.../contents> then C<POST /id/.../contents>.
+Equivalent to C<DELETE /id/.../contents> then 
+C<POST /id/.../contents>.
 
 See L</DELETE> and L</POST>.
 
@@ -1842,8 +2048,8 @@ sub PUT_contents
 
 =item $crud->metadata_relevant( $file )
 
-Test and if suitable use $file as metadata source to updatie
-the associated L<EPrints::DataObj::EPrint>.
+Test and if suitable use C<$file> as metadata source to update the 
+associated L<EPrints::DataObj::EPrint>.
 
 =cut
 
@@ -1929,7 +2135,7 @@ sub metadata_relevant
 
 =item $crud->servicedocument
 
-Gennerate response containing CRUD service document.
+Generate response containing CRUD service document.
 
 =cut
 
@@ -2050,7 +2256,7 @@ sub servicedocument
 
 =item $rc = $crud->on_behalf_of( $user )
 
-Submit CRUD request on behalf od another user.
+Submit CRUD request on behalf of another user.
 
 Returns HTTPS response code based on whether request on behalf of is 
 permitted.
@@ -2085,41 +2291,9 @@ sub on_behalf_of
 ######################################################################
 =pod
 
-=item $boolean = EPrints::Apache::Crud::is_true( $header )
-
-Tests if $header attribute is true.
-
-=cut
-
-######################################################################
-
-sub is_true
-{
-	return defined($_[0]) && lc($_[0]) eq "true";
-}
-
-######################################################################
-=pod
-
-=item $boolean = EPrints::Apache::Crud::is_false( $header )
-
-Tests if $header attribute is false.
-
-=cut
-
-######################################################################
-
-sub is_false
-{
-	return defined($_[0]) && lc($_[0]) eq "false";
-}
-
-######################################################################
-=pod
-
 =item $boolean = $crud->is_file_ok( $epdata )
 
-Tests if files with $epdata were uploaded with corruption.
+Tests if files with C<$epdata> were uploaded with corruption.
 
 =cut
 
@@ -2288,9 +2462,9 @@ sub process_headers
 ######################################################################
 =pod
 
-=item $boolean = $crud->( %opts )
+=item $boolean = $crud->sword_error( %opts )
 
-Generate SWORD error documents based on provided %opts.
+Generate SWORD error documents based on provided C<%opts>.
 
 =cut
 
@@ -2321,7 +2495,8 @@ sub sword_error
 
 =item $boolean = $crud->plugin_error( $plugin, $messages )
 
-Generate error message for import $plugin used with $messages provided.
+Generate error message for import C<$plugin> used with C<$messages>
+provided.
 
 =cut
 
@@ -2348,55 +2523,16 @@ sub plugin_error
 	);
 }
 
-######################################################################
-=pod
-
-=item $error_document = EPrints::Apache::Crud::generate_error_document( $repo, %opts )
-
-Return error document for L<EPrints::Repository> $repo using options 
-from %opts.
-
-=cut
-
-######################################################################
-
-sub generate_error_document
-{
-	my ( $repo, %opts ) = @_;
-
-	my $xml = $repo->xml;
-
-	$opts{href} = "http://eprints.org/sword/error/UnknownError"
-		if !defined $opts{href};
-
-	my $error = $xml->create_data_element( "sword:error", [
-		[ "title", "ERROR" ],
-		[ "updated", EPrints::Time::get_iso_timestamp() ],
-		[ "generator", $repo->phrase( "archive_name" ),
-			uri => "http://www.eprints.org/",
-			version => EPrints->human_version,
-		],
-		[ "summary", $opts{summary} ],
-		[ "sword:userAgent", $opts{user_agent} ],
-	],
-		"xmlns" => "http://www.w3.org/2005/Atom",
-		"xmlns:sword" => "http://purl.org/net/sword/",
-		href => $opts{href},
-	);
-
-	return "<?xml version='1.0' encoding='UTF-8'?>\n" .
-		$xml->to_string( $error, indent => 1 );
-}
 
 ######################################################################
 =pod
 
 =item $rc = $crud->send_response( $status, $content_type, $content )
 
-Output response to CRUD request with HTTP status code $status,
-content type $content_type.
+Output response to CRUD request with HTTP status code C<$status>,
+content type C<$content_type>.
 
-Returns HTTP response code OK.
+Returns HTTP response code C<OK>.
 
 =cut
 
@@ -2423,6 +2559,8 @@ sub send_response
 }
 
 1;
+######################################################################
+=pod
 
 =back
 
@@ -2434,16 +2572,16 @@ http://en.wikipedia.org/wiki/Content_negotiation
 
 =head1 COPYRIGHT
 
-=for COPYRIGHT BEGIN
+=begin COPYRIGHT
 
-Copyright 2022 University of Southampton.
+Copyright 2023 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/
 
-=for COPYRIGHT END
+=end COPYRIGHT
 
-=for LICENSE BEGIN
+=begin LICENSE
 
 This file is part of EPrints 3.4 L<http://www.eprints.org/>.
 
@@ -2460,5 +2598,5 @@ You should have received a copy of the GNU Lesser General Public
 License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
-=for LICENSE END
+=end LICENSE
 

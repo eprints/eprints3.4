@@ -13,23 +13,21 @@
 
 =head1 NAME
 
-B<EPrints::Apache::Rewrite> - rewrite cosmetic URL's to internally useful ones.
+B<EPrints::Apache::Rewrite> - rewrite cosmetic URLs to internally 
+useful ones.
 
 =head1 DESCRIPTION
 
-This rewrites the URL apache receives based on certain things, such
+This rewrites the URL Apache receives based on certain things, such
 as the current language.
 
-Expands 
-/archive/00000123/*
-to 
-/archive/00/00/01/23/*
+Expands F</archive/00000123/*> to F</archive/00/00/01/23/*> and so
+forth.
 
-and so forth.
+This should only ever be called from within the C<mod_perl> system.
 
-This should only ever be called from within the mod_perl system.
-
-This also causes some pages to be regenerated on demand, if they are stale.
+This also causes some pages to be regenerated on demand, if they are 
+stale.
 
 =head1 METHODS
 
@@ -38,8 +36,6 @@ This also causes some pages to be regenerated on demand, if they are stale.
 package EPrints::Apache::Rewrite;
 
 use EPrints::Apache::AnApache; # exports apache constants
-
-use Data::Dumper;
 
 use strict;
 
@@ -50,7 +46,7 @@ use strict;
 
 =item $rc = EPrints::Apache::Rewrite::handler( $r )
 
-Handler for managing EPrints rewrite requests.
+Handler for managing an EPrints rewrite request C<$r>.
 
 =cut
 ######################################################################
@@ -879,6 +875,19 @@ sub handler
 	return OK;
 }
 
+######################################################################
+=pod
+
+=over 4
+
+=item $rc = EPrints::Apache::Rewrite::redir_permanent( $r, $url )
+
+Redirect permanently (C<301 Moved Permanently>) request C<$r> to URL 
+specified by C<$url>.
+
+=cut
+######################################################################
+
 sub redir_permanent
 {
 	my( $r, $url ) = @_;
@@ -888,6 +897,20 @@ sub redir_permanent
 	EPrints::Apache::AnApache::send_http_header( $r );
 	return DONE;
 }
+
+
+######################################################################
+=pod
+
+=over 4
+
+=item $rc = EPrints::Apache::Rewrite::redir( $r, $url )
+
+Redirect temporarily (C<302 Found>) request C<$r> to URL specified by 
+C<$url>.
+
+=cut
+######################################################################
 
 sub redir
 {
@@ -899,6 +922,21 @@ sub redir
 	return DONE;
 } 
 
+
+
+######################################################################
+=pod
+
+=over 4
+
+=item $rc = EPrints::Apache::Rewrite::redir_see_other( $r, $url )
+
+Redirect the request C<$r> to another resource (C<303 See Other>) 
+specified by the URL in C<$url>.
+
+=cut
+######################################################################
+
 sub redir_see_other
 {
 	my( $r, $url ) = @_;
@@ -908,6 +946,21 @@ sub redir_see_other
 	EPrints::Apache::AnApache::send_http_header( $r );
 	return DONE;
 } 
+
+######################################################################
+=pod
+
+=over 4
+
+=item $rc = EPrints::Apache::Rewrite::content_negotiate_best_plugin( $repository, %o )
+
+Determine the best content type to provide based on the options 
+provided by C<%o>.
+
+Returns a string containing the best content type (e.g. C<text/html>).
+
+=cut
+######################################################################
 
 sub content_negotiate_best_plugin
 {
@@ -984,20 +1037,23 @@ sub content_negotiate_best_plugin
 
 1;
 
+######################################################################
+=pod
+
 =back
 
 =head1 COPYRIGHT
 
-=for COPYRIGHT BEGIN
+=begin COPYRIGHT
 
-Copyright 2022 University of Southampton.
+Copyright 2023 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/
 
-=for COPYRIGHT END
+=end COPYRIGHT
 
-=for LICENSE BEGIN
+=begin LICENSE
 
 This file is part of EPrints 3.4 L<http://www.eprints.org/>.
 
@@ -1014,5 +1070,5 @@ You should have received a copy of the GNU Lesser General Public
 License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
-=for LICENSE END
+=end LICENSE
 

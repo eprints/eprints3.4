@@ -14,8 +14,8 @@
 
 =head1 NAME
 
-B<EPrints::Apache::Auth> - Password authentication & authorisation checking 
-for EPrints.
+B<EPrints::Apache::Auth> - Password authentication & authorisation 
+checking for EPrints.
 
 =head1 DESCRIPTION
 
@@ -42,10 +42,10 @@ use MIME::Base64;
 
 =item $rc = EPrints::Apache::Auth::authen( $r, [ $realm ] )
 
-Perform authentication on request $r.  If using auth_basic then include
-$realm as well.
+Perform authentication on request C<$r>.  If using C<auth_basic> then 
+include C<$realm> as well.
 
-Returns an HTTP response code.
+Returns a HTTP response code.
 
 =cut
 ######################################################################
@@ -136,10 +136,10 @@ sub _use_auth_basic
 
 =item $rc = EPrints::Apache::Auth::authen_doc( $r, [ $realm ] )
 
-Perform authentication on request $r for a document.  If using 
-auth_basic then include $realm as well.
+Perform authentication on request C<$r> for a document.  If using 
+C<auth_basic> then include C<$realm> as well.
 
-Returns an HTTP response code.
+Returns a HTTP response code.
 
 =cut
 ######################################################################
@@ -167,10 +167,10 @@ sub authen_doc
 
 =item $rc = EPrints::Apache::Auth::auth_cookie( $r, $repository )
 
-Perform authentication by cookie on request $r for repository $repository.  
-Redirect as appropriate.
+Perform authentication by cookie on request S<$r> for repository 
+C<$repository>. Redirect as appropriate.
 
-Returns an HTTP response code.
+Returns a HTTP response code.
 
 =cut
 ######################################################################
@@ -242,12 +242,13 @@ sub auth_cookie
 ######################################################################
 =pod
 
-=item $rc = EPrints::Apache::Auth::auth_basic( $r, $repository, $realm )
+=item $rc = EPrints::Apache::Auth::auth_basic( $r, $repository, [ $realm ] )
 
-Perform authentication by basic authentication on request $r for 
-repository $repository.
+Perform authentication by basic authentication on request C<$r> for 
+repository C<$repository>. If using C<auth_basic> then include 
+C<$realm> as well.
 
-Returns an HTTP response code.
+Returns a HTTP response code.
 
 =cut
 ######################################################################
@@ -298,9 +299,9 @@ sub auth_basic
 
 =item $rc = EPrints::Apache::Auth::authz( $r )
 
-Perform authorization of request $r.
+Perform authorization of request C<$r>.
 
-Returns an HTTP response code (always 200 OK).
+Returns a HTTP response code (always C<200 OK>).
 
 =cut
 ######################################################################
@@ -317,9 +318,9 @@ sub authz
 
 =item $rc = EPrints::Apache::Auth::authz( $r )
 
-Perform authorization of request $r for a document.
+Perform authorization of request C<$r> for a document.
 
-Returns an HTTP response code
+Returns a HTTP response code
 
 =cut
 ######################################################################
@@ -346,16 +347,16 @@ sub authz_doc
 
 =head1 COPYRIGHT
 
-=for COPYRIGHT BEGIN
+=begin COPYRIGHT
 
-Copyright 2022 University of Southampton.
+Copyright 2023 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/
 
-=for COPYRIGHT END
+=end COPYRIGHT
 
-=for LICENSE BEGIN
+=begin LICENSE
 
 This file is part of EPrints 3.4 L<http://www.eprints.org/>.
 
@@ -372,5 +373,5 @@ You should have received a copy of the GNU Lesser General Public
 License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
-=for LICENSE END
+=end LICENSE
 

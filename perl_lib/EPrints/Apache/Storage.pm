@@ -13,11 +13,12 @@
 
 =head1 NAME
 
-EPrints::Apache::Storage - deliver file objects via mod_perl
+B<EPrints::Apache::Storage> - deliver file objects via C<mod_perl>.
 
 =head1 DESCRIPTION
 
-This mod_perl handle supports the delivery of the content of L<EPrints::DataObj::File> objects.
+This C<mod_perl> handle supports the delivery of the content of 
+L<EPrints::DataObj::File> objects.
 
 =head2 Defined HTTP Headers
 
@@ -27,37 +28,42 @@ These headers will be set by this module, where possible.
 
 =item Content-Disposition
 
-The string "inline; filename=FILENAME" where FILENAME is the B<filename> value of the file object.
+The string C<"inline; filename=FILENAME"> where C<FILENAME> is the 
+C<filename> value of the file object.
 
-If the I<download> CGI parameter is true disposition is changed from "inline" to "attachment", which will present a download dialog box in sane browsers.
+If the C<download> CGI parameter is true disposition is changed from 
+C<inline> to C<attachment>, which will present a download dialog box 
+in sane browsers.
 
 =item Content-Length
 
-The B<filesize> value of the file object.
+The C<filesize> value of the file object.
 
 =item Content-MD5
 
-The MD5 of the file content in base-64 encoding if the B<hash> value is set and B<hash_type> is 'MD5'.
+The MD5 of the file content in base-64 encoding if the C<hash> value 
+is set and C<hash_type> is C<MD5>.
 
 =item Content-Type
 
-The B<mime_type> value of the file object, or "application/octet-stream" if not set.
+The C<mime_type> value of the file object, or 
+C<application/octet-stream> if not set.
 
 =item ETag
 
-The B<hash> value of the file object, if set.
+The C<hash> value of the file object, if set.
 
 =item Expires
 
-The current time + 365 days, if the B<mtime> value is set.
+The current time + 365 days, if the C<mtime> value is set.
 
 =item Last-Modified
 
-The B<mtime> of the file object, if set.
+The C<mtime> of the file object, if set.
 
 =item Accept-Ranges
 
-Sets Accept-Ranges to bytes.
+Sets C<Accept-Ranges> to bytes.
 
 =back
 
@@ -69,11 +75,13 @@ The following headers are recognised by this module.
 
 =item If-Modified-Since
 
-If greater than or equal to the B<mtime> value of the file object returns "304 Not Modified".
+If greater than or equal to the C<mtime> value of the file object 
+returns C<304 Not Modified>.
 
 =item If-None-Match
 
-If differs from the B<hash> value of the file object returns "304 Not Modified".
+If differs from the C<hash> value of the file object returns 
+C<304 Not Modified>.
 
 =back
 
@@ -306,20 +314,23 @@ sub handler
 
 1;
 
+######################################################################
+=pod
+
 =back
 
 =head1 COPYRIGHT
 
-=for COPYRIGHT BEGIN
+=begin COPYRIGHT
 
-Copyright 2022 University of Southampton.
+Copyright 2023 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/
 
-=for COPYRIGHT END
+=end COPYRIGHT
 
-=for LICENSE BEGIN
+=begin LICENSE
 
 This file is part of EPrints 3.4 L<http://www.eprints.org/>.
 
@@ -336,5 +347,5 @@ You should have received a copy of the GNU Lesser General Public
 License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
-=for LICENSE END
+=end LICENSE
 

@@ -15,7 +15,20 @@
 
 B<EPrints::Apache::Template> - Template Applying Module
 
-=head1 SYNOPSIS
+=head1 DESCRIPTION
+
+When HTML pages are served by EPrints they are processed through a 
+template written in XML. Most repositories will have two templates - 
+F<default.xml> for HTTP and F<secure.xml> for HTTPS.
+
+Templates are parsed at B<server start-up> and any included phrases 
+are replaced at that point. Because templates persist over the 
+lifetime of a server you do not typically perform any logic within 
+the template itself, instead use a pin generated via L</Custom Pins>.
+
+The page content is added to the template via C<<epc:pins>>.
+
+=head2 Synopsis
 
 	<?xml version="1.0" standalone="no"?>
 	<!DOCTYPE html SYSTEM "entities.dtd">
@@ -24,17 +37,9 @@ B<EPrints::Apache::Template> - Template Applying Module
 		  <title><epc:pin ref="title" textonly="yes"/> - <epc:phrase ref="archive_name"/></title>
     ...
 
-=head1 DESCRIPTION
-
-When HTML pages are served by EPrints they are processed through a template written in XML. Most repositories will have two templates - F<default.xml> for HTTP and F<secure.xml> for HTTPS.
-
-Templates are parsed at B<server start-up> and any included phrases are replaced at that point. Because templates persist over the lifetime of a server you do not typically perform any logic within the template itself, instead use a pin generated via L</Custom Pins>.
-
-The page content is added to the template via <epc:pins>.
-
 =head2 Custom Pins
 
-In C<cfg.d/dynamic_template.pl>:
+In F<cfg.d/dynamic_template.pl>:
 
 	$c->{dynamic_template}->{function} = sub {
 		my( $repo, $parts ) = @_;
@@ -42,7 +47,8 @@ In C<cfg.d/dynamic_template.pl>:
 		$parts->{mypin} = $repo->xml->create_text_node( "Hello, World!" );
 	};
 
-In C<archives/[archiveid]/cfg/templates/default.xml> (copy from C<lib/templates/default.xml> if not already exists):
+In F<archives/[archiveid]/cfg/templates/default.xml> (copy from 
+F<lib/templates/default.xml> if not already exists):
 
 	<epc:pin ref="mypin" />
 
@@ -64,11 +70,12 @@ The page content.
 
 =item login_status_header
 
-HTML <head> includes for the login status of the user - currently just some JavaScript variables.
+HTML C<<head>> includes for the login status of the user - currently 
+just some JavaScript variables.
 
 =item head
 
-Page-specific HTML <head> contents.
+Page-specific HTML C<<head>> contents.
 
 =item pagetop
 
@@ -76,9 +83,12 @@ Page-specific HTML <head> contents.
 
 =item login_status
 
-A menu containing L<EPrints::Plugin::Screen>s that appear in C<key_tools>. The content from each plugin's C<render_action_link> is rendered as a HTML <ul> list.
+A menu containing L<EPrints::Plugin::Screen>s that appear in C<key_tools>. 
+The content from each plugin's C<render_action_link> is rendered as a HTML 
+C<<ul>> list.
 
-Historically this was the login/logout links plus C<key_tools> but since 3.3 login/logout are Screen plugins as well.
+Historically this was the login/logout links plus C<key_tools> but since 
+3.3 login/logout are Screen plugins as well.
 
 =item languages
 
@@ -180,20 +190,21 @@ sub handler
 
 =head1 SEE ALSO
 
-The directories scanned for template sources are in L<EPrints::Repository/template_dirs>.
+The directories scanned for template sources are in 
+L<EPrints::Repository/template_dirs>.
 
 =head1 COPYRIGHT
 
-=for COPYRIGHT BEGIN
+=begin COPYRIGHT
 
-Copyright 2022 University of Southampton.
+Copyright 2023 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/
 
-=for COPYRIGHT END
+=end COPYRIGHT
 
-=for LICENSE BEGIN
+=begin LICENSE
 
 This file is part of EPrints 3.4 L<http://www.eprints.org/>.
 
@@ -210,5 +221,5 @@ You should have received a copy of the GNU Lesser General Public
 License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
-=for LICENSE END
+=end LICENSE
 

@@ -21,6 +21,30 @@ B<EPrints::Apache::AnApache> - Utility methods for talking to mod_perl
 This module provides a number of utility methods for interacting with the
 request object.
 
+=head1 CONSTANTS
+
+For backwards compatibility - use C<HTTP_> constants instead of C<:common> 
+constants.
+
+=over 4
+
+=item AUTH_REQUIRED
+
+Maps to C<EPrints::Const::HTTP_UNAUTHORIZED>.  Authorization is required 
+to access the requested resource.
+
+=item FORBIDDEN 
+
+Maps to C<EPrints::Const::HTTP_FORBIDDEN>.  Access to the requested 
+resource is forbidden.
+
+=item SERVER_ERROR
+
+Maps to C<EPrints::Const::HTTP_INTERNAL_SERVER_ERROR>.  Requesting the
+resource has caused an internal server error.
+
+=back
+
 =head1 METHODS
 
 =cut
@@ -59,7 +83,7 @@ use strict;
 
 Send the HTTP header, if needed.
 
-$request is the current Apache request. 
+C<$request> is the current Apache request. 
 
 =cut
 ######################################################################
@@ -76,9 +100,9 @@ sub send_http_header
 
 =item EPrints::Apache::AnApache::header_out( $request, $header, $value )
 
-Set a value in the HTTP headers of the response. $request is the
-apache request object, $header is the name of the header and 
-$value is the value to give that header.
+Set a value in the HTTP headers of the response. C<$request> is the
+apache request object, C<$header> is the name of the header and 
+C<$value> is the value to give that header.
 
 =cut
 ######################################################################
@@ -160,7 +184,7 @@ sub cookie
 =item EPrints::Apache::AnApache::upload_doc_file( $session, $document, $paramid );
 
 Collect a file named $paramid uploaded via HTTP and add it to the 
-specified $document.
+specified C<$document>.
 
 =cut
 ######################################################################
@@ -211,7 +235,7 @@ sub upload_doc_archive
 
 =item EPrints::Apache::AnApache::send_status_line( $request, $code, $message )
 
-Send a HTTP status to the client with $code and $message.
+Send a HTTP status to the client with C<$code> and C<$message>.
 
 =cut
 ######################################################################
@@ -255,9 +279,10 @@ sub send_hidden_status_line
 
 Populates the byte-ranges in $chunks requested by the client.
 
-$maxlength is the length, in bytes, of the resource.
+C<$maxlength> is the length, in bytes, of the resource.
 
-Returns the appropriate byte-range result code or OK if no "Range" header is set.
+Returns the appropriate byte-range result code or C<OK> if no C<Range>
+header is set.
 
 =cut
 ######################################################################
@@ -325,13 +350,16 @@ sub ranges
 
 1;
 
+######################################################################
+=pod
+
 =back
 
 =head1 COPYRIGHT
 
 =begin COPYRIGHT
 
-Copyright 2022 University of Southampton.
+Copyright 2023 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/

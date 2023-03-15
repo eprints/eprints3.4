@@ -76,8 +76,8 @@ sub handler
 
 =item $rc = EPrints::Apache::REST::redir_add_slash( $repository )
 
-Redirect to the current request for the $repository with an added 
-slash '/' at the end of the path.
+Redirect to the current request for the C<$repository> with an added 
+slash C</> at the end of the path.
 
 =cut
 ######################################################################
@@ -93,10 +93,10 @@ sub redir_add_slash
 ######################################################################
 =pod
 
-=item $rc = EPrints::Apache::Login::serve_top_level( $repository, @path )
+=item $rc = EPrints::Apache::REST::serve_top_level( $repository, @path )
 
-Serve top level list of datasets (i.e. eprint, user and subject) or 
-pass onto B<EPrints::Apache::Login::serve_datasets>. dependent of @path.
+Serve top level list of datasets (i.e. C<eprint>, C<user> and 
+C<subject>) or pass onto L</serve_dataset>. dependent of C<@path>.
 
 =cut
 ######################################################################
@@ -147,9 +147,8 @@ sub serve_top_level
 =item $rc = EPrints::Apache::REST::serve_dataset( $repository, $dataset, @path )
 
 Serve listing of data objects for a particular dataset, pass onto
-B<EPrints::Apache::Login::serve_dataobj>, B<EPrints::Apache::Login::get_dataobj_xml>
-or B<EPrints::Apache::Login::put_dataobj_xml>,or return an appropriate
-HTTP error code.
+L</serve_dataobj>, L</get_dataobj_xml> or L</put_dataobj_xml> or
+return an appropriate HTTP error code.
 
 =cut
 ######################################################################
@@ -236,9 +235,9 @@ sub serve_dataset
 
 =item $rc = EPrints::Apache::REST::serve_dataobj( $repository, $object, $rights_object, @path )
 
-Servee HTML, XML or text version of data object from GET or PUT request,
-pass onto B<EPrints::Apache::REST::serve_field> or otherwise return an
-appropriate HTTP error code.
+Serve HTML, XML or text version of data object from C<GET> or C<PUT> 
+request. Pass onto L</serve_field> or otherwise return an appropriate 
+HTTP error code.
 
 =cut
 ######################################################################
@@ -345,9 +344,9 @@ sub serve_dataobj
 
 =item $rc = EPrints::Apache::REST::serve_field( $repository, $object, $rights_object, $field, $value, @path )
 
-Servee HTML, XML or text version of data object from GET requests
-passsingel field requests onto B<EPrints::Apache::REST::serve_field_single> 
-or otherwise return an appropriate HTTP error code.
+Serve HTML, XML or text version of data object from C<GET> requests.
+Pass on field requests onto L</serve_field_single> or otherwise return 
+an appropriate HTTP error code.
 
 =cut
 ######################################################################
@@ -450,8 +449,8 @@ sub serve_field
 
 =item $rc = EPrints::Apache::REST::serve_field_single( $repository, $object, $rights_object, $field, $value, @path )
 
-Servee single field representation by passing onto B<EPrints::Apache::REST::serve_subobject>,
-B<EPrints::Apache::REST::serve_compound> or B<EPrints::Apache::REST::serve_name>
+Serve single field representation by passing onto L</serve_subobject>,
+L</serve_compound> or C</serve_name>
 base on type of field.
 
 =cut
@@ -483,7 +482,7 @@ sub serve_field_single
 
 =item $rc = EPrints::Apache::REST::serve_suboject( $repository, $object, $rights_object, $field, $value, @path )
 
-Serves sub-object by passing onto B<EPrints::Apache::REST::serve_dataobj>.
+Serves sub-object by passing onto L</serve_dataobj>.
 
 =cut
 ######################################################################
@@ -503,7 +502,7 @@ sub serve_subobject
 =item $rc = EPrints::Apache::REST::serve_compound( $repository, $object, $rights_object, $field, $value, @path )
 
 Serves compound field by iterating over sub-field, calling 
-B<EPrints::Apache::REST::serve_field_single> where appropriate.
+L</serve_field_single> where appropriate.
 
 =cut
 ######################################################################
@@ -696,7 +695,7 @@ sub send_html
 ######################################################################
 =pod
 
-=item $rc = EPrints::Apache::REST::send_html( $repository, $xmldata )
+=item $rc = EPrints::Apache::REST::send_xml( $repository, $xmldata )
 
 Sends XML response for REST request.
 
@@ -726,9 +725,9 @@ sub send_xml
 ######################################################################
 =pod
 
-=item $rc = EPrints::Apache::REST::send_html( $repository, $content )
+=item $rc = EPrints::Apache::REST::send_plaintext( $repository, $content )
 
-Sends plaintext response for REST request.
+Sends plain text response for REST request.
 
 =cut
 ######################################################################
@@ -752,9 +751,9 @@ sub send_plaintext
 
 =item $allowed = EPrints::Apache::REST::allowed_methods( $repository, @methods )
 
-Checks if method for eequest is contained with the @methods array of
-allowed methods.  Setting and sending HTTP response headers and code
-as appropriate.
+Checks if method for request is contained with the C<@methods> array 
+of allowed methods.  Setting and sending HTTP response headers and
+code as appropriate.
 
 Returns boolean depending on whether the request method is allowed.
 
@@ -794,10 +793,11 @@ sub allowed_methods
 
 =item $allowed = EPrints::Apache::REST::allowed_methods( $priv $repository, $rights_object )
 
-Checks is privilege $priv is permitted for the current user and sets
+Checks is privilege C<$priv> is permitted for the current user and sets
 HTTP response code as appropriate.
 
-Returns boolean depending on whether current user has permitted privilege.
+Returns boolean depending on whether current user has permitted 
+privilege.
 
 =cut
 ######################################################################
@@ -852,7 +852,7 @@ sub allow_priv
 
 =item $rc = EPrints::Apache::REST::get_dataobj_xml( $repository, $object, $rights_object )
 
-Returns XML or REST request to get a data object.
+Returns XML for REST request to C<GET> a data object.
 
 =cut
 ######################################################################
@@ -871,7 +871,8 @@ sub get_dataobj_xml
 
 =item $rc = EPrints::Apache::REST::put_dataobj_xml( $repository, $object, $rights_object )
 
-Returns XML to REST request to (non-implemented) put data object.
+Returns XML for REST request to (non-implemented) C<PUT> a data
+object.
 
 =cut
 ######################################################################
@@ -891,7 +892,7 @@ sub put_dataobj_xml
 
 =item $rc = EPrints::Apache::REST::get_field_text( $repository, $object, $rights_object, $field )
 
-Returns text to to REST request to get field.
+Returns text for REST request to C<GET> a field.
 
 =cut
 ######################################################################
@@ -912,7 +913,7 @@ sub get_field_txt
 
 =item $rc = EPrints::Apache::REST::get_field_xml( $repository, $object, $rights_object, $field )
 
-Returns XML for REST request for a field.
+Returns XML for REST request to C<GET> a field.
 
 =cut
 ######################################################################
@@ -934,7 +935,7 @@ sub get_field_xml
 
 =item $rc = EPrints::Apache::REST::put_field_xml( $repository, $object, $rights_object, $field )
 
-Returns XML for REST request to put a field.
+Returns XML for REST request to C<PUT> a field.
 
 =cut
 ######################################################################
@@ -988,7 +989,7 @@ sub put_field_xml
 
 =item $rc = EPrints::Apache::REST::put_field_txt( $repository, $object, $rights_object, $field )
 
-Returns text for REST request to put a field.
+Returns text for REST request to C<PUT> a field.
 
 =cut
 ######################################################################
@@ -1014,20 +1015,23 @@ sub put_field_txt
 
 1;
 
+######################################################################
+=pod
+
 =back
 
 =head1 COPYRIGHT
 
-=for COPYRIGHT BEGIN
+=begin COPYRIGHT
 
-Copyright 2022 University of Southampton.
+Copyright 2023 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/
 
-=for COPYRIGHT END
+=end COPYRIGHT
 
-=for LICENSE BEGIN
+=begin LICENSE
 
 This file is part of EPrints 3.4 L<http://www.eprints.org/>.
 
@@ -1044,5 +1048,5 @@ You should have received a copy of the GNU Lesser General Public
 License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
-=for LICENSE END
+=end LICENSE
 

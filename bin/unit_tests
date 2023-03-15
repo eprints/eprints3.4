@@ -3,6 +3,69 @@
 use FindBin;
 use lib "$FindBin::Bin/../perl_lib";
 
+######################################################################
+#
+#
+######################################################################
+
+=pod
+
+=for Pod2Wiki
+
+=head1 NAME
+
+B<unit_tests> - Unit testing for EPrints
+
+=head1 SYNOPSIS
+
+B<check_xapian> I<repository_id> [B<options>] 
+
+=head1 DESCRIPTION
+
+Runs unit tests under F<tests/> against a chosen EPrints repository.
+
+=head1 ARGUMENTS
+
+=over 8
+
+=item B<repository_id> 
+
+The ID of the EPrints repository to run unit tests against.
+
+=back
+
+=head1 OPTIONS
+
+=over 8
+
+=item B<--help>
+
+Print a brief help message and exit.
+
+=item B<--force>
+
+Ignore warnings and run anyway.
+
+=item B<--man>
+
+Print the full manual page and then exit.
+
+=item B<--quiet>
+
+This option will suppress all output unless an error occurs.
+
+=item B<--verbose>
+
+Explain in detail what is going on.
+
+=item B<--version>
+
+Output version information and exit.
+
+=back   
+
+=cut
+
 use EPrints;
 
 use Sys::Hostname;
@@ -46,18 +109,21 @@ if( scalar(@todo) )
 
 exit(0) if runtests(map { "$test_path/$_" } @test_files);
 
+######################################################################
+=pod
+
 =head1 COPYRIGHT
 
-=for COPYRIGHT BEGIN
+=begin COPYRIGHT
 
-Copyright 2022 University of Southampton.
+Copyright 2023 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/
 
-=for COPYRIGHT END
+=end COPYRIGHT
 
-=for LICENSE BEGIN
+=begin LICENSE
 
 This file is part of EPrints 3.4 L<http://www.eprints.org/>.
 
@@ -74,5 +140,5 @@ You should have received a copy of the GNU Lesser General Public
 License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
-=for LICENSE END
+=end LICENSE
 

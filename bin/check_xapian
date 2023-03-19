@@ -546,7 +546,7 @@ for ( my $i = 0; $i < $listcount; $i++ )
 			});
 		}
 	}
-	print "\n" if !$reindex && ( !$found || !$status_correct );
+	print "\n" if !$reindex && ( !$found || "$errfacets" ne "" );
 	$unfound++ unless $found;
 	$status_wrong++ if $errfacets ne "" && $found;
 	$counter++;

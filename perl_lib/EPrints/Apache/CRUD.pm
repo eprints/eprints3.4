@@ -894,6 +894,10 @@ sub authz
 			return OK if $dataobj->permit( $priv, $user );
 		}
 	}
+	elsif ( defined $self->{dataobjid} && $self->{method} ne "PUT" ) # Data object may not already exist if using PUT for upsert
+	{
+		return HTTP_NOT_FOUND;
+	}
 	elsif( defined $user )
 	{
 		foreach my $priv (@privs)

@@ -9,7 +9,7 @@ my %invocations = (
 	 'latex' => '$(latex) -no-shell-escape -output-directory=$(TARGET) $(SOURCE)',
 	 'targz' => '$(gunzip) -c < $(ARC) 2>/dev/null | $(tar) xf - -C $(DIR) >/dev/null 2>&1',
 	 'antiwordpdf' => '$(antiword) -a a4 -m 8859-1 $(SOURCE) > $(TARGET)',
-	 'pdftotext' => '$(pdftotext) -enc UTF-8 -layout $(SOURCE) $(TARGET)',
+	 'pdftotext' => '$(pdftotext) -q -enc UTF-8 -layout $(SOURCE) $(TARGET)',
 	 'zip' => '$(unzip) 1>/dev/null 2>&1 -qq -o -d $(DIR) $(ARC)',
 	 'unzip' => '$(unzip) 1>/dev/null 2>&1 -qq -o -j -d $(DIRECTORY) $(SOURCE)',
 	 'cpall' => '$(cp) -pR $(SOURCE)/* $(TARGET)',

@@ -377,6 +377,7 @@ sub generate_cookie
 		-path    => ($repo->config( "rel_path" ) || '/'),
 		-value   => $self->value( "code" ),
 		-domain  => $domain,
+		-samesite => 'Strict',
 		-expires => $repo->config( "user_cookie_timeout" ),
 		%opts,
 	);			
@@ -406,7 +407,7 @@ sub generate_secure_cookie
 		-value   => $self->value( "securecode" ),
 		-domain  => $repo->config( "securehost" ),
 		-secure  => 1,
-		-samesite => 'None',
+		-samesite => 'Strict',
 		-expires => $repo->config( "user_cookie_timeout" ),
 		%opts,
 	);			

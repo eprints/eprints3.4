@@ -20,12 +20,11 @@ sub from
 	my $langid = $session->param( "lang" );
 	$langid = "" if !defined $langid;
 
-	my $samesite = "Lax";
+	my $samesite = "Strict";
 	my $secure = 0;
 	my $httponly = 1;
 	if ( $session->is_secure eq "on" )
 	{
-		$samesite = "None";
 		$secure = 1;
 		$httponly = 0;
 	}

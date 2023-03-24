@@ -52,12 +52,13 @@ my $document_url = $document->get_url;
 if ( EPrints::Utils::is_set( $session->config( "securehost" ) ) )
 {
         $document_url =~ s/^http:/https:/;
+	print STDERR "samesite: Strict";
 	$cookie  = $session->{query}->cookie(
 		-name    => "eprints_doc_request",
 		-path    => "/",
 		-value   => $code,
 		-secure  => 1,
-		-samesite => 'None',
+		-samesite => 'Strict',
 		-domain  => $session->config( "cookie_domain" ),
 	);
 }
@@ -67,6 +68,7 @@ else
                 -name    => "eprints_doc_request",
                 -path    => "/",
                 -value   => $code,
+				-samesite => 'Strict'
                 -domain  => $session->config( "cookie_domain" ),
         );
 }

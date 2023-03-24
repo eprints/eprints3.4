@@ -161,9 +161,13 @@ sub render_content
 		if( $field->{required} ) # moj: Handle for_archive
 		{
 			my $label = $self->{session}->make_element( "span", id => $self->{prefix}."_".$field->get_name."_label" );
-			my $labeltext = $self->{session}->html_phrase(
-                                "sys:ep_form_required",
-                                label=>$parts{label} );
+			my $labeltext = $self->{session}->make_element( "img", 
+				src => "/style/images/required.png",
+				border => "0",
+				class => "ep_required",
+				alt => "Required",
+				style=>"display: inline" );
+			$labeltext->appendChild( $self->{session}->make_text( $parts{label} ));
 			$label->appendChild( $labeltext );
 			$parts{label} = $label;
 		}

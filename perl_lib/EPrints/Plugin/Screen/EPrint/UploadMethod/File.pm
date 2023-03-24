@@ -243,6 +243,7 @@ sub render
 	$container->appendChild( $xml->create_element( "input",
 		name => $ffname,
 		id => $ffname,
+		class => "ep_upload_button",
 		type => "file",
 		onchange => "UploadMethod_file_change(this,'$self->{parent}->{prefix}','$self->{prefix}')",
 		) );

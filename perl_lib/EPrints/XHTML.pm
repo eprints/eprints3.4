@@ -814,7 +814,7 @@ sub tabs
 		my $width = int( 100 / @$labels );
 		$width += 100 % @$labels if $_ == 0;
 		my $tab = $ul->appendChild( $xml->create_element( "li",
-			($current == $_ ? (class => "ep_tab_selected") : ()),
+			($current == $_ ? (class => "ep_tab_selected") : (class => "ep_tab_not_selected")),
 			id => $basename."_tab_".$sanit_label,
 			role => "tab",
 			style => "width: $width\%",
@@ -971,7 +971,7 @@ sub action_list
 	my $repo = $self->{repository};
 	my $xml = $repo->xml;
 
-	my $ul = $xml->create_element( "ul", class => "ep_action_list", role => "toolbar" );
+	my $ul = $xml->create_element( "ul", class => "ep_action_list", role => "toolbar", %opts );
 	for(@$actions)
 	{
 		$ul->appendChild( $xml->create_data_element( "li", $_ ) );

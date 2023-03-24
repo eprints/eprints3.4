@@ -581,7 +581,7 @@ sub render_action_list_icons
 		push @actions, $self->render_action_icon( { %$params, hidden => $hidden } );
 	}
 
-	return $repo->xhtml->action_list( \@actions );
+	return $repo->xhtml->action_list( \@actions, id => $list_id );
 }
 
 1;

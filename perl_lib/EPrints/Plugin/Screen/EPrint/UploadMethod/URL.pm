@@ -76,6 +76,7 @@ sub render
 		name => $ffname,
 		size => "30",
 		id => $ffname,
+		class => "ep_upload_url_input"
 		);
 	my $add_format_button = $self->{session}->render_button(
 		value => $self->{session}->phrase( "Plugin/InputForm/Component/Upload:add_format" ), 

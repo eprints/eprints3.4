@@ -2458,7 +2458,7 @@ Views
     <epp:phrase id="Update/Views:no_grouping_title">Nothing</epp:phrase>
     <epp:phrase id="Update/Views:jump_to"><div class="ep_view_jump_to">Jump to: <epc:pin name="jumps" /></div></epp:phrase>
 	<epp:phrase id="Update/Views:jump_separator"> | </epp:phrase>
-    <epp:phrase id="Update/Views:up_a_level"><div class="no_link_decor"><epc:pin name="url"><img src="{$config{rel_path}}/style/images/multi_up.png" alt="[up]" border='0' /> Up a level</epc:pin></div></epp:phrase>
+    <epp:phrase id="Update/Views:up_a_level"> Up a level</epp:phrase>
     <epp:phrase id="Update/Views:no_items"><p>No items in this section.</p></epp:phrase>
     <epp:phrase id="Update/Views:no_value">NULL</epp:phrase>
     <epp:phrase id="Update/Views:export_section">

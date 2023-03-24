@@ -19,9 +19,14 @@ sub render_title
 
 	if( $component->is_required )
 	{
-		$title = $self->{session}->html_phrase( 
-			"sys:ep_form_required",
-			label=>$title );
+		my $required = $self->{session}->make_element("img", 
+			src=>"/style/images/required.png", 
+			border=>"0", 
+			class=>"ep_required", 
+			alt=>"Required", 
+			style=>"display: inline" );
+		$required->appendChild( $title );
+		$title = $required;
 	}
 
 	return $title;
@@ -174,7 +179,12 @@ sub _render_help
 		my $link = $session->make_element( "a",
 			onclick => $jscript,
 			href => '#' );
-		$div->appendChild( $self->html_phrase( "${action}_help", link => $link ) );
+		$link->appendChild( $session->make_element( "img", 
+			alt => "+", 
+			title => "${action} help", 
+			src => $action eq "show" ? "/style/images/help.png" : "/style/images/minus.png", 
+			border => "0" ));
+		$div->appendChild( $link );
 
 		$action_div->appendChild( $div );
 	}

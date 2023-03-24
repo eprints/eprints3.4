@@ -251,9 +251,7 @@ sub render_items
 		my %q = $self->hidden_bits;
 		$q{"set_show_$f"} = !$filters{$f};
 		$url->query_form( %q );
-		my $link = $session->render_link( $url );
-		# http://servicesjira.eprints.org:8080/browse/RCA-175
-		$link->setAttribute( 'class', "ep_items_filters_$f" );
+		my $link = $session->render_link( $url, "", class => "ep_items_filter ep_items_filters_$f" );
 		if( $filters{$f} )
 		{
 			$link->appendChild( $session->make_element(

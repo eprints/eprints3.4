@@ -74,6 +74,8 @@ dl#ep-homepage-menu dd {
  
 
 .ep_required {
+	border: 0;
+	display: inline;
 }
 
 .ep_toggle a, a.ep_toggle {

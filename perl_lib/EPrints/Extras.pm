@@ -184,7 +184,8 @@ sub render_paras
 
     if ( my $render_paras = $session->config( "render_paras" ) )
     {
-        return &$render_paras( $session, $field, $value );
+		my $xhtml = &$render_paras( $session, $field, $value );
+		return $xhtml if defined $xhtml;
     }
 
     my $frag = $session->make_doc_fragment;

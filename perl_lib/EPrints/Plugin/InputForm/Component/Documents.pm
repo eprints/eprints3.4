@@ -599,6 +599,7 @@ sub _render_doc_metadata
 				src => $self->{session}->html_phrase( "sys:ep_form_required_src" ),
 				class => "ep_required",
 				alt => $self->{session}->html_phrase( "sys:ep_form_required_alt" ));
+			$required->appendChild( $self->{session}->make_text( " " ) );
 			$required->appendChild( $labeltext );
 			$labeltext = $required;
 		}

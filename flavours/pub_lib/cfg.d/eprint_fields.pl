@@ -116,7 +116,7 @@ push @{$c->{fields}->{eprint}},
 	name => 'abstract',
 	type => 'longtext',
 	input_rows => 10,
-	render_single_value => 'render_paras',
+	render_single_value => 'EPrints::Extras::render_paras',
 },
 
 {

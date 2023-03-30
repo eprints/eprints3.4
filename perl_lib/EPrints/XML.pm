@@ -20,8 +20,8 @@ B<EPrints::XML> - XML Abstraction Module
 
 	my $xml = $repository->xml;
 
-	$doc = $xml->parse_string( $string );
-	$doc = $xml->parse_file( $filename );
+	$doc = $xml->parse_string( $string, %opts );
+	$doc = $xml->parse_file( $filename, %opts );
 	$doc = $xml->parse_url( $url );
 
 	$utf8_string = $xml->to_string( $dom_node, %opts );
@@ -147,7 +147,7 @@ sub parse_file
 	return parse_xml( $filename, $opts{base_path}, $opts{no_expand} );
 }
 
-=item $doc = $xml->parse_url( $url, %opts )
+=item $doc = $xml->parse_url( $url )
 
 Returns an XML document parsed from the content located at $url.
 

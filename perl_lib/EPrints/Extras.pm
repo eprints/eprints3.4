@@ -56,12 +56,8 @@ sub render_xhtml_field
 	my( $session , $field , $value ) = @_;
 
 	if( !defined $value ) { return $session->make_doc_fragment; }
-        my( %c ) = (
-                ParseParamEnt => 0,
-                ErrorContext => 2,
-                NoLWP => 1 );
 
-		local $SIG{__DIE__};
+	local $SIG{__DIE__};
         my $doc = eval { EPrints::XML::parse_xml_string( "<fragment>".$value."</fragment>" ); };
         if( $@ )
         {

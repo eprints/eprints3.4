@@ -2459,6 +2459,8 @@ Views
     <epp:phrase id="Update/Views:jump_to"><div class="ep_view_jump_to">Jump to: <epc:pin name="jumps" /></div></epp:phrase>
 	<epp:phrase id="Update/Views:jump_separator"> | </epp:phrase>
     <epp:phrase id="Update/Views:up_a_level"> Up a level</epp:phrase>
+    <epp:phrase id="Update/Views:up_a_level_alt">[up]</epp:phrase>
+    <epp:phrase id="Update/Views:up_a_level_src">/style/images/multi_up.png</epp:phrase>
     <epp:phrase id="Update/Views:no_items"><p>No items in this section.</p></epp:phrase>
     <epp:phrase id="Update/Views:no_value">NULL</epp:phrase>
     <epp:phrase id="Update/Views:export_section">
@@ -3217,7 +3219,8 @@ PY = 2006 and OG = (Cambridge)<br />
 
 
     <epp:phrase id="sys:ep_form_required"><img src="{$config{rel_path}}/style/images/required.png" border="0" class="ep_required" alt="Required" style="display: inline"/>&nbsp;<epc:pin name="label"/></epp:phrase>
-
+    <epp:phrase id="sys:ep_form_required_src">/style/images/required.png</epp:phrase>
+    <epp:phrase id="sys:ep_form_required_alt">Required</epp:phrase>
 
 
     <!-- Upload component -->

@@ -596,11 +596,10 @@ sub _render_doc_metadata
 		if( $field->{required} ) # moj: Handle for_archive
 		{
 			my $required = $self->{session}->make_element( "img",
-				src => "/style/images/required.png",
-				border => "0",
+				src => $self->{session}->html_phrase( "sys:ep_form_required_src" ),
 				class => "ep_required",
-				alt => "Required",
-				style=>"display: inline" );
+				alt => $self->{session}->html_phrase( "sys:ep_form_required_alt" ));
+			$required->appendChild( $self->{session}->make_text( " " ) );
 			$required->appendChild( $labeltext );
 			$labeltext = $required;
 		}

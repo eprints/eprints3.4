@@ -160,12 +160,13 @@ sub render_content
 
 		if( $field->{required} ) # moj: Handle for_archive
 		{
-			my $label = $self->{session}->make_element( "span", id => $self->{prefix}."_".$field->get_name."_label" );
-			my $labeltext = $self->{session}->html_phrase(
-                                "sys:ep_form_required",
-                                label=>$parts{label} );
-			$label->appendChild( $labeltext );
-			$parts{label} = $label;
+                        my $required = $self->{session}->make_element( "img",
+                                src => $self->{session}->html_phrase( "sys:ep_form_required_src" ),
+                                class => "ep_required",
+                                alt => $self->{session}->html_phrase( "sys:ep_form_required_alt" ));
+                        $required->appendChild( $self->{session}->make_text( " " ) );
+                        $required->appendChild( $parts{label} );
+                        $parts{label} = $required;
 		}
 
 		# customisation for type specific help on the eprint workflow

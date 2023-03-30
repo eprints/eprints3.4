@@ -121,9 +121,9 @@ sub render
 
 		my $reason = $self->{session}->make_doc_fragment;
 		my $reason_label = $self->{session}->make_element( "label", for=>"ep_mail_reason_edit" );
-                $reason_label->appendChild( $self->html_phrase( "reason_label" ) );
-                $reason_label->appendChild( $self->{session}->make_text( ":" ) );
-                $reason->appendChild( $reason_label );
+		$reason_label->appendChild( $self->html_phrase( "reason_label" ) );
+		$reason_label->appendChild( $self->{session}->make_text( ":" ) );
+		$reason->appendChild( $reason_label );
 		my $reason_static = $self->{session}->make_element( "div", id=>"ep_mail_reason_fixed",class=>"ep_only_js" );
 		$reason_static->appendChild( $self->{session}->html_phrase( "mail_bounce_reason" ) );
 		$reason_static->appendChild( $self->{session}->make_text( " " ));	
@@ -191,7 +191,7 @@ sub render_body
 	$parts{edit_link} = $repo->render_link( $eprint->get_control_url() )
 		if !defined $parts{edit_link};
 
-	$parts{reason} = $repo->make_text( scalar($repo->param( "reason" )) )
+	$parts{reason} = EPrints::Extras::render_paras( $repo, "reason", scalar( $repo->param( "reason" ) ) )
 		if !defined $parts{reason};
 
 	return $repo->html_phrase(

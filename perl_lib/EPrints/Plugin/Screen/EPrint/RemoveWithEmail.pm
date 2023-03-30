@@ -248,8 +248,8 @@ sub action_send
 		$content = $self->{session}->html_phrase( 
 			"mail_delete_body",
 			title => $title, 
-			reason => $self->{session}->make_text( 
-				$self->{session}->param( "reason" ) ) );
+			reason => EPrints::Extras::render_paras( $self->{session}, "reason", scalar( $self->{session}->param( "reason" ) ) )
+		);
 
 		$user->mail(
 			"cgi/users/edit_eprint:subject_bounce",

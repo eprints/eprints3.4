@@ -145,7 +145,7 @@ sub get_system_field_info
 
 		{ name=>"requester_email", type=>"email", required=>1 },
 
-		{ name=>"reason", type=>"longtext", required=>0, render_single_value => 'render_paras' },
+		{ name=>"reason", type=>"longtext", required=>0, render_single_value => "EPrints::Extras::render_paras" },
 
 		{ name=>"expiry_date", type=>"time", required=>0 },
 

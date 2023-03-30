@@ -168,6 +168,56 @@ sub render_lookup_list
 ######################################################################
 =pod
 
+=item $xhtml = EPrints::extras::render_paras( $session, $field, $value );
+
+Render the value in paragraphs rather than one long text string.
+
+Returns an XHTML DOM object of the contents of $value with HTML markup
+to make it into paragraphs.
+
+=cut
+######################################################################
+
+sub render_paras
+{
+    my( $session, $field, $value ) = @_;
+
+    if ( my $render_paras = $session->config( "render_paras" ) )
+    {
+        return &$render_paras( $session, $field, $value );
+    }
+
+    my $frag = $session->make_doc_fragment;
+
+    # normalise newlines
+    $value =~ s/(\r\n|\n|\r)/\n/gs;
+
+    my @paras = split( /\n\n/, $value );
+    foreach my $para( @paras )
+    {
+        $para =~ s/^\s*\n?//;
+        $para =~ s/\n?\s*$//;
+        next if $para eq "";
+
+        my $p = $session->make_element( "p", class=>"ep_field_para" );
+
+        my @lines = split( /\n/, $para );
+        for( my $i=0; $i<scalar( @lines ); $i++ )
+        {
+            $p->appendChild( $session->make_text( $lines[$i] ) );
+            $p->appendChild( $session->make_element( "br" ) ) unless $i == $#lines;
+        }
+
+        $frag->appendChild( $p );
+    }
+
+    return $frag;
+}
+
+
+######################################################################
+=pod
+
 =item $xhtml = EPrints::Extras::render_url_truncate_end( $session, $field, $value )
 
 Hyper link the URL but truncate the end part if it gets longer 

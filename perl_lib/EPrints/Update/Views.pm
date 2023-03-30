@@ -1695,8 +1695,16 @@ sub render_navigation_aids
 		{
 			$url = "./";
 		}
-		$f->appendChild( $repo->html_phrase( "Update/Views:up_a_level", 
-			url => $repo->render_link( $url ) ) );
+		my $wrapper = $repo->make_element( "div", class=>"no_link_decor" );
+		my $link = $repo->make_element( "a", href=>$url, alt=>$repo->html_phrase( "Update/Views:up_a_level_alt"));
+		my $img = $repo->make_element( "img",
+			src=>$repo->html_phrase( "Update/Views:up_a_level_src"),
+			alt=>$repo->html_phrase( "Update/Views:up_a_level_alt"));
+		my $up_level_phrase = $repo->html_phrase( "Update/Views:up_a_level" );
+		$img->appendChild( $up_level_phrase );
+		$link->appendChild( $img );
+		$wrapper->appendChild( $link );
+		$f->appendChild( $wrapper );
 	}
 
 	if( defined $opts{export_bar} )

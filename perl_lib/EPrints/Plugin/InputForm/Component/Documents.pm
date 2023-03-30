@@ -595,12 +595,13 @@ sub _render_doc_metadata
 		my $labeltext = $field->render_name($session);
 		if( $field->{required} ) # moj: Handle for_archive
 		{
-			my $required = $self->{session}->make_element( "img",
-				src => $self->{session}->html_phrase( "sys:ep_form_required_src" ),
-				class => "ep_required",
-				alt => $self->{session}->html_phrase( "sys:ep_form_required_alt" ));
-			$required->appendChild( $labeltext );
-			$labeltext = $required;
+                        my $required = $self->{session}->make_element( "img",
+                                src => $self->{session}->html_phrase( "sys:ep_form_required_src" ),
+                                class => "ep_required",
+                                alt => $self->{session}->html_phrase( "sys:ep_form_required_alt" ));
+                        $required->appendChild( $self->{session}->make_text( " " ) );
+                        $required->appendChild( $labeltext );
+                        $labeltext = $required;
 		}
 		$no_toggle = 1 if $field->{show_help} eq "always";
 		$no_toggle = 0 if $field->{show_help} eq "toggle";

@@ -19,12 +19,13 @@ sub render_title
 
 	if( $component->is_required )
 	{
-		my $required = $self->{session}->make_element("img", 
-			src => $self->{session}->html_phrase( "sys:ep_form_required_src" ),
-			class => "ep_required",
-			alt => $self->{session}->html_phrase( "sys:ep_form_required_alt" ));
-		$required->appendChild( $title );
-		$title = $required;
+                my $required = $self->{session}->make_element("img",
+                        src => $self->{session}->html_phrase( "sys:ep_form_required_src" ),
+                        class => "ep_required",
+                        alt => $self->{session}->html_phrase( "sys:ep_form_required_alt" ));
+                $required->appendChild( $self->{session}->make_text( " " ) );
+                $required->appendChild( $title );
+                $title = $required;
 	}
 
 	return $title;

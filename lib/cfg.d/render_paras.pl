@@ -3,7 +3,7 @@
 $c->{render_paras} = sub {
 	my( $session, $field, $value, $object ) = @_;
 
-	return undef if (caller(0))[0] == "EPrints::Extras";
+	return undef if (caller(0))[0] eq "EPrints::Extras";
 
 	my $frag = $session->make_doc_fragment;
 

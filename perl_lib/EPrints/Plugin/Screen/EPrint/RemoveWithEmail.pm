@@ -24,7 +24,7 @@ sub new
 		},
 		{
 			place => "eprint_actions_bar_buffer", 
-			position => 200,
+			position => 300,
 		},
 		{
 			place => "eprint_review_actions",

@@ -142,7 +142,10 @@ $c->{extract_words} = sub
 		# If the word is longer than 128 characters then this is
 		# too long to index and is unlikely to be worth truncating
 		# so it can be indexed.
-		$ok = $wordlen <= 128;
+		if ( $ok && $wordlen > 128 )
+		{
+			$ok = 0;
+		}
 	
 		# Add this word to the good list or the bad list
 		# as appropriate.	

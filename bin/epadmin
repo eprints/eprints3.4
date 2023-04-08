@@ -1259,12 +1259,12 @@ sub create_user
 		if( $noise >= 1 )
 		{
 			print "Successfully created new user:\n";
-			print "       ID: ".$new_user->get_value( "userid" )."\n";
+			print "  ID: ".$new_user->get_value( "userid" )."\n";
 		}
 		if( $noise >= 2 )
 		{
-			print " Username: ".$new_user->get_value( "username" )."\n";
-			print "     Type: ".$new_user->get_value( "usertype" )."\n";
+			print "  Username: ".$new_user->get_value( "username" )."\n";
+			print "  Type: ".$new_user->get_value( "usertype" )."\n";
 		}
 	}
 	else
@@ -1276,83 +1276,83 @@ sub create_user
 
 sub redo_hash
 {
-    my( $repoid, $datasetid, @ids ) = @_;
+	my( $repoid, $datasetid, @ids ) = @_;
 
 	my $repo = &repository( $repoid );
 
-    die "Missing dataset argument\n" if !defined $datasetid;
-    die "Dataset must be one of 'document', 'eprint' or 'file'\n"
-        if $datasetid !~ /^document|eprint|file$/;
+	die "Missing dataset argument\n" if !defined $datasetid;
+	die "Dataset must be one of 'document', 'eprint' or 'file'\n"
+		if $datasetid !~ /^document|eprint|file$/;
 
-    my $dataset = $repo->dataset( $datasetid );
+	my $dataset = $repo->dataset( $datasetid );
 
 	my $list;
-    if ( @ids )
-    {
-        @ids = expand_ids( $repo, $dataset, @ids );
-        $list = $dataset->list( \@ids );
-    }
-    else
-    {
-        $list = $dataset->search;
-    }
+	if ( @ids )
+	{
+		@ids = expand_ids( $repo, $dataset, @ids );
+		$list = $dataset->list( \@ids );
+	}
+	else
+	{
+		$list = $dataset->search;
+	}
 
-    my $i = 0;
-    my $f;
+	my $i = 0;
+	my $f;
 
 	if( $datasetid eq "eprint" )
 	{
 		$f = sub {
-            (undef, undef, my $eprint) = @_;
+			(undef, undef, my $eprint) = @_;
 
-            if( $noise >= 2 )
-            {
-                print "[" . ++$i . "/" . $list->count . "] Redoing hashes for files for eprint with eprintid: ".$eprint->id."\n";
-            }
-            else
-            {
-                print STDERR sprintf("%.0f%%\r",
-                    100 * $i++ / $list->count
-                );
-            }
+			if( $noise >= 2 )
+			{
+				print "[" . ++$i . "/" . $list->count . "] Redoing hashes for files for eprint with eprintid: ".$eprint->id."\n";
+			}
+			else
+			{
+				print STDERR sprintf("%.0f%%\r",
+					100 * $i++ / $list->count
+				);
+			}
 
 			foreach my $doc ( @{$eprint->get_value( 'documents' )} )
 			{
 				print "  Redoing hashes for files for document with docid: ".$doc->id."\n" if $noise >= 2;	
-	            my $file_ds = $repo->dataset( 'file' );
-    	        my $searchexp = new EPrints::Search(
-        	        session=>$repo,
-            	    dataset=>$file_ds );
-	            $searchexp->add_field( $file_ds->get_field( 'datasetid' ), 'document' );
-    	        $searchexp->add_field( $file_ds->get_field( 'objectid' ), $doc->id );
-        	    my $files = $searchexp->perform_search;
+				my $file_ds = $repo->dataset( 'file' );
+				my $searchexp = new EPrints::Search(
+					session=>$repo,
+					dataset=>$file_ds );
+				$searchexp->add_field( $file_ds->get_field( 'datasetid' ), 'document' );
+				$searchexp->add_field( $file_ds->get_field( 'objectid' ), $doc->id );
+				my $files = $searchexp->perform_search;
 
-	            foreach my $fileid ( @{$files->ids} )
-    	        {
-        	        my $file = $file_ds->dataobj( $fileid );
-            	    print "    Redoing hash for file with fileid: ".$file->id."\n" if $noise >= 2;
+				foreach my $fileid ( @{$files->ids} )
+				{
+					my $file = $file_ds->dataobj( $fileid );
+					print "    Redoing hash for file with fileid: ".$file->id."\n" if $noise >= 2;
 					$file->set_value( 'filesize', -s $file->get_local_copy );
-                	$file->update_md5;
-                	$file->commit;
-            	}
+					$file->update_md5;
+					$file->commit;
+				}
 			}
-        };	
+		};	
 	}
-    elsif( $datasetid eq "document" )
-    {
-        $f = sub {
-            (undef, undef, my $doc) = @_;
+	elsif( $datasetid eq "document" )
+	{
+		$f = sub {
+			(undef, undef, my $doc) = @_;
 
 			if( $noise >= 2 )
-            {
-                print "[" . ++$i . "/" . $list->count . "] Redoing hashes for files for document with docid: ".$doc->id."\n";
-            }
-            else
-            {
-                print STDERR sprintf("%.0f%%\r",
-                    100 * $i++ / $list->count
-                );
-            }
+			{
+				print "[" . ++$i . "/" . $list->count . "] Redoing hashes for files for document with docid: ".$doc->id."\n";
+			}
+			else
+			{
+				print STDERR sprintf("%.0f%%\r",
+					100 * $i++ / $list->count
+				);
+			}
 
 			my $file_ds = $repo->dataset( 'file' );
 			my $searchexp = new EPrints::Search(
@@ -1370,12 +1370,12 @@ sub redo_hash
 				$file->update_md5;
 				$file->commit;
 			}
-        };
+		};
 	}
 	else
 	{
 		$f = sub {
-            (undef, undef, my $file) = @_;
+			(undef, undef, my $file) = @_;
 
 			if( $noise >= 2 )
 			{	
@@ -1383,9 +1383,9 @@ sub redo_hash
 			}
 			else 
 			{
-	            print STDERR sprintf("%.0f%%\r",
-    	            100 * $i++ / $list->count
-        	    );
+				print STDERR sprintf("%.0f%%\r",
+					100 * $i++ / $list->count
+				);
 			}
 
 			$file->set_value( 'filesize', -s $file->get_local_copy );
@@ -1425,52 +1425,52 @@ sub redo_mime_type
 	if( $datasetid eq "eprint" )
 	{
 		$f = sub {
-            (undef, undef, my $eprint) = @_;
+			(undef, undef, my $eprint) = @_;
 
-            if ( $noise >= 2 )
-            {
-                print "[" . ++$i . "/" . $list->count . "] Redoing MIME types for document main files for eprint with eprintid: ".$eprint->id."\n";
-            }
-            else
-            {
-                print STDERR sprintf("%.0f%%\r",
-                    100 * $i++ / $list->count
-                );
-            }
+			if ( $noise >= 2 )
+			{
+				print "[" . ++$i . "/" . $list->count . "] Redoing MIME types for document main files for eprint with eprintid: ".$eprint->id."\n";
+			}
+			else
+			{
+				print STDERR sprintf("%.0f%%\r",
+					100 * $i++ / $list->count
+				);
+			}
 
 			foreach my $doc ( @{$eprint->get_value( 'documents' )} )
 			{
 				print "  Redoing MIME type for main file for document with docid: ".$doc->id."\n" if $noise >= 2;
 			
-            	my( $file ) = $doc->stored_file( $doc->value( "main" ) );
-	            next if !defined $file;
+				my( $file ) = $doc->stored_file( $doc->value( "main" ) );
+				next if !defined $file;
 
-	            my $fh = $file->get_local_copy;
-    	        next if !defined $fh;
+				my $fh = $file->get_local_copy;
+				next if !defined $fh;
 
-	            $repo->run_trigger( EPrints::Const::EP_TRIGGER_MEDIA_INFO,
-    	            filename => "$fh",
-        	        filepath => "$fh",
-            	    epdata => my $media_info = {},
-            	);
+				$repo->run_trigger( EPrints::Const::EP_TRIGGER_MEDIA_INFO,
+					filename => "$fh",
+					filepath => "$fh",
+					epdata => my $media_info = {},
+				);
 
-            	foreach my $fieldid (keys %$media_info)
-            	{
-                	next if !$dataset->has_field( $fieldid );
-	                $doc->set_value( $fieldid, $media_info->{$fieldid} );
-    	        }
-        	    $file->set_value( "mime_type", $media_info->{mime_type} );
+				foreach my $fieldid (keys %$media_info)
+				{
+					next if !$dataset->has_field( $fieldid );
+					$doc->set_value( $fieldid, $media_info->{$fieldid} );
+				}
+				$file->set_value( "mime_type", $media_info->{mime_type} );
 
-            	# hide volatiles from the search interface (sort of)
-	            if( $doc->has_relation( undef, "isVolatileVersionOf" ) )
-    	        {
-        	        $doc->set_value( "format", "other" );
-            	}
+				# hide volatiles from the search interface (sort of)
+				if( $doc->has_relation( undef, "isVolatileVersionOf" ) )
+				{
+					$doc->set_value( "format", "other" );
+				}
 
-	            $file->commit;
-    	        $doc->commit;
+				$file->commit;
+				$doc->commit;
 			}
-        };	
+		};	
 	}
 	elsif( $datasetid eq "document" )
 	{
@@ -1523,15 +1523,15 @@ sub redo_mime_type
 			(undef, undef, my $file) = @_;
 
 			if ( $noise >= 2 )
-            {
-                print "[" . ++$i . "/" . $list->count . "] Redoing MIME type for file with fileid: ".$file->id."\n";
-            }
-            else
-            {
-                print STDERR sprintf("%.0f%%\r",
-                    100 * $i++ / $list->count
-                );
-            }
+			{
+				print "[" . ++$i . "/" . $list->count . "] Redoing MIME type for file with fileid: ".$file->id."\n";
+			}
+			else
+			{
+				print STDERR sprintf("%.0f%%\r",
+					100 * $i++ / $list->count
+				);
+			}
 
 			my $fh = $file->get_local_copy;
 			return if !defined $fh;
@@ -2293,7 +2293,7 @@ sub reindex
 
 	$list->map(sub {
 		my( undef, $dataset, $item ) = @_;
-
+	
 		if ( $force )
 		{
 			if ( $dataset->id() eq "eprint" )

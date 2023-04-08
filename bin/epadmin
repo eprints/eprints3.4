@@ -150,7 +150,7 @@ Recommit all the records in the given dataset. What this does is cause the autom
 
 =item B<epadmin> reindex I<repository_id> I<dataset_id> [I<dataobj_id> I<dataobj_id> I<dataobj_id>-I<dataobj_id> ...]
 
-Schedule the dataset for reindexing. The indexer will do the actual indexing and it may take some time. This only schedules the reindexing. If a list of data object IDs is given then just reindex those. If a data object ID range is given (e.g. 10-20), then reindex all existing data objects in that range.
+Re-index all items in a dataset. (This could take some time). If a list of data object IDs is given then just re-index those. If a data object ID range is given (e.g. 10-20), then re-index all existing data objects in that range. If C<--force> is included for the eprint or document datasets, all associated .indexcodes cache files will be regenerated before re-indexing.
 
 =item B<epadmin> reorder I<repository_id> I<dataset_id> [I<dataobj_id> I<dataobj_id> I<dataobj_id>-I<dataobj_id> ...]
 
@@ -2293,7 +2293,23 @@ sub reindex
 
 	$list->map(sub {
 		my( undef, $dataset, $item ) = @_;
-	
+
+		if ( $force )
+		{
+			if ( $dataset->id() eq "eprint" )
+			{
+				foreach my $doc ( $item->get_all_documents )
+				{
+					$doc->remove_indexcodes;
+				}
+			}
+			elsif ( $dataset->id() eq "document" )
+			{
+				$item->remove_indexcodes;
+				$item->make_indexcodes;
+			}
+		}
+
 		$indexer->index_all( $item );
 
 		if( $noise >= 2 )

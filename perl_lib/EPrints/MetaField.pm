@@ -416,13 +416,20 @@ Render the name of this field as an XHTML object.
 
 sub render_name
 {
-	my( $self ) = @_;
+	my( $self, $session, $dataobj ) = @_;
 
 	if( defined $self->{title_xhtml} )
 	{
 		return EPrints::XML::clone_node( $self->{title_xhtml}, 1 );
 	}
 	my $phrasename = $self->{confid}."_fieldname_".$self->{name};
+
+	# Allow for alternative field names for different types of eprint (or any data object with a type field).
+	if ( ref( $dataobj ) && $dataobj->can( 'exists_and_set' ) && $dataobj->exists_and_set('type') )
+	{
+		my $pos_phrasename = $dataobj->get_dataset_id . '_fieldname_' . $self->{name} . '.' . $dataobj->get_value('type'); 
+		$phrasename = $pos_phrasename if $self->repository->get_lang->has_phrase( $pos_phrasename );
+	}
 
 	return $self->repository->html_phrase( $phrasename );
 }

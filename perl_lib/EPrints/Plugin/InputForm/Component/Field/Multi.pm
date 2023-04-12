@@ -156,7 +156,7 @@ sub render_content
 		$parts{class} = "ep_first" if $first;
 		$first = 0;
 
-		$parts{label} = $field->render_name( $self->{session} );
+		$parts{label} = $field->render_name( $self->{session}, $self->{dataobj} );
 
 		if( $field->{required} ) # moj: Handle for_archive
 		{

@@ -271,7 +271,7 @@ sub render_title
 {
 	my( $self, $surround ) = @_;
 
-	return $self->{config}->{field}->render_name( $self->{session} );
+	return $self->{config}->{field}->render_name( $self->{session}, $self->{dataobj} );
 }
 
 =pod

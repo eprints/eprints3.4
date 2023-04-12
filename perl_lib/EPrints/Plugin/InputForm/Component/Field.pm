@@ -118,7 +118,7 @@ sub validate
 	if( $self->is_required() && !$self->{dataobj}->is_set( $field->{name} ) )
 	{
 		my $fieldname = $self->{session}->make_element( "span", class=>"ep_problem_field:".$field->{name} );
-		$fieldname->appendChild( $field->render_name( $self->{session} ) );
+		$fieldname->appendChild( $field->render_name( $self->{session}, $self->{dataobj} ) );
 		my $problem = $self->{session}->html_phrase(
 			"lib/eprint:not_done_field" ,
 			fieldname=>$fieldname );
@@ -149,10 +149,10 @@ sub validate
 			}
 
 			my $fieldname = $self->{session}->make_element( "span", class=>"ep_problem_field:".$field->{name} );
-			$fieldname->appendChild( $field->render_name( $self->{session} ) );
+			$fieldname->appendChild( $field->render_name( $self->{session}, $self->{dataobj} ) );
 			my $problem = $self->{session}->html_phrase(
 				"lib/eprint:not_done_part",
-				partname => $sub_field->render_name( $self->{session} ),
+				partname => $sub_field->render_name( $self->{session}, $self->{dataobj} ),
 				fieldname => $fieldname,
 			);
 			push @problems, $problem;

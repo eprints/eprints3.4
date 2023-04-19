@@ -35,7 +35,7 @@ $c->{field_defaults}->{input_add_boxes} = 2;
 $c->{field_defaults}->{input_boxes} = 3;
 
 # Max digits in an integer.
-$c->{field_defaults}->{digits} = 20;
+$c->{field_defaults}->{digits} = 9;
 
 # Width of a search field
 $c->{field_defaults}->{search_cols} = 40;

@@ -370,8 +370,8 @@ sub get_property_defaults
         $defaults{hide_lineage} = $EPrints::MetaField::FROM_CONFIG;
         $defaults{family_first} = $EPrints::MetaField::FROM_CONFIG;
         $defaults{render_order} = "fg";
-        $defaults{render_limit} = $EPrints::MetaField::FROM_CONFIG;
-        $defaults{render_dynamic} = $EPrints::MetaField::FROM_CONFIG;
+        $defaults{render_limit} = $EPrints::MetaField::UNDEF;
+        $defaults{render_dynamic} = $EPrints::MetaField::UNDEF;
         $defaults{text_index} = 1;
         $defaults{render_custom} = "link";
 

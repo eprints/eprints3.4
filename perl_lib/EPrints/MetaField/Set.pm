@@ -622,7 +622,6 @@ sub get_property_defaults
 	$defaults{input_tags} = $EPrints::MetaField::UNDEF;
 	$defaults{render_option} = $EPrints::MetaField::UNDEF;
 	$defaults{render_max_search_values} = 5;
-	$defaults{text_index} = 1;
 	$defaults{sql_index} = 1;
 	$defaults{match} = "EQ";
 	$defaults{merge} = "ANY";

@@ -40,8 +40,7 @@ sub get_property_defaults
 	my( $self ) = @_;
 
 	my %defaults = $self->SUPER::get_property_defaults;
-	$defaults{repeat_secret} = $EPrints::MetaField::FROM_CONFIG;
-	$defaults{text_index} = 0;
+	$defaults{repeat_secret} = 0;
 	$defaults{sql_index} = 0;
 
 	return %defaults;

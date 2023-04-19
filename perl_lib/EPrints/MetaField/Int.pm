@@ -198,7 +198,6 @@ sub get_property_defaults
 	my( $self ) = @_;
 	my %defaults = $self->SUPER::get_property_defaults;
 	$defaults{digits} = $EPrints::MetaField::FROM_CONFIG;
-	$defaults{text_index} = 0;
 	$defaults{regexp} = qr/-?[0-9]+/;
 	return %defaults;
 }

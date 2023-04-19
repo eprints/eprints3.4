@@ -444,7 +444,6 @@ sub get_property_defaults
 	$defaults{min_resolution} = "day";
 	$defaults{render_res} = "day";
 	$defaults{render_style} = "long";
-	$defaults{text_index} = 0;
 	$defaults{regexp} = qr/\d\d\d\d(?:-\d\d(?:-\d\d)?)?/;
 	return %defaults;
 }

@@ -43,6 +43,15 @@ sub get_sql_type
 	);
 }
 
+sub get_property_defaults
+{
+    my( $self ) = @_;
+    my %defaults = $self->SUPER::get_property_defaults;
+    $defaults{digits} = 18;
+    return %defaults;
+}
+
+
 ######################################################################
 1;
 

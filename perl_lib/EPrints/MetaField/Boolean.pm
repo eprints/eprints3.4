@@ -282,7 +282,6 @@ sub get_property_defaults
 	my( $self ) = @_;
 	my %defaults = $self->SUPER::get_property_defaults;
 	$defaults{input_style} = 0;
-	$defaults{text_index} = 0;
 	$defaults{input_rows} = $EPrints::MetaField::FROM_CONFIG;
 	$defaults{false_first} = 0;
 	return %defaults;

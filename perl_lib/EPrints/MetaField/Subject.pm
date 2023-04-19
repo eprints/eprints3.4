@@ -483,7 +483,7 @@ sub get_property_defaults
 	$defaults{showtop} = 0;
 	$defaults{nestids} = 1;
 	$defaults{top} = "subjects";
-	delete $defaults{options}; # inherited but unwanted
+	$defaults{options} = $EPrints::MetaField::UNDEF;
 	return %defaults;
 }
 

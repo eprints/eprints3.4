@@ -85,7 +85,6 @@ sub get_property_defaults
 	return(
 		$self->SUPER::get_property_defaults,
 		match => "EX",
-		merge => "ALL",
 	);
 }
 

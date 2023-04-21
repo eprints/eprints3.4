@@ -562,7 +562,7 @@ sub render_upload_form
 			map { $_ => $_ } @{$self->param( "encodings" )},
 		},
 		'aria-labelledby' => "encoding_label",
-		'areia-describedby' => "upload_help",
+		'aria-describedby' => "upload_help",
 	) );
 	$form->appendChild( $xml->create_element( "br" ) );
 	$form->appendChild( $xml->create_element( "br" ) );

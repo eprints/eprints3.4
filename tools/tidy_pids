@@ -11,7 +11,7 @@ openoffice_cmd="/opt/openoffice.org3/program/soffice.bin-accept=socket,host=loca
 cd `dirname $0`
 if [[ -f $indexer_pid && ! -d /proc/`cat $indexer_pid` ]]; then
         indexer_rm=1
-elif [[ -f $indexer_pid && -d /proc/`cat $indexer_pid` && "`cat /proc/\`cat $indexer_pid\`/cmdline`" !=  "$indexer_cmd" ]]; then
+elif [[ -f $indexer_pid && -d /proc/`cat $indexer_pid` && "`cat /proc/\`cat $indexer_pid | tr -d '\0'\`/cmdline`" !=  "$indexer_cmd" ]]; then
         indexer_rm=1
 fi
 if [[ $indexer_rm -eq 1 ]]; then
@@ -22,6 +22,6 @@ if [[ $indexer_rm -eq 1 ]]; then
 fi
 if [[ -f $openoffice_pid && ! -d /proc/`cat $openoffice_pid` ]]; then
         rm $openoffice_pid
-elif [[ -f $openoffice_pid && -d /proc/`cat $openoffice_pid` && "`cat /proc/\`cat $openoffice_pid\`/cmdline`" !=  "$openoffice_cmd" ]]; then
+elif [[ -f $openoffice_pid && -d /proc/`cat $openoffice_pid` && "`cat /proc/\`cat $openoffice_pid | tr -d '\0'\`/cmdline`" !=  "$openoffice_cmd" ]]; then
         rm $openoffice_pid
 fi

@@ -138,9 +138,18 @@ sub _month_names
 	my $month;
 	foreach $month ( @EPrints::MetaField::Date::MONTHKEYS )
 	{
-		$months->{$month} = EPrints::Time::get_month_label( 
-			$session, 
-			$month );
+		if ( $self->{input_style} eq "short" )
+		{
+			$months->{$month} = EPrints::Time::short_month_label( 
+				$session, 
+				$month );
+		}
+		else
+		{
+			$months->{$month} = EPrints::Time::month_label(
+				$session,
+				$month );
+		}
 	}
 
 	return $months;
@@ -444,6 +453,7 @@ sub get_property_defaults
 	$defaults{min_resolution} = "day";
 	$defaults{render_res} = "day";
 	$defaults{render_style} = "long";
+	$defaults{input_style} = "long";
 	$defaults{regexp} = qr/\d\d\d\d(?:-\d\d(?:-\d\d)?)?/;
 	return %defaults;
 }

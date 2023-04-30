@@ -9,13 +9,30 @@
 
 =pod
 
+=for Pod2Wiki
+
 =head1 NAME
 
 B<EPrints::MetaField::Base64> - Base 64 encoded data
 
 =head1 DESCRIPTION
 
-=over 4
+Data encoded in base64.  This may be small files (e.g. kilobytes) 
+better save in the database rather than to the filesystem.
+
+=head1 INHERITANCE
+
+ L<EPrints::MetaField>
+   L<EPrints::MetaField::Id>
+     L<EPrints::MetaField::Text>
+       L<EPrints::MetaField::Longtext>
+	       B<EPrints::MetaField::Base64>
+
+=head1 PROPERTIES
+
+I<To be written>
+
+=head1 METHODS
 
 =cut
 
@@ -25,6 +42,21 @@ use MIME::Base64;
 
 use strict;
 use base "EPrints::MetaField::Longtext";
+
+######################################################################
+=pod
+
+=over 4
+
+=item $value = $field->form_value( $session, $object, [$prefix] )
+
+Base64 encode the CGI parameter submitted within the form for this 
+particular field.  Assuming the from contained such an input field.
+
+Returns a single scalar or array of base64 encoded values.
+
+=cut
+######################################################################
 
 sub form_value 
 {
@@ -48,6 +80,20 @@ sub form_value
 
   return $value;
 }
+
+
+######################################################################
+=pod
+
+=over 4
+
+=item $xml = $field->to_sax( $value, %opts )
+
+Print the field and value(s) as an XML representation of a base64 
+field.
+
+=cut
+######################################################################
 
 sub to_sax
 {
@@ -122,6 +168,22 @@ sub to_sax
 	});
 }
 
+######################################################################
+=pod
+
+=over 4
+
+=item $type = $field->get_xml_schema_type
+
+Gets the XML schema type for this base64 field.
+
+Returns a string containing the type, dataset ID and and name of this
+field (e.g. C<base64_file_data>).
+
+=cut
+######################################################################
+
+
 sub get_xml_schema_type
 {
     my ( $self ) = @_;
@@ -129,22 +191,35 @@ sub get_xml_schema_type
     return $self->get_property( "type" ) . "_" . $self->{dataset}->confid . "_" . $self->get_name;
 }
 
-# Returns DOM for the following:
-# <xs:complexType name="base64_file_data">
-#   <xs:simpleContent>
-#     <xs:extension base="xs:base64Binary">
-#       <xs:attribute name="encoding">
-#         <xs:simpleType>
-#           <xs:restriction base="xs:string">
-#             <xs:enumeration value="base64" />
-#           </xs:restriction>
-#         </xs:simpleType>
-#       </xs:attribute>
-#     </xs:extension>
-#   </xs:simpleContent>
-# </xs:complexType>
-#
-#  e.g., <data encoding="base64">...</data>
+######################################################################
+=pod
+
+=over 4
+
+=item $type = $field->render_xml_schema_type
+
+Produces an XML fragment this base64 field.
+
+Returns a DOM for the following:
+
+ <xs:complexType name="base64_file_data">
+   <xs:simpleContent>
+     <xs:extension base="xs:base64Binary">
+       <xs:attribute name="encoding">
+         <xs:simpleType>
+           <xs:restriction base="xs:string">
+             <xs:enumeration value="base64" />
+           </xs:restriction>
+         </xs:simpleType>
+       </xs:attribute>
+     </xs:extension>
+   </xs:simpleContent>
+ </xs:complexType>
+
+E.g., <data encoding="base64">...</data>
+
+=cut
+######################################################################
 
 sub render_xml_schema_type
 {
@@ -172,22 +247,25 @@ sub render_xml_schema_type
 }
 
 
+1;
 
 ######################################################################
-1;
+=pod
+
+=back
 
 =head1 COPYRIGHT
 
-=for COPYRIGHT BEGIN
+=begin COPYRIGHT
 
-Copyright 2022 University of Southampton.
+Copyright 2023 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/
 
-=for COPYRIGHT END
+=end COPYRIGHT
 
-=for LICENSE BEGIN
+=begin LICENSE
 
 This file is part of EPrints 3.4 L<http://www.eprints.org/>.
 
@@ -204,5 +282,4 @@ You should have received a copy of the GNU Lesser General Public
 License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
-=for LICENSE END
-
+=end LICENSE

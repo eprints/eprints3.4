@@ -44,6 +44,8 @@ use strict;
 
 Load EPC citation source from file.
 
+Returns 1 if citation source was successfully loaded.
+
 =cut
 ######################################################################
 
@@ -86,7 +88,9 @@ sub load_source
 
 =item $frag = $citation->render( $dataobj, %opts )
 
-Renders a L<EPrints::DataObj> using this citation style.
+Used to render a L<EPrints::DataObj> using this citation style.
+
+Returns a XML document fragment of the citation rendering.
 
 =cut
 ######################################################################
@@ -178,6 +182,9 @@ sub _render_citation_aux
 
 1;
 
+######################################################################
+=pod
+
 =back
 
 =head1 SEE ALSO
@@ -186,16 +193,16 @@ L<EPrints::Citation>
 
 =head1 COPYRIGHT
 
-=for COPYRIGHT BEGIN
+=begin COPYRIGHT
 
-Copyright 2022 University of Southampton.
+Copyright 2023 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/
 
-=for COPYRIGHT END
+=end COPYRIGHT
 
-=for LICENSE BEGIN
+=begin LICENSE
 
 This file is part of EPrints 3.4 L<http://www.eprints.org/>.
 
@@ -212,5 +219,5 @@ You should have received a copy of the GNU Lesser General Public
 License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
-=for LICENSE END
+=end LICENSE
 

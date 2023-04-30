@@ -1,6 +1,6 @@
 ######################################################################
 #
-# EPrints::MetaField::Itemref;
+# EPrints::MetaField::Dataobjref;
 #
 ######################################################################
 #
@@ -11,11 +11,11 @@
 
 =head1 NAME
 
-B<EPrints::MetaField::Itemref> - Reference to an object with an "int" type of ID field.
+B<EPrints::MetaField::Dataobjref> -
 
 =head1 DESCRIPTION
 
-not done
+
 
 =over 4
 

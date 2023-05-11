@@ -40,6 +40,8 @@
 
 $c->{build_node_attributes} = sub
 {
+	no warnings qw{ redefine };
+
 	my ($repo, $name, $node, @attrs) = @_;
 
 	my %attrs_in = @attrs;
@@ -50,7 +52,7 @@ $c->{build_node_attributes} = sub
 		return( 0 ) if( !defined $val );
 
 		ref( $val ) eq "CODE" ? return $val->( $repo ) : return $val;
-        }
+	}
 	
 	for my $key_in ( keys %attrs_in )
 	{

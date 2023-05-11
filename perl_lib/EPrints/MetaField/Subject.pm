@@ -285,6 +285,7 @@ sub render_value
     if( $self->{render_quiet} )
     {
         @value = grep { EPrints::Utils::is_set( $_ ) } @value;
+        @value = grep { defined new EPrints::DataObj::Subject( $session, $_ ) } @value;
     }
 
     foreach my $i (0..$#value) ##subjects assigned to the eprint
@@ -340,7 +341,11 @@ sub render_value_sepa_link
 
     my $subject = new EPrints::DataObj::Subject( $session, $value );
 	my $v = $session->make_doc_fragment();
-	return $v unless $subject;
+	unless ( $subject )
+	{
+		$v->appendChild( $self->render_single_value( $session, $value ) ) unless $self->{render_quiet};
+		return $v;
+	}
 	my @paths = $subject->get_paths( $session,  $self->get_property( "top" ) );
 
 	my $first = 1;

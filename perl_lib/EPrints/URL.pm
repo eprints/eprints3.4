@@ -106,7 +106,10 @@ sub get
 
 	my $uri = URI->new("", "http");
 
-	$opts{scheme} = "auto" unless defined $opts{scheme};
+	unless ( defined $opts{scheme} )
+	{
+		$opts{scheme} = EPrints::Utils::is_set( $session->config( "securehost" ) ) ? "https" : "http";
+	}
 	$opts{host} = "" unless defined $opts{host};
 	$opts{path} = "auto" unless defined $opts{path};
 

@@ -3470,7 +3470,9 @@ sub render_row_with_help
 	if ( ref $parts{label} ne "" ) 
 	{
 		$th = $self->make_element( "div", class=> "ep_multi_heading ep_table_cell" );
-		my $label = $self->make_element( "span", id=>$parts{prefix}."_label" );
+		my $prefix = $parts{prefix};
+		$prefix .= "_legend" if defined $parts{uses_fieldset} && $parts{uses_fieldset};
+		my $label = $self->make_element( "span", id=>$prefix."_label" );
 		$label->appendChild( $parts{label} );
 		$th->appendChild( $label );
 	}
@@ -3733,7 +3735,7 @@ sub render_option_list
 	if( $params{checkbox} )
 	{
 		my $fieldset = $self->make_element( "fieldset", class=>"ep_option_list" );
-		my $legend = $self->make_element( "legend", id=> $params{name}."_label", class=>"ep_field_legend" );
+		my $legend = $self->make_element( "legend", id=> $params{name}."_label", class=>"ep_field_legend", 'aria-labelledby' => $params{name}."_legend_label" );
 		$legend->appendChild( $self->make_text( $params{legend} ) );
 		$fieldset->appendChild( $legend ); 
 		my $rowdiv = $self->make_element( "div", class=>"ep_option_list_row" );

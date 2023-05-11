@@ -235,8 +235,14 @@ sub render_set_input
 
 	if( $input_style eq "short" )
 	{
+		my $legend = undef;
+		if ( $self->{form_input_style} eq "checkbox" )
+		{
+                	$legend = $session->make_text( EPrints::Utils::tree_to_utf8( $self->render_name( $self->{session} ) ) . EPrints::Utils::tree_to_utf8( $session->html_phrase( "lib/metafield/set:legend_suffix" ) ) );
+		}
 		return( $session->render_option_list(
 				checkbox => ($self->{form_input_style} eq "checkbox" ?1:0),
+				legend => $legend,		
 				values => $tags,
 				labels => $labels,
 				name => $basename,
@@ -259,8 +265,8 @@ sub render_set_input
 	else
 	{
 		$list = $session->make_element( "fieldset", class=>"ep_option_list" );
-		my $legend = $session->make_element( "legend", id=> $basename."_label", class=>"ep_field_legend" );
-	        my $legendtext = $self->render_name( $self->{session} );
+		my $legend = $session->make_element( "legend", id=> $basename."_label", class=>"ep_field_legend", "aria-labelledby" => $basename."_legend_label" );
+	        my $legendtext = $session->make_text( EPrints::Utils::tree_to_utf8( $self->render_name( $self->{session} ) ) . EPrints::Utils::tree_to_utf8( $session->html_phrase( "lib/metafield/set:legend_suffix" ) ) );
         	if( $self->{required} )
 	        {
         	        $legend->appendChild( $session->html_phrase(

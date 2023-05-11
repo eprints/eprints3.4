@@ -44,6 +44,10 @@ sub render
 
 	my $label_id = $component->{prefix} . "_label";
 	$label_id = $component->{prefix} . "_".$component->{config}->{field}->{name}."_label" if defined $component->{config}->{field};
+	if ( defined $component->{config}->{field} && ( $component->{config}->{field}->{form_input_style} eq "checkbox" || $component->{config}->{field}->{input_style} eq "checkbox" ) ) 
+	{
+		$label_id = $component->{prefix} . "_".$component->{config}->{field}->{name}."_legend_label";
+	} 
 
 	$surround->appendChild( $self->{session}->make_element( "a", name=>$component->{prefix} ) );
 	foreach my $field_id ( $component->get_fields_handled )

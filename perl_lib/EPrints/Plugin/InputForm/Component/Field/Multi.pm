@@ -218,7 +218,7 @@ sub render_content
 		$parts{prefix} = $self->{prefix} . "_" . $field->get_name;
 		$parts{help_prefix} = $self->{prefix}."_help_".$field->get_name;
 
-		
+		$parts{uses_fieldset} = 1 if $field->{form_input_style} eq "checkbox" || $field->{input_style} eq "checkbox";
 
 		$table->appendChild( $self->{session}->render_row_with_help( %parts ) );
 	}

@@ -1507,6 +1507,7 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
     <epp:phrase id="lib/metafield/itemref:lookup">Lookup</epp:phrase>
     <epp:phrase id="lib/metafield/itemref:not_found"><i><epc:pin name="objtype"/> <epc:pin name="id"/> not found.</i></epp:phrase>
     <epp:phrase id="lib/metafield/secret:show_value">[hidden]</epp:phrase>
+    <epp:phrase id="lib/metafield/set:legend_suffix"> Options</epp:phrase>
 
     <epp:phrase id="lib/metafield:words"> words</epp:phrase>
 
@@ -1695,6 +1696,8 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
     <epp:phrase id="lib/searchfield:desc:counter_between" ref="lib/searchfield:desc:between" />
     <epp:phrase id="lib/searchfield:desc:counter_orless" ref="lib/searchfield:desc:orless" />
     <epp:phrase id="lib/searchfield:desc:counter_ormore" ref="lib/searchfield:desc:ormore" />
+
+    <epp:phrase id="lib/searchfield:desc:set_legend_suffix"> Options</epp:phrase>
 
     <epp:phrase id="lib/searchfield:desc_ignored"> (Ignoring: <epc:pin name="list"/>)</epp:phrase>
 

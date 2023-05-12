@@ -190,6 +190,9 @@ sub form_value_basic
 		$value = $searchexp->serialise;	
 	}
 
+	# replace UTF8-MB4 characters with a �
+	$value=~s/[^\N{U+0000}-\N{U+FFFF}]/\N{REPLACEMENT CHARACTER}/g;
+
 	return $value;
 }
 

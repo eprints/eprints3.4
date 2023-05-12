@@ -265,7 +265,7 @@ sub form_value_basic
 	for(qw( year month day ))
 	{
 		my $part = $session->param( $basename."_$_" );
-		last if !EPrints::Utils::is_set( $part ) || $part == 0;
+		last if !EPrints::Utils::is_set( $part ) || $part =~ m/[^0-9]/ || $part == 0;
 		push @parts, $part;
 	}
 

@@ -1766,6 +1766,9 @@ sub form_value_basic
 	# strip line breaks (turn them to "space")
 	$value=~s/[\n\r]+/ /gs;
 
+	# replace UTF8-MB4 characters with a �
+	$value=~s/[^\N{U+0000}-\N{U+FFFF}]/\N{REPLACEMENT CHARACTER}/g;
+
 	return $value;
 }
 

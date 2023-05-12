@@ -108,6 +108,9 @@ sub form_value_basic
 
 	return undef if( !defined($value) or $value eq "" );
 
+	# replace UTF8-MB4 characters with a �
+	$value=~s/[^\N{U+0000}-\N{U+FFFF}]/\N{REPLACEMENT CHARACTER}/g;
+	
 	return $value;
 }
 

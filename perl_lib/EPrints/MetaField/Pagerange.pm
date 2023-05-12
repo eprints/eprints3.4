@@ -144,9 +144,9 @@ sub is_browsable
 sub form_value_basic
 {
 	my( $self, $session, $basename ) = @_;
-	
-	my $from = $session->param( $basename."_from" );
-	my $to = $session->param( $basename."_to" );
+
+	my $from = $self->EPrints::MetaField::form_value_basic( $session, $basename."_from" );	
+	my $to = $self->EPrints::MetaField::form_value_basic( $session, $basename."_to" );
 
 	if( !defined $to || $to eq "" )
 	{

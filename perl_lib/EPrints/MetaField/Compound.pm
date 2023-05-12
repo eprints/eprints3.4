@@ -121,6 +121,7 @@ sub render_value_actual
 		my $tr = $session->make_element( "div", "class"=>"ep_compound_header_row" );
 		$table->appendChild( $tr );
 		my $f = $self->get_property( "fields_cache" );
+		my $index = 0;
 		foreach my $field_conf ( @{$f} )
 		{
 			my $fieldname = $field_conf->{name};
@@ -132,7 +133,7 @@ sub render_value_actual
 			)
 			{
 				my $field = $self->{dataset}->get_field( $fieldname );
-				my $th = $session->make_element( "div", class=>"ep_compound_header_cell" );
+				my $th = $session->make_element( "div", class=>"ep_compound_header_cell", "data-row-cell-index"=>$index );
 				$tr->appendChild( $th );
 				$th->appendChild( $field->render_name( $session ) );
 			}
@@ -140,14 +141,16 @@ sub render_value_actual
 	
 		if( $self->get_property( "multiple" ) )
 		{
+			$index = 0;
 			foreach my $row ( @{$value} )
 			{
-				$table->appendChild( $self->render_single_value_row( $session, $row, $alllangs, $nolink, $object ) );
+				$table->appendChild( $self->render_single_value_row( $session, $row, $alllangs, $nolink, $object, $index ) );
+				$index++;
 			}
 		}
 		else
 		{
-			$table->appendChild( $self->render_single_value_row( $session, $value, $alllangs, $nolink, $object ) );
+			$table->appendChild( $self->render_single_value_row( $session, $value, $alllangs, $nolink, $object, undef ) );
 		}
 
 		$result = $table;
@@ -203,16 +206,25 @@ sub render_value_actual
 
 sub render_single_value_row
 {
-	my( $self, $session, $value, $alllangs, $nolink, $object ) = @_;
+	my( $self, $session, $value, $alllangs, $nolink, $object, $index ) = @_;
 
-	my $tr = $session->make_element( "div", "class"=>"ep_compound_data_row" );
+	my $tr;
+	if ( defined $index )
+	{
+		$tr = $session->make_element( "div", "class"=>"ep_compound_data_row", "data-row-index"=>$index );
+	}
+	else
+	{
+		$tr = $session->make_element( "div", "class"=>"ep_compound_data_row" );
+	}
 
+	my $i = 0;
 	foreach my $field (@{$self->{fields_cache}})
 	{
 		my $alias = $field->property( "sub_name" );
 		if ( exists $value->{$alias} || !$field->property( "render_quiet" ) )
                 {
-			my $td = $session->make_element( "div" );
+			my $td = $session->make_element( "div", "class"=>"ep_compound_data_row_cell", "data-row-cell-index"=>$i );
 			$tr->appendChild( $td );
 			$td->appendChild( 
 				$field->render_value_no_multiple( 
@@ -221,6 +233,7 @@ sub render_single_value_row
 					$alllangs,
 					$nolink,
 					$object ) );
+			$i++;
 		}
 	}
 
@@ -232,7 +245,7 @@ sub render_single_value
 	my( $self, $session, $value, $object ) = @_;
 
 	my $table = $session->make_element( "div", class=>"ep_compound_single" );
-	$table->appendChild( $self->render_single_value_row( $session, $value, $object ) );
+	$table->appendChild( $self->render_single_value_row( $session, $value, $object, undef ) );
 	return $table;
 }
 

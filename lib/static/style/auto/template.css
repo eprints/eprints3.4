@@ -85,6 +85,7 @@ hr.ep_tm_last {
 .ep_tm_key_tools li {
 	list-style: none;
 	display: inline;
+	float: left;
 	padding: 0;
 	margin: 0;
 }
@@ -114,6 +115,10 @@ hr.ep_tm_last {
 
 .ep_tm_searchbar {
 	padding: 4px 10px;
+}
+
+.ep_tm_searchbar form {
+	white-space: nowrap;
 }
 
 .ep_tm_searchbarbutton {
@@ -178,4 +183,17 @@ hr.ep_tm_last {
 }
 .ep_tm_footer hr {
 	display: none;
+}
+
+@media only screen and (min-width:600px) and (max-width:1180px)
+{
+	.ep_tm_footer img { height: 15px; width: auto !important; }
+}
+@media only screen and (min-width:0px) and (max-width:600px)
+{
+    .ep_tm_footer img { display: none; }
+}
+@media only screen and (min-width:0px) and (max-width:570px)
+{
+	footer { height: 54px; }
 }

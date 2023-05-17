@@ -157,6 +157,9 @@ popd > /dev/null
 #fi
 
 %changelog
+* Sat Feb 18 2023 David R Newman <drn@ecs.soton.ac.uk>
+ - Replaced elinks with python3-html2text
+
 * Sat Jul 11 2020 David R Newman <drn@ecs.soton.ac.uk>
  - Added perl-JSON and perl-Text-Unidecode dependencies
 

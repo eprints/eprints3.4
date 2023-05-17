@@ -1,6 +1,6 @@
 ######################################################################
 #
-# EPrints::MetaField::Arclanguage;
+# EPrints::MetaField::Arclanguage
 #
 ######################################################################
 #
@@ -8,6 +8,8 @@
 ######################################################################
 
 =pod
+
+=for Pod2Wiki
 
 =head1 NAME
 
@@ -75,7 +77,7 @@ sub get_property_defaults
 
 =begin COPYRIGHT
 
-Copyright 2022 University of Southampton.
+Copyright 2023 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/

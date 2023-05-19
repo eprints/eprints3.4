@@ -383,29 +383,31 @@ sub _render_doc_div
 	my $opts_toggle = $session->make_element( "a", onclick => "EPJS_blur(event); EPJS_toggleSlideScroll('${doc_prefix}_opts',".($hide?"false":"true").",'${doc_prefix}_block');EPJS_toggle('${doc_prefix}_opts_hide',".($hide?"false":"true").",'block');EPJS_toggle('${doc_prefix}_opts_show',".($hide?"true":"false").",'block');return false" );
 	$doc_expansion_bar->appendChild( $opts_toggle );
 
-	my $s_options = $session->make_element( "div", id=>$doc_prefix."_opts_show", class=>"ep_update_doc_options ".($hide?"":"ep_hide"),  );
-	my $show_label = $session->make_element( "label", id=>$doc_prefix."_opts_show_label" );
+	my $s_options = $session->make_element( "div", id=>$doc_prefix."_opts_show", class=>"ep_update_doc_options ".($hide?"":"ep_hide") );
+	my $show_label = $session->make_element( "label", for=>$doc_prefix."_opts_show" );
 	$show_label->appendChild( $self->html_phrase( "show_options" ) );
 	$s_options->appendChild( $show_label );
 	$s_options->appendChild( $session->make_text( " " ) );
 	$s_options->appendChild( 
-			$session->make_element( "img",
+			$session->make_element( "input",
+			    type=>'image',
 				src=>"$imagesurl/style/images/plus.png",
 				alt=>'+',
-				'aria-labelledby'=>$doc_prefix."_opts_show_label",
+				id=>$doc_prefix."_opts_show",
 				) );
 	$opts_toggle->appendChild( $s_options );
 
 	my $h_options = $session->make_element( "div", id=>$doc_prefix."_opts_hide", class=>"ep_update_doc_options ".($hide?"ep_hide":"") );
-	my $hide_label = $session->make_element( "label", id=>$doc_prefix."_opts_hide_label" );
-        $hide_label->appendChild( $self->html_phrase( "show_options" ) );
-        $h_options->appendChild( $hide_label );
+	my $hide_label = $session->make_element( "label", for=>$doc_prefix."_opts_hide" );
+	$hide_label->appendChild( $self->html_phrase( "hide_options" ) );
+	$h_options->appendChild( $hide_label );
 	$h_options->appendChild( $session->make_text( " " ) );
 	$h_options->appendChild( 
-			$session->make_element( "img",
+			$session->make_element( "input",
+			    type=>'image',
 				src=>"$imagesurl/style/images/minus.png",
 				alt=>'-',
-				'aria-labelledby'=>$doc_prefix."_opts_hide_label",
+				id=>$doc_prefix."_opts_hide",
 				) );
 	$opts_toggle->appendChild( $h_options );
 

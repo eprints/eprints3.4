@@ -778,7 +778,6 @@ sub render_search_fields
 
 	foreach my $sf ( $self->{processor}->{search}->get_non_filter_searchfields )
 	{
-		my $label;
 		my $field;
 		my $ft = $sf->{"field"}->get_type();
 		my $prefix = $sf->get_form_prefix;
@@ -852,9 +851,10 @@ sub render_show_hidden
     );
 
     return $self->{session}->render_row_with_help(
+			prefix => "showhidden",
             label => $self->{session}->html_phrase( "lib/searchexpression:showhidden" ),
             help => $self->{session}->html_phrase( "lib/searchexpression:showhidden_help" ),
-			help_prefix => "showhidden",
+			help_prefix => "showhidden_help",
             field => $checkbox
     );
 }

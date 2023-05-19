@@ -681,13 +681,25 @@ sub render_search_fields
 
 	foreach my $sf ( $self->{processor}->{search}->get_non_filter_searchfields )
 	{
+		my $field;
+		my $ft = $sf->{"field"}->get_type();
+		my $prefix = $sf->get_form_prefix;
+		if ( ( $ft eq "set" || $ft eq "namedset" ) && $sf->{"field"}->{search_input_style} eq "checkbox" )
+        {
+            $field = $sf->render( legend => EPrints::Utils::tree_to_utf8( $sf->render_name ) . " " . EPrints::Utils::tree_to_utf8( $self->{session}->html_phrase( "lib/searchfield:desc:set_legend_suffix" ) ) );
+            $prefix .= "_legend";
+        }
+        else
+		{
+            $field = $sf->render();
+        }
 		$frag->appendChild( 
 			$self->{session}->render_row_with_help( 
-				prefix => $sf->get_form_prefix,
+				prefix => $prefix,
 				help_prefix => $sf->get_form_prefix."_help",
 				help => $sf->render_help,
 				label => $sf->render_name,
-				field => $sf->render,
+				field => $field,
 				no_toggle => ( $sf->{show_help} eq "always" ),
 				no_help => ( $sf->{show_help} eq "never" ),
 			 ) );

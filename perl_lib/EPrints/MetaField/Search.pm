@@ -157,14 +157,28 @@ sub get_basic_input_elements
 	my $searchexp = $self->make_searchexp( $session, $value, $basename."_", $obj );
 
 	foreach my $sf ( $searchexp->get_non_filter_searchfields )
-	{
+	{		
+		my $ft = $sf->{"field"}->get_type();
+		my $div_id;
+		my $field;
+		if ( ( $ft eq "set" || $ft eq "namedset" ) && $sf->{"field"}->{search_input_style} eq "checkbox" )
+		{
+			$div_id = $basename."_".$sf->{id}."_legend_label";
+			$field = $sf->render( legend => EPrints::Utils::tree_to_utf8( $sf->render_name ) . " " . EPrints::Utils::tree_to_utf8( $session->html_phrase( "lib/searchfield:desc:set_legend_suffix" ) ) );
+		}
+		else
+		{
+			$div_id = $basename."_".$sf->{id}."_label";
+			$field = $sf->render();	
+		}
+
 		my $sfdiv = $session->make_element( 
 				"div" , 
 				class => "ep_search_field_name",
-				id => $basename."_".$sf->{id}."_label" );
+				id => $div_id );
 		$sfdiv->appendChild( $sf->render_name );
 		$div->appendChild( $sfdiv );
-		$div->appendChild( $sf->render() );
+		$div->appendChild( $field );
 	}
 
 	return [ [ { el=>$div } ] ];

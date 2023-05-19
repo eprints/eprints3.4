@@ -2805,10 +2805,10 @@ Titles and Help for the System Fields
 
 <p style='margin-bottom: 1px;'>Click on an icon to the right of an item to:</p>
 <div class='ep_icontable'>
-  <div><div><img src="{$config{rel_path}}/style/images/action_view.png" alt="View Item"/></div><div>View Item in Detail, including additional actions</div></div>
-  <div><div><img src="{$config{rel_path}}/style/images/action_edit.png" alt="Edit Item"/></div><div>Edit Item</div></div>
-  <div><div><img src="{$config{rel_path}}/style/images/action_reject.png" alt="Destroy Item"/></div><div>Destroy Item</div></div>
-  <div><div><img src="{$config{rel_path}}/style/images/action_deposit.png" alt="Deposit Item"/></div><div>Deposit Item</div></div>
+  <div><div><img src="{$config{rel_path}}/style/images/action_view.png" alt=""/></div><div>View Item in Detail, including additional actions</div></div>
+  <div><div><img src="{$config{rel_path}}/style/images/action_edit.png" alt=""/></div><div>Edit Item</div></div>
+  <div><div><img src="{$config{rel_path}}/style/images/action_reject.png" alt=""/></div><div>Destroy Item</div></div>
+  <div><div><img src="{$config{rel_path}}/style/images/action_deposit.png" alt=""/></div><div>Deposit Item</div></div>
 </div>
 <epc:phrase ref="Plugin/Screen/Items:table"/></epp:phrase>
     <epp:phrase id="Plugin/Screen/Items:add">Add</epp:phrase>
@@ -2821,11 +2821,11 @@ Titles and Help for the System Fields
 <p>This page shows items awaiting review.</p>
 <p style='margin-bottom: 1px;'>Click on an icon to the right of an item to:</p>
 <div class='ep_icontable'>
-  <div><div><img src="{$config{rel_path}}/style/images/action_view.png" alt="View Item"/></div><div>View Item in Detail, including additional actions</div></div>
-  <div><div><img src="{$config{rel_path}}/style/images/action_edit.png" alt="Edit Item"/></div><div>Edit Item</div></div>
+  <div><div><img src="{$config{rel_path}}/style/images/action_view.png" alt=""/></div><div>View Item in Detail, including additional actions</div></div>
+  <div><div><img src="{$config{rel_path}}/style/images/action_edit.png" alt=""/></div><div>Edit Item</div></div>
   <div><div><img src="{$config{rel_path}}/style/images/action_approve.png" alt="Move to Repository"/></div><div>Move Item to Repository</div></div>
   <div><div><img src="{$config{rel_path}}/style/images/action_bounce.png" alt="Return to Depositor"/></div><div>Return Item to Depositor (and notify depositing user)</div></div>
-  <div><div><img src="{$config{rel_path}}/style/images/action_reject.png" alt="Destroy Item"/></div><div>Destroy Item (with notification to depositing user)</div></div>
+  <div><div><img src="{$config{rel_path}}/style/images/action_reject.png" alt=""/></div><div>Destroy Item (with notification to depositing user)</div></div>
 </div>
 <p>Items that have previously been in the live archive cannot be destroyed unless you have the additional <em>eprint/remove_once_archived</em> permission.</p>
 <epc:phrase ref="Plugin/Screen/Items:table"/></epp:phrase>
@@ -4431,8 +4431,8 @@ EPrints Accessibility
 -->
     <epp:phrase id="accessibility_statement_prepared_date">2 December 2019</epp:phrase>
     <epp:phrase id="accessibility_statement_last_updated_date">7 August 2020</epp:phrase>
-    <epp:phrase id="accessibility_roadmap_last_updated_date">16 February 2021</epp:phrase>
-    <epp:phrase id="accessibility_report_last_tested_date">18 April 2021</epp:phrase>
+    <epp:phrase id="accessibility_roadmap_last_updated_date">19 May 2023</epp:phrase>
+    <epp:phrase id="accessibility_report_last_tested_date">19 May 2023</epp:phrase>
     <epp:phrase id="accessibility_report_summary">
 <p>Based on testing a default publication flavour installation of EPrints using standard test data, all tested public-facing and back-end administration pages currently report no errors or contrast errors. These pages may have one or more alerts. If so, these alerts are considered acceptable and/or essential for the functioning of EPrints as an Open Access repository and will fall into one of the following categories:</p>
 <ol>

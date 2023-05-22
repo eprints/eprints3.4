@@ -68,10 +68,6 @@ dl#ep-homepage-menu dt {
 	clip-path: inset(-6px -2px 0 -2px);
 }
 
-dl#ep-homepage-menu dt:first-child {
-	clip-path: inset(-6px -2px -1px -2px);
-}
-
 dl#ep-homepage-menu dd {
 	border-left: 1px solid #ccc;
 	border-right: 1px solid #ccc;

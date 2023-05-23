@@ -3765,7 +3765,9 @@ PY = 2006 and OG = (Cambridge)<br />
       </div>
     </div>
   </div>
-</div></epp:phrase>
+</div>
+<p>You had chosen to <strong><epc:pin name="action"/></strong> the request for the following item:</p><p><epc:pin name="eprint"/><br/><epc:pin name="document"/></p><p>However, this is irrelevant as the request has already been accepted.</p></epp:phrase>
+
 <epp:phrase id="request/respond_page:expired"><div class="ep_msg_warning">
   <div class="ep_msg_warning_content">
     <div>
@@ -3779,7 +3781,8 @@ PY = 2006 and OG = (Cambridge)<br />
       </div>
     </div>
   </div>
-</div></epp:phrase>
+</div>
+<p>You had chosen to <strong><epc:pin name="action"/></strong> the request for the following item:</p><p><epc:pin name="eprint"/><br/><epc:pin name="document"/></p><p>However, this is irrelevant as the request has already expired and can no longer be accepted or rejected.</p></epp:phrase>
 
 <epp:phrase id="request/response_email:subject">Result of request for &quot;<epc:pin name="eprint"/>&quot;</epp:phrase>
 <epp:phrase id="request/response_email:body_accept"><p>Your request for the following item has been accepted:</p>

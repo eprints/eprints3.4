@@ -139,7 +139,7 @@ sub action_confirm
 		"request/response_email:body_$action",
 		eprint => $eprint->render_citation_link,
 		document => $doc->render_value( "main" ),
-		reason => EPrints::Utils::is_set( $reason ) ? $session->make_text( $reason )
+		reason => EPrints::Utils::is_set( $reason ) ? EPrints::Extras::render_paras( $self->{session}, "reason", $reason )
 			: $session->html_phrase( "Plugin/Screen/EPrint/RequestRemoval:reason" ) ) );
 
 	my $result;
@@ -284,18 +284,29 @@ sub render
 	# Requests expiry after 90 (or specified) number of days. Otherwise, they expiry after permitted access period or immediately if rejected.
 	my $unresponded_expiry = $session->config( "expiry_for_unresponded_doc_request" );
 	$unresponded_expiry = 90 if( !defined $unresponded_expiry || $unresponded_expiry !~ /^\d+$/ );
-	$unresponded_expiry = EPrints::Time::datetime_local( $requested ) + $unresponded_expiry*3600*24;
+	$unresponded_expiry = EPrints::Time::datetime_local( split( /[- :]/, $requested ) ) + $unresponded_expiry*3600*24;
 	my $expiry_date = $self->{processor}->{request}->get_value( "expiry_date" );
 	my $expiry = $expiry_date ? EPrints::Time::datetime_local( split( /[- :]/, $expiry_date ) ) : 0;
 	if ( time > $unresponded_expiry || ( $expiry && time > $expiry ) )
 	{
-		$page->appendChild( $session->html_phrase( "request/respond_page:expired" ) );
+		$page->appendChild( $session->html_phrase( 
+			"request/respond_page:expired",
+			action => $session->make_text( $action ),
+			eprint => $self->{processor}->{eprint}->render_citation_link,
+			document => $self->render_document,
+		) );
 		return $page;
 	}
 
 	if ( EPrints::Utils::is_set( $self->{processor}->{request}->get_value( "code" ) ) )
 	{
-		$page->appendChild( $session->html_phrase( "request/respond_page:already_approved" ) );
+		$page->appendChild( $session->html_phrase( 
+			"request/respond_page:already_approved",
+			action => $session->make_text( $action ),
+			eprint => $self->{processor}->{eprint}->render_citation_link,
+	        document => $self->render_document,
+		) );
+		return $page;
 	}
 
 	$page->appendChild( $session->html_phrase(

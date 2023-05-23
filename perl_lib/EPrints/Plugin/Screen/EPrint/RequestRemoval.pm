@@ -217,7 +217,7 @@ sub action_send
                                 email => $self->{session}->make_text( $mail{replyto_email} ) ));
 	}
 
-	my $reason = $self->{session}->make_text( $self->{session}->param( "reason" ) );
+	my $reason = EPrints::Extras::render_paras( $self->{session}, "reason", scalar( $self->{session}->param( "reason" ) ) );
 	$mail{message} = $self->html_phrase(
 		"mail",
 		user => $from_user->render_description,

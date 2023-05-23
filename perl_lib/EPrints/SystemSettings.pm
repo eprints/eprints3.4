@@ -27,8 +27,8 @@ EPrints::SystemSettings
 package EPrints::SystemSettings;
 
 $EPrints::SystemSettings::conf = {
-                                   'version' => 'EPrints 3.4.5-rc2',
-                                   'version_id' => 'eprints-3.4.5-rc2',
+                                   'version' => 'EPrints 3.4.5',
+                                   'version_id' => 'eprints-3.4.5',
                                    'base_path' => '/opt/eprints3',
                                    'show_ids_in_log' => 0,
                                    'group' => 'eprints',

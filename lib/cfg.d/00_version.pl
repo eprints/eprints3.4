@@ -1,4 +1,4 @@
-$c->{version_long} = "EPrints 3.4.5-rc2";
+$c->{version_long} = "EPrints 3.4.5";
 $c->{version_alias} = "Smoothie Squall";
 $c->{vendor_long} = "EPrints Services";
 $c->{vendor_short} = "eps";

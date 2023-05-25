@@ -45,6 +45,7 @@ $EPrints::SystemSettings::conf = {
 														  'eprints-3.4.1',
 														  'eprints-3.4.2',
 														  'eprints-3.4.3',
+														  'eprints-3.4.4',
                                                         ],
                                    'smtp_server' => '127.0.0.1', # sensible default, but may not be valid
                                    'user' => 'eprints',

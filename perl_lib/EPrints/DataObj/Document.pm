@@ -1954,11 +1954,8 @@ sub render_icon_link
 	my %aopts;
 	$aopts{class} = "ep_document_link";
 	$aopts{target} = "_blank" if( $opts{new_window} );
-	$aopts{href} = $self->{session}->current_url(
-		host => 1,
-		path => "static",
-		$self->file_path
-	);
+	$aopts{href} = $self->get_url;
+
 	my $preview_id = "doc_preview_".$self->get_id;
 	my $preview_url;
 	if( $opts{preview} )

@@ -204,7 +204,7 @@ sub action_build
 	open(my $fhout, ">", $output) or die "Error writing to $output: $!";
 
 	binmode($fhout, ":utf8");
-	syswrite($fhout, $epm->serialise( 1 ));
+	$epm->serialise( $fhout, 1 );
 
 	print "$output\n";
 }

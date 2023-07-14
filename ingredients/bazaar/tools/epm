@@ -56,6 +56,7 @@ Set the version when building.
 =cut
 
 use EPrints;
+use File::Slurp;
 use Getopt::Long;
 use Pod::Usage;
 use Digest::MD5;
@@ -223,6 +224,8 @@ sub action_disable
 
 	my $repo = &repository( $repoid );
 	my $epm = &epm( $repo, $name );
+
+	local $handler->{dataobj} = $epm;
 
 	$epm->control_screen(
 		processor => $handler,
@@ -412,11 +415,25 @@ sub action_unpack
 	sysread($fh, my $xml, -s $fh);
 	close($fh);
 
-	my $epm = $repo->dataset( "epm" )->dataobj_class->new_from_xml( $repo, $xml );
+	my $doc = $repo->xml->parse_string( $xml );
+	my $epdata = $repo->dataset( "epm" )->dataobj_class->xml_to_epdata( $repo, $doc->documentElement );
+
+	# This is a bit of a hack to get at the tmp files.
+	my $files_data;
+	foreach my $document ( @{$epdata->{documents}} )
+	{
+		foreach my $file ( @{$document->{files}} )
+		{
+			$files_data->{$file->{filename}} = read_file( $file->{_content} );
+		}
+	}
+
+	my $epm = $repo->dataset( "epm" )->make_dataobj( $epdata );
 
 	foreach my $file ($epm->installed_files)
 	{
 		my $filepath = $file->value( "filename" );
+
 		if( $filepath =~ m#^/# || $filepath =~ m#/\.# )
 		{
 			warn "Won't unpack root-pathed or hidden file: $filepath";
@@ -435,7 +452,7 @@ sub action_unpack
 			die "Use --force to overwrite $filepath\n";
 		}
 		open(my $fh, ">", $filepath) or die "Error writing to $filepath: $!";
-		syswrite($fh, $file->value( "data" ));
+		syswrite($fh, $files_data->{$file->value( "filename" )} );
 		close($fh);
 		print "$filepath\n" if $noise;
 	}

@@ -1435,6 +1435,16 @@ sub mtime
 	return $filestat[9];
 }
 
+# Return whether directory is empty
+
+sub is_empty_dir 
+{
+	my( $dir ) = @_;
+
+	opendir(my $dh, $dir) or return 0;
+	return scalar(grep { $_ ne "." && $_ ne ".." } readdir($dh)) == 0;
+}
+
 
 # return a quoted string safe to go in javascript
 

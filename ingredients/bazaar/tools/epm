@@ -25,6 +25,7 @@ Where I<command> is one of:
 	list
 	rebuild
 	uninstall
+	unlink_lib
 	unpack
 
 =head1 OPTIONS
@@ -395,6 +396,67 @@ sub action_uninstall
 		print "Uninstalled $name\n";
 	}
 }
+
+=item unlink_lib I<package>
+
+Remove soft-links for all files in the package under lib/ to a directory tree lib/ 
+below the package's home directory. This is a utility method for developers.
+
+=cut
+
+sub action_unlink_lib
+{
+    my( $repo ) = @_;
+
+    pod2usage( 2 ) if @ARGV != 1;
+
+	use File::Basename;
+
+    my( $name ) = @ARGV;
+
+    my $epm = &epm( $repo, $name );
+
+	my @enabled_in;
+    foreach my $repoid (EPrints->repository_ids)
+    {
+        last if $force;
+        my $repo = EPrints->repository( $repoid );
+        my $repo_epm = $repo->dataset( "epm" )->make_dataobj( $epm->get_data );
+
+        if( $repo_epm->is_enabled )
+        {
+            push @enabled_in, $repoid;
+        }
+    }
+    die "Can't unlink while package is enabled in: ".join(', ', @enabled_in) if @enabled_in;
+
+	my $sourcedir = $epm->epm_dir . '/lib';
+    my $targetdir = $repo->config( "base_path" ) . '/lib';
+
+	File::Find::find(sub {
+        return if $File::Find::name =~ /\/\./;
+        return if -d $File::Find::name;
+
+        my $path = $targetdir;
+        $path .= "/" . substr($File::Find::dir,length($sourcedir)+1);
+
+        if( -e "$path/$_" ) {
+            unlink "$path/$_";
+        }
+
+		my $rm_path = $path;
+		my $empty_dir = EPrints::Utils::is_empty_dir( $rm_path );
+		print "Unlinked $path/$_\n";
+		while ( $empty_dir )
+		{
+			rmdir $rm_path;
+			print "Removed directory $rm_path\n";
+			$rm_path = dirname( $rm_path );
+			$empty_dir = EPrints::Utils::is_empty_dir( $rm_path );
+		}
+    }, $sourcedir);
+}
+
 
 =item unpack I<package_path>
 

@@ -20,6 +20,7 @@ our (%FORMATS, @ORDERED, %FORMATS_PREF);
 @ORDERED = %FORMATS = qw(
 bmp image/bmp
 gif image/gif
+heic image/heif
 ief image/ief
 jpeg image/jpeg
 jpe image/jpeg
@@ -32,6 +33,7 @@ pbm image/x-portable-bitmap
 pgm image/x-portable-graymap
 ppm image/x-portable-pixmap
 pdf application/pdf
+webp image/webp
 );
 # formats pref maps mime type to file suffix. Last suffix
 # in the list is used.

@@ -120,6 +120,7 @@ my %DEFAULT;
 $DEFAULT{convert_formats} = {qw(
 	bmp image/bmp
 	gif image/gif
+	heic image/heif
 	ief image/ief
 	jpeg image/jpeg
 	jpe image/jpeg
@@ -134,6 +135,7 @@ $DEFAULT{convert_formats} = {qw(
 	ppm image/x-portable-pixmap
 	pdf	application/pdf
 	ps	application/postscript
+	webp image/webp
 )};
 # formats supported by ffmpeg
 $DEFAULT{ffmpeg_formats} = {qw(

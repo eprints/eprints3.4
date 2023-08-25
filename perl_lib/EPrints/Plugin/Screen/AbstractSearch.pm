@@ -828,12 +828,11 @@ sub render_anyall_field
 				  "ANY" => $self->{session}->phrase( 
 						"lib/searchexpression:any" )} );
 
-	my $label = $self->{session}->make_element( 'span', id=>"satisfyall_label" );
-	$label->appendChild( $self->{session}->html_phrase( "lib/searchexpression:must_fulfill" ) );
 	return $self->{session}->render_row_with_help( 
 			no_help => 1,
-			label => $label,
+			label => $self->{session}->html_phrase( "lib/searchexpression:must_fulfill" ),
 			field => $menu,
+			prefix => 'satisfyall',
 	);
 }
 
@@ -883,6 +882,7 @@ sub render_order_field
 			label => $self->{session}->html_phrase( 
 				"lib/searchexpression:order_results" ),  
 			field => $self->render_order_menu,
+			prefix => 'order',
 	);
 }
 

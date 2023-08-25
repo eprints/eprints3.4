@@ -182,7 +182,7 @@ sub get_defaults
 
 	$data->{code} = &_code();
 	$data->{securecode} = &_code();
-	if( !$repo->config( "ignore_login_ip" ) )
+	if( !$repo->config( "ignore_login_ip" ) && !$repo->config( "securehost" ) )
 	{
 		$data->{ip} = $repo->remote_ip;
 	}

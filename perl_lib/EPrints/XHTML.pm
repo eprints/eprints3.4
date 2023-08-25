@@ -816,7 +816,6 @@ sub tabs
 		my $tab = $ul->appendChild( $xml->create_element( "li",
 			($current == $_ ? (class => "ep_tab_selected") : ()),
 			id => $basename."_tab_".$sanit_label,
-			role => "tab",
 			style => "width: $width\%",
 		) );
 
@@ -839,6 +838,7 @@ sub tabs
 			$labels->[$_],
 			href => $href,
 			onclick => "return ep_showTab('$basename','$label',".($expensive{$_}?1:0).");",
+			role => "tab",
 			class => "ep_tab_link",
 		) );
 

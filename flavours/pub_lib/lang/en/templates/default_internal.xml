@@ -14,41 +14,41 @@
       <header>
         <div class="ep_tm_header ep_noprint">
           <nav aria-label="Main Navigation">
-            <ul role="menu" class="ep_tm_menu">
-              <li>
+            <ul role="menubar" class="ep_tm_menu">
+              <li role="none">
                 <a href="{$config{rel_path}}/" title="{phrase('template/navigation:home:title')}" role="menuitem">
                   <epc:phrase ref="template/navigation:home"/>
                 </a>
               </li>
-              <li>
+              <li role="none">
                 <a href="{$config{rel_path}}/information.html" title="{phrase('template/navigation:about:title')}" role="menuitem">
                   <epc:phrase ref="template/navigation:about"/>
                 </a>
               </li>
-              <li>
-                <a href="{$config{rel_path}}/view/" title="{phrase('template/navigation:browse:title')}" role="menuitem" menu="ep_tm_menu_browse" aria-owns="ep_tm_menu_browse">
+              <li role="none">
+                <a href="{$config{rel_path}}/view/" title="{phrase('template/navigation:browse:title')}" role="menuitem" menu="ep_tm_menu_browse" aria-expanded="false" aria-haspopup="true" aria-owns="ep_tm_menu_browse">
                   <epc:phrase ref="template/navigation:browse"/>
                 </a>
-                <ul role="menu" id="ep_tm_menu_browse" style="display:none;">
-                  <li>
+                <ul role="menu" id="ep_tm_menu_browse" aria-label="About" style="display:none;">
+                  <li role="none">
                     <a href="{$config{rel_path}}/view/year/" role="menuitem">
                       <epc:phrase ref="bin/generate_views:indextitleprefix"/>
                       <epc:phrase ref="viewname_eprint_year"/>
                     </a>
                   </li>
-                  <li>
+                  <li role="none">
                     <a href="{$config{rel_path}}/view/subjects/" role="menuitem">
                       <epc:phrase ref="bin/generate_views:indextitleprefix"/>
                       <epc:phrase ref="viewname_eprint_subjects"/>
                     </a>
                   </li>
-                  <li>
+                  <li role="none">
                     <a href="{$config{rel_path}}/view/divisions/" role="menuitem">
                       <epc:phrase ref="bin/generate_views:indextitleprefix"/>
                       <epc:phrase ref="viewname_eprint_divisions"/>
                     </a>
                   </li>
-                  <li>
+                  <li role="none">
                     <a href="{$config{rel_path}}/view/creators/" role="menuitem">
                       <epc:phrase ref="bin/generate_views:indextitleprefix"/>
                       <epc:phrase ref="viewname_eprint_creators"/>

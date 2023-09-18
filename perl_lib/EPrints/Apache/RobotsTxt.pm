@@ -53,6 +53,7 @@ sub handler
 	my $langid = EPrints::Session::get_session_language( $repository, $r );
 	my @static_dirs = $repository->get_static_dirs( $langid );
 	my $robots;
+
 	foreach my $static_dir ( @static_dirs )
 	{
 		my $file = "$static_dir/robots.txt";
@@ -75,6 +76,40 @@ END
 		{
 			$robots .= "\nDisallow: $https_cgiroot/";
 		}
+	}
+
+	my @lines = split( '\n', $robots );
+	my $lineno = 0;
+	my $default_ua_config = "";
+	while ( lc( $lines[$lineno] ) !~ /user-agent: \*/ )
+	{
+		$lineno++;
+	}
+	$lineno++;
+	while ( $lines[$lineno] !~ /^\s*$/ )
+	{
+		$default_ua_config .= $lines[$lineno] ."\n";
+		$lineno++;
+	}
+
+	my $crawl_delay_default_secs = $repository->config( 'robotstxt', 'crawl_delay', 'default_seconds' ) || 0;
+	my $crawl_delay_secs = $repository->config( 'robotstxt', 'crawl_delay', 'seconds' ) || 10;
+	my $crawl_delay_uas = $repository->config( 'robotstxt', 'crawl_delay', 'user_agents' ) || [];
+	
+	$robots .= "\n" if $crawl_delay_default_secs || EPrints::Utils::is_set( $crawl_delay_uas );
+	
+	foreach my $ua ( @$crawl_delay_uas )
+	{
+		$robots .= "User-agent: $ua\n";
+	}
+	if ( EPrints::Utils::is_set( $crawl_delay_uas ) )
+	{
+		$robots .= "$default_ua_config" . "Crawl-delay: $crawl_delay_secs\n\n";	
+	}
+
+	if( $crawl_delay_default_secs )
+	{
+		$robots .= "User-agent: *\nCrawl-delay: $crawl_delay_default_secs\n\n";
 	}
 
 	my $sitemap = "Sitemap: ".$repository->config( 'base_url' )."/sitemap.xml";

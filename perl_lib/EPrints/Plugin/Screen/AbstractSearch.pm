@@ -626,10 +626,11 @@ sub paginate_opts
 	my $order_div = $self->{session}->make_element( "div", class=>"ep_search_reorder" );
 	my $form = $self->{session}->render_form( "GET" );
 	$order_div->appendChild( $form );
-	$form->appendChild( $self->{session}->html_phrase( "lib/searchexpression:order_results" ) );
-	$form->appendChild( $self->{session}->make_text( ": " ) );
-	$form->appendChild( $self->render_order_menu( ( auto_submit => 1 ) ) );
-
+	my $order_label = $self->{session}->make_element( "label" );
+	$order_label->appendChild( $self->{session}->html_phrase( "lib/searchexpression:order_results" ) );
+	$order_label->appendChild( $self->{session}->make_text( ": " ) );
+	$order_label->appendChild( $self->render_order_menu( ( auto_submit => 1 ) ) );
+	$form->appendChild( $order_label );
 	$form->appendChild( $self->{session}->render_button(
 			name=>"_action_search",
 			value=>$self->{session}->phrase( "lib/searchexpression:reorder_button" ) ) );
@@ -881,7 +882,7 @@ sub render_order_field
 			no_help => 1,
 			label => $self->{session}->html_phrase( 
 				"lib/searchexpression:order_results" ),  
-			field => $self->render_order_menu,
+			field => $self->render_order_menu( 'aria-labelledby' => 'order_label' ),
 			prefix => 'order',
 	);
 }
@@ -910,8 +911,8 @@ sub render_order_menu
                 values=>[values %{$methods}],
                 default=>$order,
                 labels=>\%labels,
-                'aria-labelledby'=>"order_label"
 	);
+	$attrs{'aria-labelledby'} = defined $opts{'aria-labelledby'} ? $opts{'aria-labelledby'} : undef;
 	$attrs{onchange} = "this.form.submit();" if $opts{auto_submit} && $self->{session}->config( 'order_auto_submit' );
 	return $self->{session}->render_option_list( %attrs );
 }

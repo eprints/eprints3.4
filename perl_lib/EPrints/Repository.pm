@@ -3773,7 +3773,7 @@ sub render_option_list
 		
 
 	my $class = ( defined($params{class}) ) ? $params{class} : "";
-	my $element = $self->make_element( "select" , name => $params{name}, id => $params{name}, class => $class );
+	my $element = $self->make_element( "select", name => $params{name}, class => $class );
 	my $span = undef;
 	if( $params{readonly} )
         {

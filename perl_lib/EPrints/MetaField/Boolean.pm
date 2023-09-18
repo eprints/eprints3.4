@@ -132,6 +132,7 @@ sub get_basic_input_elements
 			readonly => $readonly,
 			onclick => $onclick,
 			class => join(" ", @classes),
+			title => $session->html_phrase( $self->{confid} . "_radio_" . $self->{name} . "_true" ),
 			value => "TRUE",
 			'aria-labelledby' => $basename . "_true_label" );
 		$inputs->{false} = $session->render_noenter_input_field(
@@ -143,6 +144,7 @@ sub get_basic_input_elements
 			readonly => $readonly,
 			onclick => $onclick,
 			class => join(" ", @classes),
+			title => $session->html_phrase( $self->{confid} . "_radio_" . $self->{name} . "_false" ),
 			value => "FALSE",
 			'aria-labelledby' => $basename . "_false_label" );
 		if( !$self->get_property( "required" ) )
@@ -153,6 +155,7 @@ sub get_basic_input_elements
 				name => $basename,
                                 id => $basename . "_unspecified",
                                 class => join(" ", @classes),
+                                title => $self->unspecified_phrase( $session ),
                                 onclick => $onclick,
                                 value => "",
 				'aria-labelledby' => $basename . "_unspecified_label" )

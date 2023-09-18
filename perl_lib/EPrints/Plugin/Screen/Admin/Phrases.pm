@@ -490,7 +490,7 @@ sub render_row
 
 	$tr = $session->make_element( "tr", class => "ep_phraseedit_$src" );
 
-	$td = $session->make_element( "td", id => "ep_phraseedit_".$phraseid."_label" );
+	$td = $session->make_element( "td", id => "ep_phraseedit_".$phraseid."__label" );
 	$tr->appendChild( $td );
 	$td->appendChild( $session->make_text( $phraseid ) );
 

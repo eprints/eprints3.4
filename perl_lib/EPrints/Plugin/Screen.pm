@@ -562,7 +562,7 @@ sub render_action_list_bar
 		push @actions, $self->render_action_button( { %$params, hidden => $hidden } );
 	}
 
-	my $div = $repo->xml->create_element( "div", class => "ep_block" );
+	my $div = $repo->xml->create_element( "div", class => "ep_block", role => "toolbar" );
 	$div->appendChild( $repo->xhtml->action_list( \@actions ) );
 
 	return $div;

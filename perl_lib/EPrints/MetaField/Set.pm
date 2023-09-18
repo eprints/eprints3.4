@@ -336,14 +336,15 @@ sub render_set_input
 				$row->appendChild( $session->render_noenter_input_field(
 	                                type => $type,
         	                        name => $basename,
+                                        title => $labels->{$opt},
                 	                id => $basename."_".$opt,
                         	        value => $opt,
                                 	class => join(" ", @classes),
 	                                checked => $checked,
-        	                        'aria-labelledby' => $basename."_".$opt."_title",
+                                        'aria-labelledby' => $basename."_".$opt."_label",
                 	        ) );
 	                        $dd = $session->make_element( "dd", id=>$basename."_".$opt."_label", 'aria-describedby'=>$self->get_labelledby( $basename ) );
-				$dd->appendChild( $session->make_text( " ".$labels->{$opt} ) );
+				$dd->appendChild( $session->make_text( $labels->{$opt} ) );
 			}
 			$list->appendChild( $row );
                         $list->appendChild( $dd );

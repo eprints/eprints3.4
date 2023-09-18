@@ -147,11 +147,11 @@ sub ajax_stats
 		$form->appendChild( $session->render_hidden_field( store => $pluginid ) );
 		$form->appendChild( $session->render_hidden_field( datasetid => $datasetid ) );
 		$form->appendChild( $session->render_button(
-			id => $pluginid . "_migrate",
+			id => $pluginid . "_" . $datasetid . "_migrate",
 			onclick => "return js_admin_storagemanager_migrate(this);",
 			value => $self->phrase( "migrate" )
 			) );
-		my $select = $session->make_element( "select", name => "target", 'aria-labelledby' => $pluginid . "_migrate" );
+		my $select = $session->make_element( "select", name => "target", 'aria-labelledby' => $pluginid . "_" . $datasetid . "_migrate" );
 		$form->appendChild( $select );
 		my $option = $session->make_element( "option" );
 		$select->appendChild( $option );
@@ -336,7 +336,7 @@ sub render
 		push(@{$plugin_classes->{$store->{storage_class}}},$plugin->render_plugin( $store, \@plugins ) );
 	}
 	foreach my $plug (sort {$a cmp $b} keys(%{$plugin_classes})) {
-		my $part = $session->make_element( "div", class=>"ep_toolbox", id=>"blue" );
+		my $part = $session->make_element( "div", class=>"ep_toolbox", id=>"ep_toolbox_" . $plug );
 		my $part_content_div = $session->make_element( "div", class=>"ep_toolbox_content", style=>"padding-left:6px; padding-bottom: 6px;" );
 		my $heading_blue = $session->make_element( "h2", class=>"ep_storage_heading" );
 		$heading_blue->appendChild( $plugin->html_phrase($plug) );

@@ -488,6 +488,7 @@ sub render
 	$page->appendChild( $session->make_element( "iframe",
 			id => "${prefix}_iframe",
 			name => "${prefix}_iframe",
+			title => $self->phrase( 'title' ) . " iframe",
 			width => "0px",
 			height => "0px",
 			style => "border: 0px;",

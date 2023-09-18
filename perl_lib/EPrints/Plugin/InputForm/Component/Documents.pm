@@ -384,7 +384,7 @@ sub _render_doc_div
 	$doc_expansion_bar->appendChild( $opts_toggle );
 
 	my $s_options = $session->make_element( "div", id=>$doc_prefix."_opts_show", class=>"ep_update_doc_options ".($hide?"":"ep_hide") );
-	my $show_label = $session->make_element( "label", for=>$doc_prefix."_opts_show" );
+	my $show_label = $session->make_element( "label", for=>$doc_prefix."_opts_show_button" );
 	$show_label->appendChild( $self->html_phrase( "show_options" ) );
 	$s_options->appendChild( $show_label );
 	$s_options->appendChild( $session->make_text( " " ) );
@@ -393,12 +393,12 @@ sub _render_doc_div
 			    type=>'image',
 				src=>"$imagesurl/style/images/plus.png",
 				alt=>'+',
-				id=>$doc_prefix."_opts_show",
+				id=>$doc_prefix."_opts_show_button",
 				) );
 	$opts_toggle->appendChild( $s_options );
 
 	my $h_options = $session->make_element( "div", id=>$doc_prefix."_opts_hide", class=>"ep_update_doc_options ".($hide?"ep_hide":"") );
-	my $hide_label = $session->make_element( "label", for=>$doc_prefix."_opts_hide" );
+	my $hide_label = $session->make_element( "label", for=>$doc_prefix."_opts_hide_button" );
 	$hide_label->appendChild( $self->html_phrase( "hide_options" ) );
 	$h_options->appendChild( $hide_label );
 	$h_options->appendChild( $session->make_text( " " ) );
@@ -407,7 +407,7 @@ sub _render_doc_div
 			    type=>'image',
 				src=>"$imagesurl/style/images/minus.png",
 				alt=>'-',
-				id=>$doc_prefix."_opts_hide",
+				id=>$doc_prefix."_opts_hide_button",
 				) );
 	$opts_toggle->appendChild( $h_options );
 
@@ -608,11 +608,9 @@ sub _render_doc_metadata
 		$no_toggle = 1 if $field->{show_help} eq "always";
 		$no_toggle = 0 if $field->{show_help} eq "toggle";
 		$no_help = 1 if $field->{show_help} eq "never";
-		my $label = $self->{session}->make_element( "span", id => $field->get_name . "_label" );
-		$label->appendChild( $labeltext );
 		
 		$table->appendChild( $session->render_row_with_help(
-			label=>$label,
+			label=>$labeltext,
 			field=>$field->render_input_field(
 								$session,
 								$doc->get_value( $field->get_name ),

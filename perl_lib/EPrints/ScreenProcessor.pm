@@ -244,7 +244,7 @@ sub render_item_list
 
 	my $xml = $self->{session}->xml;
 
-	my $ul = $xml->create_element( "ul", class => $class, id => "ep_tm_menu_tools", "role" => "toolbar" );
+	my $ul = $xml->create_element( "ul", class => $class, id => "ep_tm_menu_tools" );
 
 	foreach my $opt (@$list)
 	{

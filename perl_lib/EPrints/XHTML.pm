@@ -147,7 +147,6 @@ sub form
         {
 		my $csrf_token = $self->{repository}->get_csrf_token();
                 my $csrf_token_input = $self->{repository}->xml->create_element( "input",
-			id => "csrf_token",
 			name => "csrf_token",
 			type => "hidden", 
 			value => $csrf_token,
@@ -210,7 +209,6 @@ sub hidden_field
 
 	return $self->{repository}->xml->create_element( "input",
 		name => $name,
-		id => $name,
 		value => $value,
 		type => "hidden",
 		@opts );
@@ -809,13 +807,12 @@ sub tabs
 	for(0..$#$labels)
 	{
 		my $label = defined($aliases) ? $aliases->{$_} : $_;
-		my $sanit_label = $label;
-		$sanit_label =~ s/[^a-zA-Z0-9_-]/_/g;
 		my $width = int( 100 / @$labels );
 		$width += 100 % @$labels if $_ == 0;
 		my $tab = $ul->appendChild( $xml->create_element( "li",
 			($current == $_ ? (class => "ep_tab_selected") : ()),
-			id => $basename."_tab_".$sanit_label,
+			id => $basename."_tab_".$_,
+			role => "none",
 			style => "width: $width\%",
 		) );
 
@@ -832,20 +829,24 @@ sub tabs
 		{
 			$href = $links->{$label};
 		}
-#		$href->fragment( "ep_tabs:".$basename.":".$_ );
 
 		my $link = $tab->appendChild( $xml->create_data_element( "a",
 			$labels->[$_],
 			href => $href,
 			onclick => "return ep_showTab('$basename','$label',".($expensive{$_}?1:0).");",
-			role => "tab",
 			class => "ep_tab_link",
+			role => "tab",
+			"aria-selected" => ( $current == $_ ? "true" : "false" ),
+			"aria-controls" => $basename."_panel_".$_,
+			tabindex => "-1",
 		) );
 
 		if( defined $panel )
 		{
 			my $inner_panel = $xml->create_element( "div", 
-				id => $basename."_panel_".$sanit_label,
+				id => $basename."_panel_".$_,
+				role => "tabpanel",
+				"aria-labelledby" => $basename."_panel_".$_,
 			);
 			if( $_ != $current )
 			{
@@ -974,7 +975,7 @@ sub action_list
 	my $ul = $xml->create_element( "ul", class => "ep_action_list", role => "toolbar" );
 	for(@$actions)
 	{
-		$ul->appendChild( $xml->create_data_element( "li", $_ ) );
+		$ul->appendChild( $xml->create_data_element( "li", $_, role => "none" ) );
 	}
 
 	return $ul;
@@ -1000,7 +1001,7 @@ sub action_definition_list
 	for(my $i = 0; $i < @$actions; ++$i)
 	{
 		$dl->appendChild( $xml->create_data_element( "dt", $actions->[$i], role=>"menuitem", "aria-describedby"=>"ep_".$opts{id}."_desc_$i" ) );
-		$dl->appendChild( $xml->create_data_element( "dd", $definitions->[$i], id=>"ep_".$opts{id}."_desc_$i", role=>"description" ) );
+		$dl->appendChild( $xml->create_data_element( "dd", $definitions->[$i], id=>"ep_".$opts{id}."_desc_$i", role=>"none" ) );
 	}
 
 	return $dl;

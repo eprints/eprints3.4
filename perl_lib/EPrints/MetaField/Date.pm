@@ -212,25 +212,25 @@ sub get_basic_input_elements
 
 	$div->appendChild( $session->make_text(" ") );
 
-	my $mlabel = $session->make_element( "label", for=>$monthid );
+	my $mlabel = $session->make_element( "label" );
 	$mlabel->appendChild( 
 		$session->html_phrase( "lib/metafield:month" ) );
-	$div->appendChild( $mlabel );
-	$div->appendChild( $session->make_text(" ") );
-	$div->appendChild( $session->render_option_list(
+	
+	$mlabel->appendChild( $session->make_text(" ") );
+	$mlabel->appendChild( $session->render_option_list(
 		name => $monthid,
 		id => $monthid,
 		values => \@EPrints::MetaField::Date::MONTHKEYS,
 		default => $month,
 		labels => $self->_month_names( $session ) ) );
+	$div->appendChild( $mlabel );
 
 	$div->appendChild( $session->make_text(" ") );
 
-	my $dlabel = $session->make_element( "label", for=>$dayid );
+	my $dlabel = $session->make_element( "label" );
 	$dlabel->appendChild( 
 		$session->html_phrase( "lib/metafield:day" ) );
-	$div->appendChild( $dlabel );
-	$div->appendChild( $session->make_text(" ") );
+	$dlabel->appendChild( $session->make_text(" ") );
 	my @daykeys = ();
 	my %daylabels = ();
 	for( 0..31 )
@@ -239,12 +239,13 @@ sub get_basic_input_elements
 		push @daykeys, $key;
 		$daylabels{$key} = ($_==0?"?":$key);
 	}
-	$div->appendChild( $session->render_option_list(
+	$dlabel->appendChild( $session->render_option_list(
 		name => $dayid,
 		id => $dayid,
 		values => \@daykeys,
 		default => $day,
 		labels => \%daylabels ) );
+	$div->appendChild( $dlabel );
 
 	$frag->appendChild( $div );
 	

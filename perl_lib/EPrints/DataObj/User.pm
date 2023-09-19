@@ -829,7 +829,7 @@ sub close_non_current_login_tickets
 	my ($self) = @_;
 
 	my $repo = $self->repository;
-	my $current_ticket = $repo->current_loginticket;
+	my $current_ticket = defined $repo->get_request ? $repo->current_loginticket : undef;
 
 	my $ticket_ds = $repo->dataset('loginticket');
 

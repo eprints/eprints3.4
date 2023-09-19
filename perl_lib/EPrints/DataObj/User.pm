@@ -842,7 +842,7 @@ sub close_non_current_login_tickets
 		{
 			my ($repo, $ds, $ticket, $current_ticket) = @_;
 
-			if ($ticket->value('code') ne $current_ticket->value('code'))
+			if (!defined $current_ticket || $ticket->value('code') ne $current_ticket->value('code'))
 			{
 				$ticket->remove;
 			}

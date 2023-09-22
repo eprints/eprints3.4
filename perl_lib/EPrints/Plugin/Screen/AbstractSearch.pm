@@ -546,13 +546,13 @@ sub render_export_bar
 	$button->appendChild( $session->render_button(
 			name=>"_action_export_redir",
 			value=>$session->phrase( "lib/searchexpression:export_button" ) ) );
-	$button->appendChild( $self->render_hidden_bits );
+	$button->appendChild( $self->render_hidden_bits( "export" ) );
 	$button->appendChild( 
-		$session->render_hidden_field( "order", $order ) ); 
+		$session->render_hidden_field( "order", $order, "order_export" ) ); 
 	$button->appendChild( 
-		$session->render_hidden_field( "cache", $cacheid ) ); 
+		$session->render_hidden_field( "cache", $cacheid, "cache_export" ) ); 
 	$button->appendChild( 
-		$session->render_hidden_field( "exp", $escexp, ) );
+		$session->render_hidden_field( "exp", $escexp, "exp_export" ) );
 
 	my $form = $self->{session}->render_form( "GET" );
 	$form->appendChild( $session->html_phrase( "lib/searchexpression:export_section",
@@ -634,9 +634,9 @@ sub paginate_opts
 	$form->appendChild( $self->{session}->render_button(
 			name=>"_action_search",
 			value=>$self->{session}->phrase( "lib/searchexpression:reorder_button" ) ) );
-	$form->appendChild( $self->render_hidden_bits );
+	$form->appendChild( $self->render_hidden_bits( "order" ) );
 	$form->appendChild( 
-		$self->{session}->render_hidden_field( "exp", $escexp, ) );
+		$self->{session}->render_hidden_field( "exp", $escexp, "exp_order" ) );
 
 	return (
 		pins => \%bits,
@@ -746,14 +746,15 @@ sub render_search_form
 
 sub render_hidden_bits
 {
-    my( $self ) = @_;
+    my( $self, $idsuffix ) = @_;
 
     my $chunk = $self->{session}->make_doc_fragment;
 	if ( $self->repository->param( 'search_offset' ) )
 	{
-    	$chunk->appendChild( $self->{session}->render_hidden_field( "search_offset", $self->repository->param( 'search_offset' ) ) );
+		my $search_offset_id = $idsuffix ? "search_offset_$idsuffix" : "search_offset";
+    	$chunk->appendChild( $self->{session}->render_hidden_field( "search_offset", $self->repository->param( 'search_offset' ), $search_offset_id ) );
 	}
-    $chunk->appendChild( $self->SUPER::render_hidden_bits );
+    $chunk->appendChild( $self->SUPER::render_hidden_bits( $idsuffix ) );
 
     return $chunk;
 }

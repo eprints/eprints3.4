@@ -3773,7 +3773,7 @@ sub render_option_list
 		
 
 	my $class = ( defined($params{class}) ) ? $params{class} : "";
-	my $element = $self->make_element( "select", name => $params{name}, class => $class );
+	my $element = $self->make_element( "select", name => $params{name}, id => $params{name}, class => $class );
 	my $span = undef;
 	if( $params{readonly} )
         {
@@ -3880,14 +3880,17 @@ and name and value as specified. eg.
 
 sub render_hidden_field
 {
-	my( $self, $name, $value ) = @_;
+	my( $self, $name, $value, $id ) = @_;
 
 	if( !defined $value ) 
 	{
 		$value = $self->param( $name );
 	}
 
-	return $self->xhtml->hidden_field( $name, $value );
+	my @opts = ();
+	push @opts, ( 'id', $id ) if $id;
+
+	return $self->xhtml->hidden_field( $name, $value, @opts );
 }
 
 sub render_input_field

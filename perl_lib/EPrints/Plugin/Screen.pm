@@ -98,15 +98,20 @@ sub hidden_bits
 
 sub render_hidden_bits
 {
-	my( $self ) = @_;
+	my( $self, $idsuffix ) = @_;
 
 	my $chunk = $self->{session}->make_doc_fragment;
 
 	my @params = $self->hidden_bits;
 	for(my $i = 0; $i < @params; $i+=2)
 	{
+		my $name = $params[$i];
+		my $value = $params[$i+1];
+		my $id = $idsuffix ? $name . "_" . $idsuffix : $name;
 		$chunk->appendChild( $self->{session}->render_hidden_field( 
-				@params[$i,$i+1]
+				$name,
+				$value,
+				$id
 			) );
 	}
 

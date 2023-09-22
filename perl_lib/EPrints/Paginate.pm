@@ -437,7 +437,18 @@ sub paginate_list
 	if( $n_results > 0 && defined $pins{controls} )
 	{
 		my $div = $session->make_element( "div", class=>"ep_search_controls_bottom" );
-		$div->appendChild( $session->clone_for_me( $pins{controls}, 1 ) );
+		# Needs to be a DOM to run XPath over it.
+		my $controls_bottom = $session->xml->parse_string( $session->clone_for_me( $pins{controls}, 1 ) );
+		if ( EPrints::Utils::require_if_exists( "XML::LibXML::XPathContext" ) ) 
+		{
+			my $xc = XML::LibXML::XPathContext->new( $controls_bottom );
+			foreach my $element ( $xc->findnodes( '//*[@id]' )  )
+			{
+				$element->setAttribute( 'id', $element->getAttribute( 'id' ) . "_bottom" );
+			}
+		}
+		# Append the document element of the DOM.
+		$div->appendChild( $controls_bottom->documentElement );
 		$page->appendChild( $div );
 	}	
 

@@ -210,9 +210,6 @@ sub hidden_field
 	my %hopts = @opts;
 	push @opts, ( 'id', $name ) unless defined $hopts{id};
 	
-	use Data::Dumper;
-	print STDERR "OPTS: ".Dumper( @opts );
-
 	return $self->{repository}->xml->create_element( "input",
 		name => $name,
 		value => $value,

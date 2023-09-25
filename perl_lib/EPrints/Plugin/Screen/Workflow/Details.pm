@@ -283,6 +283,7 @@ sub render_edit_button
 			dataobj => $self->{processor}->{dataobj}->id,
 			stage => $stage->get_name,
 		},
+		idsuffix => "stage_" . $stage->get_name,
 	});
 	$div->appendChild( $button );
 

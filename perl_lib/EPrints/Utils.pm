@@ -1589,6 +1589,14 @@ sub validate_email
 	return defined $email && $email =~ m/^[a-zA-Z0-9.!#$%&’*+i\/=\?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 }
 
+sub sanitise_element_id
+{
+	my ( $id ) = @_;
+
+	$id =~ s/[^a-zA-Z0-9_]/_/g;
+	return $id;
+}
+
 1;
 
 =head1 COPYRIGHT

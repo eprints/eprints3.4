@@ -203,9 +203,10 @@ sub render
 
 		my @buttons;
 
-		my $form = $self->render_form;
+		my $form = $self->render_form( "installed_" . $epm->id );
 		$form->appendChild( $xhtml->hidden_field( 
 			dataobj => $epm->id,
+			id => "dataobj_installed" . $epm->id,
 		) );
 
 		my $controller = $epm->control_screen(

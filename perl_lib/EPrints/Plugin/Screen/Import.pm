@@ -506,7 +506,7 @@ sub render_import_form
         $help->appendChild( $self->html_phrase( "data_help" ) );
 	$div->appendChild( $help );
 
-	my $form = $div->appendChild( $self->{processor}->screen->render_form );
+	my $form = $div->appendChild( $self->{processor}->screen->render_form( "import_data" ) );
 	$form->appendChild(EPrints::MetaField->new(
 			name => "data",
 			type => "longtext",
@@ -544,7 +544,7 @@ sub render_upload_form
         $div->appendChild( $help );
 
 
-	my $form = $div->appendChild( $self->{processor}->screen->render_form );
+	my $form = $div->appendChild( $self->{processor}->screen->render_form( "import_file" ) );
 	$form->appendChild( $xhtml->input_field(
 		file => undef,
 		type => "file",
@@ -665,7 +665,7 @@ sub render_import_bar
 			name=>"_action_import_from",
 			value=>$self->phrase( "action:import_from:title" ) ) );
 	$button->appendChild( 
-		$session->render_hidden_field( "screen", substr($self->{id},8) ) ); 
+		$session->render_hidden_field( "screen", substr($self->{id},8), "screen_import" ) ); 
 
 	my $form = $session->render_form( "GET" );
 	$form->appendChild( $self->html_phrase( "import_section",

@@ -433,8 +433,8 @@ sub render
 
 		if( $i > 0 )
 		{
-			my $form_l = $self->render_form;
-			$form_l->appendChild( $session->render_hidden_field( "column", $i ) );
+			my $form_l = $self->render_form( $i . "_left" );
+			$form_l->appendChild( $session->render_hidden_field( "column", $i, "column" . $i . "_left" ) );
 			$form_l->appendChild( $session->make_element( 
 				"input",
 				type=>"image",
@@ -451,8 +451,8 @@ sub render
 		}
 
 		my $msg = $self->phrase( "remove_column_confirm" );
-		my $form_rm = $self->render_form;
-		$form_rm->appendChild( $session->render_hidden_field( "column", $i ) );
+		my $form_rm = $self->render_form( $i . "_remove" );
+		$form_rm->appendChild( $session->render_hidden_field( "column", $i, $i . "_remove" ) );
 		$form_rm->appendChild( $session->make_element( 
 			"input",
 			type=>"image",
@@ -466,8 +466,8 @@ sub render
 
 		if( $i < $#$columns )
 		{
-			my $form_r = $self->render_form;
-			$form_r->appendChild( $session->render_hidden_field( "column", $i ) );
+			my $form_r = $self->render_form( $i . "_right" );
+			$form_r->appendChild( $session->render_hidden_field( "column", $i, $i . "_right" ) );
 			$form_r->appendChild( $session->make_element( 
 				"input",
 				type=>"image",
@@ -657,7 +657,7 @@ sub render_search_form
 {
 	my( $self ) = @_;
 
-	my $form = $self->render_form;
+	my $form = $self->render_form( "search" );
 	$form->setAttribute( method => "get" );
 
 	my $table = $self->{session}->make_element( "div", class=>"ep_search_fields" );

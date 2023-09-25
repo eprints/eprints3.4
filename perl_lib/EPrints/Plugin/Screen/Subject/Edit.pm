@@ -328,8 +328,10 @@ sub render_children
 		$td = $tr->appendChild( $xml->create_element( "td",
 			class => "ep_columns_cell",
 		) );
-		my $form = $td->appendChild( $self->render_form );
-		$form->appendChild( $xhtml->hidden_field( childid => $child->id ) );
+
+		my $idsuffix = EPrints::Utils::sanitise_element_id( $child->id . "_unlink" );
+		my $form = $td->appendChild( $self->render_form( $idsuffix ) );
+		$form->appendChild( $xhtml->hidden_field( childid => $child->id, $idsuffix ) );
 		$form->appendChild( $xhtml->action_button(
 			unlink => $self->phrase( "action_unlink" )
 		) );
@@ -344,7 +346,7 @@ sub render_children
 			class => "ep_columns_cell",
 			colspan => 3,
 		) );
-		my $form = $td->appendChild( $self->render_form );
+		my $form = $td->appendChild( $self->render_form( "create_subject" ) );
 		my $label = $xml->create_element( "label", "for"=>'new_childid' ); 
 		$label->appendChild( $dataset->field( "subjectid" )->render_name );
 		$form->appendChild( $label );
@@ -364,7 +366,7 @@ sub render_children
 			class => "ep_columns_cell",
 			colspan => 3,
 		) );
-		my $form = $td->appendChild( $self->render_form );
+		my $form = $td->appendChild( $self->render_form( "link_subject" ) );
 		$form->appendChild( $self->html_phrase( "existing" ) );
 		$form->appendChild( $xml->create_text_node( ": " ) );
 		my $select = $form->appendChild( $xml->create_element( "select",
@@ -469,8 +471,9 @@ sub action_unlink
 	# are we deleting?
 	if( @{$child->value( "parents" )} < 2 )
 	{
-		my $form = $self->render_form;
-		$form->appendChild( $repo->xhtml->hidden_field( childid => $childid ) );
+		my $idsuffix = EPrints::Utils::sanitise_element_id( $childid . "_unlink" );
+		my $form = $self->render_form( $idsuffix );
+		$form->appendChild( $repo->xhtml->hidden_field( childid => $childid, "childid_ " . $idsuffix ) );
 		$form->appendChild( $repo->render_action_buttons(
 			remove => $repo->phrase( "lib/submissionform:action_remove" ),
 			cancel => $repo->phrase( "lib/submissionform:action_cancel" ),

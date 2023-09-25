@@ -3888,7 +3888,11 @@ sub render_hidden_field
 	}
 
 	my @opts = ();
-	push @opts, ( 'id', $id ) if $id;
+	if ( $id )
+	{
+		$id = EPrints::Utils::sanitise_element_id( $id );
+		push @opts, ( 'id', $id ) if $id;
+	}
 
 	return $self->xhtml->hidden_field( $name, $value, @opts );
 }

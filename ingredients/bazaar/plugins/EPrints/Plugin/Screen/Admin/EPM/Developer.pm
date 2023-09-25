@@ -120,10 +120,11 @@ sub render
 		);
 
 		my $actions = $xml->create_document_fragment;
-		my $form = $self->render_form;
+		my $form = $self->render_form( "developer_" . $epm->id );
 		$actions->appendChild( $form );
 		$form->appendChild( $xhtml->hidden_field(
 			dataobj => $epm->id,
+			id => "dataobj_developer_" . $epm->id,
 		) );
 		$form->appendChild( $repo->render_action_buttons(
 			edit => $self->phrase( "action_edit" ),

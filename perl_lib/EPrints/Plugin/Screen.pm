@@ -141,11 +141,11 @@ sub export_mimetype
 	
 sub render_form
 {
-	my( $self ) = @_;
+	my( $self, $idsuffix ) = @_;
 
 	my $form = $self->{session}->render_form( "post", $self->{processor}->{url}."#t" );
 
-	$form->appendChild( $self->render_hidden_bits );
+	$form->appendChild( $self->render_hidden_bits( $idsuffix ) );
 
 	return $form;
 }
@@ -493,8 +493,14 @@ sub _render_action_aux
 		foreach my $i (0..$#query)
 		{
 			next if $i % 2;
+			my $hidden_name = $query[$i];
+			my $hidden_value = $query[$i+1];
+			my $hidden_id = $hidden_name . "_".$hidden_value;
+			$hidden_id .= "_" . $params->{screen_id} unless $hidden_name eq "screen";
+			$hidden_id .= "_" . $params->{action} if defined $params->{action} && $hidden_name ne "action";
+			$hidden_id .= defined $params->{idsuffix} ? "_" .$params->{idsuffix} : "";
 			$frag->appendChild( $session->render_hidden_field( 
-				@query[$i, $i+1] ) );
+				$hidden_name, $hidden_value, $hidden_id  ) );
 		}
 		if( defined $icon && $asicon )
 		{
@@ -547,7 +553,7 @@ sub render_action_list
 	my( @actions, @definitions );
 	foreach my $params ($self->action_list( $list_id ))
 	{
-		push @actions, $self->render_action_button( { %$params, hidden => $hidden } );
+		push @actions, $self->render_action_button( { %$params, hidden => $hidden, idsuffix => $list_id } );
 		push @definitions, $self->get_description( $params );
 	}
 
@@ -564,7 +570,7 @@ sub render_action_list_bar
 	my @actions;
 	foreach my $params ($self->action_list( $list_id ))
 	{
-		push @actions, $self->render_action_button( { %$params, hidden => $hidden } );
+		push @actions, $self->render_action_button( { %$params, hidden => $hidden, idsuffix => $list_id } );
 	}
 
 	my $div = $repo->xml->create_element( "div", class => "ep_block", role => "toolbar" );

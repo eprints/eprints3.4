@@ -304,16 +304,23 @@ sub _render_action_aux
 
 	my $form = $session->render_form( $method, $session->current_url( path => "cgi" ) . "/users/home" );
 
+	my $idsuffix = defined $params->{hidden}->{stage} ? "_stage_" . $params->{hidden}->{stage} : "";
+
 	$form->appendChild( 
 		$session->render_hidden_field( 
 			"screen", 
-			substr( $params->{screen_id}, 8 ) ) );
+			substr( $params->{screen_id}, 8 ), 
+			"screen_" . substr( $params->{screen_id}, 8 ) . $idsuffix
+		)
+	);
+
 	foreach my $id ( keys %{$params->{hidden}} )
 	{
 		$form->appendChild( 
 			$session->render_hidden_field( 
 				$id, 
-				$params->{hidden}->{$id} ) );
+				$params->{hidden}->{$id},
+				$id . "_" . substr( $params->{screen_id}, 8 ) . $idsuffix ) );
 	}
 	my( $action, $title, $icon );
 	if( defined $params->{action} )

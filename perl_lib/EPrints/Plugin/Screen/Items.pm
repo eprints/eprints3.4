@@ -313,9 +313,9 @@ sub render_items
 			{
 				my $form_l = $session->render_form( "post" );
 				$form_l->appendChild( 
-					$session->render_hidden_field( "screen", "Items" ) );
+					$session->render_hidden_field( "screen", "Items", "screen_" . $i . "_left" ) );
 				$form_l->appendChild( 
-					$session->render_hidden_field( "colid", $i ) );
+					$session->render_hidden_field( "colid", $i, "colid_" . $i . "_left" ) );
 				$form_l->appendChild( $session->make_element( 
 					"input",
 					type=>"image",
@@ -334,9 +334,9 @@ sub render_items
 			my $msg = $self->phrase( "remove_column_confirm" );
 			my $form_rm = $session->render_form( "post" );
 			$form_rm->appendChild( 
-				$session->render_hidden_field( "screen", "Items" ) );
+				$session->render_hidden_field( "screen", "Items", "screen_". $i . "_remove" ) );
 			$form_rm->appendChild( 
-				$session->render_hidden_field( "colid", $i ) );
+				$session->render_hidden_field( "colid", $i, "colid_". $i . "_remove" ) );
 			$form_rm->appendChild( $session->make_element( 
 				"input",
 				type=>"image",
@@ -352,9 +352,9 @@ sub render_items
 			{
 				my $form_r = $session->render_form( "post" );
 				$form_r->appendChild( 
-					$session->render_hidden_field( "screen", "Items" ) );
+					$session->render_hidden_field( "screen", "Items", "screen_" . $i . "_right" ) );
 				$form_r->appendChild( 
-					$session->render_hidden_field( "colid", $i ) );
+					$session->render_hidden_field( "colid", $i, "colid_". $i . "_right" ) );
 				$form_r->appendChild( $session->make_element( 
 					"input",
 					type=>"image",
@@ -432,7 +432,7 @@ sub render_items
 	# Add form
 	my $div = $session->make_element( "div", class=>"ep_columns_add" );
 	my $form_add = $session->render_form( "post" );
-	$form_add->appendChild( $session->render_hidden_field( "screen", "Items" ) );
+	$form_add->appendChild( $session->render_hidden_field( "screen", "Items", "screen_add_column" ) );
 
 	my $colcurr = {};
 	foreach( @$columns ) { $colcurr->{$_} = 1; }

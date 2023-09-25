@@ -354,6 +354,7 @@ sub render_edit_button
 		screen => $screen,
 		screen_id => "Screen::".$self->edit_screen_id,
 		hidden => [qw( eprintid stage )],
+		idsuffix => "stage_" . $stage,
 	});
 	$div->appendChild( $button );
 

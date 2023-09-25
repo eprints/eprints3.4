@@ -168,8 +168,10 @@ sub action_delete
 	$frag->appendChild( $repo->html_phrase( "Plugin/Screen/Workflow/Destroy:sure_delete",
 		title => $repo->xml->create_text_node( "$path/$relpath" ),
 	) );
-	my $form = $frag->appendChild( $self->render_form );
-	$form->appendChild( $repo->xhtml->hidden_field( "configfile", $relpath ) );
+
+	my $idsuffix = EPrints::Utils::sanitise_element_id( $relpath . "_delete" );
+	my $form = $frag->appendChild( $self->render_form( $idsuffix ) );
+	$form->appendChild( $repo->xhtml->hidden_field( "configfile", $relpath, "configfile_" . $idsuffix ) );
 	$form->appendChild( $repo->render_action_buttons(
 		confirm => $repo->phrase( "lib/submissionform:action_confirm" ),
 		cancel => $repo->phrase( "lib/submissionform:action_cancel" ),
@@ -461,8 +463,11 @@ sub render_add_file
 
 	my $xhtml = $self->{session}->xhtml;
 
-	my $form = $self->render_form;
-	$form->appendChild( $xhtml->hidden_field( "relpath", $relpath ) );
+	my $idsuffix = EPrints::Utils::sanitise_element_id( $relpath . "_add" );
+
+	my $form = $self->render_form( $idsuffix );
+
+	$form->appendChild( $xhtml->hidden_field( "relpath", $relpath, "relpath_" . $idsuffix ) );
 	my $label = $self->{session}->make_element( "label", for=>"filename_" . $relpath );
         $label->appendChild( $self->html_phrase( "filename_label" ) );
         $form->appendChild( $label );

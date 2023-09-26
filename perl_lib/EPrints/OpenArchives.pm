@@ -197,7 +197,10 @@ sub make_record
 		# low-level stuff
 		if( $md->isa( "XML::LibXML::Element" ) && $md->can( "_setAttribute" ) )
 		{
-			$md->_setAttribute( "xmlns:xsi" => "http://www.w3.org/2001/XMLSchema-instance" );
+			unless ( EPrints::Utils::is_set( $md->getAttribute( "xmlns:xsi" ) ) )
+			{
+				$md->_setAttribute( "xmlns:xsi" => "http://www.w3.org/2001/XMLSchema-instance" );
+			}
 		}
 		$record->appendChild( $session->make_indent( 4 ) );
 		$record->appendChild( $metadata );

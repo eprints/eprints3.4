@@ -473,7 +473,7 @@ sub action_unlink
 	{
 		my $idsuffix = EPrints::Utils::sanitise_element_id( $childid . "_unlink" );
 		my $form = $self->render_form( $idsuffix );
-		$form->appendChild( $repo->xhtml->hidden_field( childid => $childid, "childid_ " . $idsuffix ) );
+		$form->appendChild( $repo->xhtml->hidden_field( childid => $childid, "childid_" . $idsuffix ) );
 		$form->appendChild( $repo->render_action_buttons(
 			remove => $repo->phrase( "lib/submissionform:action_remove" ),
 			cancel => $repo->phrase( "lib/submissionform:action_cancel" ),

@@ -932,7 +932,7 @@ sub tree2
 			if ( ref($key) eq "EPrints::DataObj::Subject" ) 
 			{
 				my $subjectid = $key->get_id;
-				$subjectid = EPrints::Utils::santise_element_id( $subjectid );
+				$subjectid = EPrints::Utils::sanitise_element_id( $subjectid );
 				$dt_attrs{id} = "ep_subj_title_" . $subjectid;
 				$dd_attrs{id} = "ep_subj_desc_" . $subjectid;
 			}

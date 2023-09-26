@@ -589,7 +589,8 @@ sub render_action_list_icons
 	my @actions;
 	foreach my $params ($self->action_list( $list_id ))
 	{
-		push @actions, $self->render_action_icon( { %$params, hidden => $hidden } );
+		my $idsuffix = ref( $hidden ) eq "HASH" && defined $hidden->{eprintid} ? $list_id . "_" . $hidden->{eprintid} : $list_id;
+		push @actions, $self->render_action_icon( { %$params, hidden => $hidden, idsuffix => $idsuffix } );
 	}
 
 	return $repo->xhtml->action_list( \@actions );

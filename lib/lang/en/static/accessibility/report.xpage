@@ -445,7 +445,7 @@
     <td>Two alerts are due to suspicion of tables being used for layout but are actually being used as tables.</td>
   </tr>
   <tr>
-    <td><a href="{$config{rel_path}}/cgi/oai2?verb=Identity"><epc:print expr="$config{rel_path}"/>/cgi/oai2?verb=Identity</a></td>
+    <td><a href="{$config{rel_path}}/cgi/oai2?verb=Identify"><epc:print expr="$config{rel_path}"/>/cgi/oai2?verb=Identify</a></td>
     <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;3</div><div class="ep_accessibility_good">Features:&#160;1&#160;|&#160;Structural&#160;Elements:&#160;15&#160;|&#160;ARIA:&#160;0</div></td>
     <td>Three alerts are due to suspicion of tables being used for layout but are actually being used as tables.</td>
   </tr>

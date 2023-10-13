@@ -265,6 +265,15 @@ L<perlfunc/crypt>.
 
 L<Digest::SHA> sha512 with 2-byte salt and 10000 rounds.
 
+=item EP_CRYPT_BCRYPT_REHASH
+
+Rehashes legacy hash (C<EP_CRYPT_SHA512>) using L<Crypt::Eksblowfish::Bcrypt>.
+
+=item EP_CRYPT_BCRYPT
+
+L<Crypt::Eksblowfish::Bcrypt>
+
+
 =back
 
 =cut
@@ -355,6 +364,8 @@ use constant {
 use constant {
 	EP_CRYPT_CRYPT => 1,
 	EP_CRYPT_SHA512 => 2,
+	EP_CRYPT_BCRYPT_REHASH => 3,
+	EP_CRYPT_BCRYPT => 4,
 };
 
 @xml = qw(
@@ -481,6 +492,8 @@ use constant {
 @crypt = qw(
 	EP_CRYPT_CRYPT
 	EP_CRYPT_SHA512
+	EP_CRYPT_BCRYPT_REHASH
+	EP_CRYPT_BCRYPT
 );
 
 @EXPORT_OK = (@xml, @namespace, @http, @trigger, @metafield, @crypt);

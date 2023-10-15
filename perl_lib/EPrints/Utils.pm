@@ -1104,7 +1104,7 @@ sub crypt
 		}
 		else
 		{
-			$crypt = _crypt_sha256( $salt,  $value );
+			$crypt = _crypt_sha512( $salt,  $value );
 			%params = ( method => $method, salt => $salt, digest => $crypt );
 		}
 

@@ -1118,7 +1118,7 @@ sub crypt
 		return CORE::crypt($value ,$salt);
 	}
 
-	EPrints->abort( "Unsupported or unknown crypt method AAA: $method" );
+	EPrints->abort( "Unsupported or unknown crypt method: $method" );
 }
 
 =item $bool = EPrints::Utils::crypt_equals( $crypt, $value )

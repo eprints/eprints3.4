@@ -42,6 +42,9 @@
 # not actually disable it.
 # $c->{plugins}->{"Export::BibTeX"}->{params}->{advertise} = 0;
 
+# to prevent any export plugins that may reveal private data from being accessible without login.
+$c->{export_privacy} = 1;
+
 
 # Plugin Mapping
 

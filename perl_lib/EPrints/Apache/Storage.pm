@@ -306,6 +306,8 @@ sub handler
 	}
 	elsif( !$rv )
 	{
+ 		# log this first, and separately so the details do not appear in user-facing abort message
+ 		$repo->log( "Error below relates to fileobj: " . $fileobj->get_id );
 		EPrints::abort( "Error in file retrieval: failed to get file contents" );
 	}
 

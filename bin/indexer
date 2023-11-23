@@ -185,18 +185,6 @@ our $noise = 1;
 $noise = 0 if( $quiet );
 $noise = 1+$verbose if( $verbose );
 
-my $p = {
-	loglevel => $loglevel+0,
-	rollcount => $rollcount+0,
-	respawn => $opt_respawn+0,
-	daemon => !$notdaemon,
-	noise => $noise,
-	once => $once,
-	logfile => EPrints::Index::logfile(), 
-	pidfile => EPrints::Index::pidfile(),
-	tickfile => EPrints::Index::tickfile(),
-};
-
 if( $ARGV[0] eq "debug" )
 {
 	$once = 1;

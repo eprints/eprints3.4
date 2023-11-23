@@ -98,7 +98,7 @@ Respawn the indexer every I<seconds> (rolls the log files).
 
 =item B<--timeout> I<seconds>
 
-Set the maximum run time for an indexing task before an alarm is raised. This defaults to 600 seconds if not set.
+Set the maximum run time for an indexing task before an alarm is raised. EPrints::Index::Daemon uses a default value of 600 seconds.
 
 =item B<--notdaemon>
 

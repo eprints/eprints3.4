@@ -96,6 +96,10 @@ Set the number of once-through logs that should be kept. If set to zero then ind
 
 Respawn the indexer every I<seconds> (rolls the log files).
 
+=item B<--timeout> I<seconds>
+
+Set the maximum run time for an indexing task before an alarm is raised. This defaults to 600 seconds if not set.
+
 =item B<--notdaemon>
 
 Do not become a daemon, remain attached to the current terminal.
@@ -150,6 +154,7 @@ my $once = 0;
 my $opt_clear;
 my $opt_retry;
 my $opt_respawn = 86400;
+my $opt_timeout;
 
 Getopt::Long::Configure("permute");
 
@@ -169,6 +174,7 @@ GetOptions(
 	'clear' => \$opt_clear,
 	'retry' => \$opt_retry,
 	'respawn=s' => \$opt_respawn,
+	'timeout=s' => \$opt_timeout,
 ) || pod2usage( 2 );
 EPrints::Utils::cmd_version( "indexer" ) if $version;
 pod2usage( 1 ) if $help;
@@ -202,12 +208,15 @@ if( $ARGV[0] eq "debug" )
 $logfile ||= EPrints::Index::logfile();
 $logfile = undef if $logfile eq "-" or $notdaemon;
 
+$opt_timeout += 0 if defined $opt_timeout;
+
 my $daemon = EPrints::Index::Daemon->new(
 	loglevel => $loglevel+0,
 	respawn => $opt_respawn+0,
 	logfile => $logfile,
 	noise => $noise,
 	once => $once,
+	timeout => $opt_timeout,
 );
 
 if( $ARGV[0] eq "status" )

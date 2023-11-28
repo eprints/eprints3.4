@@ -2856,7 +2856,7 @@ sub remove_dataobj_relations
 	foreach my $relation (@{($self->get_value( "relation" ))})
 	{
 		# doesn't match $target
-		if( $relation->{"uri"} ne $uri )
+		if( EPrints::Utils::is_set( $relation->{"uri"} ) && $relation->{"uri"} ne $uri )
 		{
 			push @relations, $relation;
 		}

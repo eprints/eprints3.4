@@ -45,7 +45,7 @@ sub to_sax_basic
 {
 	my( $self, $value, %opts ) = @_;
 
-	return if !EPrints::Utils::is_set( $value );
+	return unless EPrints::Utils::is_set( $value ) && EPrints::Utils::is_set( $value->{uri} );
 
 	return $self->SUPER::to_sax_basic( {
 		type => $value->{type},

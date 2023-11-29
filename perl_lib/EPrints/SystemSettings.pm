@@ -27,119 +27,117 @@ EPrints::SystemSettings
 package EPrints::SystemSettings;
 
 $EPrints::SystemSettings::conf = {
-                                   'version' => 'EPrints 3.4.5',
-                                   'version_id' => 'eprints-3.4.5',
-                                   'base_path' => '/opt/eprints3',
-                                   'show_ids_in_log' => 0,
-                                   'group' => 'eprints',
-                                   'version_history' => [
-                                                          'eprints-3.2.3',
-                                                          'eprints-3.3.6',
-                                                          'eprints-3.3.9',
-                                                          'eprints-3.3.10',
-                                                          'eprints-3.3.12',
-                                                          'eprints-3.3.13',
-                                                          'eprints-3.3.14',
-                                                          'eprints-3.3.15',
-														  'eprints-3.4.0',
-														  'eprints-3.4.1',
-														  'eprints-3.4.2',
-														  'eprints-3.4.3',
-														  'eprints-3.4.4',
-                                                        ],
-                                   'smtp_server' => '127.0.0.1', # sensible default, but may not be valid
-                                   'user' => 'eprints',
-                                   'file_perms' => '0664',
-                                   'invocation' => {},
-                                   'executables' => {
-                                                      'perl' => '/usr/bin/perl'
-                                                    },
-                                   'dir_perms' => '02775',
-                                   'flavours' => {
-                                                   'zero' => [##site_lib has been removed from the flavour path and now a special lib that can overwrite core modules.
-                                                       'ingredients/bazaar',
-													   'ingredients/prototypejs',
-                                                    ]
-                                                },
-                                   'perl_module_isolation' => 0, #after changing this setting, you need to bin/generate_apacheconf --system --replace, then restart apache
-								   'indexer_daemon' => {
-								   						 'loglevel' => 1,
-														 'rollcount' => 5,
-														 'maxwait' => 8, # 8 seconds
-														 'interval' => 30, # 30 seconds
-														 'respawn' => 86400, # 1 day
-														 'timeout' => 600, # 10 minutes
-														 'interrupt' => 0, # break out of any loops
-													   },
-                                };
+	'version' => 'EPrints 3.4.5',
+	'version_id' => 'eprints-3.4.5',
+	'base_path' => '/opt/eprints3',
+	'show_ids_in_log' => 0,
+	'group' => 'eprints',
+	'version_history' => [
+		'eprints-3.2.3',
+		'eprints-3.3.6',
+		'eprints-3.3.9',
+		'eprints-3.3.10',
+		'eprints-3.3.12',
+		'eprints-3.3.13',
+		'eprints-3.3.14',
+		'eprints-3.3.15',
+		'eprints-3.4.0',
+		'eprints-3.4.1',
+		'eprints-3.4.2',
+		'eprints-3.4.3',
+		'eprints-3.4.4',
+	],
+	'smtp_server' => '127.0.0.1',
+	'user' => 'eprints',
+	'file_perms' => '0664',
+	'invocation' => {},
+	'executables' => {
+		'perl' => '/usr/bin/perl'
+	},
+	'dir_perms' => '02775',
+	'flavours' => {
+		'zero' => [
+			## site_lib has been removed from the flavour path and now a special lib that can overwrite core modules.
+			'ingredients/bazaar',
+			'ingredients/prototypejs',
+		]
+	},
+	'perl_module_isolation' => 0, # After changing this setting, you need to bin/generate_apacheconf --system --replace, then restart apache
+	'indexer_daemon' => {
+		'loglevel' => 1,
+		'rollcount' => 5,
+		'maxwait' => 8, # 8 seconds
+		'interval' => 30, # 30 seconds
+		'respawn' => 86400, # 1 day
+		'timeout' => 600, # 10 minutes
+		'interrupt' => 0, # break out of any loops
+	},
+};
 
 ## load the flavour inc files into the system settings' 'flavour' key.
 my $flavour_dir = $conf->{base_path}."/flavours";
-opendir(LIB, $flavour_dir);
+opendir( LIB, $flavour_dir );
 my @flavours = grep { $_ ne '.' && $_ ne '..' && $_ !~ m/^\./ } readdir LIB;
-closedir(LIB);
-foreach my $flavour (@flavours){
-    next unless -d "$flavour_dir/$flavour/";
-    my $fname = substr($flavour,0,rindex($flavour,"_")); ##flavour name is the parts before the file name, e.g. pub_lib, pub is the flavour name. Flavour name is used by epadmin: e.g. epadmin create pub
+closedir( LIB );
+foreach my $flavour ( @flavours )
+{
+	next unless -d "$flavour_dir/$flavour/";
+	my $fname = substr($flavour,0,rindex($flavour,"_")); ## Flavour name is the parts before the file name, e.g. pub_lib, pub is the flavour name. Flavour name is used by epadmin: e.g. epadmin create pub
 
-    my $incpath = "$flavour_dir/$flavour/inc";
-    my @paths = read_inc($incpath);
+	my $incpath = "$flavour_dir/$flavour/inc";
+	my @paths = read_inc( $incpath );
 
-    if (!exists $conf->{flavours}->{$fname}) ##safety check.
-    {
-        $conf->{flavours}->{$fname}=\@paths;
-    }
+	if (!exists $conf->{flavours}->{$fname}) ## Safety check.
+	{
+		$conf->{flavours}->{$fname}=\@paths;
+	}
 }
 
 
 sub read_inc
 {
-    my ($file) = @_;
+	my ($file) = @_;
 
-    my @entries;
-    open(IN, $file);
-    while(<IN>)
-    {
-        s/^[ \t]+//; # strip leading ws
-        next if /^#/; # skip comment lines
-        s/#.*//; # trim trailing comments
-        s/[ \t\r\n]+$//; # trim trailing ws
-        next if /^$/; # skip empty
+	my @entries;
+	open( IN, $file );
+	while ( <IN> )
+	{
+		s/^[ \t]+//; # Strip leading ws
+		next if /^#/; # Skip comment lines
+		s/#.*//; # Trim trailing comments
+		s/[ \t\r\n]+$//; # Trim trailing ws
+		next if /^$/; # Skip empty
 
-		#for each path in the inc file:
-        foreach my $e ( split( /;/ ) )
-        {
-            $e =~ s|i:|ingredients/|g;
-            $e =~ s|f:|flavours/|g;
+		# For each path in the inc file:
+		foreach my $e ( split( /;/ ) )
+		{
+			$e =~ s|i:|ingredients/|g;
+			$e =~ s|f:|flavours/|g;
 
-            if( $e =~ /(.*)\*/ ) # expand wildcards
-            {
-                opendir(DIR,$conf->{base_path}."/".$1);
-                while (my $item = readdir DIR)
-                {
-                    next if $item =~ /^\./;
-                    push @entries, $1.$item ;
-                }
-                closedir(DIR);
-            }
-            else
-            {
-                push @entries, $e;
-            }
-        }
-    }
-	close(IN);
-    my %l; # remove duplicates
-    @entries = grep { $_ ne '-' } map { $_ = '-' if $l{$_}; $l{$_} = 1; $_ } @entries;
+			if( $e =~ /(.*)\*/ ) # expand wildcards
+			{
+                opendir( DIR, $conf->{base_path}."/".$1 );
+				while ( my $item = readdir DIR )
+				{
+					next if $item =~ /^\./;
+					push @entries, $1.$item ;
+				}
+				closedir(DIR);
+			}
+			else
+			{
+				push @entries, $e;
+			}
+		}
+	}
+	close( IN );
+	my %l; # Remove duplicates
+	@entries = grep { $_ ne '-' } map { $_ = '-' if $l{$_}; $l{$_} = 1; $_ } @entries;
 
-    return @entries;
+	return @entries;
 }
 
-
-
-
 1;
-
 
 
 =head1 COPYRIGHT

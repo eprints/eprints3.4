@@ -234,7 +234,7 @@ sub render_url_truncate_end
 	my $len = 50;	
 	my $link = $session->render_link( $value );
 	my $text = $value;
-	if( length( $value ) > $len )
+	if( defined( $value ) && length( $value ) > $len )
 	{
 		$text = substr( $value, 0, $len )."...";
 	}
@@ -260,7 +260,7 @@ sub render_url_truncate_middle
 	my $len = 50;	
 	my $link = $session->render_link( $value );
 	my $text = $value;
-	if( length( $value ) > $len )
+	if( defined( $value ) && length( $value ) > $len )
 	{
 		$text = substr( $value, 0, $len/2 )."...".substr( $value, -$len/2, -1 );
 	}

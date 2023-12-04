@@ -1208,7 +1208,7 @@ sub get_url
 
 =item $file->path
 
-Returns the filesystem path for this file.
+Returns the path for this file as it appears as a URL.
 
 =cut
 ######################################################################
@@ -1222,6 +1222,52 @@ sub path
 
 	return $parent->path . URI::Escape::uri_escape_utf8( $self->value( "filename" ), "^A-Za-z0-9\-\._~\/" );
 }
+
+
+######################################################################
+=pod
+
+=item $file->local_path
+
+Returns the local filesystem path for this file.
+
+=cut
+######################################################################
+
+sub local_path
+{	
+	my( $self ) = @_;
+
+	my $session = $self->get_session;
+
+	if( UNIVERSAL::isa( $session, "EPrints::Repository" ))
+    {
+        if( defined $session->config( "file_local_path_function" ) && ref( $session->config( "file_local_path_function" ) ) eq "CODE" )
+        {
+            my $file_local_path_function = $session->config( "file_local_path_function" );
+			return $file_local_path_function->( $self );
+        }
+    }
+
+	my $parent = $self->parent;
+	return undef if !defined $parent;
+
+	my $grandparent = $parent->parent;
+	return undef if !defined $grandparent;
+
+	if ( $parent->dataset->id eq "document" )
+	{
+		my $docdir = sprintf "%02d", $parent->get_value( 'pos' );
+		return $session->config( 'base_path' ) . "/archives/" . $session->id . "/documents/" . $grandparent->get_value( 'dir' ) . "/" . $docdir . "/" . $self->get_value( 'filename' );
+	}
+	elsif ( $parent->dataset->id eq "history" )
+	{
+		return $session->config( 'base_path' ) . "/archives/" . $session->id . "/documents/" . $grandparent->get_value( 'dir' ) . "/revisions/" . $parent->get_value( 'revision' ) . ".xml";
+	}
+
+	return undef;
+}
+
 
 1;
 

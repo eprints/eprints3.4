@@ -47,8 +47,15 @@ sub xml_dataobj
 	my( $plugin, $dataobj ) = @_;
 
 	my $p = $plugin->{session}->make_element( "p", class=>"citation" );
-	
-	$p->appendChild( $dataobj->render_citation_link );
+
+	if ( defined $dataobj && defined $dataobj->{dataset} && $dataobj->{dataset}->citation( 'export' ) )
+	{
+		$p->appendChild( $dataobj->render_citation_link, 'export' );
+	}
+	else
+	{
+		$p->appendChild( $dataobj->render_citation_link );
+	}
 
 	return $p;
 }

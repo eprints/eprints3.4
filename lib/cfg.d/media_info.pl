@@ -128,7 +128,7 @@ $c->add_trigger( EP_TRIGGER_MEDIA_INFO, sub {
 		{
 			$media->{duration} = $1;
 		}
-		if( $type eq "video" && ( !defined $media->{video_codec} || ( $media->{width} < $stream->{width} && $media->{height} < $stream->{height} ) )
+		if( $type eq "video" && ( !defined $media->{video_codec} || ( $media->{width} < $stream->{width} && $media->{height} < $stream->{height} ) ) )
 		{
 			$media->{width} = $stream->{width};
 			$media->{height} = $stream->{height};

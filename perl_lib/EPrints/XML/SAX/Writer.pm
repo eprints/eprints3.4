@@ -483,18 +483,20 @@ sub escape
 {
 	my( $self, $str ) = @_;
 
-    $str =~ s/($ESCAPE_REGEX)/$DEFAULT_ESCAPE{$1}/oge;
+	$str ||= "";
+	$str =~ s/($ESCAPE_REGEX)/$DEFAULT_ESCAPE{$1}/oge;
 
-    return $str;
+	return $str;
 }
 
 sub escape_comment
 {
 	my( $self, $str ) = @_;
 
-    $str =~ s/($COMMENT_ESCAPE_REGEX)/$COMMENT_ESCAPE{$1}/oge;
+	$str ||= "";
+	$str =~ s/($COMMENT_ESCAPE_REGEX)/$COMMENT_ESCAPE{$1}/oge;
 
-    return $str;
+	return $str;
 }
 
 sub output

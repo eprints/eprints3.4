@@ -1670,6 +1670,28 @@ sub citation
 	return $citation;
 }
 
+=begin InternalDoc
+
+=item $has_citation = $dataset->has_citation( $style )
+
+Returns true if citation object of type C<$style> exists for the C<$dataset> otherwise returns false.
+
+=end InternalDoc
+
+=cut
+
+sub has_citation
+{
+	my( $self, $id ) = @_;
+
+	$id = "default" if !defined $id;
+
+	return defined $self->repository->{citations}->{$self->base_id}->{$id};
+}
+
+
+
+
 ######################################################################
 1;
 ######################################################################

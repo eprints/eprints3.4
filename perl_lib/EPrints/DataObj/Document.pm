@@ -1978,6 +1978,7 @@ sub render_icon_link
 		"img",
 		class=>"ep_doc_icon",
 		alt=>"[thumbnail of $img_alt]",
+  		title=>"$img_alt",
 		src=>$self->icon_url( public=>$opts{public} ),
 		border=>0 );
 	if ( $opts{with_link} )

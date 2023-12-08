@@ -1850,7 +1850,7 @@ sub render_export_bar
 	my $id = $self->get_id;
 
 	my $frag = $xml->create_document_fragment;
-	my $uri = $repo->config( "http_cgiroot" ) . "/export_redirect";
+	my $uri = $repo->config( "rel_cgipath" ) . "/export_redirect";
 	my $form = $repo->render_form( "GET", $uri );
 	$frag->appendChild( $form );
 	$form->appendChild( $xhtml->hidden_field( dataset => $self->get_dataset_id ) );

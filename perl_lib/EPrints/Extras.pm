@@ -229,10 +229,10 @@ than 50 characters.
 
 sub render_url_truncate_end
 {
-	my( $session, $field, $value ) = @_;
+	my( $session, $field, $value, $target ) = @_;
 
 	my $len = 50;	
-	my $link = $session->render_link( $value );
+	my $link = $session->render_link( $value, $target );
 	my $text = $value;
 	if( defined( $value ) && length( $value ) > $len )
 	{
@@ -255,10 +255,10 @@ than 50 characters.
 
 sub render_url_truncate_middle
 {
-	my( $session, $field, $value ) = @_;
+	my( $session, $field, $value, $target ) = @_;
 
 	my $len = 50;	
-	my $link = $session->render_link( $value );
+	my $link = $session->render_link( $value, $target );
 	my $text = $value;
 	if( defined( $value ) && length( $value ) > $len )
 	{

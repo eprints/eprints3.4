@@ -1972,14 +1972,15 @@ sub render_icon_link
 		$aopts{onblur} = "EPJS_HidePreview( event, '$preview_id', '$opts{preview_side}' );";
 	}
 	my $f = $self->{session}->make_doc_fragment;
+	my $img_class = ( $opts{size} ) ? 'ep_doc_icon ep_doc_icon_'.$opts{size} : "ep_doc_icon";
 	my $img_alt = $self->value('main');
 	$img_alt = $self->value('formatdesc') if EPrints::Utils::is_set( $self->value('formatdesc') );
 	my $img = $self->{session}->make_element(
 		"img",
-		class=>"ep_doc_icon",
+		class=>$img_class,
 		alt=>"[thumbnail of $img_alt]",
   		title=>"$img_alt",
-		src=>$self->icon_url( public=>$opts{public} ),
+		src=>$self->icon_url( public=>$opts{public}, size=>$opts{size} ),
 		border=>0 );
 	if ( $opts{with_link} )
 	{

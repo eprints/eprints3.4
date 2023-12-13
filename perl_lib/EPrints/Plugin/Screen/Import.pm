@@ -158,6 +158,8 @@ sub action_test_upload
 	$tmpfile = *$tmpfile; # CGI file handles aren't proper handles
 	return if !defined $tmpfile;
 
+	$self->{processor}->{filename} = $self->{repository}->get_query->param( "file" );
+
 	my $list = $self->run_import( 1, 0, $tmpfile ); # dry run with messages
 	$self->{processor}->{results} = $list;
 }

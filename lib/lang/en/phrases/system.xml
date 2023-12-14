@@ -3341,6 +3341,8 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="Plugin/Import/XML:file_import_disabled">File imports are currently disabled, failed to import: <epc:pin name="filename" />. To enable file imports set <code>enable_file_imports</code> to 1 in SystemSettings (this is a security risk and should be disabled when your import is done).</epp:phrase>
     <epp:phrase id="Plugin/Import/DefaultXML:no_subclass"><code>xml_to_epdata</code> should be overridden.</epp:phrase>
     <epp:phrase id="Plugin/Import/DefaultXML:unexpected_xml">Expected only text, found: <epc:pin name="xml" /></epp:phrase>
+    <epp:phrase id="Plugin/Import/DefaultXML:unexpected_xml_elements">Unexpected XML/HTML element(s): <code>&lt;<epc:pin name="elements" />&gt;</code> for import field <code>&lt;<epc:pin name="field" />&gt;</code>. Text inside this/these element(s) could not be imported.</epp:phrase>
+    <epp:phrase id="Plugin/Import/DefaultXML:invalid_xml_element">An Invalid XML/HTML element found, so field <code>&lt;<epc:pin name="field" />&gt;</code> could not be imported.</epp:phrase>
     <epp:phrase id="Plugin/Import/DefaultXML:file_imports_disabled">Attempt to import eprint with document data expressed as a local filename. This is a security hole in normal use, and is disabled. It *is* useful when bulk importing and may be enabled by setting <code>enable_file_imports</code>.</epp:phrase>
     <epp:phrase id="Plugin/Import/DefaultXML:file_not_exists">Could not locate file for import: <epc:pin name="href" />.</epp:phrase>
     <epp:phrase id="Plugin/Import/DOI:invalid_doi">Unrecognised or invalid doi: <epc:pin name="doi" />.<br />Remote service status: <code><epc:pin name="status"/></code></epp:phrase>

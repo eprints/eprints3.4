@@ -100,8 +100,16 @@ sub xml_to_text
 	my( $plugin, $xml ) = @_;
 
 	my @list = $xml->childNodes;
-	my $ok = 1;
+	my $xml_ok = 1;
+	my $element_ok = 1;
+	my @banned_elements = ();
 	my @v = ();
+	my $permitted_tags = [ qw/ b big blockquote br code dd div dl dt em h1 h2 h3 h4 h5 h6 hr i li ol p pre s small span strike strong sub sup table tbody td th tr tt u ul / ];
+	if ( $plugin->{session}->config( "import_xml_permitted_tags" ) )
+	{
+		$permitted_tags = $plugin->{session}->config( "import_xml_permitted_tags" );
+	}
+
 	foreach my $node ( @list ) 
 	{  
 		if( EPrints::XML::is_dom( $node,
@@ -111,16 +119,44 @@ sub xml_to_text
 		{
 			push @v, $node->nodeValue;
 		}
+		elsif( EPrints::XML::is_dom( $node, "Element" ) )
+		{
+			if ( $node->nodeName !~ m/^\w+$/ )
+			{
+				my $field = $xml->nodeName =~ m/^\w+$/ ? $xml->nodeName : "REDACTED";
+				$plugin->warning( $plugin->{session}->phrase( "Plugin/Import/DefaultXML:invalid_xml_element", field => $field ) );
+				return "";
+			}
+
+			if ( grep { $_ eq $node->nodeName } @$permitted_tags )
+			{
+				push @v, $node;
+			}
+			else
+			{
+				$element_ok = 0;
+				unless ( grep { $_ eq $node->nodeName } @banned_elements )
+				{
+					push @banned_elements, $node->nodeName;
+				}
+			}
+		}
 		else
 		{
-			$ok = 0;
+			$xml_ok = 0;
 		}
 	}
 
-	unless( $ok )
+	unless ( $xml_ok )
 	{
 		$plugin->warning( $plugin->{session}->phrase( "Plugin/Import/DefaultXML:unexpected_xml", xml => $xml->toString ) );
 	}
+
+	unless ( $element_ok )
+    {
+		$plugin->warning( $plugin->{session}->phrase( "Plugin/Import/DefaultXML:unexpected_xml_elements", elements => join( "&gt; &lt;", @banned_elements ) , field => $xml->nodeName ) );
+	}
+
 
 	return join( "", @v );
 }

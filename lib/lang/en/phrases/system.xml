@@ -4136,6 +4136,7 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="eprint:workflow:stage:notes:title" ref="archive:workflow:stage:notes:title"/>
     <epp:phrase id="eprint:workflow:stage:local:title" ref="archive:workflow:stage:local:title"/>
 
+    <epp:phrase id="Plugin/Screen:render_action_img_suffix"> button</epp:phrase>
     <epp:phrase id="Plugin/Screen/Listing:title">View</epp:phrase>
     <epp:phrase id="Plugin/Screen/Listing:page_title">Manage <epc:pin name="dataset" /></epp:phrase>
     <epp:phrase id="Plugin/Screen/Listing:remove_column_confirm" ref="Plugin/Screen/Review:remove_column_confirm" />

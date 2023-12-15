@@ -475,6 +475,7 @@ sub _render_action_aux
 			$frag->appendChild( $session->make_element( "img",
 				src=>$icon,
 				alt=>$title,
+				title=>$title . $session->phrase( "Plugin/Screen:render_action_img_suffix" ),
 				class=>"ep_form_action_icon",
 				role=>"button",
 			) );

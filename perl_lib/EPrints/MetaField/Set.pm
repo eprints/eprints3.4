@@ -447,6 +447,11 @@ sub render_search_input
 {
 	my( $self, $session, $searchfield, %opts ) = @_;
 
+	if( defined $self->{render_search_input} )
+	{
+		return $self->call_property( "render_search_input", $self, $session, $searchfield );
+	}
+
 	my $frag = $session->make_doc_fragment;
 	
 	$frag->appendChild( $self->render_search_set_input( 

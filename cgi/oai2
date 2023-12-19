@@ -519,11 +519,14 @@ sub Identify
 		"submissionPolicy", 
 		$repo->config( "oai","submission_policy" ) ) );
 
-	foreach( @{$repo->config( "oai","comments" )} ) 
+	if( $repo->config( "oai","comments" ) )
 	{
-		$eprints->appendChild( $repo->xhtml->data_element(
-			"comment", 
-			$_ ) );
+		foreach( @{$repo->config( "oai","comments" )} ) 
+		{
+			$eprints->appendChild( $repo->xhtml->data_element(
+				"comment", 
+				$_ ) );
+		}
 	}
 		
 	return ();

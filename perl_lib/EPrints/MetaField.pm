@@ -2275,7 +2275,12 @@ sub render_xml_schema_type
 sub render_search_input
 {
 	my( $self, $session, $searchfield, %opts ) = @_;
-	
+
+	if( defined $self->{render_search_input} )
+	{
+		return $self->call_property( "render_search_input", $self, $session, $searchfield );
+	}
+	        
 	my $frag = $session->make_doc_fragment;
 
 	if( $searchfield->get_match ne "EX" )
@@ -2394,6 +2399,7 @@ sub get_property_defaults
 		export_as_xml 	=> EP_PROPERTY_TRUE,
 		false_first	=> EP_PROPERTY_FALSE,
 		fromform 	=> EP_PROPERTY_UNDEF,
+		fromsearchform  => EP_PROPERTY_UNDEF,
 		get_item	=> EP_PROPERTY_UNDEF,
 		import		=> EP_PROPERTY_TRUE,
 		input_add_boxes => EP_PROPERTY_FROM_CONFIG,
@@ -2402,6 +2408,7 @@ sub get_property_defaults
 		input_lookup_url 	=> EP_PROPERTY_UNDEF,
 		input_lookup_params 	=> EP_PROPERTY_UNDEF,
 		input_ordered 	=> EP_PROPERTY_TRUE,
+		join_phraseid   => EP_PROPERTY_UNDEF,
 		make_single_value_orderkey 	=> EP_PROPERTY_UNDEF,
 		make_value_orderkey 		=> EP_PROPERTY_UNDEF,
 		show_in_fieldlist	=> EP_PROPERTY_TRUE,
@@ -2411,6 +2418,7 @@ sub get_property_defaults
 		name 		=> EP_PROPERTY_REQUIRED,
 		show_in_html	=> EP_PROPERTY_TRUE,
 		render_input 	=> EP_PROPERTY_UNDEF,
+		render_search_input => EP_PROPERTY_UNDEF,
 		render_single_value 	=> EP_PROPERTY_UNDEF,
 		render_quiet	=> EP_PROPERTY_FALSE,
 		render_magicstop	=> EP_PROPERTY_FALSE,

@@ -75,7 +75,12 @@ sub ordervalue_basic
 sub render_search_input
 {
 	my( $self, $session, $searchfield ) = @_;
-	
+
+	if( defined $self->{render_search_input} )
+	{
+		return $self->call_property( "render_search_input", $self, $session, $searchfield );
+	}
+
 	return $session->render_input_field(
 				class => "ep_form_text",
 				name=>$searchfield->get_form_prefix,
@@ -90,6 +95,11 @@ sub from_search_form
 	my( $self, $session, $prefix ) = @_;
 
 	my $value = $session->param( $prefix );
+	if( defined $self->{fromsearchform} )
+	{
+		$value = $self->call_property( "fromsearchform", $value, $session, $prefix );
+	}
+
 	return $value unless EPrints::Utils::is_set( $value );
 
 	my $regexp = $self->property( "regexp" );

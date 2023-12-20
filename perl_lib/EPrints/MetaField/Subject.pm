@@ -279,8 +279,6 @@ sub render_value
         @value = ($value);
     }
 
-    my @rendered_values = ();
-
     my $first = 1;
     my $html = $session->make_doc_fragment();
 

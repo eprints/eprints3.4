@@ -2193,8 +2193,10 @@ sub remove_thumbnails
 	my( $self ) = @_;
 
 	my $eprint = $self->parent;
+	return unless $eprint;
 
 	my $under_construction = $eprint->under_construction;
+	$under_construction = 0 unless $under_construction;
 	$eprint->{under_construction} = 1;
 
 	my @sizes = $self->thumbnail_types;
@@ -2258,7 +2260,10 @@ sub make_thumbnails
 	return unless defined $src_main;
 
 	my $eprint = $self->parent;
+	return unless $eprint;
+
 	my $under_construction = $eprint->under_construction;
+	$under_construction = 0 unless $under_construction;
 	$eprint->{under_construction} = 1;
 
 	my %thumbnails;

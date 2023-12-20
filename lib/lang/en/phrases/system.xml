@@ -3203,6 +3203,7 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="Plugin/Screen/Subject/Edit:error_badsubject">The specified subject does not exist, or a database error has occurred.</epp:phrase>
     <epp:phrase id="Plugin/Screen/Subject/Edit:unlinked">Unlinked subject. This subject node still exists in other places in the subject tree.</epp:phrase>
     <epp:phrase id="Plugin/Screen/Subject/Edit:removed">Removed subject. This subject node has been deleted.</epp:phrase>
+    <epp:phrase id="Plugin/Screen/Subject/Edit:has_child">Subject not removed. This subject node has not been deleted because it contains child subjects.</epp:phrase>
     <epp:phrase id="Plugin/Screen/Subject/Edit:added">Created new subject node with ID "<epc:pin name="newchild" />". Please now enter a subject name and set the subject to be depositable, if applicable.</epp:phrase>
     <epp:phrase id="Plugin/Screen/Subject/Edit:linked">Linked the existing subject node "<epc:pin name="newchild" />" as a child of this subject node.</epp:phrase>
     <epp:phrase id="Plugin/Screen/Subject/Edit:description">Modify the subject tree(s)</epp:phrase>

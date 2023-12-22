@@ -490,7 +490,7 @@ sub get_input_col_titles
 	foreach my $field ( @{$f} )
 	{
 		my $fieldname = $field->get_name;
-		my $sub_r = $field->get_input_col_titles( $session, $staff );
+		my $sub_r = $field->get_input_col_titles( $session, $staff, 1 );
 
 		if( !defined $sub_r )
 		{

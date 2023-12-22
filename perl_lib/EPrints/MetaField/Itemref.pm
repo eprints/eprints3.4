@@ -49,6 +49,20 @@ sub get_property_defaults
 	return %defaults;
 }
 
+sub get_input_col_titles
+{
+	my ( $self, $session, $staff, $from_compound ) = @_;
+	if ( !$from_compound )
+	{
+		return;
+	}
+
+	my @r;
+	push @r, $self->render_name($session);
+	push @r, $session->make_doc_fragment();
+	return \@r;
+}
+
 sub get_basic_input_elements
 {
 	my( $self, $session, $value, $basename, $staff, $obj, $one_field_component ) = @_;
@@ -60,6 +74,18 @@ sub get_basic_input_elements
 	push @{$ex->[0]}, {el=>$desc, style=>"padding: 0 0.5em 0 0.5em;"};
 
 	return $ex;
+}
+
+sub get_basic_input_ids
+{
+	my ( $self, $session, $basename, $staff, $obj, $from_compound ) = @_;
+	my @r;
+	push @r, $basename;
+	if ($from_compound)
+	{
+		push @r, $basename . '_citation';
+	}
+	return @r;
 }
 
 sub render_single_value

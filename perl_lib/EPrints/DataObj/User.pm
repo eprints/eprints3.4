@@ -1103,6 +1103,10 @@ sub mail
 		$email = $self->get_value( "email" );
 	}
 
+	# Sometimes users do not have associated email addresses. bin scripts don't need to be told this.
+	use English qw<$PROGRAM_NAME>;
+	return 0 if !EPrints::Utils::is_set( $email ) && $PROGRAM_NAME =~ m/\/bin\//;
+
 	return EPrints::Email::send_mail(
 		session  => $self->{session},
 		langid   => $langid,

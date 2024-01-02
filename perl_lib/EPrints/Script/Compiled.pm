@@ -296,7 +296,7 @@ sub run_contains
         my( $self, $state, $string, $token, $length ) = @_;
         my $t = $token->[0];
 
-        return [ ($string->[0] =~ /$t/) ? "TRUE" : "FALSE", "BOOLEAN" ];
+        return [ $string->[0] =~ /$t/, "BOOLEAN" ];
 }
 
 sub run_is_set

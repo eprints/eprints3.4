@@ -3838,7 +3838,7 @@ sub render_option_list
 
 =begin InternalDoc
 
-=item $option = $repository->render_single_option( $key, $desc, $selected )
+=item $option = $repository->render_single_option( $key, $desc, $selected, $disabled )
 
 Used by render_option_list.
 
@@ -3849,7 +3849,7 @@ Used by render_option_list.
 
 sub render_single_option
 {
-	my( $self, $key, $desc, $selected ) = @_;
+	my( $self, $key, $desc, $selected, $disabled ) = @_;
 
 	my $opt = $self->make_element( "option", value => $key );
 	$opt->appendChild( $self->make_text( $desc ) );
@@ -3858,6 +3858,11 @@ sub render_single_option
 	{
 		$opt->setAttribute( "selected" , "selected" );
 	}
+	elsif( $disabled )
+	{
+		$opt->setAttribute( "disabled" , "disabled" );
+	}
+
 	return $opt;
 }
 

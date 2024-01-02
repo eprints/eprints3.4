@@ -3681,7 +3681,8 @@ sub render_option_list
 	# defaults_at_top : move items already selected to top
 	# 			of list, so they are visible.
 	# class    : css classes to apply to the select
-	# onchange :
+	# readonly : used to flag the component as readonly, however this is not directly enforced by browsers
+	# onchange : all an onchange event handler to be registered
 	# aria-labelledby :
 	# aria-describedby :
 

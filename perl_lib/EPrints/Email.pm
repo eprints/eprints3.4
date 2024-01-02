@@ -85,6 +85,12 @@ sub send_mail
 
 	my $repository = $p{session}->get_repository;
 
+	if ( !EPrints::Utils::is_set($p{to_email}) && !EPrints::Utils::is_set($p{to_list}) )
+	{
+		$p{session}->get_repository->log( "Failed to send mail with subject \"$p{subject}\" to $p{to_name}. No email address set.\n" );
+		return 0;
+	}
+
 	if( defined $p{message} )
 	{
 		my $msg = $p{message};

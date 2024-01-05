@@ -35,6 +35,10 @@
 	text-align: center;
 }
 
+.ep_search_export div[role="toolbar"] {
+	margin: 1em;
+}
+
 .ep_search_reorder {
 	margin: 0.4em auto 0 auto;
 	text-align: center;

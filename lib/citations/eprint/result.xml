@@ -4,25 +4,25 @@
 	Neat citation for eprints used in search results.
 -->
 
-<cite:citation xmlns="http://www.w3.org/1999/xhtml" xmlns:cite="http://eprints.org/ep3/citation" xmlns:epc="http://eprints.org/ep3/control">
+<cite:citation xmlns="http://www.w3.org/1999/xhtml" xmlns:cite="http://eprints.org/ep3/citation" xmlns:epc="http://eprints.org/ep3/control" type="div_table_row">
   <div class="ep_search_result">
     <div><epc:print expr="$n" />.</div>
     <div>
       <epc:print expr="$item.citation($config{citation_default}{eprint}{for_result})" />
     </div>
     <div>
-      <epc:set name='docs' expr='$item.documents()'>
-        <epc:if test="length($docs) gt 0">
-          <div class="ep_search_result_docs">
-          <epc:foreach expr="$docs" iterator="doc" limit='2'>
-             <epc:print expr="$doc.icon( 'HoverPreview', 'noNewWindow', 'previewLeft' )" />
-          </epc:foreach>
-          </div>
-        </epc:if>
-        <epc:if test="length($docs) gt 2">
-          <div><a href='{$item.uri()}'>+<epc:print expr="length($docs)-2" /> <epc:phrase ref="page:more"/></a></div>
-        </epc:if>
-      </epc:set>
+	  <div class="ep_search_result_docs">
+        <epc:set name='docs' expr='$item.documents()'>
+          <epc:if test="length($docs) gt 0">
+            <epc:foreach expr="$docs" iterator="doc" limit='2'>
+              <epc:print expr="$doc.icon( 'HoverPreview', 'noNewWindow', 'previewLeft' )" />
+   		    </epc:foreach>
+            <epc:if test="length($docs) gt 2">
+              <span><a href='{$item.uri()}'>+<epc:print expr="length($docs)-2" /> <epc:phrase ref="page:more"/></a></span>
+            </epc:if>
+	      </epc:if>
+        </epc:set>
+	  </div>
     </div>
   </div>
 </cite:citation>

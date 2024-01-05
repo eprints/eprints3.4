@@ -67,7 +67,6 @@
 .ep_search_results
 {
 	margin: 1em auto 1em auto;
-	display: table;
 }
 
 .ep_search_desc
@@ -89,15 +88,18 @@
 	vertical-align: middle;
 }
 
-.ep_search_result_docs 
+.ep_search_result_docs
 {
 	white-space: nowrap;
+	float: right;
+	min-height: 48px;
 }
 
 .ep_paginate_list
 {
 	margin: auto;
 	display: table;
+	width: 100%;
 }
 
 .ep_search_field_name

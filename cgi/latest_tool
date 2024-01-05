@@ -199,7 +199,7 @@ foreach my $item ( @records )
 	my $row = $item->render_citation_link( 
 		$citation,
 		n => [$n++, "INTEGER"] );
-	if( $type eq "table_row" )
+	if( $type eq "table_row" || $type eq "div_table_row" )
 	{
 		$container->appendChild( $row );
 	}

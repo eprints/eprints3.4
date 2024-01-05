@@ -10,3 +10,9 @@ div.ep_latest_tool_result {
 	margin-bottom: 0.5em;
 	margin-top: 0.5em;
 }
+
+div.ep_latest_tool_list {
+	display: table;
+	width: 100%;
+}
+

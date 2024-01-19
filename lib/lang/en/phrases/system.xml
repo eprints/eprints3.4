@@ -887,7 +887,7 @@ Contact us at <a href="mailto:{$config{adminemail}}"><epc:print expr="$config{ad
 </p>
     </epp:phrase>
 
-
+	<epp:phrase id="mail_from_name_no_reply">DO NOT REPLY</epp:phrase>
 
 
 

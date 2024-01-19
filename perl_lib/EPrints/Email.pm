@@ -274,6 +274,14 @@ sub build_email
 		$p{replyto_name} =~ s/<[^>]*>|^\s+|\s+$|//g; # Tidy up particularly unnamed users
 		$mimemsg->attr( "Reply-to" => encode_mime_header( "$p{replyto_name}" )." <$p{replyto_email}>" );
 	}
+	elsif ( defined $repository->config( "senderemail" ) && $repository->config( "senderemail" ) ne $repository->config( "adminemail" ) )
+	{	
+		$mimemsg->attr( "Reply-to" => $p{session}->phrase( "archive_name" )." <".$repository->config( "adminemail" ).">" );
+		if ( $p{from_email} eq $repository->config( "senderemail" ) )
+		{
+			$mimemsg->replace( "From", $p{session}->phrase( "mail_from_name_no_reply" )." <$p{from_email}>" );
+		}
+	}
 	$mimemsg->replace( "X-Mailer" => "EPrints http://eprints.org/" );
 
 	if( EPrints::Utils::is_set( $p{to_list} ) )

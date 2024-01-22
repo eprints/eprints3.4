@@ -1564,8 +1564,15 @@ sub redo_thumbnails
 			print "Redoing thumbnails for document ".$doc->id."\n";
 		}
 
-		$doc->remove_thumbnails; #ouch!
-		$doc->make_thumbnails;
+		if ( $doc->parent )
+		{
+			$doc->remove_thumbnails; #ouch!
+			$doc->make_thumbnails;
+		}
+		else
+		{
+			print STDERR "No such eprint for document '".$doc->id."'\n";
+		}
 	};
 
 	my $dataset = $repo->dataset( "document" );

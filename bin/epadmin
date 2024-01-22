@@ -1564,9 +1564,10 @@ sub redo_thumbnails
 			print "Redoing thumbnails for document ".$doc->id."\n";
 		}
 
-		$doc->remove_thumbnails; #ouch!
+
 		if ( $doc->parent )
 		{
+			$doc->remove_thumbnails; #ouch!
 			$doc->make_thumbnails;
 		}
 		else

@@ -131,7 +131,7 @@ sub render_value_actual
 			if (
 				   ( $self->get_property( "multiple" ) && exists @{$value}[0]->{$subfieldname} )
 				|| ( !$self->get_property( "multiple" ) && exists $value->{$subfieldname} )
-				|| !$field_conf->{render_quiet}
+				|| !$field_conf->{render_column_quiet}
 			)
 			{
 				my $field = $self->{dataset}->get_field( $fieldname );
@@ -224,7 +224,7 @@ sub render_single_value_row
 	foreach my $field (@{$self->{fields_cache}})
 	{
 		my $alias = $field->property( "sub_name" );
-		if ( exists $value->{$alias} || !$field->property( "render_quiet" ) )
+		if ( exists $value->{$alias} || !$field->property( "render_column_quiet" ) )
                 {
 			my $td = $session->make_element( "div", "class"=>"ep_compound_data_row_cell", "data-row-cell-index"=>$i );
 			$tr->appendChild( $td );

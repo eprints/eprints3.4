@@ -2421,6 +2421,7 @@ sub get_property_defaults
 		render_search_input => EP_PROPERTY_UNDEF,
 		render_single_value 	=> EP_PROPERTY_UNDEF,
 		render_quiet	=> EP_PROPERTY_FALSE,
+		render_column_quiet    => EP_PROPERTY_FALSE,
 		render_magicstop	=> EP_PROPERTY_FALSE,
 		render_noreturn	=> EP_PROPERTY_FALSE,
 		render_dont_link	=> EP_PROPERTY_FALSE,

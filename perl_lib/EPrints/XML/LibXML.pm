@@ -66,11 +66,11 @@ $EPrints::XML::LIB_LEN = length("XML::LibXML::");
 
 ##############################################################################
 
-our $PARSER = XML::LibXML->new( expand_entities=>1, load_external_dtd=>1 );
+our $PARSER = XML::LibXML->new( expand_entities=>1, load_ext_dtd=>1 );
 
 sub CLONE
 {
-	$PARSER = XML::LibXML->new( expand_entities=>1, load_external_dtd=>1 );
+	$PARSER = XML::LibXML->new( expand_entities=>1, load_ext_dtd=>1 );
 }
 
 =item $doc = parse_xml_string( $string, %opts )

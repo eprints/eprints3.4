@@ -124,6 +124,11 @@ sub render
 	}
 
 	my @fields = $eprint->get_dataset->get_fields;
+	my $field_orders = $workflow->{stages_field_orders};
+	my $rowshash = {};
+	my $unspechash = {};
+
+	# Organise fields into stages
 	foreach my $field ( @fields )
 	{
 		next unless( $field->get_property( "show_in_html" ) );
@@ -133,23 +138,57 @@ sub render
 		my $stage = $self->_find_stage( $eprint, $name );
 		$stage = "" if !defined $stage;
 
-		my $rows = $stages{$stage}->{rows};
-		my $unspec = $stages{$stage}->{unspec};
+		$rowshash->{$stage} ||= {};
+		$unspechash->{$stage} ||= {};
 		$stages{$stage}->{count}++;
-
-		my $r_name = $self->_render_name_maybe_with_link( $eprint, $field );
 
 		if( $eprint->is_set( $name ) )
 		{
 			if( !$field->isa( "EPrints::MetaField::Subobject" ) )
 			{
-				push @$rows, $session->render_row(
-					$r_name,
-					$eprint->render_value( $field->get_name(), 1 ) );
+				if ( $stage )
+				{
+					$rowshash->{$stage}->{$field_orders->{$stage}->{$name}} = $name
+				}
+				else
+				{
+					$rowshash->{$stage}->{scalar keys %{$rowshash->{$stage}}} = $name;
+				}
 			}
 		}
 		else
 		{
+			if ( $stage )
+			{
+				$unspechash->{$stage}->{$field_orders->{$stage}->{$name}} = $name;
+			}
+			else
+			{	
+				$unspechash->{$stage}->{scalar keys %{$unspechash->{$stage}}} = $name;
+			}
+		}
+	}
+
+	# Organise fields in each stage
+	foreach my $stage ( keys %stages )
+	{
+		my $rows = $stages{$stage}->{rows};
+		my $unspec = $stages{$stage}->{unspec};
+		foreach my $pos ( sort { $a <=> $b } keys %{$rowshash->{$stage}} ) 
+		{
+			my $fieldname = $rowshash->{$stage}->{$pos};
+			my $field = $eprint->get_dataset->get_field( $fieldname );
+			my $r_name = $self->_render_name_maybe_with_link( $eprint, $field );
+			push @$rows, $session->render_row( 
+				$r_name,
+				$eprint->render_value( $fieldname, 1 ) 
+			);
+		}
+		foreach my $pos ( sort { $a <=> $b } keys %{$unspechash->{$stage}} )
+		{
+			my $fieldname = $unspechash->{$stage}->{$pos};
+			my $field = $eprint->get_dataset->get_field( $fieldname );
+			my $r_name = $self->_render_name_maybe_with_link( $eprint, $field );
 			if( $unspec->hasChildNodes )
 			{
 				$unspec->appendChild( $session->make_text( ", " ) );

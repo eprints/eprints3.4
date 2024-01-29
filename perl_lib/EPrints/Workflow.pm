@@ -244,6 +244,7 @@ sub _read_stages
 
 	$self->{stages}={};
 	$self->{field_stages}={};
+	$self->{stages_field_orders}={};
 
 	foreach my $element ( $self->{config}->getChildNodes )
 	{
@@ -262,6 +263,8 @@ sub _read_stages
 		foreach my $field_id ( $self->{stages}->{$stage_id}->get_fields_handled )
 		{
 			$self->{field_stages}->{$field_id} = $stage_id;
+			$self->{stages_field_orders}->{$stage_id}->{$field_id} ||= {};
+			$self->{stages_field_orders}->{$stage_id}->{$field_id} = scalar( keys( $self->{stages_field_orders}->{$stage_id} ) );
 		}
 	}
 

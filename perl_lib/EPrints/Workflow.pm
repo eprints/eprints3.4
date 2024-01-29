@@ -264,7 +264,7 @@ sub _read_stages
 		{
 			$self->{field_stages}->{$field_id} = $stage_id;
 			$self->{stages_field_orders}->{$stage_id}->{$field_id} ||= {};
-			$self->{stages_field_orders}->{$stage_id}->{$field_id} = scalar( keys( $self->{stages_field_orders}->{$stage_id} ) );
+			$self->{stages_field_orders}->{$stage_id}->{$field_id} = scalar( keys( %{ $self->{stages_field_orders}->{$stage_id} } ) );
 		}
 	}
 

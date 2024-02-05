@@ -389,9 +389,11 @@ Defaults to setting the file handle to binary semantics.
 
 sub initialise_fh
 {
-	my( $plugin, $fh ) = @_;
+	my( $plugin, $fh, $encoding ) = @_;
 
-	binmode($fh);
+	$encoding ||= ':utf8';
+
+	binmode( $fh, $encoding );
 }
 
 =item $bom = $plugin->byte_order_mark

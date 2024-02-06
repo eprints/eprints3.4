@@ -829,6 +829,7 @@ sub action_download_full_file {
 		my $type = shift @parts;
 		if( $type eq "print" )
 		{
+			next if $parts[0] eq "pin";
 			my $expr = join "", @parts;
 			#push @output, "<!-- EPEDIT:START:TEMPLATE:PRINT $expr -->";
 			if ( $expr eq '$config{rel_path}') {
@@ -1386,6 +1387,7 @@ sub get_images
 		my $type = shift @parts;
 		if( $type eq "print" )
 		{
+			next if $parts[0] eq "pin";
 			my $expr = join "", @parts;
 			#push @output, "<!-- EPEDIT:START:TEMPLATE:PRINT $expr -->";
 			if ( $expr eq '$config{rel_path}') {

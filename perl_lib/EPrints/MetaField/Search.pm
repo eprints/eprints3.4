@@ -207,7 +207,7 @@ sub form_value_basic
 	}
 
 	# replace UTF8-MB4 characters with a �
-	$value=~s/[^\N{U+0000}-\N{U+FFFF}]/\N{REPLACEMENT CHARACTER}/g;
+	$value=~s/[^\N{U+0000}-\N{U+FFFF}]/\N{REPLACEMENT CHARACTER}/g if defined $value;
 
 	return $value;
 }

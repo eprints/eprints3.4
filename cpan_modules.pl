@@ -15,6 +15,7 @@ install( 'Config::General' );
 install( 'Data::ShowTable' ); # used by DBD::mysql
 install( 'DBI' ); # used by DBD::mysql
 install( 'DBD::mysql' );
+install( 'IO::String' );
 install( 'JSON' );
 install( 'LWP::Protocol::https' );
 install( 'MIME::Base64' );

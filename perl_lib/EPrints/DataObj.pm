@@ -975,14 +975,26 @@ sub clear_citationcaches
 {
 	my( $self ) = @_;
 
-	my $db = $self->{session}->get_database();
-	my $citationcaches_sql = "SELECT `citationcacheid` FROM citationcache WHERE `datasetid` = '" . $self->{dataset}->confid . "' AND `objectid` = '" . $self->id . "'";
-	my $statement = $db->prepare( $citationcaches_sql );
-	$db->execute($statement, $citationcaches_sql);
-	while ( my $res = $statement->fetchrow_hashref )
-	{
-		$self->{session}->dataset( "citationcache" )->dataobj( $res->{citationcacheid} )->delete();
+	my $cc_ds = $self->{session}->get_dataset( 'citationcache' );
+	my $searchexp = $cc_ds->prepare_search;
+	$searchexp->add_field (
+		fields => [ $cc_ds->get_field( 'datasetid' ) ],
+		value => $self->{dataset}->confid,
+		match => "EQ"
+	);
+	$searchexp->add_field (
+		fields => [ $cc_ds->get_field( 'objectid' ) ],
+		value => $self->id,
+		match => "EQ"
+	);
+	my $citationcaches = $searchexp->perform_search;
+
+	sub delete_citationcache {
+		my( $session, $dataset, $citationcache ) = @_;
+		$citationcache->delete();
 	}
+	$citationcaches->map( \&delete_citationcache )
+
 }
 
 

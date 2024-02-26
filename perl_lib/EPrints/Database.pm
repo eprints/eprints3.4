@@ -1004,8 +1004,28 @@ sub execute
 	while( !$result )
 	{
 		$self->{session}->get_repository->log( "SQL ERROR (execute): $sql" );
-		$self->{session}->get_repository->log( "SQL ERROR (execute): ".$self->{dbh}->errstr );
-		return undef;
+		$self->{session}->get_repository->log( "SQL ERROR (execute): ".$self->{dbh}->errstr );			
+		my $r = EPrints->request;
+	        $r->status( 500 );
+        	my $htmlerrmsg = $self->{dbh}->errstr;
+	        $htmlerrmsg=~s/&/&amp;/g;
+        	$htmlerrmsg=~s/>/&gt;/g;
+	        $htmlerrmsg=~s/</&lt;/g;
+        	$htmlerrmsg=~s/\n/<br \/>/g;
+	        $htmlerrmsg = <<END;
+<html>
+<head>
+<title>EPrints System Error</title>
+</head>
+<body>
+<h1>EPrints System Error</h1>
+<p>Database schema may be out of date.</p>
+<p><code>$htmlerrmsg</code></p>
+</body>
+</html>
+END
+	        $r->custom_response( 500, $htmlerrmsg );
+		die;
 	}
 
 	return $result;

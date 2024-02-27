@@ -140,7 +140,7 @@ This erases all the .words and .indexcodes cache files from your repository, for
 
 This is useful if you only setup the fulltext indexing after your repository is already live, or if you discover there has been a problem.
 
-=item B<epadmin> rebuild_triples I<repository_id> [I<dataset_id> [I<dataobj_id> I<dataobj_id> I<dataobj_id>-I<dataobj_id> ...]]
+=item B<epadmin> rebuild_triples I<repository_id> [I<dataset_id> [I<dataobj_id> I<dataobj_id> I<dataobj_id>-I<dataobj_id> ...]
 
 Queue all the records to have their RDF triple cache rebuilt. This may tie-up the indexer for some time on a large repository. Do this if you have made changes to the way RDF triples are produced from an EPrint. If a list of data object IDs are given then just rebuild triples for those. If an data object ID range is given (e.g. 10-20), then rebuild triples all existing items in that range.
 

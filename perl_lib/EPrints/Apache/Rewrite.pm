@@ -136,6 +136,13 @@ sub handler
 		 secure => $secure,  # boolean
             return_code => \$rc,     # set to trigger a return
 	);
+
+	# set request user if configuration says to and not already set.
+	if ( $repository->config( 'cookie_auth_set_user' ) && defined $repository->current_user && !defined $r->user )
+	{
+		$r->user( $repository->current_user->get_value( 'username' ) );
+	}
+
 	# if the trigger has set an return code
 	return $rc if defined $rc;
 

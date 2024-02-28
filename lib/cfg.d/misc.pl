@@ -44,6 +44,10 @@ $c->{skip_buffer_owners} = [];
 # domain for the login and lang. cookies to be set in.
 $c->{cookie_domain} = defined $c->{host} ? $c->{host} : $c->{securehost};
 
+# Set user for request even when using cookie_auth so that username
+# appears in Apache access logs. Disabled by default.
+$c->{cookie_auth_set_user} = 0;
+
 ######################################################################
 #
 # Timeouts

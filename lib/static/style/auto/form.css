@@ -62,21 +62,21 @@ select, input.ep_form_text, textarea {
 	text-align: center;
 	font-size: 80%;
 }
-.ep_form_input_grid td {
+.ep_form_input_grid > div > div {
 	vertical-align: middle;
 }
 
-td.ep_form_input_grid_pos {
+.ep_form_input_grid_pos {
 	padding-right: 4px;
 }
-td.ep_form_input_grid_arrows {
+.ep_form_input_grid_arrows {
 	white-space: nowrap;
 	padding-top: 2px;
 	padding-bottom: 2px;
 }
 
 
-td.ep_form_input_grid_wide {
+.ep_form_input_grid_wide {
 	text-align: left;
 }
 

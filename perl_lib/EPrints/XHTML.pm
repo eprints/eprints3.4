@@ -832,6 +832,10 @@ sub tabs
 		{
 			$href = $links->{$label};
 		}
+		unless ( $href )
+		{
+			$href = "#";
+		}
 
 		my $link = $tab->appendChild( $xml->create_data_element( "a",
 			$labels->[$_],

@@ -98,19 +98,21 @@ sub add_url
 
 	my ( $urlset, $xml ) = @{$opts};
 
-	my $loc = $xml->create_element( "loc" );
-	my $url_stem = $eprint->url_stem;
-	$url_stem  =~ s/http:/https:/ if EPrints::Utils::is_set( $repo->config("securehost") );
-	$loc->appendChild( $xml->create_text_node( $url_stem ) );
+	my $loc = $eprint->url_stem;
+	$loc  =~ s/http:/https:/ if EPrints::Utils::is_set( $repo->config("securehost") );
 
-	my $changefreq = $xml->create_element( "changefreq" );
-	$changefreq->appendChild( $xml->create_text_node( "weekly" ) );
+	my $lastmod = $eprint->value( "lastmod" );
+        my $lastmod_date;
+        if( defined $lastmod && $lastmod =~ /^(\d{4}-\d{2}-\d{2})\s/ )
+        {
+                $lastmod_date = "$1";
+        }
 	
-	my $url =  $xml->create_element( "url" );
-	$url->appendChild( $loc );
-	$url->appendChild( $changefreq );
-
-	$urlset->appendChild( $url );
+	$urlset->appendChild( EPrints::Utils::make_sitemap_url( $session, {
+                loc => $loc,
+                ( defined $lastmod_date ) ? ( lastmod => $lastmod_date ) : (),
+                changefreq => 'weekly',
+        } ) );
 }
 
 =head1 COPYRIGHT

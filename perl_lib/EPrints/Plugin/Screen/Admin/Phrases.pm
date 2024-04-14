@@ -69,12 +69,14 @@ sub export
 
 	my $session = $self->{session};
 
-	my( $message, $error_level ) = $self->write_phrase;
+	my $langid = $session->param( "lang" ) ? $session->param( "lang" ) : $session->get_langid;
 
-	my $file = $session->config( "config_path" )."/lang/".$session->get_lang->{id}."/phrases/zz_webcfg.xml";
+	my( $message, $error_level ) = $self->write_phrase( $langid );	
+
+	my $file = $session->config( "config_path" )."/lang/$langid/phrases/zz_webcfg.xml";
 
 	my $phraseid = $session->param( "phraseid" );
-	my $info = $session->get_lang->get_phrase_info( $phraseid, $session );
+	my $info = $session->get_language( $langid )->get_phrase_info( $phraseid, $session );
 	my $phrase;
 	my $src = "null";
 	if( defined $info )
@@ -84,7 +86,7 @@ sub export
 		$src = "webcfg" if $info->{filename} eq $file;
 		$phrase = {
 			phraseid => $phraseid,
-			langid  => $info->{langid},
+			langid => $langid,
 			src => $src,
 			xml => $info->{xml},
 		};
@@ -93,6 +95,7 @@ sub export
 	{
 		$phrase = {
 			phraseid => $phraseid,
+			langid => $langid,
 			src => $src,
 			xml => $session->make_doc_fragment
 		};
@@ -108,10 +111,12 @@ sub export
 
 sub write_phrase
 {
-	my( $self ) = @_;
+	my( $self, $langid ) = @_;
 
 	my $session = $self->{session};
-	my $lang = $session->get_lang;
+	
+	$langid ||= $session->get_langid;
+	my $lang = $session->get_language( $langid );
 
 	# get the phraseid to write
 	my $phraseid = $session->param( "phraseid" );
@@ -119,7 +124,7 @@ sub write_phrase
 	my $phrase = $session->param( "phrase" );
 	return unless defined $phrase;
 
-	my $file = $session->config( "config_path" )."/lang/".$lang->{id}."/phrases/zz_webcfg.xml";
+	my $file = $session->config( "config_path" )."/lang/$langid/phrases/zz_webcfg.xml";
 
 	my $info = $lang->get_phrase_info( $phraseid, $session );
 
@@ -226,7 +231,7 @@ END
 	$message_dom->appendChild( $session->make_text( " " ) );
 
 	# force a load of zz_webcfg.xml to get the new phrase
-	$session->get_lang->load_phrases( $file );
+	$lang->load_phrases( $file );
 
 	if( !$reload )
 	{
@@ -353,7 +358,7 @@ sub render
 
 	my $session = $self->{session};
 
-	my $file = $session->config( "config_path" )."/lang/".$session->get_lang->{id}."/phrases/zz_webcfg.xml";
+	my $file = $session->config( "config_path" )."/lang/".$session->get_langid."/phrases/zz_webcfg.xml";
 
 	my $f = $session->make_doc_fragment;
 	
@@ -367,18 +372,21 @@ sub render
 		$f->appendChild( $self->render_new_phrase() );
 	}
 
-	my @ids;
+	my $ids_for_langs;
 	if( defined $self->{phrase_ids} )
 	{
-		@ids = sort { lc($a) cmp lc($b) } @{$self->{phrase_ids}};
+		my @ids = sort { lc($a) cmp lc($b) } @{$self->{phrase_ids}};
+		$ids_for_langs->{$session->get_langid} = \@ids;
 	}
 	else
 	{
-		# get all phrase ids, including fallbacks, and sort them
+		# get all phrase ids, excluding fallbacks, and sort them
 		# alphabetically
-		@ids =
-			sort { lc($a) cmp lc($b) }
-			$session->get_lang->get_phrase_ids( 1 );
+		foreach my $langid ( @{$session->config( 'languages' )} )
+		{
+			my @ids = sort { lc($a) cmp lc($b) } $session->get_language( $langid )->get_phrase_ids( 0 );
+			$ids_for_langs->{$langid} = \@ids;
+		}
 	}
 
 	my $ep_save_phrase = EPrints::Utils::js_string( $self->phrase( "save" ) );
@@ -405,54 +413,60 @@ EOJ
 	my $defined_rows = $session->make_doc_fragment;
 	my $undefined_rows = $session->make_doc_fragment;
 	my $fallback_rows = $session->make_doc_fragment;
-	foreach my $phraseid ( @ids )
+	foreach my $langid ( keys %{ $ids_for_langs } )
 	{
-		my $info = $session->get_lang->get_phrase_info( $phraseid, $session );
-		my $src = "null";
-		if( defined $info && $info->{fallback} )
+		my $ids = $ids_for_langs->{$langid};
+
+		foreach my $phraseid ( @$ids )
 		{
-			$src = $info->{system} ? "system" : "repo";
-			$src .= "fallback";
-			$src = "webcfg" if $info->{filename} eq $file;
-			$fallback_rows->appendChild( $self->render_row(
-				{
-					phraseid => $phraseid,
-					xml => $info->{xml},
-					langid  => $info->{langid},
-					src => $src,
-				},
-				undef,
-				"message",
-			) );
+			my $info = $session->get_language( $langid )->get_phrase_info( $phraseid, $session );
+			my $src = "null";
+			if( defined $info && $info->{fallback} )
+			{
+				$src = $info->{system} ? "system" : "repo";
+				$src .= "fallback";
+				$src = "webcfg" if $info->{filename} eq $file;
+				$fallback_rows->appendChild( $self->render_row(
+					{
+						phraseid => $phraseid,
+						xml => $info->{xml},
+						langid  => $info->{langid},
+						src => $src,
+					},
+					undef,
+					"message",
+				) );
+			}
+			elsif( defined $info )
+			{
+				$src = $info->{system} ? "system" : "repo";
+				$src = "webcfg" if $info->{filename} eq $file;
+				$defined_rows->appendChild( $self->render_row(
+					{
+						phraseid => $phraseid,
+						xml => $info->{xml},
+						langid  => $info->{langid},
+						src => $src,
+					},
+					undef,
+					"message",
+				) );
+			}
+			else
+			{
+				$undefined_rows->appendChild( $self->render_row( 
+					{
+						phraseid=>$phraseid,
+						xml=>$session->make_doc_fragment,
+						langid => $info->{langid},
+						src => $src,
+					}, 
+					$self->html_phrase( "phrase_not_defined" ),
+					"warning",
+				 ) );
+			}
 		}
-		elsif( defined $info )
-		{
-			$src = $info->{system} ? "system" : "repo";
-			$src = "webcfg" if $info->{filename} eq $file;
-			$defined_rows->appendChild( $self->render_row(
-				{
-					phraseid => $phraseid,
-					xml => $info->{xml},
-					langid  => $info->{langid},
-					src => $src,
-				},
-				undef,
-				"message",
-			) );
-		}
-		else
-		{
-			$undefined_rows->appendChild( $self->render_row( 
-				{
-					phraseid=>$phraseid,
-					xml=>$session->make_doc_fragment,
-					src => $src,
-				}, 
-				$self->html_phrase( "phrase_not_defined" ),
-				"warning",
-			 ) );
-		}
-	}	
+	}
 	$table->appendChild( $undefined_rows );
 	$table->appendChild( $fallback_rows );
 	$table->appendChild( $defined_rows );
@@ -469,11 +483,17 @@ sub render_row
 	my $phraseid = $phrase->{phraseid};
 	my $src = $phrase->{src};
 
+	my $langid = $session->config( 'defaultlanguage' );
+	if( defined $phrase->{langid} )
+	{
+		$langid = $phrase->{langid};
+	}
+
 	my $xml = $phrase->{xml};
 	my %seen = ($phrase->{phraseid} => 1);
 	while($xml->can( "hasAttribute" ) && $xml->hasAttribute( "ref" ))
 	{
-		my $info = $session->get_lang->get_phrase_info( $xml->getAttribute( "ref" ), $session );
+		my $info = $session->get_language( $langid )->get_phrase_info( $xml->getAttribute( "ref" ), $session );
 		last if !defined $info;
 		last if $seen{$info->{phraseid}};
 		$seen{$info->{phraseid}} = 1;
@@ -490,7 +510,7 @@ sub render_row
 
 	$tr = $session->make_element( "tr", class => "ep_phraseedit_$src" );
 
-	$td = $session->make_element( "td", id => "ep_phraseedit_".$phraseid."__label" );
+	$td = $session->make_element( "td", id => "ep_lang_${langid}_phraseedit_${phraseid}__label" );
 	$tr->appendChild( $td );
 	$td->appendChild( $session->make_text( $phraseid ) );
 
@@ -508,11 +528,11 @@ sub render_row
 	if ( defined $session->config( "csrf_token_salt" ) && defined $session->current_user )
         {
 		my $csrf_token = $session->get_csrf_token();
-		$div = $session->make_element( "div", id => "ep_phraseedit_$phraseid", class => "ep_phraseedit_widget", onfocus => "ep_phraseedit_edit(this, ep_phraseedit_phrases, '$csrf_token');", tabindex => "0" );
+		$div = $session->make_element( "div", id => "ep_lang_${langid}_phraseedit_${phraseid}", class => "ep_phraseedit_widget", onfocus => "ep_phraseedit_edit(this, ep_phraseedit_phrases, '$csrf_token');", tabindex => "0" );
 	}
 	else
 	{	
-		$div = $session->make_element( "div", id => "ep_phraseedit_$phraseid", class => "ep_phraseedit_widget", onfocus => "ep_phraseedit_edit(this, ep_phraseedit_phrases);", tabindex => "0" );
+		$div = $session->make_element( "div", id => "ep_lang_${langid}_phraseedit_${phraseid}", class => "ep_phraseedit_widget", onfocus => "ep_phraseedit_edit(this, ep_phraseedit_phrases);", tabindex => "0" );
 	}
 	if( $xml ne $phrase->{xml} )
 	{
@@ -523,10 +543,7 @@ sub render_row
 
 	$td = $session->make_element( "td" );
 	$tr->appendChild( $td );
-	if( defined $phrase->{langid} )
-	{
-		$td->appendChild( $session->make_text( $phrase->{langid} . "/" . $phrase->{src} ) );
-	}
+	$td->appendChild( $session->make_text( $langid . "/" . $phrase->{src} ) );
 
 	return $tr;
 }
@@ -550,6 +567,27 @@ sub render_new_phrase
 			style => "border: solid 1px #88c",
 			id => "ep_phraseedit_newid",
 			'aria-labelledby' => "ep_phraseedit_add" ));
+	my $languages = $session->config( 'languages' );
+	if ( scalar @$languages > 1 )
+	{
+		my $lang_labels = {};
+		foreach my $lang ( @$languages )
+		{
+			$lang_labels->{$lang} = $session->phrase( "languages_typename_$lang" );
+		}
+		my $default_language = $session->config( 'defaultlanguage' );
+		$default_language = $session->get_session_language( $session->{request} ) if $session->{request};
+		$form->appendChild(
+        		$session->render_option_list(
+					name => "ep_phraseedit_newlang",
+					height => 1,
+					multiple => 0,
+					id => "ep_phraseedit_newlang",
+					values => $languages,
+					labels => $lang_labels,
+					default =>  $default_language,
+					'aria-labelledby' => "ep_phraseedit_add" ));	
+	}
 	$form->appendChild( $session->make_text( " " ) );
 	my $csrf_token = "";
 	if ( defined $session->config( "csrf_token_salt" ) && defined $session->current_user )

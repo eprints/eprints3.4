@@ -26,6 +26,7 @@ var eprints_logged_in = %s;
 var eprints_logged_in_userid = %s; 
 var eprints_logged_in_username = %s; 
 var eprints_logged_in_usertype = %s; 
+var eprints_lang_id = %s;
 EOJ
 			(map { EPrints::Utils::js_string( $_ ) }
 				$repo->current_url( host => 1, path => 'static' ),
@@ -35,6 +36,7 @@ EOJ
 			defined $repo->current_user ? $repo->current_user->get_id : 0,
 			defined $repo->current_user ? '"' . $repo->current_user->get_value("username") . '"' : '""',
 			defined $repo->current_user ? '"' . $repo->current_user->get_value("usertype") . '"' : '""', # is this safe to share?
+			defined $repo->{request} ? '"' . $repo->get_session_language( $repo->{request} ) . '"' : '""',
 		)) );
 	$head->appendChild( $repo->xml->create_text_node( "\n    " ) );
 	my $style = $head->appendChild( $repo->xml->create_element( "style",

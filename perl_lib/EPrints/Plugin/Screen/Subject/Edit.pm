@@ -331,7 +331,7 @@ sub render_children
 
 		my $idsuffix = EPrints::Utils::sanitise_element_id( $child->id . "_unlink" );
 		my $form = $td->appendChild( $self->render_form( $idsuffix ) );
-		$form->appendChild( $xhtml->hidden_field( childid => $child->id, $idsuffix ) );
+		$form->appendChild( $xhtml->hidden_field( childid => $child->id, id => "childid_" . $idsuffix ) );
 		$form->appendChild( $xhtml->action_button(
 			unlink => $self->phrase( "action_unlink" )
 		) );

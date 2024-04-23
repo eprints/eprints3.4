@@ -605,9 +605,12 @@ sub _render_doc_metadata
                         $required->appendChild( $labeltext );
                         $labeltext = $required;
 		}
-		$no_toggle = 1 if $field->{show_help} eq "always";
-		$no_toggle = 0 if $field->{show_help} eq "toggle";
-		$no_help = 1 if $field->{show_help} eq "never";
+		if ( defined $field->{show_help} )
+		{
+			$no_toggle = 1 if $field->{show_help} eq "always";
+			$no_toggle = 0 if $field->{show_help} eq "toggle";
+			$no_help = 1 if $field->{show_help} eq "never";
+		}
 		
 		$table->appendChild( $session->render_row_with_help(
 			label=>$labeltext,

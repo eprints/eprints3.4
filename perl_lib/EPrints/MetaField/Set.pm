@@ -221,7 +221,7 @@ sub render_set_input
 	push @classes, join('_', 'eptype', $self->{dataset}->base_id, $self->type);
 	push @classes, join('_', 'eptype', $self->{dataset}->base_id, $self->type, $input_style) if $input_style;
 	
-	my $readonly = ( $self->{readonly} && $self->{readonly} eq "1" || $self->{readonly} eq "yes" ) ? 1 : undef; # sorry
+	my $readonly = $self->{readonly} && ( $self->{readonly} eq "1" || $self->{readonly} eq "yes" ) ? 1 : undef; # sorry
  	push @classes, "ep_readonly" if $readonly;
 
 	if( 

@@ -1593,7 +1593,7 @@ sub get_basic_input_elements
 	# messy readonly flag values
  	# $self->{readonly} = yes if this is part of a readonly compound field
  	# $self->{readonly} = 1 if this is a standalone field
- 	my $readonly = ( $self->{readonly} == 1 || $self->{readonly} eq "yes" ) ? 1 : undef;
+ 	my $readonly = defined $self->{readonly} && ( $self->{readonly} == 1 || $self->{readonly} eq "yes" ) ? 1 : undef;
 
 	my $input;
 	if( defined $self->{render_input} )

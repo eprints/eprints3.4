@@ -510,7 +510,7 @@ sub render_export_bar
 			$type = "tool" if( $plugin->is_tool );
 			
 			my $url = $self->export_url( $id );
-			my $span = $plugin->render_export_icon( $type, $url );
+			my $span = $plugin->render_export_icon( $type, $url, $id );
 
 			#add class to span so we can use CSS on it
 			$span->setAttribute('class', $span->getAttribute('class') . ' ep_search_' . $id );

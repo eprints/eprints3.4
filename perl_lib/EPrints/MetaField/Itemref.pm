@@ -69,9 +69,26 @@ sub get_basic_input_elements
 
 	my $ex = $self->SUPER::get_basic_input_elements( $session, $value, $basename, $staff, $obj, $one_field_component );
 
-	my $desc = $self->render_single_value( $session, $value );
+	my $raw_value = $value;
+	if ( defined $value && defined $self->{fromform} )
+	{
+		if ( $self->get_property("multiple") )
+		{
+			$raw_value = pop @{
+				$self->call_property( "fromform", [$value], $session, $obj,
+					$basename )
+			};
+		}
+		else
+		{
+			$raw_value =
+			  $self->call_property( "fromform", $value, $session, $obj,
+				$basename );
+		}
+	}
+	my $desc = $self->render_single_value( $session, $raw_value );
 
-	push @{$ex->[0]}, {el=>$desc, style=>"padding: 0 0.5em 0 0.5em;"};
+	push @{$ex->[0]}, {el=>$desc, class => 'ep_itemref_desc', id => 'ep_itemref_desc_' . $self->get_name };
 
 	return $ex;
 }

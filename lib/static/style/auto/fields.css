@@ -39,3 +39,7 @@ dl.ep_field_set_long dd {
 #c6_editperms_1_type_label::after {
         content: "";
 }
+
+.ep_itemref_desc {
+	padding: 0 0.5em;
+}

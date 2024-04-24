@@ -30,15 +30,6 @@ use EPrints::MetaField::Int;
 
 use strict;
 
-sub new
-{
-        my( $self, %params ) = @_;
-
-	$params{regexp} = '' if defined $params{fromform} && ! defined $params{regexp};
-
-       	return  $self->SUPER::new( %params );
-}
-
 sub get_property_defaults
 {
 	my( $self ) = @_;
@@ -70,7 +61,7 @@ sub get_basic_input_elements
 	my $ex = $self->SUPER::get_basic_input_elements( $session, $value, $basename, $staff, $obj, $one_field_component );
 
 	my $raw_value = $value;
-	if ( defined $value && defined $self->{fromform} )
+	if ( defined $value && defined $self->{fromform} && !defined $self->{get_item} )
 	{
 		if ( $self->get_property("multiple") )
 		{

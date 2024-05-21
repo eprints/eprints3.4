@@ -97,6 +97,28 @@ sub handler
 		return DECLINED;
 	}
 
+	# Certain paths forbidden from certain IPs/subnets (maybe due to (D)DOS).
+	if ( $repository->get_conf( 'restrict_paths' ) && ref( $r ) eq "Apache2::RequestRec" )
+	{
+		my $restrict_paths = $repository->get_conf( 'restrict_paths' );
+		my $ip = $repository->remote_ip;
+		foreach my $restrict_path ( @$restrict_paths )
+		{
+			if ( $uri =~ /^$restrict_path->{path}/ )
+			{
+				foreach my $restrict_ip ( @{$restrict_path->{ips}} )
+				{
+					$restrict_ip =~ s/\./\\./g;
+					$restrict_ip .= '$' if substr( $restrict_ip, -1 ) ne '.'; # avoid blocking 1.2.3.40 when blocking 1.2.3.4.
+					if ( $ip =~ /^$restrict_ip/ )
+					{
+						return FORBIDDEN;
+					}
+				}
+			}
+		}
+	}
+
 	# Non-EPrints paths within our tree
 	my $exceptions = $repository->config( 'rewrite_exceptions' );
 	$exceptions = [] if !defined $exceptions;
@@ -483,17 +505,21 @@ sub handler
 					# It's a document....           
 
 					my $pos = $2;
+					print STDERR "[DOCDL] Gettting eprint $eprintid doc in pos $pos\n";
 					my $doc = EPrints::DataObj::Document::doc_with_eprintid_and_pos( $repository, $eprintid, $pos );
 					if( !defined $doc )
 					{
+						print STDERR "  [DOCDL] doc not found\n";
 						return NOT_FOUND;
 					}
 					if( !length($uri) )
 					{
+						print STDERR "  [DOCDL] uri empty\n";
 						return redir( $r, "$urlpath/$eprintid/$pos/$args" );
 					}
 					elsif( length($1) )
 					{
+						print STDERR "  [DOCDL] leading zeroes\n";
 						return redir( $r, "$urlpath/$eprintid/$pos$uri$args" );
 					}
 					$uri =~ s! ^([^/]*)/ !!x;
@@ -505,6 +531,7 @@ sub handler
 					$r->pnotes( document => $doc );
 					$r->pnotes( dataobj => $doc );
 					$r->pnotes( filename => $filename );
+					print STDERR "  [DOCDL] Gettting eprint $eprintid doc in pos $pos with filename $filename\n";
 
 					$r->handler('perl-script');
 
@@ -537,12 +564,15 @@ sub handler
 						relations => \@relations,
 					);
 
+					print STDERR "  [DOCDL] RC is $rc\n";
+
 					# if the trigger has set an return code
 					return $rc if defined $rc;
 
 					# This way of getting a status from a trigger turns out to cause 
 					# problems and is included as a legacy feature only. Don't use it, 
 					# set ${$opts->{return_code}} = 404; or whatever, instead.
+					print STDERR "  [DOCDL] status is ".$r->status."\n";
 					return $r->status if $r->status != 200;
     
 					# Disable JavaScript if accessing whilst logged in to avoid malicious HTML files doing nasty things as the user.
@@ -577,11 +607,11 @@ sub handler
 						}
 					}
 				}
+				print STDERR "  [DOCDL] returning OK\n";
 				return OK; ## /id/eprint/XX
 			}
 		}
 	}##if use_long_url_format
-
 	if( $uri =~ s! ^$urlpath/id/(?:
 			contents | ([^/]+)(?:/([^/]+)(?:/([^/]+))?)?
 		)$ !!x )

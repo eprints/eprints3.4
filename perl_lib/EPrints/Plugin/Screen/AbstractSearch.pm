@@ -36,6 +36,7 @@ sub action_export_redir
 	my( $self ) = @_;
 
 	my $cacheid = $self->{session}->param( "cache" );
+ 	$cacheid = "" unless $cacheid =~ /^\d+$/;
 	my $format = $self->{session}->param( "output" );
 	if( !defined $format )
 	{

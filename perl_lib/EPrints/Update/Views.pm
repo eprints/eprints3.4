@@ -2223,6 +2223,16 @@ sub fieldlist_sizes
 
 	my $dataset = $self->dataset;
 	my $menus_fields = $self->menus_fields;
+	my @top_path_values = ();
+	foreach my $menu_field ( @{$menus_fields->[$menu_level]} )
+	{
+		my $field = $dataset->field( $menu_field->name );
+		if ( $field->has_property( 'top' ) && $field->get_property( 'top' ) )
+		{
+			push @top_path_values, $field->get_property( 'top' )
+		}
+	}
+	$path_values = \@top_path_values if scalar @top_path_values;
 	$filters = $self->get_filters( $path_values ) if !defined $filters;
 
 	my $menu_fields = $menus_fields->[$menu_level];

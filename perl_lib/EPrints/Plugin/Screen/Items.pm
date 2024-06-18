@@ -163,10 +163,14 @@ sub perform_search
 
 	my $processor = $self->{processor};
 	my $search = $processor->{search};
+	my $session = $self->{session};
 
-	# dirty hack to pass the internal search through to owned_eprints_list
+	# Make sure you have the search order now as reorder expensive when many items
+	my $sort_order = $search->{order};
+	$sort_order = $session->param( "_buffer_order" ) unless $sort_order;
+
 	my $list = $self->{session}->current_user->owned_eprints_list( %$search,
-		custom_order => $search->{order}
+		custom_order => $sort_order,
 	);
 
 	return $list;
@@ -426,8 +430,10 @@ sub render_items
 		},
 		rows_after => $final_row,
 	);
+	
+	# Let Paginate know if the list is already ordered, save re-ordering.
+	$opts{custom_order} = $list->{order} if $list->{order};
 	$chunk->appendChild( EPrints::Paginate::Columns->paginate_list( $session, "_buffer", $list, %opts ) );
-
 
 	# Add form
 	my $div = $session->make_element( "div", class=>"ep_columns_add" );

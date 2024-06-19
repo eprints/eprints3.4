@@ -165,6 +165,10 @@ sub matches
 				defined($self->param( "metadataPrefix" )) :
 				$self->param( "metadataPrefix" ) eq $param;
 	}
+	if( $test eq "signposting" )
+	{
+		return( $self->param( "signposting" ) == $param );
+	}
 
 	# didn't understand this match 
 	return $self->SUPER::matches( $test, $param );

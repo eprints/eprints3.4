@@ -585,6 +585,7 @@ sub handler
 				{
 					my $path = "/archive/" . $eprint->store_path();
 					EPrints::Update::Abstract::update( $repository, $lang, $eprint->id, $path );
+					EPrints::Signposting::signposting( $repository, $r, $eprint );
 					if( $uri =~ m! /$ !x )
 					{
 						$uri .= "index.html";

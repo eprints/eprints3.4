@@ -463,21 +463,6 @@ sub get_search_conditions_not_ex
 
 sub get_search_group { return 'subject'; }
 
-sub property
-{
-    my( $self, $property ) = @_;
-
-    my $value = $self->SUPER::property( $property );
-
-    if ( $property eq "top" && ref $value eq "CODE" )
-    {
-        my $func = $value;
-        $value = &$func( $self, $self->{repository} );
-    }
-
-    return $value;
-}
-
 sub get_property_defaults
 {
 	my( $self ) = @_;

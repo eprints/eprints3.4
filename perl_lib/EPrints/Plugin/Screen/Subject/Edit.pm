@@ -239,7 +239,8 @@ sub render_subject
 			$current->render_citation( "edit",
 				pindata => {
 					inserts => {
-						n => $xml->create_text_node( $current->count_eprints( $repo->dataset( "eprint" ) ) )
+						n => $xml->create_text_node( $current->count_eprints( $repo->dataset( "eprint" ) ) ),
+						a => $xml->create_text_node( $current->count_eprints( $repo->dataset( "archive" ) ) ),
 					},
 				},
 			)
@@ -256,7 +257,8 @@ sub render_subject
 			url => $url,
 			pindata => {
 				inserts => {
-					n => $xml->create_text_node( $current->count_eprints( $repo->dataset( "eprint" ) ) )
+					n => $xml->create_text_node( $current->count_eprints( $repo->dataset( "eprint" ) ) ),
+					a => $xml->create_text_node( $current->count_eprints( $repo->dataset( "archive" ) ) ),
 				},
 			},
 		) );
@@ -324,7 +326,8 @@ sub render_children
 			class => "ep_columns_cell",
 			style => "text-align: right",
 		) );
-		$td->appendChild( $xml->create_text_node( $child->count_eprints( $repo->dataset( "eprint" ) ) ) );
+		$td->appendChild( $xml->create_text_node( $child->count_eprints( $repo->dataset( "eprint" ) ) . ' (' . $child->count_eprints( $repo->dataset( "archive" ) ) . ')' ) );
+
 		$td = $tr->appendChild( $xml->create_element( "td",
 			class => "ep_columns_cell",
 		) );

@@ -3188,7 +3188,7 @@ PY = 2006 and OG = (Cambridge)<br />
 
     <epp:phrase id="Plugin/Screen/Subject/Edit:problem_ancestor">New child is an ancestor of this subject (This would cause a loop)</epp:phrase>
     <epp:phrase id="Plugin/Screen/Subject/Edit:problem_noid">No ID given for new child</epp:phrase>
-    <epp:phrase id="Plugin/Screen/Subject/Edit:eprints" ref="datasetname_eprint"/>
+    <epp:phrase id="Plugin/Screen/Subject/Edit:eprints"><epc:phrase ref="datasetname_eprint" /> (<epc:phrase ref="datasetname_archive" />)</epp:phrase>
     <epp:phrase id="Plugin/Screen/Subject/Edit:action_delete">Delete</epp:phrase>
     <epp:phrase id="Plugin/Screen/Subject/Edit:action_unlink">Unlink</epp:phrase>
     <epp:phrase id="Plugin/Screen/Subject/Edit:children">Children</epp:phrase>

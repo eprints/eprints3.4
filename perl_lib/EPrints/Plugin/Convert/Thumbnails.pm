@@ -237,6 +237,9 @@ $DEFAULT{video_webm} = {
 $DEFAULT{call_convert} = \&call_convert;
 $DEFAULT{call_ffmpeg} = \&call_ffmpeg;
 
+# threads
+$DEFAULT{ffmpeg_threads} = 0;
+
 sub new
 {
 	my( $class, %opts ) = @_;
@@ -251,6 +254,7 @@ sub new
 		convert_formats ffmpeg_formats sizes
 		video_height
 		call_convert call_ffmpeg
+		ffmpeg_threads
 	  ))
 	{
 		# defined by new( foo => bar )
@@ -680,6 +684,7 @@ sub export_audio
 	my @files;
 
 	my $format = $self->{'audio_'.$container};
+	my $ffmpeg_threads = $self->{ffmpeg_threads};
 
 	my $fn = "audio." . $format->{container};
 	my $dst = "$dir/$fn";
@@ -687,7 +692,8 @@ sub export_audio
 	$self->{session}->read_exec( $tmp, 'ffmpeg_audio_'.$format->{container},
 		SOURCE => $src,
 		TARGET => $dst,
-		%$format
+		%$format,
+		ffmpeg_threads => $ffmpeg_threads,
 	);
 	if( -s $dst )
 	{
@@ -721,6 +727,8 @@ sub export_video
 	my $lines = $self->{video_height};
 
 	return unless $doc->exists_and_set( "media_video_codec" );
+
+	my $ffmpeg_threads = $self->{ffmpeg_threads};
 
 	my $width = $doc->get_value( "media_width" );
 	my $height = $doc->get_value( "media_height" );
@@ -761,6 +769,7 @@ sub export_video
 		%$format,
 		width => $width,
 		height => $height,
+		ffmpeg_threads => $ffmpeg_threads,
 	);
 	if( -s $dst )
 	{

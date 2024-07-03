@@ -28,8 +28,6 @@ sub init_xslt
 {
 	my( $class, $repo, $xslt ) = @_;
 
-	my $stylesheet = XML::LibXSLT->new->parse_stylesheet( $xslt->{doc} );
-	$xslt->{stylesheet} = $stylesheet;
 	delete $xslt->{doc};
 
 	$SETTINGS{$class} = $xslt;
@@ -78,7 +76,13 @@ sub transform
 {
 	my( $self, $doc ) = @_;
 
-	return $self->{stylesheet}->transform( $doc );
+	my $ss_doc =  $self->{repository}->xml->parse_file( $self->{_filename} );
+	my $stylesheet  = XML::LibXSLT->new->parse_stylesheet( $ss_doc );
+
+	my $result = $stylesheet->transform( $doc );
+	$stylesheet = undef;
+	
+	return $result;
 }
 
 1;

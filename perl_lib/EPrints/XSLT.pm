@@ -83,7 +83,7 @@ sub new
 	Scalar::Util::weaken( $self->{repository} )
 		if defined(&Scalar::Util::weaken);
 
-	Carp::croak "Requires stylesheet" if !$self{stylesheet};
+	Carp::croak "Requires filename of stylesheet" if !$self{filename};
 
 	return $self;
 }
@@ -100,6 +100,9 @@ sub transform
 
 	my $ctx = $SELF;
 	$SELF = $self;
+
+	my $ss_doc =  $self->{repository}->xml->parse_file( $self->{filename} );
+	$self->{stylesheet}  = XML::LibXSLT->new->parse_stylesheet( $ss_doc );
 
 	my $result = $self->{stylesheet}->transform( $doc,
 		XML::LibXSLT::xpath_to_string( @params )

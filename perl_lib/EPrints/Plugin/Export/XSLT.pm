@@ -181,9 +181,6 @@ sub init_xslt
 	$xslt->{prefix} = "" if !defined $xslt->{prefix};
 	$xslt->{postfix} = "" if !defined $xslt->{postfix};
 
-	my $stylesheet = XML::LibXSLT->new->parse_stylesheet( $doc );
-	$xslt->{stylesheet} = $stylesheet;
-
 	$SETTINGS{$class} = $xslt;
 }
 
@@ -195,7 +192,7 @@ sub padding
 
 	my $xslt = EPrints::XSLT->new(
 		repository => $self->{session},
-		stylesheet => $self->{stylesheet},
+		filename => $self->{_filename},
 	);
 
 	# header
@@ -282,7 +279,7 @@ sub output_dataobj
 
 	my $xslt = EPrints::XSLT->new(
 		repository => $self->{session},
-		stylesheet => $self->{stylesheet},
+		filename  => $self->{_filename},
 		dataobj => $dataobj,
 	);
 
@@ -323,7 +320,7 @@ sub xml_dataobj
 
 	my $xslt = EPrints::XSLT->new(
 		repository => $self->{session},
-		stylesheet => $self->{stylesheet},
+		filename  => $self->{_filename},
 		dataobj => $dataobj,
 	);
 

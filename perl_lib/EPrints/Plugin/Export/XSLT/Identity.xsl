@@ -17,7 +17,7 @@
 	xmlns:ep="http://eprints.org/ep2/data/2.0"
 >
 
-<xsl:output method="xml" indent="yes" encoding="utf-8"/>
+<xsl:output method="xml" omit-xml-declaration="yes" indent="yes" encoding="utf-8"/>
 
 <xsl:template match="ept:template">
 <xsl:element name="{$dataset}s" namespace="http://eprints.org/ep2/data/2.0">

@@ -201,7 +201,7 @@ sub render
 	### Get the items owned by the current user
 	my $list = $self->perform_search;
 
-	my $has_eprints = $user->owned_eprints_list()->count > 0;
+	my $has_eprints = $list->count > 0 || $user->owned_eprints_list()->count > 0;
 
 	if( $repo->get_lang->has_phrase( $self->html_phrase_id( "intro" ), $repo ) )
 	{

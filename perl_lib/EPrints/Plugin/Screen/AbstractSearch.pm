@@ -18,6 +18,9 @@ sub new
 	
 	$self->{actions} = [qw/ update search newsearch export_redir export /]; 
 
+	# Make sure template can be set from search config (see properties_from).
+    $self->{template} =  $self->{processor}->{template};
+
 	return $self;
 }
 

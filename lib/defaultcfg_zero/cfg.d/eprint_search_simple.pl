@@ -9,6 +9,7 @@ $c->{search}->{simple} =
 			]
 		},
 	],
+	template => "default",
 #	preamble_phrase => "cgi/search:preamble",
 	title_phrase => "cgi/search:simple_search",
 	citation => "result",

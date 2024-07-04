@@ -8,6 +8,7 @@ $c->{search}->{advanced} =
 		{ meta_fields => [ "type" ] },
 		{ meta_fields => [ "documents.format" ] },
 	],
+	template => "default",
 	preamble_phrase => "cgi/advsearch:preamble",
 	title_phrase => "cgi/advsearch:adv_search",
 	citation => "result",

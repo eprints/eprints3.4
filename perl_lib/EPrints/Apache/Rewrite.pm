@@ -505,21 +505,17 @@ sub handler
 					# It's a document....           
 
 					my $pos = $2;
-					print STDERR "[DOCDL] Gettting eprint $eprintid doc in pos $pos\n";
 					my $doc = EPrints::DataObj::Document::doc_with_eprintid_and_pos( $repository, $eprintid, $pos );
 					if( !defined $doc )
 					{
-						print STDERR "  [DOCDL] doc not found\n";
 						return NOT_FOUND;
 					}
 					if( !length($uri) )
 					{
-						print STDERR "  [DOCDL] uri empty\n";
 						return redir( $r, "$urlpath/$eprintid/$pos/$args" );
 					}
 					elsif( length($1) )
 					{
-						print STDERR "  [DOCDL] leading zeroes\n";
 						return redir( $r, "$urlpath/$eprintid/$pos$uri$args" );
 					}
 					$uri =~ s! ^([^/]*)/ !!x;
@@ -531,7 +527,6 @@ sub handler
 					$r->pnotes( document => $doc );
 					$r->pnotes( dataobj => $doc );
 					$r->pnotes( filename => $filename );
-					print STDERR "  [DOCDL] Gettting eprint $eprintid doc in pos $pos with filename $filename\n";
 
 					$r->handler('perl-script');
 
@@ -564,15 +559,12 @@ sub handler
 						relations => \@relations,
 					);
 
-					print STDERR "  [DOCDL] RC is $rc\n";
-
 					# if the trigger has set an return code
 					return $rc if defined $rc;
 
 					# This way of getting a status from a trigger turns out to cause 
 					# problems and is included as a legacy feature only. Don't use it, 
 					# set ${$opts->{return_code}} = 404; or whatever, instead.
-					print STDERR "  [DOCDL] status is ".$r->status."\n";
 					return $r->status if $r->status != 200;
     
 					# Disable JavaScript if accessing whilst logged in to avoid malicious HTML files doing nasty things as the user.
@@ -608,7 +600,6 @@ sub handler
 						}
 					}
 				}
-				print STDERR "  [DOCDL] returning OK\n";
 				return OK; ## /id/eprint/XX
 			}
 		}

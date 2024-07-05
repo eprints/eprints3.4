@@ -27,8 +27,8 @@ EPrints::SystemSettings
 package EPrints::SystemSettings;
 
 $EPrints::SystemSettings::conf = {
-	'version' => 'EPrints 3.4.5',
-	'version_id' => 'eprints-3.4.5',
+	'version' => 'EPrints 3.4.6',
+	'version_id' => 'eprints-3.4.6',
 	'base_path' => '@PREFIX@',
 	'show_ids_in_log' => 0,
 	'group' => '@INSTALL_GROUP@',
@@ -46,6 +46,7 @@ $EPrints::SystemSettings::conf = {
 		'eprints-3.4.2',
 		'eprints-3.4.3',
 		'eprints-3.4.4',
+		'eprints-3.4.5',
 	],
 	'smtp_server' => '@SMTP_SERVER@',
 	'user' => '@INSTALL_USER@',

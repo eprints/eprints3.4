@@ -55,6 +55,11 @@
   <dd>
     <p>Further incremental changes and snag fixes. In particular, the use of fieldsets and legends in search and input forms to make them easier to style with CSS.</p>
   </dd>
+  <dt style="font-weight: bold; margin-top: 20px;">EPrints 3.4.6 released (2024)</dt>
+  <dd>
+    <p>Further incremental changes and snag fixes.</p>
+  </dd>
+
   <dt style="font-weight: bold; margin-top: 20px;">Future releases</dt>
   <dd>Improving the accessibility of PDF documents uploaded to EPrints repositories.  In particular, tools to insert metadata and accessibility features into uploaded files.</dd>
 </dl>

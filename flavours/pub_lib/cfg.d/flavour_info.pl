@@ -1,8 +1,8 @@
 $c->{flavour_id} = "pub";
 $c->{flavour_name} = "Publication";
-$c->{flavour_version} = "1.5";
+$c->{flavour_version} = "1.6";
 
-$c->{version_alias} = "Kombucha Hypercane";
+$c->{version_alias} = "Affogato Snowmelt";
 
 =head1 COPYRIGHT
 

@@ -1,5 +1,5 @@
-$c->{version_long} = "EPrints 3.4.5";
-$c->{version_alias} = "Smoothie Squall";
+$c->{version_long} = "EPrints 3.4.6";
+$c->{version_alias} = "Creme Brulee Cryoseism";
 $c->{vendor_long} = "EPrints Services";
 $c->{vendor_short} = "eps";
 $c->{version_description} = $c->{version_long} . " (" . $c->{version_alias} . ") (" . $c->{vendor_long} . ")";

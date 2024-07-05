@@ -1,5 +1,5 @@
 #!/usr/bin/perl
- 
+
 use CPAN;
 
 #
@@ -11,27 +11,40 @@ umask( 0022 );
 
 print "Attempting to install PERL modules required by GNU EPrints...\n";
 
+install( 'BibTeX::Parser' );
+install( 'CGI' );
 install( 'Config::General' );
-install( 'Data::ShowTable' ); # used by DBD::mysql
-install( 'DBI' ); # used by DBD::mysql
-install( 'DBD::mysql' );
+install('DBD::mysql' );
+install( 'DBI' );
+install( 'Digest::MD5' );
+install( 'Digest::SHA' );
+install( 'File::BOM' );
+install( 'File::Slurp' );
+install( 'HTTP::Headers' );
+install( 'HTTP::Headers::Util' );
+install( 'IO::String' );
 install( 'JSON' );
-install( 'LWP::Protocol::https' );
-install( 'MIME::Base64' );
+install( 'LWP::MediaTypes' );
+install( 'LWP::Simple' );
+install( 'LWP::UserAgent' );
+install( 'MIME::Lite' );
 install( 'Net::SMTP' );
+install( 'Pod::Usage' );
+install( 'Term::ReadKey' );
 install( 'TeX::Encode' );
+install( 'Text::Extract::Word' );
 install( 'Text::Unidecode' );
+install( 'Text::Wrap' );
+install( 'Time::Seconds' );
+install( 'URI' );
+install( 'URI::OpenURL' );
+install( 'XML::DOM' );
+install( 'XML::LibXML' );
+CPAN::Shell->notest( 'install', 'XML::LibXSLT' ); # Test will complain even though install is successful
+install( 'XML::NamespaceSupport' );
 install( 'XML::Parser' );
-
-# not required since 2.3.7
-#foreach $mod_name ( "Apache::Test", "Apache::Request" )
-#{
-#	( $mod ) = expand( "Module",$mod_name );
-#	if( $mod->uptodate ) { print "$mod_name is up to date.\n"; next; }
-#	print "Installing $mod_name (without test)\n";
-#	$mod->force; 
-#	$mod->install;
-#}
+install( 'XML::SAX::Base' );
+install( 'YAML::Tiny' );
 
 
 =head1 COPYRIGHT
@@ -63,4 +76,3 @@ License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
 =for LICENSE END
-

@@ -19,6 +19,8 @@ This module provides utility methods for processing free text into indexable thi
 
 package EPrints::Index::Tokenizer;
 
+use Text::Unidecode qw(unidecode);
+
 ######################################################################
 =pod
 =item @words = EPrints::Index::Tokenizer::split_words( $session, $utext )
@@ -74,6 +76,9 @@ sub apply_mapping
 		utf8::decode($utext);
 	}
 
+	$utext = unidecode( $utext );
+
+	# This should now have little to do if unidecode has done its job.
 	return join("", map {
 		exists($EPrints::Index::FREETEXT_CHAR_MAPPING->{$_}) ?
 		$EPrints::Index::FREETEXT_CHAR_MAPPING->{$_} :

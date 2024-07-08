@@ -1,4 +1,4 @@
-# Restrict paths is intended to allow certain IP addresses or subnets from being forbodden (i.e. 403 HTTP error code) from making requests to certain paths.  This is useful if you want to block a bot from access processor-intensive pages but don't want to block it outright as that may stop it usefully indexing your EPrints repository.
+# Restrict paths is intended to forbid access to specified paths for certain IP addresses or subnets, sending a 403 HTTP error code. This is useful if you want to block a bot from accessing processor-intensive pages but don't want to block it outright as that may stop it usefully indexing your EPrints repository.
 #$c->{restrict_paths} = [
 #   Prevent access to exportview from 1.2.3.4 and 5.6.7.8
 #	{

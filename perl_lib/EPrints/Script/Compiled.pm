@@ -653,6 +653,7 @@ sub run_icon
 		elsif( $optv eq "previewLeft" ) { $args{preview_side}='left'; }
 		elsif( $optv eq "previewRight" ) { $args{preview_side}='right'; }
 		elsif( $optv eq "LargeIcon" ) { $args{size}='lightbox'; }
+		elsif( $optv eq "noLink" ) { $args{with_link}=0; }
 		else { $self->runtime_error( "Unknown option to doc->icon(): $optv" ); }
 	}
 

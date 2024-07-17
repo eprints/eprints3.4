@@ -12,10 +12,14 @@ $c->{loghandler}->{enable} = 1;
 # which logs timestamps of users doing the submission process. It's
 # useful for us to monitor time taken on various pages in the submission
 # process and maybe you want to to...
+# Uncomment to enable.
 # $c->{log_submission_timing} = 1; 
 
-# Include timestamps in logged messages
+# Uncomment to include timestamps in logged messages
 # $c->{show_timestamps_in_log} = 1;
+
+# Uncomment to include the repository archive ID in logged messages
+# $c->{show_ids_in_log} = 1;
 
 
 ######################################################################

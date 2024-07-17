@@ -606,30 +606,9 @@ sub page
 		)->render_toolbar;
 	}
 
-	my $pagehooks = $repo->config( "pagehooks" );
-	$pagehooks = {} if !defined $pagehooks;
-	my $ph = $pagehooks->{$options{page_id}} if defined $options{page_id};
-	$ph = {} if !defined $ph;
 	if( defined $options{page_id} )
 	{
-		$ph->{bodyattr}->{id} = "page_".$options{page_id};
 		$map->{page_id} = $options{page_id};
-	}
-
-	# only really useful for head & pagetop, but it might as
-	# well support the others
-
-	foreach( keys %{$map} )
-	{
-		next if( !defined $ph->{$_} );
-
-		my $pt = $repo->xml->create_document_fragment;
-		$pt->appendChild( $map->{$_} );
-		my $ptnew = $repo->clone_for_me(
-			$ph->{$_},
-			1 );
-		$pt->appendChild( $ptnew );
-		$map->{$_} = $pt;
 	}
 
 	if( $repo->get_online && defined $repo->param( "template" ) )

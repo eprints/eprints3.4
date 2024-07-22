@@ -71,7 +71,7 @@ sub sql_row_from_value
 
 	return( undef ) if !defined $value;
 
-	$value =~ s/[\x00-\x08\x0b\x0c\x0e-\x1f\x7f-\x9f]/\x{fffd}/g;
+	$value =~ s/[\x00-\x08\x0b\x0c\x0e-\x1f\x7f-\x9f\x{fffe}-\x{ffff}]/\x{fffd}/g;
 	
 	$value =~ s/^\s+//;
 	$value =~ s/\s+$//;

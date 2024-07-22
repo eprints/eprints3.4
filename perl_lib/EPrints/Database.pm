@@ -318,7 +318,6 @@ sub connect
 				dbsock => $repo->config("dbsock"),
 				dbport => $repo->config("dbport"),
 				dbname => $repo->config("dbname"),
-				dbsid => $repo->config("dbsid")
 			),
 			$repo->config("dbuser"),
 			$repo->config("dbpass"),

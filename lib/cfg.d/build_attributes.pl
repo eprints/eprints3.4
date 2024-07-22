@@ -4,7 +4,7 @@
 #
 ###################################################################### 
 #
-# An example subroutine for maniputlating attributes before elements are created
+# An example subroutine for manipulating attributes before elements are created
 # This function is called from perl_lib/EPrints/XML.pm sub create_element if present in config
 #
 # The function example below will allow for attributes to be manipulated with the following structure

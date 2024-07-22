@@ -429,6 +429,9 @@ sub to_string
 	my $string = $node->toString( defined $opts{indent} ? $opts{indent} : 0 );
 	utf8::decode($string) unless utf8::is_utf8($string);
 
+	# Replaces invalid XML 1.0 code points with the Unicode substitution character (0xfffd), see http://www.w3.org/International/questions/qa-controls
+	$string =~ s/[\x00-\x08\x0b\x0c\x0e-\x1f\x7f-\x9f\x{fffe}-\x{ffff}]/\x{fffd}/g;
+
 	return $string;
 }
 

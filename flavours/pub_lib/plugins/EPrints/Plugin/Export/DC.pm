@@ -171,7 +171,7 @@ sub convert_dataobj
 	}
 
 	# The citation for this eprint
-	my $style = defined $plugin->{session}->config( 'citation_default', 'export' ) ? $plugin->{session}->config( 'citation_default', 'export' ) : 'default';
+	my $style = defined $plugin->{session}->config( 'citation_default', 'eprint', 'export' ) ? $plugin->{session}->config( 'citation_default', 'eprint', 'export' ) : 'default';
 	push @dcdata, [ "identifier",
 		EPrints::XML::remove_invalid_chars( EPrints::Utils::tree_to_utf8( $eprint->render_citation( $style, %params ) ) ) ];
 

@@ -1,6 +1,6 @@
 $c->{flavour_id} = "zero";
 $c->{flavour_name} = "Zero";
-$c->{flavour_version} = "1.3";
+$c->{flavour_version} = "1.6";
 
 
 =head1 COPYRIGHT

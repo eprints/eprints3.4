@@ -38,7 +38,7 @@ $c->add_trigger( EPrints::Const::EP_TRIGGER_VALIDATE_FIELD, sub
 }, priority => 1000 );
 
 $c->{login_monitoring}->{enabled} = 1;
-$c->{login_monitoring}->{fields} = [ 'timestamp', 'username', 'password_length', 'ip', 'user_agent', 'target', 'status', 'userid', 'securecode' ];
+#$c->{login_monitoring}->{fields} = [ 'timestamp', 'username', 'password_length', 'ip', 'user_agent', 'target', 'status', 'userid', 'securecode' ];
 #$c->{login_monitoring}->{function} = sub {
 #   my ( $fh, $repo, $timestamp, $username, $password, $status ) = @_;
 #   my $password_length = length( $password );

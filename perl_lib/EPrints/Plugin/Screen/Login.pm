@@ -223,15 +223,19 @@ sub log_login_attempt
 	my $logfile_exists = -e $logfile;
 	EPrints::Platform::mkdir( $logdir ) unless $logfile_exists;
 	open( my $fh, '>>', $logfile );
-	my $fields = join( ',', @{ $repo->config( 'login_monitoring', 'fields' ) } );
-	print $fh "$fields\n" unless $logfile_exists;
-
+	if ( defined $repo->config( 'login_monitoring', 'fields' ) )
+	{
+		my $fields = join( ',', @{ $repo->config( 'login_monitoring', 'fields' ) } );
+		print $fh "$fields\n" unless $logfile_exists;
+	}
 	if ( defined $repo->config( 'login_monitoring', 'function' ) )
 	{
 		my $func = $repo->config( 'login_monitoring', 'function' );
 		return $func->( $fh, $repo, $timestamp, $username, $password, $status, $securecode );
 	}
 	else {
+		my $fields = "timestamp,username,password_length,ip,user_agent,target,status,userid,securecode";
+		print $fh "$fields\n" unless $logfile_exists || defined $repo->config( 'login_monitoring', 'fields' );
 		my $password_length = length( $password );
 		my $userid = '';
 		if ( $status eq "success" )

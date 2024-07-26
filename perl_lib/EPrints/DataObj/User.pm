@@ -935,6 +935,28 @@ owned by this user.
 C<%opts> is passed to a L<EPrints::Search>, which is used to filter 
 the results. 
 
+If necessary, a config function can be defined. An example is provided below. The function must return an L<EPrints::List>.
+The default behaviour can be obtained by calling C<$user->owned_eprints_list_actual( %opts );>
+
+        $c->{'get_users_owned_eprints'} = sub
+        {
+            my( $session, $user, %opts ) = @_;
+
+            # for non-editorial accounts, return the normal list
+            if( $user->get_type ne "editor" )
+            {
+                return $user->owned_eprints_list_actual( %opts );
+            }
+
+            # only interested in editor accounts now
+            # allow editors to see their items, and items from a specific userid e.g. 99999
+            my $extra_userid = 99999;
+            my $searchexp = $opts{dataset}->prepare_search( %opts );
+            $searchexp->add_field( $opts{dataset}->field( "userid" ), $user->id . " $extra_userid", "IN", "ANY" );
+
+            return $searchexp->perform_search;
+	};
+
 =cut
 ######################################################################
 
@@ -944,27 +966,27 @@ sub owned_eprints_list
 		
 	$opts{dataset} = $self->{session}->dataset( "eprint" ) if !defined $opts{dataset};
 
-	my $searchexp = $opts{dataset}->prepare_search( %opts );
-
-	# BACKWARDS COMPATIBILITY
-	# This method is predicated on doing an in-memory intersect of everything
-	# that the user "owns" and every eprint in the matching datasets
-	# If the user chose to show his 'live' eprints that could get really,
-	# really big
 	my $fn = $self->{session}->config( "get_users_owned_eprints" );
 	if( !defined $fn )
 	{
-		$searchexp->add_field( $opts{dataset}->field( "userid" ), $self->id );
-
-		return $searchexp->perform_search;
+		return $self->owned_eprints_list_actual( %opts );
 	}
 	
-	my $list = &$fn( $self->{session}, $self, $opts{dataset} );
-	if (!$searchexp->is_blank()) { $list = $list->intersect( $searchexp->perform_search ); }
-
-	return $list;
+	my $searchexp = $opts{dataset}->prepare_search( %opts );
+	
+	return &$fn( $self->{session}, $self, %opts );
 }
 
+sub owned_eprints_list_actual
+{
+	my( $self, %opts ) = @_;
+
+	my $searchexp = $opts{dataset}->prepare_search( %opts );
+
+	$searchexp->add_field( $opts{dataset}->field( "userid" ), $self->id );
+
+	return $searchexp->perform_search;
+}
 
 ######################################################################
 =pod

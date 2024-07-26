@@ -972,8 +972,6 @@ sub owned_eprints_list
 		return $self->owned_eprints_list_actual( %opts );
 	}
 	
-	my $searchexp = $opts{dataset}->prepare_search( %opts );
-	
 	return &$fn( $self->{session}, $self, %opts );
 }
 

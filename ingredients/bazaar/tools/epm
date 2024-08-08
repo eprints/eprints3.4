@@ -48,6 +48,10 @@ Read metadata from the epm at L<package_path> when building.
 
 Set the version when building.
 
+=item --to-link
+
+Unpack in such as way it can the epm can be install with link_lib
+
 =back
 
 =head1 COMMANDS
@@ -70,6 +74,7 @@ use warnings;
 my $opt_version;
 my $opt_verbose = 0;
 my $opt_force = 0;
+my $opt_to_link = 0;
 my $opt_help;
 my $opt_man;
 my $opt_epm;
@@ -79,6 +84,7 @@ GetOptions(
 	'version=s' => \$opt_version,
 	'verbose+' => \$opt_verbose,
 	'force' => \$opt_force,
+	'to-link' => \$opt_to_link,
 	'help' => \$opt_help,
 	'man' => \$opt_man,
 ) or pod2usage( 2 );
@@ -491,32 +497,72 @@ sub action_unpack
 	}
 
 	my $epm = $repo->dataset( "epm" )->make_dataobj( $epdata );
-
-	foreach my $file ($epm->installed_files)
+	if ( $opt_to_link )
 	{
-		my $filepath = $file->value( "filename" );
-
-		if( $filepath =~ m#^/# || $filepath =~ m#/\.# )
+		my $epmid = $epm->id;
+		foreach my $file ($epm->installed_files)
 		{
-			warn "Won't unpack root-pathed or hidden file: $filepath";
-			next;
+			#next unless ( !$file->value( 'content' ) || $file->value( 'content' ) eq "install" );
+			my $filepath = $file->value( "filename" );
+			if( $filepath =~ m#^/# || $filepath =~ m#/\.# )
+			{
+				warn "Won't unpack root-pathed or hidden file: $filepath";
+				next;
+			}
+			if ( $filepath =~ m#^epm/$epmid/cfg/# )
+			{	
+				$filepath =~ s#^epm/$epmid/##;
+				$filepath = $repo->config( "base_path" ) . '/lib/epm/' . $epmid . '/' . $filepath;
+			}
+			else
+			{
+				$filepath = $repo->config( "base_path" ) . '/lib/epm/' . $epmid . '/lib/' . $filepath;
+			}
+			my( @path, $filename ) = split '/', $filepath;
+			for(0..($#path-1))
+			{
+				my $path = join '/', @path[0..$_];
+				EPrints->system->mkdir($path)
+					or die "mkdir $path: $!";
+			}
+			if( !$opt_force && -e $filepath )
+        	{
+				die "Use --force to overwrite $filepath\n";
+			}
+			open(my $fh, ">", $filepath) or die "Error writing to $filepath: $!";
+			syswrite($fh, $files_data->{$file->value( "filename" )} );
+			close($fh);
+			print "$filepath\n" if $noise;
 		}
-		$filepath = 'lib/' . $filepath;
-		my( @path, $filename ) = split '/', getcwd() . '/' . $filepath;
-		for(0..($#path-1))
+	}
+	else 
+	{
+		foreach my $file ($epm->installed_files)
 		{
-			my $path = join '/', @path[0..$_];
-			EPrints->system->mkdir($path)
-				or die "mkdir $path: $!";
+			my $filepath = $file->value( "filename" );
+	
+			if( $filepath =~ m#^/# || $filepath =~ m#/\.# )
+			{
+				warn "Won't unpack root-pathed or hidden file: $filepath";
+				next;
+			}
+			$filepath = 'lib/' . $filepath;
+			my( @path, $filename ) = split '/', getcwd() . '/' . $filepath;
+			for(0..($#path-1))
+			{
+				my $path = join '/', @path[0..$_];
+				EPrints->system->mkdir($path)
+					or die "mkdir $path: $!";
+			}
+			if( !$opt_force && -e $filepath )
+			{
+				die "Use --force to overwrite $filepath\n";
+			}
+			open(my $fh, ">", $filepath) or die "Error writing to $filepath: $!";
+			syswrite($fh, $files_data->{$file->value( "filename" )} );
+			close($fh);
+			print "$filepath\n" if $noise;
 		}
-		if( !$opt_force && -e $filepath )
-		{
-			die "Use --force to overwrite $filepath\n";
-		}
-		open(my $fh, ">", $filepath) or die "Error writing to $filepath: $!";
-		syswrite($fh, $files_data->{$file->value( "filename" )} );
-		close($fh);
-		print "$filepath\n" if $noise;
 	}
 }
 

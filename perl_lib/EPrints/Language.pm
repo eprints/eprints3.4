@@ -246,7 +246,7 @@ fallback).
 =back
 
 If C<$phraseid> is not found then a XHTML DOM object encpasulating an
-apropriate error message is returned.
+appropriate error message is returned.
 
 If the phrase contains C<pin> elements then C<$inserts> must be a hash
 reference. Each C<pin> has a C<name> attribute. For each C<pin> there

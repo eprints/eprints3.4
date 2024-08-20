@@ -112,7 +112,7 @@ A serialised version of the search expression which created this list
 is store in the instance variable called  C<encoded>, if such a search
 expression exists.
 
-If C<keep_cache> instance vairable is set to C<true> then the cache
+If C<keep_cache> instance variable is set to C<true> then the cache
 will not be disposed of at the end of the current L<EPrints::Session>.
 If C<cache_id> is set then C<keep_cache> is automatically set to
 C<true>.

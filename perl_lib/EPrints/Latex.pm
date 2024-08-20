@@ -44,7 +44,7 @@ Returns an XHTML DOM object that renders that LaTeX encoded string
 using HTML elements,
 
 This function is intended to be passed by reference to the
-C<render_single_value> property of a C<EPrints::MetaField>. It wiil
+C<render_single_value> property of a C<EPrints::MetaField>. It will
 just returns just an XHTML DOM object unless it spots anything that
 looks like a  LaTeX style equation. If so, the equation is replaced
 with and C<E<lt>imgE<gt>> element, the URL of which is a CGI script

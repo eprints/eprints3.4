@@ -27,7 +27,7 @@ the request (C</cgi/set_lang>) to set the cookie.
 
 Once the language is set the user is returned the page
 they original came from, which now should display in their preferred
-lanaguage.
+language.
 
 =head1 METHODS
 

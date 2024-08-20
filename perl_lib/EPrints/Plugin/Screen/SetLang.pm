@@ -1,6 +1,35 @@
+######################################################################
+#
+# EPrints::Plugin::Screen::SetLang
+#
+######################################################################
+#
+#
+######################################################################
+
+=pod
+
+=for Pod2Wiki
+
 =head1 NAME
 
-EPrints::Plugin::Screen::SetLang
+B<EPrints::Plugin::Screen::SetLang> - Screen plugin for setting a
+cookie for the language to use on repository web pages.
+
+=head1 DESCRIPTION
+
+This plugin allows a cookie called C<eprints_lang> to set that
+specifies the language that be used for the current visitor to the
+repository.
+
+This takes the value of the C<lang> attribute from the HTTP GET of
+the request (C</cgi/set_lang>) to set the cookie.
+
+Once the language is set the user is returned the page
+they original came from, which now should display in their preferred
+lanaguage.
+
+=head1 METHODS
 
 =cut
 
@@ -10,6 +39,24 @@ use EPrints::Plugin::Screen;
 @ISA = qw( EPrints::Plugin::Screen );
 
 use strict;
+
+######################################################################
+=pod
+
+=over 4
+
+=item EPrints::Plugin::Screen::SetLang->from
+
+Creates the C<eprints_lang> cookie using the value of C<lang> attribute
+from the HTTP GET of the request (C</cgi/set_lang>).
+
+Once the cookie is set the client is redirected back to their original
+page (specified by the C<Referrer> header of the request or the
+repository homepage.
+
+=cut
+######################################################################
+
 
 sub from
 {
@@ -55,6 +102,21 @@ sub from
 
 	$self->{processor}->{redirect} = $referrer;
 }
+
+######################################################################
+=pod
+
+=over 4
+
+=item EPrints::Plugin::Screen::SetLang->render_action_link
+
+Returns a XHTML DOM fragment for a link or links to alternative
+languages that could be used on the repository, (including a link to
+clear the currently selected language). Once one of these links is
+clicked, the C<eprints_lang> cookie will be updated appropriately.
+
+=cut
+######################################################################
 
 sub render_action_link
 {
@@ -127,6 +189,21 @@ sub render_action_link
 
 	return $div;
 }
+
+######################################################################
+=pod
+
+=over 4
+
+=item EPrints::Plugin::Screen::SetLang->render
+
+Returns an XHTML DOM object that is a rendering of screen.  As the
+client should be always be redirected from this page, once the
+C<eprints_lang> cookie is updated, it just contain as message saying
+the redirect failed.
+
+=cut
+######################################################################
 
 sub render
 {

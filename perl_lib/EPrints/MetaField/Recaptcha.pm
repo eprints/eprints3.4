@@ -9,19 +9,32 @@
 
 =pod
 
+=for Pod2Wiki
+
 =head1 NAME
 
-B<EPrints::MetaField::Recaptcha> - a Captcha
+B<EPrints::MetaField::Recaptcha3> - a Captcha using Google ReCAPTCHA v2.
 
 =head1 DESCRIPTION
 
-Please refer to the notes in [EPRINTS_ROOT]/archives/[ARCHIVEID]/cfg/cfg.d/recaptcha.pl.
+This metadata field renders a Captcha (a test that humans can easily
+pass, but robots shouldn't be able to).
 
-If this files does not exist, copy [EPRINTS_ROOT]/lib/defaultcfg/cfg.d/recaptcha.pl.example
-to the path above and edit it.
+Please refer to the wiki page L<https://wiki.eprints.org/w/Recaptcha_field>
+for advice on how to configure settings required for this field to work.
 
-This field uses the Google "reCAPTCHA" service (https://www.google.com/recaptcha/intro/) and
-renders a Captcha (a test that humans can easily pass, but robots shouldn't be able to).
+The following configuration settings will be required, where the C<CHANGME>
+settings will need to be updated with the secret and site keys provided
+by Google:
+
+ $c->{recaptcha}->{private_key} = "CHANGEME";
+ $c->{recaptcha}->{public_key} = "CHANGEME";
+This field uses version 2 of Google "reCAPTCHA" service:
+
+L<https://developers.google.com/recaptcha/docs/display>
+
+Please use the URL above for guidance on how to generate appropriate
+keys needed to configure this type of field.
 
 Note: 
 This MetaField was updated in October 2017 to reCAPTCHA v2.
@@ -29,7 +42,11 @@ The previous version of reCAPTCHA will cease to work in March 2018.
 
 Kudos to Matthew Kerwin (https://github.com/phluid61) for most of the work on the new version.
 
-=over 4
+=head1 INHERITANCE
+
+ L<EPrints::MetaField>
+   L<EPrints::MetaField::Id>
+     B<EPrints::MetaField::Recaptcha>
 
 =cut
 
@@ -40,6 +57,8 @@ use EPrints::MetaField::Id;
 
 use strict;
 use JSON;
+
+
 
 sub is_virtual { 1 }
 
@@ -193,16 +212,16 @@ sub validate
 
 =head1 COPYRIGHT
 
-=for COPYRIGHT BEGIN
+=begin COPYRIGHT
 
 Copyright 2022 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/
 
-=for COPYRIGHT END
+=end COPYRIGHT
 
-=for LICENSE BEGIN
+=begin LICENSE
 
 This file is part of EPrints 3.4 L<http://www.eprints.org/>.
 
@@ -219,4 +238,4 @@ You should have received a copy of the GNU Lesser General Public
 License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
-=for LICENSE END
+=end LICENSE

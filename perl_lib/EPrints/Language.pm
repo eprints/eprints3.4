@@ -13,11 +13,11 @@
 
 =head1 NAME
 
-B<EPrints::Language> - A Single Language supported by a repository.
+B<EPrints::Language> - A single language supported by a repository.
 
 =head1 DESCRIPTION
 
-The language class handles loading the "phrase" files for a single
+The language class handles loading the C<phrase> files for a single
 language. See the mail documentation for a full explanation of the
 format of phrase files.
 
@@ -44,7 +44,7 @@ format of phrase files.
 #     A reference to a hash. Keys are ids for phrases, values are
 #     DOM fragments containing the phases.
 #     repository_data contains repository specific phrases, data contains
-#     generic eprints phrases. 
+#     generic eprints phrases.
 #
 #  $self->{xmldoc}
 #     A XML document to hold all the stray DOM elements.
@@ -63,7 +63,7 @@ use strict;
 Create a new language object representing the phases eprints will
 use in a given language, loading them from the phrase config XML files.
 
-$langid is the ISO language ID of the language, $repository is the 
+$langid is the ISO language ID of the language, $repository is the
 repository to which this language object belongs. $fallback is either
 undef or a reference to the main language object for the repository.
 
@@ -109,7 +109,7 @@ sub new
         {
             $self->_read_phrases_dir(
                 $self->{repository_data}, ##load into archive config
-                $dir);     
+                $dir);
         }
     }
 
@@ -148,20 +148,24 @@ sub _read_phrases_dir
 	closedir $dh;
 }
 
+######################################################################
+=pod
+
 =item $info = $lang->get_phrase_info( $phraseid )
 
-Returns a hash describing the phrase $phraseid. Contains:
+Returns a hash reference describing the phrase C<$phraseid>. Contains:
 
 	langid - the language the phrase is from
 	phraseid - the phrase id
 	xml - the raw XML fragment
 	fallback - whether the phrase was from the fallback language
-	system - whether the phrase was from the system files
-	filename - the file the phrase came from
+	system - whether the phrase was from a system file
+	filename - the file from which the phrase came
 
-If $phraseid doesn't exist returns undef.
+If C<$phraseid> does not exist returns C<undef>.
 
 =cut
+######################################################################
 
 sub get_phrase_info
 {
@@ -180,13 +184,19 @@ sub get_phrase_info
 	};
 }
 
+######################################################################
+=pod
+
 =item $phraseids = $language->get_phrase_ids( $fallback )
 
-Return a reference to an array of all phrase ids that are defined in this language (repository and system).
+Returns an array reference of all phrase ids that are defined in this
+language (i.e. repository and system).
 
-If $fallback is true returns any additional phrase ids defined in the fallback language.
+If C<$fallback> is C<true> returns any additional phrase ids defined
+in the fallback language.
 
 =cut
+######################################################################
 
 sub get_phrase_ids
 {
@@ -217,29 +227,31 @@ sub get_phrase_ids
 
 =item $xhtml = $language->phrase( $phraseid, $inserts )
 
-Return an XHTML DOM structure for the phrase with the given phraseid.
+Returns a XHTML DOM structure for the phrase with the given C<phraseid>.
 
-The phraseid is looked for in the following order, if it's not in
-one phrase file the system checks the next.
+C<$phraseid> is looked for in the following order, if it is not in one
+phrase file the system checks the next.
 
 =over 4
 
-=item This languages repository specific phrases.
+=item This language's repository specific phrases.
 
-=item The fallback languages repository specific phrases (if there is a fallback).
+=item The fallback language's repository specific phrases (if there is a
+fallback).
 
-=item This languages general phrases.
+=item This language's general phrases.
 
-=item The fallback languages general phrases (if there is a fallback).
-
-=item Failing that it returns an XHTML DOM encoded error.
+=item The fallback language's general phrases (if there is a fallback).
 
 =back
 
-If the phrase contains "pin" elements then $inserts must be a reference
-to a hash. Each "pin" has a "name" attribute. For each pin there must be
-a key in $inserts of the "name". The value is a XHTML DOM object which
-will replace the "pin" when returning this phrase.
+If C<$phraseid> is not found then a XHTML DOM object encpasulating an
+apropriate error message is returned.
+
+If the phrase contains C<pin> elements then C<$inserts> must be a hash
+reference. Each C<pin> has a C<name> attribute. For each C<pin> there
+must be a key in C<$inserts> of the C<name> whose value is a XHTML DOM
+object which will replace the C<pin> in the returned phrase.
 
 =cut
 ######################################################################
@@ -250,7 +262,7 @@ sub phrase
 
 	my $session = $self->{repository};
 
-	# not using fb 
+	# not using fb
 	my( $phrase , $fb ) = $self->_get_phrase( $phraseid );
 
 	$inserts = {} if( !defined $inserts );
@@ -287,13 +299,12 @@ sub phrase
 		return $self->phrase( $ref, $inserts, $session );
 	}
 
-#print STDERR "---\nN:$phrase\nNO:".$phrase->getOwnerDocument."\n";
 	my $used = {};
-	my $result = EPrints::XML::EPC::process_child_nodes( 
-		$phrase, 
+	my $result = EPrints::XML::EPC::process_child_nodes(
+		$phrase,
 		in => "Phrase: '$phraseid'",
-		session => $session, 
-		pindata=>{ 
+		session => $session,
+		pindata=>{
 			inserts => $inserts,
 			used => $used,
 			phraseid => $phraseid,
@@ -312,7 +323,7 @@ sub phrase
 
 
 ######################################################################
-# 
+#
 # ( $phrasexml, $is_fallback ) = $language->_get_phrase( $phraseid )
 #
 # Return the phrase for the given id or undef if no phrase is defined,
@@ -374,8 +385,8 @@ sub _get_src_phrase
 
 =item $boolean = $language->has_phrase( $phraseid )
 
-Return 1 if the phraseid is defined for this language. Return 0 if
-it is only available as a fallback or unavailable.
+Returns C<1> if C<$phraseid> is defined for this language. Returns
+C<0> if it is only available as a fallback or unavailable.
 
 =cut
 ######################################################################
@@ -394,9 +405,9 @@ sub has_phrase
 
 =item $boolean = $language->has_non_empty_phrase( $phraseid )
 
-Return 1 if the phraseid is defined for this language and is not an 
-empty string. Return 0 if it is an empty string, only available as a 
-fallback or unavailable.
+Returns C<1> if C<$phraseid> is defined for this language and is not
+an empty string. Returns C<0> if it is an empty string, only available
+as a fallback or unavailable.
 
 =cut
 ######################################################################
@@ -417,7 +428,7 @@ sub has_non_empty_phrase
 }
 
 ######################################################################
-# 
+#
 # $foo = $language->_get_data
 #
 # undocumented
@@ -431,7 +442,7 @@ sub _get_data
 }
 
 ######################################################################
-# 
+#
 # $foo = $language->_get_repositorydata
 #
 # undocumented
@@ -446,12 +457,12 @@ sub _get_repositorydata
 
 
 ######################################################################
-# 
+#
 #  $phrases = $language->_read_phrases( $data, $file )
-# 
+#
 # Return a reference to a hash of DOM objects describing the phrases
 # from the XML phrase file $file.
-# 
+#
 ######################################################################
 
 sub _read_phrases
@@ -468,7 +479,7 @@ sub _read_phrases
 	}
 	my $phrases = ($doc->getElementsByTagName( "phrases" ))[0];
 
-	if( !defined $phrases ) 
+	if( !defined $phrases )
 	{
 		print STDERR "Error parsing $file\nCan't find top level element.\n";
 		EPrints::XML::dispose( $doc );
@@ -498,7 +509,7 @@ sub _read_phrases
 			if(  !$key || $key eq "" || !$warned )
 			{
 				my $warning = "Warning: in $file";
-				if( defined $near ) 
+				if( defined $near )
 				{
 					$warning.=", near '$near'";
 				}
@@ -508,7 +519,7 @@ sub _read_phrases
 					$repository->log( $warning );
 					next;
 				}
-				$repository->log( 
+				$repository->log(
 						"$warning The phrase did have a 'name' attribute so this probably means it's an EPrints v2 phrase file." );
 				$warned = 1;
 			}
@@ -522,11 +533,11 @@ sub _read_phrases
 }
 
 ######################################################################
-# 
+#
 #  $phrases = $language->_reload_phrases( $data, $file )
-# 
+#
 # Reload the phrases file $file (otherwise same as _read_phrases).
-# 
+#
 ######################################################################
 
 sub _reload_phrases
@@ -557,12 +568,13 @@ sub _reload_phrases
 	return $self->_read_phrases( $data, $file );
 }
 
+
 ######################################################################
 =pod
 
 =item $langid = $language->get_id
 
-Return the ISO language ID of this language object.
+Return the ISO 639 language ID of this language.
 
 =cut
 ######################################################################
@@ -573,11 +585,17 @@ sub get_id
 	return $self->{id};
 }
 
-=item $lang = $language->get_fallback()
 
-Return the fallback language for this language. Returns undef if there is no fallback.
+######################################################################
+=pod
+
+=item $fallback_lang = $language->get_fallback()
+
+Returns the fallback language for this language. Returns C<undef> if
+there is no fallback.
 
 =cut
+######################################################################
 
 sub get_fallback
 {
@@ -585,11 +603,16 @@ sub get_fallback
 	return $self->{fallback};
 }
 
+
+######################################################################
+=pod
+
 =item $ok = $language->load_phrases( $file )
 
-Load phrases from $file into the current language (use with care!).
+Load phrases from C<$file> into the current language.
 
 =cut
+######################################################################
 
 sub load_phrases
 {
@@ -600,11 +623,17 @@ sub load_phrases
 	return $self->_reload_phrases( $self->{repository_data}, $file );
 }
 
+
+######################################################################
+=pod
+
 =item $doc = EPrints::Language->create_phrase_doc( $session, [ $comment ] )
 
-Create and return a new, empty, phrases document. Optionally put $comment at the top.
+Returns a new, empty, phrases document. Optionally puts C<$comment> at
+the top.
 
 =cut
+######################################################################
 
 sub create_phrase_doc
 {
@@ -637,21 +666,18 @@ END
 
 =back
 
-=cut
-
-
 =head1 COPYRIGHT
 
-=for COPYRIGHT BEGIN
+=begin COPYRIGHT
 
 Copyright 2022 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/
 
-=for COPYRIGHT END
+=end COPYRIGHT
 
-=for LICENSE BEGIN
+=begin LICENSE
 
 This file is part of EPrints 3.4 L<http://www.eprints.org/>.
 
@@ -668,5 +694,5 @@ You should have received a copy of the GNU Lesser General Public
 License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
-=for LICENSE END
+=end LICENSE
 

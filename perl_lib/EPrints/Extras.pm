@@ -22,14 +22,14 @@ default render or input methods.
 
 =over 4
 
-=cut 
+=cut
+
+######################################################################
 
 package EPrints::Extras;
 
 use warnings;
 use strict;
-
-
 
 ######################################################################
 =pod
@@ -37,16 +37,16 @@ use strict;
 =item $xhtml = EPrints::Extras::render_xhtml_field( $session, $field,
 $value )
 
-Return an XHTML DOM object of the contents of $value. In the case of
-an error parsing the XML in $value return an XHTML DOM object 
+Returns a XHTML DOM object of the contents of C<$value>. In the case of
+an error parsing the XML in C<$value> return an XHTML DOM object
 describing the problem.
 
-This is intended to be used by the render_single_value metadata 
-field option, as an alternative to the default text renderer. 
+This is intended to be used by the C<render_single_value> option of
+L<EPrints::MetaField> as an alternative to the default text renderer.
 
 This allows through any XML element, so could cause problems if
-people start using SCRIPT to make pop-up windows. A later version
-may allow a limited set of elements only.
+C<E<lt>scriptE<gt>> elements are used to make pop-up windows. A later
+version may only allow a limited set of elements.
 
 =cut
 ######################################################################
@@ -84,10 +84,9 @@ sub render_xhtml_field
 
 =item $xhtml = EPrints::Extras::render_preformatted_field( $session, $field, $value )
 
-Return an XHTML DOM object of the contents of $value.
+Returns a XHTML DOM object of the contents of C<$value>.
 
-The contents of $value will be rendered in an HTML <pre>
-element. 
+The contents of C<$value> will be rendered in a HTML C<E<lt>preE<gt>> element.
 
 =cut
 ######################################################################
@@ -108,10 +107,9 @@ sub render_preformatted_field
 
 =item $xhtml = EPrints::Extras::render_hightlighted_field( $session, $field, $value )
 
-Return an XHTML DOM object of the contents of $value.
+Returns an XHTML DOM object of the contents of C<$value>.
 
-The contents of $value will be rendered in an HTML <pre>
-element. 
+The contents of C<$value> will be rendered in a HTML C<E<lt>preE<gt>> element.
 
 =cut
 ######################################################################
@@ -125,6 +123,22 @@ sub render_highlighted_field
 	$div->appendChild( $v );	
 	return $div;
 }
+
+
+######################################################################
+=pod
+
+=item $xhtml = EPrints::Extras::render_lookup_list( $session, $rows )
+
+Returns a XHTML DOM object containing all the HTML C<<li>>
+elements provided in array reference C<$rows>.
+
+The elements of C<$rows> will be rendered as HTML C<E<lt>liE<gt>>
+(list item) elements inside a HTML C<E<lt>ulE<gt>> (unordered list)
+element.
+
+=cut
+######################################################################
 
 sub render_lookup_list
 {
@@ -170,10 +184,10 @@ sub render_lookup_list
 
 =item $xhtml = EPrints::extras::render_paras( $session, $field, $value );
 
-Render the value in paragraphs rather than one long text string.
+Returns C<$value> in paragraphs rather than one long text string.
 
-Returns an XHTML DOM object of the contents of $value with HTML markup
-to make it into paragraphs.
+The text string C<$value> will be render as XHTML DOM object with HTML
+markup to make it into paragraphs.
 
 =cut
 ######################################################################
@@ -219,10 +233,13 @@ sub render_paras
 ######################################################################
 =pod
 
-=item $xhtml = EPrints::Extras::render_url_truncate_end( $session, $field, $value )
+=item $xhtml = EPrints::Extras::render_url_truncate_end( $session, $field, $value, $target )
 
-Hyper link the URL but truncate the end part if it gets longer 
-than 50 characters.
+Returns a XHTML DOM object containing a hyperlink (C<E<lt>aE<gt>)
+that links to C<$target> with the label C<$value>.
+
+Where the string length of C<$value> is E<gt> 50 characters then
+the end will be truncated and replaced with an ellipsis.
 
 =cut
 ######################################################################
@@ -245,10 +262,13 @@ sub render_url_truncate_end
 ######################################################################
 =pod
 
-=item $xhtml = EPrints::Extras::render_url_truncate_middle( $session, $field, $value )
+=item $xhtml = EPrints::Extras::render_url_truncate_middle( $session, $field, $value, $target )
 
-Hyper link the URL but truncate the middle part if it gets longer 
-than 50 characters.
+Returns a XHTML DOM object containing a hyperlink (C<E<lt>aE<gt>)
+that links to C<$target> with the label C<$value>.
+
+Where the string length of C<$value> is E<gt> 50 characters then
+the middle will be truncated and replaced with an ellipsis.
 
 =cut
 ######################################################################
@@ -273,8 +293,17 @@ sub render_url_truncate_middle
 
 =item $xhtml = EPrints::Extras::render_related_url( $session, $field, $value )
 
-Hyper link the related URL named by given type or at the end truncated link
-(if it gets longer than 40 characters) otherwise
+Returns a XHTML DOM object containing all the elements in the array
+reference C<$value>, which contains all the URLs that relate to a
+particular C<DataObj> (e.g. C<EPrint>).
+
+Where related URLs do not have a C<type> set the C<url> will be used
+as a label instead.  Where the is  E<gt> 40 characters will be truncated
+and replaced with an ellipsis.
+
+The elements of C<$value> will be rendered as HTML C<E<lt>liE<gt>>
+(list item) elements inside a HTML C<E<lt>ulE<gt>> (unordered list)
+element.
 
 =cut
 ######################################################################
@@ -319,13 +348,14 @@ sub render_related_url
 
 =item $orderkey = EPrints::Extras::english_title_orderkey( $field, $value, $dataset )
 
-Strip the leading a/an/the and any non alpha numerics from the start of a orderkey
-value. Suitable for make_single_value_orderkey on the title field.
+Returns C<$value> stripped of leading a/an/the and any non-alpha-numeric
+characters from the start of a orderkey value. Suitable for
+C<make_single_value_orderkey> on the title field.
 
 =cut
 ######################################################################
 
-sub english_title_orderkey 
+sub english_title_orderkey
 {
         my( $field, $value, $dataset ) = @_;
 
@@ -338,9 +368,16 @@ sub english_title_orderkey
 ######################################################################
 =pod
 
-=item $xhtml_dom = EPrints::Extras::render_possible_doi( $field, $value, $dataset )
+=item $xhtml = EPrints::Extras::render_possible_doi( $field, $value, $dataset )
 
-If the field looks like it contains a DOI then link it.
+Returns an XHTML DOM object containing a hyperlink (C<E<lt>aE<gt>>) for
+a DOI determined from C<$value>.
+
+Where C<$value> is not determine as a DOI just the text is returned
+withn an XHTML DOM object.
+
+The label for the hyperlink is generated by the L<EPrints::DOI>'s
+C<to_string> function with the attribute C<noprefix> set to 1.
 
 =cut
 ######################################################################
@@ -371,8 +408,7 @@ sub render_possible_doi
 =cut
 ######################################################################
 
-1; # For use/require success
-
+1;
 
 =head1 COPYRIGHT
 

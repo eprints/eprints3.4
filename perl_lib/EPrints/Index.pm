@@ -17,7 +17,7 @@ B<EPrints::Index> - Methods for indexing objects for later searching.
 =head1 DESCRIPTION
 
 This module contains methods used to add and remove information from
-the free-text search indexes. 
+the free-text search indexes.
 
 =head1 FUNCTIONS
 
@@ -63,32 +63,37 @@ sub remove
 
 	# remove from rindex table
 	$db->do(
-		"DELETE FROM " . 
-			$db->quote_identifier( $rindextable ) . 
-		" WHERE " . 
-			$db->quote_identifier( $keyfield->get_sql_name )."=".$db->quote_value( $objectid ) . 
-			" AND " . 
+		"DELETE FROM " .
+			$db->quote_identifier( $rindextable ) .
+		" WHERE " .
+			$db->quote_identifier( $keyfield->get_sql_name )."=".$db->quote_value( $objectid ) .
+			" AND " .
 			$db->quote_identifier( "field" )." IN (".join(',', map { $db->quote_value( $_ ) } @$fieldids).")"
 	);
 
 	# remove from grep table
 	$db->do(
-		"DELETE FROM " . 
-			$db->quote_identifier( $grepindextable ) . 
-		" WHERE " . 
-			$db->quote_identifier( $keyfield->get_sql_name )."=".$db->quote_value( $objectid ) . 
-			" AND " . 
+		"DELETE FROM " .
+			$db->quote_identifier( $grepindextable ) .
+		" WHERE " .
+			$db->quote_identifier( $keyfield->get_sql_name )."=".$db->quote_value( $objectid ) .
+			" AND " .
 			$db->quote_identifier( "fieldname" )." IN (".join(',', map { $db->quote_value( $_ ) } @$fieldids).")"
 	);
 
 	return $rv;
 }
 
+
+######################################################################
+=pod
+
 =item $ok = EPrints::Index::remove_all( $session, $dataset, $objectid )
 
 Remove all indexes to the specified object.
 
 =cut
+######################################################################
 
 sub remove_all
 {
@@ -118,6 +123,7 @@ sub remove_all
 	return $rv;
 }
 
+
 ######################################################################
 =pod
 
@@ -126,10 +132,11 @@ sub remove_all
 Remove all the current index information for the given dataset. Only
 really useful if used in conjunction with rebuilding the indexes.
 
+May be removed in future versions as does not look to be used.
+
 =cut
 ######################################################################
 
-# Unused?
 sub purge_index
 {
 	my( $session, $dataset ) = @_;
@@ -189,16 +196,13 @@ sub add
 }
 
 
-
-
-
 ######################################################################
 =pod
 
 =item EPrints::Index::update_ordervalues( $session, $dataset, $data, $changed )
 
-Update the order values for an object. $data is a structure
-returned by $dataobj->get_data. $changed is a hash of changed fields.
+Update the order values for an object. C<$data> is a structure
+returned by C<$dataobj->get_data>. $changed is a hash of changed fields.
 
 =cut
 ######################################################################
@@ -258,7 +262,7 @@ sub _do_ordervalues
 			my $field = $dataset->field( $fieldname );
 			next if $field->is_virtual;
 
-			my $ov = $field->ordervalue( 
+			my $ov = $field->ordervalue(
 					$data->{$fieldname},
 					$session,
 					$langid,

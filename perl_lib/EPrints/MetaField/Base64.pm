@@ -26,7 +26,7 @@ better save in the database rather than to the filesystem.
    L<EPrints::MetaField::Id>
      L<EPrints::MetaField::Text>
        L<EPrints::MetaField::Longtext>
-	       B<EPrints::MetaField::Base64>
+         B<EPrints::MetaField::Base64>
 
 =head1 PROPERTIES
 

@@ -12,7 +12,7 @@
 
 =head1 NAME
 
-B<EPrints::Latex> - Module for handling rendering latex equations in 
+B<EPrints::Latex> - Module for handling rendering latex equations in
 metadata as images.
 
 =head1 DESCRIPTION
@@ -20,6 +20,8 @@ metadata as images.
 Some repositories may want to spot latex style equations in titles and
 abstracts and render these as images instead. This module provides
 that functionality.
+
+=head1 METHODS
 
 =over 4
 
@@ -38,20 +40,21 @@ use strict;
 
 =item $xhtml = EPrints::Latex::render_string( $session, $field, $value )
 
-This function is intended to be passed by reference to the 
-render_single_value property of a metadata field. It returns just
-an XHTML DOM string unless it spots anything which looks like a 
-latex style equation, if so the equation is replaced with and img
-element, the URL of which is a CGI script which will render the equation
-as an image. 
+Returns an XHTML DOM object that renders that LaTeX encoded string
+using HTML elements,
 
-For example the equation 
+This function is intended to be passed by reference to the
+C<render_single_value> property of a C<EPrints::MetaField>. It wiil
+just returns just an XHTML DOM object unless it spots anything that
+looks like a  LaTeX style equation. If so, the equation is replaced
+with and C<E<lt>imgE<gt>> element, the URL of which is a CGI script
+that render the equation as an image.
 
- $x = \frac{-b_+_^-^\root{b^2^-4ac}}{2a}$ 
+E.g.
 
-is the quadratic equation. If you're not a physics academic then that 
-probably doesn't mean much to you, but that's how the physics community 
-like to write their equations!
+ $x = \frac{-b_+_^-^\root{b^2^-4ac}}{2a}$
+
+Is the Quadratic formula L<https://en.wikipedia.org/wiki/Quadratic_formula>
 
 =cut
 ######################################################################
@@ -98,7 +101,7 @@ sub render_string
 			{
 				$inmath = 1;
 			}
-		}	 
+		}	
 
 		elsif( $inslash == 1 )
 		{
@@ -119,7 +122,7 @@ sub render_string
 		{
 			my $url;
 
-			if( $session->config( "use_mimetex" ) ) 
+			if( $session->config( "use_mimetex" ) )
 			{
 				my $param = $buffer;
 
@@ -127,9 +130,9 @@ sub render_string
 				$param =~ s/^\$(.*)\$$/$1/;
 
 				# Mimetex can't handle whitespace. Change it to ~'s.
-				$param =~ s/\\?\s/~/g;     
+				$param =~ s/\\?\s/~/g;    
 
-				$url = $session->config( 
+				$url = $session->config(
         				"perl_url" )."/mimetex.cgi?".$param;
 			}
 			else
@@ -140,13 +143,13 @@ sub render_string
 				$param =~ s/[^a-z0-9]/sprintf('%%%02X',ord($&))/ieg;
 	
 				# strip $ from beginning and end.
-				$param =~ s/^\$(.*)\$$/$1/; 
+				$param =~ s/^\$(.*)\$$/$1/;
 	
-				$url = $session->config( 
+				$url = $session->config(
 					"perl_url" )."/latex2png?latex=".$param;
 			}
 
-			my $img = $session->make_element( 
+			my $img = $session->make_element(
 				"img",
 				align=>"absbottom",
 				alt=>$buffer,
@@ -213,23 +216,24 @@ sub render_string
 
 =item $imgfile = EPrints::Latex::texstring_to_png( $session, $texstring )
 
-Return the location of a PNG image file containing the latex fragment
-$texstring. 
+Returns the location of a PNG image file containing the LaTeX fragment
+C<$texstring>.
 
 This uses a directory to generate and cache the images. So the system
-only has to go to the effort of rendering any equation once. The 
-directory is "latexcache" in the htdocs directory of the repository.
+only has to go to the effort of rendering any equation once. The
+directory is C<latexcache> in the html directory of the repository
+archive (e.g. C<EPRINTS\_PATH/archives/ARCHIVE\_ID/html/en/>).
 
-The filename of the cached png is the md5 of the latex equation as
-a string of hex characters. 
+The filename of the cached PNG is the MD5 sum of the LaTeX equation
+as a string of hex characters.
 
-The images always have a white background. 
+Generated images always have white backgrounds.
 
-This uses the rather obvious system of creating a latex file with
-$texstring in, running latex on it, running dvips on the resulting 
-dvi file to get a postscript file of a page with the equation in the
-corner. Then uses GNU convert crop the postscript and turn it into
-a PNG.
+This uses the rather obvious system of creating a LaTeX file with
+C<$texstring> in, running the C<latex> command on it, then running
+C<dvips> command on the resulting DVI file to get a PostScript file
+of a page with the equation in the corner. Then uses GNU C<convert> to
+crop the PostScript and turn it into a PNG file.
 
 =cut
 ######################################################################
@@ -254,7 +258,7 @@ sub texstring_to_png
 
 	$ofile = $cachedir."/".$ofile;
 
-	if( -e $ofile ) 
+	if( -e $ofile )
 	{
 		return $ofile;
 	}
@@ -275,16 +279,16 @@ END
 
 	$repository->exec( "latex", SOURCE=>"$fbase.tex", TARGET=>$cachedir );
 	$repository->exec( "dvips", SOURCE=>"$fbase.dvi", TARGET=>"$fbase.ps" );
-	$repository->exec( 
-		"convert_crop_white", 
-		SOURCE => "$fbase.ps", 
+	$repository->exec(
+		"convert_crop_white",
+		SOURCE => "$fbase.ps",
 		TARGET => $ofile );
-	unlink( 
-		"$fbase.aux", 
-		"$fbase.dvi", 
-		"$fbase.tex", 
-		"$fbase.ps", 
-		"$fbase.log" 
+	unlink(
+		"$fbase.aux",
+		"$fbase.dvi",
+		"$fbase.tex",
+		"$fbase.ps",
+		"$fbase.log"
 	);
 
 	chdir( $prev_dir );
@@ -300,19 +304,18 @@ END
 
 =cut
 
-
 =head1 COPYRIGHT
 
-=for COPYRIGHT BEGIN
+=begin COPYRIGHT
 
 Copyright 2022 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/
 
-=for COPYRIGHT END
+=end COPYRIGHT
 
-=for LICENSE BEGIN
+=begin LICENSE
 
 This file is part of EPrints 3.4 L<http://www.eprints.org/>.
 
@@ -329,5 +332,5 @@ You should have received a copy of the GNU Lesser General Public
 License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
-=for LICENSE END
+=end LICENSE
 

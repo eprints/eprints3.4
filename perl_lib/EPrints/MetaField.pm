@@ -15,7 +15,20 @@
 
 B<EPrints::MetaField> - A single metadata field.
 
-=head1 SYNOPSIS
+=head1 DESCRIPTION
+
+This object represents a single metadata field, not the value of
+that field. A field belongs (usually) to a dataset and has a large
+number of properties. Optional and required properties vary between
+types.
+
+"type" is the most important property, it is the type of the metadata
+field. For example: "text", "name" or "date".
+
+A full description of metadata types and properties is in the eprints
+documentation and will not be duplicated here.
+
+=head2 Synopsis
 
 my $field = $dataset->field( $fieldname );
 
@@ -42,22 +55,7 @@ $values = $field->all_values( %opts );
 $sorted_list = $field->sort_values( $unsorted_list );
 
 
-=head1 DESCRIPTION
-
-This object represents a single metadata field, not the value of
-that field. A field belongs (usually) to a dataset and has a large
-number of properties. Optional and required properties vary between 
-types.
-
-"type" is the most important property, it is the type of the metadata
-field. For example: "text", "name" or "date".
-
-A full description of metadata types and properties is in the eprints
-documentation and will not be duplicated here.
-
-=begin InternalDoc
-
-=head1 PROPERTIES
+=head1 INSTANCE VARIABLES
 
 =over 4
 

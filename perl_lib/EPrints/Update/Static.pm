@@ -428,7 +428,7 @@ sub copy_xhtml
 
 =begin COPYRIGHT
 
-Copyright 2023 University of Southampton.
+Copyright 2024 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/

@@ -424,7 +424,7 @@ sub render_stage_warnings
 
 =for COPYRIGHT BEGIN
 
-Copyright 2022 University of Southampton.
+Copyright 2024 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/

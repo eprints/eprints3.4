@@ -55,9 +55,9 @@
   <dd>
     <p>Further incremental changes and snag fixes. In particular, the use of fieldsets and legends in search and input forms to make them easier to style with CSS.</p>
   </dd>
-  <dt style="font-weight: bold; margin-top: 20px;">EPrints 3.4.6 released (2024)</dt>
+  <dt style="font-weight: bold; margin-top: 20px;">EPrints 3.4.6 released (August 2024)</dt>
   <dd>
-    <p>Further incremental changes and snag fixes.</p>
+    <p>Further incremental changes and snag fixes. Including increased usage or appropriate ARIA attributes for elements.</p>
   </dd>
 
   <dt style="font-weight: bold; margin-top: 20px;">Future releases</dt>

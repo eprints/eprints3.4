@@ -49,13 +49,8 @@ $c->{can_request_view_document} = sub
 		}
         }
 
-
-	# If you use remote_ip() on 2.4+ it will cause an error which allows access to embargoed 
-	# documents from any IP. This is intentionally commented out and should only be use if you 
-	# need to whitelist a set of IPs so they can access restricted documents without a login.
-	#my $version = Apache2::ServerUtil::get_server_version();
-	#$version =~ /^Apache\/([0-9]+\.[0-9]+)/;
-	#my $ip = $1 >= 2.4 ? $r->useragent_ip : $r->connection()->remote_ip();
+    # Only uncomment if you need to use a user's IP address to determine access.
+	#my $ip = $doc->repository->ip;
 
 	# Example of how to allow an override for certain basic auth type usernames/passwords.
 	# This is useful if you want the site to be read by a crawler, for example.

@@ -18,6 +18,7 @@ epm I<command> [B<options>]
 Where I<command> is one of:
 
 	build
+	check_config
 	disable
 	enable
 	install
@@ -217,6 +218,73 @@ sub action_build
 	print "$output\n";
 }
 
+=item check_config I<repository> I<package>
+
+Checks the archive-specific configuration files for I<package> against
+those already present in I<repository> archive
+
+=cut
+
+sub action_check_config
+{
+    pod2usage() if @ARGV != 2;
+    my( $repoid, $name ) = @ARGV;
+
+    my $repo = &repository( $repoid );
+    my $epm = &epm( $repo, $name );
+
+    my $configdir = $epm->epm_dir . '/cfg';
+    my $targetdir = $repo->config( "base_path" ) . '/archives/' . $repoid . '/cfg';
+
+    use File::Compare;
+	my ( $copies, $copied, $differs, $oks ) = ( 0, 0, 0, 0 );
+	print "\n";
+    File::Find::find(sub {
+        return if $File::Find::name =~ /\/\./;
+        return if -d $File::Find::name;
+
+        my $path = $targetdir;
+        $path .= "/" . substr($File::Find::dir,length($configdir)+1);
+
+		if ( ! -e "$path/$_" )
+		{
+			if ( $force )
+			{
+				 EPrints->system->mkdir( $path );
+				 File::Copy::copy( $File::Find::name, "$path/$_" );
+				 print "$File::Find::name copied to $path/$_\n";
+				 $copied++;
+				 $oks++;
+
+			}
+			else
+			{
+				print "$path/$_ does not exist. Re-run with --force to copy from $File::Find::name\n";
+				$copies++;
+			}
+		}
+		elsif ( File::Compare::compare( $File::Find::name, "$path/$_" ) )
+		{
+			print "path/$_ differs to $File::Find::name and requires manual merging.\n";
+			$differs++;
+		}
+		else
+		{
+			$oks++;
+		}
+    }, $configdir);
+
+	if ( $copies > 0 || $differs > 0 )
+	{
+		print "\nWork to do: $copies files need to be copied and $differs files need to be manually merged. ($oks files are already correctly in place).\n\n";
+	}
+	else
+	{
+		print "\n" if $copied;
+		print "No work to do: $oks files are already correctly in place.\n\n";
+	}
+}
+
 =item disable I<repository> I<package>
 
 Disable the I<package> for I<repository>. This will trigger a configuration
@@ -323,7 +391,7 @@ sub action_link_lib
 		}
 		symlink($File::Find::name, "$path/$_");
 
-		print "$path/$_\n";
+		print "Created symlink: $path/$_\n";
 	}, $sourcedir);
 }
 
@@ -452,11 +520,11 @@ sub action_unlink_lib
 
 		my $rm_path = $path;
 		my $empty_dir = EPrints::Utils::is_empty_dir( $rm_path );
-		print "Unlinked $path/$_\n";
+		print "Removed symlink: $path/$_\n";
 		while ( $empty_dir )
 		{
 			rmdir $rm_path;
-			print "Removed directory $rm_path\n";
+			print "Removed directory: $rm_path\n";
 			$rm_path = dirname( $rm_path );
 			$empty_dir = EPrints::Utils::is_empty_dir( $rm_path );
 		}
@@ -532,7 +600,7 @@ sub action_unpack
 			open(my $fh, ">", $filepath) or die "Error writing to $filepath: $!";
 			syswrite($fh, $files_data->{$file->value( "filename" )} );
 			close($fh);
-			print "$filepath\n" if $noise;
+			print "Unpacked: $filepath\n" if $noise;
 		}
 	}
 	else 
@@ -561,10 +629,11 @@ sub action_unpack
 			open(my $fh, ">", $filepath) or die "Error writing to $filepath: $!";
 			syswrite($fh, $files_data->{$file->value( "filename" )} );
 			close($fh);
-			print "$filepath\n" if $noise;
+			print "Unpacked: $filepath\n" if $noise;
 		}
 	}
 }
+
 
 =back
 

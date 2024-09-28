@@ -3,7 +3,6 @@
 use strict;
 use FindBin;
 use lib "$FindBin::Bin/../perl_lib";
-no if $] >= 5.017011, warnings => 'experimental::smartmatch';
 
 use EPrints::Utils;
 

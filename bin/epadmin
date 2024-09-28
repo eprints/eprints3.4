@@ -393,7 +393,9 @@ sub create
 	my $conf = $EPrints::SystemSettings::conf;
 	my @flavours =  keys %{$conf->{flavours}};
 	my $repo_type = $ARGV[0]? $ARGV[0]:"";
-	if (not $repo_type ~~ @flavours)
+	my @repo_type_matches_available_flavour = (map {$repo_type eq $_? $_:()} @flavours);
+
+	unless (@repo_type_matches_available_flavour)
 	{
 		print STDERR "Available repository types are: \n   ",join("\n   ",@flavours),"\n";
 		print STDERR "Usage: epadmin create [repository type]\n";

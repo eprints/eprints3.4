@@ -3,7 +3,6 @@
 use strict;
 use FindBin;
 use lib "$FindBin::Bin/../perl_lib";
-no if $] >= 5.017011, warnings => 'experimental::smartmatch';
 
 use EPrints::Utils;
 
@@ -393,7 +392,7 @@ sub create
 	my $conf = $EPrints::SystemSettings::conf;
 	my @flavours =  keys %{$conf->{flavours}};
 	my $repo_type = $ARGV[0]? $ARGV[0]:"";
-	if (not $repo_type ~~ @flavours)
+	if ( not ( grep $_ eq $repo_type, @flavours ) )
 	{
 		print STDERR "Available repository types are: \n   ",join("\n   ",@flavours),"\n";
 		print STDERR "Usage: epadmin create [repository type]\n";

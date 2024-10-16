@@ -81,12 +81,13 @@ END
 	my @lines = split( '\n', $robots );
 	my $lineno = 0;
 	my $default_ua_config = "";
-	while ( lc( $lines[$lineno] ) !~ /user-agent: \*/ )
+	while ( lc( $lines[$lineno] // q() ) !~ /user-agent: \*/ )
 	{
 		$lineno++;
+  		last if $lineno >= @lines;
 	}
 	$lineno++;
-	while ( $lines[$lineno] !~ /^\s*$/ )
+	while ( ( $lines[$lineno] // q() ) !~ /^\s*$/ )
 	{
 		$default_ua_config .= $lines[$lineno] ."\n";
 		$lineno++;

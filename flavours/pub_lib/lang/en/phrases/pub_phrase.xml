@@ -15,4 +15,7 @@
     <epp:phrase id="archive:workflow:stage:core:event_details:title">Event Details</epp:phrase>
     <epp:phrase id="archive:workflow:stage:core:venue_details:title">Venue Details</epp:phrase>
 
+	<!-- homepage menu phrases -->
+	<epp:phrase id="homepage_menu_option_browse:desc">Browse the items in the repository by <a href="{$config{rel_path}}/view/year/">year</a>, <a href="{$config{rel_path}}/view/subjects/">subject</a>, <a href="{$config{rel_path}}/view/divisions/">division</a> or <a href="{$config{rel_path}}/view/creators/">author</a>.</epp:phrase>
+
 </epp:phrases>

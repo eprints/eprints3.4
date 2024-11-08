@@ -40,22 +40,7 @@
   </span>
 </div>
 
-<dl id="ep-homepage-menu" title="Homepage Menu">
-  <dt id="latest-additions"><a href="{$config{rel_cgipath}}/latest">Latest Additions</a></dt>
-  <dd>View items added to the repository in the past week.</dd>
-
-  <dt id="search-repository"><a href="{$config{rel_cgipath}}/search/advanced">Search Repository</a></dt>
-  <dd>Search the repository using a full range of fields. Use the search field at the top of the page for a quick search.</dd>
-    
-  <dt id="browse-repository"><a href="{$config{rel_path}}/view/subjects/">Browse Repository</a></dt>
-  <dd>Browse the items in the repository by subject.</dd>
- 
-  <dt id="about-this-repository"><a href="{$config{rel_path}}/information.html">About this Repository</a></dt>
-  <dd>More information about this site.</dd>
-
-  <dt id="repository-policies"><a href="{$config{rel_path}}/policies.html">Repository Policies</a></dt>
-  <dd>Policy for use of material in this repository.</dd>
-</dl>
+<epc:print expr="homepage_menu()" />
 
 <p style="margin-top: 2em; font-size: 90%">
 <epc:phrase ref="archive_name" /> supports <a href="https://www.openarchives.org"><abbr title="Open Archives Protocol for Metadata Harvesting v2.0">OAI 2.0</abbr></a> with a base URL of <code><epc:print expr="$config{perl_url}" />/oai2</code>

@@ -4418,4 +4418,22 @@ EPrints Accessibility
 <p>Miscellaneous pages like those for OAI metadata harvesting have been tested and found to have issues with tables being reported as being used for layout when they are genuinely being used as tables. However, as these pages are not intended for general human use, there is no intention to further address these issues.</p>
 </epp:phrase>
 
+<!--
+
+EPrints Homepage Menu 
+
+-->
+
+<epp:phrase id="homepage_menu_aria_label">Homepage Menu</epp:phrase>
+<epp:phrase id="homepage_menu_option_latest:title">Latest Additions</epp:phrase>
+<epp:phrase id="homepage_menu_option_latest:desc">View items added to the repository in the past week.</epp:phrase>
+<epp:phrase id="homepage_menu_option_search:title">Search Repository</epp:phrase>
+<epp:phrase id="homepage_menu_option_search:desc">Search the repository using a full range of fields. Use the search field at the top of the page for a quick search.</epp:phrase>
+<epp:phrase id="homepage_menu_option_browse:title">Browse Repository</epp:phrase>
+<epp:phrase id="homepage_menu_option_browse:desc">Browse the items in the repository by subject.</epp:phrase>
+<epp:phrase id="homepage_menu_option_about:title">About this Repository</epp:phrase>
+<epp:phrase id="homepage_menu_option_about:desc">More information about this site.</epp:phrase>
+<epp:phrase id="homepage_menu_option_policies:title">Repository Policies</epp:phrase>
+<epp:phrase id="homepage_menu_option_policies:desc">Policy for use of material in this repository.</epp:phrase>
+
 </epp:phrases>

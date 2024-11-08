@@ -1095,6 +1095,55 @@ sub run_to_dataobj
 	return [$dataobj];
 }
 
+=item homepage_menu( )
+Generates homepage's block menu from configuration in cfg.d/homepage.pl.
+=cut
+
+sub run_homepage_menu
+{
+	my( $self, $state ) = @_;
+
+	my $session = $state->{session};
+	my $hpmenu_conf = $session->config( 'homepage', 'menu' );	
+
+	my $homepage_menu = $state->{session}->make_doc_fragment;
+	my $nav = $session->make_element( 'nav', id => 'ep-homepage-menu', 'aria-label' => $session->phrase( 'homepage_menu_aria_label' ) );
+	my $ul = $session->make_element( 'ul', class => "ep_block_menu", role => 'menu' );
+	my @options = ();
+	my @fulloptions = ();
+	foreach my $option ( @{$hpmenu_conf->{options}} )
+	{
+		$fulloptions[$option->{appears}] = $option;
+	}
+ 	foreach my $option ( @fulloptions )
+	{
+		push @options, $option if defined $option;
+	}
+	foreach my $option ( @options )
+	{
+		my $id = 'ep-hp-menu-opt-' . $option->{id};
+		my $class = "ep_block_menu_option_";
+		my $li = $session->make_element( 'li', id => $id, role => 'menuitem' );
+		my $title = $session->make_element( 'p', class => $class . 'title', 'aria-described-by' => "$id-desc" );
+		my $url = $option->{url};
+		if ( $url =~ m!^/! )
+		{
+			$url = $session->config( 'rel_path' ) . $url;
+		}
+		my $title_link = $session->make_element( 'a', href => $url );
+		$title_link->appendChild( $session->html_phrase( 'homepage_menu_option_' . $option->{id} . ':title' ) ) ;
+		$title->appendChild( $title_link );
+		$li->appendChild( $title );
+		my $desc = $session->make_element( 'p', class => $class . 'desc', id => "$id-desc" );
+		$desc->appendChild( $session->html_phrase( 'homepage_menu_option_' . $option->{id} . ':desc' ) ) ;
+		$li->appendChild( $desc );
+		$ul->appendChild( $li );
+
+	}
+	$nav->appendChild( $ul );
+	$homepage_menu->appendChild( $nav );
+	return [ $homepage_menu, "XHTML" ];
+}
 
 1;
 

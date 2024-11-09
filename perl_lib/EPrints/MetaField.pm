@@ -513,7 +513,26 @@ sub render_input_field
 
 	if( defined $self->{toform} )
 	{
-		$value = $self->call_property( "toform", $value, $session, $obj, $basename );
+		if ( $self->{multiple} )
+		{
+			my $new_value = [];
+			# Evaluate just in case toform function expects an arrayref
+			foreach my $v ( @$value )
+			{
+				eval {
+					$v = $self->call_property_eval( "toform", $v, $session, $obj, $basename );
+					push @$new_value, $v;
+				} or do {
+					$new_value = $self->call_property( "toform", $value, $session, $obj, $basename );	
+					last;
+				};
+			}
+			$value = $new_value;
+		}
+		else
+		{	
+			$value = $self->call_property( "toform", $value, $session, $obj, $basename );
+		}
 	}
 
 	if( defined $self->{render_input} )
@@ -572,11 +591,6 @@ sub form_value
 	}
 
 	my $value = $self->form_value_actual( $session, $object, $basename );
-
-	if( defined $self->{fromform} )
-	{
-		$value = $self->call_property( "fromform", $value, $session, $object, $basename );
-	}
 
 	return $value;
 }
@@ -1047,6 +1061,64 @@ sub call_property
 
 	return $self->{repository}->call( $v, @args );
 }
+
+
+######################################################################
+=pod
+
+=begin InternalDoc
+
+=item $value2 = $field->call_property_eval( $property, @args )
+
+Call the method described by $property. Pass it the arguments and
+return the result. The methods assumes it is being called within an
+eval so will not handle any errors.  This may be useful if a user-
+defined function is being called where it is uncertain what @args
+it is expecting.
+
+The property may contain either a code reference, or the scalar name
+of a method.
+
+=end InternalDoc
+
+=cut
+######################################################################
+
+sub call_property_eval
+{   
+    my( $self, $property, @args ) = @_;
+
+    my $v = $self->{$property};
+
+    return unless defined $v;
+
+    if( ref( $v ) eq "CODE" || $v =~ m/::/ )
+    {
+        no strict 'refs';
+        return &{$v}(@args);
+    }
+
+	my $fn = $self->{repository}->config( $v );
+
+	if( !defined $fn || ref $fn ne "CODE" )
+    {
+        # Can't log, as that could cause a loop.
+        Carp::carp( "Undefined or invalid function: $v\n" );
+        return;
+    }
+
+	my( $r, @r );
+    if( wantarray )
+    {
+        @r = &$fn( @args );
+    }
+    else
+    {
+        $r = &$fn( @args );
+    }
+    return wantarray ? @r : $r;	
+}
+
 
 ######################################################################
 =pod
@@ -1753,6 +1825,16 @@ sub form_value_single
 	my( $self, $session, $basename, $object ) = @_;
 
 	my $value = $self->form_value_basic( $session, $basename, $object );
+
+        if( defined $self->{fromform} )
+        {
+		eval {
+	                $value = $self->call_property_eval( "fromform", $value, $session, $object, $basename );
+		} or do {
+			$value = $self->call_property( "fromform", [ $value ], $session, $object, $basename );
+		};
+        }
+
 	return undef unless( EPrints::Utils::is_set( $value ) );
 	return $value;
 }

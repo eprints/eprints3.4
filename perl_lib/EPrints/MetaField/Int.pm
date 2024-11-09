@@ -243,15 +243,12 @@ sub sql_row_from_value
 	return( $value );
 }
 
-sub form_value_basic
+sub form_value_single
 {
 	my( $self, $session, $basename, $object ) = @_;
-
-	my $value = $self->SUPER::form_value_basic( $session, $basename, $object );
-
-	return defined $value && $value =~ $self->property( "regexp" ) ?
-			$value :
-			undef;
+	my $value = $self->SUPER::form_value_single( $session, $basename, $object );
+	my $regexp = $self->property( "regexp" );
+	return defined $value && $value =~ m/^($regexp)$/ ? $value : undef;
 }
 
 ######################################################################

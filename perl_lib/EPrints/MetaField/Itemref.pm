@@ -65,16 +65,18 @@ sub get_basic_input_elements
 	{
 		if ( $self->get_property("multiple") )
 		{
-			$raw_value = pop @{
-				$self->call_property( "fromform", [$value], $session, $obj,
-					$basename )
+			# Evaluate just in case toform function does not expect an arrayref	
+			eval {
+				$raw_value = pop @{
+					$self->call_property_eval( "fromform", [ $value ], $session, $obj, $basename )
+				};
+			} or do {
+				$raw_value = $self->call_property( "fromform", $value, $session, $obj, $basename );
 			};
 		}
 		else
 		{
-			$raw_value =
-			  $self->call_property( "fromform", $value, $session, $obj,
-				$basename );
+			$raw_value = $self->call_property( "fromform", $value, $session, $obj, $basename );
 		}
 	}
 	my $desc = $self->render_single_value( $session, $raw_value );

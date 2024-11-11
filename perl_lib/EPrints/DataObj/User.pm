@@ -1113,7 +1113,7 @@ sub mail
 
 	my $remail;
 	my $rname;
-	if( defined $replyto )
+	if( defined $replyto && ! $self->{session}->get_repository->config( 'reply_to_adminemail' ) )
 	{
 		$remail = $replyto->get_value( "email" );
 		$rname = EPrints::Utils::tree_to_utf8( $replyto->render_description() );

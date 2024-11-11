@@ -187,7 +187,7 @@ sub render
 			content => $content );
 
 		my $to_user = $eprint->get_user();
-		my $from_user =$self->{session}->current_user;
+		my $from_desc = $self->{session}->config( 'reply_to_adminemail' ) ?  $self->{session}->html_phrase( "archive_name" ) : $self->{session}->current_user->render_description;
 
 		my $subject = $self->{session}->html_phrase( "cgi/users/edit_eprint:subject_bounce" );
 
@@ -195,7 +195,7 @@ sub render
 			"mail_view",
 			subject => $subject,
 			to => $to_user->render_description,
-			from => $from_user->render_description,
+			from => $from_desc,
 			body => $body );
 
 		$div->appendChild( $view );

@@ -83,26 +83,25 @@ my $cookie;
 my $document_url = $document->get_url;
 if ( EPrints::Utils::is_set( $session->config( "securehost" ) ) )
 {
-        $document_url =~ s/^http:/https:/;
-	print STDERR "samesite: Strict";
-	$cookie  = $session->{query}->cookie(
-		-name    => "eprints_doc_request",
-		-path    => "/",
-		-value   => $code,
-		-secure  => 1,
+	$document_url =~ s/^http:/https:/;
+	$cookie = $session->{query}->cookie(
+		-name => "eprints_doc_request",
+		-path => "/",
+		-value => $code,
+		-secure => 1,
 		-samesite => 'Strict',
-		-domain  => $session->config( "cookie_domain" ),
+		-domain => $session->config( "cookie_domain" ),
 	);
 }
 else
 {
-	$cookie  = $session->{query}->cookie(
-                -name    => "eprints_doc_request",
-                -path    => "/",
-                -value   => $code,
-				-samesite => 'Strict'
-                -domain  => $session->config( "cookie_domain" ),
-        );
+	$cookie = $session->{query}->cookie(
+		-name => "eprints_doc_request",
+		-path => "/",
+		-value => $code,
+		-samesite => 'Strict'
+		-domain => $session->config( "cookie_domain" ),
+	);
 }
 
 unless( defined $cookie )
@@ -115,12 +114,8 @@ unless( defined $cookie )
 my $r = $session->get_request;
 $r->err_headers_out->{"Set-Cookie"} = $cookie;
 
-#EPrints::Apache::AnApache::send_status_line( $r, 302, "Moved" );
-#EPrints::Apache::AnApache::header_out( $r, "Location", $document_url );
-#EPrints::Apache::AnApache::send_http_header( $r );
-
-$session->send_http_header( "content-type" => "text/html" );  
-print '<html><head><meta http-equiv="refresh" content="0;url='.$document_url.'"/></head><body></body></html>';  
+$session->send_http_header( "content-type" => "text/html" );
+print '<html><head><meta http-equiv="refresh" content="0;url='.$document_url.'"/></head><body></body></html>';
 
 $session->terminate;
 return;
@@ -129,9 +124,9 @@ sub _render_error
 {
 	my( $session, $error_msg ) = @_;
 
-        my $title = $session->html_phrase( "cgi/process_request:title" );
-        my $page = $session->html_phrase( "cgi/process_request:page", error => $error_msg );
-        $session->build_page( $title, $page, "process_request" );
-        $session->send_page;
-        return;
+	my $title = $session->html_phrase( "cgi/process_request:title" );
+	my $page = $session->html_phrase( "cgi/process_request:page", error => $error_msg );
+	$session->build_page( $title, $page, "process_request" );
+	$session->send_page;
+	return;
 }

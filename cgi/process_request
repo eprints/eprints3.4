@@ -115,9 +115,12 @@ unless( defined $cookie )
 my $r = $session->get_request;
 $r->err_headers_out->{"Set-Cookie"} = $cookie;
 
-EPrints::Apache::AnApache::send_status_line( $r, 302, "Moved" );
-EPrints::Apache::AnApache::header_out( $r, "Location", $document_url );
-EPrints::Apache::AnApache::send_http_header( $r );
+#EPrints::Apache::AnApache::send_status_line( $r, 302, "Moved" );
+#EPrints::Apache::AnApache::header_out( $r, "Location", $document_url );
+#EPrints::Apache::AnApache::send_http_header( $r );
+
+$session->send_http_header( "content-type" => "text/html" );  
+print '<html><head><meta http-equiv="refresh" content="0;url='.$document_url.'"/></head><body></body></html>';  
 
 $session->terminate;
 return;

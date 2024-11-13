@@ -25,10 +25,6 @@ sub new
 	# don't make it up as a tab. eg. EPrint::History.
 	$params{expensive} = exists $params{expensive} ? $params{expensive} : 0; 
 
-	# Set template for screen to default_internal unless already configured
-	# by specific screen plugin.
-	$params{template} = "default_internal" unless defined $params{template};
-
 	return $class->SUPER::new(%params);
 }
 

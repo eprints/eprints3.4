@@ -444,7 +444,8 @@ sub process
     
 	my $template = $self->{template};
 	$template = $self->screen->{template} if defined $self->screen->{template};
-	$template = "default_internal" if not defined $template;
+	$template = $self->{session}->config( 'plugins', 'Screen::' . $self->{screenid}, 'params', 'template' ) if defined $self->{session}->config( 'plugins', 'Screen::' . $self->{screenid}, 'params', 'template' );
+	$template = "default" if not defined $template;
 
 	my $page_id = $self->{screenid};
 	$page_id =~ s/::/_/g;

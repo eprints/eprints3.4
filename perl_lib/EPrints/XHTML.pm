@@ -611,7 +611,7 @@ sub page
 		$map->{page_id} = $options{page_id};
 	}
 
-	if( $repo->get_online && defined $repo->param( "template" ) )
+	if( $repo->get_online && $repo->config( 'allow_template_from_get' ) && defined $repo->param( "template" ) )
 	{
 		$options{template} = $repo->param( "template" );
 	}

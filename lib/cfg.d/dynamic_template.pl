@@ -26,6 +26,9 @@ $c->{dynamic_template}->{enable} = 1;
 #
 #};
 
+# Allow template parameter in the GET header to choose template used.
+#$c->{allow_template_from_get} = 1;
+
 # To support backwards-compatibility the new-style key tools plugins are
 # included here
 $c->{plugins}->{"Screen::Login"}->{appears}->{key_tools} = 100;

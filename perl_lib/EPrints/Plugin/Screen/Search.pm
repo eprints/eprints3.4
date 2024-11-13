@@ -397,7 +397,7 @@ sub properties_from
 	$sconf = $self->default_search_config if !%$sconf;
 
 	$processor->{sconf} = $sconf;
-	$processor->{template} = $sconf->{template};
+	$processor->{template} = $sconf->{template} if defined $sconf->{template};
 }
 
 sub default_search_config

@@ -10,6 +10,11 @@ $c->{site_logo} = "/images/sitelogo.png";
 
 # $c->{theme} = "green";
 
+# The template to use for pages in the user area i.e.
+# those that require the user to be logged in to access.
+
+$c->{user_area_template} = 'default_internal';
+
 =head1 COPYRIGHT
 
 =for COPYRIGHT BEGIN

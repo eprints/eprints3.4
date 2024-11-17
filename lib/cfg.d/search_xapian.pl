@@ -84,7 +84,6 @@ $c->add_trigger( EP_TRIGGER_INDEX_FIELDS, sub {
 		next if $field->isa( "EPrints::MetaField::Langid" );
 		next if $field->isa( "EPrints::MetaField::Subobject" );
 		next if $field->isa( "EPrints::MetaField::Storable" );
-		next unless $field->get_property( "text_index" );
 
 		my $prefix = $field->name . ':';
 		my $value = $field->get_value( $dataobj );
@@ -101,10 +100,10 @@ $c->add_trigger( EP_TRIGGER_INDEX_FIELDS, sub {
 				$value = $v;
 			}
 			next if !EPrints::Utils::is_set( $value ) || ref($value) ne ""; 
-			$tg->index_text( $value );
-			$tg->increase_termpos();
-			if( $field->isa( "EPrints::MetaField::Text" ) || $field->isa( "EPrints::MetaField::Name" ) )
+			if( $field->get_property( "text_index" ) )
 			{
+				$tg->index_text( $value );
+	                        $tg->increase_termpos();
 				$tg->index_text( $value, 2, $prefix );
 				$tg->increase_termpos();
 			}

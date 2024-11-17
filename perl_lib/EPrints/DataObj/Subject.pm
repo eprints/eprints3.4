@@ -292,7 +292,7 @@ sub get_system_field_info
 			multiple=>1 },
 
 		{ name=>"ancestors", type=>"id", required=>0,
-			multiple=>1, export_as_xml=>0, text_index => 1 },
+			multiple=>1, export_as_xml=>0 },
 
 		{ name=>"depositable", type=>"boolean", required=>1,
 			input_style=>"radio" },

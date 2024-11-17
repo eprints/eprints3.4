@@ -625,6 +625,7 @@ sub execute
 		my $sorter = Search::Xapian::MultiValueSorter->new;
 		for(split /\//, $self->{custom_order})
 		{
+			next if $_ eq "byrelevance";
 			my $reverse = $_ =~ s/^-// ? 1 : 0;
 			my $key = join '.',
 				$self->{dataset}->base_id,

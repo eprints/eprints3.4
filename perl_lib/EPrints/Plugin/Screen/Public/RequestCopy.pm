@@ -330,6 +330,8 @@ sub render
 
 	$form->appendChild( $self->workflow->render );
 
+	$form->appendChild( $session->render_hidden_field( "_default_action", "request" ) );
+
 	$form->appendChild( $session->xhtml->action_button(
 			request => $session->phrase( "request:button" )
 		) );

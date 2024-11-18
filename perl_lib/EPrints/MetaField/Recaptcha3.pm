@@ -59,7 +59,6 @@ sub get_property_defaults
 {
         my( $self ) = @_;
         my %defaults = $self->SUPER::get_property_defaults;
-        $defaults{action} = "request";
 
         return %defaults;
 }
@@ -90,12 +89,6 @@ sub render_input_field_actual
 		id => "g-recaptcha-response",
 		name => "g-recaptcha-response",
 	) );
-
-	$frag->appendChild( $session->make_element( "input",
-		type => "hidden",
-		name => "_action_" . $self->get_property( "action" ),
-		value => "1",
-	) ); 
 
 	$frag->appendChild( $session->make_javascript( <<EOJ ) );
 	function sleep(ms) {

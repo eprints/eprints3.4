@@ -86,9 +86,12 @@ sub get_basic_input_elements
 	if( $self->{input_style} eq "menu" )
 	{
 		my @values = qw/ TRUE FALSE /;
+		# try to reuse potentially already existent phrases for input_style = radio
+		my $true_phrase = $session->get_lang->has_phrase( $self->{confid} . "_radio_" . $self->{name} . "_true" ) && ! $session->get_lang->has_phrase( $self->{confid}."_fieldopt_".$self->{name}."_TRUE" ) ? $session->phrase( $self->{confid} . "_radio_" . $self->{name} . "_true" ) : $session->phrase( $self->{confid}."_fieldopt_".$self->{name}."_TRUE" );
+		my $false_phrase = $session->get_lang->has_phrase( $self->{confid} . "_radio_" . $self->{name} . "_false" ) && ! $session->get_lang->has_phrase( $self->{confid}."_fieldopt_".$self->{name}."_FALSE" ) ? $session->phrase( $self->{confid} . "_radio_" . $self->{name} . "_false" ) : $session->phrase( $self->{confid}."_fieldopt_".$self->{name}."_FALSE" );
 		my %labels = (
-			TRUE=> $session->phrase( $self->{confid}."_fieldopt_".$self->{name}."_TRUE" ),
-			FALSE=> $session->phrase( $self->{confid}."_fieldopt_".$self->{name}."_FALSE" ),
+			TRUE=> $true_phrase,
+			FALSE=> $false_phrase,
 		);
 		my $height = 2;
 		if( !$self->get_property( "required" ) )

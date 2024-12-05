@@ -377,9 +377,13 @@ sub action_link_lib
 	my $sourcedir = $epm->epm_dir . '/lib';
 	my $targetdir = $repo->config( "base_path" ) . '/lib';
 
+	my @installed_files = $epm->installed_files;
+	my @installed_filenames = map { $sourcedir . '/' . $_->value( "filename" ) } @installed_files;
+
 	File::Find::find(sub {
 		return if $File::Find::name =~ /\/\./;
 		return if -d $File::Find::name;
+		return unless grep /^$File::Find::name$/, @installed_filenames;
 
 		my $path = $targetdir;
 		$path .= "/" . substr($File::Find::dir,length($sourcedir)+1);
@@ -507,9 +511,14 @@ sub action_unlink_lib
 	my $sourcedir = $epm->epm_dir . '/lib';
     my $targetdir = $repo->config( "base_path" ) . '/lib';
 
+	my @installed_files = $epm->installed_files;
+	my @installed_filenames = map { $sourcedir . '/' . $_->value( "filename" ) } @installed_files;
+
 	File::Find::find(sub {
         return if $File::Find::name =~ /\/\./;
         return if -d $File::Find::name;
+	return unless grep /^$File::Find::name$/, @installed_filenames;
+
 
         my $path = $targetdir;
         $path .= "/" . substr($File::Find::dir,length($sourcedir)+1);

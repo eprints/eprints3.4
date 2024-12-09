@@ -77,6 +77,9 @@ $EPrints::Utils::REGEXP_NUMBER = '^[0-9]+$';
 $EPrints::Utils::REGEXP_NUMBER_OR_HASH = '^[0-9]+|#$';
 $EPrints::Utils::REGEXP_YESNO = '^(yes|no)$';
 $EPrints::Utils::REGEXP_ANY = '^.+$';
+$EPrints::Utils::REGEXP_IPV4 = '^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$';
+$EPrints::Utils::REGEXP_IPV6 = '^(([0-9a-fA-F]{0,4}:){1,7}[0-9a-fA-F]{0,4})$';
+$EPrints::Utils::REGEXP_IP = '^(((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}|(([0-9a-fA-F]{0,4}:){1,7}[0-9a-fA-F]{0,4}))$';
 
 
 BEGIN {

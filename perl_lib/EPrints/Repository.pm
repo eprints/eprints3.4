@@ -453,7 +453,11 @@ sub remote_ip
 		$ip =~ s/^\s*,+|\s+//g;
 		# slice: take only first address from the list
 		$ip =~ s/,.*//;
-		if ( EPrints::Utils::is_set( $self->config( 'ignore_x_forwarded_for_private_ip_prefixes' ) ) )
+		if ( $ip !~ m/$EPrints::Utils::REGEXP_IP/ )
+		{
+			$ip = undef;
+		}
+		elsif ( EPrints::Utils::is_set( $self->config( 'ignore_x_forwarded_for_private_ip_prefixes' ) ) )
 		{
 			for my $ip_regex ( @{ $self->config( 'ignore_x_forwarded_for_private_ip_prefixes' ) } )
 			{

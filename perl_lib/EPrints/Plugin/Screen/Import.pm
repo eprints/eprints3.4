@@ -456,12 +456,13 @@ sub render
 
 sub render_actions
 {
-	my( $self ) = @_;
+	my( $self, $tab ) = @_;
 
 	my $repo = $self->{repository};
 	my $xml = $repo->xml;
 	my $xhtml = $repo->xhtml;
 	my $plugin = $self->{processor}->{plugin};
+	$tab ||= "default";
 
 	my $ul = $self->{session}->make_element( "ul",
 		style => "list-style-type: none"
@@ -475,13 +476,13 @@ sub render_actions
 		my $checkbox = $xml->create_element( "input",
 			type => "checkbox",
 			name => $action_id,
-			id => $action_id,
+			id => "$action_id-$tab",
 			value => "yes",
 			checked => "yes",
 		);
 		$li->appendChild( $checkbox );
 		my $label = $xml->create_element( "label",
-			for => $action_id,
+			for => "$action_id-$tab",
 		);
 		$li->appendChild( $label );
 		$label->appendChild( $plugin->html_phrase( $action_id ) );
@@ -517,7 +518,7 @@ sub render_import_form
 			$repo,
 			scalar($repo->param( "data" )),
 		) );
-	$form->appendChild( $self->render_actions );
+	$form->appendChild( $self->render_actions( "import" ) );
 	$form->appendChild( $repo->render_action_buttons(
 		test_data => $repo->phrase( "Plugin/Screen/Import:action_test_data" ),
 		import_data => $repo->phrase( "Plugin/Screen/Import:action_import_data" ),
@@ -568,7 +569,7 @@ sub render_upload_form
 	) );
 	$form->appendChild( $xml->create_element( "br" ) );
 	$form->appendChild( $xml->create_element( "br" ) );
-	$form->appendChild( $self->render_actions );
+	$form->appendChild( $self->render_actions( "upload" ) );
 	$form->appendChild( $repo->render_action_buttons(
 		test_upload => $repo->phrase( "Plugin/Screen/Import:action_test_upload" ),
 		import_upload => $repo->phrase( "Plugin/Screen/Import:action_import_upload" ),

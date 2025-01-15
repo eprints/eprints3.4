@@ -37,6 +37,10 @@ Where I<command> is one of:
 
 =item --force
 
+=item --retain
+
+Retain the datasets/fields and counters for the EPM even if it is configured not to retain them.  Only used by disable.
+
 =item --help
 
 =item --man
@@ -75,6 +79,7 @@ use warnings;
 my $opt_version;
 my $opt_verbose = 0;
 my $opt_force = 0;
+my $opt_retain = 0;
 my $opt_to_link = 0;
 my $opt_help;
 my $opt_man;
@@ -85,6 +90,7 @@ GetOptions(
 	'version=s' => \$opt_version,
 	'verbose+' => \$opt_verbose,
 	'force' => \$opt_force,
+	'retain' => \$opt_retain,
 	'to-link' => \$opt_to_link,
 	'help' => \$opt_help,
 	'man' => \$opt_man,
@@ -302,8 +308,12 @@ sub action_disable
 
 	local $handler->{dataobj} = $epm;
 
+	my $retain = undef;
+	$retain = 0 if $opt_force;
+	$retain = 1 if $opt_retain;
 	$epm->control_screen(
 		processor => $handler,
+		retain => $retain,
 	)->action_disable;
 }
 

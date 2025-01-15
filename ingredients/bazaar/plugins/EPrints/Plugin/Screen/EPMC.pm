@@ -154,7 +154,7 @@ sub action_disable
 
 	$self->{processor}->{screenid} = "Admin::EPM";
 
-	$epm->disable( $self->{processor} );
+	$epm->disable( $self->{processor}, $self->{retain} );
 
 	$self->reload_config if !$skip_reload;
 }

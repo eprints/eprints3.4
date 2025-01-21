@@ -19,6 +19,7 @@ Where I<command> is one of:
 
 	build
 	check_config
+	check_symlinks
 	disable
 	enable
 	install
@@ -105,11 +106,19 @@ my $cmd = shift @ARGV;
 
 my $noise = $opt_verbose + 1;
 my $force = $opt_force;
-
+my $broken_symlinks = 0;
 my $f = "action_$cmd";
 if( !defined &$f )
 {
 	pod2usage( "Unknown or unsupported command '$cmd'" );
+}
+if ( $f eq "action_check_symlinks" )
+{
+	no strict "refs";
+	&$f();
+	print "\n$broken_symlinks broken symlinks found\n";
+	print "Use --force to delete broken symlinks\n" if ! $force && $broken_symlinks;
+	exit;
 }
 
 my @_repoids = EPrints::Config::get_repository_ids();
@@ -291,6 +300,39 @@ sub action_check_config
 	}
 }
 
+=item check_symlinks
+
+Checks symlinks created under lib/ are not broken.  Use C<--force> to remove 
+them.
+
+=cut
+
+sub action_check_symlinks
+{
+    pod2usage() if @ARGV != 0;
+
+	my $lib_dir = Cwd::abs_path( $FindBin::Bin . "/../../../lib" );
+	File::Find::find(\&_broken_symlinks, $lib_dir );
+}
+
+sub _broken_symlinks
+{
+	if ( -l && !-e )
+	{
+		$broken_symlinks++;
+		if ( $force ) 
+		{
+			 print "Deleting broken symlink: $File::Find::name\n";
+			 unlink($_) or die "Can't unlink $File::Find::name: $!\n";
+		}
+		else
+		{
+			print "Broken symlink: $File::Find::name\n";
+		}
+	}
+}
+
+
 =item disable I<repository> I<package>
 
 Disable the I<package> for I<repository>. This will trigger a configuration
@@ -336,7 +378,7 @@ sub action_enable
 
 	$epm->control_screen(
 		processor => $handler,
-	)->action_enable;
+	)->action_enable( 0, $force );
 }
 
 =item install I<package_path>

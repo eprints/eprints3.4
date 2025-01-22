@@ -1251,7 +1251,7 @@ sub update_counters
 {
 	my( $self, $before, $retain ) = @_;
 
-	$retain ||= 0;
+	$retain ||= 1;
 
 	my $repo = $self->repository;
 	
@@ -1291,7 +1291,7 @@ sub update_datasets
 {
 	my( $self, $before, $retain ) = @_;
 
-	$retain ||= 0;
+	$retain ||= 1;
 
 	my $repo = $self->repository;
 	

@@ -79,7 +79,7 @@ If SKIP_RELOAD is true will not reload the repository configuration.
 
 sub action_enable
 {
-	my( $self, $skip_reload ) = @_;
+	my( $self, $skip_reload, $skip_restore ) = @_;
 
 	my $repo = $self->{repository};
 	my $epm = $self->{processor}->{dataobj};
@@ -98,6 +98,14 @@ sub action_enable
 		my $filepath = $repo->config( "archiveroot" ) . $filename;
 		next if !-f $filepath;
 		next if !-f "$filepath.epmsave";
+		if ( $skip_restore )
+		{
+			$self->{processor}->add_message( "warning", $repo->html_phrase( "Plugin/Screen/EPMC:unrestored",
+				filename => $repo->xml->create_text_node( $filepath ),
+				unrestored => $repo->xml->create_text_node( "$filepath.epmsave" ),
+			) );
+			next;
+		}
 		rename($filepath, "$filepath.epmnew");
 		rename("$filepath.epmsave", $filepath);
 		$self->{processor}->add_message( "warning", $repo->html_phrase( "Plugin/Screen/EPMC:restored",
@@ -154,7 +162,7 @@ sub action_disable
 
 	$self->{processor}->{screenid} = "Admin::EPM";
 
-	$epm->disable( $self->{processor} );
+	$epm->disable( $self->{processor}, $self->{retain} );
 
 	$self->reload_config if !$skip_reload;
 }

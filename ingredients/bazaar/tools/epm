@@ -638,7 +638,7 @@ sub action_unpack
 				warn "Won't unpack root-pathed or hidden file: $filepath";
 				next;
 			}
-			if ( $filepath =~ m#^epm/$epmid/cfg/# )
+			if ( $filepath =~ m#^epm/$epmid/# )
 			{	
 				$filepath =~ s#^epm/$epmid/##;
 				$filepath = $repo->config( "base_path" ) . '/lib/epm/' . $epmid . '/' . $filepath;

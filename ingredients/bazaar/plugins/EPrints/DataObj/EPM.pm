@@ -172,6 +172,8 @@ sub new_from_data
     my $self = $class->SUPER::new_from_data( $repo, $epdata, $dataset );
     return undef if !defined $self;
 
+    $self->{retain} = 0;
+
     $self->_upgrade;
 
     $self->set_value( "uri", $uri );
@@ -1149,7 +1151,7 @@ Returns boolean dependent on whether disabling was successful.
 
 sub disable
 {
-	my( $self, $handler ) = @_;
+	my( $self, $handler, $retain ) = @_;
 
 	my $repo = $self->repository;
 
@@ -1173,8 +1175,11 @@ sub disable
 	# reload the configuration
 	$repo->load_config;
 
-	$self->update_datasets( $datasets );
-	$self->update_counters( $counters );
+	my $control_screen = $self->control_screen( processor => $handler );
+	$retain = $control_screen->{retain} unless defined $retain;
+
+	$self->update_datasets( $datasets, $retain );
+	$self->update_counters( $counters, $retain );
 
 	return 1;
 }
@@ -1244,7 +1249,9 @@ enabling by using L</current_counters>.)
 
 sub update_counters
 {
-	my( $self, $before ) = @_;
+	my( $self, $before, $retain ) = @_;
+
+	$retain ||= 1;
 
 	my $repo = $self->repository;
 	
@@ -1257,7 +1264,7 @@ sub update_counters
 	{
 		if( !defined delete $after{$id} )
 		{
-			$db->drop_counter( $id );
+			$db->drop_counter( $id ) unless $retain;
 		}
 	}
 	foreach my $id (keys %after)
@@ -1282,7 +1289,9 @@ enabling by using L</current_datasets>.
 
 sub update_datasets
 {
-	my( $self, $before ) = @_;
+	my( $self, $before, $retain ) = @_;
+
+	$retain ||= 1;
 
 	my $repo = $self->repository;
 	
@@ -1315,7 +1324,7 @@ sub update_datasets
 	foreach my $datasetid ( keys %$before )
 	{
 		my $dataset = $before->{$datasetid}->{dataset};
-		if( !defined $repo->dataset( $datasetid ) )
+		if( !$retain && !defined $repo->dataset( $datasetid ) )
 		{
 			$db->drop_dataset_tables( $dataset );
 		}
@@ -1323,7 +1332,7 @@ sub update_datasets
 		{
 			foreach my $field (values %{$before->{$datasetid}->{fields}})
 			{
-				if( !$repo->dataset( $datasetid )->has_field( $field->name ) )
+				if( !$retain && !$repo->dataset( $datasetid )->has_field( $field->name ) )
 				{
 					$db->remove_field( $dataset, $field );
 				}

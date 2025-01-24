@@ -49,6 +49,8 @@ Where I<command> is one of:
 
 =item help
 
+=item logout_all_users
+
 =item profile
 
 =item rebuild_triples
@@ -138,6 +140,10 @@ Use this to produce a schema for the EP3 XML read/written by your repository.
 This erases all the .words and .indexcodes cache files from your repository, forcing the indexer to rerun the tools used to extract full text from your documents.
 
 This is useful if you only setup the fulltext indexing after your repository is already live, or if you discover there has been a problem.
+
+=item B<epadmin> logout_all_users I<repository_id> [I<exclude_user_id>, I<exclude_user_id> ...]
+
+Logout all users from a repositiory.  Potentially excluding one or more user IDs.
 
 =item B<epadmin> rebuild_triples I<repository_id> [I<dataset_id> [I<dataobj_id> I<dataobj_id> I<dataobj_id>-I<dataobj_id> ...]
 
@@ -327,6 +333,7 @@ else
 	elsif( $action eq "erase_data" ) { erase_data( $repoid ); }
 	elsif( $action eq "erase_eprints" ) { erase_eprints( $repoid ); }
 	elsif( $action eq "erase_fulltext_index" ) { erase_fulltext_index( $repoid ); }
+	elsif( $action eq "logout_all_users" ) { logout_all_users( $repoid,@ARGV ); }
 	elsif( $action eq "reload" ) { reload( $repoid ); }
 	elsif( $action eq "refresh_abstracts" ) { refresh_abstracts( $repoid ); }
 	elsif( $action eq "refresh_citations" ) { refresh_citations( $repoid ); }
@@ -1956,6 +1963,33 @@ sub erase_fulltext_index
 	$ep_ds->search->map( $fn );
 
 	print "Done queuing\n" if( $noise >= 1 );
+}
+
+sub logout_all_users
+{
+    my( $repoid, @exc_userids ) = @_;
+
+    my $repo = &repository( $repoid );
+	my $ds = $repo->dataset( "loginticket" );
+	my $ltids = $ds->search->ids;
+	my $sessions = 0;
+	my %userids = ();
+
+
+	foreach my $ltid ( @{ $ltids } )
+	{
+		my $loginticket = $ds->dataobj( $ltid );
+		my $userid = $loginticket->get_value( 'userid' );
+
+		unless ( grep ( /^$userid$/, @exc_userids ) )
+		{
+			$loginticket->delete;
+			$sessions++;
+			$userids{$userid} = 1;
+		}
+	}
+
+    print "\nLogged out " . scalar( keys %userids ) . " users from a total of $sessions sessions.\n\n";
 }
 
 sub test

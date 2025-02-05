@@ -1358,7 +1358,7 @@ sub render_input_field_actual
 		else
 		{
 			my $x = 0;
-			my @input_ids = $self->get_basic_input_ids( $session, $basename, $staff );
+			my @input_ids = $self->get_basic_input_ids( $session, $basename, $staff, $obj );
 			foreach my $col_title ( @{$col_titles} )
 			{
 				

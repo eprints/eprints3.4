@@ -8,7 +8,7 @@
 
 var Prototype = {
 
-  Version: '1.7.3-eprints',
+  Version: '1.7.3.1-eprints',
 
   Browser: (function(){
     var ua = navigator.userAgent;

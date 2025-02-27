@@ -16,7 +16,7 @@ GNU EPrints README
 
 Installation guide: B<https://wiki.eprints.org/w/Installation>.
 
-For more information see B<https://www.eprints.org/software/>.
+For more information see B<https://www.eprints.org/getting-eprints/>.
 
 NOTE:
 
@@ -31,7 +31,7 @@ institutional systems.
 
 =head1 CONTACT
 
-For support options please see B<https://www.eprints.org/software/>.
+For support options please see B<https://www.eprints.org/eprints-services/>.
 
 Enquiries that can not be made via our public mailing list (e.g. security
 concerns) may be sent to B<support@eprints.org>.

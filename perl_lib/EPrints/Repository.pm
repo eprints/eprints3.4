@@ -222,6 +222,7 @@ sub new
 	}
 
 	$self->call( "session_init", $self, $self->{offline} );
+	$self->run_trigger( EP_TRIGGER_BEGIN, offline => $self->{offline} );
 
 	$self->{loadtime} = time();
 	
@@ -507,6 +508,7 @@ sub terminate
 {
 	my( $self ) = @_;
 	
+	$self->run_trigger( EP_TRIGGER_END );
 	$self->call( "session_close", $self );
 
 	if( $self->{noise} >= 2 ) { print "Ending EPrints Repository.\n\n"; }

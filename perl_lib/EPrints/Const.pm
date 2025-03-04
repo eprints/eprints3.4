@@ -153,6 +153,13 @@ Called for every request that is within the repository's path. Use this to redir
 
 =item EP_TRIGGER_DOC_URL_REWRITE
 
+Similar to the EP_TRIGGER_URL_REWRITE trigger, but is active when the request is for a document. Can be used to return variant versions of a document. It has the following additional parameters passed to it:
+
+	eprint - EPrint object that owns the requested document
+	document - Document object being requested
+	filename - Filename - initially taken from end of the URI
+	relations - if the document position path in the URL has digits followed by a '.', this is the rest of that path component, split on '.'s  e.g. hassmallThumbnailVersion
+
 =item EP_TRIGGER_CREATED
 
 Called after $dataset->create_dataobj( { ... } ).

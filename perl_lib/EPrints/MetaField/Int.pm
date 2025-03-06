@@ -240,6 +240,12 @@ sub sql_row_from_value
 {
 	my( $self, $session, $value ) = @_;
 
+	if ( length( $value ) > $self->{ "digits" } )
+	{
+		$value = substr( $value, 0, $self->{ "digits" } );
+		$session->log( "WARNING: Value for integer field '".$self->name."' was truncated, as it was longer than ". $self->{ 'digits' }." digits." );
+	}
+
 	return( $value );
 }
 

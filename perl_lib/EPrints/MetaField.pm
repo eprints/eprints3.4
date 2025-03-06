@@ -1173,7 +1173,7 @@ sub sql_row_from_value
 	{
 		use bytes;
 		my $maxlength = $self->get_sql_column_size( $session );
-		if ( $maxlength && length( $value ) > $maxlength )
+		if ( $maxlength && $value && length( $value ) > $maxlength )
 		{
 			$value = substr( $value, 0, $maxlength );
 			$session->log( "WARNING: Value for field '".$self->name."' was truncated, as it was longer than $maxlength characters." );

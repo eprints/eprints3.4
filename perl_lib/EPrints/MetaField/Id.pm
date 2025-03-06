@@ -76,6 +76,8 @@ sub sql_row_from_value
 	$value =~ s/^\s+//;
 	$value =~ s/\s+$//;
 
+	$value = $self->SUPER::sql_row_from_value( $session, $value );
+
 	$value = substr( $value, 0, $self->{ "maxlength" } );
 
 	return( $value );

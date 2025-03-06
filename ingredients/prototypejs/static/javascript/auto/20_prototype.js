@@ -8,7 +8,7 @@
 
 var Prototype = {
 
-  Version: '1.7.3',
+  Version: '1.7.3.1-eprints',
 
   Browser: (function(){
     var ua = navigator.userAgent;
@@ -621,7 +621,7 @@ Object.extend(String.prototype, (function() {
   }
 
   function stripTags() {
-    return this.replace(/<\w+(\s+("[^"]*"|'[^']*'|[^>])+)?(\/)?>|<\/\w+>/gi, '');
+    return this.replace(/<\w+(\s+("[^"]*"|'[^']*'|[^>'"])+)?\s*("[^">]*|'[^'>]*)?(\/)?>|<\/\w+>/gi, '');
   }
 
   function stripScripts() {

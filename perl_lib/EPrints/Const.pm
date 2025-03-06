@@ -124,6 +124,8 @@ Continue normal processing.
 
 =item EP_TRIGGER_BEGIN
 
+Called immediately after the 'session_init' config method (see archive config or lib/cfg.d/session.pl). These triggers should not set a return value, so all of them can run. Could be used to pre-cache information in the session, or other 'expensive' tasks that should run once.
+
 =item EP_TRIGGER_BEGIN_REQUEST
 
 Called after L<EPrints::Repository/init_from_request>.
@@ -133,6 +135,8 @@ Called after L<EPrints::Repository/init_from_request>.
 Called just before L<EPrints::Repository/cleanup> in response to a mod_perl request.
 
 =item EP_TRIGGER_END
+
+Called immediately before the 'session_close' config method (see archive config or lib/cfg.d/session.pl). These triggers should not set a return value, so the whole stack can run.
 
 =item EP_TRIGGER_URL_REWRITE
 
@@ -148,6 +152,13 @@ Called for every request that is within the repository's path. Use this to redir
 	return_code - reference to return code
 
 =item EP_TRIGGER_DOC_URL_REWRITE
+
+Similar to the EP_TRIGGER_URL_REWRITE trigger, but is active when the request is for a document. Can be used to return variant versions of a document. It has the following additional parameters passed to it:
+
+	eprint - EPrint object that owns the requested document
+	document - Document object being requested
+	filename - Filename - initially taken from end of the URI
+	relations - if the document position path in the URL has digits followed by a '.', this is the rest of that path component, split on '.'s  e.g. hassmallThumbnailVersion
 
 =item EP_TRIGGER_CREATED
 

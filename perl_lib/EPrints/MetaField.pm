@@ -1169,6 +1169,17 @@ sub sql_row_from_value
 {
 	my( $self, $session, $value ) = @_;
 
+	# Truncate value if it is longer than what the database column permits.
+	{
+		use bytes;
+		my $maxlength = $self->get_sql_column_size( $session );
+		if ( $maxlength && length( $value ) > $maxlength )
+		{
+			$value = substr( $value, 0, $maxlength );
+			$session->log( "WARNING: Value for field '".$self->name."' was truncated, as it was longer than $maxlength characters." );
+		}
+	}
+
 	return( $value );
 }
 
@@ -1278,6 +1289,45 @@ sub get_sql_index
 }
 
 
+######################################################################
+=pod
+
+=begin InternalDoc
+
+=item $sql = $field->get_sql_column_size
+
+Return the column size of the field in the database if that is
+applicable
+
+=end InternalDoc
+
+=cut
+######################################################################
+
+sub get_sql_column_size
+{
+	my( $self, $session ) = @_;
+
+	my $db = $session->get_db;
+	my $ds = $self->dataset;
+
+	if ( defined $session->{database}->{$ds->get_sql_table_name}->{$self->get_name}->{column_size} )
+	{
+		return $session->{database}->{$ds->get_sql_table_name}->{$self->get_name}->{column_size};
+	}
+
+	my $sth = $db->{dbh}->column_info(
+		undef, #catalogue
+		undef, #schema
+		$ds->get_sql_table_name,
+		$self->get_name,
+	);
+	my $res = $sth->fetchall_arrayref( { COLUMN_SIZE => 1 } );
+
+	$session->{database}->{$ds->get_sql_table_name}->{$self->get_name}->{column_size} = $res->[0] && $res->[0]->{COLUMN_SIZE} ? $res->[0]->{COLUMN_SIZE} : 0;
+
+	return $session->{database}->{$ds->get_sql_table_name}->{$self->get_name}->{column_size};
+}
 
 
 ######################################################################

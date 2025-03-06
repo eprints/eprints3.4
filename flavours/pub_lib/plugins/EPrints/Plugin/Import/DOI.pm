@@ -340,6 +340,11 @@ sub content_item
 	{
 		$data->{type} = "book_section";
 		$data->{volume_title} = $data->{title};
+                if( defined( $data->{subtitle} ) )
+                {
+                        $data->{volume_title} .= ": ".$data->{subtitle};
+                        $data->{subtitle} = undef;
+                }
 	}
 	$plugin->item_metadata( $data, $node );	
 }

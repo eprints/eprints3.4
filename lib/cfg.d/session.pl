@@ -1,4 +1,8 @@
-
+######################################################################
+#
+# DEPRECATED: Use EP_TRIGGER_BEGIN and EP_TRIGGER_END instead.
+#
+######################################################################
 
 ######################################################################
 #
@@ -14,10 +18,10 @@
 #
 ######################################################################
 
-$c->{session_init} = sub
-{
-	my( $repository, $offline ) = @_;
-};
+#$c->{session_init} = sub
+#{
+#	my( $repository, $offline ) = @_;
+#};
 
 
 ######################################################################
@@ -29,16 +33,16 @@ $c->{session_init} = sub
 #
 ######################################################################
 
-$c->{session_close} = sub
-{
-	my( $repository ) = @_;
-};
+#$c->{session_close} = sub
+#{
+#	my( $repository ) = @_;
+#};
 
 =head1 COPYRIGHT
 
 =for COPYRIGHT BEGIN
 
-Copyright 2022 University of Southampton.
+Copyright 2025 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/

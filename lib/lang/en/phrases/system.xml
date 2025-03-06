@@ -3522,8 +3522,10 @@ PY = 2006 and OG = (Cambridge)<br />
   <epp:phrase id="licenses_typename_cc_by_sa">Creative Commons: Attribution-Share Alike 3.0</epp:phrase>
   <epp:phrase id="licenses_typename_cc_by_sa_4">Creative Commons: Attribution-Share Alike 4.0</epp:phrase>
   <epp:phrase id="licenses_typename_cc_public_domain">Creative Commons: Public Domain Dedication</epp:phrase>
-  <epp:phrase id="licenses_typename_cc_gnu_gpl">Software: Creative Commons: GNU GPL 2.0</epp:phrase>
-  <epp:phrase id="licenses_typename_cc_gnu_lgpl">Software: Creative Commons: GNU LGPL 2.1</epp:phrase>
+  <epp:phrase id="licenses_typename_cc_gnu_gpl">Software: GNU GPL 2.0</epp:phrase>
+  <epp:phrase id="licenses_typename_gnu_gpl_3">Software: GNU GPL 3.0</epp:phrase>
+  <epp:phrase id="licenses_typename_cc_gnu_lgpl">Software: GNU LGPL 2.1</epp:phrase>
+  <epp:phrase id="licenses_typename_gnu_lgpl_3">Software: GNU LGPL 3.0</epp:phrase>
 
   <epp:phrase id="licenses_typename_odc_odbl">Data: Open Database License (ODbL) (Attribution-Share Alike)</epp:phrase>
   <epp:phrase id="licenses_typename_odc_by">Data: Open Data Commons Attribution License (Attribution)</epp:phrase>
@@ -3541,8 +3543,10 @@ PY = 2006 and OG = (Cambridge)<br />
   <epp:phrase id="licenses_description_cc_by_sa"><a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution Share Alike</a></epp:phrase>
   <epp:phrase id="licenses_description_cc_by_sa_4"><a href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution Share Alike</a></epp:phrase>
   <epp:phrase id="licenses_description_cc_public_domain"><a href="http://creativecommons.org/licenses/publicdomain/">Creative Commons Public Domain Dedication</a></epp:phrase>
-  <epp:phrase id="licenses_description_cc_gnu_gpl"><a href="http://creativecommons.org/licenses/GPL/2.0/">Creative Commons GNU GPL (Software)</a></epp:phrase>
-  <epp:phrase id="licenses_description_cc_gnu_lgpl"><a href="http://creativecommons.org/licenses/LGPL/2.1/">Creative Commons GNU LGPL (Software)</a></epp:phrase>
+  <epp:phrase id="licenses_description_cc_gnu_gpl"><a href="http://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html">GNU GPL 2.0 (Software)</a></epp:phrase>
+  <epp:phrase id="licenses_description_gnu_gpl_3"><a href="http://www.gnu.org/licenses/gpl-3.0.en.html">GNU GPL 3.0 (Software)</a></epp:phrase>
+  <epp:phrase id="licenses_description_cc_gnu_lgpl"><a href="http://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html">GNU LGPL 2.1 (Software)</a></epp:phrase>
+  <epp:phrase id="licenses_description_gnu_lgpl_3"><a href="http://www.gnu.org/licenses/lgpl-3.0.en.html">GNU LGPL 3.0 (Software)</a></epp:phrase>
 
 
 

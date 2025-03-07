@@ -1853,6 +1853,7 @@ sub thumbnail_url
 			"^A-Za-z0-9\-\._~\/"
 		);
 	}
+	$path = "id/eprint/$path" if $self->{session}->get_conf( "use_long_url_format" );
 
 	return $self->{session}->current_url(
 		host => 1,

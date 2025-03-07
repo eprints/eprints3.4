@@ -61,13 +61,13 @@
   <li>you cannot skip to the main content when using a screen reader</li>
 -->
 </ul>
-<p>Using the WAVE Accessbility checker tool we are also aware of alerts that it raises which cannot be resolved:</p>
+<p>Using the WAVE Accessibility checker tool we are also aware of alerts that it raises which cannot be resolved:</p>
 <ul>
-  <li>empty listing of items displays "No Items" in the middle of the table that WAVE thinks should be a table caption.  This is not appropriate and displaying a row with the text "No Otems" makes it clear there are no items whereas no rows at all might make it look as though something has broken.</li>
+  <li>empty listing of items displays "No Items" in the middle of the table that WAVE thinks should be a table caption.  This is not appropriate and displaying a row with the text "No Items" makes it clear there are no items whereas no rows at all might make it look as though something has broken.</li>
 </ul>
 
 <h3 id="what-to-do-if-you-cannot-access-parts-of-this-website">What to do if you cannot access parts of <epc:phrase ref="archive_name" /></h3>
-<p>If you need information on <epc:phrase ref="archive_name" /> in a different formats please contact our <a href="mailto:{$config{adminemail}}">repository administrators</a>. We will consider your request and will aim to get back to you within 7 working days.</p>
+<p>If you need information on <epc:phrase ref="archive_name" /> in a different format please contact our <a href="mailto:{$config{adminemail}}">repository administrators</a>. We will consider your request and will aim to get back to you within 7 working days.</p>
 
 <h3 id="reporting-accessibility-problems-with-this-website">Reporting accessibility problems with  <epc:phrase ref="archive_name" /></h3>
 <p>We are always looking to improve the accessibility of <epc:phrase ref="archive_name" />. If you find any problems not listed on this page or think we are not meeting accessibility requirements, please <a href="{$config{rel_path}}/contact.html">contact us</a>.</p>
@@ -84,7 +84,7 @@
 <p>The content listed below is non-accessible for the following reasons.</p>
 <p>We are always looking to improve the accessibility of <epc:phrase ref="archive_name" />. If you find any problems not listed on this page or think we are not meeting accessibility requirements, contact by email: <a href="mailto:{$config{adminemail}}"><epc:print expr="$config{adminemail}" /></a>.</p>
 
-<h3 id="non-compliance-with-the-accessibility-regulations">Non compliance with the accessibility regulations</h3>
+<h3 id="non-compliance-with-the-accessibility-regulations">Non-compliance with the accessibility regulations</h3>
 <p>We are yet to compile a list of where and how  <epc:phrase ref="archive_name" /> is non-compliant with accessibility regulations.</p>
 <!-- 
 [Note: In this subsection, list:

@@ -1,12 +1,6 @@
 ######################################################################
 #
-# DEPRECATED: Use EP_TRIGGER_BEGIN and EP_TRIGGER_END instead.
-#
-######################################################################
-
-######################################################################
-#
-# session_init( $repository, $offline )
+# EP_TRIGGER_BEGIN replaces $c->{session_init}
 #
 #  Invoked each time a new repository is needed (generally one per
 #  script invocation.) $repository is a repository object that can be used
@@ -18,53 +12,53 @@
 #
 ######################################################################
 
-#$c->{session_init} = sub
-#{
-#	my( $repository, $offline ) = @_;
-#};
+$c->add_trigger( EP_TRIGGER_BEGIN, 
+	sub {
+		my %params = @_;
+		my $repo = $params{repository};
+    	my $online = $params{online}; #is this session web-based
+
+		my $old_conf_fn = "session_init";
+		my $new_trigger = "EP_TRIGGER_BEGIN";
+		if ( $repo->can_call( $old_conf_fn ) )  
+		{
+			$repo->log( "UPGRADE: configuration uses '$old_conf_fn'. Please review upgrade advice for triggers ($new_trigger)." );
+			$repo->call(
+				$old_conf_fn,
+				$online,
+			);
+		}
+	}, 
+	priority => 1, 
+	id => "UPGRADE" 
+);
 
 
-######################################################################
+####################################################################
 #
-# session_close( $repository )
+# EP_TRIGGER_END replaces $c->{session_close}
 #
 #  Invoked at the close of each repository. Here you should clean up
-#  anything you did in session_init().
+#  things you did in an EP_TRIGGER_BEGIN trigger,
 #
 ######################################################################
 
-#$c->{session_close} = sub
-#{
-#	my( $repository ) = @_;
-#};
+$c->add_trigger( EP_TRIGGER_END,
+    sub {
+        my %params = @_;
+        my $repo = $params{repository};
 
-=head1 COPYRIGHT
-
-=for COPYRIGHT BEGIN
-
-Copyright 2025 University of Southampton.
-EPrints 3.4 is supplied by EPrints Services.
-
-http://www.eprints.org/eprints-3.4/
-
-=for COPYRIGHT END
-
-=for LICENSE BEGIN
-
-This file is part of EPrints 3.4 L<http://www.eprints.org/>.
-
-EPrints 3.4 and this file are released under the terms of the
-GNU Lesser General Public License version 3 as published by
-the Free Software Foundation unless otherwise stated.
-
-EPrints 3.4 is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-See the GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public
-License along with EPrints 3.4.
-If not, see L<http://www.gnu.org/licenses/>.
-
-=for LICENSE END
+        my $old_conf_fn = "session_close";
+        my $new_trigger = "EP_TRIGGER_END";
+        if ( $repo->can_call( $old_conf_fn ) )
+		{
+            $repo->log( "UPGRADE: configuration uses '$old_conf_fn'. Please review upgrade advice for triggers ($new_trigger)." );
+            $repo->call(
+                $old_conf_fn,
+            );
+        }
+    },
+    priority => 1,
+    id => "UPGRADE"
+);
 

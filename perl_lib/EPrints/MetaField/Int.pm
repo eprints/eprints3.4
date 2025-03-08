@@ -240,10 +240,10 @@ sub sql_row_from_value
 {
 	my( $self, $session, $value ) = @_;
 
-	if ( length( $value ) > $self->{ "digits" } )
+	if ( $value > 2**31-1 || $value < -2**31 ) # Make sure value is within 32-bit signed int
 	{
-		$value = substr( $value, 0, $self->{ "digits" } );
-		$session->log( "WARNING: Value for integer field '".$self->name."' was truncated, as it was longer than ". $self->{ 'digits' }." digits." );
+		$value = undef;
+        $session->log( "WARNING: Value for field '".$self->name."' was unset as it cannot be stored as a 32-bit signed integer." );
 	}
 
 	return( $value );

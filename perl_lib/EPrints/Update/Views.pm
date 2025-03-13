@@ -26,7 +26,8 @@ B<EPrints::Update::Views> - Update view pages
 					fields => [qw( date;res=year )],
 					reverse_order => 1,
 					allow_null => 1,
-					new_column_at => [10, 10]
+					new_column_at => [10, 10],
+					span_to_fit => 1,
 				},
 			],
 			variations => [qw(
@@ -109,6 +110,8 @@ Don't show a link to this view from the /view/ page.
 =item fields = [qw( ... )]
 
 =item new_column_at = [x, y]
+
+=item span_to_fit = 0
 
 =item reverse_order = 0
 
@@ -1602,11 +1605,14 @@ sub render_menu
 		}
 		$add_ul->appendChild( $li );
 	}
-	while( $cols > 1 && $col_n < $cols )
+	unless ( $menu->{span_to_fit} )
 	{
-		++$col_n;
-		my $td = $repo->make_element( "div", class=>"ep_view_col ep_view_col_".$col_n );
-		$tr->appendChild( $td );	
+		while( $cols > 1 && $col_n < $cols )
+		{
+			++$col_n;
+			my $td = $repo->make_element( "div", class=>"ep_view_col ep_view_col_".$col_n );
+			$tr->appendChild( $td );	
+		}
 	}
 
 	return $f;

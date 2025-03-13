@@ -1055,8 +1055,11 @@ sub commit
 		changed => $self->{changed},
 	);
 
-	# clear changed fields
-	$self->clear_changed();
+	# clear changed fields unless dataobj needs to save a revision file and it must be responsible for clear_changed.
+	unless ( $self->can( 'save_revision' ) )
+	{
+		$self->clear_changed();
+	}
 
 	# clear citations unless this is a citation
 	$self->clear_citationcaches() if defined $self->{session}->config( "citation_caching", "enabled" ) && $self->{session}->config( "citation_caching", "enabled" ) && $self->{dataset}->confid ne "citationcache";

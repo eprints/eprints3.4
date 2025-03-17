@@ -81,22 +81,16 @@ sub authenticate
                 return \%response;
         }
 
-        my $username;
-        my $password;
+	my ( $username, $password ) = split /:/, $authorization, 2;
 
-	if($decode_authen =~ /^(\w+)\:(\w+)$/)
-        {
-                $username = $1;
-                $password = $2;
-        }
-        else
+	if( !defined $username || !defined $password )
         {
                 $response{error} = {
                                         status_code => 401,
                                         x_error_code => "ErrorAuth",
                                         error_href => "http://eprints.org/sword/error/ErrorAuth",
                                    };
-                $response{verbose_desc} .= "[ERROR] Authentication failed (invalid base64 encoding).\n";
+                $response{verbose_desc} .= "[ERROR] Authentication failed (username or password not sent).\n";
                 return \%response;
         }
 

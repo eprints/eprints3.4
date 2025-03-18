@@ -243,8 +243,6 @@ sub create_from_data
 
 	$self->set_value( "fileinfo", $self->fileinfo );
 
-	$self->save_revision( action => "create" );
-
 	# we only need to update the DB and queue changes (if necessary)
 	$self->SUPER::commit();
 
@@ -619,6 +617,8 @@ sub update_triggers
 
 	if( $self->{non_volatile_change} )
 	{
+		# probably no longer needed as set in save_revision but might
+		# need to be set earlier for other uses.
 		$self->set_value( "lastmod", EPrints::Time::get_iso_timestamp() );
 
 		my $action = "clear_triples";
@@ -1102,16 +1102,6 @@ sub commit
 		$self->update_triggers(); # might cause a new revision
 	}
 
-	if( !$self->under_construction )
-	{
-		$self->remove_static;
-		# Create new revision if a non-volatile change to eprint or sub-object (e.g. document).
-		if( $self->{non_volatile_change} || $force == 2 ) 
-		{
-			$self->save_revision;
-		}
-	}
-
 	my( $succeeds_old, $succeeds_new );
 	if( exists $self->{changed}->{succeeds} )
 	{
@@ -1119,8 +1109,14 @@ sub commit
 		$succeeds_new = $self->{session}->eprint( $self->value( "succeeds" ) );
 	}
 
-	# commit changes and clear changed fields
+	# commit changes, save revision and clear changed fields
 	my $success = $self->SUPER::commit( $force );
+
+	# cannot save new revision until DataObj's EP_TRIGGER_BEFORE_COMMIT triggers have ben run by SUPER::commit
+	if( !$self->under_construction )
+	{
+		$self->remove_static;
+	}
 
 	my $succeeds = $self->{dataset}->field( "succeeds" );
 	$succeeds_old->removed_from_thread( $succeeds, $self )
@@ -1162,8 +1158,10 @@ sub save_revision
 	my $userid = defined $user ? $user->id : undef;
 
 	my $rev_number = $self->value( "rev_number" ) || 0;
+	$action = "create" if $rev_number == 0;
 	++$rev_number;
 	$self->set_value( "rev_number", $rev_number );
+	$self->set_value( "lastmod", EPrints::Time::get_iso_timestamp() );
 
 	my $event = $repo->dataset( "history" )->create_dataobj( 
 		{

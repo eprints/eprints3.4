@@ -57,7 +57,7 @@ sub sql_row_from_value
 {
     my( $self, $session, $value ) = @_;
 
-    if ( $value > 2**63-1 || $value < -2**63 ) # Make sure value is within 64-bit signed int
+    if ( defined $value && ( $value > 2**63-1 || $value < -2**63 ) ) # Make sure value is within 64-bit signed int
     {
         $value = undef;
         $session->log( "WARNING: Value for field '".$self->name."' was unset as it cannot be stored as a 64-bit signed integer." );

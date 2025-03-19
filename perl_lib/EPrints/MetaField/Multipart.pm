@@ -202,7 +202,7 @@ sub get_value_label
 
 sub ordervalue_basic
 {
-	my( $self , $value ) = @_;
+	my( $self, $value, $session, $langid ) = @_;
 
 	if( ref($value) ne "HASH" ) {
 		EPrints::abort( "ordervalue_basic called on something other than a hash: $value" );
@@ -211,7 +211,7 @@ sub ordervalue_basic
 	my @ov;
 	foreach( @{$self->{fields_cache}} )
 	{
-		push @ov, $_->ordervalue_basic( $value->{$_->property( "sub_name" )} );
+		push @ov, $_->ordervalue_basic( $value->{$_->property( "sub_name" )}, $session, $langid );
 	}
 
 	no warnings; # avoid undef warnings

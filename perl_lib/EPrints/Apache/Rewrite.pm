@@ -107,7 +107,7 @@ sub handler
 		{
 			if ( $uri =~ /^$restrict_path->{path}/ )
 			{
-				if ( defined $restrict_path->{not_ips} )
+				if ( defined $restrict_path->{not_ips}  && ref( $restrict_path->{not_ips} ) eq "ARRAY" )
 				{
 					my $ip_ok = 0;
 					foreach my $unrestrict_ip ( @{$restrict_path->{not_ips}} )
@@ -122,7 +122,7 @@ sub handler
 					}
 					return FORBIDDEN unless $ip_ok;
 				}
-				else
+				elsif ( defined $restrict_path->{ips} && ref( $restrict_path->{ips} ) eq "ARRAY" )
 				{
 					foreach my $restrict_ip ( @{$restrict_path->{ips}} )
 					{

@@ -102,20 +102,40 @@ sub handler
 	{
 		my $restrict_paths = $repository->get_conf( 'restrict_paths' );
 		my $ip = $repository->remote_ip;
+		my $ip_ok = 0;
 		foreach my $restrict_path ( @$restrict_paths )
 		{
 			if ( $uri =~ /^$restrict_path->{path}/ )
 			{
-				foreach my $restrict_ip ( @{$restrict_path->{ips}} )
+				if ( defined $restrict_path->{not_ips} )
 				{
-					$restrict_ip =~ s/\./\\./g;
-					$restrict_ip .= '$' if substr( $restrict_ip, -1 ) ne '.'; # avoid blocking 1.2.3.40 when blocking 1.2.3.4.
-					if ( $ip =~ /^$restrict_ip/ )
+					my $ip_ok = 0;
+					foreach my $unrestrict_ip ( @{$restrict_path->{not_ips}} )
 					{
-						return FORBIDDEN;
+						$unrestrict_ip =~ s/\./\\./g;
+						$unrestrict_ip .= '$' if substr( $unrestrict_ip, -1 ) ne '.'; # avoid allowing 1.2.3.40 when allowing 1.2.3.4.
+						if ( $ip =~ /^$unrestrict_ip/ )
+						{
+							$ip_ok = 1;
+							last;
+						}
+					}
+					return FORBIDDEN unless $ip_ok;
+				}
+				else
+				{
+					foreach my $restrict_ip ( @{$restrict_path->{ips}} )
+					{
+						$restrict_ip =~ s/\./\\./g;
+						$restrict_ip .= '$' if substr( $restrict_ip, -1 ) ne '.'; # avoid blocking 1.2.3.40 when blocking 1.2.3.4.
+						if ( $ip =~ /^$restrict_ip/ )
+						{
+							return FORBIDDEN;
+						}
 					}
 				}
 			}
+			last if $ip_ok;
 		}
 	}
 

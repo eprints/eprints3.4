@@ -130,8 +130,15 @@ $c->add_trigger( EP_TRIGGER_MEDIA_INFO, sub {
 		}
 		if( $type eq "video" && ( !defined $media->{video_codec} || ( $media->{width} < $stream->{width} && $media->{height} < $stream->{height} ) ) )
 		{
-			$media->{width} = $stream->{width};
-			$media->{height} = $stream->{height};
+			my $stream_width = $stream->{width};
+			my $stream_height = $stream->{height};
+			if( $stream->{rotation} =~ m/90/){
+				#video is rotated 90deg
+				$stream_width = $stream->{height};
+				$stream_height = $stream->{width};
+			}
+			$media->{width} = $stream_width;
+			$media->{height} = $stream_height;
 			$media->{video_codec} = $stream->{codec_name};
 			$media->{aspect_ratio} = $stream->{display_aspect_ratio};
 		}

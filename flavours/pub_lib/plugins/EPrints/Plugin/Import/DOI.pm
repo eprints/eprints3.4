@@ -178,7 +178,6 @@ sub input_text_fh
 			}
 			elsif ( $name eq "journal_article" || $name eq "conference_paper" || $name eq "book_metadata" )
 			{
-				$data->{type} = "book_section" if $name eq "content_item" && $data->{type} eq "book";
 				$plugin->item_metadata( $data, $node );
 			}
 			elsif ( $name eq "content_item" )
@@ -340,11 +339,11 @@ sub content_item
 	{
 		$data->{type} = "book_section";
 		$data->{volume_title} = $data->{title};
-                if( defined( $data->{subtitle} ) )
-                {
-                        $data->{volume_title} .= ": ".$data->{subtitle};
-                        $data->{subtitle} = undef;
-                }
+		if ( defined( $data->{subtitle} ) )
+		{
+			$data->{volume_title} .= ": ".$data->{subtitle};
+			$data->{subtitle} = undef;
+		}
 	}
 	$plugin->item_metadata( $data, $node );	
 }

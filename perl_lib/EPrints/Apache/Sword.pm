@@ -81,7 +81,7 @@ sub authenticate
                 return \%response;
         }
 
-	my ( $username, $password ) = split /:/, $authorization, 2;
+	my ( $username, $password ) = split /:/, $decode_authen, 2;
 
 	if( !defined $username || !defined $password )
         {

@@ -813,6 +813,9 @@ sub remove
 
 	$self->queue_removed;
 
+	# clean-up citation cache for this item
+	$self->clear_citationcaches() if defined $self->{session}->config( "citation_caching", "enabled" ) && $self->{session}->config( "citation_caching", "enabled" ) && $self->{dataset}->confid ne "citationcache";
+
 	return $self->{session}->get_database->remove(
 		$self->{dataset},
 		$self->get_id );

@@ -52,6 +52,10 @@ The style of citation for a particular item. Each data object may
 have many different citation styles and defined appropriate data 
 object's sub-directory of the citations configuration directory.
 
+=item context (longtext)
+
+The C<%params> of the citation serialized using C<Storable::nfreeze>.
+
 =item citation_text (text)
 
 The actually text generated for the citation cache by 
@@ -153,8 +157,10 @@ sub get_system_field_info
 		{ name=>"objectid", type=>"int", }, 
 
 		{ name=>"style", type=>"text", sql_index => 1 },
+
+		{ name=>"context", type=>"longtext", sql_index => 1 },
  
-                { name=>"citation_text", type=>"longtext", text_index=>0, },
+		{ name=>"citation_text", type=>"longtext", text_index=>0, },
 
 		{ name=>"timestamp", type=>"timestamp", }, 
 

@@ -96,6 +96,7 @@ on the data object whilst set.
 package EPrints::DataObj;
 
 use MIME::Base64 ();
+use Storable qw( nfreeze );
 
 use strict;
 
@@ -1554,6 +1555,16 @@ sub render_citation
 		$style = 'default';
 	}
 
+	# Ensure params are always in the same order before generating context
+	my @pkeys = sort keys(%params);
+	my @pvals = @params{@pkeys};
+	my @parr = ( @pkeys, @pvals );
+
+	# Make into storable context string for the database.
+	my $context =  MIME::Base64::encode_base64( nfreeze( \@parr ) );
+	# Remove any new lines that will break search of existing citation cache with same context
+	$context =~ s/\n//g;
+
 	my $citation = $self->{dataset}->citation( $style );
 
 	# no citation style available, not even "default"
@@ -1599,6 +1610,11 @@ sub render_citation
 		$searchexp->add_field (
 			fields => [ $cc_ds->get_field( 'style' ) ],
 			value => $style,
+			match => "EQ"
+		);
+		$searchexp->add_field (
+			fields => [ $cc_ds->get_field( 'context' ) ],
+			value => $context,
 			match => "EQ"
 		);
 		my $citation_caches = $searchexp->perform_search;
@@ -1653,6 +1669,7 @@ sub render_citation
 		$citation_dataobj->set_value( 'datasetid', $self->{dataset}->confid );
 		$citation_dataobj->set_value( 'objectid', $self->id );
 		$citation_dataobj->set_value( 'style', $style );
+		$citation_dataobj->set_value( 'context', $context );
 		$citation_dataobj->set_value( 'citation_text', $self->{session}->xml->to_string( $citation_htmlobj ) );
 		$citation_dataobj->set_value( 'timestamp', EPrints::Time::get_iso_timestamp() );
 

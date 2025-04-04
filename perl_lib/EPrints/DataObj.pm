@@ -1048,6 +1048,12 @@ sub commit
 		return 0;
 	}
 
+	# Save a revision file if possible
+	if ( $self->can( 'save_revision' ) && ( $self->{non_volatile_change} || $force == 2 ) ) 
+	{
+		$self->save_revision if $self->can( 'save_revision' );
+	}
+
 	# Queue changes for the indexer (if indexable)
 	$self->queue_changes();
 
@@ -1056,7 +1062,6 @@ sub commit
 		changed => $self->{changed},
 	);
 
-	# clear changed fields
 	$self->clear_changed();
 
 	# clear citations unless this is a citation

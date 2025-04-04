@@ -135,7 +135,7 @@ sub render_value_actual
 			)
 			{
 				my $field = $self->{dataset}->get_field( $fieldname );
-				my $th = $session->make_element( "div", class=>"ep_compound_header_cell", "data-row-cell-index"=>$index );
+				my $th = $session->make_element( "div", class=>"ep_compound_header_cell", "data-row-cell-index"=>$index++ );
 				$tr->appendChild( $th );
 				$th->appendChild( $field->render_name( $session ) );
 			}

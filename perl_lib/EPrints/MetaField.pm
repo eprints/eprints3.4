@@ -2589,6 +2589,7 @@ sub get_property_defaults
 		sub_name	=> EP_PROPERTY_UNDEF,
 		parent_name	=> EP_PROPERTY_UNDEF,
 		parent		=> EP_PROPERTY_UNDEF,
+		action		=> EP_PROPERTY_UNDEF,
 		volatile	=> EP_PROPERTY_FALSE,
 		virtual		=> EP_PROPERTY_FALSE,
 		default_value => EP_PROPERTY_UNDEF,

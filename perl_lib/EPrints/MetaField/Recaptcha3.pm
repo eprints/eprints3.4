@@ -57,10 +57,11 @@ sub is_virtual { 1 }
 
 sub get_property_defaults
 {
-        my( $self ) = @_;
-        my %defaults = $self->SUPER::get_property_defaults;
+	my( $self ) = @_;
+	my %defaults = $self->SUPER::get_property_defaults;
+	$defaults{action} = "request";
 
-        return %defaults;
+	return %defaults;
 }
 
 sub render_input_field_actual
@@ -90,12 +91,19 @@ sub render_input_field_actual
 		name => "g-recaptcha-response",
 	) );
 
+	my $action_name =  "_action_" . $self->get_property( "action" );
+	$frag->appendChild( $session->make_element( "input",
+		type => "hidden",
+		name => $action_name,
+		value => "1",
+	) );
+
 	$frag->appendChild( $session->make_javascript( <<EOJ ) );
 	function sleep(ms) {
 	    return new Promise(resolve => setTimeout(resolve, ms));
 	}
 	document.addEventListener("DOMContentLoaded", function(){
-		document.querySelector('.ep_form_action_button').addEventListener('click', e => {
+		document.querySelector('input[name="$action_name"][type="submit"]').addEventListener('click', e => {
 			e.preventDefault();
 			grecaptcha.ready(function() {
 				grecaptcha.execute('$public_key', {action: 'submit'}).then(function(token) {
@@ -225,7 +233,7 @@ sub validate
 
 =begin COPYRIGHT
 
-Copyright 2024 University of Southampton.
+Copyright 2025 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/

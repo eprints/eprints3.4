@@ -697,10 +697,13 @@ sub _get_records
 	else
 	{
 		# retrieve matches 1000 ids at a time
-		while((@ids % 1000) == 0)
+		my $num_results = -1;
+		while( $num_results != scalar @ids )
 		{
+			$num_results = scalar @ids;
 			push @ids, grep { length($_) } map { $_->get_document->get_data } $self->{enq}->matches( $offset, 1000 );
 			$offset += 1000;
+
 		}
 	}
 

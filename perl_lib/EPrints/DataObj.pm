@@ -813,6 +813,9 @@ sub remove
 
 	$self->queue_removed;
 
+	# clean-up citation cache for this item
+	$self->clear_citationcaches() if defined $self->{session}->config( "citation_caching", "enabled" ) && $self->{session}->config( "citation_caching", "enabled" ) && $self->{dataset}->confid ne "citationcache";
+
 	return $self->{session}->get_database->remove(
 		$self->{dataset},
 		$self->get_id );
@@ -1585,7 +1588,7 @@ sub render_citation
 	my $citation_caching_enabled = 0;
 	if ( !defined $params{no_cache} || !$params{no_cache} )
 	{
-		my @excluded_dataobjs = ( 'epm', 'loginticket', 'subject' );
+		my @excluded_dataobjs = ( 'epm', 'eventqueue', 'loginticket', 'subject' );
 		my @excluded_styles = ( 'result' );
 		@excluded_dataobjs = @{$self->{session}->config( "citation_caching", "excluded_dataobjs" )} if defined $self->{session}->config( "citation_caching", "excluded_dataobjs" );
 		@excluded_styles = @{$self->{session}->config( "citation_caching", "excluded_styles" )} if defined $self->{session}->config( "citation_caching", "excluded_styles" );

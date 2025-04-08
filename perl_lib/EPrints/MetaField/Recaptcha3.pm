@@ -59,7 +59,6 @@ sub get_property_defaults
 {
 	my( $self ) = @_;
 	my %defaults = $self->SUPER::get_property_defaults;
-	$defaults{action} = "request";
 
 	return %defaults;
 }
@@ -91,19 +90,12 @@ sub render_input_field_actual
 		name => "g-recaptcha-response",
 	) );
 
-	my $action_name =  "_action_" . $self->get_property( "action" );
-	$frag->appendChild( $session->make_element( "input",
-		type => "hidden",
-		name => $action_name,
-		value => "1",
-	) );
-
 	$frag->appendChild( $session->make_javascript( <<EOJ ) );
 	function sleep(ms) {
 	    return new Promise(resolve => setTimeout(resolve, ms));
 	}
 	document.addEventListener("DOMContentLoaded", function(){
-		document.querySelector('input[name="$action_name"][type="submit"]').addEventListener('click', e => {
+		document.querySelector('#g-recaptcha-response').form.querySelector( 'input[type="submit"]' ).addEventListener('click', e => {
 			e.preventDefault();
 			grecaptcha.ready(function() {
 				grecaptcha.execute('$public_key', {action: 'submit'}).then(function(token) {

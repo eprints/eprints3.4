@@ -165,6 +165,10 @@ Only group-by on the first value in a multiple field.
 
 Hide the jump-to links, render just the links or render as a phrase ('Update/Views:jump_to').
 
+=item number
+
+Treat the field as a number even if the field is actually a string. Useful for ordering by volume, number, etc.
+
 =item tags
 
 Treat the field value as a comma or semi-colon separated list of values.
@@ -1957,7 +1961,11 @@ sub group_items
 	my $data = [];
 	my @codes = keys %$code_to_list;
 
-	if( $opts->{"string"} )
+	if ( $opts->{"number"} )
+	{
+		@codes = sort { $a <=> $b } @codes;
+	}
+	elsif( $opts->{"string"} )
 	{
 		@codes = sort @codes;
 	}

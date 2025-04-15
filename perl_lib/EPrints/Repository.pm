@@ -443,35 +443,10 @@ sub remote_ip
 
 	return if !$r;
 
-	# Proxy has set the "X-Forwarded-For" HTTP header?
-	my $ip = $r->headers_in->{"X-Forwarded-For"};
-
-	# Sanitise and clean up $ip from XFF, if any.
-	if( EPrints::Utils::is_set( $ip ) )
-	{
-		# sanitise: remove lead commas and all whitespace
-		$ip =~ s/^\s*,+|\s+//g;
-		# slice: take only first address from the list
-		$ip =~ s/,.*//;
-		if ( $ip !~ m/$EPrints::Utils::REGEXP_IP/ )
-		{
-			$ip = undef;
-		}
-		elsif ( EPrints::Utils::is_set( $self->config( 'ignore_x_forwarded_for_private_ip_prefixes' ) ) )
-		{
-			for my $ip_regex ( @{ $self->config( 'ignore_x_forwarded_for_private_ip_prefixes' ) } )
-			{
-				if ( $ip =~ m/^$ip_regex/ )
-				{
-					$ip = undef;
-					last;
-				}
-			}
-		}
-	}
+	my $ip;
 
 	# Apache v2.4+ (http://httpd.apache.org/docs/trunk/developer/new_api_2_4.html)
-	if( !EPrints::Utils::is_set( $ip ) && $r->can( "useragent_ip" ) )
+	if( $r->can( "useragent_ip" ) )
 	{
 		$ip = $r->useragent_ip;
 	}
@@ -485,6 +460,52 @@ sub remote_ip
 	{
 		$ip = $r->connection->remote_ip;
 	}
+
+	# Proxy has set the "X-Forwarded-For" HTTP header?
+	my $xff_ips = $r->headers_in->{"X-Forwarded-For"};
+
+	# Sanitise and clean up $ip from XFF, if any.
+	if( EPrints::Utils::is_set( $xff_ips ) )
+	{
+		# sanitise: remove lead commas and all whitespace
+		$xff_ips =~ s/^\s*,+|\s+//g;
+
+		# Track back through the X-Forwarded-For IP to the purported client IP.
+		foreach my $xff_ip ( reverse( split( ',', $xff_ips ) ) )
+		{
+			my $xff_ip_subnet;
+			my $ip_subnet;
+
+			if ( $xff_ip =~ m/$EPrints::Utils::REGEXP_IPV4/ )
+			{
+				# Calculate /16 IPv4 subnets
+				$xff_ip_subnet = join( '.', (split( /\./, $xff_ip))[0..1]) . '.';
+				$ip_subnet = join( '.', (split(/\./, $ip))[0..1]) . '.';
+			}
+			elsif ( $xff_ip =~ m/$EPrints::Utils::REGEXP_IPV6/ )
+			{
+				# Calculate /48 IPv6 subnets
+				$xff_ip_subnet = join( ':', (split(/:/, $xff_ip))[0..2]) . ':';
+				$ip_subnet = join( ':', (split(/:/, $ip))[0..2]) . ':';
+			}
+			else
+			{
+				return $ip;
+			}
+
+			# If X-Forwarded-For IP could have a subnet calculated and it matches
+			# the current accepted IP subnet then update IP to the latest XFF IP.
+			if ( $xff_ip_subnet && $xff_ip_subnet eq $ip_subnet )
+			{
+				$ip = $xff_ip;
+			}
+			else
+			{
+				return $ip;
+			}
+		}
+	}
+
 	return $ip;
 }
 

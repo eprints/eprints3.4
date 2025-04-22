@@ -132,7 +132,7 @@ $c->add_trigger( EP_TRIGGER_MEDIA_INFO, sub {
 		{
 			my $stream_width = $stream->{width};
 			my $stream_height = $stream->{height};
-			if( $stream->{rotation} =~ m/90/){
+			if( $stream->{rotation} =~ m/^-?(90|270)$/){
 				#video is rotated 90deg
 				$stream_width = $stream->{height};
 				$stream_height = $stream->{width};

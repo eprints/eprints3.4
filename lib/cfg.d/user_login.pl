@@ -32,10 +32,15 @@ $c->{check_user_password} = sub {
 # restrict access to view pages
 # $c->{login_required_for_views}->{enable} = 1;
 
+# restrict access to static pages
+# $c->{login_required_for_static}->{enable} = 1;
+# still allow access to homepage
+# $c->{login_required_for_static}->{exceptions} = [ "/" ];
+
 # restrict access to cgi pages
 # $c->{login_required_for_cgi}->{enable} = 1;
 # can't restrict access to the login cgi page
-# $c->{login_required_for_cgi}->{exceptions} = [ "users/login", "handle_404" ];
+# $c->{login_required_for_cgi}->{exceptions} = [ "users/login" ];
 
 # login page to redirct users to
 # $c->{login_required_url} = "/cgi/users/login";

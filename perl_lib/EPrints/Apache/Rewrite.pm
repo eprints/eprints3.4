@@ -220,9 +220,6 @@ sub handler
 		{
 			my $v = $repository->get_conf( "login_required_for_cgi", "enable" );
 
-			# print STDERR "** CGI ** no current user ($v) '$uri'\n" unless $user;
-			# print STDERR "** CGI ** current user is " . $user->get_value("username") . "\n" if $user;
-
 			if( !$user && $v && $v eq "1" )
 			{
 				my $exceptions = $repository->get_conf( "login_required_for_cgi", "exceptions" );
@@ -237,7 +234,7 @@ sub handler
 
 				if( $exception_found == 0)
 				{
-					my $redir_url = "${login_url}?target=${cgipath}${uri}";
+					my $redir_url = "${login_url}?target=" . $repository->config( "perl_url" ) . $uri;
 					return redir( $r, $redir_url );
 				}
 			}
@@ -499,7 +496,7 @@ sub handler
 					my $v = $repository->get_conf( "login_required_for_eprints", "enable" );
 					if( !$user && defined $v && $v == 1 )
 					{
-						my $redir_url = "${login_url}?target=${uri}id/eprint/${eprintid}";
+						my $redir_url = "${login_url}?target=" . $repository->config( "base_url" ) . "id/eprint/${eprintid}";
 						return redir( $r, $redir_url );
 					}
 				}
@@ -668,12 +665,9 @@ sub handler
 			{
 				my $v = $repository->get_conf( "login_required_for_eprints", "enable" );
 
-				# print STDERR "** EPRINT ** no current user, uri is '$uri' args are '$args' eprintid is '$eprintid' ($v)\n" unless $user;
-				# print STDERR "** EPRINT ** current user is " . $user->get_value("username") . "\n" if $user;
-
 				if( !$user && defined $v && $v == 1 )
 				{
-					my $redir_url = "${login_url}?target=${uri}${eprintid}"; 
+					my $redir_url = "${login_url}?target=" . $repository->config( "base_url" ) . $eprintid;
 					return redir( $r, $redir_url );
 				}
 			}
@@ -834,12 +828,9 @@ sub handler
 		{
 			my $v = $repository->get_conf( "login_required_for_views", "enable" );
 
-			# print STDERR "** VIEW ** no current user ($v)\n" unless $user;
-			# print STDERR "** VIEW ** current user is " . $user->get_value("username") . "\n" if $user;
-
 			if( !$user && $v && $v eq "1" )
 			{
-				my $redir_url = "${login_url}?target=${urlpath}${uri}"; 
+				my $redir_url = "${login_url}?target=" . $repository->config( "base_url" ) . $uri;
 				return redir( $r, $redir_url );
 			}
 		}
@@ -884,6 +875,26 @@ sub handler
 	}
 	else
 	{
+		my $v = $repository->get_conf( "login_required_for_static", "enable" );
+		if( !$user && defined $v && $v == 1 )
+		{
+			my $exceptions = $repository->get_conf( "login_required_for_static", "exceptions" );
+			my $exception_found = 0;
+			if( $exceptions )
+			{
+				foreach my $e ( @$exceptions )
+				{
+					$exception_found = 1 if $uri =~ m|^$e$|;
+				}
+			}
+
+			if( $exception_found == 0)
+			{
+				my $redir_url = "${login_url}?target=" . $repository->config( "perl_url" ) . $uri;
+				return redir( $r, $redir_url );
+			}
+		}
+
 		# redirect /foo to /foo/ if foo is a static directory  #github:https://github.com/eprints/eprints/commit/834d56bc30679631349febe582195361301d8970
 		if( $localpath !~ m/\/$/ )
 		{

@@ -34,8 +34,8 @@ $c->{check_user_password} = sub {
 
 # restrict access to static pages
 # $c->{login_required_for_static}->{enable} = 1;
-# still allow access to homepage
-# $c->{login_required_for_static}->{exceptions} = [ "/" ];
+# still allow access to homepage and all resources the homepage requires when a vanilla installation
+# $c->{login_required_for_static}->{exceptions} = [ "/", "/favicon.ico", "/images/.*", "/style/images/.*" ];
 
 # restrict access to cgi pages
 # $c->{login_required_for_cgi}->{enable} = 1;

@@ -890,7 +890,7 @@ sub handler
 
 			if( $exception_found == 0)
 			{
-				my $redir_url = "${login_url}?target=" . $repository->config( "perl_url" ) . $uri;
+				my $redir_url = "${login_url}?target=" . $repository->config( "base_url" ) . $uri;
 				return redir( $r, $redir_url );
 			}
 		}

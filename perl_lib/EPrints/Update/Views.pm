@@ -115,6 +115,12 @@ Don't show a link to this view from the /view/ page.
 
 =item reverse_order = 0
 
+=item sort_order = sub { ... }
+
+Allows the default ordering (from EPrints::Metafield) to be replaced with a custom order. This
+may be useful for numbers-stored-as-text. The sub should return an array ref. See the 'journal_volume'
+example in lib/defaultcfg_zero/cfg.d/views.pl.
+
 =item mode = "default"
 
 Use "sections" to cause the menu to be broken into sections.
@@ -424,8 +430,15 @@ sub update_view_menu
 	# translate ids to values
 	my @values = map { $menu_fields->[0]->get_value_from_id( $repo, $_ ) } keys %$sizes;
 
-	# OK now we have a sorted list of values....
-	@values = @{$menu_fields->[0]->sort_values( $repo, \@values, $langid )};
+	# OK now we want to sort the list of values....
+	if( defined $menu->{sort_order} )
+	{
+		@values = @{ &{$menu->{sort_order}}( $repo, \@values, $langid ) };
+	}
+	else
+	{
+		@values = @{$menu_fields->[0]->sort_values( $repo, \@values, $langid )};
+	}
 
 	if( $menu->{reverse_order} )
 	{

@@ -98,7 +98,27 @@ $c->{browse_views} = [
 # Browse by the type of eprint (poster, report etc).
 #{ id=>"type", menus=>[ { fields=>"type" } ], order=>"-date" }
 
-
+# Use a default sort order e.g. for number stored in text fields
+#	{
+#		id => "journal_volume",
+#		menus => [
+#			{
+#				fields => [ "publication" ],  # First level: Journals
+#				hideempty => 1,  # Hide journals with no articles
+#			},
+#			{
+#				fields => [ "volume" ],
+#				hideempty => 1,
+#				sort_order => sub {
+#					my( $repo, $values, $lang ) = @_;
+#					my @sorted_values = sort { $a <=> $b } @$values; ## Use numeric sorting method
+#
+#					return \@sorted_values;
+#				},
+#			},
+#		],
+#		order => "-date/title",
+#	},
 
 
 

@@ -166,7 +166,7 @@ sub perform_search
 	my $session = $self->{session};
 
 	# Make sure you have the search order now as reorder expensive when many items
-	$sort_order = $search->{order};
+	my $sort_order = $search->{order};
 	$sort_order = $session->param( "_buffer_order" ) unless $sort_order;
 	unless ( $sort_order )
 	{

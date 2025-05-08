@@ -166,7 +166,7 @@ sub perform_search
 	my $session = $self->{session};
 
 	# Make sure you have the search order now as reorder expensive when many items
-	my $sort_order = $search->{order};
+	$sort_order = $search->{order};
 	$sort_order = $session->param( "_buffer_order" ) unless $sort_order;
 	unless ( $sort_order )
 	{
@@ -180,7 +180,8 @@ sub perform_search
 			$sort_order = $field->should_reverse_order ? "-$sort_col" : $sort_col;
 			last;
 		}
-	}	
+	}
+ 	$self->{sort_order} = $sort_order;
 
 	my $list = $self->{session}->current_user->owned_eprints_list( %$search,
 		custom_order => $sort_order,
@@ -388,6 +389,7 @@ sub render_items
 			screen => "Items",
 		},
 		columns => [@{$columns}, undef ],
+  		custom_order => $self->{sort_order}, # Prevents a potentially very expensive reorder
 		above_results => $filter_div,
 		render_result => sub {
 			my( $session, $e, $info ) = @_;
@@ -434,9 +436,7 @@ sub render_items
 		},
 		rows_after => $final_row,
 	);
-	
-	# Let Paginate know if the list is already ordered, save re-ordering.
-	$opts{custom_order} = $list->{order} if $list->{order};
+
 	$chunk->appendChild( EPrints::Paginate::Columns->paginate_list( $session, "_buffer", $list, %opts ) );
 
 	# Add form

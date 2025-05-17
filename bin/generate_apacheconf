@@ -364,18 +364,6 @@ foreach my $repository ( values %reps )
 			print "Wrote $apache_ssl_conf\n" if( $noise >= 1 );
 			$restart_required = 1;
 		}
-
-		foreach my $langid (@{$repository->config( "languages" )})
-		{
-			my $secure_template = "$cfg_path/lang/$langid/templates/secure.xml";
-			my $default_template = "$cfg_path/lang/$langid/templates/default.xml";
-
-			if( !-e $secure_template && -e $default_template )
-			{
-				EPrints::Utils::copy( $default_template, $secure_template );
-				print "Copied default template to secure template, you will probably need to edit the secure template:\n$secure_template\n";
-			}
-		}
 	}
 
 	my $js = "max_size = " . $repository->get_conf( 'max_upload_filesize' ) . ";";

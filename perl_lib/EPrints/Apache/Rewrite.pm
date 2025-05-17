@@ -112,9 +112,10 @@ sub handler
 					my $ip_ok = 0;
 					foreach my $unrestrict_ip ( @{$restrict_path->{not_ips}} )
 					{
-						$unrestrict_ip =~ s/\./\\./g;
-						$unrestrict_ip .= '$' if substr( $unrestrict_ip, -1 ) ne '.'; # avoid allowing 1.2.3.40 when allowing 1.2.3.4.
-						if ( $ip =~ /^$unrestrict_ip/ )
+						my $unres_ip = $unrestrict_ip;
+						$unres_ip =~ s/\./\\./g;
+						$unres_ip .= '$' if substr( $unres_ip, -1 ) ne '.' && substr( $unres_ip, -1 ) ne ':'; # avoid allowing 1.2.3.40 when allowing 1.2.3.4 but without preventing IPv6 subnets for being specified.
+						if ( $ip =~ /^$unres_ip/ )
 						{
 							$ip_ok = 1;
 							last;
@@ -126,9 +127,10 @@ sub handler
 				{
 					foreach my $restrict_ip ( @{$restrict_path->{ips}} )
 					{
-						$restrict_ip =~ s/\./\\./g;
-						$restrict_ip .= '$' if substr( $restrict_ip, -1 ) ne '.'; # avoid blocking 1.2.3.40 when blocking 1.2.3.4.
-						if ( $ip =~ /^$restrict_ip/ )
+						my $res_ip = $restrict_ip;
+						$res_ip =~ s/\./\\./g;
+						$res_ip .= '$' if substr( $res_ip, -1 ) ne '.' && substr( $res_ip, -1 ) ne ':'; # avoid blocking 1.2.3.40 when blocking 1.2.3.4 but without preventing IPv6 subnets for being specified. 
+						if ( $ip =~ /^$res_ip/ )
 						{
 							return FORBIDDEN;
 						}
@@ -848,12 +850,9 @@ sub handler
 
 		$r->filename( $filename );
 	}
-	elsif( $uri =~ m! ^$urlpath/javascript/(secure_)?auto(?:-\d+\.\d+\.\d+)?\.js$ !x )
+	elsif( $uri =~ m! ^$urlpath/javascript/auto(?:-\d+\.\d+\.\d+)?\.js$ !x )
 	{
-		my $f = $1 ?
-			\&EPrints::Update::Static::update_secure_auto_js :
-			\&EPrints::Update::Static::update_auto_js;
-		my $filename = &$f(
+		my $filename = EPrints::Update::Static::update_auto_js(
 			$repository,
 			$repository->config( "htdocs_path" )."/$lang",
 			[$repository->get_static_dirs( $lang )]

@@ -162,27 +162,6 @@ sub update_auto_css
 		);
 }
 
-sub update_secure_auto_js
-{
-	my( $session, $target_dir, $static_dirs ) = @_;
-
-	my @dirs = map { "$_/javascript/auto" } grep { defined } @$static_dirs;
-
-	my $js = "";
-	$js .= "var eprints_http_root = ".EPrints::Utils::js_string( $session->get_url( scheme => "https", host => 1, path => "static" ) ).";\n";
-	$js .= "var eprints_http_cgiroot = ".EPrints::Utils::js_string( $session->get_url( scheme => "https", host => 1, path => "cgi" ) ).";\n";
-	$js .= "var eprints_oai_archive_id = ".EPrints::Utils::js_string( EPrints::OpenArchives::archive_id( $session ) ).";\n";
-	$js .= "\n";
-
-	update_auto(
-			$session->get_repository,
-			"$target_dir/javascript/secure_auto.js",
-			"js",
-			\@dirs,
-			{ prefix => $js },
-		);
-}
-
 sub update_auto_js
 {
 	my( $session, $target_dir, $static_dirs ) = @_;

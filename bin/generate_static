@@ -202,13 +202,6 @@ foreach my $langid ( @{$session->config( "languages" )} )
 	my $fn;
 
 	# do the magic auto.js and auto.css
-	$fn = EPrints::Update::Static::update_secure_auto_js(
-			$session,
-			$base_target_dir,
-			\@static_dirs
-		);
-	$wrote_files->{$fn} = 1;
-
 	$fn = EPrints::Update::Static::update_auto_js(
 			$session,
 			$base_target_dir,

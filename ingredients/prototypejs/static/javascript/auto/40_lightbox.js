@@ -602,9 +602,6 @@ Lightbox.prototype = {
 		link.setAttribute( 'href', src );
 		link.setAttribute( 'style', 'display: block; width: ' + width + 'px; height: ' + height + 'px' );
 		html5.appendChild( link );
-		flowplayer( link, eprints_http_root + '/flowplayer-3.2.1.swf' );
-
-		//this.lightboxMovie.appendChild( video );
 		this.lightboxMovie.update( html5 );
 
 		this.resizeImageContainer(width, height);

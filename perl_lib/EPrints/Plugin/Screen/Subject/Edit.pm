@@ -420,7 +420,7 @@ sub action_create
 	$child = $subject_ds->create_dataobj( {
 		subjectid => $childid,
 		parents => [ $subject->id ],
-		depositable => 1 } );
+		depositable => "TRUE" } );
 
 	$self->{processor}->add_message( "message", $self->html_phrase( "added", newchild=>$child->render_value( "subjectid" ) ) );
 	$self->{processor}->{dataobj} = $child;

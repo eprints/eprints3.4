@@ -126,7 +126,7 @@ sub get_property_defaults
 	my( $self ) = @_;
 	my %defaults = $self->SUPER::get_property_defaults;
 	$defaults{input_rows} = $EPrints::MetaField::FROM_CONFIG;
-	$defaults{maxlength} = 65535;
+	$defaults{maxlength} = 2**31 - 1;
 	$defaults{sql_index} = 0;
 
 	return %defaults;

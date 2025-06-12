@@ -311,6 +311,7 @@ sub to_sax
 
 	for($self->property( "multiple" ) ? @$value : $value)
 	{
+		next if not defined $_;
 		next if(
 			$opts{hide_volatile} &&
 			$_->isa( "EPrints::DataObj::Document" ) &&

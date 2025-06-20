@@ -50,7 +50,7 @@ sub xml_dataobj
 
 	if ( defined $dataobj && defined $dataobj->{dataset} && $dataobj->{dataset}->has_citation( 'export' ) )
 	{
-		$p->appendChild( $dataobj->render_citation_link, 'export' );
+		$p->appendChild( $dataobj->render_citation_link( 'export' ) );
 	}
 	else
 	{

@@ -219,6 +219,7 @@ push @{$c->{fields}->{eprint}},
 				pub
 				author
 				org
+				place
 			)],
 		}
 	],

@@ -724,6 +724,19 @@ sub update_view_list
                         $PAGE->appendChild( $title_link ) if( defined $title_link );
                 }
 
+		my $custom_intro = undef;
+                if( $repo->can_call( 'get_custom_view_header' ) )
+                {
+                        #derive the path to send to the custom header
+                        my $path = join('', map { "/$_" } $view->escape_path_values( @$path_values ));
+                        $custom_intro = $repo->call('get_custom_view_header', $repo, $xml, $view->{id}, $path);
+                }
+
+		if( defined $custom_intro && $repo->config( 'get_custom_view_header_location' ) eq "before_nav" )
+                {
+                        $PAGE->appendChild( $custom_intro );
+                }
+
 		$PAGE->appendChild( $xml->clone( $navigation_aids ) );
 		
 		$PAGE = $PAGE->appendChild( $xml->create_element( "div",
@@ -733,12 +746,9 @@ sub update_view_list
 			class => "ep_view_page ep_view_page_view_$view->{id}"
 		) );
 
-		if( $repo->can_call( 'get_custom_view_header' ) )
+		if( defined $custom_intro && ( ! $repo->config( 'get_custom_view_header_location' ) || $repo->config( 'get_custom_view_header_location' ) eq "after_nav" ) )
                 {
-                        #derive the path to send to the custom header
-                	my $path = join('', map { "/$_" } $view->escape_path_values( @$path_values ));
-                        my $intro = $repo->call('get_custom_view_header', $repo, $xml, $view->{id}, $path);
-                        $PAGE->appendChild( $intro ) unless !defined $intro;
+                        $PAGE->appendChild( $custom_intro );
                 }
 
 		# Render links to alternate groupings

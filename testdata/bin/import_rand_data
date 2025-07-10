@@ -55,7 +55,6 @@ use Text::Lorem;
 
 use strict;
 use utf8;
-use encoding "utf8";
 
 my $version = 0;
 my $verbose = 0;

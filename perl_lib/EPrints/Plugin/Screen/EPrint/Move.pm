@@ -27,7 +27,7 @@ sub new
 { place => "eprint_editor_actions", 	action => "move_deletion", 	position => 700, },
 { place => "eprint_actions_bar_buffer", action => "move_archive", position => 100, },
 { place => "eprint_actions_bar_archive", action => "move_buffer", position => 100, },
-{ place => "eprint_actions_bar_archive", action => "move_deletion", position => 100, },
+{ place => "eprint_actions_bar_archive", action => "move_deletion", position => 110, },
 { place => "eprint_actions_bar_deletion", action => "move_archive", position => 100, },
 { place => "eprint_review_actions", action => "move_archive", position => 200, },
 	];

@@ -497,6 +497,17 @@ sub from
 		if( my $id = $session->param( "cache" ) )
 		{
 			$ok = $searchexp->from_cache( $id );
+			# cache included in URL but cache no longer exists
+			if( !$ok && $self->{session}->config( 'cache_not_found_no_search' ) )
+			{
+				$self->{processor}->{search_subscreen} = "cache_not_found";
+				$self->{processor}->add_message( "warning",
+					$self->{session}->html_phrase( "lib/searchexpression:cache_not_found_warning",
+						#TODO validate cache param if it's included in phrase. Currently numeric, but a validate_cache_param method might be prudent.
+						cacheid => $self->{session}->make_text( $id ) ),
+				);
+				return;
+			}
 		}
 		if( !$ok && (my $exp = $session->param( "exp" )) )
 		{

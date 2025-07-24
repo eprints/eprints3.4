@@ -60,6 +60,12 @@ $c->{cache_maxlife} = 12;
 # Maximum number of persistent cache tables to allow
 $c->{cache_max} = 100;
 
+# If a search request contains a 'cache' param referencing a cache that
+# does not exist, by default EPrints will automatically re-run the search.
+#
+# Setting this config option to 1 will prevent the search being re-run,
+# and render an error message instead.
+# $c->{cache_not_found_no_search} = 1;
 
 ######################################################################
 # 

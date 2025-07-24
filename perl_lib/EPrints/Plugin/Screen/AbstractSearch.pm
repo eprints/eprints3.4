@@ -220,6 +220,20 @@ sub from
 		if( defined $id )
 		{
 			$loaded = $self->{processor}->{search}->from_cache( $id );
+
+			### cache included in URL, but cache no longer exists
+			if( !$loaded && $self->{session}->config( 'cache_not_found_no_search' ) )
+			{
+				$self->{processor}->{search_subscreen} = "cache_not_found";
+				$self->{processor}->add_message( "warning",
+					$self->{session}->html_phrase( "lib/searchexpression:cache_not_found_warning",
+						#TODO validate cache param if it's included in phrase. Currently numeric, but a validate_cache_param method might be prudent.
+						cacheid => $self->{session}->make_text( $id ) ),
+					),
+				);
+				return;
+			}
+
 		}
 	
 		if( !$loaded )
@@ -306,6 +320,10 @@ sub render
 	if( $subscreen eq "results" )
 	{
 		return $self->render_results;	
+	}
+	if( $subscreen eq "cache_not_found" )
+	{
+		return $self->render_cache_not_found;
 	}
 
 	$self->{processor}->add_message(
@@ -715,6 +733,49 @@ sub get_citation_id
 	my( $self ) = @_;
 
 	return $self->{processor}->{sconf}->{citation} || "default";
+}
+
+sub render_cache_not_found
+{
+	my( $self ) = @_;
+
+	my $div = $self->{session}->make_element( "div", class=>"ep_cache_not_found" );
+
+	# rebuild cache search, but don't execute it
+	my $exp = $self->{session}->param( "exp" );
+
+	if( !defined $exp )
+	{
+		# without the $exp, we can't recreate the search.
+		$div->appendChild( $self->{session}->html_phrase( "lib/searchexpression:cache_not_found_no_exp" ) );
+		
+		return $div;
+	}
+
+	if( defined $exp )
+	{
+		#this parses $exp and removes fields if they are no longer in the search config
+		$self->{processor}->{search}->from_string( $exp );
+	}
+
+	my $escexp = $self->{processor}->{search}->serialise;
+
+	my $url_no_cache = URI->new( $self->{session}->get_uri );
+	$url_no_cache->query_form(
+		exp => $escexp,
+		screen => $self->{processor}->{screenid},
+		dataset => $self->search_dataset->id,
+		order => $self->{processor}->{search}->{custom_order},
+		# TODO add action, or 'regen cache and link to old cache id' (if that's implemented)
+	);
+
+	$div->appendChild(
+		$self->{session}->html_phrase( "lib/searchexpression:cache_not_found",
+			url => $self->{session}->make_text( "$url_no_cache" ), #quotes to force stringification
+		)
+	);
+
+	return $div;
 }
 
 sub render_search_form

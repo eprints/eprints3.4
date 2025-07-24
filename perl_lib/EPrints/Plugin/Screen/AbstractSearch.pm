@@ -228,14 +228,14 @@ sub from
 				$self->{processor}->add_message( "warning",
 					$self->{session}->html_phrase( "lib/searchexpression:cache_not_found_warning",
 						#TODO validate cache param if it's included in phrase. Currently numeric, but a validate_cache_param method might be prudent.
-						cacheid => $self->{session}->make_text( $id ) ),
+						cacheid => $self->{session}->make_text( $id ),
 					),
 				);
 				return;
 			}
 
 		}
-	
+
 		if( !$loaded )
 		{
 			my $exp = $self->{session}->param( "exp" );

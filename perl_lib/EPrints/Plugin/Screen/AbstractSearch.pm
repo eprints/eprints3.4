@@ -706,7 +706,7 @@ sub render_result_row
 	}
 
 	my $div = $session->make_element( "div", class=>"ep_search_result" );
-	$div->appendChild( $result->render_citation_link( "default" ) );
+	$div->appendChild( $result->render_citation_link( $self->get_citation_id ) );
 	return $div;
 }
 

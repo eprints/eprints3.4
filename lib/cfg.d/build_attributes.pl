@@ -44,6 +44,8 @@ $c->{build_node_attributes} = sub
 
 	my ($repo, $name, $node, @attrs) = @_;
 
+	return @attrs unless defined $repo->config( "config_attrs" );
+
 	my %attrs_in = @attrs;
 
 	sub resolve_value {
@@ -87,7 +89,21 @@ $c->{build_node_attributes} = sub
 		}
 	}
 
-	@attrs = %attrs_in;
+	# step through original array of keys/vals and
+	for( my $i = 0; $i < scalar @attrs; $i +=2 )
+	{
+		if( defined $attrs_in{$attrs[$i]} )
+		{
+			@attrs[$i+1] = $attrs_in{$attrs[$i]};
+			#remove element - so we can append any additional keys to the end below
+			delete $attrs_in{$attrs[$i]};
+		}
+	}
+	# add any remaining values, in a normalised order
+	for my $k ( sort keys %attrs_in )
+        {
+		push @attrs, $k, $attrs_in{$k};
+	}
 	return @attrs;
 };
 

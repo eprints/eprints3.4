@@ -309,7 +309,7 @@ containing the problems as XHTML DOM objects.
 
 sub from_form
 {
-	my( $self ) = @_;
+	my( $self, %opts ) = @_;
 
 	my( $value, $match, $merge, $problem) =
 		$self->{"field"}->from_search_form( 
@@ -320,7 +320,7 @@ sub from_form
 	{
 		$self->{value} = $value;
 	}
-	elsif( EPrints::Utils::is_set( $self->{default} ) )
+	elsif( EPrints::Utils::is_set( $self->{default} ) && $opts{action} ne "Search" ) # Only use default displaying form not when searching
 	{
 		$self->{value} = $self->{default};
 	}

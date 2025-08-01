@@ -60,9 +60,13 @@ sub from_form
 
 	my @problems;
 
+	# Check whether a search has made or just the search form is being loaded.
+	my %opts;
+	$opts{action} = defined $self->{session}->{query} && defined $self->{session}->{query}->{param} && $self->{session}->{query}->{param}->{_action_search} ? $self->{session}->{query}->{param}->{_action_search}->[0] : undef;
+
 	foreach my $sf ($self->get_non_filter_searchfields)
 	{
-		my $problem = $sf->from_form;
+		my $problem = $sf->from_form( %opts );
 		push @problems, $problem if defined $problem;
 	}
 

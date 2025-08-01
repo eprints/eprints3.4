@@ -26,12 +26,15 @@ sub new
 { place => "eprint_editor_actions", 	action => "move_buffer", 	position => 500, },
 { place => "eprint_editor_actions", 	action => "move_deletion", 	position => 700, },
 { place => "eprint_actions_bar_buffer", action => "move_archive", position => 100, },
+{ place => "eprint_actions_bar_buffer", action => "move_deletion", position => 110, },
 { place => "eprint_actions_bar_archive", action => "move_buffer", position => 100, },
 { place => "eprint_actions_bar_archive", action => "move_deletion", position => 110, },
-{ place => "eprint_actions_bar_deletion", action => "move_archive", position => 100, },
+{ place => "eprint_actions_bar_deletion", action => "move_buffer", position => 100, },
+{ place => "eprint_actions_bar_deletion", action => "move_archive", position => 110, },
 { place => "eprint_review_actions", action => "move_archive", position => 200, },
+{ place => "eprint_review_actions", action => "move_deletion", position => 600, },
 	];
-	$self->{action_icon} = { move_archive => "action_approve.png" };
+	$self->{action_icon} = { move_archive => "action_approve.png", move_deletion => "action_deprecate.png" };
 
 	return $self;
 }
@@ -118,6 +121,7 @@ sub allow_move_deletion
 	my( $self ) = @_;
 
 	return 0 unless $self->could_obtain_eprint_lock;
+	return 0 if ! $self->{processor}->{eprint}->get_value( 'datestamp' )  && $self->{processor}->{eprint}->get_value( 'eprint_status' ) eq "buffer"; # Allow once live items in the buffer to be retired without going via the live archive again.
 	return $self->allow( "eprint/move_deletion" );
 }
 sub action_move_deletion

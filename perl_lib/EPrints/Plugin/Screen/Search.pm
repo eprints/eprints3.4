@@ -154,7 +154,7 @@ sub render_result_row
 	my( $self, $session, $result, $searchexp, $n ) = @_;
 
 	my $staff = $self->{processor}->{sconf}->{staff};
-	my $citation = $self->{processor}->{sconf}->{citation};
+	my $citation = $self->get_citation_id;
 
 	#if we have a template, add it on the end of the item's url
 	my %params;

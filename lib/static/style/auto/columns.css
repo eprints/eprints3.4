@@ -44,6 +44,10 @@ td.ep_columns_no_items {
 	text-align: center;
 }
 
+.ep_columns_add select {
+	max-width: 95%;
+}
+
 .ep_columns_title_inner, .ep_columns_alter_inner {
 	display: table;
 	border-width: 0; 

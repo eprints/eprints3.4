@@ -1794,6 +1794,7 @@ sub get_describedby
 	return "" if defined $self->{show_help} && $self->{show_help} eq "never";
 	return "" if defined $self->{dataset} && !$self->repository->get_lang->has_non_empty_phrase( $self->{dataset}->confid . "_fieldhelp_" . $self->get_name );
 	return "" if defined $self->{parent} && !$self->repository->get_lang->has_non_empty_phrase( $self->{dataset}->confid . "_fieldhelp_" . $self->{parent}->get_name ); 
+	return "" if defined $self->{help_xhtml} && EPrints::Utils::tree_to_utf8( $self->{help_xhtml} ) eq "";
 
 	my $basename_top = $basename;
         $basename_top =~ s/_\d+_/_/ if $self->{multiple} || ( defined $self->{parent} && $self->{parent}->{multiple} );

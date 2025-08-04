@@ -2497,18 +2497,24 @@ sub has_relation
 ######################################################################
 =pod
 
-=item $list = $doc->search_related( [ $type ] )
+=item $list = $doc->search_related( [ $type, $order, $limit ] )
 
 Returns an L<EPrints::List> that contains all document data objects 
 related to this document data object. If C<$type> is defined return 
-only those document data object related by that type.
+only those document data object related by that type. If C<$order> is 
+defined then order based on that rather than C<docid>. If C<$limit> is
+limit the number of results to that number.
 
 =cut
 ######################################################################
 
 sub search_related
 {
-	my( $self, $type ) = @_;
+	my( $self, $type, $order, $limit ) = @_;
+
+	$order ||= "docid";
+	# The default limit just needs to be a big number, save having if/else for whether limit is set or not. 2^31-1 is as good a big number as any.
+	$limit ||= 2147483647;
 
 	if( $type )
 	{
@@ -2523,7 +2529,10 @@ sub search_related
 			},{
 				meta_fields => [qw( eprintid )],
 				value => $self->parent->id,
-			}]);
+			}],
+			custom_order => $order,
+			limit => $limit,
+		);
 	}
 	else
 	{
@@ -2535,7 +2544,10 @@ sub search_related
 			},{
 				meta_fields => [qw( eprintid )],
 				value => $self->parent->id,
-			}]);
+			}],
+			custom_order => $order,
+			limit => $limit,
+		);
 	}
 }
 

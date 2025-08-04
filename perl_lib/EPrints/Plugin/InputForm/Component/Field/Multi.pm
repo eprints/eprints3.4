@@ -191,6 +191,7 @@ sub render_content
 		{
 			$value = $self->{default};
 		}
+		$field->{show_help} = "never" if $self->{no_help};
 		$parts{field} = $field->render_input_field( 
 			$self->{session}, 
 			$value, 

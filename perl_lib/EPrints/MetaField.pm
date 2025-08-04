@@ -1791,6 +1791,7 @@ sub get_describedby
 {
 	my ( $self, $basename, $one_field_component ) = @_;
 
+	return "" if defined $self->{show_help} && $self->{show_help} eq "never";
 	return "" if defined $self->{dataset} && !$self->repository->get_lang->has_non_empty_phrase( $self->{dataset}->confid . "_fieldhelp_" . $self->get_name );
 	return "" if defined $self->{parent} && !$self->repository->get_lang->has_non_empty_phrase( $self->{dataset}->confid . "_fieldhelp_" . $self->{parent}->get_name ); 
 

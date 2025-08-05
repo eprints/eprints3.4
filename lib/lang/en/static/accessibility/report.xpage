@@ -125,6 +125,11 @@
     <td>None</td>
   </tr>
   <tr>
+	  <td><a href="{$config{rel_path}}/cgi/register"><epc:print expr="$config{rel_path}"/>/cgi/register</a></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;9&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;28</div></td>
+    <td>None</td>
+  </tr>
+  <tr>
     <td><a href="{$config{rel_path}}/cgi/latest"><epc:print expr="$config{rel_path}"/>/cgi/latest</a></td>
     <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;6&#160;|&#160;Structural&#160;Elements:&#160;9&#160;|&#160;ARIA:&#160;21</div></td>
     <td>Contains user-generated content.</td>

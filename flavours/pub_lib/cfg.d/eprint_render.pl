@@ -136,6 +136,7 @@ if(0){
 		$links->appendChild( $repository->plugin( "Export::Simple" )->dataobj_to_html_header( $eprint ) );
 		$links->appendChild( $repository->plugin( "Export::DC" )->dataobj_to_html_header( $eprint ) );
 		$links->appendChild( $repository->plugin( "Export::HighwirePress" )->dataobj_to_html_header( $eprint ) );
+		$links->appendChild( $repository->plugin( "Export::Prism" )->dataobj_to_html_header( $eprint ) );
 	}
 
 	#to define a specific template to render the abstract with, you can do something like:

@@ -49,6 +49,11 @@ DEPRECATED. A boolean to record whether the cache is for single use
 where it will be created, used and immediately deleted.  Such as 
 type of caching is no longer required.
 
+=item uuid (uuid)
+
+a uuid to uniquely identify a cache table entry, which is less
+guessable than an auto-ncrementing number.
+
 =back
 
 =head1 REFERENCES AND RELATED OBJECTS
@@ -172,6 +177,8 @@ sub get_system_field_info
 		{ name=>"searchexp", type=>"longtext", required=>0, text_index=>0 },
 
 		{ name=>"oneshot", type=>"boolean", required=>0, text_index=>0 },
+
+		{ name=>"uuid", type=>"uuid", required=>0, text_index=>0 },
 	);
 }
 
@@ -367,6 +374,28 @@ sub create_sql_table
 			]);
 
 	return $rc;
+}
+
+######################################################################
+=pod
+
+=item $id = $cachemap->get_uuid
+
+Gets the C<uuid> or the cachemap if set otherwise returns the 
+auto-incremented C<cachemapid>.
+
+=cut
+######################################################################
+
+sub get_uuid
+{
+    my( $self ) = @_;
+
+	if ( $self->get_value( 'uuid' ) )
+	{
+		return  $self->get_value( 'uuid' );
+	}
+	return $self->get_id;
 }
 
 1;

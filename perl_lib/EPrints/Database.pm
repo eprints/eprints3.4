@@ -93,6 +93,7 @@ package EPrints::Database;
 
 use DBI ();
 use Digest::MD5;
+use Time::HiRes;
 
 use EPrints;
 
@@ -832,7 +833,6 @@ sub do
 	
 	if( $self->{debug} )
 	{
-		use Time::HiRes;
 		$self->{session}->get_repository->log( "Database execute debug (" . Time::HiRes::time() . "): $sql" );
 	}
 	my $result = $self->{dbh}->do( $sql );
@@ -995,7 +995,6 @@ sub execute
 
 	if( $self->{debug} )
 	{
-		use Time::HiRes;
 		$self->{session}->get_repository->log( "Database execute debug (" . Time::HiRes::time() . "): $sql" );
 	}
 
@@ -1180,7 +1179,6 @@ sub _update
 
 	if( $self->{debug} )
 	{
-		use Time::HiRes;
 		$self->{session}->get_repository->log( "Database execute debug (" . Time::HiRes::time() ."): $sql" );
 	}
 
@@ -1289,7 +1287,6 @@ sub insert
 
 	if( $self->{debug} )
 	{
-		use Time::HiRes;
 		$self->{session}->get_repository->log( "Database execute debug (" .  Time::HiRes::time() ."): $sql" );
 	}
 
@@ -2007,11 +2004,18 @@ sub cache_exp
 	my( $self , $id ) = @_;
 
 	my $a = $self->{session}->get_repository;
+
+	print STDERR "cache_exp id: ".$id."\n";
 	my $cache = $self->get_cachemap( $id );
 
 	return unless $cache;
 
+	print STDERR "ref(cache): ".ref( $cache )."\n" if ref( $cache );
+	print STDERR "cache: $cache\n" unless ref( $cache );
+
 	my $created = $cache->get_value( "created" );
+	my $cache_maxlife = $a->get_conf("cache_maxlife") * 3600;
+
 	if( (time() - $created) > ($a->get_conf("cache_maxlife") * 3600) )
 	{
 		return;
@@ -2054,12 +2058,20 @@ sub cache
 		$userid = $user->get_id;
 	}
 
+	my $lastused = Time::HiRes::time();
+
+	my $md5 = Digest::MD5->new;
+	$md5->add( $lastused );
+	$md5->add( $userid );
+	$md5->add( $code );
+
 	my $ds = $self->{session}->get_repository->get_dataset( "cachemap" );
 	my $cachemap = $ds->create_object( $self->{session}, {
-		lastused => time(),
+		lastused => $lastused,
 		userid => $userid,
 		searchexp => $code,
 		oneshot => "TRUE",
+		uuid => $md5->hexdigest,
 	});
 	$cachemap->create_sql_table( $dataset );
 
@@ -2086,7 +2098,7 @@ sub cache
 		$self->_cache_from_TABLE($cachemap, @_[2..$#_]);
 	}
 
-	return $cachemap->get_id;
+	return $cachemap->get_uuid;
 }
 
 
@@ -2239,7 +2251,25 @@ sub get_cachemap
 {
 	my( $self, $id ) = @_;
 
-	return $self->{session}->get_repository->get_dataset( "cachemap" )->get_object( $self->{session}, $id );
+	# If $id looks like an MD5 sum (i.e. exactly 32 chars( then lookup on uuid.
+	if ( length( $id ) == 32 )
+	{
+		my $res = $self->{session}->get_repository->get_dataset( "cachemap" )->search( filters => [ { meta_fields => [ "uuid" ], value => $id }, ] );
+		if ( $res->count > 0 )
+		{
+			return $res->item( 0 );
+		}
+	}
+	else
+	{
+		my $cachemap = $self->{session}->get_repository->get_dataset( "cachemap" )->get_object( $self->{session}, $id );
+		# You should not be able to get a cachemap using its autoincrement ID if it has a uuid.
+		unless ( $cachemap->get_value( 'uuid' ) )
+		{
+			return $cachemap;
+		}
+	}
+	return undef;
 }
 
 
@@ -2878,9 +2908,15 @@ sub sort_values
 
 	$langid ||= $session->get_langid;
 
+	my $lastused = Time::HiRes::time();
+
+	my $md5 = Digest::MD5->new;
+	$md5->add( $lastused );
+
 	# we'll use a cachemap but inverted (order by the key and use the pos)
 	my $cachemap = EPrints::DataObj::Cachemap->create_from_data( $session, {
-		lastused => time(),
+		lastused => $lastused,
+		uuid => $md5->hexdigest,
 		oneshot => "TRUE",
 	});
 	my $table  = $cachemap->get_sql_table_name;

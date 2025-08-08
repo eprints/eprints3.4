@@ -2007,14 +2007,11 @@ sub cache_exp
 	my( $self , $id ) = @_;
 
 	my $a = $self->{session}->get_repository;
-
 	my $cache = $self->get_cachemap( $id );
 
 	return unless $cache;
 
 	my $created = $cache->get_value( "created" );
-	my $cache_maxlife = $a->get_conf("cache_maxlife") * 3600;
-
 	if( (time() - $created) > ($a->get_conf("cache_maxlife") * 3600) )
 	{
 		return;

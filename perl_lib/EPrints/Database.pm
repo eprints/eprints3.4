@@ -92,7 +92,7 @@ The handle on the actual database connection.
 package EPrints::Database;
 
 use DBI ();
-use Digest::MD5;
+use APR::UUID;
 
 use EPrints;
 
@@ -2086,7 +2086,7 @@ sub cache
 		$self->_cache_from_TABLE($cachemap, @_[2..$#_]);
 	}
 
-	return $cachemap->get_id;
+	return $cachemap->get_uuid;
 }
 
 
@@ -2239,7 +2239,28 @@ sub get_cachemap
 {
 	my( $self, $id ) = @_;
 
-	return $self->{session}->get_repository->get_dataset( "cachemap" )->get_object( $self->{session}, $id );
+	( my $uuid ) = $id =~ m/^urn:uuid:(.*)/; # Remove EPrints' UUID formatting if set.
+
+	# If ID looks like a UUID
+	if ( $uuid && APR::UUID->parse( $uuid )->format eq $uuid )
+	{
+		my $res = $self->{session}->get_repository->get_dataset( "cachemap" )->search( filters => [ { meta_fields => [ "uuid" ], value => $id }, ] );
+		if ( $res->count > 0 )
+		{
+			return $res->item( 0 );
+		}
+	}
+	# Else if ID looks like an autoincremented integer
+	elsif ( $id =~ m/^\d+$/ )
+	{
+		my $cachemap = $self->{session}->get_repository->get_dataset( "cachemap" )->get_object( $self->{session}, $id );
+		# You should not be able to get a cachemap using its autoincrement ID if it has a uuid.
+		unless ( $cachemap->get_value( 'uuid' ) )
+		{
+			return $cachemap;
+		}
+	}
+	return undef;
 }
 
 

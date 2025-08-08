@@ -1120,7 +1120,7 @@ sub perform_search
 		encoded => $self->serialise,
 		keep_cache => $self->{keep_cache},
 		ids => $unsorted_matches, 
-		cache_id => (defined $cachemap ? $cachemap->get_id : undef ),
+		cache_id => (defined $cachemap ? $cachemap->get_uuid : undef ),
 		searchexp => $self,
 		order => $self->{custom_order},
 	);

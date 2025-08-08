@@ -467,8 +467,8 @@ sub count
 	{
 		#cjg Should really have a way to get at the
 		# cache. Maybe we should have a table object.
-		return $self->{session}->get_database->count_table(
-			"cache".$self->{cache_id} );
+		my $cachemap = $self->{session}->get_database->get_cachemap( $self->{cache_id} );
+		return $self->{session}->get_database->count_table( $cachemap->get_sql_table_name );
 	}
 
 	EPrints::abort( "Called \$list->count() where there was no cache or ids." );

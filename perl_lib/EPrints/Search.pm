@@ -71,8 +71,6 @@ See L<EPrints::List> for more.
 
 package EPrints::Search;
 
-use Digest::MD5;
-use Time::HiRes;
 use URI::Escape;
 use strict;
 
@@ -1088,6 +1086,7 @@ sub perform_search
 		);
 	}
 
+
 	# print STDERR $self->get_conditions->describe."\n\n";
 
 	my $cachemap;
@@ -1097,19 +1096,11 @@ sub perform_search
 		my $userid = $self->{session}->current_user;
 		$userid = $userid->get_id if defined $userid;
 
-		my $lastused = Time::HiRes::time;
-
-		my $md5 = Digest::MD5->new;
-		$md5->add( $lastused );
-		$md5->add( $userid );
-		$md5->add( $self->serialise );
-
 		$cachemap = $self->{session}->get_repository->get_dataset( "cachemap" )->create_object( $self->{session}, {
-			lastused => $lastused,
+			lastused => time(),
 			userid => $userid,
 			searchexp => $self->serialise,
 			oneshot => "TRUE",
-			uuid => $md5->hexdigest,
 		} );
 		$cachemap->create_sql_table( $self->{dataset} );
 	}

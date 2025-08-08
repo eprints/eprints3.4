@@ -4191,7 +4191,7 @@ each subject.
 
 sub render_subjects
 {
-	my( $self, $subject_list, $baseid, $currentid, $linkmode, $sizes ) = @_;
+	my( $self, $subject_list, $baseid, $currentid, $linkmode, $sizes, $use_citation ) = @_;
 
 	# If sizes is defined then it contains a hash subjectid->#of subjects
 	# we don't do this ourselves.
@@ -4208,7 +4208,7 @@ sub render_subjects
 		$subs{$_} = EPrints::DataObj::Subject->new( $self, $_ );
 	}
 
-	return $self->_render_subjects_aux( \%subs, $baseid, $currentid, $linkmode, $sizes );
+	return $self->_render_subjects_aux( \%subs, $baseid, $currentid, $linkmode, $sizes, $use_citation );
 }
 
 ######################################################################
@@ -4221,7 +4221,7 @@ sub render_subjects
 
 sub _render_subjects_aux
 {
-	my( $self, $subjects, $id, $currentid, $linkmode, $sizes ) = @_;
+	my( $self, $subjects, $id, $currentid, $linkmode, $sizes, $use_citation ) = @_;
 
 	my( $ul, $li, $elementx );
 	$ul = $self->make_element( "ul" );
@@ -4259,7 +4259,7 @@ sub _render_subjects_aux
 		}
 	}
 	$li->appendChild( $elementx );
-	$elementx->appendChild( $subjects->{$id}->render_description() );
+	$elementx->appendChild( $subjects->{$id}->render_description( $use_citation ) );
 	if( defined $sizes && defined $sizes->{$id} && $sizes->{$id} > 0 )
 	{
 		$li->appendChild( $self->make_text( " (".$sizes->{$id}.")" ) );
@@ -4269,7 +4269,7 @@ sub _render_subjects_aux
 	{
 		my $thisid = $_->get_value( "subjectid" );
 		next unless( defined $subjects->{$thisid} );
-		$li->appendChild( $self->_render_subjects_aux( $subjects, $thisid, $currentid, $linkmode, $sizes ) );
+		$li->appendChild( $self->_render_subjects_aux( $subjects, $thisid, $currentid, $linkmode, $sizes, $use_citation ) );
 	}
 	
 	return $ul;

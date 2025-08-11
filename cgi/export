@@ -298,6 +298,13 @@ sub export_dataobj
 
 	my $r = $repository->get_request;
 
+	# Set the Content-Disposition field to 'attachment' rather than its default
+	# value of 'inline'. This will "force" the browser to download the file
+	# rather than showing it in-browser.
+	if( $repository->config( 'export_file_as_attachment' ) ) {
+		$r->headers_out->add( 'Content-Disposition' => 'attachment' );
+	}
+
 	my $dataset = $repository->dataset( $datasetid );
 	$repository->not_found( "No such dataset" ), exit if !defined $dataset;
 

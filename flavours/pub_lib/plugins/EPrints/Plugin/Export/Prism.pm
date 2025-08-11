@@ -88,7 +88,7 @@ sub convert_dataobj
 
 	# 4.2.54 prism:pageRange
 	push @tags, [ 'prism.pageRange', $eprint->get_value( 'pagerange' ) ] if $eprint->exists_and_set( 'pagerange' );
-	my( $starting_page, $ending_page ) = EPrints::Plugin::Export::HighwirePress::split_pagerange( $eprint );
+	my( $starting_page, $ending_page ) = EPrints::MetaField::Pagerange::split_range( $eprint->get_value( 'pagerange' ) );
 	# 4.2.70 prism:startingPage
 	push @tags, [ 'prism.startingPage', $starting_page ] if defined $starting_page;
 	# 4.2.23 prism:endingPage

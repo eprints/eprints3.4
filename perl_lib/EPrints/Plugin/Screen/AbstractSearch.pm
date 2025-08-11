@@ -766,7 +766,7 @@ sub render_cache_not_found
 		screen => $self->{processor}->{screenid},
 		dataset => $self->search_dataset->id,
 		order => $self->{processor}->{search}->{custom_order},
-		cache_miss => 1,
+		cache_miss => 1, # allows cases where these links have been followed to be seen in web logs
 		# TODO add action, or 'regen cache and link to old cache id' (if that's implemented)
 	);
 

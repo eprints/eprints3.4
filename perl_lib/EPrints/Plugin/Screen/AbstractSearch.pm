@@ -227,10 +227,10 @@ sub from
 				$self->{processor}->{search_subscreen} = "cache_not_found";
 				$self->{processor}->add_message( "warning",
 					$self->{session}->html_phrase( "lib/searchexpression:cache_not_found_warning",
-						#TODO validate cache param if it's included in phrase. Currently numeric, but a validate_cache_param method might be prudent.
-						cacheid => $self->{session}->make_text( $id ),
+						cacheid => $self->{session}->make_text( $self->_validated_cache_param( $id ) ),
 					),
 				);
+
 				return;
 			}
 
@@ -766,6 +766,7 @@ sub render_cache_not_found
 		screen => $self->{processor}->{screenid},
 		dataset => $self->search_dataset->id,
 		order => $self->{processor}->{search}->{custom_order},
+		cache_miss => 1,
 		# TODO add action, or 'regen cache and link to old cache id' (if that's implemented)
 	);
 
@@ -1069,10 +1070,18 @@ sub export_mimetype
 	return $self->{processor}->{export_plugin}->param("mimetype") 
 }
 
+# validate cache param (numeric and uuid formats), as it may be included in http response
+# Always returns a value.
+sub _validated_cache_param
+{
+	my( $self, $id ) = @_;
 
+	my $id_clean = '-';
+	$id_clean = $id if $id =~ m/^\d+$/;
+	$id_clean = $id if $id =~ m/^urn:uuid:[0-9a-zA-Z\-]{36}$/;
 
-
-
+	return $id_clean;
+}
 
 1;
 

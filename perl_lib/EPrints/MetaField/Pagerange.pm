@@ -31,49 +31,35 @@ use EPrints::MetaField::Text;
 use strict;
 
 # note that this renders pages ranges differently from
-# eprints 2.2
+# eprints 3.4.6
 sub render_single_value
 {
 	my( $self, $session, $value ) = @_;
 
 	my $frag = $session->make_doc_fragment;
 
-	# If there are leading zeros it's probably electronic (so 'other')
-	if( $value =~ /^([1-9]\d*)$/ )
-	{
+	my( $from, $to ) = split_range( $value );
+
+	if( defined $from && !defined $to ) {
 		$frag->appendChild( $session->html_phrase( "lib/metafield/pagerange:from_page",
-			from => $session->make_text( $1 ),
+			from => $session->make_text( $from ),
 			pagerange => $session->make_text( $value ),
 		));
-	}
-	elsif( ( my $from, my $to ) = $value =~ m/^([1-9]\d*)-(\d+)$/ )
-	{
-		if ( my $count = () = $value =~ /-/g > 1 )
-        	{
-			use POSIX;
-                	my $middle = ceil( $count / 2 );
-			( $from, $to ) = $value =~ m{\A((?:[^-]+-){$middle})(.+)\z};
-			$from =~ s/-\z//;
-		}
-		if( $from == $to )
-		{
+	} elsif( defined $from && defined $to ) {
+		if( $from eq $to ) {
 			$frag->appendChild( $session->html_phrase( "lib/metafield/pagerange:same_page",
 				from => $session->make_text( $from ),
 				to => $session->make_text( $to ),
 				pagerange => $session->make_text( $value ),
 			));
-		}
-		else
-		{
+		} else {
 			$frag->appendChild( $session->html_phrase( "lib/metafield/pagerange:range",
 				from => $session->make_text( $from ),
 				to => $session->make_text( $to ),
 				pagerange => $session->make_text( $value ),
 			));
 		}
-	}
-	else
-	{
+	} else {
 		$frag->appendChild( $session->html_phrase( "lib/metafield/pagerange:other",
 			pagerange => $session->make_text( $value )
 		));
@@ -195,8 +181,43 @@ sub render_search_input
 				'aria-labelledby' => $searchfield->get_form_prefix . "_label" );
 }
 
+=item ( $from, $to ) = Pagerange::split_range( $range )
+
+Splits the given C<$range> into its first page and last page. If either of
+these values cannot be gleaned from this eprint they will instead return
+C<undef>.
+
+=cut
+sub split_range
+{
+	my( $range ) = @_;
+	return( undef, undef ) unless defined $range;
+
+	# If there are leading zeros it's probably electronic (so unsplit)
+	if( $range =~ /^([1-9]\d*)$/ ) {
+		return( $1, undef );
+	} elsif( my( $from, $to ) = $range =~ m/^([^-]+)-(.+)$/ ) {
+		# If there are multiple '-' we assume that the one which defines the
+		# range is in the middle of the string and split on that one.
+		my $count = $range =~ tr/-//;
+		if( $count > 1 ) {
+			my $middle = int( ($count - 1) / 2 );
+			# Capture `$middle` instances of '<text>-' followed by '<text>' as
+			# the first group, with everything after the following hyphen in
+			# the second group.
+			( $from, $to ) = $range =~ m/^((?:[^-]+-){$middle}[^-]+)-(.+)$/;
+		}
+
+		return( $from, $to );
+	} else {
+		return( undef, undef );
+	}
+}
+
 ######################################################################
 1;
+
+=back
 
 =head1 COPYRIGHT
 

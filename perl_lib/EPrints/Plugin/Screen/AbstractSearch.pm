@@ -766,7 +766,8 @@ sub render_cache_not_found
 		screen => $self->{processor}->{screenid},
 		dataset => $self->search_dataset->id,
 		order => $self->{processor}->{search}->{custom_order},
-		cache_miss => 1, # allows cases where these links have been followed to be seen in web logs
+		# including original ID allows futher analysis of traffic if needed, in cases where these links have been followed
+		cache_miss => $self->_validated_cache_param( $self->{session}->param( "cache" ) ),
 		# TODO add action, or 'regen cache and link to old cache id' (if that's implemented)
 	);
 

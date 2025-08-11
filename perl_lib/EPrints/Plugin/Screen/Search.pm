@@ -497,6 +497,18 @@ sub from
 		if( my $id = $session->param( "cache" ) )
 		{
 			$ok = $searchexp->from_cache( $id );
+			# cache included in URL but cache no longer exists
+			if( !$ok && $self->{session}->config( 'cache_not_found_no_search' ) )
+			{
+				$self->{processor}->{search_subscreen} = "cache_not_found";
+				$self->{processor}->add_message( "warning",
+					$self->{session}->html_phrase( "lib/searchexpression:cache_not_found_warning",
+						cacheid => $self->{session}->make_text( $self->_validated_cache_param( $id ) )
+					)
+				);
+
+				return;
+			}
 		}
 		if( !$ok && (my $exp = $session->param( "exp" )) )
 		{

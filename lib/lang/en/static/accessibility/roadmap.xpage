@@ -58,8 +58,16 @@
   <dt style="font-weight: bold; margin-top: 20px;">EPrints 3.4.6 released (August 2024)</dt>
   <dd>
     <p>Further incremental changes and snag fixes. Including increased usage or appropriate ARIA attributes for elements.</p>
+</dd>
+  <dt style="font-weight: bold; margin-top: 20px;">EPrints 3.4.7 released (August 2025)</dt>
+  <dd>
+	  <p>Further incremental changes and snag fixes.</p>
+	  <ol>
+		  <li>Removing dangling ARIA describedby attributes for fields with no help text.</li>
+		  <li>Ensuring unique element IDs for common actions in different tabs.</li>
+		  <li>Adding /cgi/register to the Accessibility report.</li>
+	  </ol>
   </dd>
-
   <dt style="font-weight: bold; margin-top: 20px;">Future releases</dt>
   <dd>Improving the accessibility of PDF documents uploaded to EPrints repositories.  In particular, tools to insert metadata and accessibility features into uploaded files.</dd>
 </dl>

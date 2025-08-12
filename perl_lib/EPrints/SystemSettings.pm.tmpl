@@ -27,8 +27,8 @@ EPrints::SystemSettings
 package EPrints::SystemSettings;
 
 $EPrints::SystemSettings::conf = {
-	'version' => 'EPrints 3.4.6',
-	'version_id' => 'eprints-3.4.6',
+	'version' => 'EPrints 3.4.7',
+	'version_id' => 'eprints-3.4.7',
 	'base_path' => '/opt/eprints3',
 	'show_ids_in_log' => 0,
 	'group' => 'eprints',
@@ -47,6 +47,7 @@ $EPrints::SystemSettings::conf = {
 		'eprints-3.4.3',
 		'eprints-3.4.4',
 		'eprints-3.4.5',
+		'eprints-3.4.6',
 	],
 	'smtp_server' => '127.0.0.1',
 	'user' => 'eprints',
@@ -145,7 +146,7 @@ sub read_inc
 
 =begin COPYRIGHT
 
-Copyright 2024 University of Southampton.
+Copyright 2025 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/

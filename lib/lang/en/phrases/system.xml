@@ -4342,7 +4342,7 @@ EPrints Accessibility
 -->
     <epp:phrase id="accessibility_statement_prepared_date">2 December 2019</epp:phrase>
     <epp:phrase id="accessibility_statement_last_updated_date">7 August 2020</epp:phrase>
-    <epp:phrase id="accessibility_roadmap_last_updated_date">23 August 2024</epp:phrase>
+    <epp:phrase id="accessibility_roadmap_last_updated_date">12 August 2025</epp:phrase>
     <epp:phrase id="accessibility_report_last_tested_date">5 August 2025</epp:phrase>
     <epp:phrase id="accessibility_report_summary">
 <p>Based on testing a default publication flavour installation of EPrints using standard test data, all tested public-facing and back-end administration pages currently report no errors or contrast errors. These pages may have one or more alerts. If so, these alerts are considered acceptable and/or essential for the functioning of EPrints as an Open Access repository and will fall into one of the following categories:</p>

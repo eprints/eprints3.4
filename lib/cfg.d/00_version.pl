@@ -1,5 +1,5 @@
-$c->{version_long} = "EPrints 3.4.6";
-$c->{version_alias} = "Creme Brulee Cryoseism";
+$c->{version_long} = "EPrints 3.4.7";
+$c->{version_alias} = "Granita Gregale";
 $c->{vendor_long} = "EPrints Services";
 $c->{vendor_short} = "eps";
 $c->{version_description} = $c->{version_long} . " (" . $c->{version_alias} . ") (" . $c->{vendor_long} . ")";
@@ -8,7 +8,7 @@ $c->{version_description} = $c->{version_long} . " (" . $c->{version_alias} . ")
 
 =for COPYRIGHT BEGIN
 
-Copyright 2024 University of Southampton.
+Copyright 2025 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/

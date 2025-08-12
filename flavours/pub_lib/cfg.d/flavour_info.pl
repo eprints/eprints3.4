@@ -1,14 +1,14 @@
 $c->{flavour_id} = "pub";
 $c->{flavour_name} = "Publication";
-$c->{flavour_version} = "1.6";
+$c->{flavour_version} = "1.7";
 
-$c->{version_alias} = "Affogato Snowmelt";
+$c->{version_alias} = "Tiramisu Tramontane";
 
 =head1 COPYRIGHT
 
 =for COPYRIGHT BEGIN
 
-Copyright 2024 University of Southampton.
+Copyright 2025 University of Southampton.
 EPrints 3.4 is supplied by EPrints Services.
 
 http://www.eprints.org/eprints-3.4/

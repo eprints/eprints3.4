@@ -111,6 +111,16 @@ my $list = $view->dataset->search(
 	filters => $filters );
 
 $session->send_http_header( "content_type"=>$plugin->param("mimetype") );
+
+# Set the Content-Disposition field to 'attachment' rather than its default
+# value of 'inline'. This will "force" the browser to download the file rather
+# than showing it in-browser.
+if( $session->config( 'export_file_as_attachment' ) || defined $plugin->param( 'content_disposition' ) ) {
+	# Allow plugins to override the default on a case-by-case basis
+	my $content_disposition = $plugin->param( 'content_disposition' ) || 'attachment';
+	$session->get_request->headers_out->add( 'Content-Disposition' => $content_disposition );
+}
+
 $plugin->initialise_fh( \*STDOUT );
 
 my %arguments = %{$plugin->param( "arguments" )};

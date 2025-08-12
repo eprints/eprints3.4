@@ -86,13 +86,15 @@ sub convert_dataobj
 	# 4.2.43 prism:modificationDate
 	push @tags, [ 'prism.modificationDate', parse_date( $eprint->get_value( 'lastmod' ) ) ] if $eprint->exists_and_set( 'lastmod' );
 
-	# 4.2.54 prism:pageRange
-	push @tags, [ 'prism.pageRange', $eprint->get_value( 'pagerange' ) ] if $eprint->exists_and_set( 'pagerange' );
-	my( $starting_page, $ending_page ) = EPrints::MetaField::Pagerange::split_range( $eprint->get_value( 'pagerange' ) );
-	# 4.2.70 prism:startingPage
-	push @tags, [ 'prism.startingPage', $starting_page ] if defined $starting_page;
-	# 4.2.23 prism:endingPage
-	push @tags, [ 'prism.endingPage', $ending_page ] if defined $ending_page;
+	if( $eprint->exists_and_set( 'pagerange' ) ) {
+		# 4.2.54 prism:pageRange
+		push @tags, [ 'prism.pageRange', $eprint->get_value( 'pagerange' ) ];
+		my( $starting_page, $ending_page ) = EPrints::MetaField::Pagerange::split_range( $eprint->get_value( 'pagerange' ) );
+		# 4.2.70 prism:startingPage
+		push @tags, [ 'prism.startingPage', $starting_page ] if defined $starting_page;
+		# 4.2.23 prism:endingPage
+		push @tags, [ 'prism.endingPage', $ending_page ] if defined $ending_page;
+	}
 	# 4.2.52 prism:pageCount
 	push @tags, [ 'prism.pageCount', $eprint->get_value( 'pages' ) ] if $eprint->exists_and_set( 'pages' );
 

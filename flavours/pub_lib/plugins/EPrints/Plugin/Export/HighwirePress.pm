@@ -98,9 +98,11 @@ sub convert_dataobj
 	push @tags, [ 'citation_isbn', $eprint->get_value( 'isbn' ) ] if $eprint->exists_and_set( 'isbn' );
 	push @tags, [ 'citation_volume', $eprint->get_value( 'volume' ) ] if $eprint->exists_and_set( 'volume' );
 	push @tags, [ 'citation_issue', $eprint->get_value( 'number' ) ] if $eprint->exists_and_set( 'number' );
-	my( $firstpage, $lastpage ) = EPrints::MetaField::Pagerange::split_range( $eprint->get_value( 'pagerange' ) );
-	push @tags, [ 'citation_firstpage', $firstpage ] if defined $firstpage;
-	push @tags, [ 'citation_lastpage', $lastpage ] if defined $lastpage;
+	if( $eprint->exists_and_set( 'pagerange' ) ) {
+		my( $firstpage, $lastpage ) = EPrints::MetaField::Pagerange::split_range( $eprint->get_value( 'pagerange' ) );
+		push @tags, [ 'citation_firstpage', $firstpage ] if defined $firstpage;
+		push @tags, [ 'citation_lastpage', $lastpage ] if defined $lastpage;
+	}
 
 	# E. For theses, dissertations and technical reports provide the remaining
 	#    data in 'citation_dissertation_institution', 'citation_technical_report_institution' and

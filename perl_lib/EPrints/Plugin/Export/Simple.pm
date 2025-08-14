@@ -47,6 +47,8 @@ sub dataobj_to_html_header
 	my( $plugin, $dataobj ) = @_;
 
 	my $links = $plugin->{session}->make_doc_fragment;
+	$links->appendChild( $plugin->{session}->make_comment( " EPrints meta tags " ) );
+	$links->appendChild( $plugin->{session}->make_text( "\n" ));
 
 	my $epdata = $plugin->convert_dataobj( $dataobj, "no_cache" => 1 );
 	foreach( @{$epdata} )

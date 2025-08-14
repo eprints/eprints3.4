@@ -28,6 +28,7 @@ sub dataobj_to_html_header
 	my( $plugin, $dataobj ) = @_;
 
 	my $links = $plugin->{session}->make_doc_fragment;
+	$links->appendChild( $plugin->{session}->make_comment( " PRISM meta tags " ) );
 
 	$links->appendChild( $plugin->{session}->make_element(
 		"link",

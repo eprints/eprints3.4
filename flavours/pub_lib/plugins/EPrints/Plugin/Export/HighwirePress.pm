@@ -28,6 +28,8 @@ sub dataobj_to_html_header
 	my( $plugin, $dataobj ) = @_;
 
 	my $links = $plugin->{session}->make_doc_fragment;
+	$links->appendChild( $plugin->{session}->make_comment( " Highwire Press meta tags " ) );
+	$links->appendChild( $plugin->{session}->make_text( "\n" ));
 
 	my $tags = $plugin->convert_dataobj( $dataobj, "no_cache" => 1 );
 	for my $tag (@{$tags})

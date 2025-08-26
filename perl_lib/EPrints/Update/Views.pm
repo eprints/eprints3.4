@@ -99,6 +99,10 @@ Add group-bys on additional pages. "DEFAULT" shows all of the records in a list.
 
 Don't show a link to this view from the /view/ page.
 
+=item exclude_feeds = 1
+
+Don't include the Atom, RSS and other 'is_feed' export tools on the list pages
+
 =back
 
 =head2 Menus
@@ -1833,6 +1837,8 @@ sub render_export_bar
 		{
 			my $type = "feed";
 			$type = "tool" if( $plugin->is_tool );
+
+			next if $type eq "feed" && $view->{exclude_feeds};
 
 			my $fn = join( "_", @{$esc_path_values} );	
 			my $url = $export_url."/".$view->{id}."/$values/$id/$fn".$plugin->param("suffix");

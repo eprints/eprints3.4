@@ -61,7 +61,7 @@
   <li>you cannot skip to the main content when using a screen reader</li>
 -->
 </ul>
-<p>Using the WAVE Accessibility checker tool we are also aware of alerts that it raises which cannot be resolved:</p>
+<p>Using the WAVE Accessibility checker tool, designed to peform automated checks for compliance issues found in the <a href="https://www.section508.gov/">Section 508</a> and <a href="https://www.w3.org/TR/WCAG22/">WCAG 2.2</a> guidelines, we are also aware of alerts that it raises which cannot be resolved:</p>
 <ul>
   <li>empty listing of items displays "No Items" in the middle of the table that WAVE thinks should be a table caption.  This is not appropriate and displaying a row with the text "No Items" makes it clear there are no items whereas no rows at all might make it look as though something has broken.</li>
 </ul>

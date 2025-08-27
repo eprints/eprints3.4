@@ -27,7 +27,7 @@
 </ul>
 
 <h2 id="introduction">Introduction</h2>
-<p>This report is intended to present the results of the testing of <epc:phrase ref="archive_name"/> to assess its accessibility compliance.  This has been undertaken with the use of the <a href="https://wave.webaim.org/extension/" rel="external">Chrome Extension</a> of the <a href="https://wave.webaim.org/" rel="external">WAVE web accessibility evaluation tool</a>.  To emulate user-generated content EPrints' testdata/bin/import_test_data script has been used to import 100 publications to populate various pages under test.  In addition to this one empty (unedited) publication was added and a Saved Search for "Habits" was created. Also, due to a permissions change "+eprint/remove_once_archived" and "+eprint/remove_with_email" has been added to the admin user who is logged in to test the non-public administration pages.</p>
+<p>This report is intended to present the results of the testing of <epc:phrase ref="archive_name"/> to assess its accessibility compliance.  This has been undertaken with the use of the <a href="https://wave.webaim.org/extension/" rel="external">Firefox Extension</a> of the <a href="https://wave.webaim.org/" rel="external">WAVE web accessibility evaluation tool</a>.  To emulate user-generated content EPrints' testdata/bin/import_test_data script has been used to import 100 publications to populate various pages under test.  In addition to this one empty (unedited) publication was added to make a total of 101 publication records (100 in the live archive).  Also, a Saved Search for "Habits" was created. Also, due to a permissions change "+eprint/remove_once_archived" and "+eprint/remove_with_email" has been added to the admin user who is logged in to test the non-public administration pages.</p>
 <p>Where there are known issues, the comments section should describe the reasons and where appropriate how these issues are likely be addressed.  For more details on planned future accessibility improvements, please see <a href="roadmap.html">our accessibility roadmap</a>.</p>
 
 <h2 id="test-results">Test Results</h2>
@@ -41,7 +41,7 @@
   </tr>
   <tr> 
     <td><a href="{$config{rel_path}}/"><epc:print expr="$config{rel_path}"/>/</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;10&#160;|&#160;Structural&#160;Elements:&#160;9&#160;|&#160;ARIA:&#160;21</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;10&#160;|&#160;Structural&#160;Elements:&#160;10&#160;|&#160;ARIA:&#160;33</div></td>
     <td>None</td>
   </tr>
   <tr>
@@ -71,7 +71,7 @@
   </tr>
   <tr>
     <td><a href="{$config{rel_path}}/view/subjects/D.html"><epc:print expr="$config{rel_path}"/>/view/subjects/D.html</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;11&#160;|&#160;Structural&#160;Elements:&#160;24&#160;|&#160;ARIA:&#160;21</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;11&#160;|&#160;Structural&#160;Elements:&#160;24&#160;|&#160;ARIA:&#160;22</div></td>
     <td>Index based on user-generated content. Only testing one sub-menu per browse view type.</td>
   </tr>
   <tr>
@@ -106,22 +106,22 @@
   </tr>
   <tr>
     <td><a href="{$config{rel_path}}/id/eprint/4/"><epc:print expr="$config{rel_path}"/>/id/eprint/4/</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;3</div><div class="ep_accessibility_good">Features:&#160;9&#160;|&#160;Structural&#160;Elements:&#160;19&#160;|&#160;ARIA:&#160;22</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;3</div><div class="ep_accessibility_good">Features:&#160;8&#160;|&#160;Structural&#160;Elements:&#160;19&#160;|&#160;ARIA:&#160;22</div></td>
     <td>Contains user-generated content. Only testing one eprint summary page per eprint type, in this case &quot;Conference of Workshop Item&quot;. 3 alerts are caused by linking to PDFs, which is cannot be fixed as is essential to the purpose of an Open Access repository. However, one of the links is actually for front page JPEG image preview but is identified as a PDF due to the file extension used in the URL.</td>
   </tr>
   <tr>
     <td><a href="{$config{rel_path}}/id/eprint/54/"><epc:print expr="$config{rel_path}"/>/id/eprint/54/</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;3</div><div class="ep_accessibility_good">Features:&#160;9&#160;|&#160;Structural&#160;Elements:&#160;19&#160;|&#160;ARIA:&#160;22</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;3</div><div class="ep_accessibility_good">Features:&#160;8&#160;|&#160;Structural&#160;Elements:&#160;19&#160;|&#160;ARIA:&#160;22</div></td>
     <td>Contains user-generated content. Only testing one eprint summary page per eprint type, in this case &quot;Article&quot;. 2 alerts are caused by linking to PDFs, which is cannot be fixed as is essential to the purpose of an Open Access repository. However, one of the links is actually for front page JPEG image preview but is identified as a PDF due to the file extension used in the URL.</td>
   </tr>
   <tr>
     <td><a href="{$config{rel_path}}/cgi/users/login"><epc:print expr="$config{rel_path}"/>/cgi/users/login</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;8&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;23</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;8&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;22</div></td>
     <td>None</td>
   </tr>
   <tr>
     <td><a href="{$config{rel_path}}/cgi/logout"><epc:print expr="$config{rel_path}"/>/cgi/logout</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;7&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;22</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;7&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;21</div></td>
     <td>None</td>
   </tr>
   <tr>
@@ -181,7 +181,7 @@
   </tr>
   <tr>
     <td><a href="{$config{rel_path}}/accessibility/roadmap.html"><epc:print expr="$config{rel_path}"/>/accessibility/roadmap.html</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;7&#160;|&#160;Structural&#160;Elements:&#160;11&#160;|&#160;ARIA:&#160;21</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;7&#160;|&#160;Structural&#160;Elements:&#160;12&#160;|&#160;ARIA:&#160;21</div></td>
     <td>None</td>
   </tr>
 </table>
@@ -206,7 +206,7 @@
   </tr>
   <tr>
     <td><a href="{$config{rel_path}}/cgi/users/home?screen=EPrint%3A%3AView&amp;eprintid=4"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=EPrint%3A%3AView&amp;eprintid=4</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;7</div><div class="ep_accessibility_good">Features:&#160;11&#160;|&#160;Structural&#160;Elements:&#160;64&#160;|&#160;ARIA:&#160;106</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;7</div><div class="ep_accessibility_good">Features:&#160;11&#160;|&#160;Structural&#160;Elements:&#160;63&#160;|&#160;ARIA:&#160;94</div></td>
     <td>Alerts due to five links to PDF documents (essential to the purpose of an Open Access repository), one suspicious link text "Details" which within the context of the page is appropriate and one redundant link because both the thumbnail and the adjacent download link can be used to down the document.</td>
   </tr>
   <tr>
@@ -246,8 +246,8 @@
   </tr>
   <tr>
     <td><a href="{$config{rel_path}}/cgi/users/home?screen=Listing&amp;dataset=eprint"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Listing&amp;dataset=eprint</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;12</div><div class="ep_accessibility_good">Features:&#160;60&#160;|&#160;Structural&#160;Elements:&#160;25&#160;|&#160;ARIA:&#160;111</div></td>
-    <td>>2 (of 12) alerts due to redundant links as &quot;Show All&quot; links are same as links to show 100 items, as there is exactly 100 items from test data. 10 (of 12) alerts due to links to PDF documents (essential for an Open Access repository).</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;10</div><div class="ep_accessibility_good">Features:&#160;60&#160;|&#160;Structural&#160;Elements:&#160;25&#160;|&#160;ARIA:&#160;111</div></td>
+    <td>All 10 alerts due to links to PDF documents (essential for an Open Access repository).</td>
   </tr>
   <tr>
     <td><a href="{$config{rel_path}}/cgi/users/home?screen=Workflow%3A%3AView&amp;dataset=eprint&amp;dataobj=4"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Workflow%3A%3AView&amp;dataset=eprint&amp;dataobj=4</a></td>
@@ -331,7 +331,7 @@
   </tr>
   <tr>
     <td><a href="{$config{rel_path}}/cgi/users/home?edit_phrases=yes"><epc:print expr="$config{rel_path}"/>/cgi/users/home?edit_phrases=yes</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;6&#160;|&#160;Structural&#160;Elements:&#160;12&#160;|&#160;ARIA:&#160;159</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;6&#160;|&#160;Structural&#160;Elements:&#160;12&#160;|&#160;ARIA:&#160;161</div></td>
     <td>None</td>
   </tr>
   <tr>
@@ -341,12 +341,12 @@
   </tr>
   <tr>
     <td><a href="{$config{rel_path}}/cgi/search/eprint/staff"><epc:print expr="$config{rel_path}"/>/cgi/search/eprint/staff</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;84&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;134</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;84&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;133</div></td>
     <td>None</td>
   </tr>
   <tr>
     <td><a href="{$config{rel_path}}/cgi/search/eprint/staff?screen=Search&amp;eprintid=&amp;userid.username=&amp;userid.name_merge=ALL&amp;serid.name=&amp;eprint_status=archive&amp;dir_merge=ALL&amp;dir=&amp;documents_merge=ALL&amp;documents=&amp;title_merge=ALL&amp;title=Habits&amp;creators_name_merge=ALL&amp;creators_name=&amp;abstract_merge=ALL&amp;abstract=&amp;date=&amp;keywords_merge=ALL&amp;keywords=&amp;subjects_merge=ANY&amp;department_merge=ALL&amp;department=&amp;editors_name_merge=ALL&amp;editors_name=&amp;refereed=EITHER&amp;publication_merge=ALL&amp;publication=&amp;satisfyall=ALL&amp;order=-date%2Fcreators_name%2Ftitle&amp;_action_search=Search"><epc:print expr="$config{rel_path}"/>/cgi/search/eprint/staff?screen=Search&amp;...</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;21</div><div class="ep_accessibility_good">Features:&#160;35&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;27</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;21</div><div class="ep_accessibility_good">Features:&#160;35&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;26</div></td>
     <td>10 (of 21) alerts are caused by thumbnail image previews of PDFs having the same alternative text, as a result of the original PDF filenames are the same, due to the way the import_test_data script works. The other 11 (of 21) alerts are caused by linking to PDFs, which is cannot be fixed as is essential to the purpose of an Open Access repository. (Based on a search where "Item Status" is "Live Archive".)</td>
   </tr>
   <tr>
@@ -376,8 +376,8 @@
   </tr>
   <tr>
     <td><a href="{$config{rel_path}}/cgi/users/home?screen=Staff%3A%3AHistorySearch&amp;userid.username=&amp;action=create&amp;timestamp=&amp;objectid=&amp;satisfyall=ALL&amp;order=-timestamp&amp;_action_search=Search"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Staff%3A%3AHistorySearch...</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;2</div><div class="ep_accessibility_good">Features:&#160;9&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;27</div></td>
-    <td>Search for Action: Created.  Two alerts are due the there being exactly 100 results so show 100 results and show all results links are the same.</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;9&#160;|&#160;Structural&#160;Elements:&#160;8&#160;|&#160;ARIA:&#160;27</div></td>
+    <td>Search for Action: Created.</td>
   </tr>
   <tr>
     <td><a href="{$config{rel_path}}/cgi/users/home?screen=Status"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Status</a></td>
@@ -391,8 +391,8 @@
   </tr>
   <tr>
     <td><a href="{$config{rel_path}}/cgi/users/home?screen=Admin%3A%3AEPM"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Admin%3A%3AEPM</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;170&#160;|&#160;Structural&#160;Elements:&#160;11&#160;|&#160;ARIA:&#160;139</div></td>
-    <td>None</td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;172&#160;|&#160;Structural&#160;Elements:&#160;11&#160;|&#160;ARIA:&#160;141</div></td>
+    <td>Number of features and ARIA elements liable to vary based on number of available Bazaar plugins.</td>
   </tr>
   <tr>
     <td><a href="{$config{rel_path}}/cgi/users/home?screen=Admin%3A%3ATestEmail"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Admin%3A%3ATestEmail</a></td>
@@ -406,7 +406,7 @@
   </tr>
   <tr>
     <td><a href="{$config{rel_path}}/cgi/users/home?screen=Admin%3A%3AStorageManager"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Admin%3A%3AStorageManager</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;7&#160;|&#160;Structural&#160;Elements:&#160;15&#160;|&#160;ARIA:&#160;28</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;7&#160;|&#160;Structural&#160;Elements:&#160;16&#160;|&#160;ARIA:&#160;28</div></td>
     <td>None</td>
   </tr>
   <tr>
@@ -416,7 +416,7 @@
   </tr>
   <tr>
     <td><a href="{$config{rel_path}}/cgi/users/home?screen=Admin%3A%3APhrases"><epc:print expr="$config{rel_path}"/>/cgi/users/home?screen=Admin%3A%3APhrases</a></td>
-    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;6&#160;|&#160;Structural&#160;Elements:&#160;12&#160;|&#160;ARIA:&#160;3227</div></td>
+    <td><div class="ep_accessibility_bad">Errors:&#160;0&#160;|&#160;Contrast&#160;Errors:&#160;0&#160;|&#160;Alerts:&#160;0</div><div class="ep_accessibility_good">Features:&#160;6&#160;|&#160;Structural&#160;Elements:&#160;12&#160;|&#160;ARIA:&#160;3646</div></td>
     <td>Number ARIA elements likely to vary dependent on total number of phrases defined.</td>
   </tr>
   <tr>

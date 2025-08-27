@@ -249,7 +249,7 @@ sub create_container {
 				if ($no_op) {
 					print "[STARTUP] Failed to create the container, trying alternatives...\n";
 				} else {
-					print "[CRITICAL] Failed to create the contatiner\n";
+					print "[CRITICAL] Failed to create the container\n";
 				}
 				print $res->status_line;
 				print "\n";

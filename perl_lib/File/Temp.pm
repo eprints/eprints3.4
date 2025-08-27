@@ -148,7 +148,7 @@ use IO::Seekable;               # For SEEK_*
 use Errno;
 require VMS::Stdio if $^O eq 'VMS';
 
-# pre-emptively load Carp::Heavy. If we don't when we run out of file
+# preemptively load Carp::Heavy. If we don't when we run out of file
 # handles and attempt to call croak() we get an error message telling
 # us that Carp::Heavy won't load rather than an error telling us we
 # have run out of file handles. We either preload croak() or we

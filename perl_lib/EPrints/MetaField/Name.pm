@@ -432,7 +432,7 @@ Hugh B/Glaser		Glaser + (first initial in given is "H" OR first word in given is
 				(second initial in given is "B" OR second word in given starts with "B")
 
 Hugh Bob/Glaser		Glaser + (first initial in given is "H" OR first word in given is "Hugh" ) +
-				(second iniital in given is "B" or second word in given is "Bob")
+				(second initial in given is "B" or second word in given is "Bob")
 
 Names:
 

@@ -116,7 +116,7 @@ Add a field spec $fielddata to dataset $datasetid.
 This method will abort if the field already exists and 'reuse' is unspecified.
 
 Options:
-	reuse - re-use an existing field if it exists (must be same type)
+	reuse - reuse an existing field if it exists (must be same type)
 
 =cut
 

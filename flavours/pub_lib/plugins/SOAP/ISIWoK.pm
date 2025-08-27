@@ -367,7 +367,7 @@ sub DESTROY
 	shift->closeSession;
 }
 
-# this suppreses the usual xsi:nil="true" attribute, which WoS rejects
+# this suppresses the usual xsi:nil="true" attribute, which WoS rejects
 sub SOAP::Serializer::as_nonil
 {
 	my ($self, $value, $name, $type, $attr) = @_;

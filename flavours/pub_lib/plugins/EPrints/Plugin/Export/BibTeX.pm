@@ -316,7 +316,7 @@ sub output_dataobj
 
 $EPrints::Plugin::Export::BibTeX::SPECIAL_CHAR_MAPPING = {
 		'0x00ae' => '(R)', # registered
-		'0x00a1' => '!', # inverted exclaimation mark
+		'0x00a1' => '!', # inverted exclamation mark
 		'0x00a2' => 'c', # cent
  		'0x00a5' => 'Y', # Yen
 		'0x00aa' => 'a', # feminine ordinal

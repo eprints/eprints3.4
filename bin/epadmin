@@ -143,7 +143,7 @@ This is useful if you only setup the fulltext indexing after your repository is 
 
 =item B<epadmin> logout_all_users I<repository_id> [I<exclude_user_id>, I<exclude_user_id> ...]
 
-Logout all users from a repositiory.  Potentially excluding one or more user IDs.
+Logout all users from a repository.  Potentially excluding one or more user IDs.
 
 =item B<epadmin> rebuild_triples I<repository_id> [I<dataset_id> [I<dataobj_id> I<dataobj_id> I<dataobj_id>-I<dataobj_id> ...]
 

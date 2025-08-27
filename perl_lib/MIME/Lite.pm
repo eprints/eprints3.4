@@ -2368,7 +2368,7 @@ how mail will be sent.
 I<As a class method> with a HOW argument and optional HOWARGS, it sets
 the default sending mechanism that the no-argument instance method
 will use.  The HOW is a facility name (B<see below>),
-and the HOWARGS is interpreted by the facilty.
+and the HOWARGS is interpreted by the facility.
 The class method returns the previous HOW and HOWARGS as an array.
 
     MIME::Lite->send('sendmail', "d:\\programs\\sendmail.exe");
@@ -3156,7 +3156,7 @@ Install using
 Adjust the make command as is appropriate for your OS.
 'nmake' is the usual name under Win32
 
-In order to read the docmentation please use
+In order to read the documentation please use
 
   perldoc MIME::Lite
 

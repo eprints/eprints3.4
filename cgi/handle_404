@@ -64,7 +64,7 @@ if( $url =~ m#^/(\d+)/#  || $url =~ m#^/id/eprint/(\d+)/# )
 				citation => $eprint->render_citation_link,
 			);
 		} elsif( defined $status && $status eq "deletion" ){
-			# re-use logic used to deal with tombstone pages - linking to more recent versions
+			# reuse logic used to deal with tombstone pages - linking to more recent versions
 			# if available. 
 			# render returns: $dom, $title, $links, $template
 			( $eprint_message, undef, undef, undef ) = $eprint->render;

@@ -74,7 +74,7 @@ sub get_cache
 	my $processor = $self->{processor};
 	my $session = $processor->{session};
 
-	return $session->dataset( "cachemap" )->dataobj( $processor->{cacheid} );
+	return $session->get_database->get_cachemap( $processor->{cacheid} );
 }
 
 sub get_searchexp

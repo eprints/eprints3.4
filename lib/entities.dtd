@@ -356,7 +356,7 @@
                                      U+220F ISOamsb -->
 <!-- prod is NOT the same character as U+03A0 'greek capital letter pi' though
      the same glyph might be used for both -->
-<!ENTITY sum      "&#8721;"> <!-- n-ary sumation, U+2211 ISOamsb -->
+<!ENTITY sum      "&#8721;"> <!-- n-ary summation, U+2211 ISOamsb -->
 <!-- sum is NOT the same character as U+03A3 'greek capital letter sigma'
      though the same glyph might be used for both -->
 <!ENTITY minus    "&#8722;"> <!-- minus sign, U+2212 ISOtech -->

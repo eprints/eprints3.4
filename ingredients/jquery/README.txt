@@ -1,0 +1,1 @@
+This ingredient re-organises the jQuery and jQuery UI libraries to make them easy to include for use in EPrints.  The licenses for these are different to EPrints and can be found under the licenses sub-directory of this ingredient.

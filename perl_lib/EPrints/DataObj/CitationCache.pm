@@ -158,7 +158,7 @@ sub get_system_field_info
 
 		{ name=>"style", type=>"text", sql_index => 1 },
 
-		{ name=>"context", type=>"longtext", sql_index => 1 },
+		{ name=>"context", type=>"longtext" },
  
 		{ name=>"citation_text", type=>"longtext", text_index=>0, },
 

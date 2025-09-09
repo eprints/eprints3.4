@@ -1051,6 +1051,15 @@ sub export
 	my $format = $self->{processor}->{export_format};
 	my $plugin = $self->{session}->plugin( "Export::" . $format );
 
+	# Set the Content-Disposition field to 'attachment' rather than its default
+	# value of 'inline'. This will "force" the browser to download the file
+	# rather than showing it in-browser.
+	if( $self->{repository}->config( 'export_file_as_attachment' ) || defined $plugin->param( 'content_disposition' ) ) {
+		# Allow plugins to override the default on a case-by-case basis
+		my $content_disposition = $plugin->param( 'content_disposition' ) || 'attachment';
+		$self->{repository}->get_request->headers_out->add( 'Content-Disposition' => $content_disposition );
+	}
+
 	my %arguments = map {
 		$_ => scalar($self->{session}->param( $_ ))
 	} $plugin->arguments;

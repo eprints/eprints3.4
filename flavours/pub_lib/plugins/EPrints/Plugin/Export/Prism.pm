@@ -90,7 +90,7 @@ sub convert_dataobj
 
 	if( $eprint->exists_and_set( 'pagerange' ) ) {
 		# 4.2.54 prism:pageRange
-		push @tags, [ 'prism.pageRange', $eprint->get_value( 'pagerange' ) ];
+		push @tags, simple_value( $eprint, 'pagerange' => 'pageRange' );
 		my( $starting_page, $ending_page ) = EPrints::MetaField::Pagerange::split_range( $eprint->get_value( 'pagerange' ) );
 		# 4.2.70 prism:startingPage
 		push @tags, [ 'prism.startingPage', $starting_page ] if defined $starting_page;
@@ -98,7 +98,7 @@ sub convert_dataobj
 		push @tags, [ 'prism.endingPage', $ending_page ] if defined $ending_page;
 	}
 	# 4.2.52 prism:pageCount
-	push @tags, [ 'prism.pageCount', $eprint->get_value( 'pages' ) ] if $eprint->exists_and_set( 'pages' );
+	push @tags, simple_value( $eprint, 'pages' => 'pageCount' );
 
 	# 4.2.20 prism:doi
 	if( $eprint->exists_and_set( 'ids' ) ) {
@@ -107,33 +107,75 @@ sub convert_dataobj
 		}
 	}
 	# 4.2.31 prism:isbn
-	push @tags, [ 'prism.isbn', $eprint->get_value( 'isbn' ) ] if $eprint->exists_and_set( 'isbn' );
+	push @tags, simple_value( $eprint, 'isbn' );
 	# 4.2.33 prism:issn
-	push @tags, [ 'prism.issn', $eprint->get_value( 'issn' ) ] if $eprint->exists_and_set( 'issn' );
+	push @tags, simple_value( $eprint, 'issn' );
 
 	# 4.2.61 prism:publicationName
-	push @tags, [ 'prism.publicationName', $eprint->get_value( 'publication' ) ] if $eprint->exists_and_set( 'publication' );
+	push @tags, simple_value( $eprint, 'publication' => 'publicationName' );
 	# 4.2.88 prism:volume
-	push @tags, [ 'prism.volume', $eprint->get_value( 'volume' ) ] if $eprint->exists_and_set( 'volume' );
+	push @tags, simple_value( $eprint, 'volume' );
 	# 4.2.45 prism:number
-	push @tags, [ 'prism.number', $eprint->get_value( 'number' ) ] if $eprint->exists_and_set( 'number' );
+	push @tags, simple_value( $eprint, 'number' );
 
 	# 4.2.7 prism:bookEdition
-	push @tags, [ 'prism.bookEdition', $eprint->get_value( 'edition' ) ] if $eprint->exists_and_set( 'edition' );	
+	push @tags, simple_value( $eprint, 'edition' => 'bookEdition' );
 	# 4.2.68 prism:seriesTitle
-	push @tags, [ 'prism.seriesTitle', $eprint->get_value( 'series' ) ] if $eprint->exists_and_set( 'series' );
+	push @tags, simple_value( $eprint, 'series' => 'seriesTitle' );
 
 	# 4.2.24 prism:event
-	push @tags, [ 'prism.event', $eprint->get_value( 'event_title' ) ] if $eprint->exists_and_set( 'event_title' );
-	# 4.2.39 prism:keyword
-	push @tags, [ 'prism.keyword', $eprint->get_value( 'keywords' ) ] if $eprint->exists_and_set( 'keywords' );
+	push @tags, simple_value( $eprint, 'event_title' => 'event' );
 	# 4.2.41 prism:link
-	push @tags, [ 'prism.link', $eprint->get_value( 'official_url' ) ] if $eprint->exists_and_set( 'official_url' );
+	push @tags, simple_value( $eprint, 'official_url' => 'link' );
+
+	if( $eprint->exists_and_set( 'keywords' ) ) {
+		my $keywords = $eprint->get_value( 'keywords' );
+		# There should be zero or more instances of 'prism:keyword' so we split
+		# our keywords on newlines, commas and semicolons
+		for my $keyword (split /[\n,;]/, $keywords) {
+			# Trim leading and trailing spaces
+			$keyword =~ s/^\s+|\s+$//g;
+			# 4.2.39 prism:keyword
+			push @tags, [ 'prism.keyword', $keyword ];
+		}
+	}
+	if( $eprint->exists_and_set( 'subjects' ) ) {
+		for my $subject (@{$eprint->get_value( 'subjects' )}) {
+			my $subject_obj = EPrints::DataObj::Subject->new( $plugin->{repository}, $subject );
+			my $subject_name = $subject_obj->render_description();
+
+			push @tags, [ 'prism.keyword', $subject_name ];
+		}
+	}
 
 	return \@tags;
 }
 
 =over 4
+
+=item [$name, $value] | ([$name, $value], ...) = simple_value( $eprint, $data_name, $tag_name )
+
+Returns the value (or values if it is multiple) associated with the given
+C<$eprint> at C<$data_name>. This is designed to then be pushed straight to
+C<@tags>, associating 'prism.$tag_name' with the read value(s).
+
+=cut
+sub simple_value
+{
+	my( $eprint, $data_name, $tag_name ) = @_;
+	$tag_name = $data_name unless defined $tag_name;
+
+	if( $eprint->exists_and_set( $data_name ) ) {
+		my $value = $eprint->get_value( $data_name );
+		if( ref( $value ) eq 'ARRAY' ) {
+			return map { [ 'prism.'.$tag_name, $_ ] } @{$value};
+		} else {
+			return [ 'prism.'.$tag_name, $value ];
+		}
+	} else {
+		return ();
+	}
+}
 
 =item $parsed_date = $plugin->get_earliest_date( $eprint, [ $date_type, ... ] )
 

@@ -74,7 +74,7 @@ sub convert_dataobj
 	# as of 2025-08-05 (https://web.archive.org/web/20250606022732/https://scholar.google.co.uk/intl/en/scholar/inclusion.html#indexing)
 
 	# A. The title tag 'citation_title' containing the title of the paper
-	push @tags, [ 'citation_title', $eprint->get_value( 'title' ) ] if $eprint->exists_and_set( 'title' );
+	push @tags, simple_value( $eprint, 'title' );
 
 	# B. Separate 'citation_author' tags for each paper author
 	if( $eprint->exists_and_set( 'creators_name' ) ) {
@@ -94,12 +94,12 @@ sub convert_dataobj
 	# D. For journal and conference papers provide the remaining data in
 	#    'citation_journal_title', 'citation_conference_title', 'citation_issn', 'citation_isbn',
 	#    'citation_volume', 'citation_issue', 'citation_firstpage' and 'citation_lastpage'
-	push @tags, [ 'citation_journal_title', $eprint->get_value( 'publication' ) ] if $eprint->exists_and_set( 'publication' );
-	push @tags, [ 'citation_conference_title', $eprint->get_value( 'event_title' ) ] if $eprint->exists_and_set( 'event_title' );
-	push @tags, [ 'citation_issn', $eprint->get_value( 'issn' ) ] if $eprint->exists_and_set( 'issn' );
-	push @tags, [ 'citation_isbn', $eprint->get_value( 'isbn' ) ] if $eprint->exists_and_set( 'isbn' );
-	push @tags, [ 'citation_volume', $eprint->get_value( 'volume' ) ] if $eprint->exists_and_set( 'volume' );
-	push @tags, [ 'citation_issue', $eprint->get_value( 'number' ) ] if $eprint->exists_and_set( 'number' );
+	push @tags, simple_value( $eprint, 'publication' => 'journal_title' );
+	push @tags, simple_value( $eprint, 'event_title' => 'conference_title' );
+	push @tags, simple_value( $eprint, 'issn' );
+	push @tags, simple_value( $eprint, 'isbn' );
+	push @tags, simple_value( $eprint, 'volume' );
+	push @tags, simple_value( $eprint, 'number' => 'issue' );
 	if( $eprint->exists_and_set( 'pagerange' ) ) {
 		my( $firstpage, $lastpage ) = EPrints::MetaField::Pagerange::split_range( $eprint->get_value( 'pagerange' ) );
 		push @tags, [ 'citation_firstpage', $firstpage ] if defined $firstpage;
@@ -110,9 +110,9 @@ sub convert_dataobj
 	#    data in 'citation_dissertation_institution', 'citation_technical_report_institution' and
 	#    'citation_technical_report_number'
 	if( $eprint->get_value( 'type' ) eq 'thesis' ) {
-		push @tags, [ 'citation_dissertation_institution', $eprint->get_value( 'institution' ) ] if $eprint->exists_and_set( 'institution' );
+		push @tags, simple_value( $eprint, 'institution' => 'dissertation_institution' );
 	} else { # 'monograph'
-		push @tags, [ 'citation_technical_report_institution', $eprint->get_value( 'institution' ) ] if $eprint->exists_and_set( 'institution' );
+		push @tags, simple_value( $eprint, 'institution' => 'technical_report_institution' );
 		# TODO: Do we have anything for 'citation_technical_report_number'
 	}
 
@@ -125,16 +125,16 @@ sub convert_dataobj
 	# Suggested by https://www.zotero.org/support/dev/exposing_metadata
 	push @tags, [ 'citation_date', $publication_date || $online_date ] if defined $publication_date || $online_date;
 	push @tags, [ 'citation_cover_date', $publication_date ] if defined $publication_date;
-	push @tags, [ 'citation_book_title', $eprint->get_value( 'book_title' ) ] if $eprint->exists_and_set( 'book_title' );
-	push @tags, [ 'citation_series_title', $eprint->get_value( 'series' ) ] if $eprint->exists_and_set( 'series' );
-	push @tags, [ 'citation_publisher', $eprint->get_value( 'publisher' ) ] if $eprint->exists_and_set( 'publisher' );
+	push @tags, simple_value( $eprint, 'book_title' );
+	push @tags, simple_value( $eprint, 'series' => 'series_title' );
+	push @tags, simple_value( $eprint, 'publisher' );
 	if( $eprint->exists_and_set( 'ids' ) ) {
 		for my $id ( @{$eprint->get_value( 'ids' )} ) {
 			push @tags, [ 'citation_doi', $id->{id} ] if $id->{id_type} eq 'doi';
 			push @tags, [ 'citation_pmid', $id->{id} ] if $id->{id_type} eq 'pmid';
 		}
 	}
-	push @tags, [ 'citation_abstract', $eprint->get_value( 'abstract' ) ] if $eprint->exists_and_set( 'abstract' );
+	push @tags, simple_value( $eprint, 'abstract' );
 	my @documents = $eprint->get_all_documents();
 	if( scalar @documents && $documents[0]->exists_and_set( 'language' ) ) {
 		push @tags, [ 'citation_language', $documents[0]->get_value( 'language' ) ];
@@ -144,11 +144,59 @@ sub convert_dataobj
 			push @tags, [ 'citation_editor', EPrints::Utils::make_name_string( $editor ) ] if defined $editor;
 		}
 	}
-	push @tags, [ 'citation_keywords', $eprint->get_value( 'keywords' ) ] if $eprint->exists_and_set( 'keywords' );
 
-	push @tags, [ 'citation_journal_article', $eprint->get_value( 'article_number' ) ] if $eprint->exists_and_set( 'article_number' );
+	my $keywords = '';
+	if( $eprint->exists_and_set( 'keywords' ) ) {
+		# Keywords should be separated by semicolons according to Zotero so
+		# this converts newlines and commas into semicolons (with consistent
+		# spacing)
+		for my $keyword (split /[\n,;]/, $eprint->get_value( 'keywords' )) {
+			# Trim leading and trailing spaces
+			$keyword =~ s/^\s+|\s+$//g;
+			$keywords .= '; ' if $keywords ne '';
+			$keywords .= $keyword;
+		}
+	}
+	if( $eprint->exists_and_set( 'subjects' ) ) {
+		for my $subject (@{$eprint->get_value( 'subjects' )}) {
+			my $subject_obj = EPrints::DataObj::Subject->new( $plugin->{repository}, $subject );
+			my $subject_name = $subject_obj->render_description();
+
+			$keywords .= '; ' if $keywords ne '';
+			$keywords .= $subject_name;
+		}
+	}
+	push @tags, [ 'citation_keywords', $keywords ] if $keywords ne '';
+
+	push @tags, simple_value( $eprint, 'article_number' => 'journal_article' );
 
 	return \@tags;
+}
+
+=over 4
+
+=item [$name, $value] | ([$name, $value], ...) = simple_value( $eprint, $data_name, $tag_name )
+
+Returns the value (or values if it is multiple) associated with the given
+C<$eprint> at C<$data_name>. This is designed to then be pushed straight to
+C<@tags>, associating 'citation_$tag_name' with the read value(s).
+
+=cut
+sub simple_value
+{
+	my( $eprint, $data_name, $tag_name ) = @_;
+	$tag_name = $data_name unless defined $tag_name;
+
+	if( $eprint->exists_and_set( $data_name ) ) {
+		my $value = $eprint->get_value( $data_name );
+		if( ref( $value ) eq 'ARRAY' ) {
+			return map { [ 'citation_'.$tag_name, $_ ] } @{$value};
+		} else {
+			return [ 'citation_'.$tag_name, $value ];
+		}
+	} else {
+		return ();
+	}
 }
 
 =item $parsed_date = $plugin->get_earliest_date( $eprint, [ $date_type, ... ] )

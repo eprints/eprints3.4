@@ -37,7 +37,7 @@ sub output_list
 
 	for my $eprint ($opts{list}->get_records) {
 		for my $document ($eprint->get_all_documents) {
-			next unless $document->is_public;
+			next unless $document->is_public || $document->user_can_view( $plugin->{repository}->current_user );
 			print {$fh} '<a href="' . $document->get_url . '">' . $document->get_url . '</a><br />';
 		}
 	}

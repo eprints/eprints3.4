@@ -1567,6 +1567,18 @@ sub get_input_elements
 				$row_label->appendChild( $session->make_text( $i.". " ) );
 				$col1 = { el=>$row_label, class=>"ep_form_input_grid_pos" };
 				my $arrows = $session->make_doc_fragment;
+
+				$arrows->appendChild( $session->make_element(
+					'input',
+					type => 'image',
+					src => "$imagesurl/delete.png",
+					alt => 'down',
+					title => 'clear',
+					name => "_internal_${basename}_clear_$i",
+					onclick => "return EPJS_clear_row('$basename', $i - 1);",
+				) );
+				$arrows->appendChild( $session->make_text( ' ' ) );
+
 				$arrows->appendChild( $session->make_element(
 					"input",
 					type=>"image",

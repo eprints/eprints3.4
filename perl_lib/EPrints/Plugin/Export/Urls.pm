@@ -19,7 +19,7 @@ sub new
 	my $self = $class->SUPER::new( %opts );
 
 	$self->{name} = 'Document URLs';
-	$self->{accept} = [ 'list/*' ];
+	$self->{accept} = [ 'list/eprint', 'dataobj/eprint' ];
 	$self->{visible} = 'all';
 	$self->{suffix} = '.html';
 	$self->{mimetype} = 'text/html; charset=utf-8';
@@ -27,25 +27,21 @@ sub new
 	return $self;
 }
 
-sub output_list
+sub output_dataobj
 {
-	my( $plugin, %opts ) = @_;
+	my( $plugin, $eprint ) = @_;
 
-	my $fh = $opts{fh};
-	my $value = undef;
-	open $fh, '>', \$value unless defined $fh;
+	my $links = '';
 
-	for my $eprint ($opts{list}->get_records) {
-		for my $document ($eprint->get_all_documents) {
-			next unless $document->is_public || $document->user_can_view( $plugin->{repository}->current_user );
+	for my $document ($eprint->get_all_documents) {
+		next unless $document->is_public || $document->user_can_view( $plugin->{repository}->current_user );
 
-			my $link = '<a href="' . $document->get_url . '">' . $document->get_url . '</a>';
-			$link .= ' (private)' unless $document->is_public;
-			print {$fh} $link . '<br />';
-		}
+		$links .= '<a href="' . $document->get_url . '">' . $document->get_url . '</a>';
+		$links .= ' (private)' unless $document->is_public;
+		$links .= '<br />';
 	}
 
-	return $value;
+	return $links;
 }
 
 1;

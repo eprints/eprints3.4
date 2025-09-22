@@ -54,7 +54,6 @@ sub export
 
 	my %q = URI::http->new( $repo->get_request->unparsed_uri )->query_form;
 
-	my $progressid = $q{progressid};
 	my $ajax = $q{ajax};
 
 	if( $ajax eq "add_format" )
@@ -65,9 +64,10 @@ sub export
 			$messages =~ s/"/\\"/g;
 		}
 
-		print '{"progressid": "' . $progressid . '"';
-		print ', "docid": ' . $doc->id if defined $doc;
-		print ', "messages": "' . $messages . '"' if defined $messages;
+		print '{';
+		print '"docid": ' . $doc->id if defined $doc;
+		print ', ' if defined $doc and defined $messages;
+		print '"messages": "' . $messages . '"' if defined $messages;
 		print '}';
 
 		return;

@@ -508,12 +508,12 @@ sub convert_input
 			dec => "12",
 		);
 		my $month = substr( lc( $entry->field( "month" ) ), 0, 3 );
-		if( defined $months{$month} && defined $epdata->{date})
-		{
+		if( defined $months{$month} && defined $epdata->{date}) {
 			$epdata->{date} .= "-" . $months{$month};
-		}
-		else
-		{
+		} elsif( $month >= 1 && $month <= 12 ) {
+			# If the month is already a number, pad it two digits
+			$epdata->{date} .= '-' . sprintf( '%02d', $month );
+		} else {
 			$plugin->warning( $plugin->phrase( "skip_month", month => $month ) );
 		}
 	}

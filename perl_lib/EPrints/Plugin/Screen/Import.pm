@@ -63,7 +63,7 @@ sub new
 	$self->{show_stderr} = 1;
 
 	$self->{encodings} = \@ENCODINGS;
-	$self->{default_encoding} = "iso-8859-1";
+	$self->{default_encoding} = "UTF-8";
 
 	return $self;
 }

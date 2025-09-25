@@ -328,8 +328,9 @@ sub render_set_input
 				) );
 	                	$row->appendChild( $session->make_text( " ".$labels->{$opt} ));
         	        	$dd = $session->make_element( "dd", id=>$basename."_".$opt."_desc" );
+						my $label = $session->make_element( 'label', for => "${basename}_$opt" );
                 		my $phrasename = $self->{confid}."_optdetails_".$self->{name}."_".$opt;
-                		$dd->appendChild( $session->html_phrase( $phrasename ));
+                		$label->appendChild( $session->html_phrase( $phrasename ));
 			}
 			else 
 			{
@@ -343,8 +344,9 @@ sub render_set_input
 	                                checked => $checked,
                                         'aria-labelledby' => $basename."_".$opt."_label",
                 	        ) );
-	                        $dd = $session->make_element( "dd", id=>$basename."_".$opt."_label", 'aria-describedby'=>$self->get_labelledby( $basename ) );
-				$dd->appendChild( $session->make_text( $labels->{$opt} ) );
+				$dd = $session->make_element( "dd", id=>$basename."_".$opt."_label", 'aria-describedby'=>$self->get_labelledby( $basename ) );
+				my $label = $dd->appendChild( $session->make_element( 'label', for => "${basename}_$opt" ) );
+				$label->appendChild( $session->make_text( $labels->{$opt} ) );
 			}
 			$list->appendChild( $row );
                         $list->appendChild( $dd );

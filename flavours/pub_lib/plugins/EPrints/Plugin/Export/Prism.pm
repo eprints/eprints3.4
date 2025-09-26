@@ -103,7 +103,9 @@ sub convert_dataobj
 	# 4.2.20 prism:doi
 	if( $eprint->exists_and_set( 'ids' ) ) {
 		for my $id ( @{$eprint->get_value( 'ids' )} ) {
-			push @tags, [ 'prism.doi', $id->{id} ] if $id->{id_type} eq 'doi';
+			if( defined $id->{id} && defined $id->{id_type} ) {
+				push @tags, [ 'prism.doi', $id->{id} ] if $id->{id_type} eq 'doi';
+			}
 		}
 	}
 	# 4.2.31 prism:isbn

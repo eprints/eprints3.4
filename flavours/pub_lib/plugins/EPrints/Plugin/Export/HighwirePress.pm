@@ -130,8 +130,10 @@ sub convert_dataobj
 	push @tags, simple_value( $eprint, 'publisher' );
 	if( $eprint->exists_and_set( 'ids' ) ) {
 		for my $id ( @{$eprint->get_value( 'ids' )} ) {
-			push @tags, [ 'citation_doi', $id->{id} ] if $id->{id_type} eq 'doi';
-			push @tags, [ 'citation_pmid', $id->{id} ] if $id->{id_type} eq 'pmid';
+			if( defined $id->{id} && defined $id->{id_type} ) {
+				push @tags, [ 'citation_doi', $id->{id} ] if $id->{id_type} eq 'doi';
+				push @tags, [ 'citation_pmid', $id->{id} ] if $id->{id_type} eq 'pmid';
+			}
 		}
 	}
 	push @tags, simple_value( $eprint, 'abstract' );

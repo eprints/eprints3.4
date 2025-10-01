@@ -421,6 +421,7 @@ sub _render_date
 
 	my( $year, $mon, $day, $hour, $min, $sec ) = @l;
 
+	my $timezone_name = 'UTC';
 	if( $timezone ) {
 		if( !EPrints::Utils::require_if_exists( "DateTime" ) )
 		{
@@ -437,6 +438,7 @@ sub _render_date
 			time_zone => 'Etc/UTC',
 		);
 		$time->set_time_zone( $timezone );
+		$timezone_name = $time->time_zone_short_name;
 
 		$year = $time->year;
 		$mon = $time->month;
@@ -488,7 +490,7 @@ sub _render_date
 
 	if( @l > 3 && !$short )
 	{
-		$r .= " UTC";
+		$r .= ' ' . $timezone_name;
 	}
 
 	return $session->make_text( $r );

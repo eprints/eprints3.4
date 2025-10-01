@@ -338,7 +338,7 @@ sub dow_label
 
 =over 4
 
-=item $xhtml = EPrints::Time::render_date_with_dow( $repo, $value )
+=item $xhtml = EPrints::Time::render_date_with_dow( $repo, $value, $timezone = undef )
 
 Same as L<EPrints::Time::render_date> but adds the day of the week.
 
@@ -351,8 +351,8 @@ E.g.
 
 sub render_date_with_dow
 {
-	my( $session, $datevalue ) = @_;
-	return _render_date( $session, $datevalue, 0, 1 );
+	my( $session, $datevalue, $timezone ) = @_;
+	return _render_date( $session, $datevalue, 0, 1, $timezone );
 }
 
 =back
@@ -361,7 +361,7 @@ sub render_date_with_dow
 
 =over 4
 
-=item $xhtml = EPrints::Time::render_date( $repo, $value )
+=item $xhtml = EPrints::Time::render_date( $repo, $value, $timezone = undef )
 
 Renders a L<EPrints::MetaField::Date> or L<EPrints::MetaField::Time> value in a human-friendly form in the current locale's time zone.
 
@@ -377,14 +377,14 @@ E.g.
 
 sub render_date
 {
-	my( $session, $datevalue) = @_;
-	return _render_date( $session, $datevalue, 0 );
+	my( $session, $datevalue, $timezone ) = @_;
+	return _render_date( $session, $datevalue, 0, undef, $timezone );
 }
 
 ######################################################################
 =pod
 
-=item $xhtml = EPrints::Time::render_short_date( $repo, $value )
+=item $xhtml = EPrints::Time::render_short_date( $repo, $value, $timezone = undef )
 
 Render a shorter form of L</render_date>.
 
@@ -399,13 +399,13 @@ E.g.
 
 sub render_short_date
 {
-	my( $session, $datevalue) = @_;
-	return _render_date( $session, $datevalue, 1 );
+	my( $session, $datevalue, $timezone ) = @_;
+	return _render_date( $session, $datevalue, 1, undef, $timezone );
 }
 
 sub _render_date
 {
-	my( $session, $datevalue, $short, $dow ) = @_;
+	my( $session, $datevalue, $short, $dow, $timezone ) = @_;
 
 	if( !defined $datevalue )
 	{
@@ -420,6 +420,33 @@ sub _render_date
 	}
 
 	my( $year, $mon, $day, $hour, $min, $sec ) = @l;
+
+	my $timezone_name = 'UTC';
+	if( $timezone ) {
+		if( !EPrints::Utils::require_if_exists( "DateTime" ) )
+		{
+			EPrints->abort( "Requires DateTime as `timezone` has been set to '$timezone'" );
+		}
+
+		my $time = DateTime->new(
+			year   => $year,
+			month  => $mon || 1,
+			day    => $day || 1,
+			hour   => $hour || 0,
+			minute => $min || 0,
+			second => $sec || 0,
+			time_zone => 'Etc/UTC',
+		);
+		$time->set_time_zone( $timezone );
+		$timezone_name = $time->time_zone_short_name;
+
+		$year = $time->year;
+		$mon = $time->month;
+		$day = $time->day;
+		$hour = $time->hour;
+		$min = $time->minute;
+		$sec = $time->second;
+	}
 
 	# 1999
 	my $r = $year;
@@ -463,7 +490,7 @@ sub _render_date
 
 	if( @l > 3 && !$short )
 	{
-		$r .= " UTC";
+		$r .= ' ' . $timezone_name;
 	}
 
 	return $session->make_text( $r );

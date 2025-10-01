@@ -115,11 +115,12 @@ sub render_single_value
 		$value = substr( $value, 0, $l );
 	}
 
+	my $timezone = $session->config( 'timezone' );
 	if( $self->{render_style} eq "short" )
 	{
-		return EPrints::Time::render_short_date( $session, $value );
+		return EPrints::Time::render_short_date( $session, $value, $timezone );
 	}
-	return EPrints::Time::render_date( $session, $value );
+	return EPrints::Time::render_date( $session, $value, $timezone );
 }
 	
 

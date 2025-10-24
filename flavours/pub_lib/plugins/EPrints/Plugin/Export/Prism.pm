@@ -103,7 +103,9 @@ sub convert_dataobj
 	# 4.2.20 prism:doi
 	if( $eprint->exists_and_set( 'ids' ) ) {
 		for my $id ( @{$eprint->get_value( 'ids' )} ) {
-			push @tags, [ 'prism.doi', $id->{id} ] if $id->{id_type} eq 'doi';
+			if( defined $id->{id} && defined $id->{id_type} ) {
+				push @tags, [ 'prism.doi', $id->{id} ] if $id->{id_type} eq 'doi';
+			}
 		}
 	}
 	# 4.2.31 prism:isbn
@@ -199,7 +201,7 @@ sub get_earliest_date
 		for my $type (@types) {
 			if( defined $date->{date_type} && $date->{date_type} eq $type ) {
 				my $parsed_date = parse_date( $date->{date} );
-				if( !defined $early_date || $early_date gt $parsed_date ) {
+				if( defined $parsed_date && ( !defined $early_date || $early_date gt $parsed_date ) ) {
 					$early_date = $parsed_date;
 				}
 			}
@@ -220,7 +222,7 @@ sub parse_date
 	my( $date ) = @_;
 
 	my $parsed_date;
-	if( $date =~ m/^(\d+(?:-\d+(?:-\d+)?)?)(?: (\d+:\d+:\d+))/ ) {
+	if( defined $date && $date =~ m/^(\d+(?:-\d+(?:-\d+)?)?)(?: (\d+:\d+:\d+))/ ) {
 		$parsed_date = $1;
 		$parsed_date .= "T$2" if defined $2;
 	}

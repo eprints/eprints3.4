@@ -123,15 +123,18 @@ sub convert_dataobj
 	}
 
 	# Suggested by https://www.zotero.org/support/dev/exposing_metadata
-	push @tags, [ 'citation_date', $publication_date || $online_date ] if defined $publication_date || $online_date;
-	push @tags, [ 'citation_cover_date', $publication_date ] if defined $publication_date;
+	# Google Scholar does not recommend using these if already using citation_publication_date and/or citation_online_date
+	#push @tags, [ 'citation_date', $publication_date || $online_date ] if defined $publication_date || $online_date;
+	#push @tags, [ 'citation_cover_date', $publication_date ] if defined $publication_date;
 	push @tags, simple_value( $eprint, 'book_title' );
 	push @tags, simple_value( $eprint, 'series' => 'series_title' );
 	push @tags, simple_value( $eprint, 'publisher' );
 	if( $eprint->exists_and_set( 'ids' ) ) {
 		for my $id ( @{$eprint->get_value( 'ids' )} ) {
-			push @tags, [ 'citation_doi', $id->{id} ] if $id->{id_type} eq 'doi';
-			push @tags, [ 'citation_pmid', $id->{id} ] if $id->{id_type} eq 'pmid';
+			if( defined $id->{id} && defined $id->{id_type} ) {
+				push @tags, [ 'citation_doi', $id->{id} ] if $id->{id_type} eq 'doi';
+				push @tags, [ 'citation_pmid', $id->{id} ] if $id->{id_type} eq 'pmid';
+			}
 		}
 	}
 	push @tags, simple_value( $eprint, 'abstract' );
@@ -221,7 +224,7 @@ sub get_earliest_date
 		for my $type (@types) {
 			if( defined $date->{date_type} && $date->{date_type} eq $type ) {
 				my $parsed_date = parse_date( $date->{date} );
-				if( !defined $early_date || $early_date gt $parsed_date ) {
+				if( defined $parsed_date && ( !defined $early_date || $early_date gt $parsed_date ) ) {
 					$early_date = $parsed_date;
 				}
 			}
@@ -242,7 +245,7 @@ sub parse_date
 	my( $date ) = @_;
 
 	my $parsed_date;
-	if( $date =~ m/^(\d+)(?:-(\d+)(?:-(\d+))?)?/ ) {
+	if( defined $date && $date =~ m/^(\d+)(?:-(\d+)(?:-(\d+))?)?/ ) {
 		$parsed_date = $1;
 		$parsed_date .= "/$2" if defined $2;
 		$parsed_date .= "/$3" if defined $3;

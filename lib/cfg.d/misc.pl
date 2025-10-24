@@ -1,4 +1,12 @@
-
+# Set the timezone `MetaField::Time` and `MetaField::Date` are rendered with.
+#
+# This should be set to either `undef` (UTC) or a String from the
+# [tz database](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones),
+# such as 'Europe/London' or 'Pacific/Kiritimati'.
+#
+# You must install the `DateTime` CPAN module before setting this to anything
+# other than `undef` (`cpan install DateTime`).
+$c->{timezone} = undef;
 
 ######################################################################
 #

@@ -40,7 +40,6 @@ sub wishes_to_export
 sub export_mimetype 
 {
 	shift->{session}->get_request->unparsed_uri =~ /\bajax=([a-z_]+)\b/;
-	return "text/html" if $1 eq "add_format";
 	return "application/json";
 }
 
@@ -55,22 +54,22 @@ sub export
 
 	my %q = URI::http->new( $repo->get_request->unparsed_uri )->query_form;
 
-	my $progressid = $q{progressid};
 	my $ajax = $q{ajax};
 
 	if( $ajax eq "add_format" )
 	{
-		my $docid = defined $doc ? $doc->id : 'null';
+		my $messages = undef;
+		if( @{$self->{processor}->{messages}} ) {
+			$messages = $self->{processor}->render_messages();
+			$messages =~ s/"/\\"/g;
+		}
 
-		print <<EOH;
-<html>
-<body>
-<script type="text/javascript">
-window.top.window.UploadMethod_file_stop( '$progressid', $docid );
-</script>
-</body>
-</html>
-EOH
+		print '{';
+		print '"docid": ' . $doc->id if defined $doc;
+		print ', ' if defined $doc and defined $messages;
+		print '"messages": "' . $messages . '"' if defined $messages;
+		print '}';
+
 		return;
 	}
 

@@ -90,14 +90,19 @@ sub from
 	my $referrer = $session->param( "referrer" );
         $referrer = EPrints::Apache::AnApache::header_in( $session->get_request, 'Referer' ) unless( EPrints::Utils::is_set( $referrer ) );
 	if (defined $referrer)
-        {
-                my $referrer_uri = URI->new($referrer);
-                my $repository_uri = URI->new($session->config('base_url'));
-                if ($referrer_uri->can( "host" ) && $referrer_uri->host ne $repository_uri->host)
-                {
-                        $referrer = undef;
-                }
-        }
+	{
+			my $referrer_uri = URI->new($referrer);
+			my $repository_uri = URI->new($session->config('base_url'));
+			my $base_url = $repository_uri->canonical()->as_string();
+
+			if (defined $referrer_uri->host && $referrer_uri->host ne $repository_uri->host)
+			{
+				$referrer = undef;
+			} elsif (defined $referrer_uri->scheme && defined $referrer_uri->host && $referrer_uri->scheme . "://" . $referrer_uri->host ne $session->config('base_url')) {
+				# Verify against javascript: or data: injection
+				$referrer = undef;
+			}
+	}
 	$referrer = $session->config( "frontpage" ) unless( EPrints::Utils::is_set( $referrer ) );
 
 	$self->{processor}->{redirect} = $referrer;

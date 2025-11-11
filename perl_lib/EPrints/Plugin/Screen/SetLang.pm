@@ -93,7 +93,6 @@ sub from
 	{
 			my $referrer_uri = URI->new($referrer);
 			my $repository_uri = URI->new($session->config('base_url'));
-			my $base_url = $repository_uri->canonical()->as_string();
 
 			if (defined $referrer_uri->host && $referrer_uri->host ne $repository_uri->host)
 			{

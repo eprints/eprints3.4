@@ -40,68 +40,84 @@ use EPrints::MetaField::Longtext;
 
 sub get_basic_input_elements
 {
-        my( $self, $session, $value, $basename, $staff, $obj, $one_field_component ) = @_;
+	my( $self, $session, $value, $basename, $staff, $obj, $one_field_component ) = @_;
 
-        my %defaults = $self->get_property_defaults;
+	my %defaults = $self->get_property_defaults;
 
-        my @classes = defined $self->{dataset} ?
-                join('_', 'ep', $self->dataset->base_id, $self->name) :
-                ();
+	my @classes = defined $self->{dataset} ?
+		join('_', 'ep', $self->dataset->base_id, $self->name) :
+		();
 
 	my %attributes = (
-                name => $basename,
-                id => $basename,
-                class => join(' ', @classes),
-                rows => $self->{input_rows},
-                cols => $self->{input_cols},
-                maxlength => $self->{maxlength},
-                wrap => "virtual",
+		name => $basename,
+		id => $basename,
+		class => join(' ', @classes),
+		rows => $self->{input_rows},
+		cols => $self->{input_cols},
+		maxlength => $self->{maxlength},
+		wrap => "virtual",
 		'aria-labelledby' => $self->get_labelledby( $basename ),
 	);
+
 	my $describedby = $self->get_describedby( $basename, $one_field_component );
-        $attributes{'aria-describedby'} = $describedby if EPrints::Utils::is_set( $describedby );
+	$attributes{'aria-describedby'} = $describedby if EPrints::Utils::is_set( $describedby );
 	my $textarea = $session->make_element( "textarea", %attributes );
-        $textarea->appendChild( $session->make_text( $value ) );
+	$textarea->appendChild( $session->make_text( $value ) );
 
-        my $frag = $session->make_doc_fragment;
-        $frag->appendChild($textarea);
+	my $frag = $session->make_doc_fragment;
+	$frag->appendChild($textarea);
 
-        my $p = $session->make_element( "p", id=>$basename . "_counter_line" );
-        $p->appendChild($session->make_element( "span", id=>$basename."_display_count"));
-        if (($self->{maxwords}) ne $defaults{maxwords})
-        {
-                $p->appendChild( $session->make_text( "/".$self->{maxwords} ) );
-        }
+	my $final_max_words = 0;
+	if ( defined $self->{maxwords} && $self->{maxwords} )
+	{
+		$final_max_words = $self->{maxwords};
+	}
+	elsif ( !defined $self->{maxwords} && $defaults{maxwords} )
+	{
+		$final_max_words = $defaults{maxwords};
+	}
+
+	my @words = split( /\s+/, $value );
+	my $p;
+	if ( $final_max_words && scalar @words > $final_max_words )
+	{
+		$p = $session->make_element( "p", id=>$basename . "_counter_line", class => "ep_over_word_limit");
+	}
+	else
+	{
+		$p = $session->make_element( "p", id=>$basename . "_counter_line" );
+	}
+	$p->appendChild($session->make_element( "span", id=>$basename."_display_count"));
+	$p->appendChild( $session->make_text( "/".$final_max_words ) ) if $final_max_words;
 	$p->appendChild( $session->html_phrase( "lib/metafield:words" ) );
-        $frag->appendChild( $p );
 
+	$frag->appendChild( $p );
 
-$frag->appendChild( $session->make_javascript( <<EOJ ) );
+	$frag->appendChild( $session->make_javascript( <<EOJ ) );
 jQuery.noConflict();
 function getWordCount(words_string)
 {
 	var words = words_string.split(/\\W+/);
-        var word_count = words.length;
-        if (word_count > 0 && words[word_count-1] == "")
-        {
-                word_count--;
-        }
+	var word_count = words.length;
+	if (word_count > 0 && words[word_count-1] == "")
+	{
+		word_count--;
+	}
 	return word_count;
 }
 jQuery.fn.wordCount = function(max_words)
 {
 	var counterLine = "counter_line";
-        var counterElement = "display_count";
-        var cid = jQuery(this).attr('id');
-        var total_words;
+	var counterElement = "display_count";
+	var cid = jQuery(this).attr('id');
+	var total_words;
 
-        //for each keypress function on text areas
-        jQuery(this).bind("input propertychange", function()
-        {
+	// for each keypress function on text areas
+	jQuery(this).bind("input propertychange", function()
+	{
 		total_words = getWordCount(this.value);
-                jQuery('#'+cid+"_"+counterElement).html(total_words);
-		console.log("total_words: "+total_words+" | max_words: "+max_words);
-		if (total_words > max_words )
+		jQuery('#'+cid+"_"+counterElement).html(total_words);
+		if (max_words > 0 && total_words > max_words )
 		{
 			jQuery('#'+cid+"_"+counterLine).attr('class', 'ep_over_word_limit');
 		}
@@ -109,25 +125,24 @@ jQuery.fn.wordCount = function(max_words)
 		{
 			jQuery('#'+cid+"_"+counterLine).attr('class', '');
 		}
-        });
+	});
 	total_words = getWordCount(jQuery(this).text());
-        jQuery('#'+cid+"_"+counterElement).html(total_words);
+	jQuery('#'+cid+"_"+counterElement).html(total_words);
 };
 jQuery( document ).ready(function() {
-	jQuery("#$basename").wordCount($self->{maxwords});
+	jQuery("#$basename").wordCount($final_max_words);
 });
 EOJ
 
-
-        return [ [ { el=>$frag } ] ];
+	return [ [ { el=>$frag } ] ];
 }
 
 sub get_property_defaults
 {
-        my( $self ) = @_;
-        my %defaults = $self->SUPER::get_property_defaults;
-        $defaults{maxwords} = 500;
-        return %defaults;
+	my( $self ) = @_;
+	my %defaults = $self->SUPER::get_property_defaults;
+	$defaults{maxwords} = 0;
+	return %defaults;
 }
 
 

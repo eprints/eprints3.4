@@ -151,8 +151,16 @@ sub event_parse
 	# encoding
 	binmode($fh);
 
-	my $parser = new XML::LibXML::SAX->new(Handler => $handler);
-	$parser->parse_file( $fh );	
+	my $parser;
+	if( EPrints::Utils::require_if_exists( 'XML::SAX::ExpatXS' ) )
+	{
+		$parser = XML::SAX::ExpatXS->new( Handler => $handler );
+	}
+	else
+	{
+		$parser = XML::LibXML::SAX->new( Handler => $handler );
+	}
+	$parser->parse_file( $fh );
 }
 
 

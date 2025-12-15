@@ -2522,7 +2522,7 @@ sub plugin_error
 	$repo->xml->dispose( $ul );
 
 	return $self->sword_error(
-		status => HTTP_INTERNAL_SERVER_ERROR,
+		status => HTTP_BAD_REQUEST,
 		summary => $err
 	);
 }

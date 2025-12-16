@@ -88,17 +88,25 @@ sub from
 	$session->{request}->err_headers_out->add('Set-Cookie' => $cookie);
 
 	my $referrer = $session->param( "referrer" );
-        $referrer = EPrints::Apache::AnApache::header_in( $session->get_request, 'Referer' ) unless( EPrints::Utils::is_set( $referrer ) );
-	if (defined $referrer)
-        {
-                my $referrer_uri = URI->new($referrer);
-                my $repository_uri = URI->new($session->config('base_url'));
-                if ($referrer_uri->can( "host" ) && $referrer_uri->host ne $repository_uri->host)
-                {
-                        $referrer = undef;
-                }
-        }
-	$referrer = $session->config( "frontpage" ) unless( EPrints::Utils::is_set( $referrer ) );
+	$referrer = EPrints::Apache::AnApache::header_in( $session->get_request, 'Referer' ) unless( EPrints::Utils::is_set( $referrer ) );
+	if ( defined $referrer )
+	{
+		my $referrer_uri = URI->new($referrer);
+		my $repository_uri = URI->new($session->config('base_url'));
+
+		# Allow SCHEME://HOST/PATH if matching host
+		if ( $referrer_uri->can( "host" ) && $referrer_uri->host ne $repository_uri->host )
+		{
+			$referrer = undef;
+		}
+		# Allow /PATH if no host specified (therefore scheme will be set but empty)
+		if ( ! $referrer_uri->can( "host" ) && $referrer_uri->scheme ne "" )
+		{
+			$referrer = undef;
+		}
+
+	}
+	$referrer = $session->config( "frontpage" ) . "eprints/" unless( EPrints::Utils::is_set( $referrer ) );
 
 	$self->{processor}->{redirect} = $referrer;
 }

@@ -257,6 +257,12 @@ sub form_value_single
 	return defined $value && $value =~ m/^($regexp)$/ ? $value : undef;
 }
 
+sub empty_value 
+{
+	my ( $self ) = @_;
+	$self->property( 'allow_null' ) == 1 ? undef : 0;
+}
+
 ######################################################################
 1;
 

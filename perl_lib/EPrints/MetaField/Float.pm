@@ -108,6 +108,12 @@ sub get_search_conditions_not_ex
 	return $self->SUPER::get_search_conditions_not_ex( $session, $dataset, $search_value, $match, $merge, $search_mode );
 }
 
+sub empty_value
+{
+    my ( $self ) = @_;
+    $self->property( 'allow_null' ) == 1 ? undef : 0;
+}
+
 ######################################################################
 1;
 

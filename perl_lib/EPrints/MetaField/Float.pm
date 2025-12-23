@@ -114,6 +114,21 @@ sub empty_value
     $self->property( 'allow_null' ) == 1 ? undef : 0;
 }
 
+sub sql_row_from_value
+{
+	my( $self, $session, $value ) = @_;
+
+	# Also validate on regex for when called via CRUD API
+	if ( defined $value && $value !~ m/-?[0-9]+(\.[0-9]+)?/ )
+	{
+		$value = undef;
+		$session->log( "WARNING: Value for field '".$self->name."' as it is not a valid floating point number." );
+	}
+
+	return( $value );
+}
+
+
 ######################################################################
 1;
 

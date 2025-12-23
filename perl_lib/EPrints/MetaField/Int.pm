@@ -240,7 +240,8 @@ sub sql_row_from_value
 {
 	my( $self, $session, $value ) = @_;
 
-	if ( defined $value && ( $value > 2**31-1 || $value < -2**31 ) ) # Make sure value is within 32-bit signed int
+	# Also validate on regex for when called via CRUD API
+	if ( defined $value && ( $value !~ m/^-?[0-9]+$/ ||  $value > 2**31-1 || $value < -2**31 ) ) # Make sure value is within 32-bit signed int
 	{
 		$value = undef;
         $session->log( "WARNING: Value for field '".$self->name."' was unset as it cannot be stored as a 32-bit signed integer." );

@@ -241,10 +241,11 @@ sub sql_row_from_value
 	my( $self, $session, $value ) = @_;
 
 	# Also validate on regex for when called via CRUD API
-	if ( defined $value && ( $value !~ m/^-?[0-9]+$/ ||  $value > 2**31-1 || $value < -2**31 ) ) # Make sure value is within 32-bit signed int
+	my $regexp = defined $self->property( 'regexp' ) ? $self->property( 'regexp' ) : '.*';
+	if ( defined $value && ( $value !~ m/^($regexp)$/ ||  $value > 2**31-1 || $value < -2**31 ) ) # Make sure value is within 32-bit signed int
 	{
 		$value = undef;
-        $session->log( "WARNING: Value for field '".$self->name."' was unset as it cannot be stored as a 32-bit signed integer." );
+        $session->log( "WARNING: Value for field '".$self->name."' was unset as it cannot be stored as a 32-bit signed integer or value does not match field's regexp." );
 	}
 
 	return( $value );
@@ -254,7 +255,7 @@ sub form_value_single
 {
 	my( $self, $session, $basename, $object ) = @_;
 	my $value = $self->SUPER::form_value_single( $session, $basename, $object );
-	my $regexp = $self->property( "regexp" );
+	my $regexp = defined $self->property( 'regexp' ) ? $self->property( 'regexp' ) : '.*';
 	return defined $value && $value =~ m/^($regexp)$/ ? $value : undef;
 }
 

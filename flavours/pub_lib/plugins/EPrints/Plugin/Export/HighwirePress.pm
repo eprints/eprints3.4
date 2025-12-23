@@ -29,7 +29,7 @@ sub dataobj_to_html_header
 
 	my $links = $plugin->{session}->make_doc_fragment;
 	$links->appendChild( $plugin->{session}->make_comment( " Highwire Press meta tags " ) );
-	$links->appendChild( $plugin->{session}->make_text( "\n" ));
+	$links->appendChild( $plugin->{session}->make_text( "\n" ) );
 
 	my $tags = $plugin->convert_dataobj( $dataobj, "no_cache" => 1 );
 	for my $tag (@{$tags})
@@ -100,11 +100,9 @@ sub convert_dataobj
 	push @tags, simple_value( $eprint, 'isbn' );
 	push @tags, simple_value( $eprint, 'volume' );
 	push @tags, simple_value( $eprint, 'number' => 'issue' );
-	if( $eprint->exists_and_set( 'pagerange' ) ) {
-		my( $firstpage, $lastpage ) = EPrints::MetaField::Pagerange::split_range( $eprint->get_value( 'pagerange' ) );
-		push @tags, [ 'citation_firstpage', $firstpage ] if defined $firstpage;
-		push @tags, [ 'citation_lastpage', $lastpage ] if defined $lastpage;
-	}
+	my( $firstpage, $lastpage ) = split_pagerange( $eprint );
+	push @tags, [ 'citation_firstpage', $firstpage ] if defined $firstpage;
+	push @tags, [ 'citation_lastpage', $lastpage ] if defined $lastpage;
 
 	# E. For theses, dissertations and technical reports provide the remaining
 	#    data in 'citation_dissertation_institution', 'citation_technical_report_institution' and
@@ -202,6 +200,42 @@ sub simple_value
 	}
 }
 
+=item ( $from, $to ) = HighwirePress::split_pagerange( $eprint )
+
+Splits the pagerange from the given C<$eprint> into its first page and last
+page as done by C<EPrints::MetaField::Pagerange::render_single_value>. If
+either of these values cannot be gleaned from this eprint they will return
+C<undef>.
+
+=cut
+sub split_pagerange
+{
+	my( $eprint ) = @_;
+
+	return( undef, undef ) unless $eprint->exists_and_set( 'pagerange' );
+	my $range = $eprint->get_value( 'pagerange' );
+
+	# Based on `EPrints::MetaField::Pagerange::render_single_value`
+	if( $range =~ /^([1-9]\d*)$/ ) {
+		return( $1, undef );
+	} elsif( my( $from, $to ) = $range =~ m/^([^-]+)-(.+)$/ ) {
+		# If there are multiple '-' we assume that the one which defines the
+		# range is in the middle of the string and split on that one.
+		my $count = $range =~ tr/-//;
+		if( $count > 1 ) {
+			my $middle = int( ($count - 1) / 2 );
+			# Capture `$middle` instances of '<text>-' followed by '<text>' as
+			# the first group, with everything after the following hyphen in
+			# the second group.
+			( $from, $to ) = $range =~ m/^((?:[^-]+-){$middle}[^-]+)-(.+)$/;
+		}
+
+		return( $from, $to );
+	} else {
+		return( undef, undef );
+	}
+}
+
 =item $parsed_date = $plugin->get_earliest_date( $eprint, [ $date_type, ... ] )
 
 Returns the earliest date with an appropriate C<$date_type> from the given
@@ -217,6 +251,11 @@ sub get_earliest_date
 		if( $eprint->exists_and_set( 'date_type' ) and $eprint->get_value( 'date_type' ) eq $type ) {
 			$early_date = parse_date( $eprint->get_value( 'date' ) );
 		}
+	}
+	# Assume that if there is no date_type field then date is a publication date.
+	if( ! $eprint->{dataset}->has_field( 'date_type' ) || ! $eprint->get_value( 'date_type' ) )
+	{
+		$early_date = parse_date( $eprint->get_value( 'date' ) );
 	}
 	return $early_date unless $eprint->exists_and_set( 'dates' );
 

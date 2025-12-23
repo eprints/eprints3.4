@@ -29,7 +29,7 @@ sub dataobj_to_html_header
 
 	my $links = $plugin->{session}->make_doc_fragment;
 	$links->appendChild( $plugin->{session}->make_comment( " PRISM meta tags " ) );
-	$links->appendChild( $plugin->{session}->make_text( "\n" ));
+	$links->appendChild( $plugin->{session}->make_text( "\n" ) );
 
 	$links->appendChild( $plugin->{session}->make_element(
 		"link",
@@ -79,8 +79,6 @@ sub convert_dataobj
 	# (https://www.w3.org/submissions/2020/SUBM-prism-20200910/prism-basic.html#_Toc46322886)
 
 	my $publication_date = $plugin->get_earliest_date( $eprint, 'published', 'published_online' );
-	# 4.2.14 prism:coverDate
-	push @tags, [ 'prism.coverDate', $publication_date ] if defined $publication_date;
 	# 4.2.59 prism:publicationDate
 	push @tags, [ 'prism.publicationDate', $publication_date ] if defined $publication_date;
 	# 4.2.17 prism:dateReceived
@@ -88,15 +86,13 @@ sub convert_dataobj
 	# 4.2.43 prism:modificationDate
 	push @tags, [ 'prism.modificationDate', parse_date( $eprint->get_value( 'lastmod' ) ) ] if $eprint->exists_and_set( 'lastmod' );
 
-	if( $eprint->exists_and_set( 'pagerange' ) ) {
-		# 4.2.54 prism:pageRange
-		push @tags, simple_value( $eprint, 'pagerange' => 'pageRange' );
-		my( $starting_page, $ending_page ) = EPrints::MetaField::Pagerange::split_range( $eprint->get_value( 'pagerange' ) );
-		# 4.2.70 prism:startingPage
-		push @tags, [ 'prism.startingPage', $starting_page ] if defined $starting_page;
-		# 4.2.23 prism:endingPage
-		push @tags, [ 'prism.endingPage', $ending_page ] if defined $ending_page;
-	}
+	# 4.2.54 prism:pageRange
+	push @tags, simple_value( $eprint, 'pagerange' => 'pageRange' );
+	my( $starting_page, $ending_page ) = EPrints::Plugin::Export::HighwirePress::split_pagerange( $eprint );
+	# 4.2.70 prism:startingPage
+	push @tags, [ 'prism.startingPage', $starting_page ] if defined $starting_page;
+	# 4.2.23 prism:endingPage
+	push @tags, [ 'prism.endingPage', $ending_page ] if defined $ending_page;
 	# 4.2.52 prism:pageCount
 	push @tags, simple_value( $eprint, 'pages' => 'pageCount' );
 
@@ -195,6 +191,11 @@ sub get_earliest_date
 			$early_date = parse_date( $eprint->get_value( 'date' ) );
 		}
 	}
+	# Assume that if there is no date_type field then date is a publication date.
+	if( ! $eprint->{dataset}->has_field( 'date_type' ) || ! $eprint->get_value( 'date_type' ) )
+	{
+		$early_date = parse_date( $eprint->get_value( 'date' ) );
+	}
 	return $early_date unless $eprint->exists_and_set( 'dates' );
 
 	for my $date (@{$eprint->get_value( 'dates' )}) {
@@ -222,7 +223,7 @@ sub parse_date
 	my( $date ) = @_;
 
 	my $parsed_date;
-	if( defined $date && $date =~ m/^(\d+(?:-\d+(?:-\d+)?)?)(?: (\d+:\d+:\d+))/ ) {
+	if( defined $date && $date =~ m/^(\d+(?:-\d+(?:-\d+)?)?)(?: (\d+:\d+:\d+))?/ ) {
 		$parsed_date = $1;
 		$parsed_date .= "T$2" if defined $2;
 	}

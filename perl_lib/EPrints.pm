@@ -463,12 +463,6 @@ sub post_config_handler_module_isolation
 	# make carp verbose
 	$Carp::Verbose = 1;
 
-	if( Apache2::MPM->is_threaded )
-	{
-        print STDERR ( "Warning! Running EPrints under threads is experimental and liable to break" );
-
-	}
-
 	# check for configuration using methods removed from Apache2.4
  	my $check_security = !Apache2::Connection->can( 'remote_ip' );
 

@@ -1006,7 +1006,7 @@ sub parse_input
 		$self->plugin_error( $plugin, \@messages );
 		return undef;
 	}
-	elsif( $count == 0 || $list->count == 0 )
+	elsif( $count == 0 || ( $list->count == 0 && $self->{method} ne "PUT" ) )
 	{
 		$plugin->handler->message( "error", "Import plugin didn't create anything" );
 		$self->plugin_error( $plugin, \@messages );

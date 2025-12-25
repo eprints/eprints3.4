@@ -248,7 +248,7 @@ sub get_earliest_date
 
 	my $early_date;
 	for my $type (@types) {
-		if( $eprint->exists_and_set( 'date_type' ) and $eprint->get_value( 'date_type' ) eq $type ) {
+		if( $eprint->exists_and_set( 'date' ) && $eprint->exists_and_set( 'date_type' ) && $eprint->get_value( 'date_type' ) eq $type ) {
 			$early_date = parse_date( $eprint->get_value( 'date' ) );
 		}
 	}

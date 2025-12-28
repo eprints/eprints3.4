@@ -9,7 +9,7 @@ MyUserAgent
 use strict;
 use warnings;
 
-use Test::More tests => 27;
+use Test::More tests => 30;
 
 use EPrints;
 use EPrints::Test;
@@ -323,6 +323,49 @@ SKIP:
 	};
 
 	ok(0, "Status changed") if $@;
+}
+
+SKIP:
+{
+    skip "Missing edit-link", 3 if !defined $edit_link;
+    my $r = $ua->request( HTTP::Request->new(
+            GET => $edit_link,
+            [
+                Accept => "application/atom+xml;type=entry",
+            ]
+        ) );
+    my $doc = eval { XML::LibXML->load_xml( string => $r->content ) };
+    skip "GET Atom XML $edit_link", 2 if !defined $doc;
+    my( $category ) = $xpc->findnodes( q{/atom:entry/atom:category[@scheme='http://eprints.org/ep2/data/2.0/eprint/eprint_status']}, $doc->documentElement );
+
+    ok(defined $category, "Contains eprint status");
+
+    skip "Missing eprint status", 2 if !defined $category;
+    $category->setAttribute( "term", "inbox" );
+    $r = $ua->request( HTTP::Request->new(
+            PATCH => $edit_link,
+            [
+                'Content-Type' => "application/atom+xml;type=entry",
+            ],
+            $doc->toString
+        ) );
+
+    is($r->code, 204, "PATCH $edit_link");
+
+    $r = $ua->request( HTTP::Request->new(
+            GET => $edit_link,
+            [
+                Accept => "application/atom+xml;type=entry",
+            ]
+        ) );
+    eval {
+        my $doc = XML::LibXML->load_xml( string => $r->content );
+        my( $category ) = $xpc->findnodes( q{/atom:entry/atom:category[@scheme='http://eprints.org/ep2/data/2.0/eprint/eprint_status']}, $doc->documentElement );
+
+        is($category->getAttribute( "term" ), "inbox", "Status changed");
+    };
+
+    ok(0, "Status changed") if $@;
 }
 
 SKIP:

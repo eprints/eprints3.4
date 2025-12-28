@@ -67,7 +67,7 @@ sub render_value
 
         # Make use of the nolink property, which can be applied in citations if we want to
         # suppress a link to the browse views when one is added via eprint_fields.pl
-        if($self->get_property( "render_custom" ) eq "nolink")
+        if($self->get_property( "render_dont_link" ))
         {
                 $nolink = 1;
         }
@@ -368,14 +368,14 @@ sub get_property_defaults
 		{ sub_name => "honourific", type => "text", maxlength => 10, },
 	];
 	$defaults{input_name_cols} = $EPrints::MetaField::FROM_CONFIG;
-        $defaults{hide_honourific} = $EPrints::MetaField::FROM_CONFIG;
-        $defaults{hide_lineage} = $EPrints::MetaField::FROM_CONFIG;
-        $defaults{family_first} = $EPrints::MetaField::FROM_CONFIG;
-        $defaults{render_order} = "fg";
-        $defaults{render_limit} = $EPrints::MetaField::UNDEF;
-        $defaults{render_dynamic} = $EPrints::MetaField::UNDEF;
-        $defaults{text_index} = 1;
-        $defaults{render_custom} = "link";
+	$defaults{hide_honourific} = $EPrints::MetaField::FROM_CONFIG;
+	$defaults{hide_lineage} = $EPrints::MetaField::FROM_CONFIG;
+	$defaults{family_first} = $EPrints::MetaField::FROM_CONFIG;
+	$defaults{render_dont_link} = $EPrints::MetaField::FALSE;
+	$defaults{render_order} = "fg";
+	$defaults{render_limit} = $EPrints::MetaField::UNDEF;
+	$defaults{render_dynamic} = $EPrints::MetaField::FALSE;
+	$defaults{text_index} = $EPrints::MetaField::TRUE;
 
 	return %defaults;
 }

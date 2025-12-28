@@ -65,7 +65,7 @@ sub get_property_defaults
 	$defaults{datasetid} = $EPrints::MetaField::REQUIRED; 
 	$defaults{dataset_fieldname} = "datasetid";
 	$defaults{dataobj_fieldname} = "objectid";
-	$defaults{show_in_fieldlist} = 0;
+	$defaults{show_in_fieldlist} = $EPrints::MetaField::FALSE;
 	$defaults{match} = "IN";
 
 	return %defaults;

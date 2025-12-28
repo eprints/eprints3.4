@@ -141,7 +141,7 @@ sub get_property_defaults
 {
 	my( $self ) = @_;
 	my %defaults = $self->SUPER::get_property_defaults;
-	$defaults{maxwords} = 0;
+	$defaults{maxwords} = $EPrints::MetaField::FALSE;
 	return %defaults;
 }
 

@@ -212,14 +212,17 @@ sub render_content
 		}
 
 		# Allow for individual field setting of show_help
-		$parts{no_toggle} = 1 if $field->{show_help} eq "always";
-                $parts{no_toggle} = 0 if $field->{show_help} eq "toggle";
-                $parts{no_help} = 1 if $field->{show_help} eq "never";
+		if ( defined $field->{show_help} )
+		{
+			$parts{no_toggle} = 1 if $field->{show_help} eq "always";
+			$parts{no_toggle} = 0 if $field->{show_help} eq "toggle";
+			$parts{no_help} = 1 if $field->{show_help} eq "never";
+		}
 
 		$parts{prefix} = $self->{prefix} . "_" . $field->get_name;
 		$parts{help_prefix} = $self->{prefix}."_help_".$field->get_name;
 
-		$parts{uses_fieldset} = 1 if $field->{form_input_style} eq "checkbox" || $field->{input_style} eq "checkbox";
+		$parts{uses_fieldset} = 1 if ( defined $field->{form_input_style} && $field->{form_input_style} eq "checkbox" ) || ( defined $field->{input_style} && $field->{input_style} eq "checkbox" );
 
 		$table->appendChild( $self->{session}->render_row_with_help( %parts ) );
 	}

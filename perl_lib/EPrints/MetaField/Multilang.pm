@@ -123,7 +123,7 @@ sub get_property_defaults
 {
 	my( $self ) = @_;
 	my %defaults = $self->SUPER::get_property_defaults;
-	$defaults{input_ordered} = 0;
+	$defaults{input_ordered} = $EPrints::MetaField::FALSE;
 	$defaults{input_boxes} = 1;
 	$defaults{match} = "IN";
 	return %defaults;

@@ -186,10 +186,13 @@ sub get_basic_input_elements
  	
  	# needs to set the selectedIndex back to the original value to enforce readonly
  	my $default_index = 0;
- 	foreach my $t ( @{$tags} )
- 	{
- 	        last if $t eq $value;
- 	        $default_index++;
+	if ( defined $value )
+	{
+		foreach my $t ( @{$tags} )
+		{
+				last if $t eq $value;
+				$default_index++;
+		}
 	}
 
 	return( [ [ { el=>$session->render_option_list(
@@ -632,16 +635,16 @@ sub get_property_defaults
 	$defaults{search_input_style} = "checkbox";
 	$defaults{form_input_style} = "select";
 	$defaults{input_rows} = $EPrints::MetaField::FROM_CONFIG;
-	$defaults{input_ordered} = 0;
+	$defaults{input_ordered} = $EPrints::MetaField::FALSE;
 	$defaults{search_rows} = $EPrints::MetaField::FROM_CONFIG;
 	$defaults{options} = $EPrints::MetaField::REQUIRED;
 	$defaults{input_tags} = $EPrints::MetaField::UNDEF;
 	$defaults{render_option} = $EPrints::MetaField::UNDEF;
 	$defaults{render_max_search_values} = 5;
-	$defaults{sql_index} = 1;
+	$defaults{sql_index} = $EPrints::MetaField::TRUE;
 	$defaults{match} = "EQ";
 	$defaults{merge} = "ANY";
-	$defaults{order_labels} = 0;
+	$defaults{order_labels} = $EPrints::MetaField::FALSE;
 	return %defaults;
 }
 

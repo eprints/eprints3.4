@@ -467,13 +467,14 @@ sub get_property_defaults
 {
 	my( $self ) = @_;
 	my %defaults = $self->SUPER::get_property_defaults;
-	$defaults{search_input_style} = "default"; # "checkbox"
-	$defaults{input_style} = 0;
-	$defaults{showall} = 0;
-	$defaults{showtop} = 0;
-	$defaults{nestids} = 1;
-	$defaults{top} = "subjects";
+	$defaults{expanded_subjects} = [];
+	$defaults{nestids} = $EPrints::MetaField::TRUE;
 	$defaults{options} = $EPrints::MetaField::UNDEF;
+	$defaults{render_path} = $EPrints::MetaField::TRUE;
+	$defaults{search_input_style} = "default"; # "checkbox"
+	$defaults{showall} = $EPrints::MetaField::FALSE;
+	$defaults{showtop} = $EPrints::MetaField::FALSE;
+	$defaults{top} = "subjects";
 	return %defaults;
 }
 

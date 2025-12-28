@@ -58,7 +58,7 @@ sub get_property_defaults
 	my( $self ) = @_;
 
 	my %defaults = $self->SUPER::get_property_defaults;
-	$defaults{show_in_fieldlist} = 0;
+	$defaults{show_in_fieldlist} = $EPrints::MetaField::FALSE;
 	#$defaults{datasetid} = $EPrints::MetaField::REQUIRED; 
 
 	return %defaults;

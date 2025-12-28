@@ -600,9 +600,10 @@ sub get_property_defaults
 {
 	my( $self ) = @_;
 	my %defaults = $self->SUPER::get_property_defaults;
+	$defaults{as_list} = $EPrints::MetaField::FALSE;
 	$defaults{fields} = $EPrints::MetaField::REQUIRED;
 	$defaults{fields_cache} = $EPrints::MetaField::REQUIRED;
-	$defaults{show_in_fieldlist} = 0;
+	$defaults{show_in_fieldlist} = $EPrints::MetaField::FALSE;
 	return %defaults;
 }
 

@@ -56,7 +56,7 @@ sub get_property_defaults
 	my %defaults = $self->SUPER::get_property_defaults;
 	$defaults{datasetid} = $EPrints::MetaField::REQUIRED;
 	$defaults{match} = "IN";
-	$defaults{text_index} = 1;
+	$defaults{text_index} = $EPrints::MetaField::TRUE;
 	return %defaults;
 }
 

@@ -3486,7 +3486,8 @@ sub render_row_with_help
 
 
 	my $context = $parts{context} ? $parts{context} : 'none';
-	my $tr = $self->make_element( "div", class=>$parts{class} . " ep_table_row", "data-context"=>$context );
+	my $class = $parts{class} ? $parts{class} . ' ' : '';
+	my $tr = $self->make_element( "div", class=>$class . "ep_table_row", "data-context"=>$context );
 
 	#
 	# COL 1

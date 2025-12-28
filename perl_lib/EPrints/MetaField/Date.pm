@@ -454,11 +454,11 @@ sub get_property_defaults
 {
 	my( $self ) = @_;
 	my %defaults = $self->SUPER::get_property_defaults;
+	$defaults{input_style} = "long";
 	$defaults{min_resolution} = "day";
+	$defaults{regexp} = qr/\d\d\d\d(?:-\d\d(?:-\d\d)?)?/;
 	$defaults{render_res} = "day";
 	$defaults{render_style} = "long";
-	$defaults{input_style} = "long";
-	$defaults{regexp} = qr/\d\d\d\d(?:-\d\d(?:-\d\d)?)?/;
 	return %defaults;
 }
 

@@ -28,6 +28,17 @@ use EPrints::MetaField::Idci;
 
 use strict;
 
+sub get_property_defaults
+{
+	my( $self ) = @_;
+
+	my %defaults = $self->SUPER::get_property_defaults;
+	$defaults{render_dont_link} = $EPrints::MetaField::FALSE;
+
+	return %defaults;
+}
+
+
 sub render_single_value
 {
 	my( $self, $session, $value ) = @_;

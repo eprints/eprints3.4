@@ -290,9 +290,10 @@ sub get_property_defaults
 {
 	my( $self ) = @_;
 	my %defaults = $self->SUPER::get_property_defaults;
-	$defaults{input_style} = 0;
+	$defaults{false_first} = $EPrints::MetaField::FALSE;
 	$defaults{input_rows} = $EPrints::MetaField::FROM_CONFIG;
-	$defaults{false_first} = 0;
+	$defaults{input_style} = "checkbox";
+	$defaults{form_input_style} = "checkbox";
 	return %defaults;
 }
 

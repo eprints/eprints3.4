@@ -524,7 +524,10 @@ sub render_input_field
 				eval {
 					$v = $self->call_property_eval( "toform", $v, $session, $obj, $basename );
 					push @$new_value, $v;
-				} or do {
+					1;
+				}
+				or do
+				{
 					$new_value = $self->call_property( "toform", $value, $session, $obj, $basename );	
 					last;
 				};
@@ -1894,14 +1897,18 @@ sub form_value_single
 
 	my $value = $self->form_value_basic( $session, $basename, $object );
 
-        if( defined $self->{fromform} )
-        {
-		eval {
-	                $value = $self->call_property_eval( "fromform", $value, $session, $object, $basename );
-		} or do {
+	if( defined $self->{fromform} )
+	{
+		eval
+		{
+			$value = $self->call_property_eval( "fromform", $value, $session, $object, $basename );
+			1;
+		}
+		or do
+		{
 			$value = $self->call_property( "fromform", [ $value ], $session, $object, $basename );
 		};
-        }
+	}
 
 	return undef unless( EPrints::Utils::is_set( $value ) );
 	return $value;

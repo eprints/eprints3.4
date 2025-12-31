@@ -23,7 +23,7 @@ foreach my $file ( @files )
 	foreach my $line ( <F> )
 	{
 		chomp $line;
-		if( $line =~ m/^\s*\$c->{([^}]+)}/ )
+		if( $line =~ m/^\s*\$c->\{([^}]+)\}/ )
 		{
 			$byfile->{$file}->{$1} = 1;
 			$byopt->{$1}->{$file} = 1;

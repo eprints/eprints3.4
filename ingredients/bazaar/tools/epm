@@ -330,9 +330,7 @@ sub action_link_lib
 
 =item make_ingredient I<package>
 
-Soft-link all files in the package under lib/ to a directory tree in ingredients/
-
-Use --force to overwrite existing files.
+Create symbolic links in the EPM directory so the extracted EPM can behave as an ingredient. May not work in all circumstances.
 
 =cut
 
@@ -345,7 +343,6 @@ sub action_make_ingredient
 	my( $name ) = @ARGV;
 
 	my $epm = &epm( $repo, $name );
-    #TODO cfg dir
 	my $libdir = $epm->epm_dir . '/lib';
     my $cfgdir = $epm->epm_dir . '/cfg';
 	my $targetdir = $repo->config( "base_path" ) . '/ingredients/' . $name;

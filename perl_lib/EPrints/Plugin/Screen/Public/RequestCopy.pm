@@ -172,7 +172,8 @@ sub action_request
 	my $mail = $session->make_element( "mail" );
 	$mail->appendChild( $session->html_phrase(
 		"request/request_email:body", 
-		eprint => $eprint->render_citation_link_staff,
+		# When using pin security, the recipient is less likely to have access to the 'staff' view, so use public URL.
+		eprint => $use_pin_security ? $eprint->render_citation_link : $eprint->render_citation_link_staff,
 		document => defined $doc ? $doc->render_value( "main" ) : $session->make_doc_fragment,
 		requester => $request->render_citation( "requester" ),
 		reason => $request->is_set( "reason" ) ? $request->render_value( "reason" )

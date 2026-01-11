@@ -265,9 +265,8 @@ sub get_eprint_by_identifier
 
 	$searchexp->add_field(
 		$dataset->field( "datestamp" ),
-		"1970-01-01-",
-		"EQ",
-		"ANY"
+		undef, # no value needed when using 'SET', but param must be passed
+		"SET"
 	);
 
 	$searchexp->add_field(
@@ -412,25 +411,42 @@ sub Identify
 	);
 	$searchexp->add_field(
 		$dataset->field( "datestamp" ),
-		"1970-01-01-",
-		"EQ",
-		"ANY"
+		undef, # no value needed when using 'SET', but param must be passed
+		"SET"
 	);
 	my $sample_eprint = $searchexp->perform_search->item( 0 );
 	my $sample_identifier;
 
 	if( defined $sample_eprint )
 	{
-		$sample_identifier = EPrints::OpenArchives::to_oai_identifier(
-			EPrints::OpenArchives::archive_id( $repo ),
-			$sample_eprint->id
-			);
 		if( $sample_eprint->is_set( $DATESTAMP_FIELD->get_name ) )
 		{
 			my $datetime = $DATESTAMP_FIELD->get_value( $sample_eprint );
 			my( $date, $time ) = split / /, $datetime;
 			$time ||= "00:00:00";
 			$earliest_datestamp = sprintf("%sT%sZ", $date, $time);
+		}
+
+		if( $sample_eprint->value( "eprint_status" ) eq "archive" )
+		{
+			$sample_identifier = EPrints::OpenArchives::to_oai_identifier(
+				EPrints::OpenArchives::archive_id( $repo ),
+				$sample_eprint->id
+			);
+		}
+		else
+		{
+			# If the earliest-modified eprint isn't in the live archive, we should provide a better sample record
+			my $arc_search = $repo->dataset( "archive" )->prepare_search( custom_order => "$order", limit => 1 );
+			my $arc_ids = $arc_search->perform_search->ids; # we don't need to get the eprint itself, just the id
+
+			if( $arc_ids )
+			{
+				$sample_identifier = EPrints::OpenArchives::to_oai_identifier(
+					EPrints::OpenArchives::archive_id( $repo ),
+					$arc_ids->[0]
+				);
+			}
 		}
 	}
 
@@ -780,9 +796,7 @@ sub _list
 
 	push @$filters, {
 		meta_fields => [qw( datestamp )],
-		value => "1970-01-01-",
-		match => "EQ",
-		merge => "ANY",
+		match => "SET",
 	};
 
 	# custom sets

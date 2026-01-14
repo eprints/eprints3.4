@@ -2255,7 +2255,7 @@ sub get_cachemap
 	{
 		my $cachemap = $self->{session}->get_repository->get_dataset( "cachemap" )->get_object( $self->{session}, $id );
 		# You should not be able to get a cachemap using its autoincrement ID if it has a uuid.
-		unless ( $cachemap->get_value( 'uuid' ) )
+		unless ( defined $cachemap && $cachemap->get_value( 'uuid' ) )
 		{
 			return $cachemap;
 		}

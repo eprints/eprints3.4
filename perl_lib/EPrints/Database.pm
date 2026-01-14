@@ -2102,9 +2102,12 @@ Return the name of the SQL table used to store the cache with C<$id>.
 
 sub cache_table
 {
-	my( $self, $id ) = @_;
+    my( $self, $id ) = @_;
 
-	return "cache".$id;
+	my $cachemap = $self->get_cachemap( $id );
+	return $cachemap->get_sql_table_name() if $cachemap;
+
+    EPrints::abort( "Cache with ID '$id' not found" );
 }
 
 

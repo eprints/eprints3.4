@@ -1635,8 +1635,9 @@ sub render_citation
 			my $citation_unixtime = EPrints::Time::datetime_utc( EPrints::Time::split_value( $res->get_value( 'timestamp' ) ) );	
 			my $timestampfile = $self->{session}->get_conf( "variables_path" )."/citations.timestamp";
 			my $refresh_unixtime = ( -e $timestampfile ) ? (stat( $timestampfile ))[9] : 0;
+			my $style_timestamp = $self->{session}->{citations}->{ $self->{dataset}->confid }->{$style}->{mtime} ||= 0;
 	
-			if ( $citation_unixtime > $refresh_unixtime ) 
+			if ( ( $citation_unixtime > $refresh_unixtime ) && ( $citation_unixtime > $style_timestamp ) )
 			{
 				$use_cached_version = 1;
 			}

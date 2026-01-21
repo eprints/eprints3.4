@@ -524,18 +524,32 @@ sub link_problem_xhtml
 			return if( !defined $stage );
 			my $keyfield = $self->{dataset}->get_key_field();
 			my $kf_sql = $keyfield->get_sql_name;
-			my $url = URI->new( $self->{session}->current_url );
-			$url->query_form(
-				screen => $screenid,
-				dataset => $self->{dataset}->id,
-				dataobj => $self->{item}->id,
-				$kf_sql => $self->{item}->id,
-				stage => $stage
-			);
-			$url->fragment( $1 );
-			if( defined $new_stage && $new_stage eq $stage )
+			my $current_url = $self->{session}->current_url;
+			my $url = URI->new( $current_url );
+			if ( $current_url ne $self->{session}->get_repository->get_conf( "userhome" ) )
 			{
+				# Assumes any public forms/workflows (e.g. request a copy) are only a single stage.
 				$url = "#$1";
+			}
+			else
+			{
+				my $dataset = $self->{dataset};
+				if ( $dataset->is_virtual )
+				{
+					$dataset = $self->{session}->dataset( $dataset->base_id );
+				}
+				$url->query_form(
+					screen => $screenid,
+					dataset => $dataset->id,
+					dataobj => $self->{item}->id,
+					$kf_sql => $self->{item}->id,
+					stage => $stage
+				);
+				$url->fragment( $1 );
+				if( defined $new_stage && $new_stage eq $stage )
+				{
+					$url = "#$1";
+				}
 			}
 			
 			my $newnode = $self->{session}->render_link( $url );

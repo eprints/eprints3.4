@@ -13,9 +13,9 @@ my $session = new EPrints::Session;
 my $content = "text/html";
 $session->send_http_header( content_type=>$content );
 
-if( !( $session->current_user && $session->current_user->value("usertype") =~ /^(admin|local_admin)$/ ) )
+unless( $session->current_user->allow( 'staff/history_search' ) )
 {
-  print "<html><body>You must be logged in as an admin to view this page</body></html>\n";
+  print "<html><body>You do not have permission to access this page.</body></html>\n";
   $session->terminate;
   exit( 0 );
 }

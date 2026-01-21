@@ -30,7 +30,7 @@ our $METADATAPREFIX_REGEXP = qr/^[A-Za-z0-9\-_\.!~\*'\(\)]+$/;
 our $IDENTIFIER_REGEXP = qr/^[a-z]+:.*$/;
 our $DATETIME_REGEXP = qr/^\d\d\d\d-\d\d-\d\d(T\d\d:\d\d:\d\dZ)?$/;
 
-our $DATESTAMP_FIELD = $repo->dataset( "eprint")->get_datestamp_field;
+our $DATESTAMP_FIELD = $repo->dataset( "eprint" )->get_datestamp_field;
 our $ARCHIVE_ID = EPrints::OpenArchives::archive_id( $repo );
 
 # OAI-PMH grammar
@@ -233,14 +233,14 @@ sub render_text_url
 
 	my $node = $repo->xml->create_element( $name );
 
-	if ( defined $texturl->{"text"} ) 
+	if ( defined $texturl->{"text"} )
 	{
 		$node->appendChild( $repo->xhtml->data_element(
 			"text",
 			$texturl->{"text"} ) );
 	}
 
-	if ( defined $texturl->{"url"} ) 
+	if ( defined $texturl->{"url"} )
 	{
 		$node->appendChild( $repo->xhtml->data_element(
 			"URL",
@@ -265,9 +265,8 @@ sub get_eprint_by_identifier
 
 	$searchexp->add_field(
 		$dataset->field( "datestamp" ),
-		"1970-01-01-",
-		"EQ",
-		"ANY"
+		undef, # no value needed when using 'SET', but param must be passed
+		"SET"
 	);
 
 	$searchexp->add_field(
@@ -412,25 +411,42 @@ sub Identify
 	);
 	$searchexp->add_field(
 		$dataset->field( "datestamp" ),
-		"1970-01-01-",
-		"EQ",
-		"ANY"
+		undef, # no value needed when using 'SET', but param must be passed
+		"SET"
 	);
 	my $sample_eprint = $searchexp->perform_search->item( 0 );
 	my $sample_identifier;
 
 	if( defined $sample_eprint )
 	{
-		$sample_identifier = EPrints::OpenArchives::to_oai_identifier(
-			EPrints::OpenArchives::archive_id( $repo ),
-			$sample_eprint->id
-			);
 		if( $sample_eprint->is_set( $DATESTAMP_FIELD->get_name ) )
 		{
 			my $datetime = $DATESTAMP_FIELD->get_value( $sample_eprint );
 			my( $date, $time ) = split / /, $datetime;
 			$time ||= "00:00:00";
 			$earliest_datestamp = sprintf("%sT%sZ", $date, $time);
+		}
+
+		if( $sample_eprint->value( "eprint_status" ) eq "archive" )
+		{
+			$sample_identifier = EPrints::OpenArchives::to_oai_identifier(
+				EPrints::OpenArchives::archive_id( $repo ),
+				$sample_eprint->id
+			);
+		}
+		else
+		{
+			# If the earliest-modified eprint isn't in the live archive, we should provide a better sample record
+			my $arc_search = $repo->dataset( "archive" )->prepare_search( custom_order => "$order", limit => 1 );
+			my $arc_ids = $arc_search->perform_search->ids; # we don't need to get the eprint itself, just the id
+
+			if( $arc_ids )
+			{
+				$sample_identifier = EPrints::OpenArchives::to_oai_identifier(
+					EPrints::OpenArchives::archive_id( $repo ),
+					$arc_ids->[0]
+				);
+			}
 		}
 	}
 
@@ -492,39 +508,39 @@ sub Identify
 
 	my $d2 = $repo->xml->create_element( "description" );
 	my $eprints = $repo->xml->create_element( 	
-		"eprints", 
+		"eprints",
 		"xmlns"=>"http://www.openarchives.org/OAI/1.1/eprints",
 		"xmlns:xsi"=>"http://www.w3.org/2001/XMLSchema-instance",
 		"xsi:schemaLocation"=>"http://www.openarchives.org/OAI/1.1/eprints http://www.openarchives.org/OAI/1.1/eprints.xsd" );
 	$d2->appendChild( $eprints );
 	$response->appendChild( $d2 );
 
-	$eprints->appendChild( render_text_url( 
+	$eprints->appendChild( render_text_url(
 		$repo,
-		"content", 
+		"content",
 		$repo->config( "oai","content" ) ) );
-                          
-	$eprints->appendChild( render_text_url( 
+
+	$eprints->appendChild( render_text_url(
 		$repo,
-		"metadataPolicy", 
+		"metadataPolicy",
 		$repo->config( "oai","metadata_policy" ) ) );
 
-	$eprints->appendChild( render_text_url( 
+	$eprints->appendChild( render_text_url(
 		$repo,
-		"dataPolicy", 
+		"dataPolicy",
 		$repo->config( "oai","data_policy" ) ) );
 
-	$eprints->appendChild( render_text_url( 
+	$eprints->appendChild( render_text_url(
 		$repo,
-		"submissionPolicy", 
+		"submissionPolicy",
 		$repo->config( "oai","submission_policy" ) ) );
 
 	if( $repo->config( "oai","comments" ) )
 	{
-		foreach( @{$repo->config( "oai","comments" )} ) 
+		foreach( @{$repo->config( "oai","comments" )} )
 		{
 			$eprints->appendChild( $repo->xhtml->data_element(
-				"comment", 
+				"comment",
 				$_ ) );
 		}
 	}
@@ -544,7 +560,7 @@ sub GetRecord
 
 	my $plugin = $args->{metadataPrefix};
 
-	$response->appendChild( 
+	$response->appendChild(
 		EPrints::OpenArchives::make_record(
 			$repo,
 			$eprint,
@@ -656,29 +672,29 @@ sub ListSets
 			}
 		}
 		unless( $info->{allow_null} ) { delete $v{""}; }
-		foreach( keys %v ) 
+		foreach( keys %v )
 		{	
 			my $set = $repo->xml->create_element( "set" );
 			$response->appendChild( $set );
 			my $spec = EPrints::OpenArchives::encode_setspec( $info->{id}."=" ).$_;
-			$set->appendChild( $repo->xhtml->data_element( 
+			$set->appendChild( $repo->xhtml->data_element(
 				"setSpec",
 				$spec ) );
 			my $name = $repo->get_view_name( $ds, $info->{id} )." = ".$v{$_};
-			$set->appendChild( $repo->xhtml->data_element( 
+			$set->appendChild( $repo->xhtml->data_element(
 				"setName",
 				$name ) );
 		}
 	}
-	my $custom_sets = $repo->config( "oai", "custom_sets");
+	my $custom_sets = $repo->config( "oai", "custom_sets" );
 	foreach my $info (@{$custom_sets||[]})
 	{
 		my $set = $repo->xml->create_element( "set" );
 		$response->appendChild( $set );
-		$set->appendChild( $repo->xhtml->data_element( 
+		$set->appendChild( $repo->xhtml->data_element(
 			"setSpec",
 			$info->{spec} ) );
-		$set->appendChild( $repo->xhtml->data_element( 
+		$set->appendChild( $repo->xhtml->data_element(
 			"setName",
 			$info->{name} ) );
 	}
@@ -780,9 +796,7 @@ sub _list
 
 	push @$filters, {
 		meta_fields => [qw( datestamp )],
-		value => "1970-01-01-",
-		match => "EQ",
-		merge => "ANY",
+		match => "SET",
 	};
 
 	# custom sets
@@ -808,10 +822,10 @@ sub _list
 			limit => ($PAGESIZE+1) );
 
 	my $fullsearchexp = $ds->prepare_search(
-            allow_blank => 1,
-            filters => [
-                @{$filters},
-            ] );	
+		allow_blank => 1,
+		filters => [
+			@{$filters},
+		] );	
 
 	if( defined $args->{offset} )
 	{
@@ -888,7 +902,7 @@ END
 	}
 	
 	my $list = $searchexp->perform_search();
-    my $fulllist = $fullsearchexp->perform_search();
+	my $fulllist = $fullsearchexp->perform_search();
 	my @records = $list->slice( 0, $PAGESIZE );
 
 	if( @records == 0 )
@@ -922,7 +936,7 @@ END
 	{
 		foreach my $eprint ( @records )
 		{
-			$response->appendChild( 
+			$response->appendChild(
 				EPrints::OpenArchives::make_record(
 					$repo,
 					$eprint,

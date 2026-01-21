@@ -546,7 +546,7 @@ sub link_problem_xhtml
 					stage => $stage
 				);
 				$url->fragment( $1 );
-				if( defined $new_stage && $new_stage eq $stage )
+				if( !defined $new_stage || $new_stage eq $stage )
 				{
 					$url = "#$1";
 				}

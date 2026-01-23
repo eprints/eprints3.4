@@ -150,7 +150,7 @@ sub update_static_file
 
 sub update_auto_css
 {
-	my( $session, $target_dir, $static_dirs ) = @_;
+	my( $session, $target_dir, $static_dirs, $opts ) = @_;
 
 	my @dirs = map { "$_/style/auto" } grep { defined } @$static_dirs;
 
@@ -158,13 +158,14 @@ sub update_auto_css
 			$session->get_repository,
 			"$target_dir/style/auto.css",
 			"css",
-			\@dirs
+			\@dirs,
+			$opts,
 		);
 }
 
 sub update_auto_js
 {
-	my( $session, $target_dir, $static_dirs ) = @_;
+	my( $session, $target_dir, $static_dirs, $opts ) = @_;
 
 	my @dirs = map { "$_/javascript/auto" } grep { defined } @$static_dirs;
 
@@ -173,6 +174,7 @@ sub update_auto_js
 			"$target_dir/javascript/auto.js",
 			"js",
 			\@dirs,
+			$opts,
 		);
 }
 
@@ -220,7 +222,7 @@ sub update_auto
 	{
 		opendir(my $dh, $dir) or next;
 		# if a file is removed the dir mtime will change
-		$out_of_date = 1 if (stat($dir))[9] > $target_time;
+		$out_of_date = 1 if EPrints::Utils::mtime( $dir )  > $target_time;
 		foreach my $fn (readdir($dh))
 		{
 			next if exists $map{$fn};
@@ -228,7 +230,7 @@ sub update_auto
 			next if $fn !~ /\.$ext$/;
 			next if -d "$dir/$fn";
 
-			$out_of_date = 1 if (stat(_))[9] > $target_time;
+			$out_of_date = 1 if  EPrints::Utils::mtime( "$dir/$fn" ) > $target_time;
 
 			$map{$fn} = "$dir/$fn";
 		}
@@ -243,16 +245,18 @@ sub update_auto
 		foreach my $fn (readdir($dh))
 		{
 			next unless $fn =~ /_lib$/;
-			if ( (stat("$flavours_dir/$fn/inc"))[9] > $target_time )
+			# Add 5 minutes to inc file modification time to allow for Apache to be reloaded with the new load order
+			if ( EPrints::Utils::mtime( "$flavours_dir/$fn/inc" ) + 300 > $target_time )
 			{
 				$out_of_date = 1;
 				last;
 			}
 		}
-		$out_of_date = 1 if !$out_of_date && (stat($repo->config( 'base_path' )."/perl_lib/EPrints/SystemSettings.pm"))[9] > $target_time;
+		# Add 5 minutes to inc file modification time to allow for Apache to be reloaded with the new settings that may include load order
+		$out_of_date = 1 if !$out_of_date && EPrints::Utils::mtime( $repo->config( 'base_path' )."/perl_lib/EPrints/SystemSettings.pm" ) + 300  > $target_time;
 	}
 
-	return $target unless $out_of_date;
+	return $target unless $out_of_date || $opts->{force};
 
 	EPrints::Platform::mkdir( $target_dir );
 

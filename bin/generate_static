@@ -79,6 +79,10 @@ The ID of the eprint repository to use.
 
 =over 8
 
+=item B<--force>
+
+Will regenerate auto.css and auto.js files, even if there are not any more recently modified files that could affect its content.
+
 =item B<--prune>
 
 Remove stray files from the website (eg. if something was removed from the static pages).
@@ -122,6 +126,7 @@ use Pod::Usage;
 my $version = 0;
 my $verbose = 0;
 my $quiet = 0;
+my $force = 0;
 my $prune = 0;
 my $reload = 0;
 my $help = 0;
@@ -133,6 +138,7 @@ GetOptions(
 	'help|?' => \$help,
 	'man' => \$man,
 	'version' => \$version,
+	'force' => \$force,
 	'prune' => \$prune,
 	'reload' => \$reload,
 	'verbose+' => \$verbose,
@@ -205,14 +211,16 @@ foreach my $langid ( @{$session->config( "languages" )} )
 	$fn = EPrints::Update::Static::update_auto_js(
 			$session,
 			$base_target_dir,
-			\@static_dirs
+			\@static_dirs,
+			{ force => $force },
 		);
 	$wrote_files->{$fn} = 1;
 
 	$fn = EPrints::Update::Static::update_auto_css(
 			$session,
 			$base_target_dir,
-			\@static_dirs
+			\@static_dirs,
+			{ force => $force },
 		);
 	$wrote_files->{$fn} = 1;
 

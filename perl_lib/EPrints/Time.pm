@@ -428,24 +428,26 @@ sub _render_date
 			EPrints->abort( "Requires DateTime as `timezone` has been set to '$timezone'" );
 		}
 
-		my $time = DateTime->new(
-			year   => $year,
-			month  => $mon || 1,
-			day    => $day || 1,
-			hour   => $hour || 0,
-			minute => $min || 0,
-			second => $sec || 0,
-			time_zone => 'Etc/UTC',
-		);
-		$time->set_time_zone( $timezone );
-		$timezone_name = $time->time_zone_short_name;
+		eval {
+			my $time = DateTime->new(
+				year   => $year,
+				month  => $mon || 1,
+				day    => $day || 1,
+				hour   => $hour || 0,
+				minute => $min || 0,
+				second => $sec || 0,
+				time_zone => 'Etc/UTC',
+			);
+			$time->set_time_zone( $timezone );
+			$timezone_name = $time->time_zone_short_name;
 
-		$year = $time->year;
-		$mon = $time->month;
-		$day = $time->day;
-		$hour = $time->hour;
-		$min = $time->minute;
-		$sec = $time->second;
+			$year = $time->year;
+			$mon = $time->month;
+			$day = $time->day;
+			$hour = $time->hour;
+			$min = $time->minute;
+			$sec = $time->second;
+		}
 	}
 
 	# 1999

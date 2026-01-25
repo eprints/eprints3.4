@@ -238,22 +238,22 @@ sub update_auto
 
 	}
 
-	unless ( $out_of_date )
+	my $load_path_hash_file = $repo->config( "variables_path" )."/".$ext."_load_path.md5";
+	my $load_path_hash_from_file = "";
+	if ( -f $load_path_hash_file )
 	{
-		my $flavours_dir = $repo->config( 'base_path' ) . "/flavours";
-		opendir(my $dh, $flavours_dir) or next;
-		foreach my $fn (readdir($dh))
-		{
-			next unless $fn =~ /_lib$/;
-			# Add 5 minutes to inc file modification time to allow for Apache to be reloaded with the new load order
-			if ( EPrints::Utils::mtime( "$flavours_dir/$fn/inc" ) + 300 > $target_time )
-			{
-				$out_of_date = 1;
-				last;
-			}
-		}
-		# Add 5 minutes to inc file modification time to allow for Apache to be reloaded with the new settings that may include load order
-		$out_of_date = 1 if !$out_of_date && EPrints::Utils::mtime( $repo->config( 'base_path' )."/perl_lib/EPrints/SystemSettings.pm" ) + 300  > $target_time;
+		open( my $lph_fh, "<:raw", $load_path_hash_file );
+		$load_path_hash_from_file = join('', <$lph_fh>);
+		close( $lph_fh );
+	}
+
+	my $load_path_hash = Digest::MD5::md5_hex( join( ';', @$dirs ));
+	if ( $load_path_hash ne $load_path_hash_from_file )
+	{
+		$out_of_date = 1;
+		open(my $lph_fh, ">:raw", $load_path_hash_file) or EPrints::abort( "Can't write to $target: $!" );
+		print $lph_fh $load_path_hash;
+		close( $lph_fh );
 	}
 
 	return $target unless $out_of_date || $opts->{force};

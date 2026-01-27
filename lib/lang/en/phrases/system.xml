@@ -3278,18 +3278,28 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="Plugin/InputForm/Component/Documents:upload_failed" ref="Plugin/InputForm/Component/Upload:upload_failed"/>
 
     <!-- Subject component -->
-    <epp:phrase id="Plugin/InputForm/Component/Field/Subject:selections">Current selections:</epp:phrase>
 
+	<epp:phrase id="Plugin/InputForm/Component/Field/Subject:selections">Current selections:</epp:phrase>
     <epp:phrase id="Plugin/InputForm/Component/Field/Subject:search_no_matches"><p>No matches</p></epp:phrase>
     <epp:phrase id="Plugin/InputForm/Component/Field/Subject:subjects_search_bar"><div class="ep_subjectinput_searchbar"><epc:pin name="label"/>: <epc:pin name="input"/> <epc:pin name="search_button"/> <epc:pin name="clear_button"/></div></epp:phrase>
     <epp:phrase id="Plugin/InputForm/Component/Field/Subject:subjects_search_label_text">Search for subject</epp:phrase>
     <epp:phrase id="Plugin/InputForm/Component/Field/Subject:search_search_button">Search</epp:phrase>
     <epp:phrase id="Plugin/InputForm/Component/Field/Subject:search_clear_button">Clear</epp:phrase>
     <epp:phrase id="Plugin/InputForm/Component/Field/Subject:add">Add</epp:phrase>
-    <epp:phrase id="Plugin/InputForm/Component/Field/Subject:remove">Remove</epp:phrase>
+	<epp:phrase id="Plugin/InputForm/Component/Field/Subject:remove">Remove</epp:phrase>
 
+	<!-- AjaxSubject component -->
 
-    <!-- Component errors -->
+	<epp:phrase id="Plugin/InputForm/Component/Field/AjaxSubject:selections" ref="Plugin/InputForm/Component/Field/Subject:selections"/>
+	<epp:phrase id="Plugin/InputForm/Component/Field/AjaxSubject:search_no_matches" ref="Plugin/InputForm/Component/Field/Subject:search_no_matches"/>
+	<epp:phrase id="Plugin/InputForm/Component/Field/AjaxSubject:subjects_search_bar" ref="Plugin/InputForm/Component/Field/Subject:subjects_search_bar"/>
+	<epp:phrase id="Plugin/InputForm/Component/Field/AjaxSubject:subjects_search_label_text" ref="Plugin/InputForm/Component/Field/Subject:subjects_search_label_text"/>
+	<epp:phrase id="Plugin/InputForm/Component/Field/AjaxSubject:search_search_button" ref="Plugin/InputForm/Component/Field/Subject:search_search_button"/>
+	<epp:phrase id="Plugin/InputForm/Component/Field/AjaxSubject:search_clear_button" ref="Plugin/InputForm/Component/Field/Subject:search_clear_button"/>
+	<epp:phrase id="Plugin/InputForm/Component/Field/AjaxSubject:add" ref="Plugin/InputForm/Component/Field/Subject:add"/>
+	<epp:phrase id="Plugin/InputForm/Component/Field/AjaxSubject:remove" ref="Plugin/InputForm/Component/Field/Subject:remove"/>
+
+	<!-- Component errors -->
 
     <epp:phrase id="Plugin/InputForm/Component/Error:title">Error in <epc:pin name="filename" /></epp:phrase>
     <epp:phrase id="Plugin/InputForm/Component:error_invalid_component">Unknown component type <em><epc:pin name="placeholding"/></em> in <pre><epc:pin name="xml" /></pre></epp:phrase>

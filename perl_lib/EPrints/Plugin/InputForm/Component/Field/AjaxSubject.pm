@@ -278,14 +278,19 @@ sub _render_search
 	my $prefix = $self->{prefix};
 	my $session = $self->{session};
 	my $field = $self->{config}->{field};
+	my $label = $session->make_element( "span", id=>$prefix."q_label" );
+	$label->appendChild( $session->make_text( $self->phrase( $field->get_name."_search_label_text" ) ) );
 	my $bar = $self->html_phrase(
 		$field->get_name."_search_bar",
+		label => $label,
 		input=>$session->render_noenter_input_field( 
 			class=>"ep_form_text",
 			name=>$prefix."_searchtext", 
 			type=>"text", 
+			size=>40,
 			value=>$self->{search},
 			onKeyPress=>"return EPJS_enter_click( event, '_internal_".$prefix."_search' )" ),
+		    'aria-labelledby'=>$prefix."q_label",
 		search_button=>$session->render_button( 
 			name=>"_internal_".$prefix."_search",
 			id=>"_internal_".$prefix."_search",

@@ -19,15 +19,16 @@ use XML::SAX::Base;
 
 use strict;
 
-# xml = ?
 %EPrints::Plugin::Convert::PlainText::APPS = qw(
-pdf		pdftotext
-doc		doc2txt
-htm		html2text
-html	html2text
-xml		html2text
-ps		ps2ascii
-txt		_special
+application/pdf     pdftotext
+application/msword	doc2txt
+application/vnd.openxmlformats-officedocument.wordprocessingml.document	doc2txt
+text/html	html2text
+application/rtf	rtf2txt
+text/rtf	rtf2txt
+text/xml	html2text
+application/postscript	ps2ascii
+text/plain	_special
 );
 
 sub new
@@ -63,11 +64,11 @@ sub can_convert
 		return @type;
 	}
 
-	foreach my $ext ( keys %EPrints::Plugin::Convert::PlainText::APPS )
+	foreach my $mime ( keys %EPrints::Plugin::Convert::PlainText::APPS )
 	{
-		my $cmd_id = $EPrints::Plugin::Convert::PlainText::APPS{$ext};
+		my $cmd_id = $EPrints::Plugin::Convert::PlainText::APPS{$mime};
 
-		if( $fn =~ /\.$ext$/ )
+		if( $doc->get_value( "mime_type" ) eq $mime )
 		{
 			if( $plugin->get_repository->can_execute( $cmd_id ) )
 			{
@@ -91,17 +92,17 @@ sub export
 		return $plugin->export_docx( $dir, $doc, $type );
 	}
 
-	my( $file_extension, $cmd_id );
+	my( $cmd_id, $file_extension );
 	
 	my $repository = $plugin->get_repository();
 
 	# Find the app to use
-	foreach my $ext ( keys %EPrints::Plugin::Convert::PlainText::APPS )
+	foreach my $mime ( keys %EPrints::Plugin::Convert::PlainText::APPS )
 	{
-		$file_extension = $ext;
-		if( $main =~ /\.$ext$/i )
+		if( $doc->get_value( "mime_type" ) eq $mime )
 		{
-			$cmd_id = $EPrints::Plugin::Convert::PlainText::APPS{$ext};
+			$cmd_id = $EPrints::Plugin::Convert::PlainText::APPS{$mime};
+			( $file_extension ) = $main  =~ /(([^.\s]+)+)$/;
 			last if $repository->can_execute( $cmd_id );
 			last if $cmd_id eq "_special";
 		}

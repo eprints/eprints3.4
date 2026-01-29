@@ -23,6 +23,7 @@ my %executables = (
 	  'ffmpeg' => '/usr/bin/ffmpeg',
 	  'file' => '/usr/bin/file',
 	  'doc2txt' => "$c->{base_path}/tools/doc2txt",
+	  'rtf2txt' => "$c->{base_path}/tools/rtf2txt",
 	  'unoconv' => '/usr/bin/unoconv',
 	  'txt2refs' => "$c->{base_path}/tools/txt2refs",
 	  'ffprobe' => '/usr/bin/ffprobe',

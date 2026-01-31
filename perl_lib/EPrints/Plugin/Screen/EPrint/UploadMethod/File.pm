@@ -97,6 +97,16 @@ sub action_add_format
 	my $processor = $self->{processor};
 	my $eprint = $processor->{eprint};
 
+	if ( !defined $eprint )
+	{
+		if ( !defined $processor->{dataobj} || !defined $processor->{dataset} || $processor->{dataset}->base_id ne "eprint" )
+		{
+			$processor->add_message( "error", $session->html_phrase( "Plugin/InputForm/Component/Upload:create_failed" ) );
+			return;
+		}
+		$eprint = $processor->{dataobj};
+	}
+
 	return if !$self->SUPER::action_add_format();
 
 	my $epdata = $processor->{notes}->{epdata};

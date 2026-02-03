@@ -1,0 +1,83 @@
+#!/usr/bin/perl
+
+use FindBin;
+use lib "$FindBin::Bin/../perl_lib";
+
+use RTF::TEXT::Converter;
+use Pod::Usage;
+use Getopt::Long;
+
+=head1 NAME
+
+rtf2txt - extract plain text from .rtf files
+
+=head1 SYNOPSIS
+
+rtf2txt <input.doc> <output.txt | ->
+
+=cut
+
+use strict;
+use warnings;
+
+my(
+	$opt_help,
+);
+
+GetOptions(
+	'help' => \$opt_help,
+) or pod2usage();
+
+pod2usage(1) if $opt_help;
+pod2usage() if @ARGV != 2;
+
+my( $fh, $ofh );
+-r $ARGV[0] or die "Can't read file $ARGV[0]";
+open( $fh, "<", $ARGV[0] );
+
+if( $ARGV[1] eq '-' )
+{
+	$ofh = \*STDOUT;
+}
+else
+{
+	open($ofh, ">", $ARGV[1]) or die "Error opening $ARGV[1]: $!";
+}
+
+binmode($ofh, ":utf8");
+
+my $object = RTF::TEXT::Converter->new(
+        output => $ofh
+);
+$object->parse_stream( $fh );
+
+=head1 COPYRIGHT
+
+=for COPYRIGHT BEGIN
+
+Copyright 2021 University of Southampton.
+EPrints 3.4 is supplied by EPrints Services.
+
+http://www.eprints.org/eprints-3.4/
+
+=for COPYRIGHT END
+
+=for LICENSE BEGIN
+
+This file is part of EPrints 3.4 L<http://www.eprints.org/>.
+
+EPrints 3.4 and this file are released under the terms of the
+GNU Lesser General Public License version 3 as published by
+the Free Software Foundation unless otherwise stated.
+
+EPrints 3.4 is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public
+License along with EPrints 3.4.
+If not, see L<http://www.gnu.org/licenses/>.
+
+=for LICENSE END
+

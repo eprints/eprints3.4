@@ -16,6 +16,7 @@ my %invocations = (
 	 'wget' => '$(wget) -U "Mozilla/5.0" -p -q -nH --execute="robots=off" --cut-dirs=$(CUTDIRS) --content-disposition $(URL)',
 	 'antiword' => '$(antiword) -t -f -m UTF-8 $(SOURCE) > $(TARGET)',
 	 'doc2txt' => '$(perl) $(doc2txt) $(SOURCE) $(TARGET)',
+	 'rtf2txt' => '$(perl) $(rtf2txt) $(SOURCE) $(TARGET)',
 	 'rmall' => '$(rm) -rf $(TARGET)/*',
 	 'ffmpeg_i' => '$(ffmpeg) -i $(SOURCE)',
 

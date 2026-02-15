@@ -9,3 +9,5 @@ $c->{plugins}->{"Import::DOI"}->{params}->{contributor_types} = {
     "reader" => "http://id.loc.gov/vocabulary/relators/oth",
     "translator" => "http://id.loc.gov/vocabulary/relators/trl",
 };
+
+$c->{plugins}->{"Export::OAI_UKETD_DC"}->{params}->{contributor_type_thesis_advisor} = "http://id.loc.gov/vocabulary/relators/ths";

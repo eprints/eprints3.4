@@ -353,6 +353,13 @@ sub _vis_level
 
 	return "staff" if defined $self->{session}->current_user && $self->{session}->current_user->is_staff;
 
+    if ( $self->{session}->request )
+    {
+        use EPrints::Apache::Sword;
+        my $response = EPrints::Apache::Sword::authenticate( $self->{session}, $self->{session}->request );
+        return "staff" if defined $response->{owner} && $response->{owner}->is_staff;
+    }
+
 	return "all";
 }
 

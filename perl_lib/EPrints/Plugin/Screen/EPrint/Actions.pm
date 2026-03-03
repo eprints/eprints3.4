@@ -44,7 +44,16 @@ sub render
 	my $session = $self->{session};
 
 	my $user = $session->current_user;
-	my $staff = $user->get_type eq "editor" || $user->get_type eq "admin";
+
+	my $staff = 0;
+	if ( $session->config( 'export', 'staff_check' ) )
+	{
+		$staff = &{$session->config( 'export', 'staff_check' )}( $session, $user );
+	}
+	else
+	{
+		$staff = $user->get_type eq "editor" || $user->get_type eq "admin" || $user->get_type eq "local_admin"
+	}
 
 	my $frag = $session->make_doc_fragment;
 	my $table = $session->make_element( "table" );

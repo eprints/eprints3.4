@@ -1008,7 +1008,7 @@ sub parse_input
 	}
 	elsif( $count == 0 || ( $list->count == 0 && $self->{method} ne "PUT" && $self->{method} ne "PATCH" ) )
 	{
-		$plugin->handler->message( "error", "Import plugin didn't create anything" );
+		$plugin->handler->message( "error", "Import plugin didn't create anything.  Check ".$repo->config( 'perl_url' )."/schema to ensure the metadata being sent is valid." );
 		$self->plugin_error( $plugin, \@messages );
 		return undef;
 	}

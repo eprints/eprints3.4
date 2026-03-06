@@ -91,10 +91,13 @@ if( $plugin->param( "visible" ) eq "staff" )
 		}
 		$user = $repository->current_user;
 	}
-	if( $user->get_type ne "editor" && $user->get_type ne "admin" )
+	if( !$user->is_staff )
 	{
-		$repository->get_request->status( HTTP_FORBIDDEN );
-		exit;
+		if ( ! defined $repository->config( 'export', 'staff_check' ) || ! &{$repository->config( 'export', 'staff_check' )}( $repository, $user ) )
+		{
+			$repository->get_request->status( HTTP_FORBIDDEN );
+			exit;
+		}
 	}
 }
 

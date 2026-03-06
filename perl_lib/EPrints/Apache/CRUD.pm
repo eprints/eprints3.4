@@ -882,7 +882,16 @@ sub authz
 
 	if( defined($plugin) && $plugin->param( "visible" ) eq "staff" )
 	{
-		return HTTP_FORBIDDEN if !defined $user || !$user->is_staff;
+		# Allows staff export plugins to have more customised/relaxed access as they are read-only
+		if ( $plugin->{id} =~ m# ^Export::(.*)$ #x )
+		{
+			return HTTP_FORBIDDEN if !defined $user;
+			return HTTP_FORBIDDEN unless $user->is_staff || defined $repo->config( 'export', 'staff_check' ) && &{$repo->config( 'export', 'staff_check' )}( $repo, $user );
+		}
+		else
+		{
+			return HTTP_FORBIDDEN if !defined $user || !$user->is_staff;
+		}
 	}
 
 	my @privs = $self->_priv;

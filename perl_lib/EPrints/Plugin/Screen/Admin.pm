@@ -37,7 +37,7 @@ sub new
 sub can_be_viewed
 {
 	my( $self ) = @_;
-
+	
 	foreach my $list_id ( @{$self->param( "action_lists" )} )
 	{
 		return 1 if scalar $self->action_list( $list_id );

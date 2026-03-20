@@ -269,6 +269,20 @@ sub run_property
 		$objvar->[0] ];
 }
 
+sub run_raw_property
+{
+	my( $self, $state, $objvar, $fieldname ) = @_;
+
+	my( $value, $field ) = @{$self->run_property( $state, $objvar, $fieldname )};
+
+	if ( ref $value )
+	{
+			$value = JSON->new()->encode( $value );
+	}
+
+    return [ $value, "STRING" ]; 
+}
+
 sub run_MAIN_ITEM_PROPERTY
 {
 	my( $self, $state ) = @_;
@@ -658,6 +672,13 @@ sub run_icon
 	}
 
 	return [ $doc->[0]->render_icon_link( %args ), "XHTML" ];
+}
+
+sub run_icon_url 
+{
+    my( $self, $state, $value ) = @_;
+
+    return [ $value->[0]->icon_url, "STRING" ];
 }
 
 

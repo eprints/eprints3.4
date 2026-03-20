@@ -6,8 +6,8 @@ use strict;
 
 my $repo = EPrints->new->current_repository;
 
-my $url = $repo->current_url( host => 1, path => 'cgi', 'search/simple' );
-$url .= '?q={searchTerms}&search_offset={startIndex}';
+my $url = $repo->current_url( host => 1, path => 'cgi', 'opensearch' );
+$url .= '?q={searchTerms}&startPage={pageNumber}';
 
 my @formats;
 
@@ -28,7 +28,7 @@ foreach my $plugin (sort { ref($a) cmp ref($b) } $repo->get_plugins(
 	$mt=~s/;.*$//;
 	push @formats, [ 'Url', undef,
 		indexOffset => 0,
-		template => "$url&output=".URI::Escape::uri_escape( $plugin->get_subtype ),
+		template => "$url&format=".URI::Escape::uri_escape( $plugin->get_subtype ),
 		type => $mt
 	];
 }

@@ -11,6 +11,7 @@ my $pageSize = 20;
 
 my $q = $repo->param( 'q' );
 my $startPage = $repo->param( 'startPage' );
+my $startIndex = $repo->param( 'startIndex' );
 my $format = $repo->param( 'format' );
 
 $q = '' if !defined $q;
@@ -28,7 +29,7 @@ if( !defined($format) || $format->param( 'visible' ) ne 'all' )
 EPrints->abort( 'Missing Atom export plugin' ) if !defined $format;
 
 # calculate the range to retrieve
-my $startOffset = $pageSize * ($startPage - 1);
+my $startOffset = defined $startIndex ? $startIndex : $pageSize * ($startPage - 1);
 my $limit = $pageSize * $startPage;
 
 my $dataset = $repo->dataset( "archive" );
@@ -68,7 +69,7 @@ $links->appendChild( $xml->create_data_element( 'opensearch:itemsPerPage',
 	) );
 $links->appendChild( $xml->create_text_node( "\n" ) );
 $links->appendChild( $xml->create_data_element( 'opensearch:startIndex',
-	$startOffset+1,
+	$startOffset+(1*$pageSize),
 	) );
 $links->appendChild( $xml->create_text_node( "\n" ) );
 $links->appendChild( $xml->create_element( 'link',

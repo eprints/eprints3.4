@@ -129,7 +129,7 @@ sub render_value_actual
 			my $fieldname = $field_conf->{name};
 			(my $subfieldname = $fieldname) =~ s/^$self->{name}_//;
 			if (
-				   ( $self->get_property( "multiple" ) && exists @{$value}[0]->{$subfieldname} )
+				   ( $self->get_property( "multiple" ) && EPrints::Utils::is_set( @{$value}[0] ) && exists @{$value}[0]->{$subfieldname} )
 				|| ( !$self->get_property( "multiple" ) && exists $value->{$subfieldname} )
 				|| !$field_conf->{render_column_quiet}
 			)

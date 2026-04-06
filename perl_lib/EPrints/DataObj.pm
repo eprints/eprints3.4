@@ -191,7 +191,7 @@ sub new_from_data
                     {
                         foreach my $k ( keys %{$datum[$i]} )
                         {
-                            delete $data->{$fieldname}[$i]{$k} if $data->{$fieldname}[$i]{$k} eq "";
+                            delete $data->{$fieldname}[$i]{$k} if ! defined $data->{$fieldname}[$i]{$k} || $data->{$fieldname}[$i]{$k} eq "";
                         }
                     }
                 }

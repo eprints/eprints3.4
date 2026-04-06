@@ -11,8 +11,14 @@ $url .= '?q={searchTerms}&startPage={pageNumber}';
 
 my @formats;
 
-my $user = $repo->current_user;
 my $is_visible = "all";
+my $user = $repo->current_user;
+unless ( $user )
+{
+	use EPrints::Apache::Sword;
+	my $response = EPrints::Apache::Sword::authenticate( $repo, $repo->request );
+	$user = $response->{owner} if defined $response->{owner};
+}
 if( defined $user && ($user->value( "usertype" ) eq "admin" || $user->value( "usertype" ) eq "editor") )
 {
 	$is_visible = "staff";

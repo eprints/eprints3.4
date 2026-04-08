@@ -1,0 +1,13 @@
+$c->{plugins}->{"Import::DOI"}->{params}->{contributor_types} = {
+    "author" => "http://id.loc.gov/vocabulary/relators/aut",
+    "editor" => "http://id.loc.gov/vocabulary/relators/edt",
+    "chair" => "http://id.loc.gov/vocabulary/relators/edt",
+    "reviewer" => "http://id.loc.gov/vocabulary/relators/rev",
+    "reviewer-assistant" => "http://id.loc.gov/vocabulary/relators/rev",
+    "stats-reviewer" => "http://id.loc.gov/vocabulary/relators/rev",
+    "reviewer-external" => "http://id.loc.gov/vocabulary/relators/rev",
+    "reader" => "http://id.loc.gov/vocabulary/relators/oth",
+    "translator" => "http://id.loc.gov/vocabulary/relators/trl",
+};
+
+$c->{plugins}->{"Export::OAI_UKETD_DC"}->{params}->{contributor_type_thesis_advisor} = "http://id.loc.gov/vocabulary/relators/ths";

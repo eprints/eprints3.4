@@ -15,6 +15,20 @@ use URI;
 
 our @ISA = qw/ EPrints::Plugin::Import::TextFile /;
 
+my %DEFAULT;
+
+$DEFAULT{contributor_types} = {
+	"author" => "http://www.loc.gov/loc.terms/relators/AUT",
+	"editor" => "http://www.loc.gov/loc.terms/relators/EDT",
+	"chair" => "http://www.loc.gov/loc.terms/relators/EDT",
+	"reviewer" => "http://www.loc.gov/loc.terms/relators/REV",
+	"reviewer-assistant" => "http://www.loc.gov/loc.terms/relators/REV",
+	"stats-reviewer" => "http://www.loc.gov/loc.terms/relators/REV",
+	"reviewer-external" => "http://www.loc.gov/loc.terms/relators/REV",
+	"reader" => "http://www.loc.gov/loc.terms/relators/OTH",
+	"translator" => "http://www.loc.gov/loc.terms/relators/TRL",
+};
+
 sub new
 {
 	my( $class, %params ) = @_;
@@ -30,13 +44,16 @@ sub new
 	# https://doi.crossref.org/openurl - current preferred url, but below code does not support https
 	$self->{ base_url } = "https://doi.crossref.org/openurl";
 
+	# Uses old http://www.loc.gov/loc.terms/relators/... by default.
+	# Symlink flavours/pub_lib/cfg.d/doi_contributor_types.pl.disabled to doi_contributor_types.pl to use new http://id.loc.gov/vocabulary/relators/... contributor types.
+	$self->{contributor_types} = $self->{session} && defined $self->param( 'contributor_types' ) ? $self->param( 'contributor_types') : $DEFAULT{contributor_types};
+
 	return $self;
 }
 
 sub screen
 {
 	my( $self, %params ) = @_;
-
 	return $self->{repository}->plugin( "Screen::Import::DOI", %params );
 }
 
@@ -263,18 +280,7 @@ sub contributors
 			}
 			else
 			{
-				my %contributor_types = (
-					"author" => "http://www.loc.gov/loc.terms/relators/AUT",
-					"editor" => "http://www.loc.gov/loc.terms/relators/EDT",
-					"chair" => "http://www.loc.gov/loc.terms/relators/EDT",
-					"reviewer" => "http://www.loc.gov/loc.terms/relators/REV",
-					"reviewer-assistant" => "http://www.loc.gov/loc.terms/relators/REV",
-					"stats-reviewer" => "http://www.loc.gov/loc.terms/relators/REV",
-					"reviewer-external" => "http://www.loc.gov/loc.terms/relators/REV",
-					"reader" => "http://www.loc.gov/loc.terms/relators/OTH",
-					"translator" => "http://www.loc.gov/loc.terms/relators/TRL",
-				);
-				push @contributors, { name => $person_name, type => $contributor_types{$role} , orcid => $orcid };
+				push @contributors, { name => $person_name, type => $plugin->{contributor_types}->{$role} , orcid => $orcid };
 			}
 		}
 		elsif ( $contributor->nodeName eq "organization" && $role eq "author" )

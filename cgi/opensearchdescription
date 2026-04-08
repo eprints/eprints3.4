@@ -19,7 +19,7 @@ unless ( $user )
 	my $response = EPrints::Apache::Sword::authenticate( $repo, $repo->request );
 	$user = $response->{owner} if defined $response->{owner};
 }
-if( defined $user && ($user->value( "usertype" ) eq "admin" || $user->value( "usertype" ) eq "editor") )
+if( defined $user && $user->is_staff )
 {
 	$is_visible = "staff";
 }

@@ -19,7 +19,7 @@ $q = substr($q,0,128);
 if ( defined $startIndex )
 {
 	$startPage = undef;
-	$startIndex = 1 if $startIndex =~ /\D/;
+	$startIndex = 0 if $startIndex =~ /\D/;
 }
 else
 {
@@ -27,17 +27,31 @@ else
 }
 $pageSize = $defaultPageSize if !EPrints::Utils::is_set( $pageSize ) || $pageSize =~ /\D/;
 
+my $is_visible = "all";
+my $user = $repo->current_user;
+unless ( $user )
+{
+	use EPrints::Apache::Sword;
+	my $response = EPrints::Apache::Sword::authenticate( $repo, $repo->request );
+	$user = $response->{owner} if defined $response->{owner};
+}
+if( defined $user && $user->is_staff  )
+{
+	$is_visible = "staff";
+}
 
 $format = 'Atom' if !EPrints::Utils::is_set( $format );
 $format = $repo->plugin( "Export::$format" );
-if( !defined($format) || $format->param( 'visible' ) ne 'all' )
+
+if( !defined($format) || ! $format->is_visible( $is_visible ) )
 {
 	$format = $repo->plugin( 'Export::Atom' );
 }
+
 EPrints->abort( 'Missing Atom export plugin' ) if !defined $format;
 
 # calculate the range to retrieve
-my $startOffset = defined $startIndex ? $startIndex - 1 : $pageSize * ( $startPage - 1 );
+my $startOffset = defined $startIndex ? $startIndex : $pageSize * ( $startPage - 1 );
 my $limit = $startOffset + $pageSize;
 
 my $dataset = $repo->dataset( "archive" );
@@ -77,7 +91,7 @@ $links->appendChild( $xml->create_data_element( 'opensearch:itemsPerPage',
 	) );
 $links->appendChild( $xml->create_text_node( "\n" ) );
 $links->appendChild( $xml->create_data_element( 'opensearch:startIndex',
-	$startOffset+1,
+	$startOffset,
 	) );
 $links->appendChild( $xml->create_text_node( "\n" ) );
 $links->appendChild( $xml->create_element( 'link',
@@ -108,7 +122,7 @@ $base_url->query( undef ) if !@query;
 
 $offsets{first} = "$base_url";
 
-if( $startOffset >= $pageSize || $startIndex > 1 )
+if( $startOffset >= $pageSize || $startIndex > 0 )
 {
 	$offsets{previous} = $base_url->clone;
 	if ( $startPage )
@@ -123,7 +137,7 @@ if( $startOffset >= $pageSize || $startIndex > 1 )
 	}
 	else
 	{
-		my $prevIndex = $startIndex - $pageSize >= 1 ? $startIndex - $pageSize : 1;
+		my $prevIndex = $startIndex - $pageSize >= 0 ? $startIndex - $pageSize : 0;
 		$offsets{previous}->query_form(
 			$base_url->query_form,
 			startIndex => $prevIndex,

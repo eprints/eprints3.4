@@ -10,6 +10,8 @@ my $url = $repo->current_url( host => 1, path => 'cgi', 'opensearch' );
 $url .= '?q={searchTerms}&startPage={pageNumber}';
 
 my @formats;
+# Optional config to only offer specific formats
+my $permitted_formats = $repo->config( 'opensearch', 'formats' );
 
 my $is_visible = "all";
 my $user = $repo->current_user;
@@ -30,6 +32,8 @@ foreach my $plugin (sort { ref($a) cmp ref($b) } $repo->get_plugins(
 	is_visible => $is_visible,
 ))
 {
+	next if( defined $permitted_formats && ! grep { $plugin->get_subtype eq $_ } @$permitted_formats );
+
 	my $mt=$plugin->param( "mimetype" );
 	$mt=~s/;.*$//;
 	push @formats, [ 'Url', undef,

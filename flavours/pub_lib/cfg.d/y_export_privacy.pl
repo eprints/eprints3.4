@@ -7,4 +7,5 @@ if ( defined $c->{export_privacy} && $c->{export_privacy} )
 	$c->{plugins}->{"Export::RDFXML"}->{params}->{visible} = "staff";
 	$c->{plugins}->{"Export::CSV"}->{params}->{visible} = "staff";
 	$c->{plugins}->{"Export::Simple"}->{params}->{visible} = "staff";
+	$c->{plugins}->{"Export::XSLT::Identity"}->{params}->{visible} = "staff";
 }

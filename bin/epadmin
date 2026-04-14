@@ -41,6 +41,8 @@ Where I<command> is one of:
 
 =item create_user
 
+=item delete
+
 =item erase_data
 
 =item erase_eprints
@@ -130,6 +132,10 @@ Create the database tables.
 =item B<epadmin> create_user I<repository_id>
 
 Create a new user. You need to do this to create your first admin account.
+
+=item B<epadmin> delete I<repository_id> I<dataset_id> I<dataobj_id> I<dataobj_id> I<dataobj_id>-I<dataobj_id> ...
+
+Delete one more records of a given dataset, (currently restricted to only eprints or users).  At least one data object ID or range must be specified, if a data object ID range is given (e.g. 10-20), then all existing data objects in that range will be deleted. Equivalent to "Remove" button in the web interface and as such also  deletes sub-objects (e.g. document, file, etc.) but not related records (e.g. access, history, request, etc.).
 
 =item B<epadmin> schema I<repository_id>
 
@@ -349,6 +355,12 @@ else
 	elsif( $action eq "update_dry_run" ) { update_database_structure( $repoid, 1 ); }
 	elsif( $action eq "upgrade_mysql_charset" ) { upgrade_mysql_charset( $repoid ); }
 	elsif( $action eq "rebuild_triples" ) { rebuild_triples( $repoid, @ARGV ); }
+    elsif( $action eq "delete" )
+    {
+        my $datasetid = shift @ARGV;
+        pod2usage(1) unless defined $datasetid;
+        delete_dataobj( $repoid, $datasetid, @ARGV );
+    }
 	elsif( $action eq "recommit" ) 
 	{
 		my $datasetid = shift @ARGV;
@@ -2146,6 +2158,65 @@ sub update_database_structure
 #
 ###################################
 
+sub delete_dataobj
+{
+    my( $repoid, $datasetid, @ids ) = @_;
+
+    my $repo = &repository( $repoid );
+
+	if ( scalar @ids == 0 )
+	{
+		print STDERR "One or more data object IDs or ranges must be specified for deletion.\n";
+		exit 1;
+	}
+
+    my $dataset = $repo->dataset( $datasetid );
+    if( !defined $dataset || ( $datasetid ne "eprint" && $datasetid ne "user" ) )
+    {
+        print STDERR "Exiting due to invalid dataset.  Dataset must be 'eprint' or 'user'.\n" if( $noise >= 1 );
+        exit 1;
+    }
+
+    my $list;
+    if( @ids )
+    {
+        @ids = expand_ids( $repo, $dataset, @ids );
+        $list = $dataset->list( \@ids );
+
+        if( $list->count > 1 && !$force )
+        {
+            print "\nYou are about to delete \"$datasetid\" from the $repoid repository.\n";
+            print "This can take some time.\n\n";
+            print "Number of $datasetid records to delete: ".$list->count."\n";
+        }
+		else
+		{
+			$force = 1;
+		}
+
+        my $sure = $force || EPrints::Utils::get_input_confirm( "Continue", 1 );
+        unless( $sure )
+        {
+            print STDERR "Aborting then.\n\n";
+            exit 1;
+        }
+    }
+
+    $list->map( sub {
+            my( $session, $dataset, $item ) = @_;
+
+            if( $noise >= 2 )
+            {
+                    print STDERR "Deleting item: ".$dataset->id()."/".$item->id()."\n";
+            }
+			# Make sure eprint_status is set or eprint will not be able to be deleted.
+			if ( $datasetid eq "eprint" && !EPrints::Utils::is_set( $item->value( 'eprint_status' ) ) )
+			{
+					$item->set_value( 'eprint_status', 'inbox' );
+			}
+            $item->delete( 1 );
+    } );
+}
 
 sub recommit
 {

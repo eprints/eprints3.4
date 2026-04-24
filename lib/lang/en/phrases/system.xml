@@ -1978,6 +1978,10 @@ User Area CGI Scripts
     <epp:phrase id="Plugin/Screen/Admin/IndexerControl:action:start_indexer:description">Starts the full-text indexer.</epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/IndexerControl:action:stop_indexer:title">Stop Indexer</epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/IndexerControl:action:stop_indexer:description">Stops the full-text indexer.</epp:phrase>
+    <epp:phrase id="Plugin/Screen/Admin/IndexerControl:action:retry_tasks:title">Retry Tasks</epp:phrase>
+    <epp:phrase id="Plugin/Screen/Admin/IndexerControl:action:retry_tasks:description">Retry all failed and stale in progress tasks from the event queue.</epp:phrase>
+    <epp:phrase id="Plugin/Screen/Admin/IndexerControl:action:clear_tasks:title">Clear Tasks</epp:phrase>
+    <epp:phrase id="Plugin/Screen/Admin/IndexerControl:action:clear_tasks:description">Clear all failed and stale in progress tasks from the event queue.</epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/IndexerControl:indexer_started">Indexer started successfully.</epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/IndexerControl:indexer_stopped">Indexer stopped successfully.</epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/IndexerControl:cant_start_indexer">Unable to start indexer. You should check the log file in <epc:pin name="logpath" /> for more information.</epp:phrase>

@@ -237,6 +237,8 @@ my $PRIVMAP =
         "indexer/stop",
         "indexer/start",
         "indexer/force_start",
+        "indexer/retry_tasks",
+        "indexer/clear_tasks",
         "create_user",
         "subject/edit",
         "staff/user_search",

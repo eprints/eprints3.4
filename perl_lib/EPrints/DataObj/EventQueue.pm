@@ -146,6 +146,29 @@ sub create_unique
         return $task;
     }
 
+	# If a priority is no explictly specified set priority on the request that prompted the task to be created.
+	if ( !defined $data->{priority} )
+	{
+		if ( my $request = $session->request )
+		{
+			my $urlpath = $session->config( "rel_path" );
+			my $uri = $request->uri;
+			$uri =~ s!^$urlpath!!;
+			my $priority = $session->config( 'event_queue', 'web_priority' ) || 10;
+			my $priority_paths = $session->config( 'event_queue', 'priority_paths' );
+			foreach my $path_priority ( reverse sort keys %$priority_paths )
+			{
+				my $path = $priority_paths->{$path_priority};
+				if ( $uri =~ m!^$path$! )
+				{
+					$priority = $path_priority;
+					last;
+				}
+			}
+			$data->{priority} = $priority;
+		}
+	}
+
     # Some event queue plugins create 'staged' tasks that are logged by the indexer but executed by an external script, (e.g. video transcoding).
     my $plugin = $session->plugin( $data->{pluginid} );
     if ( defined $plugin )

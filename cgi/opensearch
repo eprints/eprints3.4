@@ -41,6 +41,12 @@ if( defined $user && $user->is_staff  )
 }
 
 $format = 'Atom' if !EPrints::Utils::is_set( $format );
+
+my $permitted_formats = $repo->config( 'opensearch', 'formats' );
+if( defined $permitted_formats && ! grep { $format eq $_ } @$permitted_formats ){
+	EPrints->abort( "Format $format not permitted for opensearch." );
+};
+
 $format = $repo->plugin( "Export::$format" );
 
 if( !defined($format) || ! $format->is_visible( $is_visible ) )

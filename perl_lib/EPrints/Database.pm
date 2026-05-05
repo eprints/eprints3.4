@@ -3011,7 +3011,7 @@ sub dequeue_events
 				{ meta_fields => ["status"], value => "waiting" },
 				{ meta_fields => ["start_time"], value => "..$until", match => "EQ" },
 			],
-			custom_order => "-priority/-start_time",
+			custom_order => "-priority/start_time",
 			limit => $n,
 		)->slice( 0, $n );
 

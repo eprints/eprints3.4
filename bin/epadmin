@@ -1574,6 +1574,8 @@ sub redo_thumbnails
 
 	my $repo = &repository( $repoid );
 
+	our $redo_thumnbs_current_eprintid = 0;
+
 	my $f = sub {
 		my( undef, undef, $doc ) = @_;
 
@@ -1584,6 +1586,11 @@ sub redo_thumbnails
 
 		if ( $doc->parent )
 		{
+			if ( $doc->parent->id != $redo_thumnbs_current_eprintid )
+			{
+				print "Redoing thumbnails for eprint ".$doc->parent->id."\n" if( $noise >= 1 );
+				$redo_thumnbs_current_eprintid = $doc->parent->id;
+			}
 			$doc->remove_thumbnails; #ouch!
 			$doc->make_thumbnails;
 		}

@@ -39,6 +39,10 @@ C<true>.
 
 The priority for this event.
 
+=item ignore_edit_lock (boolean)
+
+Do not care if the data object (e.g. eprint) is edit locked.
+
 =item start_time (time)
 
 The event should not be executed before this time.
@@ -220,6 +224,7 @@ sub get_system_field_info
 		{ name=>"eventqueueid", type=>"uuid", required=>1, },
 		{ name=>"cleanup", type=>"boolean", default_value=>"TRUE", },
 		{ name=>"priority", type=>"int", },
+		{ name=>"ignore_edit_lock", type=>"boolean" },
 		{ name=>"start_time", type=>"timestamp", required=>1, },
 		{ name=>"end_time", type=>"time", },
 		{ name=>"status", type=>"set", options=>[qw( waiting staged inprogress success failed )], default_value=>"waiting", },
@@ -398,20 +403,24 @@ sub _execute
 				$self->message( "error", $xml->create_text_node( "Bad parameters: No such item '$2' in dataset '$1'" ) );
 				return EPrints::Const::HTTP_NOT_FOUND;
 			}
-			my $locked = 0;
-			if( $param->isa( "EPrints::DataObj::EPrint" ) )
+
+			unless ( $self->value( "ignore_edit_lock" ) && $self->value( "ignore_edit_lock" ) eq "TRUE" )
 			{
-				$locked = 1 if( $param->is_locked() );
-			}
-			if( $param->isa( "EPrints::DataObj::Document" ) )
-			{
-				my $eprint = $param->get_parent;
-				$locked = 1 if( $eprint && $eprint->is_locked() );
-			}
-			if( $locked )
-			{
-				$self->message( "warning", $xml->create_text_node( $param->get_dataset->base_id.".".$param->id." is locked" ) );
-				return EPrints::Const::HTTP_LOCKED;
+				my $locked = 0;
+				if( $param->isa( "EPrints::DataObj::EPrint" ) )
+				{
+					$locked = 1 if( $param->is_locked() );
+				}
+				if( $param->isa( "EPrints::DataObj::Document" ) )
+				{
+					my $eprint = $param->get_parent;
+					$locked = 1 if( $eprint && $eprint->is_locked() );
+				}
+				if( $locked )
+				{
+					$self->message( "warning", $xml->create_text_node( $param->get_dataset->base_id.".".$param->id." is locked" ) );
+					return EPrints::Const::HTTP_LOCKED;
+				}
 			}
 		}
 	}

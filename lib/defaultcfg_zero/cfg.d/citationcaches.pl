@@ -7,7 +7,7 @@ $c->{datasets}->{citationcache} = {
 $c->{citation_caching}->{enabled} = 0;
 $c->{citation_caching}->{excluded_dataobjs} = [
 	'epm',
-	'eventqueue',
+	'event_queue',
 	'loginticket',
 	'subject',
 ];

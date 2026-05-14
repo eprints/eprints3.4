@@ -308,9 +308,11 @@ sub run_substr
 sub run_contains
 {
         my( $self, $state, $string, $token, $length ) = @_;
-        my $t = $token->[0];
 
-        return [ $string->[0] =~ /$t/, "BOOLEAN" ];
+        my $t = $token->[0];
+        my $res = defined $string->[0] && $string->[0] =~ m/$t/ ? 1 : 0;
+
+        return [ $res, "BOOLEAN" ];
 }
 
 sub run_is_set

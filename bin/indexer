@@ -196,11 +196,13 @@ if( $ARGV[0] eq "debug" )
 $logfile ||= EPrints::Index::logfile();
 $logfile = undef if $logfile eq "-" or $notdaemon;
 
+$loglevel += 0 if defined $loglevel;
+$opt_respawn += 0 if defined $opt_respawn;
 $opt_timeout += 0 if defined $opt_timeout;
 
 my $daemon = EPrints::Index::Daemon->new(
-	loglevel => $loglevel+0,
-	respawn => $opt_respawn+0,
+	loglevel => $loglevel,
+	respawn => $opt_respawn,
 	logfile => $logfile,
 	noise => $noise,
 	once => $once,

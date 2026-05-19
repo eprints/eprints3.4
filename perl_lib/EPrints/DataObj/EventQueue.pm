@@ -248,7 +248,7 @@ sub get_system_field_info
 	return (
 		{ name=>"eventqueueid", type=>"uuid", required=>1, },
 		{ name=>"cleanup", type=>"boolean", default_value=>"TRUE", },
-		{ name=>"priority", type=>"int", },
+		{ name=>"priority", type=>"int", required=>1, default_value=>0 },
 		{ name=>"start_time", type=>"timestamp", required=>1, },
 		{ name=>"end_time", type=>"time", },
 		{ name=>"status", type=>"set", options=>[qw( waiting staged inprogress success failed )], default_value=>"waiting", },

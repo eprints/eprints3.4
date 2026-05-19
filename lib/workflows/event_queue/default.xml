@@ -9,6 +9,7 @@
   <stage name="core">
   	<component><field ref="status"/></component>
   	<component><field ref="start_time"/></component>
+	<component><field ref="priority"/></component>
   </stage>
 
 </workflow>

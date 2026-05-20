@@ -482,10 +482,14 @@ sub get_values
 {
 	my( $self, $session, $dataset, %opts ) = @_;
 
+	my $showall = defined $opts{showall} ? $opts{showall} : 0;
+	my $showtop = defined $opts{showtop} ? $opts{showtop} : 1;
+
 	my $topsubj = $self->get_top_subject( $session );
+
 	my ( $pairs ) = $topsubj->get_subjects(
-		0,
-		1,
+		!$showall,
+		$showtop,
 		0 );
 	my @outvalues;
 	my $seen = {};
@@ -502,7 +506,12 @@ sub tags
 {
 	my( $self, $session ) = @_;
 
-	return @{$self->get_values( $session )};
+	my %opts = (
+		showtop => $self->{showtop},
+		showall => $self->{showall},
+	);
+
+	return @{$self->get_values( $session, undef, %opts )};
 }
 
 ######################################################################

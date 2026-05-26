@@ -140,6 +140,7 @@ sub convert_dataobj
 	if( $eprint->exists_and_set( 'subjects' ) ) {
 		for my $subject (@{$eprint->get_value( 'subjects' )}) {
 			my $subject_obj = EPrints::DataObj::Subject->new( $plugin->{repository}, $subject );
+			next unless defined $subject_obj;
 			my $subject_name = $subject_obj->render_description();
 
 			push @tags, [ 'prism.keyword', $subject_name ];

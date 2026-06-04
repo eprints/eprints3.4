@@ -372,7 +372,7 @@ sub get_defaults
 		$data->{pos} = $session->get_database->next_doc_pos( $data->{eprintid} );
 	}
 
-	$data->{placement} = $data->{pos};
+	$data->{placement} = $session->get_database->next_doc_pos( $data->{eprintid}, 'placement' );
 
 	return $data;
 }

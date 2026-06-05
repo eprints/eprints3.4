@@ -433,7 +433,7 @@ $c->add_dataset_trigger( "eprint", EP_TRIGGER_RDF, sub {
 		$o{"graph"}->add(
 			secondary_resource => $editor_uri,
 		   	  subject => $eprint_uri,
-		 	predicate => "<http://www.loc.gov/loc.terms/relators/EDT>",
+		 	predicate => "<http://id.loc.gov/vocabulary/relators/edt>",
 		    	   object => $editor_uri );
 		$o{"graph"}->add(
 			secondary_resource => $editor_uri,

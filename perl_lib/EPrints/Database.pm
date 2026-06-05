@@ -1794,27 +1794,34 @@ sub counter_reset
 ######################################################################
 =pod
 
-=item $n = $db->next_doc_pos( $eprintid )
+=item $n = $db->next_doc_pos( $eprintid, [$fieldname] )
 
 Return the next unused document position for the given C<$eprintid>.
+
+Optionally, a C<$fieldname> can be provided (e.g. I<placement>) and
+the next value for that field will be returned instead.
 
 =cut
 ######################################################################
 
 sub next_doc_pos
 {
-	my( $self, $eprintid ) = @_;
+	my( $self, $eprintid, $fieldname ) = @_;
 
 	if( $eprintid ne $eprintid + 0 )
 	{
 		EPrints::abort( "next_doc_pos got odd eprintid: '$eprintid'" );
 	}
+	unless ( $fieldname && $fieldname =~ /^\w+$/ )
+	{
+		$fieldname = 'pos';
+	}
 
 	my $Q_table = $self->quote_identifier( "document" );
 	my $Q_eprintid = $self->quote_identifier( "eprintid" );
-	my $Q_pos = $self->quote_identifier( "pos" );
+	my $Q_fieldname = $self->quote_identifier( $fieldname );
 
-	my $sql = "SELECT MAX($Q_pos) FROM $Q_table WHERE $Q_eprintid=$eprintid";
+	my $sql = "SELECT MAX($Q_fieldname) FROM $Q_table WHERE $Q_eprintid=$eprintid";
 	my @row = $self->{dbh}->selectrow_array( $sql );
 	my $max = $row[0] || 0;
 

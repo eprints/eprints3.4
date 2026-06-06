@@ -58,7 +58,7 @@ sub handler
 		return redir_add_slash( $repository );
 	}
 
-	if( ! $uri =~ m/^\// )
+	if( $uri !~ m/^\// )
 	{
 		return NOT_FOUND;
 	}

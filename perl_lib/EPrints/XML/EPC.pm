@@ -469,7 +469,7 @@ sub _process_list
                 my $name = $child->tagName;
                 $name=~s/^ep://;
                 $name=~s/^epc://;
-                if( ! $name eq "item" )
+                if( $name ne "item" )
                 {
                         EPrints::abort( "In ".$params{in}.": only epc:item is allowed in epc:list.\n".substr( $child->toString, 0, 100 ) );
                 }

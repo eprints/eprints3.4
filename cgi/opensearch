@@ -8,6 +8,18 @@ exit( 0 ) unless( defined $repo );
 my $defaultPageSize = 20;
 
 my $q = $repo->param( 'q' );
+
+my $search_confs = $repo->config( "search", "simple", "search_fields" );
+my $search_id = $repo->config( "opensearch", "simple_search_id" );
+
+# If we are defining our own search field to use, or if there isn't a 'q' search field
+if( defined $search_id || ! grep{ $_->{id} eq 'q' } @$search_confs )
+{
+        $search_id = @$search_confs[0]->{id} if !defined $search_id;
+		# map the incoming 'q' param to the search_field param
+        $repo->{query}->param( $search_id, $q ) if defined $q && ! defined $repo->param( $search_id );
+}
+
 my $startPage = $repo->param( 'startPage' );
 my $startIndex = $repo->param( 'startIndex' );
 my $pageSize = $repo->param( 'size' ) || $defaultPageSize;

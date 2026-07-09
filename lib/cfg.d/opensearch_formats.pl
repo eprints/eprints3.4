@@ -5,3 +5,16 @@
 # 
 # At a minimum, the default 'Atom' format should be offered.
 # $c->{opensearch}->{formats} = [qw( Atom BibTeX DC EndNote HTML METS )];
+#
+#
+# OpenSearch search configuration
+# If your 'simple search' doesn't include a config with:
+#     id => 'q'
+# the OpenSearch interface will fall back to the first defined simple search definition.
+# If you want a specific search config to be used, you can specify the id in the following
+# config option:
+# $c->{opensearch}->{simple_search_id} = 'metadata';
+#
+# The above example would use a search defined in
+# $c->{search}->{simple}->{search_fields} 
+# with an id of 'metadata'.

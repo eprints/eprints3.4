@@ -124,7 +124,7 @@ $c->add_trigger( EP_TRIGGER_INDEX_FIELDS, sub {
 				$langid, # TODO: non-English ordervalues?
 				$dataset
 			);
-			next if ref($ordervalue) ne ""; 
+			next if ref($ordervalue) ne "" || ! length( $ordervalue ); 
 			my $key = $dataset->base_id . '.' . $field->name . '.' . $langid;
 			$doc->add_value( $field_pos{$key}, $ordervalue );
 		}

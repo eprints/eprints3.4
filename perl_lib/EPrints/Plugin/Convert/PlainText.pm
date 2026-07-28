@@ -102,7 +102,9 @@ sub export
 		if( $doc->get_value( "mime_type" ) eq $mime )
 		{
 			$cmd_id = $EPrints::Plugin::Convert::PlainText::APPS{$mime};
-			( $file_extension ) = $main  =~ /(([^.\s]+)+)$/;
+			( $file_extension ) = $main  =~ /(([^.]+)+)$/; # Get string after last '.'
+			$file_extension =~ s/\W+//g; # Remove any non-alphanumeric characters (exc. '_')
+			$file_extension = 'dat' unless $file_extension; # If no file extension determined use 'dat'
 			last if $repository->can_execute( $cmd_id );
 			last if $cmd_id eq "_special";
 		}

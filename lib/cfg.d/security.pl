@@ -13,7 +13,7 @@ $c->{can_request_view_document} = sub
 	my( $doc, $r ) = @_;
 
 	my $security = $doc->value( "security" );
-	my $eprint = $doc->get_eprint();
+	my $eprint = EPrints::DataObj::EPrint->load_from_revision_file( $doc->get_session, $doc->get_parent_id );
 	my $status = $eprint->value( "eprint_status" );
 	if( $security eq "public" && $status eq "archive" )
 	{
@@ -89,7 +89,7 @@ $c->{can_user_view_document} = sub
 {
 	my( $doc, $user ) = @_;
 
-	my $eprint = $doc->get_eprint();
+	my $eprint = EPrints::DataObj::EPrint->load_from_revision_file( $doc->get_session, $doc->get_parent_id );
 	my $security = $doc->value( "security" );
 
 	# If the document belongs to an eprint which is in the

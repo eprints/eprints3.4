@@ -1252,7 +1252,7 @@ sub local_path
 	my $parent = $self->parent;
 	return undef if !defined $parent;
 
-	my $grandparent = $parent->parent;
+	my $grandparent = EPrints::DataObj::EPrint->load_from_revision_file( $session, $parent->get_parent_id );
 	return undef if !defined $grandparent;
 
 	if ( $parent->dataset->id eq "document" )

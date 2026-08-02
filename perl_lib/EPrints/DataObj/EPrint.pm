@@ -474,6 +474,33 @@ sub get_defaults
 ######################################################################
 =pod
 
+=item $eprint = EPrints::DataObj::EPrint->load_from_revision_file( $class, $session, $eprintid )
+
+Loads the eprint record from the latest XMLrevision file rather than 
+the database to save load. 
+
+Only intended for use when serving requests for abstract pages or an 
+eprint's documents.
+
+=cut
+######################################################################
+
+sub load_from_revision_file
+{
+    my( $class, $session, $eprintid ) = @_;
+
+    my $revision_file_path = $session->database->get_revision_file_path( get_dataset_id, $eprintid);
+    my $xml = $session->xml->parse_file( $revision_file_path );
+    my $epdata = EPrints::DataObj::EPrint->xml_to_epdata( $session, $xml );
+    my $eprint = EPrints::DataObj::EPrint->new_from_data( $session, $epdata );
+
+    return $eprint;
+}
+
+
+######################################################################
+=pod
+
 =back
 
 =head2 Object Methods

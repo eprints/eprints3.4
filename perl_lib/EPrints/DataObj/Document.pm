@@ -714,16 +714,17 @@ sub local_path
 {
 	my( $self ) = @_;
 
-	my $eprint = $self->get_parent();
+	my $eprintid = $self->get_parent_id;
 
-	if( !defined $eprint )
+	if( !defined $eprintid )
 	{
 		$self->{session}->get_repository->log(
 			"Document ".$self->get_id." has no eprint (eprintid is ".$self->get_value( "eprintid" )."!" );
 		return( undef );
 	}	
-	
-	return( $eprint->local_path()."/".sprintf( "%02d", $self->get_value( "pos" ) ) );
+
+	my $eprint_local_path = $self->{session}->database->get_documents_dir( 'eprint', $eprintid );
+	return( $eprint_local_path."/".sprintf( "%02d", $self->get_value( "pos" ) ) );
 }
 
 
@@ -2528,7 +2529,7 @@ sub search_related
 				match => "EX",
 			},{
 				meta_fields => [qw( eprintid )],
-				value => $self->parent->id,
+				value => $self->get_parent_id,
 			}],
 			custom_order => $order,
 			limit => $limit,
@@ -2543,7 +2544,7 @@ sub search_related
 				match => "EX",
 			},{
 				meta_fields => [qw( eprintid )],
-				value => $self->parent->id,
+				value => $self->get_parent_id,
 			}],
 			custom_order => $order,
 			limit => $limit,

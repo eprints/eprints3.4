@@ -503,8 +503,7 @@ sub handler
 					}
 				}
 
-				my $eprint = $repository->dataset( "eprint" )->dataobj( $eprintid );
-				if( !defined $eprint )
+				if( ! $repository->get_database->exists( $repository->dataset( "eprint" ), $eprintid ) )
 				{
 					return NOT_FOUND;
 				}
@@ -522,7 +521,6 @@ sub handler
 				if( $uri =~ s! ^/(0*)([1-9][0-9]*)\b !!x )  ##this would match /234/3/test.pdf or thumbnail: /234/1.hassmallThumbnailVersion/paper.pdf
 				{
 					# It's a document....           
-
 					my $pos = $2;
 					my $doc = EPrints::DataObj::Document::doc_with_eprintid_and_pos( $repository, $eprintid, $pos );
 					if( !defined $doc )
@@ -542,6 +540,7 @@ sub handler
 
 					my $filename = $uri;
 
+					my $eprint = EPrints::DataObj::EPrint->load_from_revision_file( $repository, $eprintid );
 					$r->pnotes( eprint => $eprint );
 					$r->pnotes( document => $doc );
 					$r->pnotes( dataobj => $doc );
@@ -594,6 +593,7 @@ sub handler
 				# this would match [/23/, /23/index.html; /23/any.file]
 				else
 				{
+					my $eprint = EPrints::DataObj::EPrint->load_from_revision_file( $repository, $eprintid );
 					my $path = "/archive/" . $eprint->store_path();
 					EPrints::Update::Abstract::update( $repository, $lang, $eprint->id, $path );
 					EPrints::Signposting::signposting( $repository, $r, $eprint );
@@ -674,8 +674,7 @@ sub handler
 				}
 			}
 
-			my $eprint = $repository->dataset( "eprint" )->dataobj( $eprintid );
-			if( !defined $eprint )
+			if( ! $repository->get_database->exists( $repository->dataset( "eprint" ), $eprintid ) )
 			{
 				return NOT_FOUND;
 			}
@@ -689,6 +688,7 @@ sub handler
 					my $fn = $repository->get_conf( "eprints_access_restrictions_callback" );
 					if( defined $fn )
 					{
+						my $eprint = EPrints::DataObj::EPrint->load_from_revision_file( $repository, $eprintid );
 						my $rv = &{$fn}( $eprint, $user );
 						return NOT_FOUND if $rv == 0; # perhaps 403 rather than 404
 					}
@@ -731,6 +731,7 @@ sub handler
 
 				my $filename = $uri;
 
+				my $eprint = EPrints::DataObj::EPrint->load_from_revision_file( $repository, $eprintid );
 				$r->pnotes( eprint => $eprint );
 				$r->pnotes( document => $doc );
 				$r->pnotes( dataobj => $doc );
@@ -782,6 +783,7 @@ sub handler
 			# OK, It's the EPrints abstract page (or something whacky like /23/fish)
 			else
 			{
+				my $eprint = EPrints::DataObj::EPrint->load_from_revision_file( $repository, $eprintid );
 				my $path = "/archive/" . $eprint->store_path();
 				EPrints::Update::Abstract::update( $repository, $lang, $eprint->id, $path );
 

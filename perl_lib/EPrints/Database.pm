@@ -2467,7 +2467,6 @@ sub get_single
 	return ($self->get_dataobjs( $dataset, $id ))[0];
 }
 
-
 ######################################################################
 =pod
 
@@ -2490,7 +2489,7 @@ sub get_all
 
 =item @ids = $db->get_cache_ids( $dataset, $cachemap, $offset, $count )
 
-Returns a list of C<$count> IDs from C<$cache_id> starting at 
+Returns a list of C<$count> IDs from C<$cache_id> starting at
 C<$offset> and in the order in the C<$cachemap>.
 
 =cut
@@ -2523,6 +2522,82 @@ sub get_cache_ids
 
 	return @ids;
 }
+
+######################################################################
+=pod
+
+=item $path = $db->get_revision_file_path( $dataset_id, $dataobj_id )
+
+Returns a string of the path to the latest revision file for a data
+object from the dataset with ID C<$dataset_id> and with object ID
+C<$dataobj_id>.
+
+=cut
+######################################################################
+
+sub get_latest_revision_file_path
+{
+	my( $self, $dataset_id, $dataobj_id ) = @_;
+
+	return undef unless $dataset_id && $dataobj_id ;
+
+	my $session = $self->{session};
+	my $dataset = $session->dataset( $dataset_id );
+
+	return undef unless $dataset && $dataobj_id && $dataset->has_field( 'rev_number' ) && $dataset->has_field( 'dir' );
+
+	my $Q_rev_number = $self->quote_identifier( "rev_number" );
+	my $Q_dir = $self->quote_identifier( "dir" );
+	my $Q_table_name = $dataset->get_sql_table_name;
+	my $Q_id_field = $self->quote_identifier( $dataset->get_key_field->get_sql_name );
+	my $Q_dataobj_id = $self->quote_value( $dataobj_id );
+
+	my $sql = "SELECT $Q_rev_number, $Q_dir FROM $Q_table_name WHERE $Q_id_field = $Q_dataobj_id";
+	my $sth = $self->prepare( $sql );
+	$self->execute( $sth, $sql );
+
+	my $row = $sth->fetch;
+	my $revision_number = $row->[0];
+	my $dir = $row->[1];
+
+	return $session->config( "documents_path" ) . "/$dir/revisions/$revision_number.xml";
+}
+
+######################################################################
+=pod
+
+=item $documents_path = $db->get_documents_dir( $dataset_id, $dataobj_id )
+
+Returns a string of the path to the directoy that store documents for
+the data object from the dataset with ID C<$dataset_id> and with
+object ID C<$dataobj_id>.
+
+=cut
+######################################################################
+
+sub get_documents_dir
+{
+	my( $self, $dataset_id, $dataobj_id ) = @_;
+
+	return undef unless $dataset_id && $dataobj_id ;
+
+	my $session = $self->{session};
+	my $dataset = $session->dataset( $dataset_id );
+	return undef unless defined $dataset && $dataset->has_field( 'dir' );
+
+	my $Q_dir = $self->quote_identifier( "dir" );
+	my $Q_table_name = $dataset->get_sql_table_name;
+	my $Q_id_field = $self->quote_identifier( $dataset->get_key_field->get_sql_name );
+	my $Q_dataobj_id = $self->quote_value( $dataobj_id );
+
+	my $sql = "SELECT $Q_dir FROM $Q_table_name WHERE $Q_id_field = $Q_dataobj_id";
+	my $sth = $self->prepare( $sql );
+	$self->execute( $sth, $sql );
+	my $row = $sth->fetch;
+
+	return $session->config( "documents_path" ) . "/" . $row->[0];
+}
+
 
 ######################################################################
 =pod

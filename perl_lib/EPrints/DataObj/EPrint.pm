@@ -489,7 +489,7 @@ sub load_from_revision_file
 {
     my( $class, $session, $eprintid ) = @_;
 
-    my $revision_file_path = $session->database->get_revision_file_path( get_dataset_id, $eprintid);
+    my $revision_file_path = $session->database->get_latest_revision_file_path( get_dataset_id, $eprintid);
     my $xml = $session->xml->parse_file( $revision_file_path );
     my $epdata = EPrints::DataObj::EPrint->xml_to_epdata( $session, $xml );
     my $eprint = EPrints::DataObj::EPrint->new_from_data( $session, $epdata );

@@ -79,8 +79,8 @@ sub new
 		EPrints::Utils::require_if_exists( "XML::LibXSLT" );
 
    
-	# system plugins (don't reload)
-	if( !scalar keys %SYSTEM_PLUGINS )
+	# load system plugins only if SYSTEM_PLUGINS is empty
+	if( !scalar keys %SYSTEM_PLUGINS ) 
 	{
 		$dir = $repository->config( "base_path" )."/perl_lib";
 		$self->_load_dir( \%SYSTEM_PLUGINS, $repository, $dir );
@@ -207,10 +207,10 @@ sub _load_dir
 
 	File::Find::find({
 		wanted => sub {
-			return if $_ =~ m/^\./;
-			return if $_ eq "CVS";
-			return unless $_ =~ m/\.pm$/;
-			return unless -f $File::Find::name;
+			return if $_ =~ m/^\./; #starts with "."
+			return if $_ eq "CVS"; #literally "CVS"
+			return unless $_ =~ m/\.pm$/; #ends ".pm"
+			return unless -f $File::Find::name; # Is a plain file
 			my $class = $File::Find::name;
 			substr($class,0,length($base_dir)) = "";
 			$class =~ s#^/+##;
@@ -229,6 +229,7 @@ sub _load_dir
 	return @plugins;
 }
 
+# nearly identical to _load_dir
 sub _load_xslt_dir
 {
 	my( $self, $data, $repository, $base_dir ) = @_;
@@ -241,10 +242,10 @@ sub _load_xslt_dir
 
 	File::Find::find({
 		wanted => sub {
-			return if $_ =~ m/^\./;
-			return if $_ eq "CVS";
-			return unless $_ =~ m/\.xslt?$/;
-			return unless -f $File::Find::name;
+			return if $_ =~ m/^\./; #starts with "."
+			return if $_ eq "CVS"; #literally "CVS"
+			return unless $_ =~ m/\.xslt?$/; #ends ".xslt"
+			return unless -f $File::Find::name; # Is a plain file
 			my $class = $File::Find::name;
 			substr($class,0,length($base_dir)) = "";
 			$class =~ s#^/+##;

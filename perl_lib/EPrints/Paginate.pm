@@ -280,7 +280,7 @@ sub paginate_list
 	if( $offset + $pagesize < $n_results )
 	{
 		my $nexturl="$url&$basename\_offset=".($offset+$pagesize);
-		my $nextlink = $session->render_link( $nexturl );
+		my $nextlink = $session->render_link( $nexturl, undef, class=>"ep_next" );
 		my $nn = $n_results - $offset - $pagesize;
 		$nn = $pagesize if( $pagesize < $nn);
 		$nextlink->appendChild( $session->html_phrase( "lib/searchexpression:next",
@@ -414,9 +414,15 @@ sub paginate_list
 
 	my $page = $session->make_doc_fragment;
 
+	my $container_div = $session->make_element( "div", class=>"ep_search_result_list" );
+	$page->appendChild( $container_div );
+	my $original_page = $page;
+	$page = $container_div;
+
 	if( defined $pins{controls} )
 	{
 		my $div = $session->make_element( "div", class=>"ep_search_controls" );
+		print STDERR "controls pin: " . $pins{controls} . "\n";
 		$div->appendChild( $pins{controls} );
 		$page->appendChild( $div );
 	}	
@@ -453,7 +459,7 @@ sub paginate_list
 	}	
 
 
-	return $page;
+	return $original_page;
 }
 
 1;

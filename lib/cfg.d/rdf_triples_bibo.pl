@@ -537,7 +537,7 @@ $c->add_dataset_trigger( "eprint", EP_TRIGGER_RDF, sub {
 	my $eprint = $o{"dataobj"};
 
 	return () if( !$eprint->dataset->has_field( "type" ) );
-	return () if( !$eprint->get_value( "type" ) eq "conference_item" );
+	return () if( $eprint->get_value( "type" ) ne "conference_item" );
 
 	my $event_uri = &{$c->{rdf}->{event_uri}}( $eprint );
 	return if !defined $event_uri;

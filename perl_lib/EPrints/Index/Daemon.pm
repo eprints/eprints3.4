@@ -186,7 +186,7 @@ sub is_running
 	my( $self ) = @_;
 	my $pid = $self->get_pid or return undef;
 	return 1 if kill(0, $pid); # Running as the same uid as us
-	return 1 if EPrints::Platform::proc_exists( $pid );
+    return 1 if EPrints::Platform::proc_exists( $pid ) > 0; # proc_exists can return 0 but in a 'defined' way, so let's check we have a useful value
 	return 0;
 }
 
@@ -201,7 +201,7 @@ sub is_child_running
 	my( $self ) = @_;
 	my $pid = $self->{child} or return undef;
 	return 1 if kill(0, $pid); # Running as the same uid as us
-	return 1 if EPrints::Platform::proc_exists( $pid );
+    return 1 if EPrints::Platform::proc_exists( $pid ) > 0; # proc_exists can return 0 but in a 'defined' way, so let's check we have a useful value
 	return 0;
 }
 

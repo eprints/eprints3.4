@@ -399,7 +399,7 @@ sub serve_field
 	
 		my( $n, $format ) = split( /\./, $file, 2 );
 
-		if( $format eq "xml" && $field->is_type( "subobject" ) )
+		if( defined $format && $format eq "xml" && $field->is_type( "subobject" ) )
 		{
 			return unless allowed_methods( $repository, "GET" );
 			return send_xml( $repository, $object->export( "XML" ) );
@@ -419,7 +419,7 @@ sub serve_field
 		}
 		else
 		{
-			if( $format eq "txt" )
+			if( defined $format && $format eq "txt" )
 			{
 				# /3.txt
 				return unless allowed_methods( $repository, "GET" );

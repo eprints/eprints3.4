@@ -80,7 +80,7 @@ sub send
 	if( $@ )
 	{
 		if(
-			$@ !~ m/^Software caused connection abort/ &&
+            $@ !~ m/:Apache2 IO write: \(103\) Software caused connection abort/ &&
 			$@ !~ m/:Apache2 IO write: \(104\) Connection reset by peer/ &&
 			$@ !~ m/:Apache2 IO write: \(32\) Broken pipe/ &&
 			$@ !~ m/:Apache2 IO write: \(70007\) The timeout specified has expired/

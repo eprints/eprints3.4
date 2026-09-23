@@ -1131,7 +1131,7 @@ If it has a subtitle, it should be preceded with a colon [:]. Use capitals only 
 
 
 
-    <epp:phrase id="mail_password_pin">
+    <epp:phrase id="mail_password_pin_new">
 <div style="font-size: 11pt">Password Activation</div>
 <p>Dear User,</p>
 
@@ -1150,8 +1150,16 @@ If it has a subtitle, it should be preceded with a colon [:]. Use capitals only 
 <p><a href="mailto:{$config{adminemail}}"><epc:print expr="$config{adminemail}" /></a></p>
     </epp:phrase>
 
+    <epp:phrase id="mail_password_pin_reset">
+<div style="font-size: 11pt">Password Reset</div>
+<p>Dear User,</p>
 
+<p>A password change for your user account (username: <b><epc:pin name="username"/></b>) has been requested.</p>
 
+<p>If this was you, please <epc:pin name="confirmurl">confirm your password change</epc:pin>. This will expire in <epc:pin name="maxdelta" />.</p>
+
+<p><a href="mailto:{$config{adminemail}}"><epc:print expr="$config{adminemail}" /></a></p>
+    </epp:phrase>
 
 
 
@@ -2633,6 +2641,7 @@ Public CGI Scripts
     </epp:phrase>
 
     <epp:phrase id="Plugin/Screen/Register:title">Create Account</epp:phrase>
+    <epp:phrase id="Plugin/Screen/Register:title:reset">Change Password</epp:phrase>
     <epp:phrase id="cgi/register:action_submit">Register</epp:phrase>
     <epp:phrase id="cgi/register:title">Register</epp:phrase>
     <epp:phrase id="cgi/register:missing_field"><p>You have not filled in the &quot;<epc:pin name="fieldname"/>&quot; field.</p></epp:phrase>
@@ -2640,7 +2649,8 @@ Public CGI Scripts
     <epp:phrase id="cgi/register:email_denied"><p>Registration not allowed from this email address: <code><epc:pin name="email"/></code>.</p></epp:phrase>
     <epp:phrase id="cgi/register:username_exists"><p>Another user already has the username <code><epc:pin name="username"/></code>.</p></epp:phrase>
     <epp:phrase id="cgi/register:created_new_user"><p>You have registered with username <big><strong><code><epc:pin name="username"/></code></strong></big>.</p><p>This registration <em>will not</em> be activated until you visit the confirmation URL which has been emailed to <code><epc:pin name="email"/></code></p></epp:phrase>
-    <epp:phrase id="cgi/register:excessive_account_requests">Too many user accounts have been requested in the last <epc:pin name="minutes"/> minutes. Please try again later.</epp:phrase>
+	<epp:phrase id="cgi/register:excessive_account_requests">Too many user accounts have been requested in the last <epc:pin name="minutes"/> minutes. Please try again later.</epp:phrase>
+	<epp:phrase id="cgi/register:password_reset_cancelled">The password reset for your account has been cancelled.</epp:phrase>
     <epp:phrase id="cgi/register:account">Registration</epp:phrase>
     <epp:phrase id="cgi/register:error">Error</epp:phrase>
 
@@ -2714,9 +2724,28 @@ Public CGI Scripts
     <epp:phrase id="cgi/confirm:bad_user"><p>User not found. It is possible that indicates a database problem, but please check the parameters in the URL carefully.</p></epp:phrase>
     <epp:phrase id="cgi/confirm:pin_mismatch"><p>The confirmation pin is incorrect. Please try and <a href="reset_password">reset your password</a> to generate an email with a new confirmation pin number.</p></epp:phrase>
     <epp:phrase id="cgi/confirm:pin_timeout"><p>The confirmation pin number has timed out. Please repeat the <a href="reset_password">reset password</a> or <a href="register">registration</a> request, and confirm it as soon as you get the email.</p></epp:phrase>
-    <epp:phrase id="cgi/confirm:no_pin"><p>There are currently no changes for this user which await confirmation. This probably means you have already confirmed the change. Try and <a href="{$config{userhome}}">login</a>.</p></epp:phrase>
+	<epp:phrase id="cgi/confirm:no_pin"><p>There are currently no changes for this user which await confirmation. This probably means you have already confirmed the change. Try and <a href="{$config{userhome}}">login</a>.</p></epp:phrase>
+	<epp:phrase id="cgi/confirm:no_newpassword">There is no new password against which the password you entered could be verified.</epp:phrase>
+	<epp:phrase id="cgi/confirm:wrong_verify_password">The password you entered does not match the password change you requested.  <a href="">Try again</a>.</epp:phrase>
     <epp:phrase id="cgi/confirm:set_email"><p>Your email address has been changed to <strong><pin name="newemail"/></strong></p></epp:phrase>
-    <epp:phrase id="cgi/confirm:set_password"><p>Your password has been changed to the new one you requested.</p></epp:phrase>
+	<epp:phrase id="cgi/confirm:set_password"><p>Your password has been changed to the new one you requested.</p></epp:phrase>
+	<epp:phrase id="cgi/verify:set_email"><p>A request has been made to change the email address for your user account (username: <strong><pin name="username"/></strong> to <strong><pin name="newemail"/></strong></p><p>If this was you, please enter the current email address for your account to verify.</p></epp:phrase>
+	<epp:phrase id="cgi/confirm:verify_password"><p id="verify_password_help">A request has been made to change the password for your user account (username: <strong><pin name="username"/></strong>).  If this was you, please re-enter your new password and click 'Confirm Password'.  Otherwise, click 'Cancel Reset'</p>
+		<form method="post" accept-charset="utf-8" enctype="multipart/form-data">
+			<div id="verify_password">
+				<div id="verify_fields">
+					<input name="pin" value="{$pindata{inserts}{pin}}" type="hidden"/>
+					<input name="userid" value="{$pindata{inserts}{userid}}" type="hidden"/>
+					<span id="verify_password_label">Verify password</span>
+					<input id="verify_password" name="verify_password" maxlength="255"  aria-describedby="verify_password_help" aria-labelledby="verify_password_label" type="password" class="ep_form_text" autocomplete="off" size="60"/>
+				</div>
+			</div>
+			<div id="verify_buttons">
+				<input value="Confirm Password" type="submit" role="button" class="ep_form_action_button" name="_action_confirm"/>
+				<input value="Cancel Reset" type="submit" role="button" class="ep_form_action_button" name="_action_cancel"/>
+			</div>
+		</form>
+		</epp:phrase>
     <epp:phrase id="cgi/confirm:username"><p>Your username on this system is: <strong><epc:pin name="username"/></strong></p></epp:phrase>
     <epp:phrase id="cgi/confirm:go_login"><p><a href="{$config{userhome}}">Continue</a></p></epp:phrase>
 

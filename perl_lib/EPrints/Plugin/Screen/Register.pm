@@ -212,15 +212,6 @@ sub action_confirm
 
     my $processor = $self->{processor};
 	my $repo = $self->{repository};
-	my $verify_password = $repo->param( "verify_password" );
-
-	if ( !EPrints::Utils::is_set( $verify_password ) )
-	{
-		$processor->add_message( "error", $repo->html_phrase( "cgi/confirm:no_verify_password" ) );
-        $processor->{screenid} = "Error";
-		delete $processor->{user};
-        return;
-	}
 
 	# Only ONE of these should be set, as the two set_* scripts should zero the
 	# other value when they set theirs.
@@ -245,6 +236,14 @@ sub action_confirm
 	}
 	else
 	{
+		my $verify_password = $repo->param( "verify_password" );
+		if ( !EPrints::Utils::is_set( $verify_password ) )
+		{
+			$processor->add_message( "error", $repo->html_phrase( "cgi/confirm:wrong_verify_password" ) );
+			$processor->{screenid} = "Error";
+			return;
+    	}
+
 		my $db = $repo->get_database;
 		my $Q_newpassword = $db->quote_identifier( "newpassword" );
 		my $Q_table = $db->quote_identifier( "user" );

@@ -27,7 +27,7 @@ sub new
 #			position => 100,
 #		},
 	];
-	$self->{actions} = [qw( register confirm )];
+	$self->{actions} = [qw( register confirm cancel verify )];
 
 	return $self;
 }
@@ -35,6 +35,10 @@ sub new
 sub allow_register { shift->{session}->config( "allow_web_signup" ) }
 
 sub allow_confirm { shift->{session}->config( "allow_reset_password" ) }
+
+sub allow_cancel { shift->{session}->config( "allow_reset_password" ) }
+
+sub allow_verify { shift->{session}->config( "allow_reset_password" ) }
 
 sub can_be_viewed
 {
@@ -105,63 +109,116 @@ sub action_register
 	return 1;
 }
 
+sub _common_validation
+{
+	my ( $self ) = @_;
+
+	my $repo = $self->{repository};
+    my $processor = $self->{processor};
+
+	# Check not just a HEAD ping
+    return if $repo->request()->header_only();
+
+    my $userid = $repo->param( 'userid' )+0;
+    my $pin = $repo->param( 'pin' );
+
+    my $user = new EPrints::DataObj::User( $repo, $userid );
+
+    if( !defined $user )
+    {
+        $processor->add_message( "error", $repo->html_phrase( "cgi/confirm:bad_user" ) );
+        $processor->{screenid} = "Error";
+        return;
+    }
+
+    my $userpin = $user->get_value( "pin" );
+    my $pinsettime = $user->get_value( "pinsettime" );
+    my $delta = (time - $pinsettime);
+
+    if( !defined $userpin )
+    {
+        $processor->add_message( "error", $repo->html_phrase( "cgi/confirm:no_pin" ) );
+        $processor->{screenid} = "Error";
+        return;
+    }
+    if( $userpin ne $pin)
+    {
+        $processor->add_message( "error", $repo->html_phrase( "cgi/confirm:pin_mismatch" ) );
+        $processor->{screenid} = "Error";
+        return;
+    }
+    my $maxdelta = $repo->config( "pin_timeout" );
+    if( ( $maxdelta != 0 ) && ( $maxdelta * 60 * 60 < $delta ) )
+    {
+        $processor->add_message( "error", $repo->html_phrase( "cgi/confirm:pin_timeout" ) );
+        $processor->{screenid} = "Error";
+        return;
+    }
+
+	$processor->{user} = $user;
+}
+
+sub action_verify
+{
+	my( $self ) = @_;
+
+	_common_validation( $self );
+}
+
+sub action_cancel
+{
+	my( $self ) = @_;
+
+	_common_validation( $self );
+
+	my $user = $self->{processor}->{user};
+	return unless $user;
+
+	my $processor = $self->{processor};
+	my $repo = $self->{repository};
+
+	if( $user->is_set( "newemail" ) )
+    {
+        $processor->{newemail} = $user->value( "newemail" );
+        # check no one else has this email! cjg
+        $user->set_value( "newemail", undef );
+        $user->set_value( "pin", undef );
+		# write the changes
+        $user->commit();
+    }
+    else
+    {
+        # Must be password then. Can't see it 'cus it's a "secret".
+		my $user_ds = $repo->get_dataset( "user" );
+        $repo->get_database->_update_quoted(
+            $user_ds->get_sql_table_name,
+            ["userid"],
+            [$repo->get_database->quote_value($user->id)],
+            ["newpassword","pin"],
+            ["NULL","NULL"],
+        );
+    }
+}
+
 sub action_confirm
 {
 	my( $self ) = @_;
 
+	_common_validation( $self );
+
+	my $user = $self->{processor}->{user};
+
+	return unless $user;
+
+    my $processor = $self->{processor};
 	my $repo = $self->{repository};
-	my $processor = $self->{processor};
-
-	# Check not just a HEAD ping
-	return if $repo->request()->header_only();
-
-	my $user_ds = $repo->get_dataset( "user" );
-
-	# Process the form.
-	my $userid = $repo->param( "userid" )+0;
-	my $pin = $repo->param( "pin" );
-
-	my $user = new EPrints::DataObj::User( $repo, $userid );
-
-	if( !defined $user )
-	{
-		$processor->add_message( "error", $repo->html_phrase( "cgi/confirm:bad_user" ) );
-		$processor->{screenid} = "Error";
-		return;
-	}
-
-	my $userpin = $user->get_value( "pin" );
-	my $pinsettime = $user->get_value( "pinsettime" );
-	my $delta = (time - $pinsettime);
-
-	if( !defined $userpin )
-	{
-		$processor->add_message( "error", $repo->html_phrase( "cgi/confirm:no_pin" ) );
-		$processor->{screenid} = "Error";
-		return;
-	}
-	if( $userpin ne $pin)
-	{
-		$processor->add_message( "error", $repo->html_phrase( "cgi/confirm:pin_mismatch" ) );
-		$processor->{screenid} = "Error";
-		return;
-	}
-	my $maxdelta = $repo->config( "pin_timeout" );
-	if( ( $maxdelta != 0 ) && ( $maxdelta * 60 * 60 < $delta ) )
-	{
-		$processor->add_message( "error", $repo->html_phrase( "cgi/confirm:pin_timeout" ) );
-		$processor->{screenid} = "Error";
-		return;
-	}
-
-	$processor->{user} = $user;
 
 	# Only ONE of these should be set, as the two set_* scripts should zero the
 	# other value when they set theirs.
 
 	# This script hacks the SQL directly, as normally "secret" fields are not
-	# accessible to eprints. 
-	
+	# accessible to eprints.
+
 	if( $user->is_set( "newemail" ) )
 	{
 		$processor->{newemail} = $user->value( "newemail" );
@@ -176,14 +233,48 @@ sub action_confirm
 		}
 		# write the changes
 		$user->commit();
-	} 
+	}
 	else
 	{
+		my $verify_password = $repo->param( "verify_password" );
+		if ( !EPrints::Utils::is_set( $verify_password ) )
+		{
+			$processor->add_message( "error", $repo->html_phrase( "cgi/confirm:wrong_verify_password" ) );
+			$processor->{screenid} = "Error";
+			return;
+    	}
+
+		my $db = $repo->get_database;
+		my $Q_newpassword = $db->quote_identifier( "newpassword" );
+		my $Q_table = $db->quote_identifier( "user" );
+		my $Q_userid = $db->quote_identifier( "userid" );
+
+		my $sql = "SELECT $Q_newpassword FROM $Q_table WHERE $Q_userid=".$db->quote_value($user->id);
+
+		my $sth = $db->prepare( $sql );
+		$db->execute( $sth , $sql );
+		my ( $crypt ) = $sth->fetchrow_array;
+		$sth->finish;
+
+		if ( !$crypt )
+		{
+			$processor->add_message( "error", $repo->html_phrase( "cgi/confirm:no_newpassword" ) );
+			$processor->{screenid} = "Error";
+			return;
+		}
+		if ( ! EPrints::Utils::crypt_equals( $crypt, $verify_password ) )
+		{
+			$processor->add_message( "error", $repo->html_phrase( "cgi/confirm:wrong_verify_password" ) );
+			$processor->{screenid} = "Error";
+			return;
+		}
+
 		# Must be password then. Can't see it 'cus it's a "secret".
+		my $user_ds = $repo->get_dataset( "user" );
 		$repo->get_database->_update_quoted(
 			$user_ds->get_sql_table_name,
 			["userid"],
-			[$repo->get_database->quote_value($userid)],
+			[$repo->get_database->quote_value($user->id)],
 			["password","newpassword","pin"],
 			[$repo->get_database->quote_identifier("newpassword"),"NULL","NULL"],
 		);
@@ -254,28 +345,32 @@ sub render
 
 	# Reset password
 
-	if( $repo->config( "allow_reset_password" ) && $action eq "confirm" )
+
+	if( $repo->config( "allow_reset_password" ) && defined $user )
 	{
-		return $page unless( defined $user );
-		
-		if( $processor->{newemail} )
+		if ( $action eq "verify" )
 		{
-			$page->appendChild( $repo->html_phrase( 
-				"cgi/confirm:set_email",
-				newemail=>$repo->make_text( $processor->{newemail} ) ) );
+			$page->appendChild( $repo->html_phrase( "cgi/confirm:verify_password",
+				username => $user->render_value( "username" ),
+				pin => $user->get_value( 'pin' ),
+				userid => $user->id	)
+			);
+
+			return $page;
 		}
-		else
+		elsif ( $action eq "confirm" )
 		{
 			$page->appendChild( $repo->html_phrase( "cgi/confirm:set_password" ) );
+            $page->appendChild( $repo->html_phrase( "cgi/confirm:go_login" ) );
+			return $page;
 		}
-
-		$page->appendChild( $repo->html_phrase( "cgi/confirm:username",
-			username => $user->render_value( "username" ) ) );
-
-		$page->appendChild( $repo->html_phrase( "cgi/confirm:go_login" ) );
-
-		return $page;
+		elsif( $action eq "cancel" )
+		{
+			$page->appendChild( $repo->html_phrase( "cgi/register:password_reset_cancelled" ) );
+			return $page;
+		}
 	}
+
 
 	# Registration
 
@@ -288,7 +383,7 @@ sub render
 	{
 		if( $user->is_set( "newpassword" ) || $user->is_set( "newemail" ) )
 		{
-			$page->appendChild( $repo->html_phrase( 
+			$page->appendChild( $repo->html_phrase(
 				"cgi/register:created_new_user",
 					email=>$user->render_value( "email" ),
 					username=>$user->render_value( "username" ) ) );
@@ -316,6 +411,29 @@ sub render
 		
 	return $page;
 }
+
+sub render_title
+{
+    my( $self ) = @_;
+
+	my $processor = $self->{processor};
+    my $repo = $self->{repository};
+
+    my $action = $processor->{action};
+    $action = "" if !defined $action;
+
+    my $title = $repo->make_doc_fragment;
+	if ( grep $_ eq $action, qw/ cancel confirm verify / )
+	{
+		$title->appendChild( $self->html_phrase( "title:reset" ) );
+	}
+	else
+	{
+		$title->appendChild( $self->html_phrase( "title" ) );
+	}
+    return $title;
+}
+
 
 sub make_reg_form
 {
@@ -397,20 +515,20 @@ sub register_user
 	
 	if( $user->is_set( "newpassword" ) )
 	{
-		$rc = $user->mail( 
+		$rc = $user->mail(
 			"cgi/register:account",
-			$repo->html_phrase( 
-				"mail_password_pin", 
+			$repo->html_phrase(
+				"mail_password_pin_new",
 				confirmurl => $repo->render_link( $repo->config( "perl_url" )."/confirm?userid=".$user->value( "userid" )."&pin=".$user->value( "pin" ) ),
 				username => $user->render_value( "username" ),
 				maxdelta => $repo->make_text( $maxdelta ) ) );
 	}
 	elsif( $user->is_set( "newemail" ) )
 	{
-		$rc = $user->mail( 
+		$rc = $user->mail(
 			"cgi/register:account",
-			$repo->html_phrase( 
-				"mail_email_pin", 
+			$repo->html_phrase(
+				"mail_email_pin",
 				confirmurl => $repo->render_link( $repo->config( "perl_url" )."/confirm?userid=".$user->value( "userid" )."&pin=".$user->value( "pin" ) ),
 				newemail => $repo->make_text( $user->value( "newemail" ) ),
 				username => $user->render_value( "username" ),

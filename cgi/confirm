@@ -13,7 +13,7 @@ exit( 0 ) unless( defined $repo );
 my $url = URI->new( $repo->current_url( host => 1, path => "cgi", query => 1, "register" ) );
 $url->query_form(
 	$url->query_form,
-	_action_confirm => 1
+	_action_verify => 1
 );
 
 $repo->redirect( "$url" );

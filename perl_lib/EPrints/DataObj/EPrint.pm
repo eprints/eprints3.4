@@ -420,7 +420,7 @@ sub get_system_field_info
 		render_value=>"EPrints::DataObj::EPrint::render_edit_lock",
  	},
 	
-	{ name=>"template", type=>"namedset", set_name=>"template", required=>1 },
+	{ name=>"template", type=>"namedset", set_name=>"template" },
 	)
 }
 

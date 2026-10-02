@@ -1507,23 +1507,64 @@ sub create_sections_menu
 	return @wrote_files;
 }
 
+# Allow menus to be filtered by top-level subjects. If a top-level subject is defined, only its children will be shown in the menu.
 sub get_showvalues_for_menu
 {
 	my( $repo, $view, $sizes, $values, $fields ) = @_;
-
 	my $showvalues = [];
+	my $field = $fields->[0];
+	my %valid_subjects = ();
+	my $has_top = 0;
 
-	if( $view->{hideempty} && defined $sizes)
+	if( defined $field && $field->isa( "EPrints::MetaField::Subject" ) )
 	{
-		foreach my $value ( @{$values} )
+		my $menu = $view->{menus}->[0];
+		my $top;
+
+		if( defined $menu && defined $menu->{top} )
 		{
-			my $id = $fields->[0]->get_id_from_value( $repo, $value );
-			push @{$showvalues}, $value if( $sizes->{$id} );
+			$top = $menu->{top};
+		}
+		elsif( defined $view->{top} )
+		{
+			$top = $view->{top};
+		}
+
+		if( defined $top )
+		{
+			my $top_ids = ref( $top ) eq "CODE" ? $top->( $repo ) : $top;
+			my @top_list = ref( $top_ids ) eq "ARRAY"
+				? @{$top_ids}
+				: ( $top_ids );
+
+			foreach my $tid ( @top_list )
+			{
+				my $top_sub = ref( $tid )
+					&& $tid->isa( "EPrints::DataObj::Subject" )
+					? $tid
+					: EPrints::DataObj::Subject->new( $repo, $tid );
+
+				if( defined $top_sub )
+				{
+					$has_top = 1;
+
+					foreach my $child ( $top_sub->get_children( 1 ) )
+					{
+						$valid_subjects{$child->get_id} = 1;
+					}
+				}
+			}
 		}
 	}
-	else
+
+	foreach my $value ( @{$values} )
 	{
-		@{$showvalues} = @{$values};
+		my $id = $field->get_id_from_value( $repo, $value );
+
+		next if( $has_top && !$valid_subjects{$id} );
+		next if( $view->{hideempty} && defined $sizes && !$sizes->{$id} );
+
+		push @{$showvalues}, $value;
 	}
 
 	return $showvalues;

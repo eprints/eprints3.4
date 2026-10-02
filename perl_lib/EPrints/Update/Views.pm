@@ -2039,7 +2039,6 @@ sub group_items
 		@codes = sort { $cmp{$a} cmp $cmp{$b} } @codes;
 	}
 
-
 	if( $opts->{reverse} )
 	{
 		@codes = reverse @codes;

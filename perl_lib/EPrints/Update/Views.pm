@@ -2023,7 +2023,6 @@ sub group_items
 	my $data = [];
 	my @codes = keys %$code_to_list;
 
-	
 	if ( $opts->{"number"} )
 	{
 		@codes = sort { $a <=> $b } @codes;
@@ -2040,8 +2039,6 @@ sub group_items
 		@codes = sort { $cmp{$a} cmp $cmp{$b} } @codes;
 	}
 
-	use Data::Dumper;
-	print STDERR Dumper(@codes);
 
 	if( $opts->{reverse} )
 	{

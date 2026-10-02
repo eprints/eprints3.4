@@ -577,7 +577,8 @@ sub update_view_list
 	$max_items = $MAX_ITEMS if !defined $max_items;
 
 
-	# If 'order' is set to a subroutine, don't pass it as custom_order to search
+	# If 'order' is set to a subroutine, don't pass it as custom_order to search - we will 
+	# be filtering against the subroutine
 	my $search_order;
 	if (ref($view->{order}) ne "CODE") {
 		$search_order = $view->{order};
@@ -654,7 +655,7 @@ sub update_view_list
 
 	my @items = $list->get_records;
 
-	# If 'order' is set to a subroutine, run it against the records found by the search
+	# If 'order' is set to a subroutine, get item order from subroutine
 	if ((ref($view->{order}) eq "CODE")) {
 		@items = &{$view->{order}}(@items);
 	}

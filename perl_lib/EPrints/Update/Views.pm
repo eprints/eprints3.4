@@ -577,7 +577,7 @@ sub update_view_list
 	$max_items = $MAX_ITEMS if !defined $max_items;
 
 
-	# If 'order' is set to a sub block, don't pass it as custom_order to search
+	# If 'order' is set to a subroutine, don't pass it as custom_order to search
 	my $search_order;
 	if (ref($view->{order}) ne "CODE") {
 		$search_order = $view->{order};
@@ -654,7 +654,7 @@ sub update_view_list
 
 	my @items = $list->get_records;
 
-	# If 'order' is set to a sub block, run it against the records found by the search
+	# If 'order' is set to a subroutine, run it against the records found by the search
 	if ((ref($view->{order}) eq "CODE")) {
 		@items = &{$view->{order}}(@items);
 	}

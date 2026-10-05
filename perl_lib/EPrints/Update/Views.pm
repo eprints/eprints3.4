@@ -576,8 +576,16 @@ sub update_view_list
 	$max_items = $repo->config("browse_views_max_items") if !defined $max_items;
 	$max_items = $MAX_ITEMS if !defined $max_items;
 
+
+	# If 'order' is set to a subroutine, don't pass it as custom_order to search - we will 
+	# be filtering against the subroutine
+	my $search_order;
+	if (ref($view->{order}) ne "CODE") {
+		$search_order = $view->{order};
+	}
+
 	my $list = $ds->search(
-		custom_order=>$view->{order},
+		custom_order=>$search_order,
 		satisfy_all=>1,
 		filters=>$filters,
 		($max_items > 0 ? (limit => $max_items+1) : ()),
@@ -646,6 +654,11 @@ sub update_view_list
 	}
 
 	my @items = $list->get_records;
+
+	# If 'order' is set to a subroutine, get item order from subroutine
+	if ((ref($view->{order}) eq "CODE")) {
+		@items = &{$view->{order}}(@items);
+	}
 
 	my @files = ();
 	my $first_view = 1;	

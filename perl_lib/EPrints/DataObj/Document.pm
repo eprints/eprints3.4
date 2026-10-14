@@ -1182,6 +1182,8 @@ sub add_directory
 		wanted => sub {
 			return unless $rc and !-d $File::Find::name;
 			my $filepath = $File::Find::name;
+			return if -l $filepath;
+			return if !-f $filepath;
 			my $filename = substr($filepath, length($directory));
 			my $stored = $self->add_file( $filepath, $filename, 1 );
 			$rc = defined $stored;

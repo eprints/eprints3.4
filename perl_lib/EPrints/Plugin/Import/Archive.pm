@@ -7,6 +7,7 @@ EPrints::Plugin::Import::Archive
 package EPrints::Plugin::Import::Archive;
 
 use strict;
+use Fcntl qw(O_RDONLY O_NOFOLLOW);
 
 our @ISA = qw/ EPrints::Plugin::Import /;
 
@@ -81,6 +82,8 @@ sub create_epdata_from_directory
 		wanted => sub {
 			return if -d $File::Find::name;
 			my $filepath = $File::Find::name;
+			return if -l $filepath;
+			return if !-f $filepath;
 			my $filename = substr($filepath, length($dir) + 1);
 
 			$media_info = {};
@@ -90,7 +93,10 @@ sub create_epdata_from_directory
 				epdata => $media_info,
 				);
 
-			open(my $fh, "<", $filepath) or die "Error opening $filename: $!";
+			sysopen(my $fh, $filepath, O_RDONLY | O_NOFOLLOW)
+				or die "Error opening $filename: $!";
+			binmode($fh);
+			die "Not a regular file: $filename" unless -f $fh;
 			if( $single )
 			{
 				push @{$epdata->{files}}, {
@@ -116,7 +122,10 @@ sub create_epdata_from_directory
 				die "Too many files" if @{$epdata} > $too_many_files
 			}
 		},
-	}, $dir ) };
+	}, $dir );
+		die "Archive contains no regular files" if $single && !@{$epdata->{files}};
+	};
+	return undef if $@;
 
 	if( $single )
 	{
@@ -128,7 +137,7 @@ sub create_epdata_from_directory
 		};
 	}
 
-	return !$@ ? $epdata : undef;
+	return $epdata;
 }
 
 1;

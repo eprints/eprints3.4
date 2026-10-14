@@ -1182,6 +1182,7 @@ sub add_directory
 		wanted => sub {
 			return unless $rc and !-d $File::Find::name;
 			my $filepath = $File::Find::name;
+			# Only want regular files (no symlinks)
 			return if -l $filepath;
 			return if !-f $filepath;
 			my $filename = substr($filepath, length($directory));

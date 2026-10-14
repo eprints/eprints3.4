@@ -82,6 +82,7 @@ sub create_epdata_from_directory
 		wanted => sub {
 			return if -d $File::Find::name;
 			my $filepath = $File::Find::name;
+			# Only want regular files (no symlinks)
 			return if -l $filepath;
 			return if !-f $filepath;
 			my $filename = substr($filepath, length($dir) + 1);
@@ -93,6 +94,7 @@ sub create_epdata_from_directory
 				epdata => $media_info,
 				);
 
+			# Open the file for read-only and die if a symlink
 			sysopen(my $fh, $filepath, O_RDONLY | O_NOFOLLOW)
 				or die "Error opening $filename: $!";
 			binmode($fh);

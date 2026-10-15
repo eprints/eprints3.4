@@ -293,6 +293,8 @@ sub handler
 		}
 		push @paths, EPrints::Config::get( "cgi_path" ); ##system cgi path
 
+        my $cgi_found = 0;
+
 		PATH: foreach my $path (@paths)
 		{
 			for(my $i = $#parts; $i >= 0; --$i)
@@ -303,10 +305,18 @@ sub handler
 					$r->filename( $filename );
 					$path_info = join('/', @parts[$i+1..$#parts]);
 					$path_info = '/' . $path_info if length($path_info);
+                    $cgi_found = 1;
 					last PATH;
 				}
 			}
 		}
+
+        # no CGI files found at all at any of the above paths, so let's bail out here
+        if( !$cgi_found )
+        {
+            EPrints::Apache::AnApache::send_status_line( $r, 404, "Not Found" );
+            return NOT_FOUND;
+        }
 
 		if( $uri =~ m! ^/users\b !x )
 		{
@@ -608,8 +618,20 @@ sub handler
 					{
 						$uri .= "index.html";
 					}
+
+                    if ($uri !~ m!^/index.html$!)
+					{
+			# EPrints is being too generous with URL resolution...
+			# We think that we should return a 404 here to stop valid URLs that have
+			# nonsense appended to them from resolving the valid section of the URL
+			# AND then spawning a sub-request that can cause a seg-fault
+                        EPrints::Apache::AnApache::send_status_line( $r, 404, "Not Found" );
+                        return NOT_FOUND;
+                    }
+
 					$r->filename( $eprint->_htmlpath( $lang ) . $uri );
-					if( $uri =~ /\.html$/ )
+
+                    if( $uri =~ /\.html$/ )
 					{
 						$r->pnotes( eprint => $eprint );
 						$r->handler('perl-script');
@@ -804,6 +826,17 @@ sub handler
 				{
 					$uri .= "index.html";
 				}
+
+                if ($uri !~ m!^/index.html$!)
+                {
+                    # EPrints is being too generous with URL resolution...
+                    # We think that we should return a 404 here to stop valid URLs that have
+                    # nonsense appended to them from resolving the valid section of the URL
+                    # AND then spawning a sub-request that can cause a seg-fault
+                    EPrints::Apache::AnApache::send_status_line( $r, 404, "Not Found" );
+                    return NOT_FOUND;
+                }
+
 				$r->filename( $eprint->_htmlpath( $lang ) . $uri );
 
 				if( $uri =~ /\.html$/ )
@@ -935,17 +968,25 @@ sub handler
 		$r->headers_out->{'Cache-Control'} = 'public';
 	}
 
-	if( $r->filename =~ /\.html$/ )
+    # just looking for html pages at this point
+    if( $r->filename =~ /\.html$/ )
 	{
+        # confirm this is a genuine static page with a .page that the template handler won't decline
+        # if we leave this until the template handler then we get a subrequest when given a nonsense URL
+        my $filename = $r->filename;
+        $filename =~ s/\.html$//;
+        if( -r $filename.".page" )
+        {
 		my $ua = $r->headers_in->{'User-Agent'};
 		if( $ua && $ua =~ /MSIE ([0-9]{1,}[\.0-9]{0,})/ && $1 >= 8.0 )
 		{
 			$r->headers_out->{'X-UA-Compatible'} = "IE=9";
 		}
-		$r->handler('perl-script');
-		$r->set_handlers(PerlResponseHandler => [ 'EPrints::Apache::Template' ] );
-	}
 
+		    $r->handler('perl-script');
+		$r->set_handlers(PerlResponseHandler => [ 'EPrints::Apache::Template' ] );
+	    }
+    }
 	return OK;
 }
 

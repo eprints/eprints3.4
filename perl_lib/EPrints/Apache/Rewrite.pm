@@ -97,50 +97,6 @@ sub handler
 		return DECLINED;
 	}
 
-	# Certain paths forbidden from certain IPs/subnets (maybe due to (D)DOS).
-	if ( $repository->get_conf( 'restrict_paths' ) && ref( $r ) eq "Apache2::RequestRec" )
-	{
-		my $restrict_paths = $repository->get_conf( 'restrict_paths' );
-		my $ip = $repository->remote_ip;
-		my $ip_ok = 0;
-		foreach my $restrict_path ( @$restrict_paths )
-		{
-			if ( $uri =~ /^$restrict_path->{path}/ )
-			{
-				if ( defined $restrict_path->{not_ips}  && ref( $restrict_path->{not_ips} ) eq "ARRAY" )
-				{
-					my $ip_ok = 0;
-					foreach my $unrestrict_ip ( @{$restrict_path->{not_ips}} )
-					{
-						my $unres_ip = $unrestrict_ip;
-						$unres_ip =~ s/\./\\./g;
-						$unres_ip .= '$' if substr( $unres_ip, -1 ) ne '.' && substr( $unres_ip, -1 ) ne ':'; # avoid allowing 1.2.3.40 when allowing 1.2.3.4 but without preventing IPv6 subnets for being specified.
-						if ( $ip =~ /^$unres_ip/ )
-						{
-							$ip_ok = 1;
-							last;
-						}
-					}
-					return FORBIDDEN unless $ip_ok;
-				}
-				elsif ( defined $restrict_path->{ips} && ref( $restrict_path->{ips} ) eq "ARRAY" )
-				{
-					foreach my $restrict_ip ( @{$restrict_path->{ips}} )
-					{
-						my $res_ip = $restrict_ip;
-						$res_ip =~ s/\./\\./g;
-						$res_ip .= '$' if substr( $res_ip, -1 ) ne '.' && substr( $res_ip, -1 ) ne ':'; # avoid blocking 1.2.3.40 when blocking 1.2.3.4 but without preventing IPv6 subnets for being specified. 
-						if ( $ip =~ /^$res_ip/ )
-						{
-							return FORBIDDEN;
-						}
-					}
-				}
-			}
-			last if $ip_ok;
-		}
-	}
-
 	# Non-EPrints paths within our tree
 	my $exceptions = $repository->config( 'rewrite_exceptions' );
 	$exceptions = [] if !defined $exceptions;
@@ -487,171 +443,181 @@ sub handler
 				return redir_permanent( $r, $url );
 			}   
 			return OK; 
-		}   
+		} 
+	}  
+	
 
-		#this will serve a document, static files(.include files) or abstract page. 
-		my $accept = EPrints::Apache::AnApache::header_in( $r, "Accept" );
-		my $method = eval {$r->method} || "";
-		if ( ( $method eq "GET" || $method eq "HEAD" ) ## request method must be GET or HEAD
-			&&  (index(lc($accept), "text/html") != -1 || index(lc($accept), "text/*") != -1 || index(lc($accept),"*/*") != -1 || $accept eq ""  )   ## header must be text/html, text/*, */* or undef
-			&&  ($uri !~ m!^${urlpath}/id/eprint/0*[1-9][0-9]*/contents$! )   ## uri must not be id/eprint/XX/contents
-			&&  ($uri =~ s! ^${urlpath}/id/eprint/(0*)([1-9][0-9]*)\b !!x )     ## uri must be id/eprint/XX
+	#this will serve a document, static files(.include files) or abstract page. 
+	my $accept = EPrints::Apache::AnApache::header_in( $r, "Accept" );
+	my $method = eval {$r->method} || "";
+	if (
+		($repository->config("use_long_url_format")
+			&& ( ( $method eq "GET" || $method eq "HEAD" ) ## request method must be GET or HEAD
+				&&  (index(lc($accept), "text/html") != -1 || index(lc($accept), "text/*") != -1 || index(lc($accept),"*/*") != -1 || $accept eq ""  )   ## header must be text/html, text/*, */* or undef
+				&&  ($uri !~ m!^${urlpath}/id/eprint/0*[1-9][0-9]*/contents$! )   ## uri must not be id/eprint/XX/contents
+				&&  ($uri =~ s! ^${urlpath}/id/eprint/(0*)([1-9][0-9]*)\b !!x )     ## uri must be id/eprint/XX
+			)
 		)
+		||# /XX/ eprints
+		(!$repository->config("use_long_url_format") && $uri =~ s! ^$urlpath/(0*)([1-9][0-9]*)\b !!x )  # ignore leading 0s
+	)
+	{
+			
+		# It's an eprint...
+		my $eprintid = $2;
+
+		# Allow abstract pages to have their access restricted to logged in users
+		# If login_required_for_eprints is enabled and if user is not logged in, redir to login page
+		
+		my $v = $repository->get_conf( "login_required_for_eprints", "enable" );
+		if( !$user && defined $v && $v == 1 )
 		{
+			my $redir_url = "${login_url}?target=" . $repository->config( "base_url" ) . "id/eprint/${eprintid}";
+			return redir( $r, $redir_url );
+		}
+		
+
+		if( ! $repository->get_database->exists( $repository->dataset( "eprint" ), $eprintid ) )
+		{
+			return NOT_FOUND;
+		}
+
+		# redirect to canonical path - /XX/
+		if( !length($uri) )
+		{
+			return redir_see_other( $r, "$urlpath/id/eprint/$eprintid/$args" );
+		}
+		elsif( length($1) ) ##remove leading 0s
+		{
+			return redir( $r, "$urlpath/id/eprint/$eprintid$uri$args" );
+		}
+
+		if( $uri =~ s! ^/(0*)([1-9][0-9]*)\b !!x )  ##this would match /234/3/test.pdf or thumbnail: /234/1.hassmallThumbnailVersion/paper.pdf
+		{
+			# It's a document....     
+
+			my $pos = $2;
+			my $doc = EPrints::DataObj::Document::doc_with_eprintid_and_pos( $repository, $eprintid, $pos );
+			if( !defined $doc )
 			{
-				# It's an eprint...
-				my $eprintid = $2;
+				return NOT_FOUND;
+			}
+			if( !length($uri) )
+			{
+				return redir( $r, "$urlpath/$eprintid/$pos/$args" );
+			}
+			elsif( length($1) )
+			{
+				return redir( $r, "$urlpath/$eprintid/$pos$uri$args" );
+			}
+			$uri =~ s! ^([^/]*)/ !!x;
+			my @relations = grep { length($_) } split /\./, $1;
 
-				# Allow abstract pages to have their access restricted to logged in users
-				# If login_required_for_eprints is enabled and if user is not logged in, redir to login page
+			my $filename = $uri;
+
+			my %files = $doc->files;
+			if ( ! defined $files{$filename} )
+			{
+				return NOT_FOUND;
+			}
+
+			my $eprint = $repository->dataset( "eprint" )->dataobj( $eprintid );
+			$r->pnotes( eprint => $eprint );
+			$r->pnotes( document => $doc );
+			$r->pnotes( dataobj => $doc );
+			$r->pnotes( filename => $filename );
+
+			$r->handler('perl-script');
+
+			# don't cache documents, these could be large.
+			$r->headers_out->{'Cache-Control'} = "no-store, no-cache, must-revalidate";
+
+			# no real file to map to
+			$r->set_handlers(PerlMapToStorageHandler => sub { OK } );
+
+			$r->push_handlers(PerlAccessHandler => [
+				\&EPrints::Apache::Auth::authen_doc,
+				\&EPrints::Apache::Auth::authz_doc
+			] );
+			$r->set_handlers(PerlResponseHandler => \&EPrints::Apache::Storage::handler );
+
+			$r->pool->cleanup_register(\&EPrints::Apache::LogHandler::document, $r);
+
+			my $rc = undef;
+			$repository->run_trigger( EPrints::Const::EP_TRIGGER_DOC_URL_REWRITE,
+				# same as for URL_REWRITE
+				request => $r,
+				lang => $lang,    # en
+				args => $args,    # "" or "?foo=bar"
+				urlpath => $urlpath, # "" or "/subdir"
+				cgipath => $cgipath, # /cgi or /subdir/cgi
+				uri => $uri,     # /foo/bar
+				secure => $secure,  # boolean
+				return_code => \$rc,     # set to trigger a return
+				# extra bits
+				eprint => $eprint,
+				document => $doc,
+				filename => $filename,
+				relations => \@relations,
+			);
+
+			# if the trigger has set an return code
+			return $rc if defined $rc;
+
+			# This way of getting a status from a trigger turns out to cause 
+			# problems and is included as a legacy feature only. Don't use it, 
+			# set ${$opts->{return_code}} = 404; or whatever, instead.
+			return $r->status if $r->status != 200;
+
+			# Disable JavaScript if accessing whilst logged in to avoid malicious HTML files doing nasty things as the user.
+			$r->headers_out->{'Content-Security-Policy'} = "script-src 'none';" if $user && !$repository->config( "allow_uploaded_doc_js" );
+		}
+		# OK, It's the EPrints abstract page (or something whacky like /23/fish)
+		# ## can't let CRUD to use accept header todo content nego because we have files like .title, .page etc, so just redirect  /8 to /id/eprint/8 
+		# this would match [/23/, /23/index.html; /23/any.file]
+		else
+		{
+			my $eprint = $repository->dataset( "eprint" )->dataobj( $eprintid );
+			my $path = "/archive/" . $eprint->store_path();
+			EPrints::Update::Abstract::update( $repository, $lang, $eprintid, $path );
+			EPrints::Signposting::signposting( $repository, $r, $eprint );
+			if( $uri =~ m! /$ !x )
+			{
+				$uri .= "index.html";
+			}
+
+			if ($uri !~ m!^/index.html$!)
+			{
+				# EPrints is being too generous with URL resolution...
+				# We think that we should return a 404 here to stop valid URLs that have
+				# nonsense appended to them from resolving the valid section of the URL
+				# AND then spawning a sub-request that can cause a seg-fault
+				EPrints::Apache::AnApache::send_status_line( $r, 404, "Not Found" );
+				return NOT_FOUND;
+			}
+
+			$r->filename( $eprint->_htmlpath( $lang ) . $uri );
+
+			if( $uri =~ /\.html$/ )
+			{
+				$r->pnotes( eprint => $eprint );
+				$r->handler('perl-script');
+				$r->set_handlers(PerlResponseHandler => [ 'EPrints::Apache::Template' ] );
+
+				if ( $eprint->get_value( 'eprint_status' ) eq "deletion" )
 				{
-					my $v = $repository->get_conf( "login_required_for_eprints", "enable" );
-					if( !$user && defined $v && $v == 1 )
-					{
-						my $redir_url = "${login_url}?target=" . $repository->config( "base_url" ) . "id/eprint/${eprintid}";
-						return redir( $r, $redir_url );
-					}
+						EPrints::Apache::AnApache::send_status_line( $r, 410, "Gone" );	
 				}
-
-				if( ! $repository->get_database->exists( $repository->dataset( "eprint" ), $eprintid ) )
+				else 
 				{
-					return NOT_FOUND;
+					# log abstract hits
+					$r->pool->cleanup_register(\&EPrints::Apache::LogHandler::eprint, $r);
 				}
-
-				# redirect to canonical path - /XX/
-				if( !length($uri) )
-				{
-					return redir_see_other( $r, "$urlpath/id/eprint/$eprintid/$args" );
-				}
-				elsif( length($1) ) ##remove leading 0s
-				{
-					return redir( $r, "$urlpath/id/eprint/$eprintid$uri$args" );
-				}
-
-				if( $uri =~ s! ^/(0*)([1-9][0-9]*)\b !!x )  ##this would match /234/3/test.pdf or thumbnail: /234/1.hassmallThumbnailVersion/paper.pdf
-				{
-					# It's a document....           
-
-					my $pos = $2;
-					my $doc = EPrints::DataObj::Document::doc_with_eprintid_and_pos( $repository, $eprintid, $pos );
-					if( !defined $doc )
-					{
-						return NOT_FOUND;
-					}
-					if( !length($uri) )
-					{
-						return redir( $r, "$urlpath/$eprintid/$pos/$args" );
-					}
-					elsif( length($1) )
-					{
-						return redir( $r, "$urlpath/$eprintid/$pos$uri$args" );
-					}
-					$uri =~ s! ^([^/]*)/ !!x;
-					my @relations = grep { length($_) } split /\./, $1;
-
-					my $filename = $uri;
-
-					my %files = $doc->files;
-					if ( ! defined $files{$filename} )
-					{
-						return NOT_FOUND;
-					}
-
-					my $eprint = $repository->dataset( "eprint" )->dataobj( $eprintid );
-					$r->pnotes( eprint => $eprint );
-					$r->pnotes( document => $doc );
-					$r->pnotes( dataobj => $doc );
-					$r->pnotes( filename => $filename );
-
-					$r->handler('perl-script');
-
-					# no real file to map to
-					$r->set_handlers(PerlMapToStorageHandler => sub { OK } );
-
-					$r->push_handlers(PerlAccessHandler => [
-						\&EPrints::Apache::Auth::authen_doc,
-						\&EPrints::Apache::Auth::authz_doc
-					] );
-					$r->set_handlers(PerlResponseHandler => \&EPrints::Apache::Storage::handler );
-
-					$r->pool->cleanup_register(\&EPrints::Apache::LogHandler::document, $r);
-
-					my $rc = undef;
-					$repository->run_trigger( EPrints::Const::EP_TRIGGER_DOC_URL_REWRITE,
-						# same as for URL_REWRITE
-						request => $r,
-						lang => $lang,    # en
-						args => $args,    # "" or "?foo=bar"
-						urlpath => $urlpath, # "" or "/subdir"
-						cgipath => $cgipath, # /cgi or /subdir/cgi
-						uri => $uri,     # /foo/bar
-						secure => $secure,  # boolean
-						return_code => \$rc,     # set to trigger a return
-						# extra bits
-						eprint => $eprint,
-						document => $doc,
-						filename => $filename,
-						relations => \@relations,
-					);
-
-					# if the trigger has set an return code
-					return $rc if defined $rc;
-
-					# This way of getting a status from a trigger turns out to cause 
-					# problems and is included as a legacy feature only. Don't use it, 
-					# set ${$opts->{return_code}} = 404; or whatever, instead.
-					return $r->status if $r->status != 200;
-    
-					# Disable JavaScript if accessing whilst logged in to avoid malicious HTML files doing nasty things as the user.
-					$r->headers_out->{'Content-Security-Policy'} = "script-src 'none';" if $user && !$repository->config( "allow_uploaded_doc_js" );
-				}
-				# OK, It's the EPrints abstract page (or something whacky like /23/fish)
-				# ## can't let CRUD to use accept header todo content nego because we have files like .title, .page etc, so just redirect  /8 to /id/eprint/8 
-				# this would match [/23/, /23/index.html; /23/any.file]
-				else
-				{
-					my $eprint = $repository->dataset( "eprint" )->dataobj( $eprintid );
-					my $path = "/archive/" . $eprint->store_path();
-					EPrints::Update::Abstract::update( $repository, $lang, $eprintid, $path );
-					EPrints::Signposting::signposting( $repository, $r, $eprint );
-					if( $uri =~ m! /$ !x )
-					{
-						$uri .= "index.html";
-					}
-
-                    if ($uri !~ m!^/index.html$!)
-					{
-			# EPrints is being too generous with URL resolution...
-			# We think that we should return a 404 here to stop valid URLs that have
-			# nonsense appended to them from resolving the valid section of the URL
-			# AND then spawning a sub-request that can cause a seg-fault
-                        EPrints::Apache::AnApache::send_status_line( $r, 404, "Not Found" );
-                        return NOT_FOUND;
-                    }
-
-					$r->filename( $eprint->_htmlpath( $lang ) . $uri );
-
-                    if( $uri =~ /\.html$/ )
-					{
-						$r->pnotes( eprint => $eprint );
-						$r->handler('perl-script');
-						$r->set_handlers(PerlResponseHandler => [ 'EPrints::Apache::Template' ] );
-
-						if ( $eprint->get_value( 'eprint_status' ) eq "deletion" )
-						{
-							 EPrints::Apache::AnApache::send_status_line( $r, 410, "Gone" );	
-						}
-						else 
-						{
-							# log abstract hits
-							$r->pool->cleanup_register(\&EPrints::Apache::LogHandler::eprint, $r);
-						}
-					}
-				}
-				return OK; ## /id/eprint/XX
 			}
 		}
-	}##if use_long_url_format
+		return OK; 
+	}
+	
 	if( $uri =~ s! ^$urlpath/id/(?:
 			contents | ([^/]+)(?:/([^/]+)(?:/([^/]+))?)?
 		)$ !!x )
@@ -683,184 +649,6 @@ sub handler
 		return OK;
 	}
 
-	if(not $repository->config("use_long_url_format"))
-	{
-		# /XX/ eprints
-		if( $uri =~ s! ^$urlpath/(0*)([1-9][0-9]*)\b !!x )  # ignore leading 0s
-		{
-			# It's an eprint...
-			my $eprintid = $2;
-
-			# Allow abstract pages to have their access restricted to logged in users
-			# If login_required_for_eprints is enabled and if user is not logged in, redir to login page
-			{
-				my $v = $repository->get_conf( "login_required_for_eprints", "enable" );
-
-				if( !$user && defined $v && $v == 1 )
-				{
-					my $redir_url = "${login_url}?target=" . $repository->config( "base_url" ) . $eprintid;
-					return redir( $r, $redir_url );
-				}
-			}
-
-			if( ! $repository->get_database->exists( $repository->dataset( "eprint" ), $eprintid ) )
-			{
-				return NOT_FOUND;
-			}
-
-			# Only allow specific users to access abstract pages.
-			{
-				my $v = $repository->get_conf( "login_required_for_eprints", "enable" );
-				if( defined $v && $v == 1 )
-				{
-					# if we are here then access to abstracts etc are restricted, and we are logged in as a user
-					my $fn = $repository->get_conf( "eprints_access_restrictions_callback" );
-					if( defined $fn )
-					{
-						my $eprint = $repository->dataset( "eprint" )->dataobj( $eprintid );
-						my $rv = &{$fn}( $eprint, $user );
-						return NOT_FOUND if $rv == 0; # perhaps 403 rather than 404
-					}
-
-				}
-			}
-
-			# redirect to canonical path - /XX/
-			if( !length($uri) )
-			{
-				return redir( $r, "$urlpath/$eprintid/$args" );
-			}
-			elsif( length($1) )
-			{
-				return redir( $r, "$urlpath/$eprintid$uri$args" );
-			}
-
-			if( $uri =~ s! ^/(0*)([1-9][0-9]*)\b !!x )
-			{
-				# It's a document....			
-
-				my $pos = $2;
-				my $doc = EPrints::DataObj::Document::doc_with_eprintid_and_pos( $repository, $eprintid, $pos );
-				if( !defined $doc )
-				{
-					return NOT_FOUND;
-				}
-
-				if( !length($uri) )
-				{
-					return redir( $r, "$urlpath/$eprintid/$pos/$args" );
-				}
-				elsif( length($1) )
-				{
-					return redir( $r, "$urlpath/$eprintid/$pos$uri$args" );
-				}
-
-				$uri =~ s! ^([^/]*)/ !!x;
-				my @relations = grep { length($_) } split /\./, $1;
-
-				my $filename = $uri;
-
-				my %files = $doc->files;
-				if ( ! defined $files{$filename} )
-				{
-					return NOT_FOUND;
-				}
-
-				my $eprint = $repository->dataset( "eprint" )->dataobj( $eprintid );
-				$r->pnotes( eprint => $eprint );
-				$r->pnotes( document => $doc );
-				$r->pnotes( dataobj => $doc );
-				$r->pnotes( filename => $filename );
-
-				$r->handler('perl-script');
-
-				# no real file to map to
-				$r->set_handlers(PerlMapToStorageHandler => sub { OK } );
-
-				$r->push_handlers(PerlAccessHandler => [
-					\&EPrints::Apache::Auth::authen_doc,
-					\&EPrints::Apache::Auth::authz_doc
-				] );
-
-				$r->set_handlers(PerlResponseHandler => \&EPrints::Apache::Storage::handler );
-
-				$r->pool->cleanup_register(\&EPrints::Apache::LogHandler::document, $r);
-
-				my $rc = undef;
-				$repository->run_trigger( EPrints::Const::EP_TRIGGER_DOC_URL_REWRITE,
-					# same as for URL_REWRITE
-					request => $r,
-					lang => $lang,    # en
-					args => $args,    # "" or "?foo=bar"
-					urlpath => $urlpath, # "" or "/subdir"
-					cgipath => $cgipath, # /cgi or /subdir/cgi
-					uri => $uri,     # /foo/bar
-					secure => $secure,  # boolean
-					return_code => \$rc,     # set to trigger a return
-					# extra bits
-					eprint => $eprint,
-					document => $doc,
-					filename => $filename,
-					relations => \@relations,
-				);
-
-				# if the trigger has set an return code
-				return $rc if defined $rc;
-
-				# This way of getting a status from a trigger turns out to cause 
-				# problems and is included as a legacy feature only. Don't use it, 
-				# set ${$opts->{return_code}} = 404; or whatever, instead.
-				return $r->status if $r->status != 200;
-
-				# Disable JavaScript if accessing whilst logged in to avoid malicious HTML files doing nasty things as the user.
-				$r->headers_out->{'Content-Security-Policy'} = "script-src 'none';" if $user && !$repository->config( "allow_uploaded_doc_js" );
-			}
-			# OK, It's the EPrints abstract page (or something whacky like /23/fish)
-			else
-			{
-				my $eprint = $repository->dataset( "eprint" )->dataobj( $eprintid );
-				my $path = "/archive/" . $eprint->store_path();
-				EPrints::Update::Abstract::update( $repository, $lang, $eprintid, $path );
-
-				if( $uri =~ m! /$ !x )
-				{
-					$uri .= "index.html";
-				}
-
-                if ($uri !~ m!^/index.html$!)
-                {
-                    # EPrints is being too generous with URL resolution...
-                    # We think that we should return a 404 here to stop valid URLs that have
-                    # nonsense appended to them from resolving the valid section of the URL
-                    # AND then spawning a sub-request that can cause a seg-fault
-                    EPrints::Apache::AnApache::send_status_line( $r, 404, "Not Found" );
-                    return NOT_FOUND;
-                }
-
-				$r->filename( $eprint->_htmlpath( $lang ) . $uri );
-
-				if( $uri =~ /\.html$/ )
-				{
-					$r->pnotes( eprint => $eprint );
-
-					$r->handler('perl-script');
-					$r->set_handlers(PerlResponseHandler => [ 'EPrints::Apache::Template' ] );
-
-					if ( $eprint->get_value( 'eprint_status' ) eq "deletion" )
-					{
-						EPrints::Apache::AnApache::send_status_line( $r, 410, "Gone" );
-					}
-					else 
-					{
-						# log abstract hits
-						$r->pool->cleanup_register(\&EPrints::Apache::LogHandler::eprint, $r);
-					}
-				}
-			}
-
-			return OK;
-		}
-	} ##if long url format is not enabled
 
 	# apache 2 does not automatically look for index.html so we have to do it ourselves
 	my $localpath = $uri;
@@ -962,9 +750,10 @@ sub handler
 		$r->pool,
 		time + 30 * 86400
 	);
-	# let Firefox cache secure, static files
-	if( $repository->get_secure )
+
+	if(!defined $r->headers_out->{'Cache-Control'})
 	{
+		# Allow caching all static files unless it's been explicitly disabled above
 		$r->headers_out->{'Cache-Control'} = 'public';
 	}
 

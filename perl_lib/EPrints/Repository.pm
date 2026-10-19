@@ -5077,9 +5077,11 @@ sub send_http_header
 	}
 	$self->{request}->content_type( $opts{content_type} );
 
-	EPrints::Apache::AnApache::header_out( 
-		$self->{"request"},
-		"Cache-Control" => "no-store, no-cache, must-revalidate" );
+	if(!defined $self->{request}->headers_out->{'Cache-Control'})
+	{
+		# Allow caching all static files unless it's been explicitly disabled above
+		$self->{request}->headers_out->{'Cache-Control'} = 'public';
+	}
 
 	EPrints::Apache::AnApache::send_http_header( $self->{request} );
 }

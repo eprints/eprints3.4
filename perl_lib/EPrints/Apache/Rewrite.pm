@@ -48,6 +48,13 @@ use strict;
 
 Handler for managing an EPrints rewrite request C<$r>.
 
+Note the slightly unusual regex:
+m for match, s for substitute (which will change the value of the tested variable, usually $uri)
+then using literal '!' as the delimiters, allowing literal '/' to be used without escaping
+x at the end means you can have the spaces in the regex (presumably for readability?)
+
+m! ^$urlpath/archive/+(.*) !x
+
 =cut
 ######################################################################
   
@@ -296,6 +303,9 @@ sub handler
 	# SWORD-APP
 	if( $uri =~ s! ^$urlpath/sword-app/servicedocument$ !!x )
 	{
+		# by default, disable all caching for the APIs
+		$r->headers_out->{'Cache-Control'} = "no-store, no-cache, must-revalidate";
+
 		$r->handler( 'perl-script' );
 
 		$r->set_handlers( PerlMapToStorageHandler => sub { OK } );
@@ -344,6 +354,9 @@ sub handler
 	# REST
 	if( $uri =~ m! ^$urlpath/rest\b !x )
 	{
+		# by default, disable all caching for the APIs
+		$r->headers_out->{'Cache-Control'} = "no-store, no-cache, must-revalidate";
+
 		$r->handler( 'perl-script' );
 
 		$r->set_handlers( PerlMapToStorageHandler => sub { OK } );
@@ -387,6 +400,9 @@ sub handler
 			$ch_regex =~ s/URLPATH/$urlpath/;
 			if ( $uri =~ m! $ch_regex !x )
 			{
+				# by default, disable all caching for the APIs
+				$r->headers_out->{'Cache-Control'} = "no-store, no-cache, must-revalidate";
+
 				return $custom_handler->{function}->( $r );
 			}
 		}
@@ -422,6 +438,7 @@ sub handler
 	if ($repository->config("use_long_url_format"))
 	{
 		# /XX/ redirect to /id/eprint/XX/
+		# if matched, this block WILL return
 		if( $uri =~ s! ^$urlpath/(0*)([1-9][0-9]*)\b !!x )  # ignore leading 0s
 		{   
 			my $eprintid = $2;
@@ -450,6 +467,7 @@ sub handler
 	#this will serve a document, static files(.include files) or abstract page. 
 	my $accept = EPrints::Apache::AnApache::header_in( $r, "Accept" );
 	my $method = eval {$r->method} || "";
+	# if the URI matches an eprint for the correct document format enter this block, which will call return
 	if (
 		($repository->config("use_long_url_format")
 			&& ( ( $method eq "GET" || $method eq "HEAD" ) ## request method must be GET or HEAD
@@ -462,6 +480,7 @@ sub handler
 		(!$repository->config("use_long_url_format") && $uri =~ s! ^$urlpath/(0*)([1-9][0-9]*)\b !!x )  # ignore leading 0s
 	)
 	{
+		# note that inside this block $uri is now just what's left after matching an eprint
 			
 		# It's an eprint...
 		my $eprintid = $2;
@@ -494,7 +513,8 @@ sub handler
 
 		if( $uri =~ s! ^/(0*)([1-9][0-9]*)\b !!x )  ##this would match /234/3/test.pdf or thumbnail: /234/1.hassmallThumbnailVersion/paper.pdf
 		{
-			# It's a document....     
+			# It's a document....    
+			# $uri is now just what's left after matching the document 
 
 			my $pos = $2;
 			my $doc = EPrints::DataObj::Document::doc_with_eprintid_and_pos( $repository, $eprintid, $pos );
@@ -623,6 +643,9 @@ sub handler
 		)$ !!x )
 	{
 		my( $datasetid, $dataobjid, $fieldid ) = ($1, $2, $3);
+
+		# by default, disable all caching for the APIs
+		$r->headers_out->{'Cache-Control'} = "no-store, no-cache, must-revalidate";
 
 		my $crud = EPrints::Apache::CRUD->new(
 				repository => $repository,
@@ -753,7 +776,7 @@ sub handler
 
 	if(!defined $r->headers_out->{'Cache-Control'})
 	{
-		# Allow caching all static files unless it's been explicitly disabled above
+		# Allow caching all static files by default
 		$r->headers_out->{'Cache-Control'} = 'public';
 	}
 

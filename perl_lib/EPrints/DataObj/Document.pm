@@ -1225,7 +1225,13 @@ sub upload_url
 	{
 		$url->path( "/" );
 	}
-	$self->set_value( 'upload_url', $url ); 
+
+	# Use user-defined function, if exists, to validate before allowing upload.
+	if ( my $validate_func = $self->{session}->config( "upload_url_validate" ) )
+	{
+		$url = &$validate_func( $self->{session}, $url );
+		return( 0 ) unless $url;
+	}
 
 	my $tmpdir = File::Temp->newdir();
 
@@ -1240,6 +1246,8 @@ sub upload_url
 		return( 0 );
 	}
 	
+	$self->set_value( 'upload_url', $url );
+
 	# Work out the number of directories to cut, so top-level files go in
 	# at the top level in the destination dir.
 	

@@ -147,7 +147,7 @@ sub parse_file
 	return parse_xml( $filename, $opts{base_path}, $opts{no_expand} );
 }
 
-=item $doc = $xml->parse_url( $url )
+=item $doc = $xml->parse_url( $url, $no_expand )
 
 Returns an XML document parsed from the content located at $url.
 
@@ -155,7 +155,8 @@ Returns an XML document parsed from the content located at $url.
 
 sub parse_url
 {
-	return _parse_url( pop(@_) );
+	my ( $url, $no_expand ) = @_;
+	return _parse_url( $url, $no_expand );
 }
 
 =back

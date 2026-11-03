@@ -53,6 +53,8 @@ sub new
 		$self{userid} = $user->id;
 	}
 
+	$self->{old_screenid} = "";
+
 	return $self;
 }
 
@@ -305,7 +307,9 @@ sub process
 
 	my $self = $class->new( %opts );
 
-	my $screen = $self->get_screen();
+	# note, the various screens can just dip into this class and change the screenid whenever they want, so every time we want to 
+	# use the screen we have to fetch it fresh
+	# my $screen = $self->get_screen();
 
 	my $current_user = $self->{session}->current_user;
 
@@ -334,20 +338,20 @@ sub process
 	}
 	# This loads the properties of what the screen is about,
 	# Rather than parameters for the action, if any.
-	$screen->properties_from;
+	$self->get_screen()->properties_from();
 
 	$self->{action} = $self->{session}->get_action_button;
 	$self->{internal} = $self->{session}->get_internal_button;
 	delete $self->{action} if( $self->{action} eq "" );
 	delete $self->{internal} if( $self->{internal} eq "" );
 
-	if( !$screen->can_be_viewed )
+	if( !$self->get_screen()->can_be_viewed )
 	{
-		$screen->register_error;
+		$self->get_screen()->register_error();
 		$self->{screenid} = "Error";
 		EPrints::Apache::AnApache::send_hidden_status_line( $self->{"session"}->request, 403 );
 	}
-	elsif( !$screen->obtain_edit_lock )
+	elsif( !$self->get_screen()->obtain_edit_lock )
 	{
 		$self->add_message( "error", $self->{session}->html_phrase( 
 			"Plugin/Screen:item_locked" ) );
@@ -356,7 +360,7 @@ sub process
 	}
 	else
 	{
-		$screen->from;	
+		$self->get_screen()->from();	
 	}
 
 	if( defined $self->{redirect} )
@@ -372,16 +376,17 @@ sub process
 			}
 		}
 		$self->{session}->redirect( $self->{redirect} );
+		$self->{screen} = undef;
 		return;
 	}
 
 	# used to swap to a different screen if appropriate
-	$screen->about_to_render;
+	$self->get_screen()->about_to_render();
 
 
 	if( $ENV{REQUEST_METHOD} eq "POST" && defined $current_user )
 	{
-		my $url = $screen->redirect_to_me_url;
+		my $url = $self->get_screen()->redirect_to_me_url();
 		if( defined $url )
 		{
 			foreach my $message ( @{$self->{messages}} )
@@ -392,6 +397,7 @@ sub process
 					$message->{content} );
 			}
 			$self->{session}->redirect( $url );
+			$self->{screen} = undef;
 			return;
 		}
 	}
@@ -399,7 +405,7 @@ sub process
 	
 	# rendering
 
-	if( !$screen->can_be_viewed )
+	if( !$self->get_screen()->can_be_viewed() )
 	{
 		$self->add_message( "error", $self->{session}->html_phrase( 
 			"Plugin/Screen:screen_not_allowed",
@@ -407,7 +413,7 @@ sub process
 		$self->{screenid} = "Error";
 		EPrints::Apache::AnApache::send_hidden_status_line( $self->{"session"}->request, 403 );
 	}
-	elsif( !$screen->obtain_view_lock )
+	elsif( !$self->get_screen()->obtain_view_lock() )
 	{
 		$self->add_message( "error", $self->{session}->html_phrase( 
 			"Plugin/Screen:item_locked" ) );
@@ -417,18 +423,19 @@ sub process
 
 	# XHTML or special format?
 	
-	if( $screen->wishes_to_export )
+	if( $self->get_screen()->wishes_to_export() )
 	{
-		$self->{session}->send_http_header( "content_type"=>$screen->export_mimetype );
-		$screen->export;
+		$self->{session}->send_http_header( "content_type"=>$self->get_screen()->export_mimetype );
+		$self->get_screen()->export();
+		$self->{screen} = undef;
 		return;
 	}
 
-	$screen->register_furniture;
+	$self->get_screen()->register_furniture();
 
-	my $content = $screen->render;
-	my $links = $screen->render_links;
-	my $title = $screen->render_title;
+	my $content = $self->get_screen()->render();
+	my $links = $self->get_screen()->render_links();
+	my $title = $self->get_screen()->render_title();
 
 	my $page = $self->{session}->make_doc_fragment;
 
@@ -445,7 +452,7 @@ sub process
 	$page->appendChild( $content );
     
 	my $template = $self->{template};
-	$template = $screen->{template} if defined $screen->{template};
+	$template = $self->get_screen()->{template} if defined $self->get_screen()->{template};
 	$template = $self->{session}->config( 'plugins', 'Screen::' . $self->{screenid}, 'params', 'template' ) if defined $self->{session}->config( 'plugins', 'Screen::' . $self->{screenid}, 'params', 'template' );
 	$template = "default" if not defined $template;
 
@@ -470,6 +477,8 @@ sub process
 
 	$self->{session}->send_page();
 
+	# Unless every screen sets {processor} as a weak reference, we've got a circular reference here, so clear it up
+	$self->{screen} = undef;
 	return $self; # useful for unit-tests
 }
 
@@ -497,13 +506,25 @@ sub add_message
 	push @{$self->{messages}},{type=>$type,content=>$message};
 }
 
-# This used to set $self->{screen} AND return the screen. However that results in a circular reference and plugins/screens being kept alive indefinitely.
-# I don't think that anything ever needed $self->{screen} but if any issues pop up, it was caused by this change here. lpw1r25
+# Bit of explaining needed. $self->{screenid} can be changed by the screen object without ScreenProcessor really knowing.
+# The simple (but inefficient) solution is to just return a fresh screen object every time we need it, just in case screenid changed
+# This instead will only create a new screen object if the screenid has changed or screen hasn't been created yet
+# anywhere that calls get_screen (just ::process at the moment) MUST delete $self->{screen} to avoid circular references to/from Screen and ScreenProcessor
 sub get_screen
 {
 	my( $self ) = @_;
 
 	my $screenid = $self->{screenid};
+
+	if($screenid eq $self->{old_screenid} && defined $self->{screen})
+	{
+		# can keep using the same screen object, it already exists and screenid hasn't changed
+		return $self->{screen};
+	}
+	# else carry on, we need a new object
+
+	$self->{old_screenid} = $screenid;
+
 	my $plugin_id = "Screen::".$screenid;
 	my $screen = $self->{session}->plugin( $plugin_id, processor=>$self );
 
@@ -518,10 +539,12 @@ sub get_screen
 					screen=>$self->{session}->make_text( $screenid ) ) );
 			$self->{screenid} = "Error";
 			EPrints::Apache::AnApache::send_hidden_status_line( $self->{"session"}->request, 400 );
+			# this will return undef. unsure if that was the originally intended behaviour
 			return $screen;
 		}
 	}
 
+	$self->{screen} = $screen;
 	return $screen;
 }
 

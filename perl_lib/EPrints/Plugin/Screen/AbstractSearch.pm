@@ -1100,44 +1100,6 @@ sub _validated_cache_param
 	return $id_clean;
 }
 
-sub DESTROY
-{
-
-	
-    my $self = shift;
-
-	print STDERR "AbstractSearch::DESTROY ".ref($self)."\n";
-
-	
-	
-	# if(defined $self->{processor} && defined $self->{processor}->{search})
-	# {
-	# 	print STDERR "clearing reference to {processor}->{search}\n";
-	# 	#clear out the reference to the search plugin we put in the screen processor (it doesn't know about it)
-	# 	#why is this not being reached for XapianSearch?
-	# 	$self->{processor}->{search} = undef;
-	# }
-
-	# if(defined $self->{processor} && defined $self->{processor}->{results})
-	# {
-	# 	print STDERR "clearing reference to {processor}->{results}\n";
-	# 	$self->{processor}->{results} = undef;
-	# }
-	
-
-	if(defined $self->{processor} )
-	{
-		print STDERR "clearing reference to {processor}\n";
-		$self->{processor} = undef;
-	}
-	# if(defined $self->{screen}){
-	# 	print STDERR "screen still defined: ".$self->{screenid}."\n";
-	# }
-	# $self->tidy_up();
-
-	$self->SUPER::DESTROY();
-
-}
 
 1;
 

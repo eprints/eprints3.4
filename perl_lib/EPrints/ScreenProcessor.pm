@@ -27,8 +27,6 @@ sub new
 {
 	my( $class, %self ) = @_;
 
-	print STDERR "ScreenProcessor::NEW $class\n";
-
 	$self{messages} = [];
 	$self{after_messages} = [];
 	$self{before_messages} = [];
@@ -294,10 +292,7 @@ Process and send a response to a Web request.
 
 sub process
 {
-	print STDERR "EPrints::ScreenProcessor->process\n";
 	my( $class, %opts ) = @_;
-
-	
 
 	if( !defined $opts{screenid} ) 
 	{
@@ -337,7 +332,6 @@ sub process
 			EPrints::Apache::AnApache::send_hidden_status_line( $self->{"session"}->request, 403 );
 		}
 	}
-	print STDERR "EPrints::ScreenProcessor->process before screen->properties_from\n ";
 	# This loads the properties of what the screen is about,
 	# Rather than parameters for the action, if any.
 	$screen->properties_from;
@@ -362,9 +356,7 @@ sub process
 	}
 	else
 	{
-		print STDERR "EPrints::ScreenProcessor->process before screen->from\n ";
-		$screen->from;
-		
+		$screen->from;	
 	}
 
 	if( defined $self->{redirect} )
@@ -380,7 +372,6 @@ sub process
 			}
 		}
 		$self->{session}->redirect( $self->{redirect} );
-		# $self->tidy_up();
 		return;
 	}
 
@@ -401,7 +392,6 @@ sub process
 					$message->{content} );
 			}
 			$self->{session}->redirect( $url );
-			# $self->tidy_up();
 			return;
 		}
 	}
@@ -431,19 +421,15 @@ sub process
 	{
 		$self->{session}->send_http_header( "content_type"=>$screen->export_mimetype );
 		$screen->export;
-		# $self->tidy_up();
 		return;
 	}
-print STDERR "ScreenProcessor->process after screen->wishes_to_export: screen->{processor} = " . ref($screen->{processor})."\n";
-	print STDERR "ScreenProcessor->process after screen->wishes_to_export: screen->{processor}->{search} = " . ref($screen->{processor}->{search})."\n";
+
 	$screen->register_furniture;
 
 	my $content = $screen->render;
 	my $links = $screen->render_links;
 	my $title = $screen->render_title;
 
-print STDERR "ScreenProcessor->process after screen->render: screen->{processor} = " . ref($screen->{processor})."\n";
-	print STDERR "ScreenProcessor->process after screen->render: screen->{processor}->{search} = " . ref($screen->{processor}->{search})."\n";
 	my $page = $self->{session}->make_doc_fragment;
 
 	foreach my $chunk ( @{$self->{before_messages}} )
@@ -467,8 +453,7 @@ print STDERR "ScreenProcessor->process after screen->render: screen->{processor}
 	$page_id =~ s/::/_/g;
 	$page_id .= "_" . $opts{session}->param( "dataset" ) if defined $opts{session}->param( "dataset" );
 	$page_id .= "_" . $self->{action} if defined $self->{action};
-	print STDERR "ScreenProcessor->process before prepare_page: screen->{processor}->{search} = " . ref($self->{search})."\n";
-	#prepare_page seems to be losing the reference to $self->{processor}->{search} without triggering its destructor. what's going on in there?
+
 	$self->{session}->prepare_page(  
 		{
 			title => $title, 
@@ -482,32 +467,10 @@ print STDERR "ScreenProcessor->process after screen->render: screen->{processor}
 			page_id => $page_id,
 		),
  	);
-	
-	print STDERR "ScreenProcessor->process after prepare_page: screen->{processor}->{search} = " . ref($self->{search})."\n";
+
 	$self->{session}->send_page();
 
-	print STDERR "ScreenProcessor->process after send_page: screen->{processor}->{search} = " . ref($screen->{processor}->{search})."\n";
-
-	# need to call tidy up HERE because $self->{screen} holds a reference back to us, so both objects keep each other alive
-	# $self->tidy_up();
-	# no longer, now we don't keep the screen in $self->{screen} and just have it as a local variable here
-	print STDERR "ScreenProcessor::process finished\n";
-
-	print STDERR "ScreenProcessor::process finished: screen->{processor} = " . ref($screen->{processor})."\n";
-	print STDERR "ScreenProcessor::process finished: screen->{processor}->{search} = " . ref($screen->{processor}->{search})."\n";
-
-	print STDERR "ScreenProcessor::process finished: self->{search} = " . ref($self->{search})."\n";
-
 	return $self; # useful for unit-tests
-}
-
-
-sub tidy_up
-
-{
-	my( $self ) = @_;
-	# $self->{screen} = undef;
-	$self->{session}->get_plugin_factory->cache( "screen_lists", undef);
 }
 
 sub before_messages
@@ -619,33 +582,6 @@ sub action_not_allowed
 	$self->add_message( "error", $self->{session}->html_phrase( 
 		"Plugin/Screen:action_not_allowed",
 		action=>$action ) );
-}
-
-
-sub DESTROY
-{
-
-	
-    my $self = shift;
-	print STDERR "ScreenProcessor::DESTROY : ". $self->{screenid}. "\n";
-	
-	if(defined $self->{screen}){
-		print STDERR "screen still defined: ".$self->{screenid}."\n";
-	}
-
-	if(defined $self->{search}){
-		print STDERR "search still defined\n";
-		$self->{search} = undef;
-	}
-	if(defined $self->{results}){
-		print STDERR "results still defined\n";
-		$self->{results} = undef;
-	}
-
-	$self->tidy_up();
-
-	$self->SUPER::DESTROY();
-
 }
 
 1;

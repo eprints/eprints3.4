@@ -28,6 +28,7 @@ use strict;
 
 use XML::LibXML 1.63;
 use XML::LibXML::SAX;
+use XML::SAX::ExpatXS;
 # $XML::LibXML::skipXMLDeclaration = 1; # Same behaviour as XML::DOM
 
 $EPrints::XML::CLASS = "EPrints::XML::LibXML";
@@ -150,16 +151,15 @@ sub event_parse
 	# library ought to read the <?xml> declaration anyway, to determine the
 	# encoding
 	binmode($fh);
-
-	my $parser;
-	if( EPrints::Utils::require_if_exists( 'XML::SAX::ExpatXS' ) )
-	{
-		$parser = XML::SAX::ExpatXS->new( Handler => $handler );
-	}
-	else
-	{
-		$parser = XML::LibXML::SAX->new( Handler => $handler );
-	}
+	
+	my $parser = XML::SAX::ExpatXS->new( Handler => $handler );
+	# do NOT import external entities. Prevents attacks loading any system files!
+	# CVE-2024-40896 doesn't explicitly cover SAX, but the option to turn off loading external entities is unavailable for libxml SAX
+	# so use ExpatXS instead, despite its last update being from 2012.
+	# future TODO would be to find a maintained secure SAX library. I've had no luck finding one, libxml2 is maintained but the
+	# perl SAX code doesn't support these features.
+	$parser->set_feature("http://xml.org/sax/features/external-general-entities", 0);
+	$parser->set_feature("http://xml.org/sax/features/external-parameter-entities", 0);
 	$parser->parse_file( $fh );
 }
 

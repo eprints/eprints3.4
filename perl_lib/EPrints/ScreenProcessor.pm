@@ -497,20 +497,14 @@ sub add_message
 	push @{$self->{messages}},{type=>$type,content=>$message};
 }
 
-
+# This used to set $self->{screen} AND return the screen. However that results in a circular reference and plugins/screens being kept alive indefinitely.
+# I don't think that anything ever needed $self->{screen} but if any issues pop up, it was caused by this change here. lpw1r25
 sub get_screen
 {
 	my( $self ) = @_;
 
-	
-	# if (defined $self->{screen})
-	# {
-	# 	return $self->{screen};
-	# }
-
 	my $screenid = $self->{screenid};
 	my $plugin_id = "Screen::".$screenid;
-	# $self->{screen} = $self->{session}->plugin( $plugin_id, processor=>$self );
 	my $screen = $self->{session}->plugin( $plugin_id, processor=>$self );
 
 	if( !defined $screen )

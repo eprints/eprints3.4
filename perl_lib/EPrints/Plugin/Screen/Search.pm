@@ -598,6 +598,22 @@ sub from
 	}
 }
 
+
+
+sub DESTROY
+{
+
+	
+    my $self = shift;
+	print STDERR "Search::DESTROY\n";
+
+	$self->{processor} = undef;
+
+	$self->SUPER::DESTROY();
+
+}
+
+
 1;
 
 =head1 COPYRIGHT

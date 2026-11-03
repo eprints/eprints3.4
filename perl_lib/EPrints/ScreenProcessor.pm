@@ -27,6 +27,8 @@ sub new
 {
 	my( $class, %self ) = @_;
 
+	print STDERR "ScreenProcessor::NEW $class\n";
+
 	$self{messages} = [];
 	$self{after_messages} = [];
 	$self{before_messages} = [];
@@ -292,7 +294,10 @@ Process and send a response to a Web request.
 
 sub process
 {
+	print STDERR "EPrints::ScreenProcessor->process\n";
 	my( $class, %opts ) = @_;
+
+	
 
 	if( !defined $opts{screenid} ) 
 	{
@@ -304,6 +309,8 @@ sub process
 	}
 
 	my $self = $class->new( %opts );
+
+	my $screen = $self->get_screen();
 
 	my $current_user = $self->{session}->current_user;
 
@@ -330,23 +337,23 @@ sub process
 			EPrints::Apache::AnApache::send_hidden_status_line( $self->{"session"}->request, 403 );
 		}
 	}
-
+	print STDERR "EPrints::ScreenProcessor->process before screen->properties_from\n ";
 	# This loads the properties of what the screen is about,
 	# Rather than parameters for the action, if any.
-	$self->screen->properties_from;
+	$screen->properties_from;
 
 	$self->{action} = $self->{session}->get_action_button;
 	$self->{internal} = $self->{session}->get_internal_button;
 	delete $self->{action} if( $self->{action} eq "" );
 	delete $self->{internal} if( $self->{internal} eq "" );
 
-	if( !$self->screen->can_be_viewed )
+	if( !$screen->can_be_viewed )
 	{
-		$self->screen->register_error;
+		$screen->register_error;
 		$self->{screenid} = "Error";
 		EPrints::Apache::AnApache::send_hidden_status_line( $self->{"session"}->request, 403 );
 	}
-	elsif( !$self->screen->obtain_edit_lock )
+	elsif( !$screen->obtain_edit_lock )
 	{
 		$self->add_message( "error", $self->{session}->html_phrase( 
 			"Plugin/Screen:item_locked" ) );
@@ -355,7 +362,9 @@ sub process
 	}
 	else
 	{
-		$self->screen->from;
+		print STDERR "EPrints::ScreenProcessor->process before screen->from\n ";
+		$screen->from;
+		
 	}
 
 	if( defined $self->{redirect} )
@@ -371,15 +380,17 @@ sub process
 			}
 		}
 		$self->{session}->redirect( $self->{redirect} );
+		# $self->tidy_up();
 		return;
 	}
 
 	# used to swap to a different screen if appropriate
-	$self->screen->about_to_render;
+	$screen->about_to_render;
+
 
 	if( $ENV{REQUEST_METHOD} eq "POST" && defined $current_user )
 	{
-		my $url = $self->screen->redirect_to_me_url;
+		my $url = $screen->redirect_to_me_url;
 		if( defined $url )
 		{
 			foreach my $message ( @{$self->{messages}} )
@@ -390,6 +401,7 @@ sub process
 					$message->{content} );
 			}
 			$self->{session}->redirect( $url );
+			# $self->tidy_up();
 			return;
 		}
 	}
@@ -397,7 +409,7 @@ sub process
 	
 	# rendering
 
-	if( !$self->screen->can_be_viewed )
+	if( !$screen->can_be_viewed )
 	{
 		$self->add_message( "error", $self->{session}->html_phrase( 
 			"Plugin/Screen:screen_not_allowed",
@@ -405,7 +417,7 @@ sub process
 		$self->{screenid} = "Error";
 		EPrints::Apache::AnApache::send_hidden_status_line( $self->{"session"}->request, 403 );
 	}
-	elsif( !$self->screen->obtain_view_lock )
+	elsif( !$screen->obtain_view_lock )
 	{
 		$self->add_message( "error", $self->{session}->html_phrase( 
 			"Plugin/Screen:item_locked" ) );
@@ -415,19 +427,23 @@ sub process
 
 	# XHTML or special format?
 	
-	if( $self->screen->wishes_to_export )
+	if( $screen->wishes_to_export )
 	{
-		$self->{session}->send_http_header( "content_type"=>$self->screen->export_mimetype );
-		$self->screen->export;
+		$self->{session}->send_http_header( "content_type"=>$screen->export_mimetype );
+		$screen->export;
+		# $self->tidy_up();
 		return;
 	}
+print STDERR "ScreenProcessor->process after screen->wishes_to_export: screen->{processor} = " . ref($screen->{processor})."\n";
+	print STDERR "ScreenProcessor->process after screen->wishes_to_export: screen->{processor}->{search} = " . ref($screen->{processor}->{search})."\n";
+	$screen->register_furniture;
 
-	$self->screen->register_furniture;
+	my $content = $screen->render;
+	my $links = $screen->render_links;
+	my $title = $screen->render_title;
 
-	my $content = $self->screen->render;
-	my $links = $self->screen->render_links;
-	my $title = $self->screen->render_title;
-
+print STDERR "ScreenProcessor->process after screen->render: screen->{processor} = " . ref($screen->{processor})."\n";
+	print STDERR "ScreenProcessor->process after screen->render: screen->{processor}->{search} = " . ref($screen->{processor}->{search})."\n";
 	my $page = $self->{session}->make_doc_fragment;
 
 	foreach my $chunk ( @{$self->{before_messages}} )
@@ -443,7 +459,7 @@ sub process
 	$page->appendChild( $content );
     
 	my $template = $self->{template};
-	$template = $self->screen->{template} if defined $self->screen->{template};
+	$template = $screen->{template} if defined $screen->{template};
 	$template = $self->{session}->config( 'plugins', 'Screen::' . $self->{screenid}, 'params', 'template' ) if defined $self->{session}->config( 'plugins', 'Screen::' . $self->{screenid}, 'params', 'template' );
 	$template = "default" if not defined $template;
 
@@ -451,6 +467,8 @@ sub process
 	$page_id =~ s/::/_/g;
 	$page_id .= "_" . $opts{session}->param( "dataset" ) if defined $opts{session}->param( "dataset" );
 	$page_id .= "_" . $self->{action} if defined $self->{action};
+	print STDERR "ScreenProcessor->process before prepare_page: screen->{processor}->{search} = " . ref($self->{search})."\n";
+	#prepare_page seems to be losing the reference to $self->{processor}->{search} without triggering its destructor. what's going on in there?
 	$self->{session}->prepare_page(  
 		{
 			title => $title, 
@@ -464,12 +482,33 @@ sub process
 			page_id => $page_id,
 		),
  	);
+	
+	print STDERR "ScreenProcessor->process after prepare_page: screen->{processor}->{search} = " . ref($self->{search})."\n";
 	$self->{session}->send_page();
+
+	print STDERR "ScreenProcessor->process after send_page: screen->{processor}->{search} = " . ref($screen->{processor}->{search})."\n";
+
+	# need to call tidy up HERE because $self->{screen} holds a reference back to us, so both objects keep each other alive
+	# $self->tidy_up();
+	# no longer, now we don't keep the screen in $self->{screen} and just have it as a local variable here
+	print STDERR "ScreenProcessor::process finished\n";
+
+	print STDERR "ScreenProcessor::process finished: screen->{processor} = " . ref($screen->{processor})."\n";
+	print STDERR "ScreenProcessor::process finished: screen->{processor}->{search} = " . ref($screen->{processor}->{search})."\n";
+
+	print STDERR "ScreenProcessor::process finished: self->{search} = " . ref($self->{search})."\n";
 
 	return $self; # useful for unit-tests
 }
 
 
+sub tidy_up
+
+{
+	my( $self ) = @_;
+	# $self->{screen} = undef;
+	$self->{session}->get_plugin_factory->cache( "screen_lists", undef);
+}
 
 sub before_messages
 {
@@ -496,30 +535,37 @@ sub add_message
 }
 
 
-sub screen
+sub get_screen
 {
 	my( $self ) = @_;
 
-	my $screen = $self->{screenid};
-	my $plugin_id = "Screen::".$screen;
-	$self->{screen} = $self->{session}->plugin( $plugin_id, processor=>$self );
+	
+	# if (defined $self->{screen})
+	# {
+	# 	return $self->{screen};
+	# }
 
-	if( !defined $self->{screen} )
+	my $screenid = $self->{screenid};
+	my $plugin_id = "Screen::".$screenid;
+	# $self->{screen} = $self->{session}->plugin( $plugin_id, processor=>$self );
+	my $screen = $self->{session}->plugin( $plugin_id, processor=>$self );
+
+	if( !defined $screen )
 	{
-		if( $screen ne "Error" )
+		if( $screenid ne "Error" )
 		{
 			$self->add_message( 
 				"error", 
 				$self->{session}->html_phrase( 
 					"Plugin/Screen:unknown_screen",
-					screen=>$self->{session}->make_text( $screen ) ) );
+					screen=>$self->{session}->make_text( $screenid ) ) );
 			$self->{screenid} = "Error";
 			EPrints::Apache::AnApache::send_hidden_status_line( $self->{"session"}->request, 400 );
-			return $self->screen;
+			return $screen;
 		}
 	}
 
-	return $self->{screen};
+	return $screen;
 }
 
 sub render_messages
@@ -575,6 +621,32 @@ sub action_not_allowed
 		action=>$action ) );
 }
 
+
+sub DESTROY
+{
+
+	
+    my $self = shift;
+	print STDERR "ScreenProcessor::DESTROY : ". $self->{screenid}. "\n";
+	
+	if(defined $self->{screen}){
+		print STDERR "screen still defined: ".$self->{screenid}."\n";
+	}
+
+	if(defined $self->{search}){
+		print STDERR "search still defined\n";
+		$self->{search} = undef;
+	}
+	if(defined $self->{results}){
+		print STDERR "results still defined\n";
+		$self->{results} = undef;
+	}
+
+	$self->tidy_up();
+
+	$self->SUPER::DESTROY();
+
+}
 
 1;
 

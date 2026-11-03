@@ -593,6 +593,29 @@ sub render_action_list_icons
 	return $repo->xhtml->action_list( \@actions );
 }
 
+
+
+
+
+
+sub DESTROY
+{
+
+	
+    my $self = shift;
+
+	# print STDERR "Screen::DESTROY ".ref($self)."\n";
+
+	
+	if(defined $self->{processor} )
+	{
+		$self->{processor} = undef;
+	}
+
+	$self->SUPER::DESTROY();
+
+}
+
 1;
 
 		

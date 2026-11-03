@@ -541,6 +541,16 @@ sub register_plugin
 	return $plugin;
 }
 
+
+
+sub DESTROY 
+{ 
+	print STDERR "PluginFactory::DESTROY\n";
+	my $self = shift;
+	$self->{_cache} = undef;
+
+}
+
 1;
 
 =head1 COPYRIGHT

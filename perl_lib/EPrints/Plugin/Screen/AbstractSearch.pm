@@ -1100,7 +1100,6 @@ sub _validated_cache_param
 	return $id_clean;
 }
 
-
 1;
 
 =head1 COPYRIGHT

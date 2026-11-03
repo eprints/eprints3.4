@@ -247,8 +247,9 @@ sub render_item_list
 	my $ul = $xml->create_element( "ul", class => $class, id => "ep_tm_menu_tools" );
 
 	foreach my $opt (@$list)
-	{
-		my $screen = $opt->screen();
+	{	
+		# list_items has created this object, it's not a reference to the now removed property of ScreenProcessor
+		my $screen = $opt->{screen};
 
 		my $li = $xml->create_element( "li", class => "ep_tm_key_tools_item" );
 

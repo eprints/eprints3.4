@@ -501,7 +501,6 @@ sub add_message
 
 # Bit of explaining needed. $self->{screenid} can be changed by the screen object without ScreenProcessor really knowing.
 # The simple (but inefficient) solution is to just return a fresh screen object every time we need it, just in case screenid changed
-# This instead will only create a new screen object if the screenid has changed or screen hasn't been created yet
 # I've stuck with the simple solution as it turns out other classes also access this
 # get_screen would be a better name but is a lot of work to change over and hard to backport to site_lib because it would involve changing so many files
 sub screen

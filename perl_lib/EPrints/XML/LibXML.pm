@@ -109,7 +109,7 @@ sub _parse_url
 	my $parser = $PARSER;
 	if ( $no_expand )
 	{
-		$parser = XML::LibXML->new( expand_entities => 0, load_ext_dtd => 0 );
+    $parser = XML::LibXML->new( expand_entities => 0, load_ext_dtd => 0 );
 	}
 
 	return $parser->parse_file( "$url" ) if substr( $url, 0, 6 ) ne "https:";

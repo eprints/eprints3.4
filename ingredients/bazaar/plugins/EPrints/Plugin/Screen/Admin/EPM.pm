@@ -87,9 +87,9 @@ sub export
 
 	foreach my $item ($self->list_items( "admin_epm_tabs" ))
 	{
-		next if !$item->{screen}->can_be_viewed;
-		$screen = $item->{screen}, last
-			if $item->{screen}->get_subtype eq $current;
+		next if !$item->screen->can_be_viewed;
+		$screen = $item->screen, last
+			if $item->screen->get_subtype eq $current;
 	}
 
 	return if !defined $screen;
@@ -108,8 +108,8 @@ sub render_links
 
 	foreach my $item ($self->list_items( "admin_epm_tabs" ))
 	{
-		next if !$item->{screen}->can_be_viewed;
-		$frag->appendChild( $item->{screen}->render_links );
+		next if !$item->screen->can_be_viewed;
+		$frag->appendChild( $item->screen->render_links );
 	}
 
 	return $frag;

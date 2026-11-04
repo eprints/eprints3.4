@@ -77,6 +77,45 @@ Set citations to recached before generating view(s).
 
 Prunes cached directories for disabled/removed browse views and cached browse view 
 files older than C<max_list_age> for listings or C<max_menu_age> for menus.
+=item B<--updated> I<date>
+
+Generate only the list pages containing records modified since the supplied date.
+
+Supported formats:
+ 
+Relative dates:
+ 
+  yesterday
+  "1d ago"
+  "7 days ago"
+  "1 month ago"
+  "1 year ago"
+ 
+Short relative dates:
+ 
+  1d
+  7d
+  1m
+  6m
+  1y
+ 
+Absolute dates:
+ 
+  YYYY
+  YYYY-MM
+  YYYY-MM-DD
+ 
+Examples:
+ 
+  --updated 7d
+  --updated 1m
+  --updated 1y
+  --updated "30 days ago"
+  --updated 2026
+  --updated 2026-07
+  --updated 2026-07-23
+ 
+Expressions containing spaces must be quoted. A trailing '-' is allowed and ignored.
 
 =item B<--help>
 
@@ -111,6 +150,8 @@ use File::Copy;
 use strict;
 use Getopt::Long;
 use Pod::Usage;
+use Time::Piece;
+use Time::Seconds;
 
 my $version = 0;
 my $verbose = 0;
@@ -122,6 +163,7 @@ my $prune = 0;
 my $generate_opt;
 my @view_opts;
 my $lang_opt;
+my $updated_opt;
 
 Getopt::Long::Configure("permute");
 
@@ -137,6 +179,7 @@ GetOptions(
 	'generate=s' => \$generate_opt,
 	'view=s' => \@view_opts,
 	'lang=s' => \$lang_opt,
+	'updated=s' => \$updated_opt
 ) || pod2usage( 2 );
 EPrints::Utils::cmd_version( "generate_views" ) if $version;
 pod2usage( 1 ) if $help;
@@ -161,6 +204,63 @@ if( defined $generate_opt )
 }
 
 my $PATH = "view";
+
+
+sub normalise_updated_arg
+{
+	my( $value ) = @_;
+
+	return undef unless defined $value;
+
+	$value =~ s/-$//;
+    $value =~ s/yesterday/1d ago/;
+
+    if( $value =~ /^([0-9]+)\s*([dmy])(?:ays?|onths?|ears?)?(?:\s+ago)?$/i )
+	{
+		my ($n, $unit) = ($1, lc $2);
+
+		my @lt = localtime;
+
+		if( $unit eq 'd' )
+		{
+			@lt = localtime( time - $n * 86400 );
+		}
+		elsif( $unit eq 'm' )
+		{
+			# approximation
+			@lt = localtime( time - $n * 30 * 86400 );
+		}
+		elsif( $unit eq 'y' )
+		{
+			# approximation
+			@lt = localtime( time - $n * 365 * 86400 );
+		}
+
+		return sprintf(
+			"%04d-%02d-%02d-",
+			$lt[5] + 1900,
+			$lt[4] + 1,
+			$lt[3]
+		);
+	}
+	elsif ( $value =~ /^[0-9]{4}$/ )
+	{
+		return "$value-";
+	}
+	elsif ( $value =~ /^[0-9]{4}-[0-9]{2}$/ )
+	{
+		return "$value-";
+	}
+	elsif ( $value =~ /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/ )
+	{
+		return "$value-";
+	}
+
+	die "Invalid updated value: $value\n";
+}
+
+
+my $updated_value = normalise_updated_arg( $updated_opt );
 
 # Set STDOUT to auto flush (without needing a \n)
 $|=1;
@@ -228,11 +328,25 @@ LANGUAGE: foreach my $langid ( @{$repository->get_conf( "languages" )} )
 			view => $view
 		);
 
+		if( defined $updated_value )
+		{
+			$view->update_view_by_date(
+				on_write => sub { print "Wrote: $_[0]\n" if $noise > 1 },
+				langid => $langid,
+				do_menus => $do_menus,
+				do_lists => $do_lists,
+				updated => $updated_value,
+			);
+		}
+		else
+		{
 		$view->update_view_by_path(
 			on_write => sub { print "Wrote: $_[0]\n" if $noise > 1 },
 			langid => $langid, 
 			do_menus => $do_menus,
-			do_lists => $do_lists );
+			do_lists => $do_lists,
+			 );
+		}
 	}
 
 	if( $do_menus )
@@ -330,4 +444,3 @@ License along with EPrints 3.4.
 If not, see L<http://www.gnu.org/licenses/>.
 
 =for LICENSE END
-

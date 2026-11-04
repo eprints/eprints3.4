@@ -64,26 +64,10 @@ $EPrints::XML::CLASS = undef;
 
 sub init
 {
-	my $c = $EPrints::SystemSettings::conf;
-	my $disable_libxml = exists $c->{enable_libxml} && !$c->{enable_libxml};
-	my $disable_gdome = exists $c->{enable_gdome} && !$c->{enable_gdome};
+	eval "use EPrints::XML::LibXML; 1";
+	return 1 if !$@;
 
-	if( !$disable_libxml )
-	{
-		eval "use EPrints::XML::LibXML; 1";
-		return 1 if !$@;
-	}
-
-	print STDERR "*** DEPRECATION WARNING ***
-In future versions, EPrints will be standardising to only support the LibXML library for providing XML functionality.  Please ensure LibXML is installed before upgrading EPrints.\n";
-
-	if( !$disable_gdome )
-	{
-		eval "use EPrints::XML::GDOME; 1";
-		return 1 if !$@;
-	}
-
-	require EPrints::XML::DOM; 
+	EPrints->abort( "*** DEPRECATION NOTICE - EPrints has standardised to only support the LibXML library for providing XML functionality. Please ensure the Perl module XML::LibXML is installed. ***" );
 }
 
 use strict;
@@ -147,7 +131,7 @@ sub parse_file
 	return parse_xml( $filename, $opts{base_path}, $opts{no_expand} );
 }
 
-=item $doc = $xml->parse_url( $url )
+=item $doc = $xml->parse_url( $url, $no_expand )
 
 Returns an XML document parsed from the content located at $url.
 
@@ -155,7 +139,8 @@ Returns an XML document parsed from the content located at $url.
 
 sub parse_url
 {
-	return _parse_url( pop(@_) );
+	my ( $url, $no_expand ) = @_;
+	return _parse_url( $url, $no_expand );
 }
 
 =back

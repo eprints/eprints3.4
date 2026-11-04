@@ -46,7 +46,7 @@ sub input_fh
 
 	# read the source XML
 	# note: LibXSLT will only work with LibXML, so that's what we use here
-	my $source = XML::LibXML->new->parse_fh( $fh );
+	my $source = XML::LibXML->new( expand_entities => 0, load_ext_dtd => 0 )->parse_fh( $fh );
 
 	# transform it using our stylesheet
 	my $result = $self->transform( $source );

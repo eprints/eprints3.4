@@ -247,7 +247,8 @@ sub render_item_list
 	my $ul = $xml->create_element( "ul", class => $class, id => "ep_tm_menu_tools" );
 
 	foreach my $opt (@$list)
-	{
+	{	
+		# list_items has created this object, it's not a reference to the now removed property of ScreenProcessor
 		my $screen = $opt->{screen};
 
 		my $li = $xml->create_element( "li", class => "ep_tm_key_tools_item" );
@@ -305,6 +306,10 @@ sub process
 
 	my $self = $class->new( %opts );
 
+	# note, the various screens can just dip into this class and change the screenid whenever they want, so every time we want to 
+	# use the screen we have to fetch it fresh
+	# my $screen = $self->screen();
+
 	my $current_user = $self->{session}->current_user;
 
 	# Check to make sure CSRF token is set and  has not been changed.
@@ -330,23 +335,22 @@ sub process
 			EPrints::Apache::AnApache::send_hidden_status_line( $self->{"session"}->request, 403 );
 		}
 	}
-
 	# This loads the properties of what the screen is about,
 	# Rather than parameters for the action, if any.
-	$self->screen->properties_from;
+	$self->screen()->properties_from();
 
 	$self->{action} = $self->{session}->get_action_button;
 	$self->{internal} = $self->{session}->get_internal_button;
 	delete $self->{action} if( $self->{action} eq "" );
 	delete $self->{internal} if( $self->{internal} eq "" );
 
-	if( !$self->screen->can_be_viewed )
+	if( !$self->screen()->can_be_viewed )
 	{
-		$self->screen->register_error;
+		$self->screen()->register_error();
 		$self->{screenid} = "Error";
 		EPrints::Apache::AnApache::send_hidden_status_line( $self->{"session"}->request, 403 );
 	}
-	elsif( !$self->screen->obtain_edit_lock )
+	elsif( !$self->screen()->obtain_edit_lock )
 	{
 		$self->add_message( "error", $self->{session}->html_phrase( 
 			"Plugin/Screen:item_locked" ) );
@@ -355,7 +359,7 @@ sub process
 	}
 	else
 	{
-		$self->screen->from;
+		$self->screen()->from();	
 	}
 
 	if( defined $self->{redirect} )
@@ -375,11 +379,12 @@ sub process
 	}
 
 	# used to swap to a different screen if appropriate
-	$self->screen->about_to_render;
+	$self->screen()->about_to_render();
+
 
 	if( $ENV{REQUEST_METHOD} eq "POST" && defined $current_user )
 	{
-		my $url = $self->screen->redirect_to_me_url;
+		my $url = $self->screen()->redirect_to_me_url();
 		if( defined $url )
 		{
 			foreach my $message ( @{$self->{messages}} )
@@ -397,7 +402,7 @@ sub process
 	
 	# rendering
 
-	if( !$self->screen->can_be_viewed )
+	if( !$self->screen()->can_be_viewed() )
 	{
 		$self->add_message( "error", $self->{session}->html_phrase( 
 			"Plugin/Screen:screen_not_allowed",
@@ -405,7 +410,7 @@ sub process
 		$self->{screenid} = "Error";
 		EPrints::Apache::AnApache::send_hidden_status_line( $self->{"session"}->request, 403 );
 	}
-	elsif( !$self->screen->obtain_view_lock )
+	elsif( !$self->screen()->obtain_view_lock() )
 	{
 		$self->add_message( "error", $self->{session}->html_phrase( 
 			"Plugin/Screen:item_locked" ) );
@@ -415,18 +420,18 @@ sub process
 
 	# XHTML or special format?
 	
-	if( $self->screen->wishes_to_export )
+	if( $self->screen()->wishes_to_export() )
 	{
-		$self->{session}->send_http_header( "content_type"=>$self->screen->export_mimetype );
-		$self->screen->export;
+		$self->{session}->send_http_header( "content_type"=>$self->screen()->export_mimetype );
+		$self->screen()->export();
 		return;
 	}
 
-	$self->screen->register_furniture;
+	$self->screen()->register_furniture();
 
-	my $content = $self->screen->render;
-	my $links = $self->screen->render_links;
-	my $title = $self->screen->render_title;
+	my $content = $self->screen()->render();
+	my $links = $self->screen()->render_links();
+	my $title = $self->screen()->render_title();
 
 	my $page = $self->{session}->make_doc_fragment;
 
@@ -443,7 +448,7 @@ sub process
 	$page->appendChild( $content );
     
 	my $template = $self->{template};
-	$template = $self->screen->{template} if defined $self->screen->{template};
+	$template = $self->screen()->{template} if defined $self->screen()->{template};
 	$template = $self->{session}->config( 'plugins', 'Screen::' . $self->{screenid}, 'params', 'template' ) if defined $self->{session}->config( 'plugins', 'Screen::' . $self->{screenid}, 'params', 'template' );
 	$template = "default" if not defined $template;
 
@@ -451,6 +456,7 @@ sub process
 	$page_id =~ s/::/_/g;
 	$page_id .= "_" . $opts{session}->param( "dataset" ) if defined $opts{session}->param( "dataset" );
 	$page_id .= "_" . $self->{action} if defined $self->{action};
+
 	$self->{session}->prepare_page(  
 		{
 			title => $title, 
@@ -464,12 +470,11 @@ sub process
 			page_id => $page_id,
 		),
  	);
+
 	$self->{session}->send_page();
 
 	return $self; # useful for unit-tests
 }
-
-
 
 sub before_messages
 {
@@ -495,31 +500,36 @@ sub add_message
 	push @{$self->{messages}},{type=>$type,content=>$message};
 }
 
-
+# Bit of explaining needed. $self->{screenid} can be changed by the screen object without ScreenProcessor really knowing.
+# The simple (but inefficient) solution is to just return a fresh screen object every time we need it, just in case screenid changed
+# I've stuck with the simple solution as it turns out other classes also access this
+# get_screen would be a better name but is a lot of work to change over and hard to backport to site_lib because it would involve changing so many files
 sub screen
 {
 	my( $self ) = @_;
 
-	my $screen = $self->{screenid};
-	my $plugin_id = "Screen::".$screen;
-	$self->{screen} = $self->{session}->plugin( $plugin_id, processor=>$self );
+	my $screenid = $self->{screenid};
 
-	if( !defined $self->{screen} )
+	my $plugin_id = "Screen::".$screenid;
+	my $screen = $self->{session}->plugin( $plugin_id, processor=>$self );
+
+	if( !defined $screen )
 	{
-		if( $screen ne "Error" )
+		if( $screenid ne "Error" )
 		{
 			$self->add_message( 
 				"error", 
 				$self->{session}->html_phrase( 
 					"Plugin/Screen:unknown_screen",
-					screen=>$self->{session}->make_text( $screen ) ) );
+					screen=>$self->{session}->make_text( $screenid ) ) );
 			$self->{screenid} = "Error";
 			EPrints::Apache::AnApache::send_hidden_status_line( $self->{"session"}->request, 400 );
-			return $self->screen;
+			# this will return undef. unsure if that was the originally intended behaviour
+			return $screen;
 		}
 	}
 
-	return $self->{screen};
+	return $screen;
 }
 
 sub render_messages
@@ -574,7 +584,6 @@ sub action_not_allowed
 		"Plugin/Screen:action_not_allowed",
 		action=>$action ) );
 }
-
 
 1;
 

@@ -13,6 +13,21 @@ $c->{diskspace_error_threshold} = 64*1024;
 # repository administrator is sent a warning email. In kilobytes.
 $c->{diskspace_warn_threshold} = 512*1024;
 
+# Disable document "Upload from URL" by default. If you re-enable considering
+# validating URLs with "upload_url_validate" configuration below.
+$c->{plugins}->{"Screen::EPrint::UploadMethod::URL"}->{params}->{disable} = 1;
+
+# Validate a URL specified for document upload
+#$c->{upload_url_validate} = sub {
+#        my( $session, $url ) = @_;
+#
+#        # Only allow HTTPS URLs
+#        return if $url !~ /^https:/;
+#
+#        return $url;
+#};
+
+
 # Add an additional MIME type mapping from file extensions
 # $c->{mimemap}->{html} = "text/html";
 

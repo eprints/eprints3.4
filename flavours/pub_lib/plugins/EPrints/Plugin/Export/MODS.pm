@@ -236,7 +236,10 @@ sub _make_publisher
 sub _make_genre
 {
 	my( $session, $dataset, $dataobj ) = @_;
-	
+
+	return $session->make_doc_fragment unless defined $dataobj->get_type();
+	return $session->make_doc_fragment unless $session->get_lang->has_phrase( $dataset->confid()."_typename_".$dataobj->get_type() );
+
 	my $val = $session->phrase( $dataset->confid()."_typename_".$dataobj->get_type() );
 	
 	my $genre = $session->make_element( "${PREFIX}genre" );

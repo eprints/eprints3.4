@@ -122,7 +122,7 @@ sub input_text_fh
 		my $dom_doc;
 		my $dom_crossref;
 		eval {
-			$dom_doc = EPrints::XML::parse_url( $url );
+			$dom_doc = EPrints::XML::parse_url( $url, 1 );
 			$dom_crossref = ($dom_doc->findnodes( "doi_records/doi_record/crossref" ))[0];
 		};
 

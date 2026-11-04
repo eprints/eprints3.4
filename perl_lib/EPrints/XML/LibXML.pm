@@ -105,11 +105,18 @@ sub _parse_url
 {
 	my( $url, $no_expand ) = @_;
 
-	return $PARSER->parse_file( "$url" ) if substr( $url, 0, 6 ) ne "https:";
+	# Use non-expanding parser if expressly asked.
+	my $parser = $PARSER;
+	if ( $no_expand )
+	{
+		$parser = XML::LibXML->new;
+	}
+
+	return $parser->parse_file( "$url" ) if substr( $url, 0, 6 ) ne "https:";
 
 	use LWP::Simple qw(get);
 	my $string = get( $url );
-    	return $PARSER->parse_string( $string );
+	return $parser->parse_string( $string );
 }
 
 =item $doc = parse_xml( $filename [, $basepath [, $no_expand]] )
@@ -146,21 +153,25 @@ sub event_parse
 {
 	my( $fh, $handler ) = @_;	
 
-	# XML::LibXML causes a "stack smashing detected" on utf8 input FHs. The XML
-	# library ought to read the <?xml> declaration anyway, to determine the
-	# encoding
-	binmode($fh);
-
-	my $parser;
+	# Do not use XML::LibXML::SAX as it does not support disabling entities, which
+	# could be used for XML external entity (XXE) injection. XML::SAX::ExpatXS is
+	# also an old library and will be replaced in a future version of EPrints.
 	if( EPrints::Utils::require_if_exists( 'XML::SAX::ExpatXS' ) )
 	{
-		$parser = XML::SAX::ExpatXS->new( Handler => $handler );
+		binmode($fh);
+
+		my $parser = XML::SAX::ExpatXS->new( Handler => $handler );
+
+		# Disable entity expansion to prevent XXE.
+		$parser->set_feature("http://xml.org/sax/features/external-general-entities", 0);
+		$parser->set_feature("http://xml.org/sax/features/external-parameter-entities", 0);
+
+		$parser->parse_file( $fh );
 	}
 	else
 	{
-		$parser = XML::LibXML::SAX->new( Handler => $handler );
+		EPrints::abort( "Can't read XML file: XML::SAX::ExpatXS module is not installed." );
 	}
-	$parser->parse_file( $fh );
 }
 
 

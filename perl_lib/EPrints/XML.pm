@@ -22,7 +22,7 @@ B<EPrints::XML> - XML Abstraction Module
 
 	$doc = $xml->parse_string( $string, %opts );
 	$doc = $xml->parse_file( $filename, %opts );
-	$doc = $xml->parse_url( $url );
+	$doc = $xml->parse_url( $url, $no_expand );
 
 	$utf8_string = $xml->to_string( $dom_node, %opts );
 
@@ -43,10 +43,8 @@ B<EPrints::XML> - XML Abstraction Module
 
 =head1 DESCRIPTION
 
-EPrints can use either XML::DOM, XML::LibXML or XML::GDOME modules to generate
-and process XML. Some of the functionality of these modules differs so this
-module abstracts such functionality so that all the module specific code is in
-one place. 
+EPrints has been standardised to only use the XML::LibXML module for generating/parsing XML.
+For compatibility reasons this abstraction class has been retained.
 
 =head1 METHODS
 

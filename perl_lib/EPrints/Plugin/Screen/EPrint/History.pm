@@ -60,7 +60,7 @@ sub render
 		$basename,
 		$list,
 		params => {
-			$self->{processor}->{screen}->hidden_bits,
+			$self->{processor}->screen->hidden_bits,
 		},
 		container => $repo->make_element( "div" ),
 		render_result => sub {

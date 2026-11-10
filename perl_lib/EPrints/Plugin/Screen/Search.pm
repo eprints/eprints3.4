@@ -95,7 +95,7 @@ sub get_controls_before
 
 	my $baseurl = URI->new( $self->{session}->get_uri );
 	$baseurl->query_form(
-		# cache => $cacheid,
+		cache => $cacheid,
 		exp => $escexp,
 		screen => $self->{processor}->{screenid},
 		dataset => $self->search_dataset->id,
@@ -473,7 +473,7 @@ sub from
 			{
 				session => $session,
 				dataset => $self->search_dataset,
-				keep_cache => 0,
+				keep_cache => $self->{session}->config("search_uses_cache_tables"),
 				satisfy_all => $satisfy_all,
 				%{$sconf},
 				filters => [

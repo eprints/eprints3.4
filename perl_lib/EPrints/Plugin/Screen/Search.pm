@@ -469,11 +469,16 @@ sub from
 		{
 			EPrints->abort( "No available configuration for search type $format" );
 		}
+		my $keep_cache = $self->{session}->config("search_uses_cache_tables");
+		if(! defined $keep_cache)
+		{
+			$keep_cache = 1;
+		}
 		$searchexp = $session->plugin( "Search" )->plugins(
 			{
 				session => $session,
 				dataset => $self->search_dataset,
-				keep_cache => $self->{session}->config("search_uses_cache_tables"),
+				keep_cache => $keep_cache,
 				satisfy_all => $satisfy_all,
 				%{$sconf},
 				filters => [

@@ -53,10 +53,11 @@ sub query_form {
             $key =~ s/ /+/g;
             $vals = [ref($vals) eq "ARRAY" ? @$vals : $vals];
             for my $val (@$vals) {
-                $val = '' unless defined $val;
-                $val =~ s/([;\/?:@&=+,\$\[\]%])/ URI::Escape::escape_char($1)/eg;
-                $val =~ s/ /+/g;
-                push(@query, "$key=$val");
+                if(defined $val){
+                    $val =~ s/([;\/?:@&=+,\$\[\]%])/ URI::Escape::escape_char($1)/eg;
+                    $val =~ s/ /+/g;
+                    push(@query, "$key=$val");
+                }
             }
         }
 

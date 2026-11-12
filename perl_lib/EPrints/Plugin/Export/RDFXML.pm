@@ -177,7 +177,7 @@ sub attr
 
 	if( $obj_id =~ /^<(.*)>$/ ) { return xmlesc($1); }
 
-	if( ! $obj_id =~ m/:/ ) 
+	if( $obj_id !~ m/:/ ) 
 	{ 
 		warn "Neither <uri> nor namespace prefix in RDF data: $obj_id";
 		return xmlesc($obj_id);

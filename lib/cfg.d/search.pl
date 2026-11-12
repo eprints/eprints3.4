@@ -17,6 +17,9 @@ $c->{latest_citation} = "default";
 #   eprint_search_advanced.pl
 #   eprint_search_simple.pl
 
+# Use the cache tables in the database to cache search.
+# Really not very useful anymore with the AI bot spam, so BEVIS will disable it to improve the nginx cache
+$c->{search_uses_cache_tables} = 1;
 
 =head1 COPYRIGHT
 

@@ -16,14 +16,14 @@ sub query
     $$self =~ m,^([^?\#]*)(?:\?([^\#]*))?(.*)$,s or die;
 
     if (@_) {
-	my $q = shift;
-	$$self = $1;
-	if (defined $q) {
-	    $q =~ s/([^$URI::uric])/ URI::Escape::escape_char($1)/ego;
-	    utf8::downgrade($q);
-	    $$self .= "?$q";
-	}
-	$$self .= $3;
+    my $q = shift;
+    $$self = $1;
+    if (defined $q) {
+        $q =~ s/([^$URI::uric])/ URI::Escape::escape_char($1)/ego;
+        utf8::downgrade($q);
+        $$self .= "?$q";
+    }
+    $$self .= $3;
     }
     $2;
 }
@@ -49,16 +49,21 @@ sub query_form {
         my @query;
         while (my($key,$vals) = splice(@_, 0, 2)) {
             $key = '' unless defined $key;
-	    $key =~ s/([;\/?:@&=+,\$\[\]%])/ URI::Escape::escape_char($1)/eg;
-	    $key =~ s/ /+/g;
-	    $vals = [ref($vals) eq "ARRAY" ? @$vals : $vals];
+            $key =~ s/([;\/?:@&=+,\$\[\]%])/ URI::Escape::escape_char($1)/eg;
+            $key =~ s/ /+/g;
+            $vals = [ref($vals) eq "ARRAY" ? @$vals : $vals];
             for my $val (@$vals) {
-                $val = '' unless defined $val;
-		$val =~ s/([;\/?:@&=+,\$\[\]%])/ URI::Escape::escape_char($1)/eg;
-                $val =~ s/ /+/g;
-                push(@query, "$key=$val");
+                if(defined $val){
+                    $val =~ s/([;\/?:@&=+,\$\[\]%])/ URI::Escape::escape_char($1)/eg;
+                    $val =~ s/ /+/g;
+                    push(@query, "$key=$val");
+                }
             }
         }
+
+        # simple alphabetical sort of parameters so we can cache URLs more easily
+        @query = sort @query;
+
         if (@query) {
             unless ($delim) {
                 $delim = $1 if $old && $old =~ /([&;])/;
@@ -83,10 +88,10 @@ sub query_keywords
     my $old = $self->query;
     if (@_) {
         # Try to set query string
-	my @copy = @_;
-	@copy = @{$copy[0]} if @copy == 1 && ref($copy[0]) eq "ARRAY";
-	for (@copy) { s/([;\/?:@&=+,\$\[\]%])/ URI::Escape::escape_char($1)/eg; }
-	$self->query(@copy ? join('+', @copy) : undef);
+    my @copy = @_;
+    @copy = @{$copy[0]} if @copy == 1 && ref($copy[0]) eq "ARRAY";
+    for (@copy) { s/([;\/?:@&=+,\$\[\]%])/ URI::Escape::escape_char($1)/eg; }
+    $self->query(@copy ? join('+', @copy) : undef);
     }
     return if !defined($old) || !defined(wantarray);
     return if $old =~ /=/;  # not keywords, but a form

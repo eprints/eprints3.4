@@ -1568,6 +1568,11 @@ sub render_citation
 	my @pvals = @params{@pkeys};
 	my @parr = ( @pkeys, @pvals );
 
+	# Citations contain phrases (and dates, names...) rendered in the current
+	# language: the language must be part of the cache key, or a citation
+	# cached in one language is served in all the others.
+	push @parr, "__langid", $self->{session}->get_langid;
+
 	# Make into storable context string for the database.
 	my $context =  MIME::Base64::encode_base64( nfreeze( \@parr ) );
 	# Remove any new lines that will break search of existing citation cache with same context

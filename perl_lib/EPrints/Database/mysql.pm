@@ -725,7 +725,10 @@ sub ci_lookup
 
 	return if !defined $value; # Can't do a CI match on 'NULL'
 
-	my $table = $field->dataset->get_sql_table_name;
+	# A multiple field is stored in its own sub-table.
+	my $table = $field->property( "multiple" )
+		? $field->dataset->get_sql_sub_table_name( $field )
+		: $field->dataset->get_sql_table_name;
 	
 	my $sql =
 		"SELECT ".$self->quote_identifier( $field->get_sql_name ).

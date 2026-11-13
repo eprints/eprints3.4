@@ -15,6 +15,10 @@ sub new
 	bless $self, $class;
 
 	$self->{workflow} = $workflow;
+	# The workflow holds its stages: a strong reference back would be a
+	# cycle, never freed (see _read_components).
+	Scalar::Util::weaken( $self->{workflow} )
+		if defined &Scalar::Util::weaken;
 	$self->{session} = $workflow->{session};
 	$self->{item} = $workflow->{item};
 	$self->{repository} = $self->{session}->get_repository;
@@ -54,7 +58,8 @@ sub _read_components
 		if( $name eq "component" )
 		{
 
-			# Nb. Cyclic refs on stage & workflow. May mess up g.c.
+			# Nb. stage and workflow references are weakened below and
+			# in new(), to avoid reference cycles.
 			my %params = (
 					session=>$self->{session}, 
 					xml_config=>$stage_node, 
@@ -112,6 +117,11 @@ sub _read_components
 					problems => [$plugin->problems],
 				);
 			}
+
+			# The stage holds its components: weaken the component's
+			# reference back to the stage, or the cycle is never freed.
+			Scalar::Util::weaken( $plugin->{stage} )
+				if ref $plugin->{stage} && defined &Scalar::Util::weaken;
 
 			if ($self->{workflow}->{processor}->{required_fields_only}) {
 				if ($plugin->is_required()) {

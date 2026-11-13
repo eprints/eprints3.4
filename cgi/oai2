@@ -947,6 +947,12 @@ END
 		}
 	}
 
+	# The cursor is the number of records already returned before this
+	# response (OAI-PMH 2.0, 3.5.1), not the eprintid the next page starts
+	# from: carry the count in the token. Older tokens without it start at 0.
+	my $cursor = defined $args->{cursor} && $args->{cursor} =~ /^\d+$/ ? $args->{cursor} : 0;
+	$token{cursor} = $cursor + scalar @records;
+
 	# will show a blank list if total is % $PAGESIZE
 	if( $list->count > $PAGESIZE )
 	{
@@ -956,7 +962,18 @@ END
 			serialise_resumptiontoken( $repo, \%token ),
 			expirationDate => EPrints::Time::get_iso_timestamp( time + 86400 ),
 			completeListSize => $fulllist->count,
-			cursor => $args->{offset} ? $args->{offset} : 0,
+			cursor => $cursor,
+			) );
+	}
+	elsif( defined $repo->param( "resumptionToken" ) )
+	{
+		# The response that completes a list obtained with resumption tokens
+		# must include an empty resumptionToken element (OAI-PMH 2.0, 3.5).
+		$response->appendChild( $repo->xhtml->data_element(
+			"resumptionToken",
+			"",
+			completeListSize => $fulllist->count,
+			cursor => $cursor,
 			) );
 	}
 

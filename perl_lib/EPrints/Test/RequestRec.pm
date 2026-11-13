@@ -68,6 +68,40 @@ sub headers_out
 	return $self->{headers_out} ||= {};
 }
 
+# Client address: EPrints::Repository::remote_ip() uses useragent_ip when
+# the request can() it, and would otherwise call $r->connection, which this
+# fake request does not have.
+sub useragent_ip
+{
+	my( $self ) = @_;
+
+	return $self->{useragent_ip} ||= "127.0.0.1";
+}
+
+sub path_info
+{
+	my( $self ) = @_;
+
+	$self->{path_info} = $_[1] if @_ == 2;
+
+	return $self->{path_info} || "";
+}
+
+# Per-request notes, as Apache2::RequestRec::pnotes: with no key returns the
+# hash, with a key returns or sets its value.
+sub pnotes
+{
+	my( $self, $key, $value ) = @_;
+
+	$self->{pnotes} ||= {};
+
+	return $self->{pnotes} if @_ == 1;
+
+	$self->{pnotes}->{$key} = $value if @_ == 3;
+
+	return $self->{pnotes}->{$key};
+}
+
 sub custom_response
 {
 	my( $self, $code, $url ) = @_;

@@ -28,6 +28,10 @@ $c->{oai} = $oai;
 # Base URL of OAI 2.0
 $oai->{v2}->{base_url} = $c->{perl_url}."/oai2";
 
+# Logo of the "View in <repository>" link of the human-readable version
+# (/cgi/oai2/html). Defaults to $c->{site_logo}.
+# $oai->{html_logo} = "/images/sitelogo.png";
+
 ##########################################################################
 # GENERAL OAI CONFIGURATION
 # 

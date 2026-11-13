@@ -26,6 +26,67 @@ my $eprints = EPrints->new;
 my $repo = $eprints->current_repository;
 exit( 0 ) unless defined $repo;
 
+# /cgi/oai2/css/<lang>: the raw XML's single CSS stylesheet: the styling
+#     (static/oai2.css from the archive, else from the core) followed by the
+#     texts (banner, "Error", "deleted") from the phrases. The language is in
+#     the URL (chosen by the XML response): no mixed-up cache.
+if( ( $repo->get_request->path_info // "" ) =~ m{^/css/([a-z]{2})/?$} )
+{
+	my $langid = $1;
+	$langid = $repo->config( "defaultlanguage" ) if !grep { $_ eq $langid } @{ $repo->config( "languages" ) || [] };
+	my $lang = $repo->get_language( $langid );
+	my $text = sub {
+		my( $id, %pins ) = @_;
+		my $t = EPrints::Utils::tree_to_utf8( $lang->phrase( $id, { map { $_ => $repo->make_text( $pins{$_} ) } keys %pins }, $repo ) );
+		$t =~ s/\s+/ /g;
+		$t =~ s/([\\"])/\\$1/g;
+		return qq{"$t"};
+	};
+	my $base = $repo->config( "base_url" ) . "/cgi/oai2/html";
+	$repo->send_http_header( content_type => "text/css; charset=UTF-8" );
+	$repo->get_request->headers_out->{"Cache-Control"} = "max-age=3600";
+	my $style = "\@namespace oai url(http://www.openarchives.org/OAI/2.0/);\n";
+	foreach my $dir ( $repo->config( "config_path" ) . "/static", $repo->config( "lib_path" ) . "/static" )
+	{
+		next if !open( my $fh, "<:encoding(UTF-8)", "$dir/oai2.css" );
+		$style = do { local $/; <$fh> };
+		close( $fh );
+		last;
+	}
+	$style =~ s/^\x{FEFF}//;
+	$style =~ s/^\s*\@charset[^;]*;\s*//;
+	binmode( STDOUT, ":utf8" );
+	# @charset first, then oai2.css (its @namespace before any rule).
+	print "\@charset \"UTF-8\";\n", $style, "\n",
+		"oai|OAI-PMH::before { content: " . $text->( "oai2_html:css:banner", base => $base ) . "; }\n",
+		"oai|error::before { content: " . $text->( "oai2_html:css:error" ) . " \" \" attr(code) \" : \"; }\n",
+		"oai|header[status=\"deleted\"]::before { content: " . $text->( "oai2_html:deleted" ) . "; }\n";
+	exit( 0 );
+}
+
+# /cgi/oai2/html without arguments: the human home page is Identify.
+if( ( $repo->get_request->path_info // "" ) =~ m{^/html/?$} && !grep { length( $repo->param( $_ ) // "" ) } $repo->param )
+{
+	$repo->redirect( $repo->current_url( path => "cgi" ) . "/oai2/html?verb=Identify" );
+	exit( 0 );
+}
+
+# HTML version? (package variables: reset on each request under
+#     mod_perl). $HTML_PAGES: ids of all records of the list, for paging
+#     (HTML version only).
+our $HTML_MODE = ( $repo->get_request->path_info // "" ) =~ m{^/html/?$} ? 1 : 0;
+our $HTML_PAGES = undef;
+# Language of the request: export plugins may change the session language
+# while building records (change_lang), the HTML page restores it.
+our $HTML_LANG = $repo->get_langid;
+# records per page of the HTML version ("n", never seen by OAI parsing).
+our @HTML_SIZES = ( 10, 25, 50, 100 );
+our $HTML_SIZE = 100;
+if( $HTML_MODE && defined( my $n = $repo->param( "n" ) ) )
+{
+	( $HTML_SIZE ) = ( grep( { $_ == ( $n =~ /^(\d+)$/ ? $1 : 0 ) } @HTML_SIZES ), 100 );
+}
+
 our $METADATAPREFIX_REGEXP = qr/^[A-Za-z0-9\-_\.!~\*'\(\)]+$/;
 our $IDENTIFIER_REGEXP = qr/^[a-z]+:.*$/;
 our $DATETIME_REGEXP = qr/^\d\d\d\d-\d\d-\d\d(T\d\d:\d\d:\d\dZ)?$/;
@@ -74,6 +135,7 @@ my @params = $repo->param;
 # check whether any parameters were repeated
 for(@params)
 {
+	next if $HTML_MODE && $_ eq "n";
 	my @values = $repo->param( $_ );
 	if( scalar(@values) > 1 )
 	{
@@ -205,14 +267,29 @@ else
 	$oai_pmh->appendChild( $response );
 }
 
+# /cgi/oai2/html: the same response, laid out for humans (linked from the
+# site, never from harvesters, which only use the base URL; the path is not
+# an OAI-PMH argument).
+if( $HTML_MODE )
+{
+	html_page( $repo, $oai_pmh, $verb, \%params, $url );
+	$repo->xml->dispose( $oai_pmh );
+	exit( 0 );
+}
+
 # send the response
 $repo->send_http_header( content_type=>"text/xml; charset=UTF-8" );
 
-my $xslt = $repo->current_url( path => "static" ) . "/oai2.xsl";
+# a CSS stylesheet, no longer XSLT: browsers drop XSLT (Chrome 158,
+#     2026-11-17) but keep xml-stylesheet with CSS. The browsable version is
+#     /cgi/oai2/html.
+# a single stylesheet, styling and texts (banner, "Error") in the
+#     session language.
+my $css = $repo->current_url( path => "cgi" ) . "/oai2/css/" . ( $repo->get_langid // "en" );
 
 binmode(STDOUT, ":utf8");
 print "<?xml version='1.0' encoding='UTF-8'?>\n",
-	"<?xml-stylesheet type='text/xsl' href='$xslt' ?>\n",
+	"<?xml-stylesheet type='text/css' href='$css' ?>\n",
 	$repo->xml->to_string( $oai_pmh, indent => 1 );
 
 $repo->xml->dispose( $oai_pmh );
@@ -720,7 +797,7 @@ sub _list
 {
 	my( $repo, $response, $args, $show_metadata ) = @_;
 
-	my $PAGESIZE = 100;
+	my $PAGESIZE = $HTML_MODE ? $HTML_SIZE : 100;
 
 	# different params depending if we have a resumptionToken
 	# or not
@@ -903,6 +980,15 @@ END
 	
 	my $list = $searchexp->perform_search();
 	my $fulllist = $fullsearchexp->perform_search();
+
+	# HTML version: all ids of the list, for paging (harvesting does none of
+	# this). Each page starts at a known id: its token is "offset=<id>".
+	if( $HTML_MODE )
+	{
+		my %base = %token;
+		delete $base{offset};
+		$HTML_PAGES = { ids => $fulllist->ids, base => \%base, size => $PAGESIZE };
+	}
 	my @records = $list->slice( 0, $PAGESIZE );
 
 	if( @records == 0 )
@@ -960,6 +1046,584 @@ END
 	}
 
 	return ();
+}
+
+
+######################################################################
+# HTML version (/cgi/oai2/html), without XSLT nor JavaScript (except the
+# optional "expand all" buttons): the OAI-PMH response already built, read
+# node by node and put in the page template.
+######################################################################
+
+sub _kids
+{
+	my( $node, $name ) = @_;
+	return grep { $_->nodeType == 1 && ( !defined $name || $_->localname eq $name ) } $node->childNodes;
+}
+
+sub _kid_text
+{
+	my( $node, $name ) = @_;
+	my( $kid ) = _kids( $node, $name );
+	return defined $kid ? $kid->textContent : undef;
+}
+
+# link to the HTML version with these arguments (fixed order).
+sub _html_url
+{
+	my( $repo, %args ) = @_;
+	my $base = $repo->current_url( path => "cgi" ) . "/oai2/html";
+	my @q = map { URI::Escape::uri_escape_utf8( $_ ) . "=" . URI::Escape::uri_escape_utf8( $args{$_} ) }
+		grep { defined $args{$_} && length $args{$_} }
+		qw( verb identifier metadataPrefix from until set resumptionToken );
+	push @q, "n=$HTML_SIZE" if $HTML_SIZE != 100 && !$args{_no_n} && @q;
+	return @q ? "$base?" . join( "&", @q ) : $base;
+}
+
+sub _link
+{
+	my( $repo, $href, $text, %attr ) = @_;
+	my $a = $repo->make_element( "a", href => $href, %attr );
+	$a->appendChild( ref $text ? $text : $repo->make_text( $text ) );
+	return $a;
+}
+
+sub _el
+{
+	my( $repo, $parent, $name, $content, %attr ) = @_;
+	my $el = $parent->appendChild( $repo->make_element( $name, %attr ) );
+	$el->appendChild( ref $content ? $content : $repo->make_text( $content ) ) if defined $content;
+	return $el;
+}
+
+# set spec in clear: sets from fields are hex-encoded; custom sets
+#     (cfg.d/oai.pl) are already in clear.
+sub _set_label
+{
+	my( $spec ) = @_;
+	my @parts = split /:/, $spec, -1;
+	return $spec if !@parts || grep { $_ !~ /^(?:[0-9A-Fa-f]{2})+$/ } @parts;
+	my @out;
+	foreach my $part ( @parts )
+	{
+		my $text = eval { Encode::decode( "UTF-8", pack( "H*", $part ), Encode::FB_CROAK() ) };
+		return $spec if !defined $text || $text =~ /[^\P{C}\t]/;
+		push @out, $text;
+	}
+	return join ":", @out;
+}
+
+sub _value
+{
+	my( $repo, $text ) = @_;
+	return $text =~ m{^\s*(https?://\S+)\s*$} ? _link( $repo, $1, $1 ) : $repo->make_text( $text );
+}
+
+# an element's attributes, all of them (namespace declarations and
+#     xsi:schemaLocation included), with their prefix.
+sub _attr_list
+{
+	my( $node ) = @_;
+	my @out;
+	foreach my $attr ( $node->attributes )
+	{
+		next if !defined $attr;
+		my $type = $attr->nodeType;
+		if( $type == 2 )
+		{
+			push @out, [ $attr->nodeName, $attr->value ];
+		}
+		elsif( $type == 18 )
+		{
+			# XML::LibXML::Namespace
+			my $prefix = $attr->declaredPrefix;
+			push @out, [ ( defined $prefix && length $prefix ? "xmlns:$prefix" : "xmlns" ), $attr->declaredURI // "" ];
+		}
+	}
+	# namespace declarations first, as usually written.
+	return ( ( grep { $_->[0] =~ /^xmlns(?::|$)/ } @out ), ( grep { $_->[0] !~ /^xmlns(?::|$)/ } @out ) );
+}
+
+# one "name: value" row of the tree.
+sub _row
+{
+	my( $repo, $parent, $name, $value, $class, $title ) = @_;
+	my $row = _el( $repo, $parent, "div", undef, class => "ep_oai_leaf" . ( $class ? " $class" : "" ) );
+	_el( $repo, $row, "span", $name, class => "ep_oai_name", ( defined $title ? ( title => $title ) : () ) );
+	my $vals = _el( $repo, $row, "span", undef, class => "ep_oai_vals" );
+	$vals->appendChild( ref $value ? $value : _value( $repo, $value ) );
+	return $row;
+}
+
+sub _clean
+{
+	my( $text ) = @_;
+	$text =~ s/\s+/ /g;
+	$text =~ s/^ | $//g;
+	return $text;
+}
+
+# XML tree for humans. Everything is shown:
+#     - an element with no attribute nor child = one "name: value" row;
+#       such siblings with the same name = one row, values listed;
+#     - otherwise a folding block; folded, it shows its name and a text
+#       preview (never the attributes); open, each attribute on its own
+#       row (@name), then the content in document order: elements, text,
+#       comments, processing instructions.
+#     Open down to depth $open.
+sub _tree
+{
+	my( $repo, $node, $depth, $open ) = @_;
+
+	my @attrs = _attr_list( $node );
+	my @content = grep {
+		my $t = $_->nodeType;
+		$t == 1 || $t == 7 || $t == 8 || ( ( $t == 3 || $t == 4 ) && $_->nodeValue =~ /\S/ )
+	} $node->childNodes;
+	my $ns = $node->namespaceURI // "";
+
+	if( !@attrs && !grep { $_->nodeType != 3 && $_->nodeType != 4 } @content )
+	{
+		return _row( $repo, $repo->make_doc_fragment, $node->nodeName, $node->textContent, undef, $ns );
+	}
+
+	my $details = $repo->make_element( "details", class => "ep_oai_node", ( $depth < $open ? ( open => "open" ) : () ) );
+	my $summary = _el( $repo, $details, "summary" );
+	_el( $repo, $summary, "span", $node->nodeName, class => "ep_oai_name", title => $ns );
+	# preview (first texts): a folded block says what it holds.
+	my @texts = grep { length } map { _clean( $_->nodeValue ) } $node->findnodes( ".//text()" );
+	if( @texts )
+	{
+		my $text = join " \x{2014} ", @texts[ 0 .. ( $#texts < 2 ? $#texts : 2 ) ];
+		$text = substr( $text, 0, 140 ) . "\x{2026}" if length( $text ) > 140;
+		_el( $repo, $summary, "span", $text, class => "ep_oai_preview" );
+	}
+	my $box = _el( $repo, $details, "div", undef, class => "ep_oai_kids" );
+
+	_row( $repo, $box, "\@$_->[0]", $_->[1], "ep_oai_attr" ) for @attrs;
+
+	my $plain = sub { $_[0]->nodeType == 1 && !_attr_list( $_[0] ) && !_kids( $_[0] ) && !grep { $_->nodeType == 7 || $_->nodeType == 8 } $_[0]->childNodes };
+	my $i = 0;
+	while( $i < @content )
+	{
+		my $kid = $content[$i];
+		my $type = $kid->nodeType;
+		if( $type == 3 || $type == 4 )
+		{
+			_row( $repo, $box, "#text", _clean( $kid->nodeValue ), "ep_oai_text" );
+			$i++;
+			next;
+		}
+		if( $type == 8 )
+		{
+			_row( $repo, $box, "<!-- -->", _clean( $kid->nodeValue ), "ep_oai_comment" );
+			$i++;
+			next;
+		}
+		if( $type == 7 )
+		{
+			_row( $repo, $box, "<?" . $kid->nodeName . "?>", _clean( $kid->nodeValue // "" ), "ep_oai_comment" );
+			$i++;
+			next;
+		}
+		my $j = $i;
+		$j++ while $plain->( $kid ) && $j + 1 < @content && $plain->( $content[$j + 1] ) && $content[$j + 1]->nodeName eq $kid->nodeName;
+		if( $j > $i )
+		{
+			my $ul = $repo->make_element( "ul", class => "ep_oai_list" );
+			_el( $repo, $ul, "li" )->appendChild( _value( $repo, $_->textContent ) ) for @content[ $i .. $j ];
+			_row( $repo, $box, $kid->nodeName, $ul, undef, $kid->namespaceURI // "" );
+		}
+		else
+		{
+			$box->appendChild( _tree( $repo, $kid, $depth + 1, $open ) );
+		}
+		$i = $j + 1;
+	}
+	return $details;
+}
+
+# a record (header only for ListIdentifiers): title, identifier, date,
+#     sets, links, then the metadata tree.
+sub _record
+{
+	my( $repo, $record, $prefix, $open ) = @_;
+
+	my( $header ) = $record->localname eq "header" ? ( $record ) : _kids( $record, "header" );
+	my( $metadata ) = _kids( $record, "metadata" );
+	my $id = defined $header ? _kid_text( $header, "identifier" ) // "" : "";
+	my $deleted = defined $header && ( $header->getAttribute( "status" ) // "" ) eq "deleted";
+
+	my $card = $repo->make_element( "article", class => "ep_oai_record" . ( $deleted ? " ep_oai_is_deleted" : "" ) );
+	# EPrints' DOM keeps prefixes in the name ("dc:title").
+	my( $title ) = defined $metadata ? grep { $_->nodeName =~ /(?:^|:)title$/ } $metadata->getElementsByTagName( "*" ) : ();
+	my $h = _el( $repo, $card, "h3", defined $title ? $title->textContent : $id, class => "ep_oai_title" );
+	_el( $repo, $h, "span", $repo->html_phrase( "oai2_html:deleted" ), class => "ep_oai_badge" ) if $deleted;
+
+	my $meta = _el( $repo, $card, "div", undef, class => "ep_oai_meta" );
+	_el( $repo, $meta, "code", $id );
+	if( defined $header && defined( my $ds = _kid_text( $header, "datestamp" ) ) )
+	{
+		_el( $repo, $meta, "span", $ds, class => "ep_oai_date" );
+	}
+	foreach my $spec ( defined $header ? map { $_->textContent } _kids( $header, "setSpec" ) : () )
+	{
+		$meta->appendChild( _link( $repo, _html_url( $repo, verb => "ListRecords", metadataPrefix => $prefix // "oai_dc", set => $spec ),
+			_set_label( $spec ), class => "ep_oai_pill" ) );
+	}
+	if( !$deleted && $id ne "" )
+	{
+		# the logo and the button alone; formats are in the page bar
+		#     (lists and single record).
+		my $links = _el( $repo, $card, "div", undef, class => "ep_oai_links" );
+		my $eid = EPrints::OpenArchives::from_oai_identifier( $repo, $id );
+		if( EPrints::Utils::is_set( $eid ) )
+		{
+			# the small repository logo alone; "View in <repository>" as title
+			#     and alt (no logo: the text); $c->{oai}->{html_logo}, else the
+			#     standard key site_logo (cfg.d/branding.pl).
+			my $text = EPrints::Utils::tree_to_utf8( $repo->html_phrase( "oai2_html:view" ) );
+			my $view = $repo->make_doc_fragment;
+			if( my $logo = $repo->config( "oai", "html_logo" ) || $repo->config( "site_logo" ) )
+			{
+				$logo = $repo->current_url( path => "static" ) . $logo if $logo =~ m{^/};
+				$view->appendChild( $repo->make_element( "img", src => $logo, alt => $text, title => $text, class => "ep_oai_logo" ) );
+			}
+			else
+			{
+				$view->appendChild( $repo->make_text( $text ) );
+			}
+			$links->appendChild( _link( $repo, $repo->current_url( path => "static" ) . "/id/eprint/$eid/", $view, class => "ep_oai_view" ) );
+		}
+	}
+	if( defined $metadata )
+	{
+		my( $root ) = _kids( $metadata );
+		# folded in lists ($open = 0), two levels open for a single
+		#     record; the button opens or closes the whole tree.
+		if( defined $root )
+		{
+			my $links = ( grep { ( $_->getAttribute( "class" ) // "" ) eq "ep_oai_links" } _kids( $card, "div" ) )[0]
+				// _el( $repo, $card, "div", undef, class => "ep_oai_links" );
+			$links->appendChild( _expand_button( $repo, "oai2_html:expand", "oai2_html:collapse" ) );
+		}
+		$card->appendChild( defined $root ? _tree( $repo, $root, 0, $open // 2 ) : $repo->html_phrase( "oai2_html:no_metadata" ) );
+	}
+	# the record's <about> blocks (rights, provenance...).
+	foreach my $about ( $record->localname eq "record" ? _kids( $record, "about" ) : () )
+	{
+		$card->appendChild( _tree( $repo, $about, 0, $open // 2 ) );
+	}
+	return $card;
+}
+
+# "expand all / collapse all" button (JavaScript; hidden without it,
+#     each block still opens by hand). Scope: its record, or the whole list.
+sub _expand_button
+{
+	my( $repo, $open_id, $close_id ) = @_;
+	return _el( $repo, $repo->make_doc_fragment, "button", $repo->phrase( $open_id ), type => "button", class => "ep_oai_btn ep_oai_expand",
+		"aria-expanded" => "false", "data-open" => $repo->phrase( $open_id ), "data-close" => $repo->phrase( $close_id ) );
+}
+
+sub _table
+{
+	my( $repo, $heads, $rows ) = @_;
+	my $table = $repo->make_element( "table", class => "ep_oai_table" );
+	my $tr = _el( $repo, $table, "tr" );
+	_el( $repo, $tr, "th", $repo->html_phrase( "oai2_html:col:$_" ) ) for @$heads;
+	foreach my $row ( @$rows )
+	{
+		my $r = _el( $repo, $table, "tr" );
+		_el( $repo, $r, "td", ref $_ ? $_ : $repo->make_text( $_ // "" ) ) for @$row;
+	}
+	return $table;
+}
+
+# paging. Each page starts at a known record id: its OAI token is
+#     "offset=<id>" with the list's arguments (page 1: no token).
+sub _pager
+{
+	my( $repo, $verb, $items ) = @_;
+
+	return undef if !defined $HTML_PAGES || !@$items;
+	my @ids = @{ $HTML_PAGES->{ids} };
+	my $size = $HTML_PAGES->{size};
+	my $base = $HTML_PAGES->{base};
+	my $pages = int( ( @ids + $size - 1 ) / $size );
+
+	my( $header ) = $items->[0]->localname eq "header" ? ( $items->[0] ) : _kids( $items->[0], "header" );
+	my $first = EPrints::OpenArchives::from_oai_identifier( $repo, _kid_text( $header, "identifier" ) // "" ) // 0;
+	my %at = map { $ids[$_] => $_ } 0 .. $#ids;
+	my $current = int( ( $at{$first} // 0 ) / $size );
+
+	my $url = sub {
+		my( $k ) = @_;
+		return _html_url( $repo, verb => $verb, %$base ) if $k == 0;
+		return _html_url( $repo, verb => $verb, resumptionToken => serialise_resumptiontoken( $repo, { %$base, offset => $ids[ $k * $size ] } ) );
+	};
+
+	my $nav = $repo->make_element( "nav", class => "ep_oai_pager" );
+	_el( $repo, $nav, "span", $repo->html_phrase( "oai2_html:pager:info",
+		page => $repo->make_text( $current + 1 ), pages => $repo->make_text( $pages ), n => $repo->make_text( scalar @ids ) ), class => "ep_oai_pager_info" );
+
+	# records per page: GET form (works without JavaScript, OK button);
+	#     the choice goes back to page 1 of the same list.
+	my $form = _el( $repo, $nav, "form", undef, method => "get", action => $repo->current_url( path => "cgi" ) . "/oai2/html", class => "ep_oai_size" );
+	$form->appendChild( $repo->make_element( "input", type => "hidden", name => "verb", value => $verb ) );
+	$form->appendChild( $repo->make_element( "input", type => "hidden", name => $_, value => $base->{$_} ) ) for grep { defined $base->{$_} } qw( metadataPrefix from until set );
+	my $label = _el( $repo, $form, "label" );
+	$label->appendChild( $repo->html_phrase( "oai2_html:per_page" ) );
+	my $select = _el( $repo, $label, "select", undef, name => "n", onchange => "this.form.submit()" );
+	_el( $repo, $select, "option", $_, value => $_, ( $_ == $HTML_SIZE ? ( selected => "selected" ) : () ) ) for @HTML_SIZES;
+	# same look as the page's other buttons (ep_oai_btn).
+	_el( $repo, $form, "button", $repo->html_phrase( "oai2_html:ok" ), type => "submit", class => "ep_oai_btn" );
+
+	return $nav if $pages < 2;
+
+	my $add = sub {
+		my( $k, $label, $class ) = @_;
+		if( $k < 0 || $k >= $pages || $k == $current )
+		{
+			_el( $repo, $nav, "span", $label, class => $class // "ep_oai_page_off" );
+		}
+		else
+		{
+			$nav->appendChild( _link( $repo, $url->( $k ), $label, class => "ep_oai_page" ) );
+		}
+	};
+	$add->( 0, $repo->html_phrase( "oai2_html:pager:first" ) );
+	$add->( $current - 1, $repo->html_phrase( "oai2_html:pager:prev" ) );
+	my %show = map { $_ => 1 } grep { $_ >= 0 && $_ < $pages } ( 0, 1, $current - 2 .. $current + 2, $pages - 2, $pages - 1 );
+	my $last = -1;
+	foreach my $k ( sort { $a <=> $b } keys %show )
+	{
+		_el( $repo, $nav, "span", "\x{2026}", class => "ep_oai_page_gap" ) if $k > $last + 1;
+		$add->( $k, $k + 1, $k == $current ? "ep_oai_page_on" : undef );
+		$last = $k;
+	}
+	$add->( $current + 1, $repo->html_phrase( "oai2_html:pager:next" ) );
+	$add->( $pages - 1, $repo->html_phrase( "oai2_html:pager:last" ) );
+	return $nav;
+}
+
+sub html_page
+{
+	my( $repo, $oai_pmh, $verb, $params, $base ) = @_;
+
+	$repo->change_lang( $HTML_LANG ) if defined $HTML_LANG && ( $repo->get_langid // "" ) ne $HTML_LANG;
+
+	my $page = $repo->make_doc_fragment;
+	my $prefix = $params->{metadataPrefix};
+	my $set = $params->{set};
+	if( defined $params->{resumptionToken} )
+	{
+		my %t = map { map { URI::Escape::uri_unescape( $_ ) } split /=/, $_, 2 } split /&/, URI::Escape::uri_unescape( $params->{resumptionToken} );
+		$prefix //= $t{metadataPrefix};
+		$set //= $t{set};
+	}
+
+	my $style = $page->appendChild( $repo->make_element( "style" ) );
+	$style->appendChild( $repo->make_text( <<'CSS' ) );
+.ep_oai { --oai-blue: #2b6cb0; --oai-line: #d0d7de; --oai-muted: #59636e; --oai-soft: #f6f8fa; max-width: 70em; }
+.ep_oai_intro { color: var(--oai-muted); }
+.ep_oai_nav { display: flex; flex-wrap: wrap; gap: .3em; margin: .8em 0 1em; padding-bottom: .6em; border-bottom: 1px solid var(--oai-line); }
+.ep_oai_nav a, .ep_oai_pill { display: inline-block; padding: .2em .7em; border: 1px solid var(--oai-line); border-radius: 999px; text-decoration: none; color: var(--oai-blue); }
+.ep_oai_nav a.ep_oai_on, .ep_oai_pill.ep_oai_on { background: var(--oai-blue); border-color: var(--oai-blue); color: #fff; }
+.ep_oai_bar { display: flex; flex-wrap: wrap; align-items: center; gap: .3em .5em; margin: .5em 0; color: var(--oai-muted); }
+.ep_oai_pill { font-size: .85em; padding: .05em .6em; }
+.ep_oai_error { margin: 1em 0; padding: .6em .9em; background: #fdecea; color: #8a1c13; border-left: 4px solid #c62828; }
+.ep_oai_record { margin: 1em 0; padding: .8em 1em; border: 1px solid var(--oai-line); border-radius: 6px; }
+.ep_oai_record.ep_oai_is_deleted { background: var(--oai-soft); color: var(--oai-muted); }
+.ep_oai_title { margin: 0 0 .3em; font-size: 1.1em; }
+.ep_oai_badge { margin-left: .5em; padding: .05em .5em; border-radius: 4px; background: #fdecea; color: #8a1c13; font-size: .8em; font-weight: 400; }
+.ep_oai_meta { display: flex; flex-wrap: wrap; align-items: center; gap: .3em .6em; font-size: .9em; color: var(--oai-muted); }
+.ep_oai_links { display: flex; flex-wrap: wrap; align-items: center; gap: .4em 1em; margin: .5em 0 .3em; font-size: .9em; }
+.ep_oai_view { display: inline-flex; align-items: center; }
+.ep_oai_logo { height: 1.3em; width: auto; vertical-align: middle; }
+.ep_oai_btn { display: inline-block; width: auto; margin: 0; padding: .1em .7em; border: 1px solid var(--oai-blue); border-radius: 4px; background: #fff; color: var(--oai-blue); font: inherit; font-size: .9em; line-height: 1.5; cursor: pointer; }
+.ep_oai_btn:hover, .ep_oai_btn:focus-visible { background: var(--oai-blue); color: #fff; }
+.ep_oai_expand { display: none; }
+.ep_oai_js .ep_oai_expand { display: inline-block; }
+.ep_oai_expand[aria-expanded="true"] { background: var(--oai-blue); color: #fff; }
+.ep_oai_expand_all { margin: .5em 0; }
+.ep_oai_node > summary { cursor: pointer; padding: .15em 0; }
+.ep_oai_kids { margin-left: .45em; padding-left: .9em; border-left: 2px solid var(--oai-line); }
+.ep_oai_leaf { display: grid; grid-template-columns: minmax(7em, max-content) 1fr; gap: 1em; padding: .2em 0; border-bottom: 1px dotted var(--oai-line); }
+.ep_oai_leaf:last-child { border-bottom: 0; }
+.ep_oai_name { color: var(--oai-blue); font-weight: 600; font-size: .9em; }
+.ep_oai_vals { margin: 0; padding: 0; list-style: none; overflow-wrap: anywhere; white-space: pre-line; }
+.ep_oai_vals li + li { margin-top: .2em; }
+.ep_oai_attr > .ep_oai_name { color: var(--oai-muted); font-weight: 400; font-style: italic; }
+.ep_oai_attr > .ep_oai_vals { color: var(--oai-muted); font-size: .9em; }
+.ep_oai_text > .ep_oai_name, .ep_oai_comment > .ep_oai_name { color: var(--oai-muted); font-weight: 400; }
+.ep_oai_comment > .ep_oai_vals { color: var(--oai-muted); font-style: italic; }
+.ep_oai_list { margin: 0; padding: 0; list-style: none; }
+.ep_oai_list li + li { margin-top: .2em; }
+.ep_oai_table { border-collapse: collapse; width: 100%; margin: .4em 0 1.2em; }
+.ep_oai_table th, .ep_oai_table td { text-align: left; vertical-align: top; padding: .35em .6em; border-bottom: 1px solid var(--oai-line); overflow-wrap: anywhere; }
+.ep_oai_pager { display: flex; flex-wrap: wrap; align-items: center; gap: .3em; margin: 1em 0; }
+.ep_oai_pager_info { color: var(--oai-muted); font-size: .9em; }
+.ep_oai_size { flex-basis: 100%; order: -1; display: flex; flex-wrap: wrap; align-items: center; gap: .4em; margin: 0; font-size: .9em; color: var(--oai-muted); }
+.ep_oai_pager_info { order: -2; flex-basis: 100%; }
+.ep_oai_size select { margin-left: .3em; }
+.ep_oai_page, .ep_oai_page_on, .ep_oai_page_off { display: inline-block; min-width: 2em; padding: .2em .55em; border: 1px solid var(--oai-line); border-radius: 4px; text-align: center; text-decoration: none; }
+.ep_oai_page { color: var(--oai-blue); }
+.ep_oai_page_on { background: var(--oai-blue); border-color: var(--oai-blue); color: #fff; font-weight: 600; }
+.ep_oai_page_off { color: var(--oai-line); }
+.ep_oai_page_gap { padding: 0 .2em; color: var(--oai-muted); }
+.ep_oai_setlist { display: flex; flex-wrap: wrap; gap: .3em .5em; margin: .3em 0 1.2em; padding: 0; list-style: none; }
+.ep_oai_setlist a { display: inline-block; padding: .15em .7em; border: 1px solid var(--oai-line); border-radius: 999px; text-decoration: none; color: var(--oai-blue); }
+.ep_oai_setlist a:hover { border-color: var(--oai-blue); }
+.ep_oai_preview { margin-left: .6em; color: var(--oai-muted); font-size: .85em; }
+.ep_oai_node[open] > summary > .ep_oai_preview { display: none; }
+CSS
+
+	my $wrap = _el( $repo, $page, "div", undef, class => "ep_oai" );
+	my $intro = _el( $repo, $wrap, "p", undef, class => "ep_oai_intro" );
+	$intro->appendChild( $repo->html_phrase( "oai2_html:intro", base => $repo->make_text( $base ) ) );
+	$intro->appendChild( $repo->make_text( " " ) );
+	my $xml_url = $repo->current_url( path => "cgi" ) . "/oai2" . ( ( _html_url( $repo, verb => $verb eq "error" ? undef : $verb, %$params, _no_n => 1 ) =~ /(\?.*)\z/ )[0] // "" );
+	$intro->appendChild( _link( $repo, $xml_url, $repo->html_phrase( "oai2_html:view_xml" ) ) );
+
+	my $nav = _el( $repo, $wrap, "nav", undef, class => "ep_oai_nav" );
+	# no "Identifiers": records show them (ListIdentifiers is still served).
+	foreach my $v ( qw( Identify ListSets ListMetadataFormats ListRecords ) )
+	{
+		my %a = ( verb => $v );
+		$a{metadataPrefix} = $prefix // "oai_dc" if $v =~ /^List(Identifiers|Records)$/;
+		$a{set} = $set if $v =~ /^List(Identifiers|Records)$/ && defined $set;
+		$nav->appendChild( _link( $repo, _html_url( $repo, %a ), $repo->html_phrase( "oai2_html:verb:$v" ),
+			( $v eq $verb && !defined $params->{identifier} ? ( class => "ep_oai_on" ) : () ) ) );
+	}
+
+	my @formats = sort map { $_->param( "metadataPrefix" ) } $repo->get_plugins( metadataPrefix => "*", is_advertised => 1 );
+
+	# current format and set, for lists and records.
+	if( $verb =~ /^(ListIdentifiers|ListRecords|GetRecord)$/ )
+	{
+		my $bar = _el( $repo, $wrap, "div", undef, class => "ep_oai_bar" );
+		$bar->appendChild( $repo->html_phrase( "oai2_html:formats_label" ) );
+		foreach my $p ( @formats )
+		{
+			my %a = ( verb => $verb, metadataPrefix => $p );
+			$a{identifier} = $params->{identifier} if $verb eq "GetRecord";
+			$a{set} = $set if $verb ne "GetRecord";
+			$a{$_} = $params->{$_} for grep { defined $params->{$_} && $verb ne "GetRecord" } qw( from until );
+			$bar->appendChild( _link( $repo, _html_url( $repo, %a ), $p, class => "ep_oai_pill" . ( defined $prefix && $p eq $prefix ? " ep_oai_on" : "" ) ) );
+		}
+		if( defined $set && $verb ne "GetRecord" )
+		{
+			my $sbar = _el( $repo, $wrap, "div", undef, class => "ep_oai_bar" );
+			$sbar->appendChild( $repo->html_phrase( "oai2_html:set_label" ) );
+			_el( $repo, $sbar, "span", _set_label( $set ), class => "ep_oai_pill ep_oai_on" );
+			$sbar->appendChild( _link( $repo, _html_url( $repo, verb => $verb, metadataPrefix => $prefix ), "\x{2715}" ) );
+		}
+	}
+
+	my @errors = _kids( $oai_pmh, "error" );
+	foreach my $e ( @errors )
+	{
+		my $div = _el( $repo, $wrap, "div", undef, class => "ep_oai_error" );
+		_el( $repo, $div, "strong", $repo->html_phrase( "oai2_html:error" ) );
+		$div->appendChild( $repo->make_text( " " . ( $e->getAttribute( "code" ) // "" ) . " : " . $e->textContent ) );
+	}
+
+	my( $response ) = @errors ? () : _kids( $oai_pmh, $verb );
+	if( defined $response )
+	{
+		if( $verb eq "Identify" )
+		{
+			my $box = _el( $repo, $wrap, "div", undef, class => "ep_oai_record" );
+			foreach my $f ( _kids( $response ) )
+			{
+				$box->appendChild( $f->localname eq "description" ? _tree( $repo, ( _kids( $f ) )[0] // $f, 1, 2 ) : _tree( $repo, $f, 0, 1 ) );
+			}
+		}
+		elsif( $verb eq "ListSets" )
+		{
+			# one list of links per group: the link carries the OAI spec, the
+			#     text is the name ("2021" under "Year"); custom sets first, then
+			#     one group per field.
+			my( @custom, %by, @order );
+			foreach my $s ( _kids( $response, "set" ) )
+			{
+				my $spec = _kid_text( $s, "setSpec" ) // "";
+				my $label = _set_label( $spec );
+				my $name = _kid_text( $s, "setName" ) // $label;
+				my $url = _html_url( $repo, verb => "ListRecords", metadataPrefix => "oai_dc", set => $spec );
+				if( $label =~ /^([^=]+)=(.*)$/ )
+				{
+					my( $key, $value ) = ( $1, $2 );
+					my( $title, $text ) = $name =~ /^(.*?) = (.*)$/ ? ( $1, $2 ) : ( $key, $value );
+					push @order, $key if !$by{$key};
+					$by{$key}->{title} //= $title;
+					push @{ $by{$key}->{sets} }, [ $value, $text, $url ];
+				}
+				else
+				{
+					push @custom, [ $name, $name, $url ];
+				}
+			}
+			my $list = sub {
+				my( $title, $sets ) = @_;
+				_el( $repo, $wrap, "h3", $title );
+				my $ul = _el( $repo, $wrap, "ul", undef, class => "ep_oai_setlist" );
+				_el( $repo, $ul, "li", _link( $repo, $_->[2], $_->[1] ) ) for @$sets;
+			};
+			$list->( $repo->html_phrase( "oai2_html:custom_sets" ), \@custom ) if @custom;
+			foreach my $key ( @order )
+			{
+				my @sets = sort { $b->[0] =~ /^\d+$/ && $a->[0] =~ /^\d+$/ ? $b->[0] <=> $a->[0] : lc $a->[1] cmp lc $b->[1] } @{ $by{$key}->{sets} };
+				$list->( $by{$key}->{title}, \@sets );
+			}
+		}
+		elsif( $verb eq "ListMetadataFormats" )
+		{
+			$wrap->appendChild( _table( $repo, [qw( prefix schema namespace )], [ map {
+				my $p = _kid_text( $_, "metadataPrefix" ) // "";
+				my $s = _kid_text( $_, "schema" ) // "";
+				[ _link( $repo, defined $params->{identifier}
+						? _html_url( $repo, verb => "GetRecord", identifier => $params->{identifier}, metadataPrefix => $p )
+						: _html_url( $repo, verb => "ListRecords", metadataPrefix => $p ), $p ),
+					_value( $repo, $s ), _kid_text( $_, "metadataNamespace" ) ]
+			} _kids( $response, "metadataFormat" ) ] ) );
+		}
+		else
+		{
+			my @items = _kids( $response, $verb eq "ListIdentifiers" ? "header" : "record" );
+			my $pager = $verb ne "GetRecord" ? _pager( $repo, $verb, \@items ) : undef;
+			$wrap->appendChild( $pager->cloneNode( 1 ) ) if defined $pager;
+			if( $verb ne "GetRecord" && grep { _kids( $_, "metadata" ) } @items )
+			{
+				_el( $repo, $wrap, "div", undef, class => "ep_oai_expand_all" )->appendChild( _expand_button( $repo, "oai2_html:expand_all", "oai2_html:collapse_all" ) );
+			}
+			$wrap->appendChild( _record( $repo, $_, $prefix, $verb eq "GetRecord" ? 2 : 0 ) ) for @items;
+			$wrap->appendChild( $pager ) if defined $pager && @items > 5;
+		}
+	}
+
+	my $script = $wrap->appendChild( $repo->make_element( "script" ) );
+	$script->appendChild( $repo->make_text( <<'JS' ) );
+document.documentElement.classList.add('ep_oai_js');
+document.addEventListener('click', function (e) {
+	var b = e.target.closest('.ep_oai_expand');
+	if (!b) return;
+	var box = b.closest('.ep_oai_record') || b.closest('.ep_oai');
+	var open = b.getAttribute('aria-expanded') !== 'true';
+	box.querySelectorAll('details').forEach(function (d) { d.open = open; });
+	box.querySelectorAll('.ep_oai_expand').forEach(function (x) {
+		x.setAttribute('aria-expanded', open ? 'true' : 'false');
+		x.textContent = open ? x.getAttribute('data-close') : x.getAttribute('data-open');
+	});
+});
+JS
+
+	# no indexing: robots would walk all of ListRecords.
+	$repo->get_request->headers_out->{"X-Robots-Tag"} = "noindex, nofollow";
+	my $title = $repo->html_phrase( "oai2_html:title", verb => $repo->make_text( $verb eq "error" ? "?" : $verb ) );
+	$repo->prepare_page( { title => $title, page => $page }, page_id => "oai2_html" );
+	$repo->send_page;
 }
 
 1;

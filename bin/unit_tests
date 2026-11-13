@@ -18,7 +18,7 @@ B<unit_tests> - Unit testing for EPrints
 
 =head1 SYNOPSIS
 
-B<check_xapian> I<repository_id> [B<options>] 
+B<unit_tests> [I<repository_id>] [B<options>] [I<test_file> ...]
 
 =head1 DESCRIPTION
 
@@ -102,6 +102,17 @@ my @test_files = grep { -f "$test_path/$_" && $_ !~ /^\./ && $_ =~ /\.pl$/ } rea
 closedir( DIR );
 
 @test_files = sort { $a cmp $b } @test_files;
+
+# The documented repository_id argument: a first argument that is not a test
+# file is the repository to test against, handed to EPrints::Test (see
+# get_test_id) through the environment of the test scripts.
+my %is_test = map { $_ => 1, substr($_,0,-3) => 1 } @test_files;
+if( @todo && !$is_test{$todo[0]} )
+{
+	$ENV{EPRINTS_TEST_REPOSITORY} = shift @todo;
+	%todo = map { $_ => 1 } @todo;
+}
+
 if( scalar(@todo) )
 {
     @test_files = grep { $todo{$_} or $todo{substr($_,0,-3)} } @test_files;

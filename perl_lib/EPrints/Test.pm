@@ -28,7 +28,8 @@ sub init
 
 =item $repoid = EPrints::Test::get_test_id()
 
-Returns the first repository id.
+Returns the repository id to test against: C<$ENV{EPRINTS_TEST_REPOSITORY}>
+if set (see B<bin/unit_tests>), otherwise the first repository id.
 
 =cut
 
@@ -40,6 +41,14 @@ sub get_test_id
 	{
 		EPrints::abort "Requires at least one functioning repository";
 	}
+
+	my $wanted = $ENV{EPRINTS_TEST_REPOSITORY};
+	if( defined $wanted && length $wanted )
+	{
+		return $wanted if grep { $_ eq $wanted } @ids;
+		EPrints::abort "EPRINTS_TEST_REPOSITORY=$wanted is not a repository id (have: @ids)";
+	}
+
 	return $ids[0];
 }
 

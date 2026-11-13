@@ -400,6 +400,28 @@ sub properties_from
 	$processor->{template} = $sconf->{template} if defined $sconf->{template};
 }
 
+# Shows the Error screen with a 404 status when the searchid has no search
+# configuration. The value comes from the URL: it is not shown in the page,
+# and is logged truncated, with control characters replaced.
+sub unknown_searchid
+{
+	my( $self ) = @_;
+
+	my $session = $self->{session};
+	my $processor = $self->{processor};
+
+	my $logged = $processor->{searchid};
+	$logged = "" if !defined $logged;
+	$logged = substr( $logged, 0, 80 );
+	$logged =~ s/[[:cntrl:]]/?/g;
+	$session->log( "No search configuration for searchid \"$logged\" in dataset " . $processor->{dataset}->base_id );
+
+	$processor->add_message( "error", $self->html_phrase( "unknown_searchid" ) );
+	$processor->{screenid} = "Error";
+	EPrints::Apache::AnApache::send_hidden_status_line( $session->get_request, 404 )
+		if $session->get_online;
+}
+
 sub default_search_config
 {
 	my( $self ) = @_;
@@ -464,11 +486,14 @@ sub from
 	my $searchexp = $processor->{search};
 	if( !defined $searchexp )
 	{
-		my $format = $processor->{searchid} . "/" . $processor->{dataset}->base_id;
+		# An unknown searchid comes from the URL (e.g. /cgi/search/archive/foo,
+		# typed or tried by a robot): answer 404, not a 500 with a stack trace.
 		if( !defined $sconf )
 		{
-			EPrints->abort( "No available configuration for search type $format" );
+			$self->unknown_searchid;
+			return;
 		}
+		my $format = $processor->{searchid} . "/" . $processor->{dataset}->base_id;
 		my $keep_cache = $self->{session}->config("search_uses_cache_tables");
 		if(! defined $keep_cache)
 		{

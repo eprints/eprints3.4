@@ -160,7 +160,15 @@ sub cache_list_items
                         push @item_list_tmp, $item if defined $item && defined $item->{position};
                 }
                 $item_list = \@item_list_tmp;
-                @$item_list = sort { $a->{position} <=> $b->{position} } @$item_list;
+                # Ties are broken by screen id then action: the lists are built
+                # from hashes, whose order differs between Apache children, so
+                # items with the same position would otherwise swap places from
+                # one request to the next.
+                @$item_list = sort {
+                        $a->{position} <=> $b->{position}
+                        || $a->{screen_id} cmp $b->{screen_id}
+                        || ( defined $a->{action} ? $a->{action} : "" ) cmp ( defined $b->{action} ? $b->{action} : "" )
+                } @$item_list;
 	}
 
 	return $session->get_plugin_factory->cache( "screen_lists", $screen_lists );

@@ -233,8 +233,16 @@ Clean up old caches for specified C<$repo>.
 
 Returns the number of caches dropped.
 
+When there are more than C<cache_max> caches, the oldest ones (by
+C<cachemapid>) are dropped, but never one less than
+C<$EPrints::DataObj::Cachemap::GRACE> seconds (60) old, so the number of
+caches may briefly exceed C<cache_max>.
+
 =cut
 ######################################################################
+
+# Minimum age, in seconds, of a cache dropped to enforce cache_max.
+our $GRACE = 60;
 
 sub cleanup
 {
@@ -265,8 +273,15 @@ sub cleanup
 		my $count = $repo->database->count_table( $dataset->get_sql_table_name );
 		if( $count >= $cache_max )
 		{
+			# Never drop a cache created in the last $GRACE seconds: it may
+			# still be being filled by another request. Order by cachemapid
+			# (strictly increasing) rather than created, which has a one
+			# second resolution and so many ties during a burst of searches.
 			my $list = $dataset->search(
-				custom_order => "created", # oldest first
+				filters => [
+					{ meta_fields => [qw( created )], value => "..".( time() - $GRACE ) },
+				],
+				custom_order => "cachemapid", # oldest first
 				limit => ($count - ($cache_max-1))
 			);
 			$list->map( sub {

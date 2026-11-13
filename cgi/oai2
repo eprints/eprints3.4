@@ -791,8 +791,9 @@ sub _list
 	}
 
 	my $ds = $repo->dataset( "eprint" );
-	my $filters = $repo->config( "oai", "filters" );
-	$filters = [] unless defined $filters;
+	# Copy: under mod_perl the configuration persists between requests, and
+	# the pushes below would otherwise grow $c->{oai}->{filters} every time.
+	my $filters = [ @{ $repo->config( "oai", "filters" ) || [] } ];
 
 	push @$filters, {
 		meta_fields => [qw( datestamp )],

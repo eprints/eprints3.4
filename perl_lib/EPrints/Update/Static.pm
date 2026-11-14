@@ -25,6 +25,7 @@ Update static web pages on demand.
 package EPrints::Update::Static;
 
 use File::Find;
+use File::Temp ();
 
 use strict;
 
@@ -260,8 +261,14 @@ sub update_auto
 
 	EPrints::Platform::mkdir( $target_dir );
 
+	# Write to a temporary file in the same directory, then rename() it over
+	# $target: concurrent requests (other Apache children or threads) must
+	# never serve a truncated, partly written auto.js/auto.css. tempfile()
+	# opens with O_EXCL, so the name is unique across threads, unlike $$.
+	my( $fh, $tmp_target ) = eval { File::Temp::tempfile( "$target.XXXXXXXX", UNLINK => 0 ) };
+	EPrints::abort( "Can't write to $target: $@" ) if !defined $fh;
 	# to improve speed use raw read/write
-	open(my $fh, ">:raw", $target) or EPrints::abort( "Can't write to $target: $!" );
+	binmode( $fh, ":raw" );
 
 	print $fh Encode::encode_utf8($opts->{prefix}) if defined $opts->{prefix};
 
@@ -281,7 +288,16 @@ sub update_auto
 
 	print $fh Encode::encode_utf8($opts->{postfix}) if defined $opts->{postfix};
 
-	close($fh);
+	close($fh) or EPrints::abort( "Can't write to $tmp_target: $!" );
+
+	# tempfile() creates the file 0600: give it the mode open() would have.
+	chmod( 0666 & ~umask(), $tmp_target );
+	if( !rename( $tmp_target, $target ) )
+	{
+		my $err = $!;
+		unlink( $tmp_target );
+		EPrints::abort( "Can't rename $tmp_target to $target: $err" );
+	}
 
 	return $target;
 }

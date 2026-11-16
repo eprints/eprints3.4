@@ -89,23 +89,7 @@ sub from
 
 	my $referrer = $session->param( "referrer" );
 	$referrer = EPrints::Apache::AnApache::header_in( $session->get_request, 'Referer' ) unless( EPrints::Utils::is_set( $referrer ) );
-	if ( defined $referrer )
-	{
-		my $referrer_uri = URI->new($referrer);
-		my $repository_uri = URI->new($session->config('base_url'));
-
-		# Allow SCHEME://HOST/PATH if matching host
-		if ( $referrer_uri->can( "host" ) && $referrer_uri->host ne $repository_uri->host )
-		{
-			$referrer = undef;
-		}
-		# Allow /PATH if no host specified (therefore scheme will be set but empty)
-		if ( ! $referrer_uri->can( "host" ) && $referrer_uri->scheme ne "" )
-		{
-			$referrer = undef;
-		}
-
-	}
+	$referrer = $self->_safe_referrer( $referrer );
 	$referrer = $session->config( "frontpage" ) . "eprints/" unless( EPrints::Utils::is_set( $referrer ) );
 
 	$self->{processor}->{redirect} = $referrer;
@@ -223,6 +207,39 @@ sub render
         return $chunk;
 }
 
+
+######################################################################
+=pod
+
+=over 4
+
+=item EPrints::Plugin::Screen::SetLang->_safe_referrer
+
+Returns the URL for the referrer if it looks safe, otherwise returns
+undef.
+
+=cut
+######################################################################
+
+
+sub _safe_referrer
+{
+	my( $self, $referrer ) = @_;
+
+	return undef if !EPrints::Utils::is_set( $referrer );
+
+	# Browsers read "\" as "/" and ignore tabs and newlines in a URL.
+	return undef if $referrer =~ /[\\\x00-\x1f\x7f]/;
+
+	my $repository_uri = URI->new( $self->{session}->config( "base_url" ) );
+	my $referrer_uri = URI->new_abs( $referrer, $repository_uri );
+
+	return undef if !defined $referrer_uri->scheme || $referrer_uri->scheme !~ /^https?$/;
+	return undef if !$referrer_uri->can( "host" ) || !defined $referrer_uri->host;
+	return undef if lc( $referrer_uri->host ) ne lc( $repository_uri->host );
+
+	return $referrer_uri->as_string;
+}
 
 1;
 

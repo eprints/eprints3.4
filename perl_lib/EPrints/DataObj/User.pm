@@ -579,6 +579,18 @@ sub create_from_data
 {
 	my( $class, $session, $data, $dataset ) = @_;
 
+	# denied roles (e.g. toolbox) are not stored in the roles field
+	if( ref $data eq "HASH" && ref $data->{roles} eq "ARRAY" )
+	{
+		my( $kept, $removed ) = split_denied_roles( $session, $data->{roles} );
+		if( @{$removed} )
+		{
+			$data = { %{$data}, roles => $kept };
+			$session->log( sprintf( "new user %s: denied roles not stored in the roles field: %s",
+				( $data->{username} // "" ), join( ", ", @{$removed} ) ) );
+		}
+	}
+
 	my $new_user = $class->SUPER::create_from_data( $session, $data, $dataset );
 
 	$new_user->update_triggers();
@@ -793,6 +805,9 @@ successfully committed.
 sub commit
 {
 	my( $self, $force ) = @_;
+
+	# denied roles (e.g. toolbox) never stay in the roles field
+	$self->remove_denied_roles;
 
 	$self->update_triggers();
 	
@@ -1446,6 +1461,293 @@ sub send_out_editor_alert
 ######################################################################
 =pod
 
+=item $user->set_value_raw( $fieldname, $value )
+
+As L<EPrints::DataObj/set_value_raw>, and forgets the privileges cached
+by L</get_privs> when C<usertype> or C<roles> changes, so that they are
+computed again from the new values.
+
+=cut
+######################################################################
+
+sub set_value_raw
+{
+	my( $self, $fieldname, $value ) = @_;
+
+	delete $self->{".privs"} if $fieldname eq "usertype" || $fieldname eq "roles";
+
+	return $self->SUPER::set_value_raw( $fieldname, $value );
+}
+
+
+######################################################################
+=pod
+
+=item $roles = EPrints::DataObj::User::type_only_roles( $repo )
+
+Returns a reference to a hash of the role names that only an account
+type may grant, when C<user_roles_type_only> is enabled:
+
+	$c->{user_roles_type_only} = {
+		enabled => 1,
+		allow => [qw( review-eprint )],	# optional exceptions
+		deny => [qw( toolbox )],	# roles nobody may have
+	};
+
+These are the named roles listed in C<< $c->{user_roles}->{TYPE} >> for
+any account type (C<admin>, C<editor>, C<deposit>... as the site
+configures them), except those listed in C<allow>. Roles that no type
+grants, such as C<rest>, which is meant to be given to a dedicated
+account, stay allowed in the C<roles> field (C<toolbox> belongs in
+C<deny>, below). A reserved role in the C<roles> field of a user is
+ignored by L</get_privs>, L</get_roles> and L</has_role>,
+but left in the field: nothing is removed from it when the account is
+saved, except the denied roles (see L</remove_denied_roles>). Privileges
+(C<+priv>, C<-priv>) and the other roles of C<< $c->{roles} >> are not
+affected.
+
+C<deny> lists roles that nobody may have, whatever their source: they
+are added to these roles, and L</type_roles> drops them from the roles of
+the account types too (see L</denied_roles>).
+
+Returns an empty hash when the option is disabled (the default).
+
+=cut
+######################################################################
+
+sub type_only_roles
+{
+	my( $repo ) = @_;
+
+	my $conf = $repo->config( "user_roles_type_only" );
+	return {} if ref $conf ne "HASH" || !$conf->{enabled};
+
+	my %roles;
+	my $user_roles = $repo->config( "user_roles" ) || {};
+	foreach my $type ( keys %{$user_roles} )
+	{
+		foreach my $role ( @{$user_roles->{$type} || []} )
+		{
+			next if !defined $role || $role =~ m/^[+-]/;
+			$roles{$role} = 1;
+		}
+	}
+	delete @roles{ @{$conf->{allow} || []} };
+	$roles{$_} = 1 for keys %{ denied_roles( $repo ) };
+
+	return \%roles;
+}
+
+
+######################################################################
+=pod
+
+=item $roles = EPrints::DataObj::User::denied_roles( $repo )
+
+Returns a reference to a hash of the roles listed in
+C<< $c->{user_roles_type_only}->{deny} >>, which nobody may have, when the
+option is enabled; an empty hash otherwise.
+
+=cut
+######################################################################
+
+sub denied_roles
+{
+	my( $repo ) = @_;
+
+	my $conf = $repo->config( "user_roles_type_only" );
+	return {} if ref $conf ne "HASH" || !$conf->{enabled};
+
+	return { map { $_ => 1 } grep { defined } @{$conf->{deny} || []} };
+}
+
+
+######################################################################
+=pod
+
+=item $roles = $user->type_roles
+
+Returns the roles and privileges of the user's account type
+(C<< $c->{user_roles}->{TYPE} >>), less the denied roles (see
+L</denied_roles>).
+
+=cut
+######################################################################
+
+sub type_roles
+{
+	my( $self ) = @_;
+
+	my $roles = $self->{session}->config( "user_roles", $self->get_value( "usertype" ) ) || [];
+	my $denied = denied_roles( $self->{session} );
+	return $roles if !%{$denied};
+
+	return [ grep { !$denied->{$_} } @{$roles} ];
+}
+
+
+######################################################################
+=pod
+
+=item $roles = $user->extra_roles
+
+Returns the roles and privileges of the C<roles> field that apply to
+this user: all of them, less the roles reserved to account types (see
+L</type_only_roles>).
+
+=cut
+######################################################################
+
+sub extra_roles
+{
+	my( $self ) = @_;
+
+	my $roles = $self->get_value( "roles" ) || [];
+	my $type_only = type_only_roles( $self->{session} );
+	return $roles if !%{$type_only};
+
+	my $denied_privs = denied_privileges( $self->{session} );
+
+	return [ grep { !$type_only->{$_} && !( m/^\+(.*)$/ && $denied_privs->{$1} ) } @{$roles} ];
+}
+
+
+######################################################################
+=pod
+
+=item $removed = $user->remove_denied_roles
+
+Removes from the C<roles> field the denied roles (see L</denied_roles>)
+and the privileges they grant (e.g. C<toolbox>, C<+toolbox>), and logs
+them. Nothing else is removed: roles reserved to account types stay in
+the field (they are only ignored, see L</extra_roles>), and so do the
+other roles and privileges, such as those of the REST API. Returns the
+list of the removed entries. Called by L</commit> and L</login_roles>.
+
+=cut
+######################################################################
+
+sub remove_denied_roles
+{
+	my( $self ) = @_;
+
+	my( $kept, $removed ) = split_denied_roles( $self->{session}, $self->get_value( "roles" ) );
+	return () if !@{$removed};
+
+	$self->set_value( "roles", $kept );
+	$self->{session}->log( sprintf( "user %s: denied roles removed from the roles field: %s",
+		( $self->id // "(new)" ), join( ", ", @{$removed} ) ) );
+
+	return @{$removed};
+}
+
+
+######################################################################
+=pod
+
+=item ( $kept, $removed ) = EPrints::DataObj::User::split_denied_roles( $repo, $roles )
+
+Splits the list C<$roles> (a C<roles> field value) into the entries that
+may stay and the denied ones: a denied role (see L</denied_roles>) or
+C<+priv> for a privilege it grants. Returns two array references.
+
+=cut
+######################################################################
+
+sub split_denied_roles
+{
+	my( $repo, $roles ) = @_;
+
+	my $denied = denied_roles( $repo );
+	my $denied_privs = denied_privileges( $repo );
+	my( @kept, @removed );
+	foreach my $role ( @{$roles || []} )
+	{
+		if( defined $role && ( $denied->{$role} || ( $role =~ m/^\+(.*)$/ && $denied_privs->{$1} ) ) )
+		{
+			push @removed, $role;
+		}
+		else
+		{
+			push @kept, $role;
+		}
+	}
+
+	return( \@kept, \@removed );
+}
+
+
+######################################################################
+=pod
+
+=item $privs = EPrints::DataObj::User::denied_privileges( $repo )
+
+Returns a reference to a hash of the privileges granted by the denied
+roles (see L</denied_roles>), as defined by the core or by
+C<< $c->{roles} >>, with the role names themselves. L</get_privs> never
+grants them, whatever their source.
+
+=cut
+######################################################################
+
+sub denied_privileges
+{
+	my( $repo ) = @_;
+
+	my $denied = denied_roles( $repo );
+	return {} if !%{$denied};
+
+	my %privmap = ( %{$PRIVMAP}, %{$repo->config( "roles" ) || {}} );
+	my %privs;
+	foreach my $role ( keys %{$denied} )
+	{
+		$privs{$role} = 1;
+		foreach my $priv ( @{$privmap{$role} || []} )
+		{
+			next if !defined $priv || $priv =~ m/^-/;
+			( my $name = $priv ) =~ s/^\+//;
+			$privs{$name} = 1;
+		}
+	}
+
+	return \%privs;
+}
+
+
+######################################################################
+=pod
+
+=item $ok = $user->login_roles
+
+Called by L<EPrints::Repository/valid_login> once the user is
+authenticated, on the account as C<check_user_password> left it (its
+effective type). Forgets any cached privileges, removes from the C<roles>
+field the denied roles only (see L</remove_denied_roles>), adds nothing,
+then calls C<< $c->{user_login_roles}->( $repo, $user ) >> if set, for
+site rules that depend on the privileges (e.g. C<editperms>): at that
+point L</get_privs> gives the roles of the type first, then the other
+roles and privileges of the account. Commits the account.
+
+=cut
+######################################################################
+
+sub login_roles
+{
+	my( $self ) = @_;
+
+	my $repo = $self->{session};
+
+	delete $self->{".privs"};
+	$self->remove_denied_roles;
+	$repo->call( "user_login_roles", $repo, $self ) if $repo->can_call( "user_login_roles" );
+
+	return $self->commit;
+}
+
+
+######################################################################
+=pod
+
 =item $result = $user->allow( $priv, [ $item ] )
 
 Returns C<true> if user can perform an action specified by C<$priv>.
@@ -1511,8 +1813,8 @@ sub get_privs
     return $self->{".privs"} if( defined $self->{".privs"} ) ;
 
     my $rep = $self->{session}->get_repository;
-    my $role_config = $rep->get_conf( "user_roles", $self->get_value( "usertype" ) );
-    my $extra_roles = $self->get_value( "roles" ) || [];
+    my $role_config = $self->type_roles;
+    my $extra_roles = $self->extra_roles;
 
     my %privmap = %{$PRIVMAP};
 
@@ -1554,6 +1856,9 @@ sub get_privs
         }
     }
 
+    # denied roles (user_roles_type_only deny) grant nothing, whatever their source
+    delete @{$self->{".privs"}}{ keys %{ denied_privileges( $self->{session} ) } };
+
     return $self->{".privs"};
 }
 
@@ -1574,8 +1879,8 @@ sub get_roles
     my( $self ) = @_;
 
     my $rep = $self->{session}->get_repository;
-    my $role_config = $rep->get_conf( "user_roles", $self->get_value( "usertype" ) );
-    my $extra_roles = $self->get_value( "roles" ) || [];
+    my $role_config = $self->type_roles;
+    my $extra_roles = $self->extra_roles;
     my @roles = ();
     foreach my $role ( @{$role_config}, @{$extra_roles} )
     {

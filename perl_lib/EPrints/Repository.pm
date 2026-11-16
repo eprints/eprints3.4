@@ -5761,6 +5761,16 @@ sub valid_login
 		$user->commit;
 	}
 
+	# After a successful authentication only: the account, as
+	# check_user_password left it (its effective type), gets its roles and
+	# privileges from that type first, then from its roles field less the
+	# roles reserved to account types (see EPrints::DataObj::User::login_roles).
+	if( EPrints::Utils::is_set( $real_username ) )
+	{
+		my $account = user_by_username( $self, $real_username );
+		$account->login_roles if defined $account && $account->can( "login_roles" );
+	}
+
 	return $real_username;
 }
 

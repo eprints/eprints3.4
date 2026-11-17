@@ -153,13 +153,15 @@ sub event_parse
 {
 	my( $fh, $handler ) = @_;	
 
-	# Do not use XML::LibXML::SAX as it does not support disabling entities, which
-	# could be used for XML external entity (XXE) injection. XML::SAX::ExpatXS is
-	# also an old library and will be replaced in a future version of EPrints.
+	# XML::LibXML causes a "stack smashing detected" on utf8 input FHs. The XML
+	# library ought to read the <?xml> declaration anyway, to determine the
+	# encoding
+	binmode($fh);
+
+	# Imported XML must never expand external entities or load external DTDs,
+	# which could be used for XML external entity (XXE) injection.
 	if( EPrints::Utils::require_if_exists( 'XML::SAX::ExpatXS' ) )
 	{
-		binmode($fh);
-
 		my $parser = XML::SAX::ExpatXS->new( Handler => $handler );
 
 		# Disable entity expansion to prevent XXE.
@@ -170,7 +172,19 @@ sub event_parse
 	}
 	else
 	{
-		EPrints::abort( "Can't read XML file: XML::SAX::ExpatXS module is not installed." );
+		# XML::LibXML::SAX expands entities with its default parser, but it
+		# takes its parser from ParserOptions: give it one that does not.
+		# External entities are then rejected ("Entity x not defined");
+		# predefined, character and internal entities still work.
+		my $parser = XML::LibXML::SAX->new(
+			Handler => $handler,
+			ParserOptions => { LibParser => XML::LibXML->new(
+				expand_entities => 0,
+				load_ext_dtd => 0,
+				no_network => 1,
+			) },
+		);
+		$parser->parse_file( $fh );
 	}
 }
 

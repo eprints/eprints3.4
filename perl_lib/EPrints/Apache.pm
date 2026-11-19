@@ -168,6 +168,12 @@ sub apache_secure_conf
 # with the --replace option
 #
 $lrb_conf
+
+# Note that PerlTransHandler can't go inside
+# a "Location" block as it occurs before the
+# Location is known.
+PerlTransHandler +EPrints::Apache::Rewrite
+
   <Location "$https_root">
     PerlSetVar EPrints_ArchiveID $id
     PerlSetVar EPrints_Secure yes

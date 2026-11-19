@@ -549,7 +549,7 @@ sub handler
 
 			$r->handler('perl-script');
 
-			# don't cache documents, these could be large.
+			# don't cache documents, these could be large. Plus not caching makes the usage statistics more accurate.
 			$r->headers_out->{'Cache-Control'} = "no-store, no-cache, must-revalidate";
 
 			# no real file to map to

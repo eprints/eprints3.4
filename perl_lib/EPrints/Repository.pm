@@ -5079,7 +5079,7 @@ sub send_http_header
 
 	if(!defined $self->{request}->headers_out->{'Cache-Control'})
 	{
-		# Allow caching all static files unless it's been explicitly disabled above
+		# Allow caching all static files unless it's been explicitly disabled
 		$self->{request}->headers_out->{'Cache-Control'} = 'public';
 	}
 

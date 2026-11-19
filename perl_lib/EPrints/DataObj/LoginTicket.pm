@@ -309,8 +309,12 @@ In the following circumstance:
 	custom.example.org
 
 Where both hosts use the same cookie key the cookie from example.org 
-will collide with the cookie from custom.example.org. To avoid this 
-the full hostname is embedded in the cookie key.
+will collide. Previously the hostname was appended to the cookie name.
+This behaviour made configuring a cache harder and is a very niche use
+case so has been removed.
+
+If this behaviour is ever needed again I recommend making SESSION_KEY
+configurable.
 
 =cut
 ######################################################################
@@ -321,7 +325,7 @@ sub session_key
 
 	my $host = $repo->config('host');
 	$host ||= $repo->config('securehost');
-	return join ':', $SESSION_KEY, $host;
+	return $SESSION_KEY;
 }
 
 
@@ -339,7 +343,7 @@ sub secure_session_key
 {
 	my ($class, $repo) = @_;
 
-	return join ':', $SECURE_SESSION_KEY, $repo->config('securehost');
+	return $SECURE_SESSION_KEY;
 }
 
 
@@ -442,6 +446,46 @@ sub set_cookies
 			'Set-Cookie' => $self->generate_cookie
 		);
 	}
+}
+
+######################################################################
+=pod
+
+=item $ticket->remove
+
+When removing a loginticket (logging out) also delete the cookie.
+This aids with testing caching - as the cache is disabled if a login cookie is present
+regardless of if a matching login session exists.
+
+=cut
+######################################################################
+sub remove
+{
+	my ($self) = @_;
+
+	# carry on removing loginticket from database
+	$self->SUPER::remove();
+
+	# but also remove the user's cookie, to make testing the cache easier
+
+	my $repo = $self->{session};
+
+	my $domain = $repo->config( "host" );
+	$domain ||= $repo->config( "securehost" );
+
+	$repo->get_request->err_headers_out->add(
+		'Set-Cookie' => $repo->query->cookie(
+			-name    => $self->secure_session_key($repo),
+			-path    => ($repo->config( "https_root" ) || '/'),
+			-value   => 'blank',
+			-domain  => $repo->config( "securehost" ),
+			-secure  => 1,
+			-samesite => 'Strict',
+			-expires =>  "-1d",
+		)			
+	);
+
+
 }
 
 ######################################################################

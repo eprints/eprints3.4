@@ -143,7 +143,7 @@ sub _extract_bibl
 
 		next if !-e "$custom_dir/item$idx.xml";
 
-		my $doc = eval { $xml->parse_file( "$custom_dir/$fn" ) };
+		my $doc = eval { $xml->parse_file( "$custom_dir/$fn", no_expand => 1 ) };
 		next if !defined $doc;
 
 		my( $schemaRef ) = $doc->documentElement->getElementsByTagNameNS(
@@ -158,7 +158,7 @@ sub _extract_bibl
 		next if !defined $uri;
 		next if $uri ne "http://schemas.openxmlformats.org/officeDocument/2006/bibliography";
 
-		$doc = eval { $xml->parse_file( "$custom_dir/item$idx.xml" ) };
+		$doc = eval { $xml->parse_file( "$custom_dir/item$idx.xml", no_expand => 1 ) };
 		next if !defined $doc;
 
 		$self->_extract_references( $bibl_file, $doc );
@@ -294,7 +294,7 @@ sub _parse_dc
 	my $epdata = $opts{epdata};
 	my $xml = $self->{session}->xml;
 
-	my $dom_doc = eval { $xml->parse_file( "$dir/docProps/core.xml" ) };
+	my $dom_doc = eval { $xml->parse_file( "$dir/docProps/core.xml", no_expand => 1 ) };
 	return if !defined $dom_doc;
 	my $root = $dom_doc->documentElement;
 
@@ -328,7 +328,7 @@ sub _parse_dc
 			$values->[0];
 	}
 
-	$dom_doc = eval { $xml->parse_file( "$dir/word/document.xml" ) };
+	$dom_doc = eval { $xml->parse_file( "$dir/word/document.xml", no_expand => 1 ) };
 
 	if( defined $dom_doc )
 	{
@@ -365,7 +365,7 @@ sub _parse_dc
 
 		next if !-e "$custom_dir/item$idx.xml";
 
-		my $dom_doc = eval { $xml->parse_file( "$custom_dir/$fn" ) };
+		my $dom_doc = eval { $xml->parse_file( "$custom_dir/$fn", no_expand => 1 ) };
 		next if !defined $dom_doc;
 	
 		$root = $dom_doc->documentElement;

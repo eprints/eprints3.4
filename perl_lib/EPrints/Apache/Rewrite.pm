@@ -434,8 +434,8 @@ sub handler
 
 		return redir_see_other( $r, $url );
 	}
-
-	if ($repository->config("use_long_url_format"))
+	my $long_url = $repository->config("use_long_url_format");
+	if ($long_url)
 	{
 		# /XX/ redirect to /id/eprint/XX/
 		# if matched, this block WILL return
@@ -463,21 +463,29 @@ sub handler
 		} 
 	}  
 	
-
 	#this will serve a document, static files(.include files) or abstract page. 
 	my $accept = EPrints::Apache::AnApache::header_in( $r, "Accept" );
 	my $method = eval {$r->method} || "";
 	# if the URI matches an eprint for the correct document format enter this block, which will call return
 	if (
-		($repository->config("use_long_url_format")
-			&& ( ( $method eq "GET" || $method eq "HEAD" ) ## request method must be GET or HEAD
-				&&  (index(lc($accept), "text/html") != -1 || index(lc($accept), "text/*") != -1 || index(lc($accept),"*/*") != -1 || $accept eq ""  )   ## header must be text/html, text/*, */* or undef
-				&&  ($uri !~ m!^${urlpath}/id/eprint/0*[1-9][0-9]*/contents$! )   ## uri must not be id/eprint/XX/contents
-				&&  ($uri =~ s! ^${urlpath}/id/eprint/(0*)([1-9][0-9]*)\b !!x )     ## uri must be id/eprint/XX
-			)
+		( 
+			( $method eq "GET" || $method eq "HEAD" ) ## request method must be GET or HEAD
+			 &&  (index(lc($accept), "text/html") != -1 || index(lc($accept), "text/*") != -1 || index(lc($accept),"*/*") != -1 || $accept eq ""  )   ## header must be text/html, text/*, */* or undef
 		)
-		||# /XX/ eprints
-		(!$repository->config("use_long_url_format") && $uri =~ s! ^$urlpath/(0*)([1-9][0-9]*)\b !!x )  # ignore leading 0s
+		&&
+		(
+			(
+				$long_url
+					&&  ($uri !~ m!^${urlpath}/id/eprint/0*[1-9][0-9]*/contents$! )   ## uri must not be id/eprint/XX/contents
+					&&  ($uri =~ s! ^${urlpath}/id/eprint/(0*)([1-9][0-9]*)\b !!x )     ## uri must be id/eprint/XX
+			)
+			
+			||# /XX/ eprints
+			(
+				!$long_url 
+				&& $uri =~ s! ^$urlpath/(0*)([1-9][0-9]*)\b !!x # ignore leading 0s
+			)  
+		)
 	)
 	{
 		# note that inside this block $uri is now just what's left after matching an eprint
@@ -494,21 +502,22 @@ sub handler
 			my $redir_url = "${login_url}?target=" . $repository->config( "base_url" ) . "id/eprint/${eprintid}";
 			return redir( $r, $redir_url );
 		}
-		
 
 		if( ! $repository->get_database->exists( $repository->dataset( "eprint" ), $eprintid ) )
 		{
 			return NOT_FOUND;
 		}
-
-		# redirect to canonical path - /XX/
+		
+		# no other characters in the uri after matching eprintid
 		if( !length($uri) )
 		{
-			return redir_see_other( $r, "$urlpath/id/eprint/$eprintid/$args" );
+			# redirect to canonical path - /XX/
+			# will add a trailing forward slash on the end of the URL. WHY? Entirely unclear.
+			return redir_see_other( $r, $long_url ? "$urlpath/id/eprint/$eprintid/$args" : "$urlpath/$eprintid/$args" );
 		}
 		elsif( length($1) ) ##remove leading 0s
 		{
-			return redir( $r, "$urlpath/id/eprint/$eprintid$uri$args" );
+			return redir( $r, $long_url ? "$urlpath/id/eprint/$eprintid$uri$args" : "$urlpath/$eprintid$uri$args" );
 		}
 
 		if( $uri =~ s! ^/(0*)([1-9][0-9]*)\b !!x )  ##this would match /234/3/test.pdf or thumbnail: /234/1.hassmallThumbnailVersion/paper.pdf
@@ -524,11 +533,14 @@ sub handler
 			}
 			if( !length($uri) )
 			{
-				return redir( $r, "$urlpath/$eprintid/$pos/$args" );
+				# logic as per eprint (and again, zero idea WHY) - if there is no more uri, add a slash to the end.
+				# even though we will then return 404 because there's no filename so we can't serve up a document. *shrug*
+				return redir( $r, $long_url ? "$urlpath/id/eprint/$eprintid/$pos/$args" : "$urlpath/$eprintid/$pos/$args" );
 			}
 			elsif( length($1) )
 			{
-				return redir( $r, "$urlpath/$eprintid/$pos$uri$args" );
+				# Strip out leading zeros
+				return redir( $r, $long_url ? "$urlpath/id/eprint/$eprintid/$pos$uri$args" : "$urlpath/$eprintid/$pos$uri$args" );
 			}
 			$uri =~ s! ^([^/]*)/ !!x;
 			my @relations = grep { length($_) } split /\./, $1;
@@ -550,6 +562,7 @@ sub handler
 			$r->handler('perl-script');
 
 			# don't cache documents, these could be large. Plus not caching makes the usage statistics more accurate.
+			# Future TODO cache thumbnails
 			$r->headers_out->{'Cache-Control'} = "no-store, no-cache, must-revalidate";
 
 			# no real file to map to

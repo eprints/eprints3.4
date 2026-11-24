@@ -1,0 +1,84 @@
+/*
+ * Styling of the raw OAI-PMH XML shown in a browser (replaces oai2.xsl:
+ * browsers are removing XSLT). Reading only; the browsable version is
+ * /cgi/oai2/html. Not linked directly: /cgi/oai2/css/<lang> serves it
+ * (from the archive's static/ if present, else from lib/static/), followed
+ * by the texts (phrases) in the session language.
+ */
+@namespace oai url(http://www.openarchives.org/OAI/2.0/);
+@namespace oai_dc url(http://www.openarchives.org/OAI/2.0/oai_dc/);
+@namespace dc url(http://purl.org/dc/elements/1.1/);
+
+* { display: block; margin-left: 1.2em; }
+oai|OAI-PMH {
+	margin: 0; padding: 1em 1.5em;
+	font: 15px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif;
+	color: #1f2328; background: #fff;
+}
+oai|OAI-PMH::before {
+	display: block; margin: 0 0 1em; padding: .6em .8em;
+	background: #2b6cb0; color: #fff; font-weight: 600; border-radius: 4px;
+}
+oai|responseDate, oai|request { color: #59636e; font-size: 13px; margin-left: 0; }
+oai|responseDate::before { content: "responseDate : "; }
+oai|request::before { content: "request : "; }
+oai|error { margin: 1em 0; padding: .5em .8em; background: #fdecea; color: #8a1c13; border-left: 4px solid #c62828; }
+oai|error::before { font-weight: 600; }
+
+oai|record, oai|header, oai|set, oai|metadataFormat {
+	margin: .8em 0; padding: .5em .8em; border: 1px solid #d0d7de; border-radius: 4px;
+}
+oai|ListIdentifiers > oai|header { margin: .4em 0; }
+oai|record > oai|header { border: 0; padding: 0; margin: 0 0 .4em; }
+oai|header[status="deleted"] { color: #8a1c13; }
+oai|header[status="deleted"]::before { font-weight: 600; }
+
+oai|identifier { font-weight: 600; color: #2b6cb0; margin-left: 0; }
+oai|datestamp, oai|setSpec, oai|metadataPrefix, oai|schema, oai|metadataNamespace { margin-left: 0; font-size: 13px; color: #59636e; }
+oai|datestamp::before { content: "datestamp : "; }
+oai|header > oai|setSpec::before { content: "set : "; }
+oai|set > oai|setSpec { font-weight: 600; color: #2b6cb0; font-size: 15px; }
+oai|setName { margin-left: 0; }
+oai|metadataPrefix { font-weight: 600; color: #2b6cb0; font-size: 15px; }
+oai|schema::before { content: "schema : "; }
+oai|metadataNamespace::before { content: "namespace : "; }
+oai|resumptionToken { margin: 1em 0; color: #59636e; font-size: 13px; }
+oai|resumptionToken::before { content: "resumptionToken : "; }
+
+oai|Identify > * { margin-left: 0; }
+oai|repositoryName { font-size: 1.3em; font-weight: 600; }
+oai|baseURL::before { content: "baseURL : "; }
+oai|protocolVersion::before { content: "protocolVersion : "; }
+oai|adminEmail::before { content: "adminEmail : "; }
+oai|earliestDatestamp::before { content: "earliestDatestamp : "; }
+oai|deletedRecord::before { content: "deletedRecord : "; }
+oai|granularity::before { content: "granularity : "; }
+oai|description { margin: .6em 0; color: #59636e; font-size: 13px; }
+
+oai|metadata { margin-left: 0; }
+oai_dc|dc > * { margin-left: 0; padding: .1em 0; }
+dc|title { font-weight: 600; }
+dc|title::before { content: "title : "; font-weight: 400; color: #59636e; }
+dc|creator::before { content: "creator : "; color: #59636e; }
+dc|contributor::before { content: "contributor : "; color: #59636e; }
+dc|subject::before { content: "subject : "; color: #59636e; }
+dc|description::before { content: "description : "; color: #59636e; }
+dc|publisher::before { content: "publisher : "; color: #59636e; }
+dc|date::before { content: "date : "; color: #59636e; }
+dc|type::before { content: "type : "; color: #59636e; }
+dc|format::before { content: "format : "; color: #59636e; }
+dc|identifier::before { content: "identifier : "; color: #59636e; }
+dc|source::before { content: "source : "; color: #59636e; }
+dc|language::before { content: "language : "; color: #59636e; }
+dc|relation::before { content: "relation : "; color: #59636e; }
+dc|coverage::before { content: "coverage : "; color: #59636e; }
+dc|rights::before { content: "rights : "; color: #59636e; }
+dc|identifier { font-weight: 400; color: inherit; }
+
+@media (prefers-color-scheme: dark) {
+	oai|OAI-PMH { color: #e6edf3; background: #0d1117; }
+	oai|record, oai|header, oai|set, oai|metadataFormat { border-color: #30363d; }
+	oai|identifier, oai|set > oai|setSpec, oai|metadataPrefix { color: #7fb3f0; }
+	oai|responseDate, oai|request, oai|datestamp, oai|setSpec, oai|schema, oai|metadataNamespace, oai|resumptionToken, oai|description { color: #9198a1; }
+	oai|error { background: #3d1614; color: #ffb4ab; }
+}

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<!DOCTYPE phrases SYSTEM "entities.dtd">
+<!-- HTML version of /cgi/oai2 (/cgi/oai2/html) and texts of the raw XML stylesheet (/cgi/oai2/css/<lang>). -->
+<epp:phrases xmlns="http://www.w3.org/1999/xhtml" xmlns:epp="http://eprints.org/ep3/phrase" xmlns:epc="http://eprints.org/ep3/control">
+<epp:phrase id="oai2_html:title">OAI-PMH: <epc:pin name="verb"/></epp:phrase>
+<epp:phrase id="oai2_html:intro">Readable version of the <epc:phrase ref="archive_name"/> OAI-PMH interface, for humans. Harvesters use the base URL <code><epc:pin name="base"/></code>, which returns XML.</epp:phrase>
+<epp:phrase id="oai2_html:view_xml">View the XML</epp:phrase>
+<epp:phrase id="oai2_html:verb:Identify">Identify</epp:phrase>
+<epp:phrase id="oai2_html:verb:ListSets">Sets</epp:phrase>
+<epp:phrase id="oai2_html:verb:ListMetadataFormats">Formats</epp:phrase>
+<epp:phrase id="oai2_html:verb:ListIdentifiers">Identifiers</epp:phrase>
+<epp:phrase id="oai2_html:verb:ListRecords">Records</epp:phrase>
+<epp:phrase id="oai2_html:error">Error</epp:phrase>
+<epp:phrase id="oai2_html:col:identifier">Identifier</epp:phrase>
+<epp:phrase id="oai2_html:col:datestamp">Modified</epp:phrase>
+<epp:phrase id="oai2_html:col:sets">Sets</epp:phrase>
+<epp:phrase id="oai2_html:col:spec">Spec</epp:phrase>
+<epp:phrase id="oai2_html:col:name">Name</epp:phrase>
+<epp:phrase id="oai2_html:col:prefix">Prefix</epp:phrase>
+<epp:phrase id="oai2_html:col:schema">Schema</epp:phrase>
+<epp:phrase id="oai2_html:col:namespace">Namespace</epp:phrase>
+<epp:phrase id="oai2_html:deleted">deleted</epp:phrase>
+<epp:phrase id="oai2_html:record">record</epp:phrase>
+<epp:phrase id="oai2_html:formats">formats</epp:phrase>
+<epp:phrase id="oai2_html:no_metadata">No metadata in this format for this record.</epp:phrase>
+<epp:phrase id="oai2_html:prefix">Format: <epc:pin name="prefix"/></epp:phrase>
+<epp:phrase id="oai2_html:view">View in <epc:phrase ref="archive_name"/></epp:phrase>
+<epp:phrase id="oai2_html:none">No results.</epp:phrase>
+<epp:phrase id="oai2_html:formats_label">Formats:</epp:phrase>
+<epp:phrase id="oai2_html:set_label">Set:</epp:phrase>
+<epp:phrase id="oai2_html:custom_sets">Custom sets</epp:phrase>
+<epp:phrase id="oai2_html:pager:info">Page <epc:pin name="page"/> of <epc:pin name="pages"/> (<epc:pin name="n"/> records)</epp:phrase>
+<epp:phrase id="oai2_html:pager:first">« First</epp:phrase>
+<epp:phrase id="oai2_html:pager:prev">‹ Previous</epp:phrase>
+<epp:phrase id="oai2_html:pager:next">Next ›</epp:phrase>
+<epp:phrase id="oai2_html:pager:last">Last »</epp:phrase>
+<epp:phrase id="oai2_html:per_page">Records per page:</epp:phrase>
+<epp:phrase id="oai2_html:ok">OK</epp:phrase>
+<epp:phrase id="oai2_html:expand">Expand all</epp:phrase>
+<epp:phrase id="oai2_html:collapse">Collapse all</epp:phrase>
+<epp:phrase id="oai2_html:expand_all">Expand all records</epp:phrase>
+<epp:phrase id="oai2_html:collapse_all">Collapse all records</epp:phrase>
+<epp:phrase id="oai2_html:css:banner">OAI-PMH — <epc:phrase ref="archive_name"/>. Readable version: <epc:pin name="base"/></epp:phrase>
+<epp:phrase id="oai2_html:css:error">Error</epp:phrase>
+</epp:phrases>

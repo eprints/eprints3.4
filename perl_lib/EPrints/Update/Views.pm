@@ -559,6 +559,16 @@ sub update_view_list
 	# construct the export and navigation bars, which are common to all "alt_views"
 	my $menu_fields = $menus_fields->[$#$path_values];
 
+	if($menu_fields->[0]->isa( "EPrints::MetaField::Subject" ))
+	{
+		#this subject doesn't exist, just return undef and let Rewrite 404 it, before we go and do too much more work.
+		my $subject = EPrints::Subject->new( $repo, $path_values->[-1] );
+		if( !defined $subject )
+		{
+			return;
+		}
+	}
+
 	# exact = 0, for subject fields, will show items which are affiliated to that subject's children
 	my $has_subject_menu = 0;
 	foreach my $mf  ( @$menus_fields )

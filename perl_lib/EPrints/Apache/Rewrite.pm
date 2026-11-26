@@ -786,11 +786,16 @@ sub handler
 		$r->pool,
 		time + 30 * 86400
 	);
-
-	if(!defined $r->headers_out->{'Cache-Control'})
-	{
-		# Allow caching all static files by default
-		$r->headers_out->{'Cache-Control'} = 'public';
+	if(!$user){
+		# not logged in
+		if(!defined $r->headers_out->{'Cache-Control'})
+		{
+			# Allow caching all static files by default (when not logged in)
+			$r->headers_out->{'Cache-Control'} = 'public';
+		}
+	}else{
+		# when logged in, aggressively disable the cache. Motivation here is that you're able to change content.
+		$r->headers_out->{'Cache-Control'} =  "no-store, no-cache, must-revalidate";
 	}
 
     # just looking for html pages at this point

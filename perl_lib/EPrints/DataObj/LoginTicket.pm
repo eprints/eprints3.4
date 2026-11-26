@@ -439,12 +439,16 @@ sub set_cookies
 		$repo->get_request->err_headers_out->add(
 			'Set-Cookie' => $self->generate_secure_cookie
 		);
+		# wipe out the cached pages which will otherwise still be showing a login button
+		$repo->get_request->err_headers_out->add('Clear-Site-Data' => '"cache"');
 	}
 	else
 	{
 		$repo->get_request->err_headers_out->add(
 			'Set-Cookie' => $self->generate_cookie
 		);
+		# wipe out the cached pages which will otherwise still be showing a login button (won't actually work on HTTP, needs HTTPS, but just do it anyway)
+		$repo->get_request->err_headers_out->add('Clear-Site-Data' => '"cache"')
 	}
 }
 
